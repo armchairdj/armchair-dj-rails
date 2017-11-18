@@ -4,17 +4,18 @@ FactoryBot.define do
   # SEQUENCES.
   #############################################################################
 
-  sequence :artist_name do |n|
-    "Artist Name #{n}"
+  sequence :song_title do |n|
+    "Song Title #{n}"
   end
 
   #############################################################################
   # FACTORIES.
   #############################################################################
 
-  factory :artist do
-    factory :minimal_artist do
-      name { generate(:artist_name) }
+  factory :song do
+    factory :minimal_song do
+      association :artist, factory: :minimal_artist
+      title { generate(:song_title) }
     end
   end
 end
