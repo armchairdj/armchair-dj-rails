@@ -49,17 +49,20 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 # JavaScript libraries.
-gem "jquery-rails"
+gem 'jquery-rails'
+
+# HTTP client library.
+gem 'faraday'
 
 ###############################################################################
 # UTILITIES.
 ###############################################################################
 
 # Configuration factory.
-gem "simpleconfig"
+gem 'simpleconfig'
 
 # Don't allow empty strings into the database
-gem "nilify_blanks"
+gem 'nilify_blanks'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
@@ -91,18 +94,21 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   # Environment variable loader.
-  gem "dotenv-rails"
+  gem 'dotenv-rails'
+
+  # Restore behavior of Rails <5 controller tests (assigns and assert_template).
+  gem 'rails-controller-testing'
 
   # Rspec + plugins
-  gem "rspec-rails"
-  gem "rspec-html-matchers"
-  gem "shoulda-matchers"
-  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
-  gem "pundit-matchers"
-  gem "accept_values_for"
+  gem 'rspec-rails'
+  gem 'rspec-html-matchers'
+  gem 'shoulda-matchers'
+  # gem 'shoulda-callback-matchers' # Causes pundit-matchers to blow up
+  gem 'pundit-matchers'
+  gem 'accept_values_for'
 
   # Fixture generator.
-  gem "factory_bot"
+  gem 'factory_bot_rails'
 
   # Adds support for Capybara system testing and selenium driver
   # gem 'capybara', '~> 2.13'
@@ -112,17 +118,17 @@ end
 
 group :test do
   # Test database maintainer.
-  gem "database_cleaner"
+  gem 'database_cleaner'
 
   # Time manipulation tool.
-  gem "timecop"
+  gem 'timecop'
 
   # Test coverage measurement tool.
-  gem "simplecov"
+  gem 'simplecov'
 
   # Cache http responses from third parties in specs.
-  gem "vcr"
+  gem 'vcr'
 
   # Modify environment variables in specs.
-  gem "climate_control"
+  gem 'climate_control'
 end
