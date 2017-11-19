@@ -16,8 +16,10 @@ module ArmchairDjRails
     # -- all .rb files in that directory are automatically loaded.
 
     config.generators do |g|
+      g.javascripts false
       g.scaffold_stylesheet false
-      g.system_tests = nil
+      g.stylesheets false
+      g.system_tests nil
     end
   end
 end
