@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ArtistPolicy do
+RSpec.describe AlbumPolicy do
 
   let(:user) { User.new }
 

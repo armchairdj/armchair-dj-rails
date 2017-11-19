@@ -17,6 +17,7 @@ module ArmchairDjRails
 
     config.generators do |g|
       g.scaffold_stylesheet false
+      g.system_tests = nil
     end
   end
 end
