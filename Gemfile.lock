@@ -42,10 +42,12 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (8.0.0)
+    awesome_print (1.8.0)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    bcrypt (3.1.11)
     bindex (0.5.0)
     builder (3.2.3)
     byebug (9.1.0)
@@ -53,6 +55,12 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     database_cleaner (1.6.2)
+    devise (4.3.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 5.2)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.1.5)
     dotenv (2.2.1)
@@ -77,6 +85,9 @@ GEM
       activesupport (>= 4.2.0)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
+    inline_svg (1.3.0)
+      activesupport (>= 3.0)
+      nokogiri (>= 1.6)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -107,6 +118,7 @@ GEM
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     normalize-rails (4.1.1)
+    orm_adapter (0.5.0)
     pg (0.21.0)
     puma (3.10.0)
     pundit (1.1.0)
@@ -148,6 +160,9 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    responders (2.4.0)
+      actionpack (>= 4.2.0, < 5.3)
+      railties (>= 4.2.0, < 5.3)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -219,6 +234,8 @@ GEM
     uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     vcr (3.0.3)
+    warden (1.2.7)
+      rack (>= 1.0)
     web-console (3.5.1)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -233,13 +250,16 @@ PLATFORMS
 
 DEPENDENCIES
   accept_values_for
+  awesome_print
   byebug
   climate_control
   database_cleaner
+  devise
   dotenv-rails
   factory_bot_rails
   faraday
   foundation-rails (~> 6.4)
+  inline_svg
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
@@ -247,6 +267,7 @@ DEPENDENCIES
   normalize-rails
   pg
   puma (~> 3.7)
+  pundit
   pundit-matchers
   rails (~> 5.1.4)
   rails-controller-testing

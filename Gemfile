@@ -56,6 +56,13 @@ gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 
 ###############################################################################
+# IMAGES.
+###############################################################################
+
+# SVG inliner.
+gem 'inline_svg'
+
+###############################################################################
 # VIEWS.
 ###############################################################################
 
@@ -84,6 +91,16 @@ gem 'faraday'
 # gem 'capistrano-rails', group: :development
 
 ###############################################################################
+# AUTHENTICATION & AUTHORIZATION.
+###############################################################################
+
+# Authentication framework.
+gem 'devise'
+
+# Authorization framework.
+gem 'pundit'
+
+###############################################################################
 # DEV & TEST.
 ###############################################################################
 
@@ -100,6 +117,9 @@ group :development do
 end
 
 group :development, :test do
+  # Pretty printer.
+  gem 'awesome_print'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 

@@ -1,20 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 7]>      <html class="mod-no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>         <html class="mod-no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>         <html class="mod-no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="mod-no-js" lang="en"> <!--<![endif]-->
+<head>
 
-    <title><%= content_for?(:title) ? yield(:title) : "Armchair DJ" %></title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <%= javascript_include_tag "modernizr" %>
-    <%= stylesheet_link_tag "application" %>
-    <%= csrf_meta_tags %>
-  </head>
+<title><%= content_for?(:title) ? yield(:title) : "Armchair DJ" %></title>
 
-  <body>
+<%= javascript_include_tag "modernizr" %>
+<%= stylesheet_link_tag "application" %>
+<%= csrf_meta_tags %>
 
-    <%= yield %>
+</head>
+<body>
 
-    <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
-  </body>
+<%= render "layouts/application/masthead" %>
+
+<%= content_tag(:main, role: "main") do %>
+  <%= render "layouts/application/flash_messages" %>
+
+  <%= content_tag(:div, class: "wrapper") do %>
+    <%= content_tag(:div, class: "constrain") do %>
+      <%= content_tag(:article) do %>
+        <%= content_for_unless_empty :pre_header %>
+        <%= content_for_unless_empty :header %>
+        <%= content_for_unless_empty :post_header %>
+
+        <%= content_for_unless_empty :pre_main %>
+        <%= yield %>
+        <%= content_for_unless_empty :post_main %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render "layouts/application/footer" %>
+
+<%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
+
+</body>
 </html>
