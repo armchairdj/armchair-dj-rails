@@ -34,7 +34,7 @@ gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
 
 # SASS/UI framework
-gem 'foundation-rails'
+gem 'foundation-rails', '~> 6.4'
 
 # SASS and CSS libraries.
 gem 'normalize-rails'
