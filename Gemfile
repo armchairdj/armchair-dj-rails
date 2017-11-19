@@ -27,20 +27,24 @@ gem 'pg'
 gem 'puma', '~> 3.7'
 
 ###############################################################################
-# ASSETS.
+# CSS.
 ###############################################################################
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 
+# SASS/UI framework
+gem 'foundation-rails'
+
 # SASS and CSS libraries.
 gem 'normalize-rails'
 
+###############################################################################
+# JAVASCRIPT.
+###############################################################################
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 4.2'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
@@ -50,9 +54,6 @@ gem 'jbuilder', '~> 2.5'
 
 # JavaScript libraries.
 gem 'jquery-rails'
-
-# HTTP client library.
-gem 'faraday'
 
 ###############################################################################
 # VIEWS.
@@ -69,6 +70,9 @@ gem 'simpleconfig'
 
 # Don't allow empty strings into the database
 gem 'nilify_blanks'
+
+# HTTP client library.
+gem 'faraday'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
