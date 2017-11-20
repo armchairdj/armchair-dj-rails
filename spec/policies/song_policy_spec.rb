@@ -6,23 +6,23 @@ RSpec.describe SongPolicy do
 
   subject { described_class }
 
-  permissions ".scope" do
+  describe ".scope" do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 
-  permissions :show? do
+  describe :show? do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 
-  permissions :create? do
+  describe :create? do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 
-  permissions :update? do
+  describe :update? do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 
-  permissions :destroy? do
+  describe :destroy? do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 end

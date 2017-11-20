@@ -2,9 +2,10 @@
 # http://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
+  resources :artists
   resources :albums
   resources :songs
-  resources :artists
+  resources :reviews
 
-  root "artists#index"
+  root "reviews#index"
 end

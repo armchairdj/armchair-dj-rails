@@ -1,4 +1,4 @@
-class Album < ApplicationRecord
+class Review < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
@@ -12,9 +12,7 @@ class Album < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :artist, required: false
-
-  has_many :reviews, as: :reviewable, dependent: :destroy
+  belongs_to :reviewable, polymorphic: true, required: true
 
   #############################################################################
   # ENUMS.
@@ -28,8 +26,6 @@ class Album < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :title, presence: true
-
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -38,8 +34,12 @@ class Album < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def reviewable_dropdown_option
-    "#{self.artist.name}: #{self.title}"
+  def reviewable_gid
+    self.reviewable.to_global_id if self.reviewable.present?
+  end
+
+  def reviewable_gid=(reviewable)
+    self.reviewable = GlobalID::Locator.locate reviewable
   end
 
   #############################################################################
