@@ -7,31 +7,31 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    true
   end
 
   def show?
     scope.where(:id => record.id).exists?
   end
 
-  def create?
-    false
-  end
-
   def new?
     create?
   end
 
-  def update?
-    false
+  def create?
+    true
   end
 
   def edit?
     update?
   end
 
+  def update?
+    true
+  end
+
   def destroy?
-    false
+    true
   end
 
   def scope
