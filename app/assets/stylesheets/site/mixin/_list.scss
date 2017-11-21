@@ -1,0 +1,44 @@
+@mixin bulleted-list {
+  padding: 0 0 0 1rem;
+  margin: 0 0 0 1rem;
+  @include bottom-margin(1em);
+
+  li {
+    list-style-type: disc;
+    padding-left: .5rem;
+    margin: 0 0 .5rem;
+    @include bottom-margin(.5rem);
+  }
+}
+
+@mixin numbered-list($type: decimal) {
+  list-style-type: $type;
+  list-style-position: outside;
+  padding-left: 1.25rem;
+
+  > li {
+    list-style-type: $type;
+    list-style-position: outside;
+    @include bottom-margin(.5rem);
+  }
+}
+
+@mixin piped-list {
+  li {
+    display: inline-block;
+    margin-top: -.25rem;
+    margin-bottom: .5rem;
+
+    &:after {
+      content: "\007c";
+      font-size: 1.1rem;
+      font-weight: 100;
+      display: inline-block;
+      margin: 0 5px;
+    }
+
+    &:last-child:after {
+      content: "";
+    }
+  }
+}

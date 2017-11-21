@@ -23,7 +23,7 @@
   <%= render "layouts/application/flash_messages" %>
 
   <%= content_tag(:div, class: "wrapper") do %>
-    <%= content_tag(:div, class: "constrain") do %>
+    <%= content_tag(:div, class: "constrain row column") do %>
       <%= content_tag(:article) do %>
         <%= content_for_unless_empty :pre_header %>
         <%= content_for_unless_empty :header %>

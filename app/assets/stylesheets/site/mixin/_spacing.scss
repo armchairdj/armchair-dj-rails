@@ -1,0 +1,7 @@
+@mixin bottom-margin($margin: $global-margin) {
+  margin-bottom: $margin;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
