@@ -72,6 +72,9 @@ gem 'simple_form'
 # UTILITIES.
 ###############################################################################
 
+# Pagination.
+gem "will_paginate"
+
 # Configuration factory.
 gem 'simpleconfig'
 
