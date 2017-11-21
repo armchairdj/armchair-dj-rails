@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def site_logo
-    content_tag(:span, "logo")
+    image_tag("armchair.jpg", class: "chair")
   end
 
   def site_title

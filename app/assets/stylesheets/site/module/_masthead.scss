@@ -1,3 +1,8 @@
 nav#masthead {
-  
+  background-color: #000;
+
+  .logo {
+    @include flipBackgroundImage();
+    max-width: 40%;
+  }
 }

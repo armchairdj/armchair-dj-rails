@@ -1,8 +1,8 @@
-<%= content_tag(:nav, id: "masthead", class: "row column") do %>
+<%= content_tag(:nav, id: "masthead") do %>
   <% if @homepage %>
-    <%= site_logo %>
+    <%= content_tag(:span, site_logo, class: "logo") %>
   <% else %>
-    <%= link_to(site_logo, root_path, title: "back to homepage") %>
+    <%= link_to(site_logo, root_path, title: "back to homepage", class: "logo") %>
   <% end %>
 
   <%= content_tag(:header) do %>
