@@ -18,6 +18,6 @@ module ApplicationHelper
   end
 
   def site_title
-    "Armchair #{content_tag(:span, "DJ")}".html_safe
+    "Armchair#{content_tag(:span, "DJ")}".html_safe
   end
 end

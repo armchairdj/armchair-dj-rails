@@ -1,0 +1,58 @@
+@mixin colored-link($color: $linkColor) {
+  color: $color;
+
+  &:visited {
+    color: $color;
+  }
+
+  &:hover {
+    color: $color;
+  }
+
+  &:active {
+    color: $color;
+  }
+}
+
+@mixin uncolored-link($color: $bodyTextColor) {
+  @include colored-link($color);
+}
+
+@mixin underlined-always {
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  &:active {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+@mixin underlined-on-hover {
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  &:active {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+@mixin underline-never {
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: none;
+  }
+  &:active {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}

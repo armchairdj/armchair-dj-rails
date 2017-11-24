@@ -1,8 +1,80 @@
 nav#masthead {
-  background-color: #000;
+  @include clearfix;
+  background-color: $black;
+  padding: .5rem 0;
 
   .logo {
-    @include flipBackgroundImage();
-    max-width: 40%;
+    display: none;
+
+    @include breakpoint(large) {
+      display: block;
+      float: left;
+      width: 160px;
+
+      img {
+        display: block;
+        @include flipForegroundImage();
+      }
+    }
+  }
+
+  header {
+    text-align: center;
+
+    h1 {
+      font-size: 1.6rem;
+      white-space: nowrap;
+      @include compact();
+      color: $white;
+
+      a {
+        @include colored-link($white, $white);
+        @include underline-never();
+      }
+
+      span {
+        @include bold();
+      }
+    }
+
+    h2 {
+      font-size: .8rem;
+      line-height: $readable;
+      margin-top: -.5rem;
+      color: $primary-color;
+
+      span {
+        display: inline-block;
+        white-space: nowrap;
+      }
+    }
+
+    @include breakpoint(medium) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+    }
+
+    @include breakpoint(large) {
+      float: right;
+      text-align: right;
+      margin-left: 220px;
+
+      h1 {
+        font-size: 3.6rem;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+
+        span {
+          display: block;
+        }
+      }
+    }
   }
 }

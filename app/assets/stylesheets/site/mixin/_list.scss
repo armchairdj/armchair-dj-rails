@@ -24,6 +24,8 @@
 }
 
 @mixin piped-list {
+  margin: 0;
+
   li {
     display: inline-block;
     margin-top: -.25rem;

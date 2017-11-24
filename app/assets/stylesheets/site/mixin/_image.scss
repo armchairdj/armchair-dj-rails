@@ -1,3 +1,8 @@
+@mixin flipForegroundImage {
+  transform: scaleX(-1);
+  filter: FlipH;
+}
+
 @mixin flipBackgroundImage {
   transform: scaleX(-1);
   filter: FlipH;

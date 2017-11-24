@@ -17,10 +17,10 @@
 </head>
 <body>
 
-<%= render "layouts/application/masthead" %>
+<%= render "layouts/global/masthead" %>
 
 <%= content_tag(:main, role: "main") do %>
-  <%= render "layouts/application/flash_messages" %>
+  <%= render "layouts/global/flash_messages" %>
 
   <%= content_tag(:div, class: "wrapper") do %>
     <%= content_tag(:div, class: "constrain") do %>
@@ -37,7 +37,7 @@
   <% end %>
 <% end %>
 
-<%= render "layouts/application/footer" %>
+<%= render "layouts/global/footer" %>
 
 <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 
