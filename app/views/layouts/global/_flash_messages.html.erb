@@ -1,5 +1,20 @@
-<%= content_tag(:aside, id: "flashMessages") do %>
-  <%= content_tag(:div, class: "constrain") do %>
-    FLASH MESSAGES
+<% return if flash.empty? %>
+
+<%= content_tag(:aside, class: "flash-messages", data: {
+  behavior: "Closeable"
+}) do %>
+  <% flash.each do |type, message| %>
+    <%= content_tag(:div, class: "flash-#{type}") do %>
+      <%= content_tag(:div, class: "constrain") do %>
+        <%= link_to "&#215;".html_safe, "#",
+          class: "closeable",
+          title: "dismiss this message",
+          data: { closeable: "trigger" }
+        %>
+
+        <%= message %>
+      <% end %>
+    <% end %>
   <% end %>
+
 <% end %>

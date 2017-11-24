@@ -1,0 +1,39 @@
+aside.flash-messages {
+  .flash-alert,
+  .flash-error,
+  .flash-notice,
+  .flash-success {
+    margin: 0;
+    padding: 20px 30px 20px 0;
+
+    .constrain {
+      position: relative;
+    }
+
+    a {
+      @include underline-always();
+
+      &.closeable {
+        position: absolute;
+        top: 5px;
+        right: 20px;
+        @include underline-never();
+        @include no-hover-link($white);
+        @include bold();
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .flash-alert,
+  .flash-error {
+    background-color: scale-color($concrete, $lightness: -15%);
+    @include text-and-link($warning-color);
+  }
+
+  .flash-notice,
+  .flash-success {
+    background-color: scale-color($concrete, $lightness: -15%);
+    @include text-and-link($success-color);
+  }
+}

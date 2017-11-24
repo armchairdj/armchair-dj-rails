@@ -28,7 +28,7 @@ nav#masthead {
       color: $white;
 
       a {
-        @include colored-link($white, $white);
+        @include hover-link($white, $white);
         @include underline-never();
       }
 

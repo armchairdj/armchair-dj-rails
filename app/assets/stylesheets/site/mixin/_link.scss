@@ -1,4 +1,4 @@
-@mixin colored-link($color: $linkColor) {
+@mixin hover-link($color: $linkColor) {
   color: $color;
 
   &:visited {
@@ -14,8 +14,8 @@
   }
 }
 
-@mixin uncolored-link($color: $bodyTextColor) {
-  @include colored-link($color);
+@mixin no-hover-link($color: $bodyTextColor) {
+  @include hover-link($color);
 }
 
 @mixin underlined-always {
