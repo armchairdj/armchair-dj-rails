@@ -4,7 +4,7 @@ aside.flash-messages {
   .flash-notice,
   .flash-success {
     margin: 0;
-    padding: 20px 30px 20px 0;
+    padding: 20px 40px 20px 20px;
 
     .constrain {
       position: relative;
@@ -15,12 +15,13 @@ aside.flash-messages {
 
       &.closeable {
         position: absolute;
-        top: 5px;
+        top: -5px;
         right: 20px;
         @include underline-never();
         @include no-hover-link($white);
         @include bold();
         font-size: 2rem;
+        line-height: .6;
       }
     }
   }

@@ -26,7 +26,7 @@
     <%= content_tag(:div, class: "constrain") do %>
       <%= content_tag(:article) do %>
         <%= content_for_unless_empty :pre_header %>
-        <%= content_for_unless_empty :header %>
+        <%= render "layouts/global/header" %>
         <%= content_for_unless_empty :post_header %>
 
         <%= content_for_unless_empty :pre_main %>

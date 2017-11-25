@@ -1,4 +1,6 @@
-<p id="notice"><%%= notice %></p>
+<%%=
+  @headline = @title = "<%= singular_table_name.titleize %>"
+%>
 
 <% attributes.reject(&:password_digest?).each do |attribute| -%>
 <p>
@@ -7,5 +9,6 @@
 </p>
 
 <% end -%>
+
 <%%= link_to 'Edit', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %> |
 <%%= link_to 'Back', <%= index_helper %>_path %>
