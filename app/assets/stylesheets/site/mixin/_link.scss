@@ -1,4 +1,10 @@
-@mixin hover-link($color: $linkColor) {
+@mixin text-and-link($color: $anchor-color) {
+  color: $color;
+
+  @include no-hover-link($color);
+}
+
+@mixin hover-link($color: $anchor-color, $hover: $anchor-color-hover) {
   color: $color;
 
   &:visited {
@@ -6,7 +12,7 @@
   }
 
   &:hover {
-    color: $color;
+    color: $hover;
   }
 
   &:active {
@@ -14,11 +20,11 @@
   }
 }
 
-@mixin no-hover-link($color: $bodyTextColor) {
-  @include hover-link($color);
+@mixin no-hover-link($color: $anchor-color) {
+  @include hover-link($color, $color);
 }
 
-@mixin underlined-always {
+@mixin underline-always {
   text-decoration: underline;
 
   &:hover {
@@ -31,7 +37,7 @@
   }
 }
 
-@mixin underlined-on-hover {
+@mixin underline-on-hover {
   text-decoration: none;
 
   &:hover {

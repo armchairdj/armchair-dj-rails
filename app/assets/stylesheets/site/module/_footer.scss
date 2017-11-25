@@ -1,4 +1,4 @@
-footer#pageFooter {
+footer#page-footer {
   background-color: $black;
   padding: 2rem 0;
   text-align: center;
@@ -22,7 +22,7 @@ footer#pageFooter {
   
   .logo {
     display: block;
-    width: 100px;
+    width: 70px;
     margin: 1rem auto 0;
 
     img {
@@ -41,6 +41,7 @@ footer#pageFooter {
     .logo {
       float: right;
       margin: 0;
+      width: 100px;
     }
   }
 }

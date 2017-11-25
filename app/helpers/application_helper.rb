@@ -1,8 +1,8 @@
 module ApplicationHelper
   def content_for_unless_empty(key)
-    return unless content_for?(key)
+    return unless content_for?(key.to_sym)
 
-    content_for(key)
+    yield(key.to_sym)
   end
 
   def copyright_notice
@@ -11,6 +11,12 @@ module ApplicationHelper
     daterange = start == now ? start : "#{start}-#{now}"
 
     "&copy; #{daterange} Brian J. Dillard".html_safe
+  end
+
+  def page_title
+    raise NoMethodError unless @title
+
+    [@title, "Armchair DJ"].flatten.join(" | ")
   end
 
   def site_logo

@@ -6,15 +6,19 @@ nav#masthead {
   .logo {
     display: none;
 
-    @include breakpoint(large) {
+    @include breakpoint(medium) {
       display: block;
       float: left;
-      width: 160px;
+      width: 90px;
 
       img {
         display: block;
-        @include flipForegroundImage();
+        @include flip-foreground-image();
       }
+    }
+
+    @include breakpoint(large) {
+      width: 150px;
     }
   }
 
@@ -25,6 +29,7 @@ nav#masthead {
       font-size: 1.6rem;
       white-space: nowrap;
       @include compact();
+      @include light();
       color: $white;
 
       a {
@@ -41,7 +46,8 @@ nav#masthead {
       font-size: .8rem;
       line-height: $readable;
       margin-top: -.5rem;
-      color: $primary-color;
+      color: $tagline-color;
+      line-height: 1.1;
 
       span {
         display: inline-block;
@@ -50,30 +56,30 @@ nav#masthead {
     }
 
     @include breakpoint(medium) {
+      float: right;
+      text-align: right;
+      margin-left: 220px;
+
       h1 {
         font-size: 2rem;
       }
 
       h2 {
         font-size: 1rem;
+
+        span {
+          display: block;
+        }
       }
     }
 
     @include breakpoint(large) {
-      float: right;
-      text-align: right;
-      margin-left: 220px;
-
       h1 {
         font-size: 3.6rem;
       }
 
       h2 {
         font-size: 1.6rem;
-
-        span {
-          display: block;
-        }
       }
     }
   }
