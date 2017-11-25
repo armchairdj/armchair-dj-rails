@@ -6,7 +6,7 @@
   <% flash.each do |type, message| %>
     <%= content_tag(:div, class: "flash-#{type}") do %>
       <%= content_tag(:div, class: "constrain") do %>
-        <%= link_to "&#215;".html_safe, "#",
+        <%= link_to "&#215;".html_safe, "javascript:alert('TODO');",
           class: "closeable",
           title: "dismiss this message",
           data: { closeable: "trigger" }

@@ -13,8 +13,9 @@ aside.flash-messages {
   .flash-error,
   .flash-notice,
   .flash-success {
+    font-size: .9rem;
     margin: 0;
-    padding: 20px 40px 20px 20px;
+    padding: 20px 60px 20px 20px;
     background-color: scale-color($blacktop, $lightness: -20%);
 
     .constrain {
@@ -26,8 +27,8 @@ aside.flash-messages {
 
       &.closeable {
         position: absolute;
-        top: -2px;
-        right: 20px;
+        top: 0;
+        right: 0;
         @include underline-never();
         @include no-hover-link($white);
         @include bold();

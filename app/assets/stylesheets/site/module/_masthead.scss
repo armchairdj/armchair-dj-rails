@@ -47,7 +47,7 @@ nav#masthead {
       line-height: $readable;
       margin-top: -.5rem;
       color: $tagline-color;
-      line-height: 1.1;
+      line-height: $readable;
 
       span {
         display: inline-block;
