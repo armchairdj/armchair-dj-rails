@@ -1,10 +1,21 @@
 aside.flash-messages {
   .flash-alert,
+  .flash-error {
+    @include text-and-link($alert-color);
+  }
+
+  .flash-notice,
+  .flash-success {
+    @include text-and-link($success-color);
+  }
+
+  .flash-alert,
   .flash-error,
   .flash-notice,
   .flash-success {
     margin: 0;
     padding: 20px 40px 20px 20px;
+    background-color: scale-color($blacktop, $lightness: -20%);
 
     .constrain {
       position: relative;
@@ -24,17 +35,5 @@ aside.flash-messages {
         line-height: .6;
       }
     }
-  }
-
-  .flash-alert,
-  .flash-error {
-    background-color: scale-color($blacktop, $lightness: -15%);
-    @include text-and-link($warning-color);
-  }
-
-  .flash-notice,
-  .flash-success {
-    background-color: scale-color($blacktop, $lightness: -15%);
-    @include text-and-link($success-color);
   }
 }

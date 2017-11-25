@@ -4,7 +4,7 @@ class ReviewsController < ApplicationController
   # GET /reviews
   # GET /reviews.json
   def index
-    flash.now[:notice] = "notice"
+    flash.now[:notice] = "This is a flash notice message."
 
     @reviews = Review.all
   end
