@@ -14,7 +14,7 @@ class Album < ApplicationRecord
 
   belongs_to :artist, required: false
 
-  has_many :reviews, as: :reviewable, dependent: :destroy
+  has_many :posts, as: :postable, dependent: :destroy
 
   #############################################################################
   # ENUMS.
@@ -23,6 +23,9 @@ class Album < ApplicationRecord
   #############################################################################
   # SCOPES.
   #############################################################################
+
+  scope :alphabetical, -> { order(:title) }
+  scope :alphabetical_by_artist, -> { joins(:artist).order("artists.name") }
 
   #############################################################################
   # VALIDATIONS.
@@ -38,7 +41,7 @@ class Album < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def reviewable_dropdown_option
+  def postable_dropdown_option
     "#{self.artist.name}: #{self.title}"
   end
 

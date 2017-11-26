@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :artists
   resources :albums
   resources :songs
-  resources :reviews
+  resources :posts
 
-  root "reviews#index"
+  root "posts#index"
 end

@@ -1,17 +1,17 @@
-<%= simple_form_for(@review) do |f| %>
+<%= simple_form_for(@post) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.grouped_collection_select :reviewable_gid,
+    <%= f.grouped_collection_select :postable_gid,
       [Song, Album],
       :all,
       :model_name,
       :to_global_id,
-      :reviewable_dropdown_option,
+      :postable_dropdown_option,
       include_blank: "Please choose"
     %>
     <%= f.input :title %>
-    <%= f.input :content %>
+    <%= f.input :body %>
   </div>
 
   <div class="form-actions">

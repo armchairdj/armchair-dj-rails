@@ -1,4 +1,4 @@
-class Review < ApplicationRecord
+class Post < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
@@ -12,7 +12,7 @@ class Review < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :reviewable, polymorphic: true, required: true
+  belongs_to :postable, polymorphic: true, required: false
 
   #############################################################################
   # ENUMS.
@@ -22,9 +22,14 @@ class Review < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :reverse_cron, -> { order(published_at: :desc) }
+
   #############################################################################
   # VALIDATIONS.
   #############################################################################
+
+  validates :title, presence: true
+  validates :body, presence: true
 
   #############################################################################
   # HOOKS.
@@ -34,12 +39,12 @@ class Review < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def reviewable_gid
-    self.reviewable.to_global_id if self.reviewable.present?
+  def postable_gid
+    self.postable.to_global_id if self.postable.present?
   end
 
-  def reviewable_gid=(reviewable)
-    self.reviewable = GlobalID::Locator.locate reviewable
+  def postable_gid=(postable)
+    self.postable = GlobalID::Locator.locate postable
   end
 
   #############################################################################

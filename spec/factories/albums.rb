@@ -13,11 +13,12 @@ FactoryBot.define do
   #############################################################################
 
   factory :album do
-    factory :minimal_album do
+    factory :single_artist_album do
       title { generate(:album_title) }
+      association :artist, factory: :minimal_artist
 
-      factory :single_artist_album do
-        association :artist, factory: :minimal_artist
+      factory :minimal_album do
+        # Just a single-artist album
       end
     end
   end

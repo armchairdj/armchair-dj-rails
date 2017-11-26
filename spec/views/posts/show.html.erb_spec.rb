@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "reviews/show", type: :view do
+RSpec.describe "posts/show", type: :view do
   before(:each) do
-    @review = assign(:review, create(:minimal_review))
+    @post = assign(:post, create(:minimal_post))
   end
 
   it "renders attributes in <p>" do

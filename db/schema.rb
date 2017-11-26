@@ -29,14 +29,15 @@ ActiveRecord::Schema.define(version: 20171120213759) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "reviews", force: :cascade do |t|
+  create_table "posts", force: :cascade do |t|
     t.string "title"
-    t.text "content"
-    t.string "reviewable_type"
-    t.bigint "reviewable_id"
+    t.text "body"
+    t.datetime "published_at"
+    t.string "postable_type"
+    t.bigint "postable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["reviewable_type", "reviewable_id"], name: "index_reviews_on_reviewable_type_and_reviewable_id"
+    t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
   end
 
   create_table "songs", force: :cascade do |t|
