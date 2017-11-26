@@ -77,7 +77,7 @@ gem 'redcarpet'
 ###############################################################################
 
 # Pagination.
-gem "will_paginate"
+gem 'will_paginate'
 
 # Configuration factory.
 gem 'simpleconfig'
