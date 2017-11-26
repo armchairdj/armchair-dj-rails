@@ -7,5 +7,5 @@ Rails.application.routes.draw do
   resources :songs
   resources :posts
 
-  root "posts#index"
+  root "pages#index"
 end

@@ -161,7 +161,7 @@ group :test do
   gem 'timecop'
 
   # Test coverage measurement tool.
-  gem 'simplecov'
+  gem 'simplecov', require: false, group: :test
 
   # Cache http responses from third parties in specs.
   gem 'vcr'

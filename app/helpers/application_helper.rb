@@ -14,9 +14,13 @@ module ApplicationHelper
   end
 
   def page_title
+    if @homepage
+      return "Armchair DJ: a monologue about music, with occasional mixtapes"
+    end
+
     raise NoMethodError unless @title
 
-    [@title, "Armchair DJ"].flatten.join(" | ")
+    [@title, "Armchair DJ"].flatten.compact.join(" | ")
   end
 
   def site_logo

@@ -1,0 +1,36 @@
+en:
+  errors:
+    # The default format to use in full error messages.
+    # format: "%{attribute} %{message}"
+
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages:
+      model_invalid: "Validation failed: %{errors}"
+      inclusion: "Please choose a value."
+      exclusion: "This value is reserved."
+      invalid: "This value is invalid."
+      confirmation: "This value needs to match %{attribute}."
+      accepted: "This value must be accepted."
+      empty: "Please enter a value."
+      blank: "Please enter a value."
+      present: "Please leave this blank."
+      too_long:
+        one: "Please enter no more than 1 character."
+        other: "Please enter no more than %{count} characters."
+      too_short:
+        one: "Please enter at least 1 character."
+        other: "Please enter at least %{count} characters."
+      wrong_length:
+        one: "Please enter exactly 1 character."
+        other: "Please enter exactly %{count} characters."
+      not_a_number: "Please enter a number."
+      not_an_integer: "Please enter an integer."
+      greater_than: "Please enter a value greater than %{count}."
+      greater_than_or_equal_to: "Please enter a value greater than or equal to %{count}."
+      equal_to: "Please enter a value equal to %{count}."
+      less_than: "Please enter a value less than %{count}."
+      less_than_or_equal_to: "Please enter a value less than or equal to %{count}."
+      other_than: "Please enter a value other than %{count}."
+      odd: "Please enter an odd value."
+      even: "Please enter an even value."
