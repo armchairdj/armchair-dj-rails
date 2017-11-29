@@ -19,4 +19,12 @@ footer#page-footer {
       display: block;
     }
   }
+
+  @include breakpoint(large) {
+    text-align: left;
+
+    .logo {
+      margin: 1rem 0 0;
+    }
+  }
 }
