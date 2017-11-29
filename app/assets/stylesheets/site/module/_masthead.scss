@@ -1,86 +1,104 @@
 nav#masthead {
-  @include clearfix;
+  @include clearfix();
   background-color: $black;
   padding: .5rem 0;
 
-  .logo {
-    display: none;
-
-    @include breakpoint(medium) {
-      display: block;
-      float: left;
-      width: 90px;
-
-      img {
-        display: block;
-        @include flip-foreground-image();
-      }
-    }
-
-    @include breakpoint(large) {
-      width: 150px;
-    }
-  }
-
   header {
-    text-align: center;
+    float: left;
+    @include clearfix();
 
-    h1 {
-      font-size: 1.6rem;
-      white-space: nowrap;
-      @include compact();
-      @include light();
-      color: $white;
-
-      a {
-        @include hover-link($white, $white);
-        @include underline-never();
-      }
-
-      span {
-        @include bold();
-      }
-    }
-
-    h2 {
-      font-size: .8rem;
-      line-height: $readable;
-      margin-top: -.5rem;
-      color: $tagline-color;
-      line-height: $readable;
-
-      span {
-        display: inline-block;
-        white-space: nowrap;
-      }
-    }
-
-    @include breakpoint(medium) {
-      float: right;
-      text-align: right;
-      margin-left: 220px;
+    .headlines {
+      float: left;
 
       h1 {
-        font-size: 2rem;
+        font-size: 1.9rem;
+        color: $white;
+        white-space: nowrap;
+        @include compact();
+        @include light();
+
+        a {
+          @include hover-link($white, $white);
+          @include underline-never();
+        }
+
+        span {
+          @include bold();
+        }
       }
 
       h2 {
-        font-size: 1rem;
+        font-size: .8rem;
+        line-height: $readable;
+        margin-top: -.5rem;
+        color: $tagline-color;
+        line-height: $readable;
 
         span {
           display: block;
+          white-space: nowrap;
         }
       }
     }
 
-    @include breakpoint(large) {
-      h1 {
-        font-size: 3.6rem;
+    .logo {
+      display: block;
+      float: left;
+      width: 75px;
+
+      img {
+        display: block;
+      }
+    }
+
+    @include breakpoint(medium) {
+      .headlines {
+        h1 {
+          font-size: 2.7rem;
+        }
+
+        h2 {
+          font-size: 1.2rem;
+        }
       }
 
-      h2 {
-        font-size: 1.6rem;
+      .logo {
+        width: 105px;
       }
+    }
+
+    @include breakpoint(large) {
+      float: right;
+
+      .headlines {
+        float: right;
+        text-align: right;
+
+        h1 {
+          font-size: 3.6rem;
+        }
+
+        h2 {
+          font-size: 1.6rem;
+        }
+      }
+
+      .logo {
+        float: right;
+        width: 150px;
+
+        img {
+          @include flip-foreground-image();
+        }
+      }
+    }
+  }
+
+  .menu {
+    float: right;
+
+    @include breakpoint(large) {
+      display: none;
     }
   }
 }

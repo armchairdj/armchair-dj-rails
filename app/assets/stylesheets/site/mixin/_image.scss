@@ -3,6 +3,11 @@
   filter: FlipH;
 }
 
+@mixin unflip-foreground-image {
+  transform: none;
+  filter: none;
+}
+
 @mixin flip-background-image {
   transform: scaleX(-1);
   filter: FlipH;

@@ -1,5 +1,5 @@
 .constrain {
-  @include clearfix;
+  @include clearfix();
 
   padding: 0 20px;
   max-width: 100%;
@@ -11,7 +11,7 @@
 }
 
 .constrain-wide {
-  @include clearfix;
+  @include clearfix();
 
   padding: 0 20px;
   max-width: 100%;

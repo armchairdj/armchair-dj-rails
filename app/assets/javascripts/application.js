@@ -1,9 +1,5 @@
-//= require rails-ujs
+//= require jquery
 //= require underscore
-//= require foundation
+//= require rails-ujs
 //= require turbolinks
 //= require site
-
-$(function () {
-  $(document).foundation();
-});
