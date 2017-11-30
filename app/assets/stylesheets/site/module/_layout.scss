@@ -3,22 +3,18 @@
 
   padding: 0 20px;
   max-width: 100%;
-
-  @include breakpoint(large) {
-    max-width: 1024px;
-    margin: 0 auto;
-  }
-}
-
-.constrain-wide {
-  @include clearfix();
-
-  padding: 0 20px;
-  max-width: 100%;
 }
 
 .wrapper {
   padding: 20px 0 40px;
   background-color: $blacktop;
   min-height: 1000px;
+
+  @include breakpoint(large) {
+    margin-right: $masthead-width-large;
+  }
+
+  @include breakpoint(xlarge) {
+    margin-right: $masthead-width-xlarge;
+  }
 }
