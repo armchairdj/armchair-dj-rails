@@ -15,5 +15,7 @@ module ArmchairDjRails
       g.system_tests nil
       g.helper false
     end
+
+    config.exceptions_app = self.routes
   end
 end

@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include HandleErrors
+
   protect_from_forgery with: :exception
 
   layout :determine_layout
