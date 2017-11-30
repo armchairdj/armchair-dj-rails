@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   root "pages#index"
 
   get "/404" => "errors#not_found"
-
   get "/500" => "errors#internal_server_error"
   post "/500" => "errors#internal_server_error"
 
