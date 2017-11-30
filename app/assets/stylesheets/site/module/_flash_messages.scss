@@ -1,5 +1,5 @@
 aside.flash-messages {
-  background-color: scale-color($blacktop, $lightness: -20%);
+  background-color: $flash-background;
 
   .flash-alert,
   .flash-error {
@@ -37,5 +37,9 @@ aside.flash-messages {
         line-height: .6;
       }
     }
+  }
+
+  @include breakpoint(large) {
+    margin-right: $masthead-large-width;
   }
 }

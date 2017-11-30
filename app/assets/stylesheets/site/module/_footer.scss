@@ -1,5 +1,5 @@
 footer#page-footer {
-  background-color: $black;
+  background-color: $flash-background;
   padding: 2rem 0;
   text-align: center;
 
@@ -12,8 +12,11 @@ footer#page-footer {
   
   .logo {
     display: block;
-    width: 70px;
+    width: 110px;
     margin: 1rem auto 0;
+    padding: 20px;
+    border-radius: 55px;
+    background-color: $black;
 
     img {
       display: block;
@@ -21,9 +24,17 @@ footer#page-footer {
   }
 
   @include breakpoint(large) {
-    text-align: left;
+    @include clearfix();
+    text-align: right;
+    margin-right: $masthead-large-width;
+
+    nav.links {
+      float: right;
+    }
 
     .logo {
+      clear: right;
+      float: right;
       margin: 1rem 0 0;
     }
   }
