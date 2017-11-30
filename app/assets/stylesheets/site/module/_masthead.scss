@@ -80,13 +80,33 @@ nav#masthead {
     top: 0;
     right: 0;
     height: 100%;
-    width: $masthead-large-width;
+    width: $masthead-width-large;
 
     header {
       .headlines {
         float: right;
         text-align: right;
+      }
 
+      .logo {
+        float: right;
+
+        img {
+          @include flip-foreground-image();
+        }
+      }
+    }
+
+    .menu {
+      display: none;
+    }
+  }
+
+  @include breakpoint(xlarge) {
+    width: $masthead-width-xlarge;
+
+    header {
+      .headlines {
         h1 {
           font-size: 3.6rem;
         }
@@ -97,17 +117,8 @@ nav#masthead {
       }
 
       .logo {
-        float: right;
         width: 150px;
-
-        img {
-          @include flip-foreground-image();
-        }
       }
-    }
-
-    .menu {
-      display: none;
     }
   }
 }
