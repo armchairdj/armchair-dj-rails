@@ -44,7 +44,7 @@ nav#masthead {
     .logo {
       display: block;
       float: left;
-      width: 75px;
+      width: 70px;
 
       img {
         display: block;
@@ -70,7 +70,7 @@ nav#masthead {
       }
 
       .logo {
-        width: 105px;
+        width: 100px;
       }
     }
   }
@@ -83,6 +83,9 @@ nav#masthead {
     width: $masthead-width-large;
 
     header {
+      float: none;
+      margin: 0 auto;
+
       .headlines {
         float: right;
         text-align: right;
@@ -117,7 +120,7 @@ nav#masthead {
       }
 
       .logo {
-        width: 150px;
+        width: 140px;
       }
     }
   }

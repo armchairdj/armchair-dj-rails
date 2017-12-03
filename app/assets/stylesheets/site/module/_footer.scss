@@ -1,3 +1,6 @@
+$footer-logo-width: 100px;
+$footer-logo-radius: $footer-logo-width / 2;
+
 footer#page-footer {
   background-color: $flash-background;
   padding: 2rem 0;
@@ -14,10 +17,11 @@ footer#page-footer {
   
   .logo {
     display: block;
-    width: 110px;
+    width: $footer-logo-width;
+    height: $footer-logo-width;
     margin: 1rem auto 0;
     padding: 20px;
-    border-radius: 55px;
+    border-radius: $footer-logo-radius;
     background-color: $black;
 
     img {

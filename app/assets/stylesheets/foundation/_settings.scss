@@ -62,6 +62,13 @@
 
 @import 'util/util';
 
+// 0. Custom
+// ---------
+
+$blacktop: #131313;
+$flash-background: scale-color($blacktop, $lightness: 5%);
+$tagline-color: #92898a;
+
 // 1. Global
 // ---------
 
@@ -80,7 +87,7 @@ $medium-gray: #999;
 $dark-gray: #555;
 $black: #000;
 $white: #fefefe;
-$body-background: $black;
+$body-background: $flash-background;
 $body-font-color: $white;
 $body-font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $body-antialiased: true;
