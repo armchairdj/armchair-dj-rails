@@ -2,6 +2,7 @@
 # http://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
+  devise_for :users
   root "pages#index"
 
   get "/404" => "errors#not_found"
@@ -12,4 +13,12 @@ Rails.application.routes.draw do
   resources :albums
   resources :songs
   resources :posts
+
+  # devise_for :users, controllers: {
+  #   confirmations: "users/confirmations",
+  #   passwords:     "users/passwords",
+  #   registrations: "users/registrations",
+  #   sessions:      "users/sessions",
+  #   unlocks:       "users/sessions"
+  # }
 end

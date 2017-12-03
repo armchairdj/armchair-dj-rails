@@ -18,7 +18,7 @@ module ApplicationHelper
       return "Armchair DJ: a monologue about music, with occasional mixtapes"
     end
 
-    raise NoMethodError unless @title
+    raise NoMethodError.new("This page needs a title") unless @title
 
     [@title, "Armchair DJ"].flatten.compact.join(" | ")
   end

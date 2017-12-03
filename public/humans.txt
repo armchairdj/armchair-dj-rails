@@ -1,0 +1,43 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+/* TEAM */
+  Brian Dillard
+  Writer & Developer
+  Los Angeles via Chicago by way of Battle Creek, MI, USA
+  https://github.com/armchairdj
+  https://stackoverflow.com/users/1518589/armchairdj
+  https://twitter.com/armchairdj
+  https://www.linkedin.com/in/briandillard
+  http://www.briandillard.com
+
+/* MASCOT */
+  The Armchair DJ's armchair is derived from a photo by David Costa:
+  https://www.flickr.com/photos/101899087@N06/17221395626/in/photolist-dYpih1-9vrkMz-tBmAUN-seN9Wf-jbuBmL-Do7pLr-83PeP9-vdvVZ9-8BPNMh-83L6y4-9vun3q-83PhHQ-83LcKc-83Pdrq-83Pg2C-83Pb6s-83Pka7-naPigS-8XM7Vx-3jT8ET-5sJcWG
+
+  Borrowed under the Creative Commons Attribution 2.0 Generic License:
+  https://creativecommons.org/licenses/by/2.0/
+
+  Modified extensively for various uses.
+
+/* FAVICON */
+  Icons from the 48 Bubbles Iconset by Umar Irshad:
+  https://dribbble.com/shots/1569128-Freebie-48-Bubbles-Iconset
+
+/* CODEBASE */
+  Watch this site evolve in real time at GitHub:
+  https://github.com/armchairdj/armchair-dj-rails
+
+/* WAYBACK */
+  Armchair DJ began its life on the servers of Michigan State University in 1996.
+  It was dormant for many years but returned to life in 2018.
+
+  You can see its erratic publication history at the Wayback Machine:
+  https://web.archive.org/web/19990210183450/http://www.msu.edu/user/dillardb/
+  https://web.archive.org/web/20020602192407/http://www.armchair-dj.com
+
+/* THANKS */
+  Flickr creative commons photographers.
+  The Rails community.
+  Too many other open-source projects to name.
+  All the musicians, DJS, artists and other makers whose work I discuss here.
