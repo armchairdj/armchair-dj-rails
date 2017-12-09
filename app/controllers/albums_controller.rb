@@ -1,31 +1,48 @@
 class AlbumsController < ApplicationController
-  before_action :set_album, only: [:show, :edit, :update, :destroy]
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :create_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :authorize_instance, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
+  ]
 
   # GET /albums
   # GET /albums.json
   def index
-    @albums = Album.all
+    @albums = policy_scope(Album)
   end
 
   # GET /albums/1
   # GET /albums/1.json
   def show
+
   end
 
   # GET /albums/new
   def new
-    @album = Album.new
-  end
 
-  # GET /albums/1/edit
-  def edit
   end
 
   # POST /albums
   # POST /albums.json
   def create
-    @album = Album.new(album_params)
-
     respond_to do |format|
       if @album.save
         format.html { redirect_to @album, notice: 'Album was successfully created.' }
@@ -37,11 +54,16 @@ class AlbumsController < ApplicationController
     end
   end
 
+  # GET /albums/1/edit
+  def edit
+
+  end
+
   # PATCH/PUT /albums/1
   # PATCH/PUT /albums/1.json
   def update
     respond_to do |format|
-      if @album.update(album_params)
+      if @album.update(instance_params)
         format.html { redirect_to @album, notice: 'Album was successfully updated.' }
         format.json { render :show, status: :ok, location: @album }
       else
@@ -55,20 +77,32 @@ class AlbumsController < ApplicationController
   # DELETE /albums/1.json
   def destroy
     @album.destroy
+
     respond_to do |format|
       format.html { redirect_to albums_url, notice: 'Album was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_album
-      @album = Album.find(params[:id])
-    end
+private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def album_params
-      params.fetch(:album, {}).permit(:title, :artist_id)
-    end
+  def find_instance
+    @album = Album.find(params[:id])
+  end
+
+  def create_new_instance
+    @album = Album.new(instance_params)
+  end
+
+  def authorize_instance
+    authorize @album
+  end
+
+  def authorize_collection
+    authorize Album
+  end
+
+  def instance_params
+    params.fetch(:album, {}).permit(:title, :artist_id)
+  end
 end

@@ -1,35 +1,48 @@
 class ArtistsController < ApplicationController
-  before_action :set_artist, only: [
+  before_action :find_instance, only: [
     :show,
     :edit,
     :update,
     :destroy
   ]
 
+  before_action :create_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :authorize_instance, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
+  ]
+
   # GET /artists
   # GET /artists.json
   def index
-    @artists = Artist.all
+    @artists = policy_scope(Artist)
   end
 
   # GET /artists/1
   # GET /artists/1.json
   def show
+
   end
 
   # GET /artists/new
   def new
-    @artist = Artist.new
-  end
 
-  # GET /artists/1/edit
-  def edit
   end
 
   # POST /artists
   # POST /artists.json
   def create
-    @artist = Artist.new(artist_params)
 
     respond_to do |format|
       if @artist.save
@@ -42,11 +55,16 @@ class ArtistsController < ApplicationController
     end
   end
 
+  # GET /artists/1/edit
+  def edit
+
+  end
+
   # PATCH/PUT /artists/1
   # PATCH/PUT /artists/1.json
   def update
     respond_to do |format|
-      if @artist.update(artist_params)
+      if @artist.update(instance_params)
         format.html { redirect_to @artist, notice: 'Artist was successfully updated.' }
         format.json { render :show, status: :ok, location: @artist }
       else
@@ -60,6 +78,7 @@ class ArtistsController < ApplicationController
   # DELETE /artists/1.json
   def destroy
     @artist.destroy
+
     respond_to do |format|
       format.html { redirect_to artists_url, notice: 'Artist was successfully destroyed.' }
       format.json { head :no_content }
@@ -68,13 +87,23 @@ class ArtistsController < ApplicationController
 
 private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_artist
-    @artist = Artist.find(params[:id])
+  def find_instance
+    @artist = Album.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def artist_params
+  def create_new_instance
+    @artist = Artist.new(instance_params)
+  end
+
+  def authorize_instance
+    authorize @artist
+  end
+
+  def authorize_collection
+    authorize Artist
+  end
+
+  def instance_params
     params.fetch(:artist, {}).permit(:name)
   end
 end
