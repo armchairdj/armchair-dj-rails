@@ -15,7 +15,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   }
 
 <% unless options[:singleton] -%>
-  describe "GET #index" do
+  describe 'GET #index' do
     it "returns a success response" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
@@ -28,7 +28,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   end
 
 <% end -%>
-  describe "GET #show" do
+  describe 'GET #show' do
     it "returns a success response" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
@@ -40,7 +40,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
   end
 
-  describe "GET #new" do
+  describe 'GET #new' do
     it "returns a success response" do
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :new, {}
@@ -51,7 +51,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
   end
 
-  describe "POST #create" do
+  describe 'POST #create' do
     context "with valid params" do
       it "creates a new <%= class_name %>" do
         expect {
@@ -85,7 +85,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
   end
 
-  describe "GET #edit" do
+  describe 'GET #edit' do
     it "returns a success response" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
@@ -97,7 +97,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
   end
 
-  describe "PUT #update" do
+  describe 'PUT #update' do
     context "with valid params" do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
@@ -138,7 +138,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
   end
 
-  describe "DELETE #destroy" do
+  describe 'DELETE #destroy' do
     it "destroys the requested <%= ns_file_name %>" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
       expect {

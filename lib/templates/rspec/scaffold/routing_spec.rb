@@ -2,7 +2,7 @@ require "rails_helper"
 
 <% module_namespacing do -%>
 RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:routing) %> do
-  describe "routing" do
+  describe 'routing' do
 
 <% unless options[:singleton] -%>
     it "routes to #index" do

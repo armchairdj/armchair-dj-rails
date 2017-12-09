@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "songs/new", type: :view do
+RSpec.describe 'songs/new', type: :view do
   before(:each) do
     assign(:song, build(:song))
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "songs/index", type: :view do
+RSpec.describe 'songs/index', type: :view do
   before(:each) do
     assign(:songs, [
       create(:minimal_song),

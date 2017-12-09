@@ -1,8 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
 
   #############################################################################
   # CONSTANTS.
@@ -12,6 +8,19 @@ class User < ApplicationRecord
   # PLUGINS.
   #############################################################################
 
+  devise(
+    # :omniauthable,
+    # :timeoutable,
+    :confirmable,
+    :database_authenticatable,
+    :lockable,
+    :recoverable,
+    :registerable,
+    :rememberable,
+    :trackable,
+    :validatable
+  )
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -19,6 +28,13 @@ class User < ApplicationRecord
   #############################################################################
   # ENUMS.
   #############################################################################
+
+  enum role: {
+    guest:       0,
+    member:      1,
+    contributor: 2,
+    admin:       3
+  }
 
   #############################################################################
   # SCOPES.
@@ -28,13 +44,25 @@ class User < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validates :first_name, presence: true
+
+  validates :last_name, presence: true
+
+  validates :role, presence: true
+
   #############################################################################
   # HOOKS.
   #############################################################################
 
+  before_validation :set_default_role, if: :new_record?
+
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def set_default_role
+    self.role = :guest if self.role.nil?
+  end
 
   #############################################################################
   # CLASS.

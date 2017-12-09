@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "albums/edit", type: :view do
+RSpec.describe 'albums/edit', type: :view do
   before(:each) do
     @album = assign(:album, create(:minimal_album))
   end

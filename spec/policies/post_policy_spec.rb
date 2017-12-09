@@ -6,7 +6,7 @@ RSpec.describe PostPolicy do
 
   subject { described_class }
 
-  describe ".scope" do
+  describe '.scope' do
     pending "add some examples to (or delete) #{__FILE__}"
   end
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "albums/new", type: :view do
+RSpec.describe 'albums/new', type: :view do
   before(:each) do
     assign(:album, build(:album))
   end

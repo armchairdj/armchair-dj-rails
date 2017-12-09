@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "artists/new", type: :view do
+RSpec.describe 'artists/new', type: :view do
   before(:each) do
     assign(:artist, build(:artist))
   end

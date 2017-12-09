@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "albums/index", type: :view do
+RSpec.describe 'albums/index', type: :view do
   before(:each) do
     assign(:albums, [
       create(:minimal_album),

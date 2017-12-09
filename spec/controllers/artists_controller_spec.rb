@@ -10,7 +10,7 @@ RSpec.describe ArtistsController, type: :controller do
     name: ""
   } }
 
-  describe "GET #index" do
+  describe 'GET #index' do
     let(:artists) { [
       create(:minimal_artist),
       create(:minimal_artist)
@@ -25,7 +25,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "GET #show" do
+  describe 'GET #show' do
     let(:artist) {
       create(:minimal_artist)
     }
@@ -37,7 +37,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "GET #new" do
+  describe 'GET #new' do
     it "returns a success response" do
       get :new, params: {}
 
@@ -45,7 +45,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
+  describe 'POST #create' do
     context "with valid params" do
       it "creates a new Artist" do
         expect {
@@ -69,7 +69,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe 'GET #edit' do
     let(:artist) {
       create(:minimal_artist)
     }
@@ -81,7 +81,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
+  describe 'PUT #update' do
     let(:artist) {
       create(:minimal_artist)
     }
@@ -115,7 +115,7 @@ RSpec.describe ArtistsController, type: :controller do
     end
   end
 
-  describe "DELETE #destroy" do
+  describe 'DELETE #destroy' do
     let!(:artist) {
       create(:minimal_artist)
     }

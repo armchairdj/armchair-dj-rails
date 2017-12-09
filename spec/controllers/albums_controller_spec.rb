@@ -12,7 +12,7 @@ RSpec.describe AlbumsController, type: :controller do
     artist_id: nil
   } }
 
-  describe "GET #index" do
+  describe 'GET #index' do
     let(:albums) { [
       create(:minimal_album),
       create(:minimal_album)
@@ -25,7 +25,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "GET #show" do
+  describe 'GET #show' do
     let(:album) {
       create(:minimal_album)
     }
@@ -37,7 +37,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "GET #new" do
+  describe 'GET #new' do
     it "returns a success response" do
       get :new, params: {}
 
@@ -45,7 +45,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
+  describe 'POST #create' do
     context "with valid params" do
       it "creates a new Album" do
         expect {
@@ -69,7 +69,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe 'GET #edit' do
     let(:album) {
       create(:minimal_album)
     }
@@ -81,7 +81,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
+  describe 'PUT #update' do
     let(:album) {
       create(:minimal_album)
     }
@@ -115,7 +115,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
   end
 
-  describe "DELETE #destroy" do
+  describe 'DELETE #destroy' do
     let!(:album) {
       create(:minimal_album)
     }

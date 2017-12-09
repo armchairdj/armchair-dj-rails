@@ -1,3 +1,3 @@
-RSpec.describe "artists" do
+RSpec.describe 'artists' do
 
 end

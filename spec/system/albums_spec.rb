@@ -1,3 +1,3 @@
-RSpec.describe "albums" do
+RSpec.describe 'albums' do
 
 end

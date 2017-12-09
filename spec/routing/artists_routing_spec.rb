@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ArtistsController, type: :routing do
-  describe "routing" do
+  describe 'routing' do
 
     it "routes to #index" do
       expect(:get => "/artists").to route_to("artists#index")

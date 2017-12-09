@@ -1,6 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Post, type: :model do
+<% module_namespacing do -%>
+RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
+  pending "add some examples to (or delete) #{__FILE__}"
+
   describe 'constants' do
     # Nothing so far.
   end
@@ -10,7 +13,7 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'associations' do
-    it { should belong_to(:postable) }
+    # Nothing so far.
   end
 
   describe 'enums' do
@@ -18,12 +21,11 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'scopes' do
-    pending 'reverse_cron'
+    # Nothing so far.
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:title) }
-    it { should validate_presence_of(:body) }
+    # Nothing so far.
   end
 
   describe 'hooks' do
@@ -31,11 +33,12 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'instance' do
-    pending 'postable_gid'
-    pending 'postable_gid='
+    # Nothing so far.
   end
 
   describe 'class' do
     # Nothing so far.
   end
+
 end
+<% end -%>

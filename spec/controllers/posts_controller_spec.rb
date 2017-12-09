@@ -14,7 +14,7 @@ RSpec.describe PostsController, type: :controller do
     postable_gid: nil
   } }
 
-  describe "GET #index" do
+  describe 'GET #index' do
     let(:posts) { [
       create(:minimal_post),
       create(:minimal_post)
@@ -27,7 +27,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "GET #show" do
+  describe 'GET #show' do
     let(:post) {
       create(:minimal_post)
     }
@@ -39,7 +39,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "GET #new" do
+  describe 'GET #new' do
     it "returns a success response" do
       get :new, params: {}
 
@@ -47,7 +47,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
+  describe 'POST #create' do
     context "with valid params" do
       it "creates a new Post" do
         expect {
@@ -71,7 +71,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
+  describe 'GET #edit' do
     let(:post) {
       create(:minimal_post)
     }
@@ -83,7 +83,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
+  describe 'PUT #update' do
     let(:post) {
       create(:minimal_post)
     }
@@ -117,7 +117,7 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  describe "DELETE #destroy" do
+  describe 'DELETE #destroy' do
     let!(:post) {
       create(:minimal_post)
     }
