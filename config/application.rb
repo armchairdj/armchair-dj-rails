@@ -16,6 +16,7 @@ module ArmchairDjRails
       g.helper false
     end
 
+    # Custom error pages.
     config.exceptions_app = self.routes
   end
 end

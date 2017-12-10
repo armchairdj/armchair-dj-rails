@@ -1,4 +1,19 @@
 class ArtistsController < ApplicationController
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :find_collection, only: [
+    :index
+  ]
+
+  before_action :build_new_instance, only: [
+    :new,
+    :create
+  ]
+
   before_action :find_instance, only: [
     :show,
     :edit,
@@ -6,27 +21,17 @@ class ArtistsController < ApplicationController
     :destroy
   ]
 
-  before_action :create_new_instance, only: [
-    :new,
-    :create
-  ]
-
   before_action :authorize_instance, only: [
-    :index,
-    :new,
-    :create
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
+    :show,
+    :edit,
+    :update,
+    :destroy
   ]
 
   # GET /artists
   # GET /artists.json
   def index
-    @artists = policy_scope(Artist)
+
   end
 
   # GET /artists/1
@@ -46,7 +51,7 @@ class ArtistsController < ApplicationController
 
     respond_to do |format|
       if @artist.save
-        format.html { redirect_to @artist, notice: 'Artist was successfully created.' }
+        format.html { redirect_to @artist, notice: I18n.t("artist.notice.create") }
         format.json { render :show, status: :created, location: @artist }
       else
         format.html { render :new }
@@ -65,7 +70,7 @@ class ArtistsController < ApplicationController
   def update
     respond_to do |format|
       if @artist.update(instance_params)
-        format.html { redirect_to @artist, notice: 'Artist was successfully updated.' }
+        format.html { redirect_to @artist, notice: I18n.t("artist.notice.update") }
         format.json { render :show, status: :ok, location: @artist }
       else
         format.html { render :edit }
@@ -80,27 +85,31 @@ class ArtistsController < ApplicationController
     @artist.destroy
 
     respond_to do |format|
-      format.html { redirect_to artists_url, notice: 'Artist was successfully destroyed.' }
+      format.html { redirect_to artists_url, notice: I18n.t("artist.notice.destroy") }
       format.json { head :no_content }
     end
   end
 
 private
 
-  def find_instance
-    @artist = Album.find(params[:id])
+  def authorize_collection
+    authorize Artist
   end
 
-  def create_new_instance
+  def find_collection
+    @artists = policy_scope(Artist)
+  end
+
+  def build_new_instance
     @artist = Artist.new(instance_params)
+  end
+
+  def find_instance
+    @artist = Artist.find(params[:id])
   end
 
   def authorize_instance
     authorize @artist
-  end
-
-  def authorize_collection
-    authorize Artist
   end
 
   def instance_params
