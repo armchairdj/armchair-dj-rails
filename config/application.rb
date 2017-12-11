@@ -14,6 +14,8 @@ module ArmchairDjRails
       g.stylesheets false
       g.system_tests nil
       g.helper false
+      g.pundit true
+      g.scaffold_controller :scaffold_controller_with_pundit
     end
 
     # Custom error pages.
