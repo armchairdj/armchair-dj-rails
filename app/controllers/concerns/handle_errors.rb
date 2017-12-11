@@ -8,37 +8,37 @@ module HandleErrors
 
   included do
     # 403
-    rescue_from Pundit::NotAuthorizedError,          with: :handle_403
+    rescue_from Pundit::AuthorizationNotPerformedError, with: :handle_403_recoverable
+    rescue_from Pundit::NotAuthorizedError,             with: :handle_403
 
     # 404
-    rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
-    rescue_from ActionController::RoutingError,      with: :handle_404
-    rescue_from ActionController::UnknownController, with: :handle_404
-    rescue_from AbstractController::ActionNotFound,  with: :handle_404
+    rescue_from ActiveRecord::RecordNotFound,           with: :handle_404
+    rescue_from ActionController::RoutingError,         with: :handle_404
+    rescue_from ActionController::UnknownController,    with: :handle_404
+    rescue_from AbstractController::ActionNotFound,     with: :handle_404
+
   protected
 
-    def handle_500(exception = nil)
-      logger.info "handle_500"
+    def handle_403_recoverable(exception = nil)
+      return handle_403(exception) if request.xhr?
 
-      respond_with_error(500, :internal_server_error, exception)
-    end
+      set_user_return_to
 
-    def handle_404(exception = nil)
-      logger.info "handle_404"
-
-      respond_with_error(404, :not_found, exception)
+      redirect_to(new_user_session_path, notice: I18n.t("session.missing"))
     end
 
     def handle_403(exception = nil)
       set_user_return_to
 
-      logger.info "handle_403"
-
       respond_with_error(403, :permission_denied, exception)
     end
 
-    def user_signed_in?
-      false
+    def handle_404(exception = nil)
+      respond_with_error(404, :not_found, exception)
+    end
+
+    def handle_500(exception = nil)
+      respond_with_error(500, :internal_server_error, exception)
     end
 
     def set_user_return_to
@@ -69,22 +69,32 @@ module HandleErrors
 
     def log_error(code, exception = nil)
       logger.error [
-        log_error_identifier(code),
-        request.url.present? ? request.url                                  : "mystery URL",
-        user_signed_in?      ? "#{current_user.id} [#{current_user.email}]" : "guest user",
+        error_identifier(code),
+        url_identifier,
+        user_identifier,
         exception
       ].compact.join(" :: ")
     end
 
-    def log_error_identifier(code)
+    def error_identifier(code)
       case code
       when 500
-        "ARMCHAIRDJ_EXCEPTION (500)"
+        "ARMCHAIRDJ_WHOOPS (500)"
       when 404
         "ARMCHAIRDJ_NOT_FOUND (404)"
       when 403
         "ARMCHAIRDJ_FORBIDDEN (403)"
+      else
+        "ARMCHAIRDJ_EXCEPTION (#{code})"
       end
+    end
+
+    def url_identifier
+      request.url.present? ? request.url : "unknown URL"
+    end
+
+    def user_identifier
+      user_signed_in? ? "#{current_user.id} [#{current_user.email}]" : "guest user"
     end
   end
 end

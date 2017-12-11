@@ -1,8 +1,21 @@
 class ApplicationPolicy
   attr_reader :user, :record
 
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user  = user
+      @scope = scope
+    end
+
+    def resolve
+      scope
+    end
+  end
+
   def initialize(user, record)
-    @user = user
+    @user   = user
     @record = record
   end
 
@@ -14,15 +27,11 @@ class ApplicationPolicy
     false
   end
 
-  def create?
-    false
-  end
-
   def new?
     create?
   end
 
-  def update?
+  def create?
     false
   end
 
@@ -30,20 +39,39 @@ class ApplicationPolicy
     update?
   end
 
+  def update?
+    false
+  end
+
   def destroy?
     false
   end
 
-  class Scope
-    attr_reader :user, :scope
+protected
 
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
+  def admin?
+    user.admin?
+  end
 
-    def resolve
-      scope
-    end
+  def owner_or_admin?
+    (user.admin? || user == record.user)
+  end
+
+  def force_login
+    raise Pundit::AuthorizationNotPerformedError, "must be logged in" unless user
+  end
+
+  def force_admin_login
+    force_login
+
+    raise Pundit::NotAuthorizedError, "must be admin" unless user.admin?
+  end
+
+  def raise_unauthorized
+    raise Pundit::NotAuthorizedError, "unauthorized" unless record_in_scope?
+  end
+
+  def record_in_scope?
+    scope.where(id: record.id).exists?
   end
 end

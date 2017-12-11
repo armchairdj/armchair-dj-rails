@@ -23,6 +23,8 @@ en:
       create: "Post created."
       destroy: "Post destroyed."
       update: "Post Updated."
+  session:
+    missing: "Please log in to access that."
   song:
     notice:
       create: "Song created."
