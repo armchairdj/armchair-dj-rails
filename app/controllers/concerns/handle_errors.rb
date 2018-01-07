@@ -8,14 +8,14 @@ module HandleErrors
 
   included do
     # 403
-    rescue_from Pundit::AuthorizationNotPerformedError, with: :handle_403_recoverable
-    rescue_from Pundit::NotAuthorizedError,             with: :handle_403
+    rescue_from Pundit::NotAuthenticatedError,       with: :handle_403_recoverable
+    rescue_from Pundit::NotAuthorizedError,          with: :handle_403
 
     # 404
-    rescue_from ActiveRecord::RecordNotFound,           with: :handle_404
-    rescue_from ActionController::RoutingError,         with: :handle_404
-    rescue_from ActionController::UnknownController,    with: :handle_404
-    rescue_from AbstractController::ActionNotFound,     with: :handle_404
+    rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
+    rescue_from ActionController::RoutingError,      with: :handle_404
+    rescue_from ActionController::UnknownController, with: :handle_404
+    rescue_from AbstractController::ActionNotFound,  with: :handle_404
 
   protected
 

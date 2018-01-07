@@ -58,7 +58,7 @@ protected
   end
 
   def force_login
-    raise Pundit::AuthorizationNotPerformedError, "must be logged in" unless user
+    raise Pundit::NotAuthenticatedError, "must be logged in" unless user
   end
 
   def force_admin_login
