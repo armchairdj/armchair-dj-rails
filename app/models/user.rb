@@ -64,22 +64,6 @@ class User < ApplicationRecord
     self.role = :guest if self.role.nil?
   end
 
-  def guest?
-    self.role == "guest"
-  end
-
-  def member?
-    self.role == "member"
-  end
-
-  def contributor?
-    self.role == "contributor"
-  end
-
-  def admin?
-    self.role == "admin"
-  end
-
   #############################################################################
   # CLASS.
   #############################################################################
