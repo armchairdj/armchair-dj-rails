@@ -1,6 +1,34 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  before_action :configure_sign_up_params, only: [:create]
-  before_action :configure_account_update_params, only: [:update]
+  prepend_before_action :authenticate_scope!, only: [
+    :edit,
+    :update,
+    :edit_password,
+    :update_password,
+    :edit_preferences,
+    :update_preferences,
+    :customize
+  ]
+
+  prepend_before_action :set_minimum_password_length, only: [
+    :new,
+    :create,
+    :edit,
+    :update,
+    :edit_password,
+    :update_password
+  ]
+
+  before_action :configure_sign_up_params, only: [
+    :create
+  ]
+
+  before_action :configure_account_update_params, only: [
+    :update
+  ]
+
+  before_action :configure_password_update_params, only: [
+    :update_password
+  ]
 
   # GET /resource/sign_up
   # def new
@@ -36,9 +64,34 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  # GET /users/change_password
+  def edit_password
 
-  # If you have extra params to permit, append them to the sanitizer.
+  end
+
+  # PUT /users/change_password
+  def update_password
+    self.resource = current_user
+
+    resource_updated = update_resource(resource, account_update_params)
+
+    if resource_updated
+      if is_flashing_format?
+        set_flash_message :notice, :updated_password
+      end
+
+      bypass_sign_in resource, scope: resource_name
+
+      redirect_to settings_path
+    else
+      clean_up_passwords resource
+
+      render :edit_password
+    end
+  end
+
+protected
+
   def configure_sign_up_params
     devise_parameter_sanitizer.permit(:sign_up) do |user|
       user.permit(
@@ -50,14 +103,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
     devise_parameter_sanitizer.permit(:account_update) do |user|
       user.permit(
         :first_name,
         :last_name,
         :email,
-        :password
+        :current_password
+      )
+    end
+  end
+
+  def configure_password_update_params
+    devise_parameter_sanitizer.permit(:account_update) do |user|
+      user.permit(
+        :password,
+        :current_password
       )
     end
   end

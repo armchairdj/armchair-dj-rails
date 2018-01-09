@@ -9,17 +9,18 @@ Rails.application.routes.draw do
   post "500" => "errors#internal_server_error"
 
   devise_scope :user do
-    get    "register",        to: "users/registrations#new",     as: :new_user_registration
-    get    "settings/cancel", to: "users/registrations#cancel",  as: :cancel_user_registration
-    get    "settings",        to: "users/registrations#edit",    as: :edit_user_registration
-    post   "settings",        to: "users/registrations#create"
-    patch  "settings",        to: "users/registrations#update"
-    put    "settings",        to: "users/registrations#update"
-    delete "settings",        to: "users/registrations#destroy"
+    get    "register",          to: "users/registrations#new",             as: :new_user_registration
+    get    "register/cancel",   to: "users/registrations#cancel",          as: :cancel_user_registration
+    get    "settings",          to: "users/registrations#edit",            as: :edit_user_registration
+    post   "settings",          to: "users/registrations#create"
+    match  "settings",          to: "users/registrations#update",          via: [:patch, :put]
+    delete "settings",          to: "users/registrations#destroy"
+    get    "settings/password", to: "users/registrations#edit_password"
+    match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
 
-    get   "log_in",           to: "users/sessions#new",          as: :new_user_session
-    post  "log_in",           to: "users/sessions#create",       as: :user_session
-    match "log_out",          to: "users/sessions#destroy",      as: :destroy_user_session, via: Devise.sign_out_via
+    get   "log_in",             to: "users/sessions#new",                  as: :new_user_session
+    post  "log_in",             to: "users/sessions#create",               as: :user_session
+    match "log_out",            to: "users/sessions#destroy",              as: :destroy_user_session, via: Devise.sign_out_via
   end
 
   devise_for :users, skip: [:sessions, :registrations], controllers: {
