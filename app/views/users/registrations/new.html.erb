@@ -2,7 +2,7 @@
   @headline = @title = "Register"
 %>
 
-<%= simple_form_for(@user, url: user_registration_path) do |f| %>
+<%= simple_form_for(@user, url: settings_path) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
@@ -16,7 +16,6 @@
 
     <%= f.input :email,
       required: true,
-      autofocus: true,
       placeholder: "name@domain.com"
     %>
 

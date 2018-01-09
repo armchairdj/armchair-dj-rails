@@ -9,17 +9,17 @@ Rails.application.routes.draw do
   post "500" => "errors#internal_server_error"
 
   devise_scope :user do
-    get    "register",            to: "users/registrations#new",     as: :new_user_registration
-    post   "register",            to: "users/registrations#create",  as: :user_registration
-    get    "cancel_registration", to: "users/registrations#cancel",  as: :cancel_user_registration
-    get    "settings",            to: "users/registrations#edit"
-    patch  "settings",            to: "users/registrations#update"
-    put    "settings",            to: "users/registrations#update"
-    delete "settings",            to: "users/registrations#destroy"
+    get    "register",        to: "users/registrations#new",     as: :new_user_registration
+    get    "settings/cancel", to: "users/registrations#cancel",  as: :cancel_user_registration
+    get    "settings",        to: "users/registrations#edit",    as: :edit_user_registration
+    post   "settings",        to: "users/registrations#create"
+    patch  "settings",        to: "users/registrations#update"
+    put    "settings",        to: "users/registrations#update"
+    delete "settings",        to: "users/registrations#destroy"
 
-    get   "log_in",               to: "users/sessions#new",          as: :new_user_session
-    post  "log_in",               to: "users/sessions#create",       as: :user_session
-    match "log_out",              to: "users/sessions#destroy",      as: :destroy_user_session, via: Devise.sign_out_via
+    get   "log_in",           to: "users/sessions#new",          as: :new_user_session
+    post  "log_in",           to: "users/sessions#create",       as: :user_session
+    match "log_out",          to: "users/sessions#destroy",      as: :destroy_user_session, via: Devise.sign_out_via
   end
 
   devise_for :users, skip: [:sessions, :registrations], controllers: {
