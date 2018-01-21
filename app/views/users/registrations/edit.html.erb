@@ -5,7 +5,7 @@
 <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
+  <%= content_tag(:div, class: "form_inputs") do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -19,30 +19,23 @@
       placeholder: "name@domain.com"
     %>
 
-    <%= f.input :password,
-      required: false,
-      autocomplete: "off",
-      hint: "leave it blank if you don't want to change it",
-      placeholder: ("#{@minimum_password_length} or more characters")
-    %>
-
     <%= f.input :current_password,
       required: true,
       hint: "we need your current password to confirm your changes"
     %>
-  </div>
+  <% end %>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
   <% end %>
 
-  <div class="form-actions">
+  <%= content_tag(:div, class: "button_group") do %>
     <%= f.button :submit, "Update" %>
-  </div>
+  <% end %>
 <% end %>
 
 <h3>Cancel my account</h3>
 
-<p>Unhappy? <%= link_to "Cancel my account", cancel_user_registration_path, data: { confirm: "Are you sure?" }, method: :delete %></p>
+<p>Unhappy? <%= link_to "Cancel my account", destroy_user_registration_path, data: { confirm: "Are you sure?" }, method: :delete %></p>
 
 <%= link_to "Back", :back %>

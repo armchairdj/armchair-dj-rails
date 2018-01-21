@@ -5,7 +5,7 @@
 <%= simple_form_for(@user, url: settings_path) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
+  <%= content_tag(:div, class: "form_inputs") do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -23,11 +23,11 @@
       required: true,
       placeholder: ("#{@minimum_password_length} or more characters")
     %>
-  </div>
+  <% end %>
 
-  <div class="form-actions">
+  <%= content_tag(:div, class: "button_group") do %>
     <%= f.button :submit, "Sign up" %>
-  </div>
+  <% end %>
 <% end %>
 
 <%= render "users/shared/links" %>

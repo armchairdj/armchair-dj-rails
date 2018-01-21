@@ -1,7 +1,7 @@
 <%= simple_form_for(@post) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
+  <%= content_tag(:div, class: "form_inputs") do %>
     <%= f.grouped_collection_select :postable_gid,
       [Song, Album],
       :all,
@@ -12,9 +12,9 @@
     %>
     <%= f.input :title %>
     <%= f.input :body %>
-  </div>
+  <% end %>
 
-  <div class="form-actions">
+  <%= content_tag(:div, class: "button_group") do %>
     <%= f.button :submit %>
-  </div>
+  <% end %>
 <% end %>
