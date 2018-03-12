@@ -33,11 +33,10 @@ gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 
-# SASS/UI framework
-gem 'foundation-rails', '~> 6.4'
-
-# SASS and CSS libraries.
-gem 'normalize-rails'
+# Bourbon CSS toolbox + its offspring.
+gem 'bourbon'
+gem 'bitters'
+gem 'neat'
 
 ###############################################################################
 # JAVASCRIPT.
@@ -128,6 +127,9 @@ group :development do
   gem 'spring'
 
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # Procfile-based application runner.
+  gem 'foreman'
 end
 
 group :development, :test do

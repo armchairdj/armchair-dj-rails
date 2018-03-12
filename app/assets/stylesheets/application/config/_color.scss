@@ -1,0 +1,53 @@
+/* Brand Colors */
+
+$blacktop: #131313;
+$flash-bg: scale-color($blacktop, $lightness: 5%);
+$tagline-color: #92898a;
+$white: #fff;
+$button-bg: #999;
+$alert-color: #dd1c1a;
+$success-color: #a2d729;
+
+/* Primary buttons */
+
+$buttonBgPrimary: $button-bg;
+$buttonBgPrimaryHover: scale-color($button-bg, $lightness: -15%);
+
+$buttonBoderPrimary: $button-bg;
+$buttonBoderPrimaryHover: $button-bg;
+
+$buttonTextPrimary: $white;
+$buttonTextPrimaryHover: $white;
+
+/* Secondary buttons */
+
+$buttonBgSecondary: $button-bg;
+$buttonBgSecondaryHover: scale-color($button-bg, $lightness: -15%);
+
+$buttonBoderSecondary: $button-bg;
+$buttonBoderSecondaryHover: $button-bg;
+
+$buttonTextSecondary: $white;
+$buttonTextSecondaryHover: $white;
+
+/* Tertiary buttons */
+
+$buttonBgTertiary: $button-bg;
+$buttonBgTertiaryHover: scale-color($button-bg, $lightness: -15%);
+
+$buttonBoderTertiary: $button-bg;
+$buttonBoderTertiaryHover: $button-bg;
+
+$buttonTextTertiary: $white;
+$buttonTextTertiaryHover: $white;
+
+/* Disabled buttons */
+
+$buttonBgDisabled: $button-bg;
+$buttonBgDisabledHover: scale-color($button-bg, $lightness: -15%);
+
+$buttonBoderDisabled: $button-bg;
+$buttonBoderDisabledHover: $button-bg;
+
+$buttonTextDisabled: $white;
+$buttonTextDisabledHover: $white;

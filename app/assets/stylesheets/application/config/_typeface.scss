@@ -1,0 +1,4 @@
+@mixin button-text {
+  font-size: $button-font-size;
+  @include bold();
+}

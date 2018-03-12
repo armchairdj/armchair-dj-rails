@@ -1,0 +1,54 @@
+@mixin svg() {
+  .svg_icon {
+    @content;
+  }
+}
+
+@mixin block-svg() {
+  @include svg() {
+    display: block;
+    @content;
+  }
+}
+
+@mixin inline-block-svg() {
+  @include svg() {
+    display: inline-block;
+    @content;
+  }
+}
+
+@mixin absolute-svg($top: auto, $right: auto, $bottom: auto, $left: auto) {
+  position: relative;
+
+  @include block-svg() {
+    @include absolute($top: $top, $right: $right, $bottom: $bottom, $left: $left);
+    @content;
+  }
+}
+
+@mixin svg-fill($color) {
+  fill: $color;
+}
+
+@mixin svg-stroke($color) {
+  stroke: $color;
+}
+
+@mixin svg-rect-fill($color) {
+  rect {
+    @include svg-fill($color);
+  }
+}
+
+@mixin svg-path-fill($color) {
+  path {
+    @include svg-fill($color);
+  }
+}
+
+@mixin svg-polygon-fill($color) {
+  polygon {
+    @include svg-fill($color);
+  }
+}

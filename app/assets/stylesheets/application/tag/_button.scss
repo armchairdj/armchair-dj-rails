@@ -1,0 +1,17 @@
+#{$buttons} {
+  @include button-base();
+  @include primary-button();
+
+  &.secondary {
+    @include secondary-button();
+  }
+
+  &.tertiary {
+    @include tertiary-button();
+  }
+
+  &.disabled,
+  &:disabled {
+    @include disabled-button();
+  }
+}
