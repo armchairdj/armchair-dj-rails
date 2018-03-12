@@ -1,7 +1,7 @@
 table {
-  border-collapse: collapse;
-  margin: $base-spacing 0;
   table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
   text-align: left;
   width: 100%;
 }
@@ -20,10 +20,10 @@ tr {
 }
 
 th {
-  font-weight: 600;
+
 }
 
 th,
 td {
-  padding: $small-spacing $small-spacing $small-spacing 0;
+  padding: 0;
 }

@@ -1,11 +1,10 @@
 @charset "utf-8";
 
 @import "bourbon";
-//@import "bourbon_bitters/index";
-//@import "bourbon_neat/grid_settings";
-//@import "neat";
 
-@import "application/config/**/*";
-@import "application/mixin/**/*";
-@import "application/tag/**/*";
-@import "application/module/**/*";
+@import "config/**/*";
+@import "mixin/**/*";
+@import "tag/**/*";
+@import "module/**/*";
+
+@import "neat";

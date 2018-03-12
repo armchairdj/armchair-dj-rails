@@ -1,0 +1,50 @@
+/* Brand Colors */
+
+$white: #fff;
+$medium-grey: #999;
+$blacktop: #131313;
+$black: #000;
+
+$flash-bg: scale-color($blacktop, $lightness: 5%);
+$alert-color: #dd1c1a;
+$success-color: #a2d729;
+
+$tagline-color: #92898a;
+
+$button-bg: #999;
+
+/* Primary buttons */
+
+$button-bg-primary: $button-bg;
+$button-border-primary: $button-bg;
+$button-text-primary: $white;
+
+$button-bg-primary-hover: scale-color($button-bg, $lightness: -15%);
+$button-border-primary-hover: $button-bg;
+$button-text-primary-hover: $white;
+
+/* Secondary buttons */
+
+$button-bg-secondary: $button-bg;
+$button-border-secondary: $button-bg;
+$button-text-secondary: $white;
+
+$button-bg-secondary-hover: scale-color($button-bg, $lightness: -15%);
+$button-border-secondary-hover: $button-bg;
+$button-text-secondary-hover: $white;
+
+/* Tertiary buttons */
+
+$button-bg-tertiary: $button-bg;
+$button-border-tertiary: $button-bg;
+$button-text-tertiary: $white;
+
+$button-bg-tertiary-hover: scale-color($button-bg, $lightness: -15%);
+$button-border-tertiary-hover: $button-bg;
+$button-text-tertiary-hover: $white;
+
+/* Disabled buttons */
+
+$button-bg-disabled: $black;
+$button-border-disabled: $black;
+$button-text-disabled: $white;
