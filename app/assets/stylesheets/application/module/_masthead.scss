@@ -105,8 +105,8 @@ nav#masthead {
     }
   }
 
-  @include breakpoint(xlarge) {
-    width: $masthead-width-xlarge;
+  @include breakpoint(x-large) {
+    width: $masthead-width-x-large;
 
     header {
       .headlines {

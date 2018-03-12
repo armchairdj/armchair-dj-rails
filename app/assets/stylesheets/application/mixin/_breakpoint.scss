@@ -1,0 +1,15 @@
+@mixin breakpoint($breakpoint) {
+         @if $breakpoint == "x-small-only"  {
+    @media (max-width: $breakpoint-x-small) { @content ; }
+  } @else if $breakpoint == "small-only"    {
+    @media (max-width: $breakpoint-small  ) { @content ; }
+  } @else if $breakpoint == "small"         {
+    @media (min-width: $breakpoint-small  ) { @content ; }
+  } @else if $breakpoint == "medium"        {
+    @media (min-width: $breakpoint-medium ) { @content ; }
+  } @else if $breakpoint == "large"         {
+    @media (min-width: $breakpoint-large  ) { @content ; }
+  } @else if $breakpoint == "x-large"       {
+    @media (min-width: $breakpoint-x-large) { @content ; }
+  } 
+}

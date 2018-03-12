@@ -1,0 +1,11 @@
+@mixin compact {
+  line-height: $compact;
+}
+
+@mixin readable {
+  line-height: $readable;
+}
+
+@mixin spacious {
+  line-height: $spacious;
+}

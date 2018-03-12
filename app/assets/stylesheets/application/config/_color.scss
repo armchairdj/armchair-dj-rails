@@ -1,12 +1,17 @@
 /* Brand Colors */
 
-$blacktop: #131313;
-$flash-bg: scale-color($blacktop, $lightness: 5%);
-$tagline-color: #92898a;
 $white: #fff;
-$button-bg: #999;
+$medium-grey: #999;
+$blacktop: #131313;
+$black: #000;
+
+$flash-bg: scale-color($blacktop, $lightness: 5%);
 $alert-color: #dd1c1a;
 $success-color: #a2d729;
+
+$tagline-color: #92898a;
+
+$button-bg: #999;
 
 /* Primary buttons */
 

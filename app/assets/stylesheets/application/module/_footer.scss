@@ -11,7 +11,7 @@ footer#page-footer {
 
     .copyright {
       font-size: .75rem;
-      color: $medium-gray;
+      color: $medium-grey;
     }
   }
   
@@ -45,7 +45,7 @@ footer#page-footer {
     }
   }
 
-  @include breakpoint(xlarge) {
-    margin-right: $masthead-width-xlarge;
+  @include breakpoint(x-large) {
+    margin-right: $masthead-width-x-large;
   }
 }

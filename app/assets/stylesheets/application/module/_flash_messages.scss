@@ -43,7 +43,7 @@ aside.flash-messages {
     margin-right: $masthead-width-large;
   }
 
-  @include breakpoint(xlarge) {
-    margin-right: $masthead-width-xlarge;
+  @include breakpoint(x-large) {
+    margin-right: $masthead-width-x-large;
   }
 }

@@ -1,27 +1,4 @@
-/* Font-weight */
-
-@mixin light {
-  font-weight: $font-weight-light;
-}
-
-@mixin normal {
-  font-weight: $font-weight-normal;
-}
-
-@mixin bold {
-  font-weight: $font-weight-bold;
-}
-
-/* Line-height */
-
-@mixin compact {
-  line-height: $compact;
-}
-
-@mixin readable {
-  line-height: $readable;
-}
-
-@mixin spacious {
-  line-height: $spacious;
+@mixin button-text {
+  font-size: $button-font-size;
+  @include bold();
 }

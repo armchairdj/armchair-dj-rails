@@ -17,8 +17,16 @@ $spacious: 1.5;
 /* Measurements */
 
 $masthead-width-large: 450px;
-$masthead-width-xlarge: 600px;
+$masthead-width-x-large: 600px;
 
 /* Buttons */
 
 $button-border-radius: 6px;
+
+/* Breakpoints */
+
+$breakpoint-x-small: 375px;
+$breakpoint-small: 480px;
+$breakpoint-medium: 600px;
+$breakpoint-large: 768px;
+$breakpoint-x-large: 1024px;
