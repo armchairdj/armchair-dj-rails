@@ -1,2 +1,4 @@
-$text-inputs: "input[type=email], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=url]";
-$buttons: ".button_like, a.button, a.button:link, a.button:visited, button, input[type=button], input[type=submit]";
+$text-inputs:     "input[type=color], input[type=date], input[type=datetime], input[type=datetime-local], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week]";
+$all-text-inputs: "#{$text-inputs}, input:not([type]), textarea";
+$buttons:         "button, input[type=button], input[type=submit]";
+$all-buttons:     "#{$buttons}, .button_like, a.button";

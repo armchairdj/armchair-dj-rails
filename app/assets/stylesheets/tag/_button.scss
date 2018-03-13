@@ -1,4 +1,4 @@
-#{$buttons} {
+#{$all-buttons} {
   @include button-base();
   @include primary-button();
 
@@ -14,4 +14,8 @@
   &:disabled {
     @include disabled-button();
   }
+}
+
+.button_group {
+  @include bottom-margin-only();
 }

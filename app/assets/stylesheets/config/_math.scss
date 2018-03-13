@@ -1,32 +1,50 @@
-/* Font-size */
+/* Standards. */
 
-$button-font-size: 20px;
+$standard-border-radius:       4px;
+$standard-spacing:             1rem;
+$small-spacing:                $standard-spacing / 2;
+$standard-transition-duration: 150ms;
+$standard-transition-function: ease;
+$standard-z-index:             0;
 
-/* Font-weight */
+/* Font-size. */
 
-$font-weight-light: 200;
+$page-headline-font-size: 2rem;
+$standard-font-size: 1rem;
+$button-font-size: 1.2rem;
+
+/* Font-weight. */
+
+$font-weight-light:  200;
 $font-weight-normal: 500;
-$font-weight-bold: 700;
+$font-weight-bold:   700;
 
-/* Line-height */
+/* Line-height. */
 
-$compact: 1;
+$compact:  1;
 $readable: 1.231;
 $spacious: 1.5;
 
-/* Measurements */
+/* Measurements. */
 
-$masthead-width-large: 450px;
+$masthead-width-large:   450px;
 $masthead-width-x-large: 600px;
 
-/* Buttons */
+/* Buttons. */
 
-$button-border-radius: 6px;
+$button-border-radius: $standard-border-radius;
 
-/* Breakpoints */
+/* Breakpoints. */
 
 $breakpoint-x-small: 375px;
-$breakpoint-small: 480px;
-$breakpoint-medium: 600px;
-$breakpoint-large: 768px;
+$breakpoint-small:   480px;
+$breakpoint-medium:  600px;
+$breakpoint-large:   768px;
 $breakpoint-x-large: 1024px;
+
+/* Focus */
+
+$focus-outline-color:  transparentize($link-color, 0.4);
+$focus-outline-width:  3px;
+$focus-outline:        $focus-outline-width solid $focus-outline-color;
+$focus-outline-offset: 2px;

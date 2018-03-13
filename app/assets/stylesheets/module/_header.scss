@@ -1,0 +1,22 @@
+header.page_header {
+  h1 {
+    font-size: $page-headline-font-size;
+  }
+
+  &.auth {
+    ul {
+      font-size: $page-headline-font-size;
+
+      li {
+        h1,
+        h2 {
+          display: inline-block;
+        }
+
+        h2 {
+          @include normal();
+        }
+      }
+    }
+  }
+}

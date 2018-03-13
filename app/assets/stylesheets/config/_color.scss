@@ -1,50 +1,82 @@
-/* Brand Colors */
+/* Brand Colors. */
 
-$white: #fff;
+$armchair-blue-dark:   #04a1cc;
+$armchair-blue-medium: #11b0e0;
+$armchair-blue-light:  #67d0ef;
+
+$armchair-blacktop:    #131313;
+$armchair-smoke:       #92898a;
+
+/* Greyscale. */
+
+$white:       #fff;
+$light-grey:  #ddd;
 $medium-grey: #999;
-$blacktop: #131313;
-$black: #000;
+$dark-grey:   #333;
+$black:       #000;
 
-$flash-bg: scale-color($blacktop, $lightness: 5%);
-$alert-color: #dd1c1a;
+/* Flash. */
+
+$flash-bg:      scale-color($armchair-blacktop, $lightness: 5%);
+$alert-color:   #dd1c1a;
 $success-color: #a2d729;
 
-$tagline-color: #92898a;
+/* Forms. */
 
-$button-bg: #999;
+$input-bg-color:        #eee;
+$input-bg-color-active: #fff;
 
-/* Primary buttons */
 
-$button-bg-primary: $button-bg;
-$button-border-primary: $button-bg;
-$button-text-primary: $white;
+/* Borders. */
 
-$button-bg-primary-hover: scale-color($button-bg, $lightness: -15%);
-$button-border-primary-hover: $button-bg;
-$button-text-primary-hover: $white;
+$standard-border-color: $light-grey;
+$standard-border:       1px solid $standard-border-color;
 
-/* Secondary buttons */
+/* Masthead. */
 
-$button-bg-secondary: $button-bg;
-$button-border-secondary: $button-bg;
-$button-text-secondary: $white;
+$tagline-color: $armchair-smoke;
 
-$button-bg-secondary-hover: scale-color($button-bg, $lightness: -15%);
-$button-border-secondary-hover: $button-bg;
-$button-text-secondary-hover: $white;
+/* Text. */
 
-/* Tertiary buttons */
+$standard-font-color: $dark-grey;
 
-$button-bg-tertiary: $button-bg;
-$button-border-tertiary: $button-bg;
-$button-text-tertiary: $white;
+/* Links. */
 
-$button-bg-tertiary-hover: scale-color($button-bg, $lightness: -15%);
-$button-border-tertiary-hover: $button-bg;
-$button-text-tertiary-hover: $white;
+$link-color:       $armchair-blue-dark;
+$link-color-hover: scale-color($link-color, $lightness: 15%);
 
-/* Disabled buttons */
+/* Buttons: Primary. */
 
-$button-bg-disabled: $black;
+$button-bg-primary:     $armchair-blue-dark;
+$button-border-primary: $button-bg-primary;
+$button-text-primary:   $white;
+
+$button-bg-primary-hover:     scale-color($button-bg-primary, $lightness: 15%);
+$button-border-primary-hover: $button-border-primary;
+$button-text-primary-hover:   $button-text-primary;
+
+/* Buttons: Secondary. */
+
+$button-bg-secondary:     $armchair-blue-light;
+$button-border-secondary: $button-bg-secondary;
+$button-text-secondary:   $white;
+
+$button-bg-secondary-hover:     scale-color($button-bg-secondary, $lightness: 15%);
+$button-border-secondary-hover: $button-border-secondary;
+$button-text-secondary-hover:   $button-text-secondary;
+
+/* Buttons: Tertiary. */
+
+$button-bg-tertiary:     $medium-grey;
+$button-border-tertiary: $button-bg-tertiary;
+$button-text-tertiary:   $white;
+
+$button-bg-tertiary-hover:     scale-color($button-bg-tertiary, $lightness: 15%);
+$button-border-tertiary-hover: $button-border-tertiary;
+$button-text-tertiary-hover:   $button-text-tertiary;
+
+/* Buttons: Disabled. */
+
+$button-bg-disabled:     $black;
 $button-border-disabled: $black;
-$button-text-disabled: $white;
+$button-text-disabled:   $white;

@@ -7,7 +7,7 @@ table {
 }
 
 thead {
-  line-height: $heading-line-height;
+  @include readable();
   vertical-align: bottom;
 }
 
@@ -16,7 +16,7 @@ tbody {
 }
 
 tr {
-  border-bottom: $base-border;
+  border-bottom: $standard-border;
 }
 
 th {

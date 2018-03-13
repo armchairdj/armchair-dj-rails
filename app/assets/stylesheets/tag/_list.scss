@@ -3,7 +3,7 @@ ol,
 dl {
   margin: 0;
   padding: 0;
-  @include bottom-margin(1rem);
+  @include bottom-margin();
 }
 
 li,
@@ -35,15 +35,15 @@ ol {
 }
 
 dl {
-  @include bottom-margin(1rem);
+  @include bottom-margin();
 
   dt {
     @include bold();
-    @include bottom-margin(.25rem);
+    @include bottom-margin($standard-spacing * .25);
   }
 
   dd {
-    @include bottom-margin(.75rem);
+    @include bottom-margin($standard-spacing * .75);
   }
 
   &.horizontal {

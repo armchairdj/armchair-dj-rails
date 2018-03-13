@@ -1,7 +1,55 @@
-@mixin bottom-margin($margin: $global-margin) {
+@mixin top-margin($margin: $standard-spacing) {
+  margin-top: $margin;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+@mixin top-margin-only($margin: $standard-spacing) {
+  margin: 0;
+
+  @include top-margin($margin);
+}
+
+@mixin right-margin($margin: $standard-spacing) {
+  margin-right: $margin;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+@mixin right-margin-only($margin: $standard-spacing) {
+  margin: 0;
+
+  @include right-margin($margin);
+}
+
+@mixin bottom-margin($margin: $standard-spacing) {
   margin-bottom: $margin;
 
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+@mixin bottom-margin-only($margin: $standard-spacing) {
+  margin: 0;
+
+  @include bottom-margin($margin);
+}
+
+@mixin left-margin($margin: $standard-spacing) {
+  margin-left: $margin;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+@mixin left-margin-only($margin: $standard-spacing) {
+  margin: 0;
+
+  @include left-margin($margin);
 }
