@@ -19,7 +19,8 @@ label {
 select {
   display: block;
   font-family: $raleway-font-stack;
-  font-size: .9rem;
+  font-size: 1.2rem;
+  line-height: 1.8;
   @include light();
 }
 
@@ -30,7 +31,7 @@ select {
   border-radius: $standard-border-radius;
   box-sizing: border-box;
   margin-bottom: $small-spacing;
-  padding: $standard-spacing / 3;
+  padding: 0 ($small-spacing);
   transition: border-color $standard-transition-duration $standard-transition-function;
   width: 100%;
 

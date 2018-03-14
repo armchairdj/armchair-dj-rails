@@ -24,10 +24,6 @@
   background-color: $armchair-blacktop;
   min-height: 400px;
 
-  @include breakpoint(large) {
-    margin-right: $masthead-width-large;
-  }
-
   @include breakpoint(x-large) {
     margin-right: $masthead-width-x-large;
   }

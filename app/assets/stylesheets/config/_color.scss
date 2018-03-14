@@ -1,8 +1,18 @@
 /* Brand Colors. */
 
-$armchair-blue-dark:   #04a1cc;
-$armchair-blue-medium: #11b0e0;
-$armchair-blue-light:  #67d0ef;
+$armchair-blue-darkest:  #04a1cc;
+$armchair-blue-dark:     #11b0e0;
+$armchair-blue-medium:   #67d0ef;
+$armchair-blue-light:    #9cc9de;
+$armchair-blue-lightest: #c0e0ed;
+
+$bright-cerulean:        #10acdb;
+$trolley-grey:           #7f8185;
+$gun-metal:              #2b2d42;
+$grey-blue:              #8d99ae;
+$maximum-yellow:         #f8f32b;
+$bone:                   #e2dbbe;
+
 
 $armchair-blacktop:    #131313;
 $armchair-smoke:       #92898a;
@@ -26,7 +36,6 @@ $success-color: #a2d729;
 $input-bg-color:        #eee;
 $input-bg-color-active: #fff;
 
-
 /* Borders. */
 
 $standard-border-color: $light-grey;
@@ -34,7 +43,7 @@ $standard-border:       1px solid $standard-border-color;
 
 /* Masthead. */
 
-$tagline-color: $armchair-smoke;
+$tagline-color: $bone;
 
 /* Text. */
 
@@ -42,12 +51,12 @@ $standard-font-color: $dark-grey;
 
 /* Links. */
 
-$link-color:       $armchair-blue-dark;
+$link-color:       $armchair-blue-darkest;
 $link-color-hover: scale-color($link-color, $lightness: 15%);
 
 /* Buttons: Primary. */
 
-$button-bg-primary:     $armchair-blue-dark;
+$button-bg-primary:     $armchair-blue-darkest;
 $button-border-primary: $button-bg-primary;
 $button-text-primary:   $white;
 
@@ -57,7 +66,7 @@ $button-text-primary-hover:   $button-text-primary;
 
 /* Buttons: Secondary. */
 
-$button-bg-secondary:     $armchair-blue-light;
+$button-bg-secondary:     $armchair-blue-medium;
 $button-border-secondary: $button-bg-secondary;
 $button-text-secondary:   $white;
 

@@ -1,13 +1,16 @@
 $footer-logo-width: 100px;
 $footer-logo-radius: $footer-logo-width / 2;
 
-footer#page-footer {
+footer#page_footer {
   background-color: $flash-bg;
   padding: 2rem 0;
   text-align: center;
 
   nav.links {
-    width: auto;
+    ul,
+    .copyright {
+      @include bottom-margin(1.2rem);
+    }
 
     .copyright {
       font-size: .75rem;
@@ -29,10 +32,10 @@ footer#page-footer {
     }
   }
 
-  @include breakpoint(large) {
+  @include breakpoint(x-large) {
     @include clearfix();
     text-align: right;
-    margin-right: $masthead-width-large;
+    margin-right: $masthead-width-x-large;
 
     nav.links {
       float: right;
@@ -43,9 +46,5 @@ footer#page-footer {
       float: right;
       margin: 1rem 0 0;
     }
-  }
-
-  @include breakpoint(x-large) {
-    margin-right: $masthead-width-x-large;
   }
 }

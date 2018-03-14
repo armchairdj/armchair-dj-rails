@@ -11,7 +11,7 @@ nav#masthead {
       float: left;
 
       h1 {
-        font-size: 1.9rem;
+        font-size: 1.8rem;
         color: $white;
         white-space: nowrap;
         @include compact();
@@ -28,9 +28,9 @@ nav#masthead {
       }
 
       h2 {
-        font-size: .8rem;
+        font-size: .7rem;
         line-height: $readable;
-        margin-top: -.5rem;
+        margin-top: -.8rem;
         color: $tagline-color;
         line-height: $readable;
 
@@ -75,12 +75,12 @@ nav#masthead {
     }
   }
 
-  @include breakpoint(large) {
+  @include breakpoint(x-large) {
     position: fixed;
     top: 0;
     right: 0;
     height: 100%;
-    width: $masthead-width-large;
+    width: $masthead-width-x-large;
 
     header {
       float: none;
@@ -93,6 +93,7 @@ nav#masthead {
 
       .logo {
         float: right;
+        width: 140px;
 
         img {
           @include flip-foreground-image();
@@ -102,26 +103,6 @@ nav#masthead {
 
     .menu {
       display: none;
-    }
-  }
-
-  @include breakpoint(x-large) {
-    width: $masthead-width-x-large;
-
-    header {
-      .headlines {
-        h1 {
-          font-size: 3.6rem;
-        }
-
-        h2 {
-          font-size: 1.6rem;
-        }
-      }
-
-      .logo {
-        width: 140px;
-      }
     }
   }
 }

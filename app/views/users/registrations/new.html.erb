@@ -4,9 +4,9 @@
 
 <% content_for(:header) do %>
   <%= content_tag(:header, class: "page_header auth") do %>
-    <%= content_tag(:ul, class: "piped") do %>
-      <%= content_tag :li, content_tag(:h1, @headline) %>
-      <%= content_tag :li, content_tag(:h2, link_to("Log In", new_user_session_path)) %>
+    <%= content_tag(:h1) do %>
+      <%= content_tag(:span, @headline) %>
+      <%= link_to("(Or Log In)", new_user_session_path) %>
     <% end %>
   <% end %>
 <% end %>
@@ -38,5 +38,3 @@
     <%= f.button :submit, "Sign up" %>
   <% end %>
 <% end %>
-
-<%= render "users/shared/links" %>

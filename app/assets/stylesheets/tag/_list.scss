@@ -26,6 +26,10 @@ ul {
   &.piped {
     @include piped-list;
   }
+
+  &.arrowed {
+    @include arrowed-list;
+  }
 }
 
 ol {
