@@ -6,6 +6,9 @@ $armchair-blue-medium:   #67d0ef;
 $armchair-blue-light:    #9cc9de;
 $armchair-blue-lightest: #c0e0ed;
 
+$armchair-blacktop:      #131313;
+$armchair-smoke:         #92898a;
+
 $bright-cerulean:        #10acdb;
 $trolley-grey:           #7f8185;
 $gun-metal:              #2b2d42;
@@ -13,9 +16,10 @@ $grey-blue:              #8d99ae;
 $maximum-yellow:         #f8f32b;
 $bone:                   #e2dbbe;
 
-
-$armchair-blacktop:    #131313;
-$armchair-smoke:       #92898a;
+$success-color:          #a2d729;
+$error-color:            #dd1c1a;
+$error-bg-color:         scale-color($error-color, $lightness: 70%);
+$error-bg-color-focus:   scale-color($error-color, $lightness: 80%);
 
 /* Greyscale. */
 
@@ -25,16 +29,19 @@ $medium-grey: #999;
 $dark-grey:   #333;
 $black:       #000;
 
+/* Text. */
+
+$standard-font-color: $dark-grey;
+
 /* Flash. */
 
-$flash-bg:      scale-color($armchair-blacktop, $lightness: 5%);
-$alert-color:   #dd1c1a;
-$success-color: #a2d729;
+$flash-bg: scale-color($armchair-blacktop, $lightness: 5%);
 
 /* Forms. */
 
-$input-bg-color:        #eee;
-$input-bg-color-active: #fff;
+$input-bg-color:        #ddd;
+$input-bg-color-focus:  #fff;
+$placeholder-color:     scale-color($standard-font-color, $lightness: 50%);
 
 /* Borders. */
 
@@ -44,10 +51,6 @@ $standard-border:       1px solid $standard-border-color;
 /* Masthead. */
 
 $tagline-color: $armchair-smoke;
-
-/* Text. */
-
-$standard-font-color: $dark-grey;
 
 /* Links. */
 

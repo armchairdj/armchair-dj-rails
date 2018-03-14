@@ -3,17 +3,49 @@
 %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
+  <%= content_tag(:div, class: "error_notification") do %>
+    Page-level form error notification.
+  <% end %>
+
   <%= content_tag(:div, class: "form_inputs") do %>
+
+    <%= f.input :string, as: :string %>
+
+    <%= f.input :optional_string, as: :string, required: false %>
+
+    <%= f.input :string_with_extras, as: :string,
+      placeholder: "Placeholder for a text input",
+      hint:        "Hint hint hint"
+    %>
+
+    <%= f.input(:string_with_error,
+      wrapper_html: { class: "field_with_errors" },
+      hint: "Hint for errored string field."
+    ) do %>
+      <%= f.text_field :string_with_error %>
+      <%= content_tag(:div, "Error message for string.", class: "error") %>
+    <% end %>
+
+    <%= f.input :textarea, as: :text %>
+
+    <%= f.input :textarea_with_extras, as: :text,
+      placeholder: "Placeholder for a textarea",
+      hint:        "Hint for textarea with extras."
+    %>
+
+    <%= f.input(:string_with_error,
+      wrapper_html: { class: "field_with_errors" },
+      hint: "Hint for errored textarea."
+    ) do %>
+      <%= f.text_area :string_with_error %>
+    <% end %>
+
     <%= f.input :select do %>
       <%= f.select :select,
         [true, false],
         include_blank: "Please choose"
       %>
     <% end %>
-
-    <%= f.input :string, as: :string %>
-
-    <%= f.input :text, as: :text %>
 
     <%= f.input :checkbox, as: :boolean %>
 

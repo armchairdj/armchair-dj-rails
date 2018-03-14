@@ -11,7 +11,7 @@ class PagesController < ApplicationController
 
   def style_guide
     flash.now[:error]  = "This is an error message."
-    flash.now[:notice] = "This is a notice message."
+    flash.now[:notice] = "This is a notice."
 
   end
 end

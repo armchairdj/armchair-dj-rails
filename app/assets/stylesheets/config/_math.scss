@@ -3,6 +3,7 @@
 $standard-border-radius:       4px;
 $standard-spacing:             1rem;
 $small-spacing:                $standard-spacing / 2;
+$tiny-spacing:                 $standard-spacing / 4;
 $standard-transition-duration: 150ms;
 $standard-transition-function: ease;
 $standard-z-index:             0;
@@ -11,8 +12,11 @@ $standard-z-index:             0;
 
 $page-headline-font-size: 2rem;
 $standard-font-size: 1rem;
-$button-font-size: 1.2rem;
+
 $input-font-size: 1.2rem;
+$input-error-font-size: .8rem;
+$hint-font-size: .8rem;
+$button-font-size: 1.2rem;
 
 /* Font-weight. */
 

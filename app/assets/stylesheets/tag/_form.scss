@@ -6,105 +6,38 @@ fieldset {
 }
 
 legend {
-  margin-bottom: $small-spacing / 2;
+  margin-bottom: $tiny-spacing;
   padding: 0;
 }
 
 label {
   display: block;
-  margin-bottom: $small-spacing / 2;
+  margin-bottom: $tiny-spacing;
 }
 
 #{$all-text-inputs},
 textarea {
+  @include no-appearance();
   @include form-field();
+  @include bottom-margin-only($small-spacing);
+  @include horizontal-padding-only($small-spacing);
+  @include luxurious();
 }
 
 textarea {
   resize: vertical;
 }
 
-select {
-//  margin-bottom: $small-spacing;
-//  width: 100%;
-//  background-image: url(image_path("open_iconic/chevron-bottom.svg"));
-//  background-repeat: no-repeat;
-//  background-size: .8rem .8rem;
-//  background-position: 98% 55%;
-}
-
-select {
-  margin: 0;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  background: transparent none no-repeat;
-  cursor: pointer;
-}
-
-@media screen and (min-width:0) {
-  /* for relatively modern browsers including IE 8+ */
-  select {
-    @include form-field();
-    height: #{$luxurious}rem;
-    background-image: url("data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAAAlElEQVRIx+2VwQ3AIAhFwTiFi7KC7uYGHo1z0Et7MWkjaEiaQOJBDzy/wgdqrXwHWKyAiGAZDnSgHBhC+IfCUgqbKXxgGqhY4QyRQkUK35KLoK01iZd+xZKXRuEfbvdQPPGkAABEhMeLhohE5yfaAufk93791r13zQDmnLNqcOMYg1NKmoJgTRHtmDeaWZvPQweaAi8PXSmZJU3QRAAAAABJRU5ErkJggg==");
-    background-position: -50px -50px;
-  }
-}
-
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  /* for Webkit */
-  select {
-    -webkit-appearance: none;
-    background-position: right center;
-    padding-right: 32px;
-  }
-}
-
-@-moz-document url-prefix() {
-  /* for Firefox */
-  select {
-    -moz-appearance: none;
-    text-indent: 0.01px;
-    text-overflow: "";
-    background-position: right center;
-    padding-right: 16px;
-  }
-  
-  /* hides the dotted outline on focus in FF (See SO#3773430) */
-  select:-moz-focusring {
-    color: transparent;
-    text-shadow: 0 0 0 #000;
-  }
-}
-
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-  /* for IE10+ */
-  select::-ms-expand {
-    display: none;
-  }
-  select {
-    background-position: right center;
-    padding-right: 30px;
-  }
-}
-
-#{$all-text-inputs},
-textarea {
-  &::placeholder {
-    color: tint($standard-font-color, 40%);
-  }
-}
-
 [type="checkbox"] {
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  margin-right: $small-spacing / 2;
+  margin-right: $tiny-spacing;
 }
 
 [type="radio"] {
   display: inline;
-  margin-right: $small-spacing / 2;
+  margin-right: $tiny-spacing;
 }
 
 [type="file"] {
@@ -120,10 +53,37 @@ textarea {
   }
 }
 
-div.input {
-  @include bottom-margin-only();
+.input {
+  @include bottom-margin-only(1.5rem);
 }
 
-div.form_inputs {
+.form_inputs {
   @include bottom-margin-only(1.5rem);
+}
+
+.hint {
+  @include hint-text();
+  @include offset-input-sub-element();
+}
+
+.error_notification {
+  color: $error-color;
+  @include bottom-margin-only(1.5rem);
+}
+
+.field_with_errors {
+  label,
+  .error {
+    color: $error-color;
+  }
+
+  .error {
+    @include input-error-text();
+    @include offset-input-sub-element();
+  }
+
+  #{$all-text-inputs},
+  textarea {
+    @include form-field-with-error();
+  }
 }

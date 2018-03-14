@@ -3,7 +3,7 @@ aside.flash-messages {
 
   .flash-alert,
   .flash-error {
-    @include text-and-link($alert-color);
+    @include text-and-link($error-color);
   }
 
   .flash-notice,

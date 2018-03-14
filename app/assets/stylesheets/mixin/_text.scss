@@ -9,3 +9,12 @@
   font-family: $raleway-font-stack;
   @include light();
 }
+
+@mixin input-error-text() {
+  font-size: $input-error-font-size;
+}
+
+@mixin hint-text {
+  font-size: $hint-font-size;
+  @include light();
+}

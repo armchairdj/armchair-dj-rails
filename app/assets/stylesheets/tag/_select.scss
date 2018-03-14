@@ -1,0 +1,54 @@
+select {
+  @include bottom-margin-only($small-spacing);
+  @include horizontal-padding-only($small-spacing);
+  background: transparent none no-repeat;
+  cursor: pointer;
+}
+
+/* Relatively modern browsers including IE 8+ */
+@media screen and (min-width: 0) {
+  select {
+    @include form-field();
+    @include luxurious();
+    background-image: url("data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAAAlElEQVRIx+2VwQ3AIAhFwTiFi7KC7uYGHo1z0Et7MWkjaEiaQOJBDzy/wgdqrXwHWKyAiGAZDnSgHBhC+IfCUgqbKXxgGqhY4QyRQkUK35KLoK01iZd+xZKXRuEfbvdQPPGkAABEhMeLhohE5yfaAufk93791r13zQDmnLNqcOMYg1NKmoJgTRHtmDeaWZvPQweaAi8PXSmZJU3QRAAAAABJRU5ErkJggg==");
+    background-position: -50px -50px;
+  }
+}
+
+/* Webkit */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select {
+    -webkit-appearance: none;
+    background-position: right center;
+    padding-right: 32px;
+  }
+}
+
+/* Firefox */
+@-moz-document url-prefix() {
+  select {
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: "";
+    background-position: right center;
+    padding-right: 16px;
+    height: #{$luxurious * 1.25}rem;
+  }
+  
+  select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #000;
+  }
+}
+
+/* IE10+ */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  select::-ms-expand {
+    display: none;
+  }
+
+  select {
+    background-position: right center;
+    padding-right: 30px;
+  }
+}
