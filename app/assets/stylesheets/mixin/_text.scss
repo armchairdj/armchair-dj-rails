@@ -1,4 +1,11 @@
 @mixin button-text {
   font-size: $button-font-size;
+  font-family: $raleway-font-stack;
   @include bold();
+}
+
+@mixin input-text {
+  font-size: $input-font-size;
+  font-family: $raleway-font-stack;
+  @include light();
 }

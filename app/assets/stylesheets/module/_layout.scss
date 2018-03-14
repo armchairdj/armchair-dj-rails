@@ -24,7 +24,7 @@
   background-color: $armchair-blacktop;
   min-height: 400px;
 
-  @include breakpoint(x-large) {
-    margin-right: $masthead-width-x-large;
+  @include breakpoint(large) {
+    @include fixed-widthable();
   }
 }

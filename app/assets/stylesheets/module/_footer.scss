@@ -12,8 +12,12 @@ footer#page_footer {
       @include bottom-margin(1.2rem);
     }
 
+    ul {
+      font-size: .8rem;
+    }
+
     .copyright {
-      font-size: .75rem;
+      font-size: .7rem;
       color: $medium-grey;
     }
   }
@@ -31,11 +35,11 @@ footer#page_footer {
       display: block;
     }
   }
-
-  @include breakpoint(x-large) {
+  
+  @include breakpoint(large) {
+    @include fixed-widthable();
     @include clearfix();
     text-align: right;
-    margin-right: $masthead-width-x-large;
 
     nav.links {
       float: right;

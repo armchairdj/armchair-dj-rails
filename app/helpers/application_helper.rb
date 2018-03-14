@@ -23,6 +23,28 @@ module ApplicationHelper
     [@title, "Armchair DJ"].flatten.compact.join(" | ")
   end
 
+  def non_semantic_svg_image(image_path, label = nil, desc = nil)
+    opts = {
+      nocomment: true,
+      aria:      false,
+      class:     "scalable_image"
+    }
+
+    if label.present && desc.present?
+      opts = opts.merge({
+        aria:  true,
+        title: label,
+        desc:  desc,
+      })
+    end
+
+    inline_svg(image_path, opts)
+  end
+
+  def semantic_svg_image(image_path, label, desc)
+    non_semantic_svg_image(image_path, label, desc)
+  end
+
   def site_logo
     image_tag("armchair.jpg", class: "chair")
   end

@@ -3,6 +3,7 @@
 
 Rails.application.routes.draw do
   root "pages#index"
+  get "style_guide" => "pages#style_guide"
 
   get  "404" => "errors#not_found"
   get  "500" => "errors#internal_server_error"

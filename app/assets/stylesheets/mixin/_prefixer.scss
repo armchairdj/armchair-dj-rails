@@ -1,0 +1,3 @@
+@mixin no-appearance() {
+  @include prefixer(appearance, none, ("webkit", "moz"));
+}

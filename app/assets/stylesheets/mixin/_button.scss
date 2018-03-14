@@ -1,14 +1,14 @@
 @mixin button-base {
   @include button-text();
+  @include no-appearance();
   -webkit-font-smoothing: antialiased;
   transition: background-color $standard-transition-duration $standard-transition-function;
-  appearance: none;
   border-width: 1px;
   border-style: solid;
   cursor: pointer;
   display: inline-block;
   width: auto;
-  line-height: 1;
+  line-height: $compact;
   text-decoration: none;
   text-transform: uppercase;
   user-select: none;
@@ -16,7 +16,7 @@
   text-align: center;
   white-space: nowrap;
   border-radius: $button-border-radius;
-  padding: 10px 20px;
+  padding: .6rem 1.8rem;
 
   &:focus,
   &:hover,

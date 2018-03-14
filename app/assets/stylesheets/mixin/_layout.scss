@@ -1,0 +1,7 @@
+@mixin fixed-widthable($fixed-element: false) {
+  @if $fixed-element == true {
+    width: $fixed-masthead-width;
+  } @else {
+    margin-right: $fixed-masthead-width;
+  }
+}

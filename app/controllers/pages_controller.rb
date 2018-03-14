@@ -5,10 +5,13 @@ class PagesController < ApplicationController
     # raise StandardError
     # raise ActiveRecord::RecordNotFound
     # raise Pundit::NotAuthorizedError
-    # flash.now[:error] = "This is an error message."
-    # flash.now[:notice] = "This is a notice message."
 
     @homepage = true
   end
 
+  def style_guide
+    flash.now[:error]  = "This is an error message."
+    flash.now[:notice] = "This is a notice message."
+
+  end
 end

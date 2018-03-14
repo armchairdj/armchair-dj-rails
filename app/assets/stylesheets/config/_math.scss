@@ -12,6 +12,7 @@ $standard-z-index:             0;
 $page-headline-font-size: 2rem;
 $standard-font-size: 1rem;
 $button-font-size: 1.2rem;
+$input-font-size: 1.2rem;
 
 /* Font-weight. */
 
@@ -21,13 +22,14 @@ $font-weight-bold:   700;
 
 /* Line-height. */
 
-$compact:  1;
-$readable: 1.231;
-$spacious: 1.5;
+$compact:   1;
+$readable:  1.231;
+$spacious:  1.5;
+$luxurious: 1.8;
 
 /* Measurements. */
 
-$masthead-width-x-large: 500px;
+$fixed-masthead-width: 16.65em;
 
 /* Buttons. */
 

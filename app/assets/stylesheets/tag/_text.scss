@@ -7,6 +7,7 @@ h6 {
   @include bottom-margin-only();
   @include bold();
   color: $bone;
+  line-height: $readable;
 }
 
 h1 {
@@ -39,4 +40,5 @@ p {
 
 abbr[title] {
   border-bottom: none;
+  text-decoration: none;
 }

@@ -4,7 +4,23 @@ html {
   padding: 0;
   box-sizing: border-box;
   background-color: $flash-bg;
-  font-size: 20px;
+  font-size: 16px;
+
+  @include breakpoint(small) {
+    font-size: 18px;
+  }
+
+  @include breakpoint(medium) {
+    font-size: 20px;
+  }
+
+  @include breakpoint(large) {
+    font-size: 22px;
+  }
+
+  @include breakpoint(x-large) {
+    font-size: 24px;
+  }
 }
 
 *,
@@ -20,4 +36,5 @@ body {
   padding: 0;
   font-family: $raleway-font-stack;
   color: $white;
+  line-height: $spacious;
 }

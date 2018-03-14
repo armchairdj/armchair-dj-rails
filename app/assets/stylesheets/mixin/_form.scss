@@ -1,0 +1,32 @@
+@mixin form-field() {
+  @include no-appearance();
+  @include input-text();
+  @include luxurious();
+  display: block;
+  background-color: $input-bg-color;
+  padding: 0 ($small-spacing);
+  border: $standard-border;
+  border-radius: $standard-border-radius;
+  box-sizing: border-box;
+  margin-bottom: $small-spacing;
+  transition: border-color $standard-transition-duration $standard-transition-function;
+  width: 100%;
+
+  &:hover {
+    border-color: shade($standard-border-color, 20%);
+  }
+
+  &:focus {
+    border-color: $white;
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: shade($input-bg-color, 5%);
+    cursor: not-allowed;
+
+    &:hover {
+      border: $standard-border;
+    }
+  }
+}
