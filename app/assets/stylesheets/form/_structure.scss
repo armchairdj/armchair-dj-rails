@@ -11,7 +11,7 @@ fieldset {
   border: 0;
   padding: 0;
   background-color: transparent;
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only();
 }
 
 legend {
@@ -20,19 +20,8 @@ legend {
   @include legend-text();
 }
 
-label {
-  display: block;
-  @include bottom-margin-only($tiny-spacing);
-  @include label-text();
-}
-
-.hint {
-  @include offset-input-sub-element();
-  @include hint-text();
-}
-
 .input {
-  @include bottom-margin-only(1rem);
+  @include bottom-margin-only();
 
   &.field_with_errors {
     label {
@@ -46,8 +35,19 @@ label {
   }
 }
 
+label {
+  display: block;
+  @include bottom-margin-only(.1rem);
+  @include label-text();
+}
+
+.hint {
+  @include bottom-margin-only($tiny-spacing);
+  @include hint-text();
+}
+
 .error {
   color: $error-color;
   @include form-field-error-text();
-  @include offset-input-sub-element();
+  @include bottom-margin-only($tiny-spacing);
 }

@@ -1,7 +1,31 @@
+@mixin legend-text {
+  font-size: $legend-font-size;
+  text-transform: uppercase;
+}
+
+@mixin label-text {
+  font-size: $label-font-size;
+}
+
+@mixin hint-text {
+  font-size: $hint-font-size;
+  @include light();
+}
+
+@mixin input-text {
+  font-size: $input-font-size;
+  font-family: $raleway-font-stack;
+  @include light();
+  @include luxurious();
+}
+
+@mixin form-field-error-text() {
+  font-size: $form-field-error-font-size;
+}
+
 @mixin form-field() {
   @include input-text();
   @include no-focus-outline();
-  display: block;
   background-color: $input-bg-color;
   border: $standard-border;
   border-radius: $standard-border-radius;
@@ -23,6 +47,12 @@
   }
 }
 
+@mixin form-field-spacing() {
+  display: block;
+  @include bottom-margin-only($tiny-spacing);
+  @include horizontal-padding-only($small-spacing);
+}
+
 @mixin form-field-with-error() {
   border-color: $error-color;
   background-color: $error-bg-color;
@@ -30,10 +60,6 @@
   &:focus {
     background-color: $error-bg-color-focus;
   }
-}
-
-@mixin offset-input-sub-element() {
-  margin: -$tiny-spacing 0 $tiny-spacing;
 }
 
 @mixin no-focus-outline() {

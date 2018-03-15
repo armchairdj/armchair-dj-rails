@@ -1,6 +1,5 @@
 select {
-  @include bottom-margin-only($small-spacing);
-  @include horizontal-padding-only($small-spacing);
+  @include form-field-spacing();
   background: transparent none no-repeat;
   cursor: pointer;
 }
@@ -10,7 +9,6 @@ select {
 @media screen and (min-width: 0) {
   select {
     @include form-field();
-    @include luxurious();
     background-image: url("data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAAAlElEQVRIx+2VwQ3AIAhFwTiFi7KC7uYGHo1z0Et7MWkjaEiaQOJBDzy/wgdqrXwHWKyAiGAZDnSgHBhC+IfCUgqbKXxgGqhY4QyRQkUK35KLoK01iZd+xZKXRuEfbvdQPPGkAABEhMeLhohE5yfaAufk93791r13zQDmnLNqcOMYg1NKmoJgTRHtmDeaWZvPQweaAi8PXSmZJU3QRAAAAABJRU5ErkJggg==");
     background-position: -50px -50px;
   }

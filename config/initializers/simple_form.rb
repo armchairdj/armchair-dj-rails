@@ -72,8 +72,10 @@ SimpleForm.setup do |config|
   ) do |b|
     b.use :html5
 
-    ## Inputs
-    b.use :label_input
+    b.wrapper tag: "label" do |bl|
+       bl.use :input
+       bl.use :label_text
+    end
     b.use :hint,  wrap_with: { tag: :div, class: :hint }
     b.use :error, wrap_with: { tag: :div, class: :error }
   end
