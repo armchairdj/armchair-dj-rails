@@ -3,6 +3,10 @@ textarea {
   @include no-appearance();
   @include form-field();
   @include form-field-spacing();
+
+  .form-field.with-errors & {
+    @include form-field-with-error();
+  }
 }
 
 textarea {

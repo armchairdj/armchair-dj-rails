@@ -9,9 +9,9 @@ SimpleForm.setup do |config|
   config.wrapper_mappings = { boolean: :checks }
 
   config.wrappers(:default,
-    class:       :input,
-    hint_class:  :field_with_hint,
-    error_class: :field_with_errors
+    class:       'form-field',
+    hint_class:  'with-hint',
+    error_class: 'with-errors'
   ) do |b|
     ## Extensions enabled by default
     # Any of these extensions can be disabled for a
@@ -24,7 +24,7 @@ SimpleForm.setup do |config|
     b.use :html5
 
     # Calculates placeholders automatically from I18n
-    # You can also pass a string as f.input placeholder: "Placeholder"
+    # You can also pass a string as f.input placeholder: 'Placeholder'
     b.use :placeholder
 
     ## Optional extensions
@@ -51,40 +51,41 @@ SimpleForm.setup do |config|
 
     ## Inputs
     b.use :label
-    b.use :hint,  wrap_with: { tag: :div, class: :hint }
+    b.use :hint,  wrap_with: { tag: :div, class: 'hint' }
     b.use :input
-    b.use :error, wrap_with: { tag: :div, class: :error }
+    b.use :error, wrap_with: { tag: :div, class: 'error' }
 
     ## full_messages_for
     # If you want to display the full error message for the attribute, you can
     # use the component :full_error, like:
     #
-    # b.use :full_error, wrap_with: { tag: :span, class: :error }
+    # b.use :full_error, wrap_with: { tag: :span, class: 'error' }
   end
 
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :default
 
   config.wrappers(:checks,
-    class:       :input,
-    hint_class:  :field_with_hint,
-    error_class: :field_with_errors
+    class:       'form-field',
+    hint_class:  'with-hint',
+    error_class: 'with-errors'
   ) do |b|
     b.use :html5
 
-    b.wrapper tag: "label" do |bl|
+    b.wrapper tag: 'label' do |bl|
        bl.use :input
-       bl.use :label_text
+       bl.use :hint,       wrap_with: { tag: :span, class: 'custom-checkbox' }
+       bl.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
     end
-    b.use :hint,  wrap_with: { tag: :div, class: :hint }
-    b.use :error, wrap_with: { tag: :div, class: :error }
+
+    b.use :error, wrap_with: { tag: :div, class: 'error' }
   end
 
   # Define the way to render check boxes / radio buttons with labels.
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
-  # config.boolean_style = :nested
+  config.boolean_style = :nested
 
   # Default class for buttons
   config.button_class = 'button'
@@ -113,7 +114,7 @@ SimpleForm.setup do |config|
   config.collection_wrapper_tag = :fieldset
 
   # You can define the class to use on all collection wrappers. Defaulting to none.
-  config.collection_wrapper_class = 'collection_wrapper'
+  config.collection_wrapper_class = 'collection-wrapper'
 
   # You can wrap each item in a collection of radio/check boxes with a tag,
   # defaulting to :span.
@@ -159,7 +160,7 @@ SimpleForm.setup do |config|
 
   # Namespaces where SimpleForm should look for custom input classes that
   # override default inputs.
-  # config.custom_inputs_namespaces << "CustomInputs"
+  # config.custom_inputs_namespaces << 'CustomInputs'
 
   # Default priority for time_zone inputs.
   # config.time_zone_priority = nil
@@ -184,7 +185,7 @@ SimpleForm.setup do |config|
 
   # Defines if the default input wrapper class should be included in radio
   # collection wrappers.
-  # config.include_default_input_wrapper_class = true
+  config.include_default_input_wrapper_class = true
 
   # Defines which i18n scope will be used in Simple Form.
   # config.i18n_scope = 'simple_form'

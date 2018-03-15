@@ -12,34 +12,48 @@
 
   <%= content_tag(:div, class: "form_inputs") do %>
 
-    <%= f.input(:string_with_error,
-      wrapper_html: { class: "field_with_errors" },
-      hint: "Hint for string."
-    ) do %>
-      <%= f.text_field :string_with_error, placeholder: "Placeholder for string" %>
-      <%= content_tag(:div, "Error message for string.", class: "error") %>
-    <% end %>
+    <%= content_tag :fieldset do %>
+      <%= content_tag(:legend, "Fields With Errors") %>
 
-    <%= f.input(:textarea_with_error,
-      wrapper_html: { class: "field_with_errors" },
-      hint: "Hint for textarea."
-    ) do %>
-      <%= f.text_area :textarea_with_error, placeholder: "Placeholder for textarea" %>
-      <%= content_tag(:div, "Error message for textarea.", class: "error") %>
-    <% end %>
+      <%= f.input(:string_with_error,
+        wrapper_html: { class: "with-errors" },
+        hint: "Hint for string."
+      ) do %>
+        <%= f.text_field :string_with_error, placeholder: "Placeholder for string" %>
+        <%= content_tag(:div, "Error message for string.", class: "error") %>
+      <% end %>
 
-    <%= f.input(:select_with_error,
-      wrapper_html: { class: "field_with_errors" },
-      hint: "Hint for select."
-    ) do %>
-      <%= f.select :select,
-        [true, false],
-        include_blank: "Please choose"
-      %>
-      <%= content_tag(:div, "Error message for select.", class: "error") %>
-    <% end %>
+      <%= f.input(:select_with_error,
+        wrapper_html: { class: "with-errors" },
+        hint: "Hint for select."
+      ) do %>
+        <%= f.select :select,
+          [true, false],
+          include_blank: "Please choose"
+        %>
+        <%= content_tag(:div, "Error message for select.", class: "error") %>
+      <% end %>
 
-    <%= f.input :checkbox, as: :boolean %>
+      <%= f.input(:checkbox_with_error,
+        label: false,
+        wrapper_html: { class: "boolean with-errors" }
+      ) do %>
+        <%= content_tag(:label) do %>
+          <%= f.check_box(:checkbox_with_error) %>
+          <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-checkbox") %>
+          <%= content_tag(:span, "Checkbox with error", class: "label-text") %>
+          <%= content_tag(:div, "Error message for checkbox.", class: "error") %>
+        <% end %>
+      <% end %>
+
+      <%= f.input(:textarea_with_error,
+        wrapper_html: { class: "with-errors" },
+        hint: "Hint for textarea."
+      ) do %>
+        <%= f.text_area :textarea_with_error, placeholder: "Placeholder for textarea" %>
+        <%= content_tag(:div, "Error message for textarea.", class: "error") %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <%= content_tag(:div, class: "button_group") do %>

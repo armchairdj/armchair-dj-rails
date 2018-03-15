@@ -1,6 +1,7 @@
 @mixin legend-text {
   font-size: $legend-font-size;
   text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
 @mixin label-text {

@@ -1,10 +1,10 @@
 .error_notification {
   color: $error-color;
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only(2rem);
 }
 
 .form_inputs {
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only(2rem);
 }
 
 fieldset {
@@ -16,28 +16,23 @@ fieldset {
 
 legend {
   padding: 0;
-  @include bottom-margin-only();
+  @include bottom-margin-only(.75rem);
   @include legend-text();
 }
 
-.input {
-  @include bottom-margin-only();
+.form-field {
+  @include bottom-margin-only(1.5rem);
 
-  &.field_with_errors {
+  &.with-errors {
     label {
       color: $error-color;
-    }
-
-    #{$all-text-inputs},
-    textarea {
-      @include form-field-with-error();
     }
   }
 }
 
 label {
   display: block;
-  @include bottom-margin-only(.1rem);
+  @include bottom-margin-only(.05rem);
   @include label-text();
 }
 

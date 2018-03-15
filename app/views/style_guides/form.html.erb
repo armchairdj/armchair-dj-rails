@@ -12,6 +12,8 @@
 
       <%= f.input :string, as: :string %>
 
+      <%= f.input :radios, as: :radio_buttons, collection: [["one", 1], ["two", 2], ["three", 3]] %>
+
       <%= f.input :select do %>
         <%= f.select :select,
           [true, false],
@@ -19,9 +21,9 @@
         %>
       <% end %>
 
-      <%= f.input :textarea, as: :text %>
+      <%= f.input :checkbox, as: :boolean, hint: "&nbsp;".html_safe %>
 
-      <%= f.input :checkbox, as: :boolean %>
+      <%= f.input :textarea, as: :text %>
     <% end %>
 
     <%= content_tag :fieldset do %>

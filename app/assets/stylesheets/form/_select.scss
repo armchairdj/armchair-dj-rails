@@ -11,10 +11,8 @@ select {
     @include form-field();
     background-image: url("data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAAAlElEQVRIx+2VwQ3AIAhFwTiFi7KC7uYGHo1z0Et7MWkjaEiaQOJBDzy/wgdqrXwHWKyAiGAZDnSgHBhC+IfCUgqbKXxgGqhY4QyRQkUK35KLoK01iZd+xZKXRuEfbvdQPPGkAABEhMeLhohE5yfaAufk93791r13zQDmnLNqcOMYg1NKmoJgTRHtmDeaWZvPQweaAi8PXSmZJU3QRAAAAABJRU5ErkJggg==");
     background-position: -50px -50px;
-  }
 
-  .input.field_with_errors {
-    select {
+    .form-field.with-errors & {
       @include form-field-with-error();
     }
   }
