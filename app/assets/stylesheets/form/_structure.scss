@@ -1,0 +1,53 @@
+.error_notification {
+  color: $error-color;
+  @include bottom-margin-only(1.5rem);
+}
+
+.form_inputs {
+  @include bottom-margin-only(1.5rem);
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  @include bottom-margin-only(1.5rem);
+}
+
+legend {
+  padding: 0;
+  @include bottom-margin-only();
+  @include legend-text();
+}
+
+label {
+  display: block;
+  @include bottom-margin-only($tiny-spacing);
+  @include label-text();
+}
+
+.hint {
+  @include offset-input-sub-element();
+  @include hint-text();
+}
+
+.input {
+  @include bottom-margin-only(1rem);
+
+  &.field_with_errors {
+    label {
+      color: $error-color;
+    }
+
+    #{$all-text-inputs},
+    textarea {
+      @include form-field-with-error();
+    }
+  }
+}
+
+.error {
+  color: $error-color;
+  @include form-field-error-text();
+  @include offset-input-sub-element();
+}

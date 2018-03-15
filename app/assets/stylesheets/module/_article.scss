@@ -1,0 +1,11 @@
+article {
+  @include bottom-margin();
+
+  section {
+    @include bottom-margin();
+
+    header {
+      @include bottom-margin();
+    }
+  }
+}

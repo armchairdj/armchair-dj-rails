@@ -1,0 +1,5 @@
+article.style_guide {
+  section {
+    @include standard-border-bottom();
+  }
+}

@@ -1,5 +1,8 @@
 <%
-  @headline = @title = "Style Guide"
+  @headline = "Form With Errors"
+  @title    = ["Style Guide", @headline]
+
+  @page_container_class = "style_guide"
 %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
@@ -9,46 +12,34 @@
 
   <%= content_tag(:div, class: "form_inputs") do %>
 
-    <%= f.input :string, as: :string %>
-
-    <%= f.input :optional_string, as: :string, required: false %>
-
-    <%= f.input :string_with_extras, as: :string,
-      placeholder: "Placeholder for a text input",
-      hint:        "Hint hint hint"
-    %>
-
     <%= f.input(:string_with_error,
       wrapper_html: { class: "field_with_errors" },
-      hint: "Hint for errored string field."
+      hint: "Hint for string."
     ) do %>
-      <%= f.text_field :string_with_error %>
+      <%= f.text_field :string_with_error, placeholder: "Placeholder for string" %>
       <%= content_tag(:div, "Error message for string.", class: "error") %>
     <% end %>
 
-    <%= f.input :textarea, as: :text %>
-
-    <%= f.input :textarea_with_extras, as: :text,
-      placeholder: "Placeholder for a textarea",
-      hint:        "Hint for textarea with extras."
-    %>
-
-    <%= f.input(:string_with_error,
+    <%= f.input(:textarea_with_error,
       wrapper_html: { class: "field_with_errors" },
-      hint: "Hint for errored textarea."
+      hint: "Hint for textarea."
     ) do %>
-      <%= f.text_area :string_with_error %>
+      <%= f.text_area :textarea_with_error, placeholder: "Placeholder for textarea" %>
+      <%= content_tag(:div, "Error message for textarea.", class: "error") %>
     <% end %>
 
-    <%= f.input :select do %>
+    <%= f.input(:select_with_error,
+      wrapper_html: { class: "field_with_errors" },
+      hint: "Hint for select."
+    ) do %>
       <%= f.select :select,
         [true, false],
         include_blank: "Please choose"
       %>
+      <%= content_tag(:div, "Error message for select.", class: "error") %>
     <% end %>
 
     <%= f.input :checkbox, as: :boolean %>
-
   <% end %>
 
   <%= content_tag(:div, class: "button_group") do %>

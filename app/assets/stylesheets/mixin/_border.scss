@@ -1,0 +1,23 @@
+@mixin standard-border-top($padding: $standard-spacing, $all: false) {
+  border-top: $standard-border;
+  padding-top: $padding;
+
+  @if $all == false {
+    &:last-child {
+      border-top: none;
+      padding-top: none;
+    }
+  }
+}
+
+@mixin standard-border-bottom($padding: $standard-spacing, $all: false) {
+  border-bottom: $standard-border;
+  padding-bottom: $padding;
+
+  @if $all == false {
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: none;
+    }
+  }
+}

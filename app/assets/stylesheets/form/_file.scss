@@ -1,0 +1,5 @@
+[type="file"] {
+  margin-bottom: $small-spacing;
+  width: 100%;
+  @include no-focus-outline();
+}

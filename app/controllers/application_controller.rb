@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   layout :determine_layout
 
+  add_flash_types :error, :success, :info
+
 private
 
   def determine_layout

@@ -1,0 +1,69 @@
+<%
+  @headline = "Form"
+  @title    = ["Style Guide", @headline]
+
+  @page_container_class = "style_guide"
+%>
+
+<%= simple_form_for(:user, method: :get) do |f| %>
+  <%= content_tag(:div, class: "form_inputs") do %>
+    <%= content_tag :fieldset do %>
+      <%= content_tag(:legend, "Plain Fields") %>
+
+      <%= f.input :string, as: :string %>
+
+      <%= f.input :select do %>
+        <%= f.select :select,
+          [true, false],
+          include_blank: "Please choose"
+        %>
+      <% end %>
+
+      <%= f.input :textarea, as: :text %>
+
+      <%= f.input :checkbox, as: :boolean %>
+    <% end %>
+
+    <%= content_tag :fieldset do %>
+      <%= content_tag(:legend, "Optional Fields") %>
+
+      <%= f.input :optional_string, as: :string, required: false %>
+
+      <%= f.input :optional_select, required: false do %>
+        <%= f.select :optional_select,
+          [true, false],
+          include_blank: "Please choose"
+        %>
+      <% end %>
+
+      <%= f.input :optional_textarea, as: :text, required: false %>
+    <% end %>
+
+    <%= content_tag :fieldset do %>
+      <%= content_tag(:legend, "Tricked-Out Fields") %>
+
+      <%= f.input :string_with_extras, as: :string,
+        placeholder: "Placeholder for string",
+        hint:        "Hint for string."
+      %>
+
+      <%= f.input(:select_with_extras_and_no_blank,
+        hint: "Hint for select."
+      ) do %>
+        <%= f.select :select_with_extras_and_no_blank,
+          [true, false],
+          include_blank: false
+        %>
+      <% end %>
+
+      <%= f.input :textarea_with_extras, as: :text,
+        placeholder: "Placeholder for textarea",
+        hint:        "Hint for textarea."
+      %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button_group") do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

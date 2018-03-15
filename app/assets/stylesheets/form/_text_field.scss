@@ -1,0 +1,12 @@
+#{$all-text-inputs},
+textarea {
+  @include no-appearance();
+  @include form-field();
+  @include bottom-margin-only($small-spacing);
+  @include horizontal-padding-only($small-spacing);
+  @include luxurious();
+}
+
+textarea {
+  resize: vertical;
+}

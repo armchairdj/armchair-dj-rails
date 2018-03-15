@@ -1,0 +1,7 @@
+[type="checkbox"] {
+  @include no-focus-outline();
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: $tiny-spacing;
+}

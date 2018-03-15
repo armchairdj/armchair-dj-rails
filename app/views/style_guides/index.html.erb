@@ -1,0 +1,54 @@
+<%
+  @headline = @title = "Style Guide"
+
+  @page_container_class = "style_guide"
+%>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "General") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "bulleted") do %>
+    <%= content_tag(:li, link_to("Lists",           style_guides_list_path)) %>
+    <%= content_tag(:li, link_to("Posts",           style_guides_post_path)) %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Forms") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "bulleted") do %>
+    <%= content_tag(:li, link_to("Buttons",         style_guides_button_path)) %>
+    <%= content_tag(:li, link_to("Form",            style_guides_form_path)) %>
+    <%= content_tag(:li, link_to("Form w/ Errors",  style_guides_form_with_errors_path)) %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Flash Messages") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "bulleted") do %>
+    <%= content_tag(:li, link_to("Alert",           style_guides_flash_alert_path)) %>
+    <%= content_tag(:li, link_to("Error",           style_guides_flash_error_path)) %>
+    <%= content_tag(:li, link_to("Info",            style_guides_flash_info_path)) %>
+    <%= content_tag(:li, link_to("Notice",          style_guides_flash_notice_path)) %>
+    <%= content_tag(:li, link_to("Success",         style_guides_flash_success_path)) %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Error Pages") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "bulleted") do %>
+    <%= content_tag(:li, link_to("500",             style_guides_internal_server_error_path)) %>
+    <%= content_tag(:li, link_to("404",             style_guides_not_found_path)) %>
+    <%= content_tag(:li, link_to("403",             style_guides_permission_denied_path)) %>
+  <% end %>
+<% end %>

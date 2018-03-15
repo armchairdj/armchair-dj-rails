@@ -3,11 +3,33 @@
 
 Rails.application.routes.draw do
   root "pages#index"
-  get "style_guide" => "pages#style_guide"
 
-  get  "404" => "errors#not_found"
-  get  "500" => "errors#internal_server_error"
-  post "500" => "errors#internal_server_error"
+  #############################################################################
+  # Style Guide.
+  #############################################################################
+
+  get "style_guide",                       to: "style_guides#index",                 as: "style_guides"
+
+  get "style_guide/list",                  to: "style_guides#list",                  as: "style_guides_list"
+  get "style_guide/post",                  to: "style_guides#post",                  as: "style_guides_post"
+
+  get "style_guide/button",                to: "style_guides#button",                as: "style_guides_button"
+  get "style_guide/form",                  to: "style_guides#form",                  as: "style_guides_form"
+  get "style_guide/form_with_errors",      to: "style_guides#form_with_errors",      as: "style_guides_form_with_errors"
+
+  get "style_guide/flash_alert",           to: "style_guides#flash_alert",           as: "style_guides_flash_alert"
+  get "style_guide/flash_error",           to: "style_guides#flash_error",           as: "style_guides_flash_error"
+  get "style_guide/flash_info",            to: "style_guides#flash_info",            as: "style_guides_flash_info"
+  get "style_guide/flash_notice",          to: "style_guides#flash_notice",          as: "style_guides_flash_notice"
+  get "style_guide/flash_success",         to: "style_guides#flash_success",         as: "style_guides_flash_success"
+
+  get "style_guide/internal_server_error", to: "style_guides#internal_server_error", as: "style_guides_internal_server_error"
+  get "style_guide/not_found",             to: "style_guides#not_found",             as: "style_guides_not_found"
+  get "style_guide/permission_denied",     to: "style_guides#permission_denied",     as: "style_guides_permission_denied"
+
+  #############################################################################
+  # Users.
+  #############################################################################
 
   devise_scope :user do
     get    "register",          to: "users/registrations#new",             as: :new_user_registration
@@ -30,8 +52,27 @@ Rails.application.routes.draw do
     unlocks:       "users/unlocks"
   }
 
+  #############################################################################
+  # Artists.
+  #############################################################################
+
   resources :artists
+
+  #############################################################################
+  # Albums.
+  #############################################################################
+
   resources :albums
+
+  #############################################################################
+  # Songs.
+  #############################################################################
+
   resources :songs
+
+  #############################################################################
+  # Posts.
+  #############################################################################
+
   resources :posts
 end

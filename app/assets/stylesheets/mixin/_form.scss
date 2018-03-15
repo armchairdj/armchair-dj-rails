@@ -1,5 +1,6 @@
 @mixin form-field() {
   @include input-text();
+  @include no-focus-outline();
   display: block;
   background-color: $input-bg-color;
   border: $standard-border;
@@ -10,7 +11,6 @@
 
   &:focus {
     background-color: $input-bg-color-focus;
-    outline: none;
   }
 
   &:disabled {
@@ -34,4 +34,10 @@
 
 @mixin offset-input-sub-element() {
   margin: -$tiny-spacing 0 $tiny-spacing;
+}
+
+@mixin no-focus-outline() {
+  &:focus {
+    outline: none;
+  }
 }
