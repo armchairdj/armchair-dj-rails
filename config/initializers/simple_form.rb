@@ -6,47 +6,22 @@ SimpleForm.setup do |config|
   # stack. The options given below are used to wrap the
   # whole input.
 
-  config.wrapper_mappings = { boolean: :checks }
+  # The default wrapper to be used by the FormBuilder.
+  config.default_wrapper = :default
+
+  config.wrapper_mappings = {
+    # radio_buttons: :custom_radios,
+    boolean:       :custom_checkbox
+  }
 
   config.wrappers(:default,
     class:       'form-field',
     hint_class:  'with-hint',
     error_class: 'with-errors'
   ) do |b|
-    ## Extensions enabled by default
-    # Any of these extensions can be disabled for a
-    # given input by passing: `f.input EXTENSION_NAME => false`.
-    # You can make any of these extensions optional by
-    # renaming `b.use` to `b.optional`.
-
-    # Determines whether to use HTML5 (:email, :url, ...)
-    # and required attributes
     b.use :html5
-
-    # Calculates placeholders automatically from I18n
-    # You can also pass a string as f.input placeholder: 'Placeholder'
     b.use :placeholder
 
-    ## Optional extensions
-    # They are disabled unless you pass `f.input EXTENSION_NAME => true`
-    # to the input. If so, they will retrieve the values from the model
-    # if any exists. If you want to enable any of those
-    # extensions by default, you can change `b.optional` to `b.use`.
-
-    # Calculates maxlength from length validations for string inputs
-    # and/or database column lengths
-    b.optional :maxlength
-
-    # Calculate minlength from length validations for string inputs
-    b.optional :minlength
-
-    # Calculates pattern from format validations for string inputs
-    b.optional :pattern
-
-    # Calculates min and max from length validations for numeric inputs
-    b.optional :min_max
-
-    # Calculates readonly automatically from readonly attributes
     b.optional :readonly
 
     ## Inputs
@@ -62,20 +37,17 @@ SimpleForm.setup do |config|
     # b.use :full_error, wrap_with: { tag: :span, class: 'error' }
   end
 
-  # The default wrapper to be used by the FormBuilder.
-  config.default_wrapper = :default
-
-  config.wrappers(:checks,
+  config.wrappers(:custom_checkbox,
     class:       'form-field',
     hint_class:  'with-hint',
     error_class: 'with-errors'
   ) do |b|
     b.use :html5
 
-    b.wrapper tag: 'label' do |bl|
-       bl.use :input
-       bl.use :hint,       wrap_with: { tag: :span, class: 'custom-checkbox' }
-       bl.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
+    b.wrapper tag: 'label' do |item|
+      item.use :input
+      item.use :hint,       wrap_with: { tag: :span, class: 'custom-checkbox' }
+      item.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
     end
 
     b.use :error, wrap_with: { tag: :div, class: 'error' }
@@ -85,9 +57,8 @@ SimpleForm.setup do |config|
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
-  config.boolean_style = :nested
+  # config.boolean_style = :nested
 
-  # Default class for buttons
   config.button_class = 'button'
 
   # Method used to tidy up errors. Specify any Rails Array method.

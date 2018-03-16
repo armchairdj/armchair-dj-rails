@@ -12,7 +12,7 @@
 
       <%= f.input :string, as: :string %>
 
-      <%= f.input :radios, as: :radio_buttons, collection: [["one", 1], ["two", 2], ["three", 3]] %>
+      <%= f.input :radios, label: false, as: :radio_buttons, collection: [["one", 1], ["two", 2], ["three", 3]] %>
 
       <%= f.input :select do %>
         <%= f.select :select,
