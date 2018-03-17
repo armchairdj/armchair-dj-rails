@@ -1,3 +1,10 @@
+[type=checkbox],
+[type=radio] {
+  display: inline;
+  margin-right: $tiny-spacing;
+  @include no-focus-outline();
+}
+
 .form-field.boolean,
 .form-field.radio_buttons {
   [type=checkbox],
