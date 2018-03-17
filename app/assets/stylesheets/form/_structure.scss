@@ -24,7 +24,7 @@ fieldset {
 .form-field {
   @include bottom-margin-only(1.5rem);
 
-  &.with-errors {
+  &.with-error {
     label,
     legend {
       color: $error-color;

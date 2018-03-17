@@ -22,20 +22,24 @@
     position: absolute;
   }
 
-  span.custom-boolean {
+  label {
+    display: inline-block;
+  }
+
+  span.custom-boolean-indicator {
     @include fake-checkbox();
     border: 1px solid $white;
     position: absolute;
     top: .2rem;
   }
 
-  [type=checkbox]:focus + span.custom-boolean,
-  [type=radio]:focus + span.custom-boolean {
+  [type=checkbox]:focus + span.custom-boolean-indicator,
+  [type=radio]:focus + span.custom-boolean-indicator {
     @include input-focus-outline();
   }
 
-  &.with-errors {
-    span.custom-boolean {
+  &.with-error {
+    span.custom-boolean-indicator {
       @include form-field-with-error();
     }
   }
@@ -50,15 +54,15 @@
 .form-field.boolean {
   position: relative;
 
-  [type=checkbox]:checked + span.custom-boolean {
+  [type=checkbox]:checked + span.custom-boolean-indicator {
     &:before {
       @include fake-checkbox();
       content: "\2713";
     }
   }
 
-  &.with-errors {
-    [type=checkbox]:checked + span.custom-boolean {
+  &.with-error {
+    [type=checkbox]:checked + span.custom-boolean-indicator {
       &:before {
         color: $error-color;
       }
@@ -75,16 +79,16 @@
     }
   }
 
-  span.custom-boolean {
+  span.custom-boolean-indicator {
     border-radius: .5rem;
   }
 
-  [type=radio]:checked + span.custom-boolean {
+  [type=radio]:checked + span.custom-boolean-indicator {
     background-color: $white;
   }
 
-  &.with-errors {
-    [type=radio]:checked + span.custom-boolean {
+  &.with-error {
+    [type=radio]:checked + span.custom-boolean-indicator {
       background-color: $error-color;
     }
   }

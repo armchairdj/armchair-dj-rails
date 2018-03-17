@@ -12,7 +12,7 @@
 <% end %>
 
 <%= simple_form_for(@user, url: settings_path) do |f| %>
-  <%= f.error-notification %>
+  <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :first_name,

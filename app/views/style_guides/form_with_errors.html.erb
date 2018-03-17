@@ -16,34 +16,27 @@
       <%= content_tag(:legend, "Fields With Errors") %>
 
       <%= f.input(:string_with_error,
-        wrapper_html: { class: "with-errors" },
+        wrapper_html: { class: "with-error" },
         hint: "Hint for string."
       ) do %>
         <%= f.text_field :string_with_error, placeholder: "Placeholder for string" %>
         <%= content_tag(:div, "Error message for string.", class: "error") %>
       <% end %>
 
-      <%= f.input :radios_with_error, label: false, as: :radio_buttons, wrapper_tag: :fieldset, wrapper_html: { class: "with-errors" } do |b| %>
-        <%= content_tag(:legend, class: "label") do %>
-          Radios <%= I18n.t("simple_form.required.html").html_safe %>
-        <% end %>
+      <%= render partial: "shared/custom_radios", locals: {
+        f:          f,
+        name:       :radios_with_error,
+        legend:     "Radios",
+        hint:       "Hint for radios.",
+        collection: [[1, "one"], [2, "two"], [3, "three"]],
+        error:      "Error message for radios."
+      } %>
 
-        <%= f.collection_radio_buttons :radios, [[1, "one"], [2, "two"], [3, "three"]], :first, :last, item_wrapper_tag: :div, item_wrapper_class: "collection-item" do |b| %>
-          <%= b.label do %>
-            <%= b.radio_button %>
-            <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean") %>
-            <%= content_tag(:span, b.text, class: "label-text") %> 
-          <% end  %>
-        <% end %>
-
-        <%= content_tag(:div, "Error message for radios.", class: "error") %>
-      <% end %>
-
-      <%= f.input(:select_with_error,
-        wrapper_html: { class: "with-errors" },
+      <%= f.input(:select_with_error, as: :select,
+        wrapper_html: { class: "with-error" },
         hint: "Hint for select."
       ) do %>
-        <%= f.select :select,
+        <%= f.select :select_with_error,
           [true, false],
           include_blank: "Please choose"
         %>
@@ -52,18 +45,18 @@
 
       <%= f.input(:checkbox_with_error,
         label: false,
-        wrapper_html: { class: "boolean with-errors" }
+        wrapper_html: { class: "boolean with-error" }
       ) do %>
         <%= content_tag(:label) do %>
           <%= f.check_box(:checkbox_with_error) %>
-          <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean") %>
+          <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean-indicator") %>
           <%= content_tag(:span, "Checkbox with error", class: "label-text") %>
           <%= content_tag(:div, "Error message for checkbox.", class: "error") %>
         <% end %>
       <% end %>
 
       <%= f.input(:textarea_with_error,
-        wrapper_html: { class: "with-errors" },
+        wrapper_html: { class: "with-error" },
         hint: "Hint for textarea."
       ) do %>
         <%= f.text_area :textarea_with_error, placeholder: "Placeholder for textarea" %>

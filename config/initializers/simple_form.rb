@@ -16,7 +16,7 @@ SimpleForm.setup do |config|
   config.wrappers(:default,
     class:       'form-field',
     hint_class:  'with-hint',
-    error_class: 'with-errors'
+    error_class: 'with-error'
   ) do |b|
     b.use :html5
     b.use :placeholder
@@ -39,13 +39,13 @@ SimpleForm.setup do |config|
   config.wrappers(:custom_checkbox,
     class:       'form-field',
     hint_class:  'with-hint',
-    error_class: 'with-errors'
+    error_class: 'with-error'
   ) do |b|
     b.use :html5
 
     b.wrapper tag: 'label' do |item|
       item.use :input
-      item.use :hint,       wrap_with: { tag: :span, class: 'custom-boolean' }
+      item.use :hint,       wrap_with: { tag: :span, class: 'custom-boolean-indicator' }
       item.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
     end
 

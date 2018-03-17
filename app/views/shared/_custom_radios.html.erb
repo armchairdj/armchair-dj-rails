@@ -1,0 +1,32 @@
+<% hint  = nil if local_assigns[:hint ].nil? %>
+<% error = nil if local_assigns[:error].nil? %>
+
+<% wrapper_class = [
+  "form-field",
+  "radio-buttons",
+  ("with-error" if error.present?)
+].compact.join(" ") %>
+
+<%= f.input(name, as: :radio_buttons, label: false,
+  wrapper_tag:   :fieldset,
+  wrapper_class: wrapper_class
+) do |b| %>
+  <%= content_tag(:legend, class: "label") do %>
+    <%= legend %> <%= I18n.t("simple_form.required.html").html_safe %>
+  <% end %>
+
+  <%= content_tag(:div, hint, class: "hint") if hint.present? %>
+
+  <%= f.collection_radio_buttons(name, collection, :first, :last,
+    item_wrapper_tag:   :div,
+    item_wrapper_class: "collection-item"
+  ) do |b| %>
+    <%= b.label do %>
+      <%= b.radio_button %>
+      <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean-indicator") %>
+      <%= content_tag(:span, b.text, class: "label-text") %> 
+    <% end  %>
+  <% end %>
+
+  <%= content_tag(:div, error, class: "error") if error.present? %>
+<% end %>

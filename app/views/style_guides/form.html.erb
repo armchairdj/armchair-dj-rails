@@ -12,28 +12,25 @@
 
       <%= f.input :string, as: :string %>
 
-      <%= f.input :radios, label: false, as: :radio_buttons, wrapper_tag: :fieldset, wrapper_class: 'form-field radio-buttons' do |b| %>
-        <%= content_tag(:legend, class: "label") do %>
-          Radios <%= I18n.t("simple_form.required.html").html_safe %>
-        <% end %>
+      <%= render partial: "shared/custom_radios", locals: {
+        f:          f,
+        name:       :radios,
+        legend:     "Radios",
+        hint:       "Hint for radios.",
+        collection: [[1, "one"], [2, "two"], [3, "three"]]
+      } %>
 
-        <%= f.collection_radio_buttons :radios, [[1, "one"], [2, "two"], [3, "three"]], :first, :last, item_wrapper_tag: :div, item_wrapper_class: "collection-item" do |b| %>
-          <%= b.label do %>
-            <%= b.radio_button %>
-            <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean") %>
-            <%= content_tag(:span, b.text, class: "label-text") %> 
-          <% end  %>
-        <% end %>
-      <% end %>
-
-      <%= f.input :select do %>
+      <%= f.input :select, as: :select do %>
         <%= f.select :select,
           [true, false],
           include_blank: "Please choose"
         %>
       <% end %>
 
-      <%= f.input :checkbox, as: :boolean, hint: "&nbsp;".html_safe %>
+      <%= render partial: "shared/custom_checkbox", locals: {
+        f:    f,
+        name: :checkbox
+      } %>
 
       <%= f.input :textarea, as: :text %>
     <% end %>
@@ -61,7 +58,7 @@
         hint:        "Hint for string."
       %>
 
-      <%= f.input(:select_with_extras_and_no_blank,
+      <%= f.input(:select_with_extras_and_no_blank, as: :select,
         hint: "Hint for select."
       ) do %>
         <%= f.select :select_with_extras_and_no_blank,

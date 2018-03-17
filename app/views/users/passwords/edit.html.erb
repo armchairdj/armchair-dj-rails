@@ -3,7 +3,7 @@
 %>
 
 <%= simple_form_for(@user, url: user_password_path, html: { method: :put }) do |f| %>
-  <%= f.error-notification %>
+  <%= f.error_notification %>
 
   <%= f.input :reset_password_token, as: :hidden %>
   <%= f.full_error :reset_password_token %>

@@ -3,7 +3,7 @@
 %>
 
 <%= simple_form_for(@user, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error-notification %>
+  <%= f.error_notification %>
   <%= f.full_error :unlock_token %>
 
   <%= content_tag(:div, class: "form-inputs") do %>

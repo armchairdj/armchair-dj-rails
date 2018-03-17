@@ -3,7 +3,7 @@
 %>
 
 <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
-  <%= f.error-notification %>
+  <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :first_name,
@@ -21,7 +21,7 @@
 
     <%= f.input :current_password,
       required: true,
-      hint: "we need your current password to confirm your changes"
+      hint: "We need your current password to confirm your changes"
     %>
   <% end %>
 

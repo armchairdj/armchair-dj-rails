@@ -4,7 +4,7 @@ textarea {
   @include form-field();
   @include form-field-spacing();
 
-  .form-field.with-errors & {
+  .form-field.with-error & {
     @include form-field-with-error();
   }
 }
