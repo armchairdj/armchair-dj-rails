@@ -27,7 +27,7 @@ module ApplicationHelper
     opts = {
       nocomment: true,
       aria:      false,
-      class:     "scalable_image"
+      class:     "scalable-image"
     }
 
     if label.present && desc.present?

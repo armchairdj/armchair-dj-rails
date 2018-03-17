@@ -3,7 +3,7 @@
 %>
 
 <% content_for(:header) do %>
-  <%= content_tag(:header, class: "page_header auth") do %>
+  <%= content_tag(:header, class: "page-header auth") do %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @headline) %>
       <%= link_to("(Or Log In)", new_user_session_path) %>
@@ -12,9 +12,9 @@
 <% end %>
 
 <%= simple_form_for(@user, url: settings_path) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error-notification %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -34,7 +34,7 @@
     %>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit, "Sign up" %>
   <% end %>
 <% end %>

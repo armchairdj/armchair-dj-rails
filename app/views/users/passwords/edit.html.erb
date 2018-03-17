@@ -3,16 +3,16 @@
 %>
 
 <%= simple_form_for(@user, url: user_password_path, html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error-notification %>
 
   <%= f.input :reset_password_token, as: :hidden %>
   <%= f.full_error :reset_password_token %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :password, label: "New password", required: true, autofocus: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit, "Change my password" %>
   <% end %>
 <% end %>

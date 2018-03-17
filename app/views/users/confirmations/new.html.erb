@@ -3,14 +3,14 @@
 %>
 
 <%= simple_form_for(@user, url: user_confirmation_path, html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error-notification %>
   <%= f.full_error :confirmation_token %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :email, required: true, autofocus: true %>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit, "Resend confirmation instructions" %>
   <% end %>
 <% end %>

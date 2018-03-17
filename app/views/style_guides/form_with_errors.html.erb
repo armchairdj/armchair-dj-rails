@@ -2,15 +2,15 @@
   @headline = "Form With Errors"
   @title    = ["Style Guide", @headline]
 
-  @page_container_class = "style_guide"
+  @page_container_class = "style-guide"
 %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
-  <%= content_tag(:div, class: "error_notification") do %>
+  <%= content_tag(:div, class: "error-notification") do %>
     Page-level form error notification.
   <% end %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
 
     <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Fields With Errors") %>
@@ -72,7 +72,7 @@
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit %>
   <% end %>
 <% end %>

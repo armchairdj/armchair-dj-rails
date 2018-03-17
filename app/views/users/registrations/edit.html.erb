@@ -3,9 +3,9 @@
 %>
 
 <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error-notification %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -29,7 +29,7 @@
     <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit, "Update" %>
   <% end %>
 <% end %>

@@ -1,5 +1,4 @@
-a[href],
-.link_like {
+a[href] {
   @include underline-always();
   @include hover-link();
 }

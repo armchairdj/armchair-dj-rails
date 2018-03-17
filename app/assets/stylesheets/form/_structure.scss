@@ -1,9 +1,9 @@
-.error_notification {
+.error-notification {
   color: $error-color;
   @include bottom-margin-only(2rem);
 }
 
-.form_inputs {
+.form-inputs {
   @include bottom-margin-only(2rem);
 }
 

@@ -1,7 +1,7 @@
 <%= simple_form_for(@song) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error-notification %>
 
-  <%= content_tag(:div, class: "form_inputs") do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.association :artist,
       collection:    Artist.alphabetical,
       label_method:  :name,
@@ -13,7 +13,7 @@
     <%= f.input :title %>
   <% end %>
 
-  <%= content_tag(:div, class: "button_group") do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit %>
   <% end %>
 <% end %>
