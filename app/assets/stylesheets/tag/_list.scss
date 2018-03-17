@@ -20,21 +20,21 @@ li {
 
 ul {
   &.bulleted {
-    @include bulleted-list;
+    @include bulleted-list();
   }
 
   &.piped {
-    @include piped-list;
+    @include piped-list();
   }
 
   &.arrowed {
-    @include arrowed-list;
+    @include arrowed-list();
   }
 }
 
 ol {
   &.numbered {
-    @include numbered-list;
+    @include numbered-list();
   }
 }
 

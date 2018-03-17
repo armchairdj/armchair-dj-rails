@@ -1,3 +1,12 @@
+/* Greyscale. */
+
+$white:        #fff;
+$light-grey:   #ddd;
+$medium-grey:  #999;
+$dark-grey:    #666;
+$darkest-grey: #333;
+$black:        #000;
+
 /* Brand Colors. */
 
 $armchair-blue-darkest:  #04a1cc;
@@ -17,18 +26,8 @@ $maximum-yellow:         #f8f32b;
 $bone:                   #e2dbbe;
 
 $success-color:          #a2d729;
+$info-color:             $light-grey;
 $error-color:            #dd1c1a;
-$error-bg-color:         scale-color($error-color, $lightness: 70%);
-$error-bg-color-focus:   scale-color($error-color, $lightness: 80%);
-
-/* Greyscale. */
-
-$white:        #fff;
-$light-grey:   #ddd;
-$medium-grey:  #999;
-$dark-grey:    #666;
-$darkest-grey: #333;
-$black:        #000;
 
 /* Text. */
 

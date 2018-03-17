@@ -6,15 +6,16 @@ aside.flash-messages {
     @include text-and-link($error-color);
   }
 
+  .flash-info {
+    @include text-and-link($info-color);
+  }
+
   .flash-notice,
   .flash-success {
     @include text-and-link($success-color);
   }
 
-  .flash-alert,
-  .flash-error,
-  .flash-notice,
-  .flash-success {
+  .flash {
     font-size: .9rem;
     margin: 0;
 

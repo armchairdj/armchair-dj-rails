@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit
-  include HandleErrors
+  include Errorable
 
   protect_from_forgery with: :exception
 

@@ -4,7 +4,7 @@
   behavior: "Closeable"
 }) do %>
   <% flash.each do |type, message| %>
-    <%= content_tag(:div, class: "flash-#{type}", "data-controller": "dismissable") do %>
+    <%= content_tag(:div, class: "flash flash-#{type}", "data-controller": "dismissable") do %>
       <%= content_tag(:div, class: "constrain-wide flash-inner") do %>
         <%= link_to "&#215;".html_safe, "javascript:window.location.reload();",
           class: "closeable",

@@ -8,24 +8,19 @@ Rails.application.routes.draw do
   # Style Guide.
   #############################################################################
 
-  get "style_guide",                       to: "style_guides#index",                 as: "style_guides"
+  get "style_guide", to: "style_guides#index", as: "style_guides"
 
-  get "style_guide/list",                  to: "style_guides#list",                  as: "style_guides_list"
-  get "style_guide/post",                  to: "style_guides#post",                  as: "style_guides_post"
+  get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
+    template: /button|form|form_error|headline|list|post|quotation|svg|text/
+  }
 
-  get "style_guide/button",                to: "style_guides#button",                as: "style_guides_button"
-  get "style_guide/form",                  to: "style_guides#form",                  as: "style_guides_form"
-  get "style_guide/form_with_errors",      to: "style_guides#form_with_errors",      as: "style_guides_form_with_errors"
+  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash", constraints: {
+    flash_type: /alert|error|info|notice|success/
+  }
 
-  get "style_guide/flash_alert",           to: "style_guides#flash_alert",           as: "style_guides_flash_alert"
-  get "style_guide/flash_error",           to: "style_guides#flash_error",           as: "style_guides_flash_error"
-  get "style_guide/flash_info",            to: "style_guides#flash_info",            as: "style_guides_flash_info"
-  get "style_guide/flash_notice",          to: "style_guides#flash_notice",          as: "style_guides_flash_notice"
-  get "style_guide/flash_success",         to: "style_guides#flash_success",         as: "style_guides_flash_success"
-
-  get "style_guide/internal_server_error", to: "style_guides#internal_server_error", as: "style_guides_internal_server_error"
-  get "style_guide/not_found",             to: "style_guides#not_found",             as: "style_guides_not_found"
-  get "style_guide/permission_denied",     to: "style_guides#permission_denied",     as: "style_guides_permission_denied"
+  get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
+    error_type: /not_found|permission_denied|internal_server_error/
+  }
 
   #############################################################################
   # Users.

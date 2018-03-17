@@ -3,7 +3,7 @@
 # Used in conjunction with ErrorsController & config.exceptions_app & routes.
 ################################################################################
 
-module HandleErrors
+module Errorable
   extend ActiveSupport::Concern
 
   included do
