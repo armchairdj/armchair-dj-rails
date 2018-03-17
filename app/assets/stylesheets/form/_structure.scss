@@ -11,7 +11,7 @@ fieldset {
   border: 0;
   padding: 0;
   background-color: transparent;
-  @include bottom-margin-only();
+  @include bottom-margin-only(1.5rem);
 
   &.legendary {
     > legend {

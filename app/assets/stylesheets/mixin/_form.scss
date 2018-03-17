@@ -1,11 +1,13 @@
 @mixin legend-text {
   font-size: $legend-font-size;
+  color: $legend-color;
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
 
 @mixin label-text {
   font-size: $label-font-size;
+  color: $label-color;
 }
 
 @mixin hint-text {
