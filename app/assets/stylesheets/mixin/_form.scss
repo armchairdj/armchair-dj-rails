@@ -50,17 +50,12 @@
 
 @mixin form-field-spacing() {
   display: block;
+  padding: 4px $small-spacing;
   @include bottom-margin-only($tiny-spacing);
-  @include horizontal-padding-only($small-spacing);
 }
 
 @mixin form-field-with-error() {
   border-color: $error-color;
-  background-color: $error-bg-color;
-
-  &:focus {
-    background-color: $error-bg-color-focus;
-  }
 }
 
 @mixin no-focus-outline() {

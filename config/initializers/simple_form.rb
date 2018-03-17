@@ -10,8 +10,7 @@ SimpleForm.setup do |config|
   config.default_wrapper = :default
 
   config.wrapper_mappings = {
-    # radio_buttons: :custom_radios,
-    boolean:       :custom_checkbox
+    boolean: :custom_checkbox
   }
 
   config.wrappers(:default,
@@ -46,18 +45,12 @@ SimpleForm.setup do |config|
 
     b.wrapper tag: 'label' do |item|
       item.use :input
-      item.use :hint,       wrap_with: { tag: :span, class: 'custom-checkbox' }
+      item.use :hint,       wrap_with: { tag: :span, class: 'custom-boolean' }
       item.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
     end
 
     b.use :error, wrap_with: { tag: :div, class: 'error' }
   end
-
-  # Define the way to render check boxes / radio buttons with labels.
-  # Defaults to :nested for bootstrap config.
-  #   inline: input + label
-  #   nested: label > input
-  # config.boolean_style = :nested
 
   config.button_class = 'button'
 
@@ -81,15 +74,7 @@ SimpleForm.setup do |config|
   # Series of attempts to detect a default value method for collection.
   # config.collection_value_methods = [ :id, :to_s ]
 
-  # You can wrap a collection of radio/check boxes in a pre-defined tag, defaulting to none.
   config.collection_wrapper_tag = :fieldset
-
-  # You can define the class to use on all collection wrappers. Defaulting to none.
-  config.collection_wrapper_class = 'collection-wrapper'
-
-  # You can wrap each item in a collection of radio/check boxes with a tag,
-  # defaulting to :span.
-  config.item_wrapper_tag = :div
 
   # You can define a class to use in all item wrappers. Defaulting to none.
   # config.item_wrapper_class = nil
@@ -107,14 +92,8 @@ SimpleForm.setup do |config|
   # You can define which elements should obtain additional classes
   # config.generate_additional_classes_for = [:wrapper, :label, :input]
 
-  # Whether attributes are required by default (or not). Default is true.
   config.required_by_default = true
 
-  # Tell browsers whether to use the native HTML5 validations (novalidate form option).
-  # These validations are enabled in SimpleForm's internal config but disabled by default
-  # in this configuration, which is recommended due to some quirks from different browsers.
-  # To stop SimpleForm from generating the novalidate option, enabling the HTML5 validations,
-  # change this configuration to true.
   config.browser_validations = false
 
   # Collection of methods to detect if a file type was given.

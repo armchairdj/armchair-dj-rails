@@ -12,25 +12,29 @@ fieldset {
   padding: 0;
   background-color: transparent;
   @include bottom-margin-only();
-}
 
-legend {
-  padding: 0;
-  @include bottom-margin-only(.75rem);
-  @include legend-text();
+  &.legendary {
+    > legend {
+      @include bottom-margin-only(.75rem);
+      @include legend-text();
+    }
+  }
 }
 
 .form-field {
   @include bottom-margin-only(1.5rem);
 
   &.with-errors {
-    label {
+    label,
+    legend {
       color: $error-color;
     }
   }
 }
 
-label {
+label,
+legend {
+  padding: 0;
   display: block;
   @include bottom-margin-only(.05rem);
   @include label-text();

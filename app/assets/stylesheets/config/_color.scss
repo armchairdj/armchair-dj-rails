@@ -39,7 +39,7 @@ $flash-bg: scale-color($armchair-blacktop, $lightness: 5%);
 
 /* Forms. */
 
-$input-bg-color:        #ddd;
+$input-bg-color:        scale-color($grey-blue, $lightness: 50%);
 $input-bg-color-focus:  #fff;
 $placeholder-color:     scale-color($standard-font-color, $lightness: 30%);
 

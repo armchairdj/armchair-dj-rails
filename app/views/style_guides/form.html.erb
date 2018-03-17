@@ -7,12 +7,24 @@
 
 <%= simple_form_for(:user, method: :get) do |f| %>
   <%= content_tag(:div, class: "form_inputs") do %>
-    <%= content_tag :fieldset do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Plain Fields") %>
 
       <%= f.input :string, as: :string %>
 
-      <%= f.input :radios, label: false, as: :radio_buttons, collection: [["one", 1], ["two", 2], ["three", 3]] %>
+      <%= f.input :radios, label: false, as: :radio_buttons, wrapper_tag: :fieldset do |b| %>
+        <%= content_tag(:legend, class: "label") do %>
+          Radios <%= I18n.t("simple_form.required.html").html_safe %>
+        <% end %>
+
+        <%= f.collection_radio_buttons :radios, [[1, "one"], [2, "two"], [3, "three"]], :first, :last, item_wrapper_tag: :div, item_wrapper_class: "collection-item" do |b| %>
+          <%= b.label do %>
+            <%= b.radio_button %>
+            <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean") %>
+            <%= content_tag(:span, b.text, class: "label-text") %> 
+          <% end  %>
+        <% end %>
+      <% end %>
 
       <%= f.input :select do %>
         <%= f.select :select,
@@ -26,7 +38,7 @@
       <%= f.input :textarea, as: :text %>
     <% end %>
 
-    <%= content_tag :fieldset do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Optional Fields") %>
 
       <%= f.input :optional_string, as: :string, required: false %>
@@ -41,7 +53,7 @@
       <%= f.input :optional_textarea, as: :text, required: false %>
     <% end %>
 
-    <%= content_tag :fieldset do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Tricked-Out Fields") %>
 
       <%= f.input :string_with_extras, as: :string,
