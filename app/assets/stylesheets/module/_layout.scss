@@ -9,7 +9,7 @@
 .constrain {
   @include breakpoint(medium) {
     padding: 0 40px;
-    max-width: 600px;
+    max-width: 800px;
   }
 }
 

@@ -4,10 +4,21 @@
   @include bold();
 }
 
+@mixin button-layout {
+  margin: 0 $button-spacing $button-spacing 0;
+  padding: .4rem .8rem .3rem;
+  line-height: $compact;
+
+  @include breakpoint(x-large) {
+    padding: .6rem 1.2rem .525rem;
+  }
+}
+
 @mixin button-base {
   @include button-text();
   @include no-appearance();
   @include standard-transition(background-color);
+  @include button-layout();
   -webkit-font-smoothing: antialiased;
   user-select: none;
   border-width: 1px;
@@ -16,8 +27,6 @@
   cursor: pointer;
   display: inline-block;
   width: auto;
-  padding: .6rem 1.8rem;
-  line-height: $compact;
   text-decoration: none;
   text-transform: uppercase;
   vertical-align: middle;
@@ -31,60 +40,40 @@
   }
 }
 
-@mixin primary-button() {
-  background-color: $button-bg-primary;
-  border-color: $button-border-primary;
-  color: $button-text-primary;
+@mixin button-color-scheme($color, $text-color: $white, $border-color: false, $hover: true) {
+  background-color: $color;
+  border-color: if($border-color != false, $border-color, $color);
+  color: $text-color;
 
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: $button-bg-primary-hover;
-    border-color: $button-border-primary-hover;
-    color: $button-text-primary-hover;
+  @if $hover {
+    &:focus,
+    &:hover,
+    &:active {
+      background-color: scale-color($color, $lightness: -20%);
+      border-color: $color;
+      color: $text-color;
+    }
   }
+}
+
+@mixin primary-button() {
+  @include button-color-scheme($button-bg-primary);
 }
 
 @mixin secondary-button() {
-  background-color: $button-bg-secondary;
-  border-color: $button-border-secondary;
-  color: $button-text-secondary;
-
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: $button-bg-secondary-hover;
-    border-color: $button-border-secondary-hover;
-    color: $button-text-secondary-hover;
-  }
+  @include button-color-scheme($button-bg-secondary);
 }
 
 @mixin tertiary-button() {
-  background-color: $button-bg-tertiary;
-  border-color: $button-border-tertiary;
-  color: $button-text-tertiary;
+  @include button-color-scheme($button-bg-tertiary);
+}
 
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: $button-bg-tertiary-hover;
-    border-color: $button-border-tertiary-hover;
-    color: $button-text-tertiary-hover;
-  }
+@mixin danger-button() {
+  @include button-color-scheme($button-bg-danger);
 }
 
 @mixin disabled-button() {
-  background-color: $button-bg-disabled;
-  border-color: $button-border-disabled;
-  color: $button-text-disabled;
+  @include button-color-scheme($button-bg-disabled, $border-color: $white, $hover: false);
   cursor: not-allowed;
-  opacity: 0.5;
-
-  &:focus,
-  &:hover,
-  &:active {
-    background-color: $button-bg-disabled;
-    border-color: $button-border-disabled;
-    color: $button-text-disabled;
-  }
+  opacity: 0.3;
 }

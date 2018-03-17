@@ -10,6 +10,10 @@
     @include tertiary-button();
   }
 
+  &.danger {
+    @include danger-button();
+  }
+
   &.disabled,
   &:disabled {
     @include disabled-button();
@@ -18,4 +22,8 @@
 
 .button-group {
   @include bottom-margin-only();
+}
+
+a.button {
+  @include no-hover-link($color: $white);
 }
