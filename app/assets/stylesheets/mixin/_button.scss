@@ -7,22 +7,22 @@
 @mixin button-base {
   @include button-text();
   @include no-appearance();
+  @include standard-transition(background-color);
   -webkit-font-smoothing: antialiased;
-  transition: background-color $standard-transition-duration $standard-transition-function;
+  user-select: none;
   border-width: 1px;
   border-style: solid;
+  border-radius: $button-border-radius;
   cursor: pointer;
   display: inline-block;
   width: auto;
+  padding: .6rem 1.8rem;
   line-height: $compact;
   text-decoration: none;
   text-transform: uppercase;
-  user-select: none;
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
-  border-radius: $button-border-radius;
-  padding: .6rem 1.8rem;
 
   &:focus,
   &:hover,

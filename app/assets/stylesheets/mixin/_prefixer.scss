@@ -1,3 +1,15 @@
 @mixin no-appearance() {
   @include prefixer(appearance, none, ("webkit", "moz"));
 }
+
+@mixin box-shadow($val) {
+  @include prefixer(box-shadow, $val, ("webkit", "moz"));
+}
+
+@mixin transition($val) {
+  @include prefixer(transition, $val, ("webkit", "moz", "o", "ms"));
+}
+
+@mixin standard-transition($val) {
+  @include transition(#{$val} $standard-transition-duration $standard-transition-function);
+}

@@ -4,7 +4,7 @@ $standard-border-radius:       4px;
 $standard-spacing:             1rem;
 $small-spacing:                $standard-spacing / 2;
 $tiny-spacing:                 $standard-spacing / 4;
-$standard-transition-duration: 150ms;
+$standard-transition-duration: 300ms;
 $standard-transition-function: ease;
 $standard-z-index:             0;
 
@@ -49,10 +49,3 @@ $breakpoint-small:   480px;
 $breakpoint-medium:  600px;
 $breakpoint-large:   768px;
 $breakpoint-x-large: 1024px;
-
-/* Focus */
-
-$focus-outline-color:  transparentize($link-color, 0.4);
-$focus-outline-width:  3px;
-$focus-outline:        $focus-outline-width solid $focus-outline-color;
-$focus-outline-offset: 2px;

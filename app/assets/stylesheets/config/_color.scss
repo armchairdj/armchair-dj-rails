@@ -33,9 +33,10 @@ $black:       #000;
 
 $standard-color: $white;
 
-/* Flash. */
+/* Links. */
 
-$flash-bg: scale-color($armchair-blacktop, $lightness: 5%);
+$link-color:       $armchair-blue-darkest;
+$link-color-hover: scale-color($link-color, $lightness: 15%);
 
 /* Forms. */
 
@@ -44,6 +45,11 @@ $label-color:           $standard-color;
 $input-bg-color:        scale-color($grey-blue, $lightness: 50%);
 $input-bg-color-focus:  #fff;
 $placeholder-color:     scale-color($dark-grey, $lightness: 30%);
+$focus-outline-color:   transparentize($armchair-blue-lightest, 0.4);
+
+/* Flash. */
+
+$flash-bg: scale-color($armchair-blacktop, $lightness: 5%);
 
 /* Borders. */
 
@@ -53,11 +59,6 @@ $standard-border:       1px solid $standard-border-color;
 /* Masthead. */
 
 $tagline-color: $armchair-smoke;
-
-/* Links. */
-
-$link-color:       $armchair-blue-darkest;
-$link-color-hover: scale-color($link-color, $lightness: 15%);
 
 /* Buttons: Primary. */
 
