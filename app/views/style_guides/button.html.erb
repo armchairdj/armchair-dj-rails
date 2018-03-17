@@ -172,7 +172,8 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      xxx
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= link_to "Alternate", root_path %>
     <% end %>
   <% end %>
 
@@ -182,7 +183,9 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      xxx
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= link_to "Alternate", root_path %>
     <% end %>
   <% end %>
 
@@ -192,7 +195,10 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      xxx
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
+      <%= link_to "Alternate", root_path %>
     <% end %>
   <% end %>
 <% end %>

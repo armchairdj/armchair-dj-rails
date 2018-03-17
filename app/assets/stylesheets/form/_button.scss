@@ -21,7 +21,13 @@
 }
 
 .button-group {
-  @include bottom-margin-only();
+  @include clearfix();
+  @include bottom-margin-only(.5rem);
+
+  a:not(.button) {
+    @include button-layout($horizontal-padding: false);
+    border: 1px solid transparent;
+  }
 }
 
 a.button {

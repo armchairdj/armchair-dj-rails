@@ -4,13 +4,24 @@
   @include bold();
 }
 
-@mixin button-layout {
+@mixin button-layout($horizontal-padding: true) {
+  float: left;
+  display: block;
   margin: 0 $button-spacing $button-spacing 0;
-  padding: .4rem .8rem .3rem;
-  line-height: $compact;
+  padding: 0;
+  line-height: 1.6rem;
+  white-space: nowrap;
+
+  @if $horizontal-padding == true {
+    @include horizontal-padding(.8rem);
+  }
 
   @include breakpoint(x-large) {
-    padding: .6rem 1.2rem .525rem;
+    line-height: 1.8rem;
+
+    @if $horizontal-padding == true {
+      @include horizontal-padding(1.2rem);
+    }
   }
 }
 
@@ -25,13 +36,11 @@
   border-style: solid;
   border-radius: $button-border-radius;
   cursor: pointer;
-  display: inline-block;
   width: auto;
   text-decoration: none;
   text-transform: uppercase;
   vertical-align: middle;
   text-align: center;
-  white-space: nowrap;
 
   &:focus,
   &:hover,
