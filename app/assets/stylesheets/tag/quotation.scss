@@ -4,15 +4,15 @@ figure.quote {
   @include bottom_margin_only();
 
   blockquote {
-    position: relative;
     margin: 0;
     padding: 0;
 
     &:before {
       position: absolute;
-      left: -.5rem;
+      left: -1rem;
+      top: -.25rem;
       color: $armchair-blue-lightest;
-      content: open-quote;
+      content: "\201c";
       font-size: 3rem;
       line-height: $compact;
     }
@@ -21,4 +21,9 @@ figure.quote {
   figcaption {
     font-size: .8rem;
   }
+}
+
+q {
+  display: inline;
+  color: $armchair-blue-lightest;
 }
