@@ -79,6 +79,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
+    ffaker (2.8.1)
     ffi (1.9.18)
     foreman (0.63.0)
       dotenv (>= 0.7)
@@ -268,6 +269,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faraday
+  ffaker
   foreman
   inline_svg
   jbuilder (~> 2.5)

@@ -1,0 +1,24 @@
+figure.quote {
+  position: relative;
+  padding: 0;
+  @include bottom_margin_only();
+
+  blockquote {
+    position: relative;
+    margin: 0;
+    padding: 0;
+
+    &:before {
+      position: absolute;
+      left: -.5rem;
+      color: $armchair-blue-lightest;
+      content: open-quote;
+      font-size: 3rem;
+      line-height: $compact;
+    }
+  }
+
+  figcaption {
+    font-size: .8rem;
+  }
+}

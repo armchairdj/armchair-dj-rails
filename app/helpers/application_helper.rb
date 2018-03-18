@@ -1,3 +1,5 @@
+require 'ffaker'
+
 module ApplicationHelper
   def content_for_unless_empty(key)
     return unless content_for?(key.to_sym)
@@ -13,14 +15,8 @@ module ApplicationHelper
     "&copy; #{daterange} Brian J. Dillard".html_safe
   end
 
-  def page_title
-    if @homepage
-      return "Armchair DJ: a monologue about music, with occasional mixtapes"
-    end
-
-    raise NoMethodError.new("This page needs a title") unless @title
-
-    [@title, "Armchair DJ"].flatten.compact.join(" | ")
+  def lorem_html_paragraphs(num = 2)
+    FFaker::Lorem.paragraphs(num).map { |p| content_tag(:p, p) }.join.html_safe
   end
 
   def non_semantic_svg_image(image_path, label = nil, desc = nil)
@@ -39,6 +35,16 @@ module ApplicationHelper
     end
 
     inline_svg(image_path, opts)
+  end
+
+  def page_title
+    if @homepage
+      return "Armchair DJ: a monologue about music, with occasional mixtapes"
+    end
+
+    raise NoMethodError.new("This page needs a title") unless @title
+
+    [@title, "Armchair DJ"].flatten.compact.join(" | ")
   end
 
   def semantic_svg_image(image_path, label, desc)

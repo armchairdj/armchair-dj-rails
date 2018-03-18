@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   }
 
   get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
-    error_type: /not_found|permission_denied|internal_server_error/
+    error_type: /internal_server_error|not_found|permission_denied/
   }
 
   #############################################################################

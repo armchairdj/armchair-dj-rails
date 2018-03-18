@@ -26,6 +26,9 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 3.0'
+
 ###############################################################################
 # CSS.
 ###############################################################################
@@ -55,13 +58,6 @@ gem 'webpacker', '~> 3.0'
 gem 'jquery-rails'
 
 ###############################################################################
-# API.
-###############################################################################
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
-
-###############################################################################
 # IMAGES.
 ###############################################################################
 
@@ -79,29 +75,37 @@ gem 'simple_form'
 gem 'redcarpet'
 
 ###############################################################################
-# UTILITIES.
+# API.
+###############################################################################
+
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.5'
+
+###############################################################################
+# ACTIVE RECORD EXTENSIONS.
 ###############################################################################
 
 # Pagination.
 gem 'will_paginate'
 
-# Configuration factory.
-gem 'simpleconfig'
-
-# Don't allow empty strings into the database
+# Don't allow empty strings into the database.
 gem 'nilify_blanks'
-
-# HTTP client library.
-gem 'faraday'
-
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+###############################################################################
+# UTILITIES.
+###############################################################################
+
+# Configuration factory.
+gem 'simpleconfig'
+
+# HTTP client library.
+gem 'faraday'
+
+# Test data.
+gem "ffaker"
 
 ###############################################################################
 # AUTHENTICATION & AUTHORIZATION.
@@ -114,6 +118,13 @@ gem 'devise'
 gem 'pundit'
 
 ###############################################################################
+# DEPLOYMENT.
+###############################################################################
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+###############################################################################
 # DEV & TEST.
 ###############################################################################
 
@@ -123,7 +134,7 @@ group :development do
 
   gem 'listen', '>= 3.0.5', '< 3.2'
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  # Application backgrounder.
   gem 'spring'
 
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -166,7 +177,10 @@ group :test do
   # Test database maintainer.
   gem 'database_cleaner'
 
-  # Time manipulation tool.
+  # Manipulate env variables.
+  gem 'climate_control'
+
+  # Manipulate time.
   gem 'timecop'
 
   # Test coverage measurement tool.
@@ -174,7 +188,4 @@ group :test do
 
   # Cache http responses from third parties in specs.
   gem 'vcr'
-
-  # Modify environment variables in specs.
-  gem 'climate_control'
 end
