@@ -2,7 +2,6 @@ require "administrate/base_dashboard"
 
 class SongDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
-    artist:     Field::BelongsTo,
     posts:      Field::HasMany,
     id:         Field::Number,
     title:      Field::String,
@@ -13,12 +12,10 @@ class SongDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :title,
-    :artist,
     :posts,
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = [
-    :artist,
     :posts,
     :id,
     :title,
@@ -27,7 +24,6 @@ class SongDashboard < Administrate::BaseDashboard
   ].freeze
 
   FORM_ATTRIBUTES = [
-    :artist,
     :posts,
     :title,
   ].freeze

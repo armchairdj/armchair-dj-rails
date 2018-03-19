@@ -1,4 +1,4 @@
-class Album < ApplicationRecord
+class AlbumContributor < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
@@ -12,10 +12,8 @@ class Album < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :album_contributions
-  has_many :artists, through: :album_contributions
-
-  has_many :posts, as: :postable, dependent: :destroy
+  belongs_to :artist, required: true
+  belongs_to :album, required: true
 
   #############################################################################
   # ENUMS.
@@ -25,14 +23,9 @@ class Album < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(:title) }
-  scope :alphabetical_by_artist, -> { joins(:artist).order("artists.name") }
-
   #############################################################################
   # VALIDATIONS.
   #############################################################################
-
-  validates :title, presence: true
 
   #############################################################################
   # HOOKS.
@@ -41,10 +34,6 @@ class Album < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def postable_dropdown_option
-    "#{self.artist.name}: #{self.title}"
-  end
 
   #############################################################################
   # CLASS.

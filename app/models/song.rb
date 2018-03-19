@@ -12,7 +12,8 @@ class Song < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :artist, required: true
+  has_many :song_contributions
+  has_many :artists, through: :song_contributions
 
   has_many :posts, as: :postable, dependent: :destroy
 
