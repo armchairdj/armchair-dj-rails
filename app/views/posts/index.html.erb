@@ -9,19 +9,12 @@
         <td>
           <% if post.postable %>
             <%= content_tag(:div, post.postable.artist.name) %>
-            <%= content_tag(:div, post.postable.title) %>
+            <%= content_tag(:div, link_to(post.postable.title, post)) %>
           <% else %>
-            <%= post.title %>
+            <%= link_to post.title, post %>
           <% end %>
         </td>
-        <td><%= link_to 'Show', post %></td>
-        <td><%= link_to 'Edit', edit_post_path(post) %></td>
-        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Post', new_post_path %>
