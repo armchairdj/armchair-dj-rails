@@ -8,6 +8,9 @@
 # en:
 #   'true': 'foo'
 en:
+  admin:
+    authentication:
+      error: "You must be an admin to view this resource."
   album:
     notice:
       create: "Album created."

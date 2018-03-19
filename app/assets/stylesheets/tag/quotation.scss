@@ -9,11 +9,11 @@ figure.quote {
 
     &:before {
       position: absolute;
-      left: -1rem;
-      top: -.25rem;
+      left: -1.6rem;
+      top: -.5rem;
       color: $armchair-blue-lightest;
       content: "\201c";
-      font-size: 3rem;
+      font-size: 5rem;
       line-height: $compact;
     }
   }

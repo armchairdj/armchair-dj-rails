@@ -21,8 +21,11 @@
         <% end %>
       <% end %>
 
-      <%= content_tag(:ul, class: "arrowed") do %>
-        <%= content_tag :li, link_to("Style Guide", style_guides_path) %>
+      <% if user_signed_in? && current_user.admin? %>
+        <%= content_tag(:ul, class: "arrowed") do %>
+          <%= content_tag :li, link_to("Admin", admin_root_path) %>
+          <%= content_tag :li, link_to("Style Guide", style_guides_path) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:div, copyright_notice, class: "copyright") %>

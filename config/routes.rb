@@ -5,24 +5,6 @@ Rails.application.routes.draw do
   root "pages#index"
 
   #############################################################################
-  # Style Guide.
-  #############################################################################
-
-  get "style_guide", to: "style_guides#index", as: "style_guides"
-
-  get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
-    template: /button|form|form_error|headline|list|post|quotation|svg|text/
-  }
-
-  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash", constraints: {
-    flash_type: /alert|error|info|notice|success/
-  }
-
-  get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
-    error_type: /internal_server_error|not_found|permission_denied/
-  }
-
-  #############################################################################
   # Users.
   #############################################################################
 
@@ -70,4 +52,36 @@ Rails.application.routes.draw do
   #############################################################################
 
   resources :posts
+
+  #############################################################################
+  # Admin.
+  #############################################################################
+
+  namespace :admin do
+    resources :users
+    resources :albums
+    resources :artists
+    resources :posts
+    resources :songs
+
+    root to: "users#index"
+  end
+
+  #############################################################################
+  # Style Guide.
+  #############################################################################
+
+  get "style_guide", to: "style_guides#index", as: "style_guides"
+
+  get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
+    template: /button|form|form_error|headline|list|post|quotation|svg|text/
+  }
+
+  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash", constraints: {
+    flash_type: /alert|error|info|notice|success/
+  }
+
+  get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
+    error_type: /internal_server_error|not_found|permission_denied/
+  }
 end

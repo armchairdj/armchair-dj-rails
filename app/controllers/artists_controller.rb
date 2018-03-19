@@ -48,7 +48,6 @@ class ArtistsController < ApplicationController
   # POST /artists
   # POST /artists.json
   def create
-
     respond_to do |format|
       if @artist.save
         format.html { redirect_to @artist, notice: I18n.t("artist.notice.create") }
