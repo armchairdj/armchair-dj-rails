@@ -5,7 +5,7 @@ class Song < ApplicationRecord
   #############################################################################
 
   #############################################################################
-  # PLUGINS.
+  # CONCERNS & PLUGINS.
   #############################################################################
 
   #############################################################################
@@ -13,7 +13,12 @@ class Song < ApplicationRecord
   #############################################################################
 
   has_many :song_contributions
-  has_many :artists, through: :song_contributions
+
+  has_many :contributors,
+    through: :song_contributions, source: :artist, class_name: "Artist"
+
+  has_many :artists, -> { where(song_contributions: { contribution: 0 }) },
+    through: :song_contributions
 
   has_many :posts, as: :postable, dependent: :destroy
 

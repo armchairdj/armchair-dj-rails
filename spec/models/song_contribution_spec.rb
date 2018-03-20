@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SongContributor, type: :model do
+RSpec.describe SongContribution, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 
   describe 'constants' do

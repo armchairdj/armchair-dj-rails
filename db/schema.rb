@@ -15,13 +15,14 @@ ActiveRecord::Schema.define(version: 20180319181402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "album_contributors", force: :cascade do |t|
+  create_table "album_contributions", force: :cascade do |t|
     t.bigint "album_id"
     t.bigint "artist_id"
+    t.integer "contribution", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["album_id"], name: "index_album_contributors_on_album_id"
-    t.index ["artist_id"], name: "index_album_contributors_on_artist_id"
+    t.index ["album_id"], name: "index_album_contributions_on_album_id"
+    t.index ["artist_id"], name: "index_album_contributions_on_artist_id"
   end
 
   create_table "albums", force: :cascade do |t|
@@ -47,13 +48,14 @@ ActiveRecord::Schema.define(version: 20180319181402) do
     t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
   end
 
-  create_table "song_contributors", force: :cascade do |t|
+  create_table "song_contributions", force: :cascade do |t|
     t.bigint "song_id"
     t.bigint "artist_id"
+    t.integer "contribution", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["artist_id"], name: "index_song_contributors_on_artist_id"
-    t.index ["song_id"], name: "index_song_contributors_on_song_id"
+    t.index ["artist_id"], name: "index_song_contributions_on_artist_id"
+    t.index ["song_id"], name: "index_song_contributions_on_song_id"
   end
 
   create_table "songs", force: :cascade do |t|
