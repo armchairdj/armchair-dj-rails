@@ -1,16 +1,53 @@
-<%= simple_form_for(@song) do |f| %>
+<%
+  fieldset_classes = [
+    "legendary",
+    "fields_for",
+    ("fieldset-with-errors" if @song.errors[:song_contributions].any?)
+  ].flatten.join(" ")
+%>
+
+<%= simple_form_for(song) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= f.association :artist,
-      collection:    Artist.alphabetical,
-      label_method:  :name,
-      value_method:  :id,
-      required:      true,
-      include_blank: "Please choose"
-    %>
 
     <%= f.input :title %>
+
+    <%= content_tag(:fieldset, class: fieldset_classes) do %>
+      <%= content_tag(:legend) do %>
+        Artists
+        <%= I18n.t("simple_form.required.html").html_safe %>
+      <% end %>
+
+      <%= content_tag(:div, class: "hint") do %>
+        Please choose at least one credited artist.
+      <% end %>
+
+      <% @song.song_contributions.each do |contribution| %>
+        <%= f.simple_fields_for :song_contributions, contribution do |ff| %>
+          <%= ff.input :artist_id, as: :select,
+            collection: @artists_for_select,
+            required: false,
+            include_blank: "Please choose"
+          %>
+
+          <%= ff.input :role, as: :select,
+            collection: SongContribution.human_enum_collection(:role),
+            required: false,
+            include_blank: "Please choose"
+          %>
+
+          <% unless ff.object.new_record? %>
+            <%= render(partial: "shared/custom_checkbox", locals: {
+              f:    ff,
+              name: :_destroy
+            }) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.error :song_contributions %>
+    <% end %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

@@ -1,14 +1,35 @@
 en:
   activerecord:
+    attributes:
+      album_contribution:
+        roles:
+          credited_artist:    "Credited Artist"
+          featured_artist:    "Featured Artist"
+          songwriter:         "Songwriter"
+          producer:           "Producer"
+          executive_producer: "Executive Producer"
+          co_producer:        "Co-Producer"
+          engineer:           "Engineer"
+          musician:           "Musician"
+      song_contribution:
+        roles:
+          credited_artist:    "Credited Artist"
+          featured_artist:    "Featured Artist"
+          songwriter:         "Songwriter"
+          producer:           "Producer"
+          executive_producer: "Executive Producer"
+          co_producer:        "Co-Producer"
+          engineer:           "Engineer"
+          musician:           "Musician"
     errors:
       models:
         album:
           attributes:
-            contributors:
+            album_contributions:
               missing: "Please choose at least one credited artist."
         song:
           attributes:
-            contributors:
+            song_contributions:
               missing: "Please choose at least one credited artist."
   errors:
     # The default format to use in full error messages.

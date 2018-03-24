@@ -2,7 +2,11 @@ module Contribution
   extend ActiveSupport::Concern
 
   included do
-    self.build_dynamic_associations
+    belongs_to :artist, required: true
+
+    validates :role, presence: true
+
+    validates :artist, presence: true
 
     accepts_nested_attributes_for :artist, allow_destroy: true
 
@@ -16,17 +20,5 @@ module Contribution
       engineer:           30,
       musician:          100
     }
-  end
-
-  class_methods do
-    def build_dynamic_associations
-      inverse = self.model_name.param_key
-
-      puts ">>"
-      puts inverse
-      puts "<<"
-
-      belongs_to :artist, required: true, inverse_of: inverse
-    end
   end
 end

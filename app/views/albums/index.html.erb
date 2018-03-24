@@ -2,13 +2,27 @@
   @headline = @title = "Albums"
 %>
 
-<table>
-  <tbody>
-    <% @albums.each do |album| %>
-      <tr>
-        <td><%= link_to album.title, album %></td>
-        <td><%= album.artists.first.name %></td>
-      </tr>
+<% content_for(:before_page_headline) do %>
+  <%= link_to("New", new_album_path, class: "crud") %>
+<% end %>
+
+<%= content_tag(:table) do %>
+  <%= content_tag(:thead) do %>
+    <%= content_tag(:tr) do %>
+      <%= content_tag :th, "Name" %>
+      <%= content_tag :th, "Artists" %>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+  <%= content_tag(:tbody) do %>
+    <% @albums.each do |album| %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag :td, link_to(album.title, album) %>
+        <%= content_tag :td do %>
+          <% album.artists.each do |artist| %>
+            <%= link_to(artist.name, artist) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

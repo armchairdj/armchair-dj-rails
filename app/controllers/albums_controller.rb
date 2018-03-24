@@ -28,6 +28,11 @@ class AlbumsController < ApplicationController
     :destroy
   ]
 
+  before_action :prepare_contributions, only: [
+    :new,
+    :edit
+  ]
+
   # GET /albums
   # GET /albums.json
   def index
@@ -53,6 +58,8 @@ class AlbumsController < ApplicationController
         format.html { redirect_to @album, notice: I18n.t("album.notice.create") }
         format.json { render :show, status: :created, location: @album }
       else
+        prepare_contributions
+
         format.html { render :new }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
@@ -72,6 +79,8 @@ class AlbumsController < ApplicationController
         format.html { redirect_to @album, notice: I18n.t("album.notice.update") }
         format.json { render :show, status: :ok, location: @album }
       else
+        prepare_contributions
+
         format.html { render :edit }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
@@ -112,6 +121,23 @@ private
   end
 
   def instance_params
-    params.fetch(:album, {}).permit(:title, :artist_id)
+    params.fetch(:album, {}).permit(
+      :title,
+      :album_contributions_attributes => [
+        :id,
+        :album_id,
+        :artist_id,
+        :role,
+        :_destroy
+      ]
+    )
+  end
+
+  def prepare_contributions
+    count_needed = Album.max_contributions - @album.album_contributions.length
+
+    count_needed.times { @album.album_contributions.build }
+
+    @artists_for_select = Artist.all.alphabetical
   end
 end

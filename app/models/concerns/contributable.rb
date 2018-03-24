@@ -3,41 +3,57 @@ module Contributable
 
   included do
     self.build_dynamic_associations
-
-    validate do
-      validate_credited_artist
-    end
   end
 
   class_methods do
     def build_dynamic_associations
       # album_contributions
-      # song_contributions
+      #  song_contributions
       param = :"#{self.model_name.param_key}_contributions"
       # AlbumContribution
-      # SongContribution
+      #  SongContribution
       klass = "#{self.model_name}Contribution".constantize
       # AlbumContribution.roles
-      # SongContribution.roles
+      #  SongContribution.roles
       role = klass.roles["credited_artist"]
 
-      has_many param
+      has_many param, inverse_of: self.model_name.param_key
       has_many :contributors, through: param, source: :artist, class_name: "Artist"
       has_many :artists, -> { where(param => { role: role }) }, through: param
 
-      accepts_nested_attributes_for param, allow_destroy: true
+      accepts_nested_attributes_for param,
+        allow_destroy: true,
+        reject_if:     :reject_blank_contributions
+
+      validate do
+        validate_contributions(param)
+      end
+    end
+
+    def max_contributions
+      3
     end
   end
 
-  def postable_dropdown_label
-    "#{self.artists.join(" & ").name}: #{self.title}"
+  def display_name_with_artist
+    "#{self.display_artist}: #{self.title}"
+  end
+
+  def display_artist
+    self.artists.map(&:name).join(" & ")
   end
 
 private
 
-  def validate_credited_artist
-    return if contributors.reject(&:marked_for_destruction?).count > 0
+  def reject_blank_contributions(attributes)
+    # album_contributions_atrributes
+    #  song_contributions_atrributes
+    attributes["artist_id"].blank?
+  end
 
-    errors.add(:contributors, :missing)
+  def validate_contributions(param)
+    return if self.send(param).reject(&:marked_for_destruction?).count > 0
+
+    errors.add(param, :missing)
   end
 end

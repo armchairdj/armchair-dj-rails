@@ -28,6 +28,11 @@ class AlbumContribution < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validates :artist_id, uniqueness: {
+    scope:   [:album_id, :role],
+    message: "TODO UNIQUENESS"
+  }
+
   #############################################################################
   # HOOKS.
   #############################################################################

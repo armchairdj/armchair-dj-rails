@@ -28,6 +28,11 @@ class SongsController < ApplicationController
     :destroy
   ]
 
+  before_action :prepare_contributions, only: [
+    :new,
+    :edit
+  ]
+
   # GET /songs
   # GET /songs.json
   def index
@@ -53,6 +58,8 @@ class SongsController < ApplicationController
         format.html { redirect_to @song, notice: I18n.t("song.notice.create") }
         format.json { render :show, status: :created, location: @song }
       else
+        prepare_contributions
+
         format.html { render :new }
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
@@ -72,6 +79,8 @@ class SongsController < ApplicationController
         format.html { redirect_to @song, notice: I18n.t("song.notice.update") }
         format.json { render :show, status: :ok, location: @song }
       else
+        prepare_contributions
+
         format.html { render :edit }
         format.json { render json: @song.errors, status: :unprocessable_entity }
       end
@@ -112,6 +121,23 @@ private
   end
 
   def instance_params
-    params.fetch(:song, {}).permit(:title, :artist_id)
+    params.fetch(:song, {}).permit(
+      :title,
+      :song_contributions_attributes => [
+        :id,
+        :song_id,
+        :artist_id,
+        :role,
+        :_destroy
+      ]
+    )
+  end
+
+  def prepare_contributions
+    count_needed = Song.max_contributions - @song.song_contributions.length
+
+    count_needed.times { @song.song_contributions.build }
+
+    @artists_for_select = Artist.all.alphabetical
   end
 end

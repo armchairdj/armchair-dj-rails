@@ -1,3 +1,13 @@
 <%
-  @headline = @title = "Song"
+  @title = @song.display_name_with_artist
 %>
+
+<% content_for(:page_header) do %>
+  <%= content_tag(:header, class: "page-header work") do %>
+    <%= link_to("Edit", edit_song_path(@song), class: "crud") %>
+    <%= link_to("Destroy", song_path(@song), method: :delete, class: "crud", :"data-confirm" => "Are you sure?") %>
+
+    <%= content_tag(:h2, @song.display_artist) %>
+    <%= content_tag(:h1, @song.title) %>
+  <% end %>
+<% end %>
