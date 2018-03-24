@@ -2,11 +2,12 @@ require "administrate/base_dashboard"
 
 class SongDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
-    posts:      Field::HasMany,
-    id:         Field::Number,
-    title:      Field::String,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    posts:              Field::HasMany,
+    id:                 Field::Number,
+    title:              Field::String,
+    song_contributions: Field::HasMany,
+    created_at:         Field::DateTime,
+    updated_at:         Field::DateTime,
   }.freeze
 
   COLLECTION_ATTRIBUTES = [
@@ -25,6 +26,7 @@ class SongDashboard < Administrate::BaseDashboard
 
   FORM_ATTRIBUTES = [
     :title,
+    :song_contributions
   ].freeze
 
   def display_resource(song)

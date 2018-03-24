@@ -1,14 +1,16 @@
 en:
+  activerecord:
+    errors:
+      models:
+        album:
+          attributes:
+            contributors:
+              missing: "Please choose at least one credited artist."
+        song:
+          attributes:
+            contributors:
+              missing: "Please choose at least one credited artist."
   errors:
-    models:
-      album:
-        attributes:
-          contributors:
-            missing: "Please choose at least one credited artist."
-      song:
-        attributes:
-          contributors:
-            missing: "Please choose at least one credited artist."
     # The default format to use in full error messages.
     # format: "%{attribute} %{message}"
 

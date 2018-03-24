@@ -3,7 +3,7 @@ require "administrate/base_dashboard"
 class PostDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id:           Field::Number,
-    postable:     Field::Polymorphic,
+    postable:     Field::Polymorphic.with_options(classes: [Song, Album]),
     title:        Field::String,
     body:         Field::Text,
     created_at:   Field::DateTime,
@@ -31,7 +31,6 @@ class PostDashboard < Administrate::BaseDashboard
     :postable,
     :title,
     :body,
-    :published_at,
   ].freeze
 
   def display_resource(post)

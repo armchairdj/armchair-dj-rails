@@ -38,6 +38,6 @@ private
   def validate_credited_artist
     return if contributors.reject(&:marked_for_destruction?).count > 0
 
-    errors.add(:contributors, :missing_item)
+    errors.add(:contributors, :missing)
   end
 end
