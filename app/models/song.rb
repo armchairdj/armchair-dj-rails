@@ -8,17 +8,11 @@ class Song < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
+  include Contributable
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
-
-  has_many :song_contributions
-
-  has_many :contributors,
-    through: :song_contributions, source: :artist, class_name: "Artist"
-
-  has_many :artists, -> { where(song_contributions: { contribution: 0 }) },
-    through: :song_contributions
 
   has_many :posts, as: :postable, dependent: :destroy
 
@@ -31,7 +25,6 @@ class Song < ApplicationRecord
   #############################################################################
 
   scope :alphabetical, -> { order(:title) }
-  scope :alphabetical_by_artist, -> { joins(:artist).order("artists.name") }
 
   #############################################################################
   # VALIDATIONS.
@@ -46,10 +39,6 @@ class Song < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def postable_dropdown_option
-    "#{self.artist.name}: #{self.title}"
-  end
 
   #############################################################################
   # CLASS.

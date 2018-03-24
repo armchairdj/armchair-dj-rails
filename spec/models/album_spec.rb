@@ -32,7 +32,7 @@ RSpec.describe Album, type: :model do
   end
 
   describe 'instance' do
-    pending "postable_dropdown_option"
+
   end
 
   describe 'class' do

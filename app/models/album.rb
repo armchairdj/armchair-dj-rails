@@ -8,17 +8,11 @@ class Album < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
+  include Contributable
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
-
-  has_many :album_contributions
-
-  has_many :contributors,
-    through: :album_contributions, source: :artist, class_name: "Artist"
-
-  has_many :artists, -> { where(album_contributions: { contribution: 0 }) },
-    through: :album_contributions
 
   has_many :posts, as: :postable, dependent: :destroy
 
@@ -31,7 +25,6 @@ class Album < ApplicationRecord
   #############################################################################
 
   scope :alphabetical, -> { order(:title) }
-  scope :alphabetical_by_artist, -> { joins(:artist).order("artists.name") }
 
   #############################################################################
   # VALIDATIONS.
@@ -46,10 +39,6 @@ class Album < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def postable_dropdown_option
-    "#{self.artist.name}: #{self.title}"
-  end
 
   #############################################################################
   # CLASS.

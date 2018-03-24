@@ -2,15 +2,26 @@ module Contributable
   extend ActiveSupport::Concern
 
   included do
-    enum contribution: {
-      credited_artist:     0,
-      featured_artist:     1,
-      songwriter:         10,
-      producer:           20,
-      executive_producer: 21,
-      co_producer:        22,
-      engineer:           30,
-      musician:          100
-    }
+    self.create_relations
+  end
+
+  class_methods do
+    def create_relations
+      relation_sym   = :"#{self.model_name.param_key}_contributions"
+      relation_klass = "#{self.model_name}Contribution".constantize
+      enum_value     = relation_klass.contributions["credited_artist"]
+
+      has_many relation_sym
+
+      has_many :contributors,
+        through: relation_sym, source: :artist, class_name: "Artist"
+
+      has_many :artists, -> { where(relation_sym => { contribution: enum_value }) },
+        through: relation_sym
+    end
+  end
+
+  def postable_dropdown_label
+    "#{self.artists.join(" & ").name}: #{self.title}"
   end
 end
