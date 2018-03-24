@@ -4,9 +4,6 @@ import $ from "jquery";
 
 export default class extends Controller {
   connect() {
-    alert("initialize");
-    console.log("come on!!");
-
     this.$node   = $(this.element);
     this.$items  = this.$node.find("fieldset");
     this.$hidden = this.$items.filter(this.shouldHide);
@@ -17,15 +14,7 @@ export default class extends Controller {
   }
 
   shouldHide() {
-    var hide = true;
-
-    $(this).find("select").each(function () {
-      if (!$(this).val()) {
-        hide = false;
-      }
-    });
-
-    return hide;
+    return !$(this).find(".form-field:first-child select").val()
   }
 
   hideItems() {
@@ -50,7 +39,7 @@ export default class extends Controller {
   }
 
   getLinkHtml() {
-    return $('<a href="# data-action="click->expandable_has_many#expand">add another</a>');
+    return $('<a href="#" data-action="click->expandable-has-many#expand">add another</a>');
   }
 
   expand(evt) {
