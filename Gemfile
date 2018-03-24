@@ -52,7 +52,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'turbolinks', '~> 5'
 
 # JavaScript bundler.
-gem 'webpacker', '~> 3.0'
+gem 'webpacker', '~> 3.4'
 
 # JavaScript libraries.
 gem 'jquery-rails'

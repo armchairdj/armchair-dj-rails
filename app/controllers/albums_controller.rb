@@ -139,5 +139,6 @@ private
     count_needed.times { @album.album_contributions.build }
 
     @artists_for_select = Artist.all.alphabetical
+    @roles_for_select   = AlbumContribution.human_enum_collection(:role)
   end
 end

@@ -2,7 +2,7 @@
   "name": "armchair-dj-rails",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "^3.2.1",
+    "@rails/webpacker": "^3.4.1",
     "jquery": "^3.3.1",
     "rails-ujs": "^5.1.5",
     "stimulus": "^1.0.1",
@@ -10,6 +10,6 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.11.1"
+    "webpack-dev-server": "2.11.2"
   }
 }

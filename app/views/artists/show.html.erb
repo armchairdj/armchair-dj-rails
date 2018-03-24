@@ -4,5 +4,5 @@
 
 <% content_for(:before_page_headline) do %>
   <%= link_to("Edit", edit_artist_path(@artist), class: "crud") %>
-  <%= link_to("Destroy", artist_path(@artist), method: :delete, class: "crud", :"data-confirm" => "Are you sure?") %>
+  <%= link_to("Destroy", artist_path(@artist), method: :delete, class: "crud", "data-confirm": "Are you sure?") %>
 <% end %>

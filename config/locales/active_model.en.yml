@@ -2,6 +2,7 @@ en:
   activerecord:
     attributes:
       album_contribution:
+        _destroy: "Remove this contribution"
         roles:
           credited_artist:    "Credited Artist"
           featured_artist:    "Featured Artist"
@@ -12,6 +13,7 @@ en:
           engineer:           "Engineer"
           musician:           "Musician"
       song_contribution:
+        _destroy: "Remove this contribution"
         roles:
           credited_artist:    "Credited Artist"
           featured_artist:    "Featured Artist"

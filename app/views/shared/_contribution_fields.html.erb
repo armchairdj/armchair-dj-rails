@@ -1,0 +1,44 @@
+<%
+  fieldset_classes = [
+    "legendary",
+    "fields_for",
+    ("fieldset-with-errors" if f.object.errors[association].any?)
+  ].compact.join(" ")
+%>
+
+<%= content_tag(:fieldset, class: fieldset_classes, "data-controller": "expandable_has_many") do %>
+  <%= content_tag(:legend) do %>
+    Artists <%= I18n.t("simple_form.required.html").html_safe %>
+  <% end %>
+
+  <%= content_tag(:div, class: "hint") do %>
+    Please choose at least one credited artist.
+  <% end %>
+
+  <% f.object.send(association).each do |contribution| %>
+    <%= f.simple_fields_for association, contribution do |ff| %>
+      <%= content_tag(:fieldset, class: "contribution") do %>
+        <%= ff.input :artist_id,
+          as:            :select,
+          collection:    artists,
+          required:      false,
+          include_blank: ""
+        %>
+
+        <%= ff.input :role,
+          as:            :select,
+          collection:    roles,
+          required:      false,
+          include_blank: false
+        %>
+
+        <%= render(partial: "shared/custom_checkbox", locals: {
+          f:    ff,
+          name: :_destroy
+        }) unless ff.object.new_record? %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= f.error association %>
+<% end %>

@@ -31,7 +31,7 @@ module Contributable
     end
 
     def max_contributions
-      3
+      10
     end
   end
 

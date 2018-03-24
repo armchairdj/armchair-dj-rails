@@ -139,5 +139,6 @@ private
     count_needed.times { @song.song_contributions.build }
 
     @artists_for_select = Artist.all.alphabetical
+    @roles_for_select   = SongContribution.human_enum_collection(:role)
   end
 end

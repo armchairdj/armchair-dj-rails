@@ -10,7 +10,7 @@ const Turbolinks = require("turbolinks")
 const application = Application.start();
 const context     = require.context("./controllers", true, /\.js$/);
 
+application.load(definitionsFromContext(context));
+
 Rails.start();
 Turbolinks.start()
-
-application.load(definitionsFromContext(context));

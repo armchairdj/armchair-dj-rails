@@ -1,11 +1,3 @@
-<%
-  fieldset_classes = [
-    "legendary",
-    "fields_for",
-    ("fieldset-with-errors" if @album.errors[:album_contributions].any?)
-  ].flatten.join(" ")
-%>
-
 <%= simple_form_for(album) do |f| %>
   <%= f.error_notification %>
 
@@ -13,34 +5,12 @@
 
     <%= f.input :title %>
 
-    <%= content_tag(:fieldset, class: fieldset_classes) do %>
-      <%= content_tag(:legend) do %>
-        Artists
-        <%= I18n.t("simple_form.required.html").html_safe %>
-      <% end %>
-
-      <%= content_tag(:div, class: "hint") do %>
-        Please choose at least one credited artist.
-      <% end %>
-
-      <% @album.album_contributions.each do |contribution| %>
-        <%= f.simple_fields_for :album_contributions, contribution do |ff| %>
-          <%= ff.input :artist_id, as: :select,
-            collection: @artists_for_select,
-            required: false,
-            include_blank: "Please choose"
-          %>
-
-          <%= ff.input :role, as: :select,
-            collection: AlbumContribution.human_enum_collection(:role),
-            required: false,
-            include_blank: "Please choose"
-          %>
-        <% end %>
-      <% end %>
-
-      <%= f.error :album_contributions %>
-    <% end %>
+    <%= render partial: "shared/contribution_fields", locals: {
+      f:           f,
+      association: :album_contributions,
+      artists:     @artists_for_select,
+      roles:       @roles_for_select
+    } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
