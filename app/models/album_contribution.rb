@@ -14,7 +14,6 @@ class AlbumContribution < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :artist, required: true
   belongs_to :album, required: true
 
   #############################################################################

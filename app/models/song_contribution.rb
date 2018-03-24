@@ -14,7 +14,6 @@ class SongContribution < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :artist, required: true
   belongs_to :song, required: true
 
   #############################################################################

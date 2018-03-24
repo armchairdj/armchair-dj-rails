@@ -26,7 +26,7 @@ module ApplicationHelper
       class:     "scalable-image"
     }
 
-    if label.present && desc.present?
+    if label.present? && desc.present?
       opts = opts.merge({
         aria:  true,
         title: label,

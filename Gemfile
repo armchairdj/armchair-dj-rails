@@ -78,7 +78,8 @@ gem 'redcarpet'
 # ADMIN.
 ###############################################################################
 
-gem "administrate"
+gem 'administrate'
+# gem 'administrate-field-nested_has_many'
 
 ###############################################################################
 # API.

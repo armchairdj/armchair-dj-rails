@@ -76,6 +76,8 @@ class UserDashboard < Administrate::BaseDashboard
   ].freeze
 
   def display_resource(user)
-    "User ##{user.id}"
+    return "New User" unless (displayable = user.display_name).present?
+
+    displayable
   end
 end

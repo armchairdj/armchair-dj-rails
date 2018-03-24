@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319181402) do
+ActiveRecord::Schema.define(version: 20180324171040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20180319181402) do
   create_table "album_contributions", force: :cascade do |t|
     t.bigint "album_id"
     t.bigint "artist_id"
-    t.integer "contribution", default: 0, null: false
+    t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["album_id"], name: "index_album_contributions_on_album_id"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20180319181402) do
   create_table "song_contributions", force: :cascade do |t|
     t.bigint "song_id"
     t.bigint "artist_id"
-    t.integer "contribution", default: 0, null: false
+    t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["artist_id"], name: "index_song_contributions_on_artist_id"

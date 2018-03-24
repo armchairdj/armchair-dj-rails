@@ -16,19 +16,18 @@ class SongDashboard < Administrate::BaseDashboard
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = [
-    :posts,
     :id,
     :title,
     :created_at,
     :updated_at,
+    :posts,
   ].freeze
 
   FORM_ATTRIBUTES = [
-    :posts,
     :title,
   ].freeze
 
   def display_resource(song)
-    "Song ##{song.id}"
+    song.title.present? ? song.title : "New Song"
   end
 end

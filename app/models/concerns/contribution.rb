@@ -2,7 +2,11 @@ module Contribution
   extend ActiveSupport::Concern
 
   included do
-    enum contribution: {
+    belongs_to :artist, required: true
+
+    accepts_nested_attributes_for :artist, allow_destroy: true
+
+    enum role: {
       credited_artist:     0,
       featured_artist:     1,
       songwriter:         10,

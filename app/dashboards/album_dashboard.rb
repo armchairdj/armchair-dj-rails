@@ -16,19 +16,18 @@ class AlbumDashboard < Administrate::BaseDashboard
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = [
-    :posts,
     :id,
     :title,
     :created_at,
     :updated_at,
+    :posts,
   ].freeze
 
   FORM_ATTRIBUTES = [
-    :posts,
     :title,
   ].freeze
 
   def display_resource(album)
-    "Album #{album.name}"
+    album.title.present? ? album.title : "New Album"
   end
 end
