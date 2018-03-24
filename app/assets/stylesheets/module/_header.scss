@@ -1,5 +1,10 @@
 header.page-header {
   @include bottom-margin-only();
+  @include clearfix();
+
+  a.button {
+    float: right;
+  }
 
   h1 {
     text-transform: uppercase;

@@ -2,12 +2,25 @@
   @headline = @title = "Artists"
 %>
 
-<table>
-  <tbody>
-    <% @artists.each do |artist| %>
-      <tr>
-        <td><%= link_to artist.name, artist %></td>
-      </tr>
+<% content_for(:before_page_headline) do %>
+  <%= link_to("New", new_artist_path, class: "button secondary") %>
+<% end %>
+
+<%= content_tag(:table) do %>
+  <%= content_tag(:thead) do %>
+    <%= content_tag(:tr) do %>
+      <%= content_tag :th, "Name" %>
+      <%= content_tag :th, "Albums" %>
+      <%= content_tag :th, "Songs" %>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+  <%= content_tag(:tbody) do %>
+    <% @artists.each do |artist| %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag :td, link_to(artist.name, artist) %>
+        <%= content_tag :td, artist.albums.count %>
+        <%= content_tag :td, artist.songs.count %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

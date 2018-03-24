@@ -1,0 +1,19 @@
+<%= simple_form_for(@album) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= f.association :artist,
+      collection:    Artist.alphabetical,
+      label_method:  :name,
+      value_method:  :id,
+      required:      true,
+      include_blank: "Please choose"
+    %>
+
+    <%= f.input :title %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

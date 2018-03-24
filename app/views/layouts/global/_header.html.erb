@@ -2,6 +2,8 @@
   <%= content_for :header %>
 <% elsif @headline %>
   <%= content_tag(:header, class: "page-header") do %>
+    <%= content_for_unless_empty(:before_page_headline) %>
+
     <%= content_tag(:h1, @headline) %>
   <% end %>
 <% end %>

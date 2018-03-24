@@ -4,7 +4,7 @@ module ApplicationHelper
   def content_for_unless_empty(key)
     return unless content_for?(key.to_sym)
 
-    yield(key.to_sym)
+    content_for(key.to_sym)
   end
 
   def copyright_notice
