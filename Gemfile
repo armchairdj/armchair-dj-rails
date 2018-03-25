@@ -89,6 +89,16 @@ gem 'administrate'
 gem 'jbuilder', '~> 2.5'
 
 ###############################################################################
+# EMAIL.
+###############################################################################
+
+# Email generator. Inlines CSS and automatically generates text versions from HTML.
+gem 'premailer-rails'
+
+# HTML parser for premailer-rails.
+gem 'nokogiri'
+
+###############################################################################
 # ACTIVE RECORD EXTENSIONS.
 ###############################################################################
 
@@ -100,6 +110,15 @@ gem 'nilify_blanks'
 
 # Ordinal ranking.
 gem 'acts_as_list'
+
+# Active Record tree structures.
+gem 'ancestry'
+
+# Soft deletes for Active Record.
+gem 'discard'
+
+# Acts As State Machine.
+gem 'aasm'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -115,7 +134,7 @@ gem 'simpleconfig'
 gem 'faraday'
 
 # Test data.
-gem "ffaker"
+gem 'ffaker'
 
 ###############################################################################
 # AUTHENTICATION & AUTHORIZATION.

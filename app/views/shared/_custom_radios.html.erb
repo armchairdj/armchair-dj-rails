@@ -12,7 +12,7 @@
   wrapper_class: wrapper_class
 ) do |b| %>
   <%= content_tag(:legend, class: "label") do %>
-    <%= legend %> <%= I18n.t("simple_form.required.html").html_safe %>
+    <%= legend %> <%= required_indicator %>
   <% end %>
 
   <%= content_tag(:div, hint, class: "hint") if hint.present? %>

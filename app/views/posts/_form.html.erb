@@ -2,15 +2,29 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= f.grouped_collection_select :postable_gid,
-      [Song, Album],
-      :all,
-      :model_name,
-      :to_global_id,
-      :postable_dropdown_option,
-      include_blank: "Please choose"
-    %>
-    <%= f.input :title %>
+    <%= content_tag(:fieldset, class: "compact legendary") do %>
+      <%= content_tag(:legend) do %>
+        Work or Title <%= required_indicator %>
+      <% end %>
+
+      <%= content_tag(:div, class: "hint") do %>
+        Please choose one or the other.
+      <% end %>
+
+      <%= f.input :postable, as: :select, required: false do %>
+        <%= f.grouped_collection_select :postable_gid,
+          [Album, Song],
+          :alphabetical_with_artist,
+          :model_name,
+          :to_global_id,
+          :display_name_with_artist,
+          include_blank: true
+        %>
+      <% end %>
+
+      <%= f.input :title, required: false %>
+    <% end %>
+
     <%= f.input :body %>
   <% end %>
 

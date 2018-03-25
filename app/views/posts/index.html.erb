@@ -2,19 +2,21 @@
   @headline = @title = "Posts"
 %>
 
-<table>
-  <tbody>
-    <% @posts.each do |post| %>
-      <tr>
-        <td>
-          <% if post.postable %>
-            <%= content_tag(:div, post.postable.artist.name) %>
-            <%= content_tag(:div, link_to(post.postable.title, post)) %>
-          <% else %>
-            <%= link_to post.title, post %>
-          <% end %>
-        </td>
-      </tr>
+<% content_for(:before_page_headline) do %>
+  <%= link_to("New", new_post_path, class: "crud") %>
+<% end %>
+
+<%= content_tag(:table) do %>
+  <%= content_tag(:thead) do %>
+    <%= content_tag(:tr) do %>
+      <%= content_tag :th, "Name" %>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+  <%= content_tag(:tbody) do %>
+    <% @posts.each do |post| %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag :td, link_to_post(post) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

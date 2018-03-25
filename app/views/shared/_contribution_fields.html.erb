@@ -8,7 +8,7 @@
 
 <%= content_tag(:fieldset, class: fieldset_classes, "data-controller": "expandable-has-many") do %>
   <%= content_tag(:legend) do %>
-    Artists <%= I18n.t("simple_form.required.html").html_safe %>
+    Artists <%= required_indicator %>
   <% end %>
 
   <%= content_tag(:div, class: "hint") do %>
@@ -22,7 +22,7 @@
           as:            :select,
           collection:    artists,
           required:      false,
-          include_blank: ""
+          include_blank: true
         %>
 
         <%= ff.input :role,

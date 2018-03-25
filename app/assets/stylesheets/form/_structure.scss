@@ -18,6 +18,17 @@ fieldset {
       @include bottom-margin-only(.75rem);
       @include legend-text();
     }
+
+    > .hint {
+      margin: -.75rem 0 .75rem;
+      @include hint-text();
+    }
+  }
+
+  &.compact {
+    .form-field {
+      @include bottom-margin-only(.5rem);
+    }
   }
 
   &.contribution {

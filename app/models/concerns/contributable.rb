@@ -28,10 +28,16 @@ module Contributable
       validate do
         validate_contributions(param)
       end
+
+      scope :alphabetical, -> { order(:title) }
     end
 
     def max_contributions
       10
+    end
+
+    def alphabetical_with_artist
+      self.all.to_a.sort_by { |c| c.display_name_with_artist }
     end
   end
 
@@ -54,6 +60,6 @@ private
   def validate_contributions(param)
     return if self.send(param).reject(&:marked_for_destruction?).count > 0
 
-    errors.add(param, :missing)
+    self.errors.add(param, :missing)
   end
 end

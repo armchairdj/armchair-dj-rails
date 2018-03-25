@@ -15,6 +15,22 @@ module ApplicationHelper
     "&copy; #{daterange} Brian J. Dillard".html_safe
   end
 
+  def links_to_artists_for_work(work)
+    work.artists.map { |a| link_to(a.name, a) }.join(" & ").html_safe
+  end
+
+  def link_to_post(post)
+    if post.postable
+      link_to post.postable.display_name_with_artist, post
+    else
+      link_to post.title, post
+    end
+  end
+
+  def link_to_work(work)
+    link_to(work.title, work)
+  end
+
   def lorem_html_paragraphs(num = 2)
     FFaker::Lorem.paragraphs(num).map { |p| content_tag(:p, p) }.join.html_safe
   end
@@ -45,6 +61,10 @@ module ApplicationHelper
     raise NoMethodError.new("This page needs a title") unless @title
 
     [@title, "Armchair DJ"].flatten.compact.join(" | ")
+  end
+
+  def required_indicator
+    I18n.t("simple_form.required.html").html_safe
   end
 
   def semantic_svg_image(image_path, label, desc)

@@ -28,11 +28,18 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :title, presence: true
+  validate do
+    ensure_postable_or_title
+  end
+
   validates :body, presence: true
 
   #############################################################################
   # HOOKS.
+  #############################################################################
+
+  #############################################################################
+  # CLASS.
   #############################################################################
 
   #############################################################################
@@ -47,8 +54,24 @@ class Post < ApplicationRecord
     self.postable = GlobalID::Locator.locate postable
   end
 
-  #############################################################################
-  # CLASS.
-  #############################################################################
+  def one_line_title
+    if self.postable
+      self.postable.display_name_with_artist
+    else
+      self.title
+    end
+  end
 
+private
+
+  def ensure_postable_or_title
+    has_work  = self.postable.present?
+    has_title = self.title.present?
+
+    if has_work && has_title
+      self.errors.add(:title, :has_work_and_title)
+    elseif !has_work && !has_title
+      self.errors.add(:title, :needs_work_or_title)
+    end
+  end
 end
