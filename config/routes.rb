@@ -30,22 +30,16 @@ Rails.application.routes.draw do
   }
 
   #############################################################################
-  # Artists.
+  # Creators.
   #############################################################################
 
-  resources :artists
+  resources :creators
 
   #############################################################################
-  # Albums.
+  # Works.
   #############################################################################
 
-  resources :albums
-
-  #############################################################################
-  # Songs.
-  #############################################################################
-
-  resources :songs
+  resources :works
 
   #############################################################################
   # Posts.
@@ -59,10 +53,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :users
-    resources :albums
-    resources :artists
+    resources :creators
+    resources :works
     resources :posts
-    resources :songs
 
     root to: "users#index"
   end

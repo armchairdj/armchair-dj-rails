@@ -1,8 +1,8 @@
 en:
   helpers:
     label:
-      artist:
-      album:
-      song:
+      creator:
+      work:
+      work:
       post:
       user:

@@ -8,12 +8,12 @@ FactoryBot.define do
     "Naked Post Title #{n}"
   end
 
-  sequence :album_post_title do |n|
-    "Album Post Title #{n}"
+  sequence :work_post_title do |n|
+    "Work Post Title #{n}"
   end
 
-  sequence :song_post_title do |n|
-    "Song Post Title #{n}"
+  sequence :work_post_title do |n|
+    "Work Post Title #{n}"
   end
 
   #############################################################################
@@ -30,16 +30,16 @@ FactoryBot.define do
       end
     end
 
-    factory :song_post do
-      title { generate(:song_post_title) }
-      body "This is a song review."
-      association :postable, factory: :minimal_song
+    factory :work_post do
+      title { generate(:work_post_title) }
+      body "This is a work review."
+      association :postable, factory: :minimal_work
     end
 
-    factory :album_post do
-      title { generate(:album_post_title) }
-      body "This is an album review."
-      association :postable, factory: :minimal_album
+    factory :work_post do
+      title { generate(:work_post_title) }
+      body "This is an work review."
+      association :postable, factory: :minimal_work
     end
   end
 end

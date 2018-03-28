@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe 'Songs', type: :request do
-  describe 'GET /songs' do
+RSpec.describe 'Works', type: :request do
+  describe 'GET /works' do
     it "works! (now write some real specs)" do
-      get songs_path
+      get works_path
       expect(response).to have_http_status(200)
     end
   end

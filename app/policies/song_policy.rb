@@ -1,4 +1,4 @@
-class SongPolicy < ApplicationPolicy
+class WorkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope.all

@@ -1,4 +1,4 @@
-class AlbumsController < ApplicationController
+class WorksController < ApplicationController
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -33,67 +33,67 @@ class AlbumsController < ApplicationController
     :edit
   ]
 
-  # GET /albums
-  # GET /albums.json
+  # GET /works
+  # GET /works.json
   def index
 
   end
 
-  # GET /albums/1
-  # GET /albums/1.json
+  # GET /works/1
+  # GET /works/1.json
   def show
 
   end
 
-  # GET /albums/new
+  # GET /works/new
   def new
 
   end
 
-  # POST /albums
-  # POST /albums.json
+  # POST /works
+  # POST /works.json
   def create
     respond_to do |format|
-      if @album.save
-        format.html { redirect_to @album, notice: I18n.t("album.notice.create") }
-        format.json { render :show, status: :created, location: @album }
+      if @work.save
+        format.html { redirect_to @work, notice: I18n.t("work.notice.create") }
+        format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions
 
         format.html { render :new }
-        format.json { render json: @album.errors, status: :unprocessable_entity }
+        format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # GET /albums/1/edit
+  # GET /works/1/edit
   def edit
 
   end
 
-  # PATCH/PUT /albums/1
-  # PATCH/PUT /albums/1.json
+  # PATCH/PUT /works/1
+  # PATCH/PUT /works/1.json
   def update
     respond_to do |format|
-      if @album.update(instance_params)
-        format.html { redirect_to @album, notice: I18n.t("album.notice.update") }
-        format.json { render :show, status: :ok, location: @album }
+      if @work.update(instance_params)
+        format.html { redirect_to @work, notice: I18n.t("work.notice.update") }
+        format.json { render :show, status: :ok, location: @work }
       else
         prepare_contributions
 
         format.html { render :edit }
-        format.json { render json: @album.errors, status: :unprocessable_entity }
+        format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /albums/1
-  # DELETE /albums/1.json
+  # DELETE /works/1
+  # DELETE /works/1.json
   def destroy
-    @album.destroy
+    @work.destroy
 
     respond_to do |format|
-      format.html { redirect_to albums_url, notice: I18n.t("album.notice.destroy") }
+      format.html { redirect_to works_url, notice: I18n.t("work.notice.destroy") }
       format.json { head :no_content }
     end
   end
@@ -101,44 +101,44 @@ class AlbumsController < ApplicationController
 private
 
   def authorize_collection
-    authorize Album
+    authorize Work
   end
 
   def find_collection
-    @albums = policy_scope(Album)
+    @works = policy_scope(Work)
   end
 
   def build_new_instance
-    @album = Album.new(instance_params)
+    @work = Work.new(instance_params)
   end
 
   def find_instance
-    @album = Album.find(params[:id])
+    @work = Work.find(params[:id])
   end
 
   def authorize_instance
-    authorize @album
+    authorize @work
   end
 
   def instance_params
-    params.fetch(:album, {}).permit(
+    params.fetch(:work, {}).permit(
       :title,
-      :album_contributions_attributes => [
+      :work_contributions_attributes => [
         :id,
         :_destroy,
-        :album_id,
-        :artist_id,
+        :work_id,
+        :creator_id,
         :role
       ]
     )
   end
 
   def prepare_contributions
-    count_needed = Album.max_contributions - @album.album_contributions.length
+    count_needed = Work.max_contributions - @work.work_contributions.length
 
-    count_needed.times { @album.album_contributions.build }
+    count_needed.times { @work.work_contributions.build }
 
-    @artists_for_select = Artist.all.alphabetical
-    @roles_for_select   = AlbumContribution.human_enum_collection(:role)
+    @creators_for_select = Creator.all.alphabetical
+    @roles_for_select   = WorkContribution.human_enum_collection(:role)
   end
 end

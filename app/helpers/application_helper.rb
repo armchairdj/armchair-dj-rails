@@ -15,13 +15,13 @@ module ApplicationHelper
     "&copy; #{daterange} Brian J. Dillard".html_safe
   end
 
-  def links_to_artists_for_work(work)
-    work.artists.map { |a| link_to(a.name, a) }.join(" & ").html_safe
+  def links_to_creators_for_work(work)
+    work.creators.map { |a| link_to(a.name, a) }.join(" & ").html_safe
   end
 
   def link_to_post(post)
     if post.postable
-      link_to post.postable.display_name_with_artist, post
+      link_to post.postable.display_name_with_creator, post
     else
       link_to post.title, post
     end

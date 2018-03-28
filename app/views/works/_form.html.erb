@@ -1,0 +1,19 @@
+<%= simple_form_for(work) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+
+    <%= f.input :title %>
+
+    <%= render partial: "shared/contribution_fields", locals: {
+      f:           f,
+      association: :work_contributions,
+      creators:     @creators_for_select,
+      roles:       @roles_for_select
+    } %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

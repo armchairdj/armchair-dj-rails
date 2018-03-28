@@ -11,18 +11,25 @@
         Please choose one or the other.
       <% end %>
 
+      <%= f.input :title, required: false %>
+
       <%= f.input :postable, as: :select, required: false do %>
         <%= f.grouped_collection_select :postable_gid,
-          [Album, Song],
-          :alphabetical_with_artist,
+          [Work, Work],
+          :alphabetical_with_creator,
           :model_name,
           :to_global_id,
-          :display_name_with_artist,
+          :display_name_with_creator,
           include_blank: true
         %>
       <% end %>
 
-      <%= f.input :title, required: false %>
+      <%= f.simple_fields_for association, contribution do |ff| %>
+        <%= content_tag(:fieldset, class: "contribution") do %>
+
+
+
+
     <% end %>
 
     <%= f.input :body %>

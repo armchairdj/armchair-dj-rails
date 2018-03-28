@@ -1,11 +1,11 @@
 require "administrate/base_dashboard"
 
-class SongDashboard < Administrate::BaseDashboard
+class WorkDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     posts:              Field::HasMany,
     id:                 Field::Number,
     title:              Field::String,
-    song_contributions: Field::HasMany,
+    work_contributions: Field::HasMany,
     created_at:         Field::DateTime,
     updated_at:         Field::DateTime,
   }.freeze
@@ -26,10 +26,10 @@ class SongDashboard < Administrate::BaseDashboard
 
   FORM_ATTRIBUTES = [
     :title,
-    :song_contributions
+    :work_contributions
   ].freeze
 
-  def display_resource(song)
-    song.title.present? ? song.title : "New Song"
+  def display_resource(work)
+    work.title.present? ? work.title : "New Work"
   end
 end

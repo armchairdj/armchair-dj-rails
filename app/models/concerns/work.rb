@@ -7,19 +7,19 @@ module Work
 
   class_methods do
     def build_dynamic_associations
-      # album_contributions
-      #  song_contributions
+      # work_contributions
+      #  work_contributions
       param = :"#{self.model_name.param_key}_contributions"
-      # AlbumContribution
-      #  SongContribution
+      # WorkContribution
+      #  WorkContribution
       klass = "#{self.model_name}Contribution".constantize
-      # AlbumContribution.roles
-      #  SongContribution.roles
-      role = klass.roles["credited_artist"]
+      # WorkContribution.roles
+      #  WorkContribution.roles
+      role = klass.roles["credited_creator"]
 
       has_many param, inverse_of: self.model_name.param_key
-      has_many :contributors, through: param, source: :artist, class_name: "Artist"
-      has_many :artists, -> { where(param => { role: role }) }, through: param
+      has_many :contributors, through: param, source: :creator, class_name: "Creator"
+      has_many :creators, -> { where(param => { role: role }) }, through: param
 
       accepts_nested_attributes_for param,
         allow_destroy: true,
@@ -36,25 +36,25 @@ module Work
       10
     end
 
-    def alphabetical_with_artist
-      self.all.to_a.sort_by { |c| c.display_name_with_artist }
+    def alphabetical_with_creator
+      self.all.to_a.sort_by { |c| c.display_name_with_creator }
     end
   end
 
-  def display_name_with_artist
-    "#{self.display_artist}: #{self.title}"
+  def display_name_with_creator
+    "#{self.display_creator}: #{self.title}"
   end
 
-  def display_artist
-    self.artists.map(&:name).join(" & ")
+  def display_creator
+    self.creators.map(&:name).join(" & ")
   end
 
 private
 
   def reject_blank_contributions(attributes)
-    # album_contributions_atrributes
-    #  song_contributions_atrributes
-    attributes["artist_id"].blank?
+    # work_contributions_atrributes
+    #  work_contributions_atrributes
+    attributes["creator_id"].blank?
   end
 
   def validate_contributions(param)

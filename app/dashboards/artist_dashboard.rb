@@ -1,22 +1,22 @@
 require "administrate/base_dashboard"
 
-class ArtistDashboard < Administrate::BaseDashboard
+class CreatorDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id:                  Field::Number,
     name:                Field::String,
     created_at:          Field::DateTime,
     updated_at:          Field::DateTime,
-    album_contributions: Field::HasMany,
-    albums:              Field::HasMany,
-    song_contributions:  Field::HasMany,
-    songs:               Field::HasMany,
+    work_contributions: Field::HasMany,
+    works:              Field::HasMany,
+    work_contributions:  Field::HasMany,
+    works:               Field::HasMany,
   }.freeze
 
   COLLECTION_ATTRIBUTES = [
     :id,
     :name,
-    :album_contributions,
-    :song_contributions,
+    :work_contributions,
+    :work_contributions,
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = [
@@ -24,17 +24,17 @@ class ArtistDashboard < Administrate::BaseDashboard
     :name,
     :created_at,
     :updated_at,
-    :albums,
-    :songs,
+    :works,
+    :works,
   ].freeze
 
   FORM_ATTRIBUTES = [
     :name,
-    :album_contributions,
-    :song_contributions,
+    :work_contributions,
+    :work_contributions,
   ].freeze
 
-  def display_resource(artist)
-    artist.name.present? ? artist.name : "New Artist"
+  def display_resource(creator)
+    creator.name.present? ? creator.name : "New Creator"
   end
 end

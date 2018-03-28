@@ -40,4 +40,4 @@
   Flickr creative commons photographers.
   The Rails community.
   Too many other open-source projects to name.
-  All the musicians, DJS, artists and other makers whose work I discuss here.
+  All the musicians, DJS, creators and other makers whose work I discuss here.

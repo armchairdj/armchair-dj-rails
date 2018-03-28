@@ -11,16 +11,16 @@ en:
   admin:
     authentication:
       error: "You must be an admin to view this resource."
-  album:
+  work:
     notice:
-      create: "Album created."
-      destroy: "Album destroyed."
-      update: "Album Updated."
-  artist:
+      create: "Work created."
+      destroy: "Work destroyed."
+      update: "Work Updated."
+  creator:
     notice:
-      create: "Artist created."
-      destroy: "Artist destroyed."
-      update: "Artist Updated."
+      create: "Creator created."
+      destroy: "Creator destroyed."
+      update: "Creator Updated."
   post:
     notice:
       create: "Post created."
@@ -28,8 +28,8 @@ en:
       update: "Post Updated."
   session:
     missing: "Please log in to access that."
-  song:
+  work:
     notice:
-      create: "Song created."
-      destroy: "Song destroyed."
-      update: "Song Updated."
+      create: "Work created."
+      destroy: "Work destroyed."
+      update: "Work Updated."

@@ -1,4 +1,4 @@
-class ArtistPolicy < ApplicationPolicy
+class CreatorPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope.all.alphabetical

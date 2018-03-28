@@ -1,5 +1,5 @@
-class RemoveArtistFromAlbums < ActiveRecord::Migration[5.1]
+class RemoveCreatorFromWorks < ActiveRecord::Migration[5.1]
   def change
-    remove_reference :albums, :artist, index: true
+    remove_reference :works, :creator, index: true
   end
 end

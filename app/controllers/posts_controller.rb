@@ -116,15 +116,15 @@ private
       :title,
       :body,
       :postable_gid,
-      :song_attributes => [
+      :postable_attributes => [
         :id,
         :_destroy,
         :title,
-        :song_contributions_attributes => [
+        :work_contributions_attributes => [
           :id,
           :_destroy,
-          :song_id,
-          :artist_id,
+          :work_id,
+          :creator_id,
           :role
         ]
       ]

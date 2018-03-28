@@ -1,0 +1,8 @@
+<%
+  @headline = @title = @creator.name
+%>
+
+<% content_for(:before_page_headline) do %>
+  <%= link_to("Edit", edit_creator_path(@creator), class: "crud") %>
+  <%= link_to("Destroy", creator_path(@creator), method: :delete, class: "crud", "data-confirm": "Are you sure?") %>
+<% end %>

@@ -10,28 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180324171040) do
+ActiveRecord::Schema.define(version: 20180328163256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "album_contributions", force: :cascade do |t|
-    t.bigint "album_id"
-    t.bigint "artist_id"
+  create_table "contributions", force: :cascade do |t|
+    t.bigint "work_id"
+    t.bigint "creator_id"
     t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["album_id"], name: "index_album_contributions_on_album_id"
-    t.index ["artist_id"], name: "index_album_contributions_on_artist_id"
+    t.index ["creator_id"], name: "index_contributions_on_creator_id"
+    t.index ["work_id"], name: "index_contributions_on_work_id"
   end
 
-  create_table "albums", force: :cascade do |t|
-    t.string "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "artists", force: :cascade do |t|
+  create_table "creators", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -46,22 +40,6 @@ ActiveRecord::Schema.define(version: 20180324171040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
-  end
-
-  create_table "song_contributions", force: :cascade do |t|
-    t.bigint "song_id"
-    t.bigint "artist_id"
-    t.integer "role", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["artist_id"], name: "index_song_contributions_on_artist_id"
-    t.index ["song_id"], name: "index_song_contributions_on_song_id"
-  end
-
-  create_table "songs", force: :cascade do |t|
-    t.string "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -92,6 +70,13 @@ ActiveRecord::Schema.define(version: 20180324171040) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
+  end
+
+  create_table "works", force: :cascade do |t|
+    t.string "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "category"
   end
 
 end

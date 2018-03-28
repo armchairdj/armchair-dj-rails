@@ -12,15 +12,15 @@
   <% end %>
 
   <%= content_tag(:div, class: "hint") do %>
-    Please choose at least one credited artist.
+    Please choose at least one credited creator.
   <% end %>
 
   <% f.object.send(association).each do |contribution| %>
     <%= f.simple_fields_for association, contribution do |ff| %>
       <%= content_tag(:fieldset, class: "contribution") do %>
-        <%= ff.input :artist_id,
+        <%= ff.input :creator_id,
           as:            :select,
-          collection:    artists,
+          collection:    creators,
           required:      false,
           include_blank: true
         %>

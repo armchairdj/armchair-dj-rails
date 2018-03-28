@@ -1,0 +1,28 @@
+<%
+  @headline = @title = "Works"
+%>
+
+<% content_for(:before_page_headline) do %>
+  <%= link_to("New", new_work_path, class: "crud") %>
+<% end %>
+
+<%= content_tag(:table) do %>
+  <%= content_tag(:thead) do %>
+    <%= content_tag(:tr) do %>
+      <%= content_tag :th, "Name" %>
+      <%= content_tag :th, "Creators" %>
+    <% end %>
+  <% end %>
+  <%= content_tag(:tbody) do %>
+    <% @works.each do |work| %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag :td, link_to(work.title, work) %>
+        <%= content_tag :td do %>
+          <% work.creators.each do |creator| %>
+            <%= link_to(creator.name, creator) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

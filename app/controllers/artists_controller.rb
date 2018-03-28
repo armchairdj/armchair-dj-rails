@@ -1,4 +1,4 @@
-class ArtistsController < ApplicationController
+class CreatorsController < ApplicationController
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -28,64 +28,64 @@ class ArtistsController < ApplicationController
     :destroy
   ]
 
-  # GET /artists
-  # GET /artists.json
+  # GET /creators
+  # GET /creators.json
   def index
 
   end
 
-  # GET /artists/1
-  # GET /artists/1.json
+  # GET /creators/1
+  # GET /creators/1.json
   def show
 
   end
 
-  # GET /artists/new
+  # GET /creators/new
   def new
 
   end
 
-  # POST /artists
-  # POST /artists.json
+  # POST /creators
+  # POST /creators.json
   def create
 
     respond_to do |format|
-      if @artist.save
-        format.html { redirect_to @artist, notice: I18n.t("artist.notice.create") }
-        format.json { render :show, status: :created, location: @artist }
+      if @creator.save
+        format.html { redirect_to @creator, notice: I18n.t("creator.notice.create") }
+        format.json { render :show, status: :created, location: @creator }
       else
         format.html { render :new }
-        format.json { render json: @artist.errors, status: :unprocessable_entity }
+        format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # GET /artists/1/edit
+  # GET /creators/1/edit
   def edit
 
   end
 
-  # PATCH/PUT /artists/1
-  # PATCH/PUT /artists/1.json
+  # PATCH/PUT /creators/1
+  # PATCH/PUT /creators/1.json
   def update
     respond_to do |format|
-      if @artist.update(instance_params)
-        format.html { redirect_to @artist, notice: I18n.t("artist.notice.update") }
-        format.json { render :show, status: :ok, location: @artist }
+      if @creator.update(instance_params)
+        format.html { redirect_to @creator, notice: I18n.t("creator.notice.update") }
+        format.json { render :show, status: :ok, location: @creator }
       else
         format.html { render :edit }
-        format.json { render json: @artist.errors, status: :unprocessable_entity }
+        format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /artists/1
-  # DELETE /artists/1.json
+  # DELETE /creators/1
+  # DELETE /creators/1.json
   def destroy
-    @artist.destroy
+    @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to artists_url, notice: I18n.t("artist.notice.destroy") }
+      format.html { redirect_to creators_url, notice: I18n.t("creator.notice.destroy") }
       format.json { head :no_content }
     end
   end
@@ -93,26 +93,26 @@ class ArtistsController < ApplicationController
 private
 
   def authorize_collection
-    authorize Artist
+    authorize Creator
   end
 
   def find_collection
-    @artists = policy_scope(Artist)
+    @creators = policy_scope(Creator)
   end
 
   def build_new_instance
-    @artist = Artist.new(instance_params)
+    @creator = Creator.new(instance_params)
   end
 
   def find_instance
-    @artist = Artist.find(params[:id])
+    @creator = Creator.find(params[:id])
   end
 
   def authorize_instance
-    authorize @artist
+    authorize @creator
   end
 
   def instance_params
-    params.fetch(:artist, {}).permit(:name)
+    params.fetch(:creator, {}).permit(:name)
   end
 end

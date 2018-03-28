@@ -2,18 +2,18 @@ module Contribution
   extend ActiveSupport::Concern
 
   included do
-    belongs_to :artist, required: true
+    belongs_to :creator, required: true
 
     validates :role, presence: true
 
-    validates :artist, presence: true
+    validates :creator, presence: true
 
-    accepts_nested_attributes_for :artist, allow_destroy: true
+    accepts_nested_attributes_for :creator, allow_destroy: true
 
     enum role: {
-      credited_artist:     0,
-      featured_artist:     1,
-      songwriter:         10,
+      credited_creator:     0,
+      featured_creator:     1,
+      workwriter:         10,
       producer:           20,
       executive_producer: 21,
       co_producer:        22,

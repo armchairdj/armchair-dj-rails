@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class AlbumDashboard < Administrate::BaseDashboard
+class WorkDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     posts:      Field::HasMany,
     id:         Field::Number,
@@ -27,7 +27,7 @@ class AlbumDashboard < Administrate::BaseDashboard
     :title,
   ].freeze
 
-  def display_resource(album)
-    album.title.present? ? album.title : "New Album"
+  def display_resource(work)
+    work.title.present? ? work.title : "New Work"
   end
 end

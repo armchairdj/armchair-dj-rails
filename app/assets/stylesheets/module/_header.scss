@@ -28,7 +28,7 @@ header.work {
   @include bottom-margin-only();
 
   h2 {
-    @include work-artist-headline();
+    @include work-creator-headline();
   }
 
   h1 {

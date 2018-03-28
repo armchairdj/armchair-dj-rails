@@ -5,7 +5,7 @@ RSpec.describe PostsController, type: :controller do
   let(:valid_attributes) { {
     title: "Post Title",
     body: "content",
-    postable_gid: create(:minimal_song).to_global_id
+    postable_gid: create(:minimal_work).to_global_id
   } }
 
   let(:invalid_attributes) { {

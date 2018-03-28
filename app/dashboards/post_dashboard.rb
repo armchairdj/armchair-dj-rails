@@ -3,7 +3,7 @@ require "administrate/base_dashboard"
 class PostDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id:           Field::Number,
-    postable:     Field::Polymorphic.with_options(classes: [Song, Album]),
+    postable:     Field::Polymorphic.with_options(classes: [Work, Work]),
     title:        Field::String,
     body:         Field::Text,
     created_at:   Field::DateTime,

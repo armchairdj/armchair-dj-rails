@@ -1,8 +1,8 @@
-class CreateSongContributions < ActiveRecord::Migration[5.1]
+class CreateWorkContributions < ActiveRecord::Migration[5.1]
   def change
-    create_table :song_contributions do |t|
-      t.belongs_to :song, index: true
-      t.belongs_to :artist, index: true
+    create_table :work_contributions do |t|
+      t.belongs_to :work, index: true
+      t.belongs_to :creator, index: true
       t.integer :role, null: false, default: 0
 
       t.timestamps
