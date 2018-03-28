@@ -26,8 +26,7 @@ class Contribution < ApplicationRecord
   #############################################################################
 
   enum role: {
-    credited_creator:               0,
-    featured_creator:               1,
+    creator:                        0,
 
     # Music
 
@@ -83,14 +82,11 @@ class Contribution < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validates :role,    presence: true
   validates :work,    presence: true
   validates :creator, presence: true
-  validates :role,    presence: true
 
-  validates :creator_id, uniqueness: {
-    scope:   [:work_id, :role],
-    message: "TODO UNIQUENESS"
-  }
+  validates :creator_id, uniqueness: { scope: [:work_id, :role] }
 
   #############################################################################
   # HOOKS.

@@ -4,8 +4,7 @@ en:
       contribution:
         _destroy: "Remove this contribution"
         roles:
-          credited_creator:            "Creator"
-          featured_creator:            "Co-Creator"
+          creator:                     "Creator"
 
           musical_artist:              "Artist"
           musical_featured_artist:     "Featured Artist"
@@ -38,7 +37,7 @@ en:
       work:
         media:
           song:     "Song"
-          album:    "Album or EP"
+          album:    "Album"
           film:     "Movie"
           tv_show:  "TV Show"
           book:     "Book"
@@ -46,6 +45,11 @@ en:
           software: "App"
     errors:
       models:
+        contribution:
+          attributes:
+            creator_id:
+              taken: "This creator cannot appear twice in the same role."
+        creator:
         post:
           attributes:
             title:
@@ -54,4 +58,5 @@ en:
         work:
           attributes:
             contributions:
-              missing: "Please choose at least one credited creator."
+              missing: "Please choose at least one creator."
+        user:

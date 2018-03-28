@@ -34,3 +34,4 @@ en:
       other_than: "Please enter a value other than %{count}."
       odd: "Please enter an odd value."
       even: "Please enter an even value."
+      taken: "Please choose a unique value."

@@ -15,11 +15,11 @@ class Creator < ApplicationRecord
   has_many :contributions
 
   has_many :works, -> { where(contributions: {
-    role: Contribution.roles["credited_creator"] })
+    role: Contribution.roles["creator"] })
   }, through: :contributions, source: :work, class_name: "Work"
 
   has_many :contributed_works, -> { where.not(contributions: {
-    role: Contribution.roles["credited_creator"] })
+    role: Contribution.roles["creator"] })
   }, through: :contributions, source: :work, class_name: "Work"
 
   has_many :posts, through: :works

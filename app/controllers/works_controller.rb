@@ -129,14 +129,20 @@ private
 
   def instance_params
     params.fetch(:work, {}).permit(
+      :medium,
       :title,
       :body,
       :contributions_attributes => [
         :id,
         :_destroy,
+        :role,
         :work_id,
         :creator_id,
-        :role
+        :creator_attributes => [
+          :id,
+          :_destroy,
+          :name
+        ]
       ]
     )
   end

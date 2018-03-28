@@ -2,7 +2,6 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-
     <%= f.input :medium, as: :select,
       collection: Work.human_enum_collection(:media, alphabetical: true)
     %>
@@ -11,8 +10,7 @@
 
     <%= render partial: "shared/contribution_fields", locals: {
       f:           f,
-      association: :contributions,
-      creators:     @creators_for_select,
+      creators:    @creators_for_select,
       roles:       @roles_for_select
     } %>
   <% end %>

@@ -2,7 +2,7 @@
   fieldset_classes = [
     "legendary",
     "fields_for",
-    ("fieldset-with-errors" if f.object.errors[association].any?)
+    ("fieldset-with-errors" if f.object.errors[:contributions].any?)
   ].compact.join(" ")
 %>
 
@@ -12,25 +12,32 @@
   <% end %>
 
   <%= content_tag(:div, class: "hint") do %>
-    Please choose at least one credited creator.
+    Choose at least one creator.
   <% end %>
 
-  <% f.object.send(association).each do |contribution| %>
-    <%= f.simple_fields_for association, contribution do |ff| %>
+  <% f.object.contributions.each do |contribution| %>
+    <%= f.simple_fields_for :contributions, contribution do |ff| %>
       <%= content_tag(:fieldset, class: "contribution") do %>
-        <%= ff.input :creator_id,
-          as:            :select,
-          collection:    creators,
-          required:      false,
-          include_blank: true
-        %>
+        <%= content_tag(:div, class: "stacked") do %>
+          <%= ff.input :creator_id,
+            as:            :select,
+            collection:    creators,
+            required:      false,
+            include_blank: true,
+            error:         false
+          %>
 
-        <%= ff.input :role,
-          as:            :select,
-          collection:    roles,
-          required:      false,
-          include_blank: false
-        %>
+          <%= ff.input :role,
+            as:            :select,
+            collection:    roles,
+            required:      false,
+            include_blank: false,
+            error:         false
+          %>
+        <% end %>
+
+        <%= ff.error :creator_id %>
+        <%= ff.error :role %>
 
         <%= render(partial: "shared/custom_checkbox", locals: {
           f:    ff,
@@ -40,5 +47,5 @@
     <% end %>
   <% end %>
 
-  <%= f.error association %>
+  <%= f.error :contributions %>
 <% end %>

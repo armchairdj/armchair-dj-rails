@@ -1,6 +1,6 @@
 .error-notification {
   color: $error-color;
-  @include bottom-margin-only(2rem);
+  @include bottom-margin-only(1.5rem);
 }
 
 .form-inputs {
@@ -32,23 +32,23 @@ fieldset {
   }
 
   &.contribution {
-    @include clearfix();
     @include bottom-margin-only(.5rem);
 
-    .form-field:first-child {
-      float: left;
-      width: 55%;
-      margin-bottom: .5rem;
-    }
+    .stacked {
+      @include clearfix();
+      @include bottom-margin-only(.5rem);
 
-    .form-field:nth-child(2) {
-      float: right;
-      width: 40%;
-      margin-bottom: .5rem;
-    }
+      .form-field:first-child {
+        float: left;
+        width: 55%;
+        margin-bottom: 0;
+      }
 
-    .form-field:nth-child(3) {
-      clear: both;
+      .form-field:last-child {
+        float: right;
+        width: 40%;
+        margin-bottom: 0;
+      }
     }
   }
 }

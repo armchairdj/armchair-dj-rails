@@ -15,7 +15,7 @@ class Work < ApplicationRecord
   has_many :contributions
 
   has_many :creators, -> {
-    where(contributions: { role: Contribution.roles["credited_creator"] })
+    where(contributions: { role: Contribution.roles["creator"] })
   }, through: :contributions
 
   has_many :contributors, through: :contributions,
@@ -115,13 +115,14 @@ class Work < ApplicationRecord
 private
 
   def reject_blank_contributions(attributes)
-    # contributions_atrributes
-    #  contributions_atrributes
     attributes["creator_id"].blank?
   end
 
-  def validate_contributions(param)
-    return if self.contributions.reject(&:marked_for_destruction?).count > 0
+  def validate_contributions
+    available = self.contributions.reject(&:marked_for_destruction?)
+    creators  = available.keep_if { |c| c.role == Contribution.roles[:creator] }
+
+    return if creators.any?
 
     self.errors.add(:contributions, :missing)
   end
