@@ -1,4 +1,4 @@
-class WorkContribution < ApplicationRecord
+class Contribution < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
@@ -26,48 +26,53 @@ class WorkContribution < ApplicationRecord
   #############################################################################
 
   enum role: {
-    credited_creator:          0,
-    featured_creator:          1,
+    credited_creator:               0,
+    featured_creator:               1,
 
     # Music
 
-    musical_artist:          100,
-    musical_featured_artist: 101,
+    musical_artist:               100,
+    musical_featured_artist:      101,
 
-    songwriter:              110,
-    lyricist:                111,
+    songwriter:                   110,
+    lyricist:                     111,
 
-    producer:                120,
-    executive_producer:      121,
-    co_producer:             122,
+    music_producer:               120,
+    music_executive_producer:     121,
+    music_co_producer:            122,
 
-    engineer:                130,
+    music_engineer:               130,
 
-    singer:                  140,
+    singer:                       140,
 
-    musician:                150,
+    musician:                     150,
+
+    # Film & TV
+
+    director:                     200,
+
+    producer:                     220,
+    executive_producer:           221,
+    co_producer:                  222,
+    show_runner:                  223,
+
+    cinematographer:              230,
+    editor:                       231,
+
+    screenwriter:                 240,
 
     # Prose
 
-    author:                  200,
-
-    # Film
-
-    director:                300,
-
-    producer:                320,
-    executive_producer:      321,
-    co_producer:             322,
-
-    cinematographer:         330,
+    author:                       300,
+    editor:                       310,
 
     # Art
 
-    artist:                  400,
+    artist:                       400,
 
     # Software
 
-    programmer:              400,
+    programmer:                   500,
   }
 
   #############################################################################
@@ -78,9 +83,9 @@ class WorkContribution < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :work, presence: true
+  validates :work,    presence: true
   validates :creator, presence: true
-  validates :role, presence: true
+  validates :role,    presence: true
 
   validates :creator_id, uniqueness: {
     scope:   [:work_id, :role],

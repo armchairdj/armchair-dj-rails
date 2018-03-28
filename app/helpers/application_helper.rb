@@ -20,8 +20,8 @@ module ApplicationHelper
   end
 
   def link_to_post(post)
-    if post.postable
-      link_to post.postable.display_name_with_creator, post
+    if post.work
+      link_to post.work.display_name_with_creator, post
     else
       link_to post.title, post
     end

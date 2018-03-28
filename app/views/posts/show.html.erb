@@ -7,9 +7,9 @@
     <%= link_to("Edit", edit_post_path(@post), class: "crud") %>
     <%= link_to("Destroy", post_path(@post), method: :delete, class: "crud", "data-confirm": "Are you sure?") %>
 
-    <% if @post.postable %>
-      <%= content_tag(:h2, @post.postable.display_creator) %>
-      <%= content_tag(:h1, @post.postable.title) %>
+    <% if @post.work %>
+      <%= content_tag(:h2, @post.work.display_creator) %>
+      <%= content_tag(:h1, @post.work.title) %>
     <% else %>
       <%= content_tag(:h1, @post.title) %>
     <% end %>

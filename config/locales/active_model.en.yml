@@ -1,45 +1,4 @@
 en:
-  activerecord:
-    attributes:
-      work_contribution:
-        _destroy: "Remove this contribution"
-        roles:
-          credited_creator:    "Credited Creator"
-          featured_creator:    "Featured Creator"
-          songwriter:         "Workwriter"
-          producer:           "Producer"
-          executive_producer: "Executive Producer"
-          co_producer:        "Co-Producer"
-          engineer:           "Engineer"
-          musician:           "Musician"
-      work_contribution:
-        _destroy: "Remove this contribution"
-        roles:
-          credited_creator:    "Credited Creator"
-          featured_creator:    "Featured Creator"
-          songwriter:         "Workwriter"
-          producer:           "Producer"
-          executive_producer: "Executive Producer"
-          co_producer:        "Co-Producer"
-          engineer:           "Engineer"
-          musician:           "Musician"
-      post:
-        postable: "Work"
-    errors:
-      models:
-        work:
-          attributes:
-            work_contributions:
-              missing: "Please choose at least one credited creator."
-        post:
-          attributes:
-            title:
-              has_work_and_title: "Please choose a work or a title but not both."
-              needs_work_or_title: "Please choose either a work or a title."
-        work:
-          attributes:
-            work_contributions:
-              missing: "Please choose at least one credited creator."
   errors:
     # The default format to use in full error messages.
     # format: "%{attribute} %{message}"

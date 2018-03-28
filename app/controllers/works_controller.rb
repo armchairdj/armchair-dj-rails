@@ -28,7 +28,7 @@ class WorksController < ApplicationController
     :destroy
   ]
 
-  before_action :prepare_contributions, only: [
+  before_action :prepare_contributions_attributes_fields, only: [
     :new,
     :edit
   ]
@@ -58,7 +58,7 @@ class WorksController < ApplicationController
         format.html { redirect_to @work, notice: I18n.t("work.notice.create") }
         format.json { render :show, status: :created, location: @work }
       else
-        prepare_contributions
+        prepare_contributions_attributes_fields
 
         format.html { render :new }
         format.json { render json: @work.errors, status: :unprocessable_entity }
@@ -79,7 +79,7 @@ class WorksController < ApplicationController
         format.html { redirect_to @work, notice: I18n.t("work.notice.update") }
         format.json { render :show, status: :ok, location: @work }
       else
-        prepare_contributions
+        prepare_contributions_attributes_fields
 
         format.html { render :edit }
         format.json { render json: @work.errors, status: :unprocessable_entity }
@@ -120,10 +120,18 @@ private
     authorize @work
   end
 
+  def prepare_contributions_attributes_fields
+    @work.prepare_contributions
+
+    @creators_for_select = Creator.all.alphabetical
+    @roles_for_select    = Contribution.human_enum_collection(:role)
+  end
+
   def instance_params
     params.fetch(:work, {}).permit(
       :title,
-      :work_contributions_attributes => [
+      :body,
+      :contributions_attributes => [
         :id,
         :_destroy,
         :work_id,
@@ -131,14 +139,5 @@ private
         :role
       ]
     )
-  end
-
-  def prepare_contributions
-    count_needed = Work.max_contributions - @work.work_contributions.length
-
-    count_needed.times { @work.work_contributions.build }
-
-    @creators_for_select = Creator.all.alphabetical
-    @roles_for_select   = WorkContribution.human_enum_collection(:role)
   end
 end

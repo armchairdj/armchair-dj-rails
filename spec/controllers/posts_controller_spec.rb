@@ -4,14 +4,12 @@ RSpec.describe PostsController, type: :controller do
 
   let(:valid_attributes) { {
     title: "Post Title",
-    body: "content",
-    postable_gid: create(:minimal_work).to_global_id
+    body: "Post Content",
   } }
 
   let(:invalid_attributes) { {
     title: "",
-    body: "",
-    postable_gid: nil
+    body: ""
   } }
 
   describe 'GET #index' do

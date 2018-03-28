@@ -8,10 +8,6 @@ FactoryBot.define do
     "Naked Post Title #{n}"
   end
 
-  sequence :work_post_title do |n|
-    "Work Post Title #{n}"
-  end
-
   #############################################################################
   # FACTORIES.
   #############################################################################
@@ -27,9 +23,8 @@ FactoryBot.define do
     end
 
     factory :work_post do
-      title { generate(:work_post_title) }
       body "This is a post about a work."
-      association :postable, factory: :minimal_work
+      association :work, factory: :minimal_work
     end
   end
 end

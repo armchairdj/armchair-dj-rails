@@ -11,9 +11,17 @@ RSpec.describe Creator, type: :model do
 
   describe 'associations' do
     describe 'associations' do
-      it { should have_many(:works) }
-      it { should have_many(:works) }
+      it { should have_many(:contributions) }
+
+      it { should have_many(:works   ).through(:contributions) }
+      it { should have_many(:contributed_works).through(:contributions) }
+
+      it { should have_many(:posts).through(:works) }
     end
+  end
+
+  describe 'nested_attributes' do
+    # Nothing so far.
   end
 
   describe 'enums' do
@@ -34,11 +42,15 @@ RSpec.describe Creator, type: :model do
     # Nothing so far.
   end
 
-  describe 'instance' do
+  describe 'class' do
     # Nothing so far.
   end
 
-  describe 'class' do
-    # Nothing so far.
+  describe 'instance' do
+    describe 'private' do
+      describe 'callbacks' do
+        # Nothing so far.
+      end
+    end
   end
 end

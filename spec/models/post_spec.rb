@@ -10,7 +10,11 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'associations' do
-    it { should belong_to(:postable) }
+    it { should belong_to(:work) }
+  end
+
+  describe 'nested_attributes' do
+    # Nothing so far.
   end
 
   describe 'enums' do
@@ -22,20 +26,26 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:title) }
     it { should validate_presence_of(:body) }
+
+    pending '#ensure_work_or_title'
   end
 
   describe 'hooks' do
     # Nothing so far.
   end
 
-  describe 'instance' do
-    pending 'postable_gid'
-    pending 'postable_gid='
-  end
-
   describe 'class' do
     # Nothing so far.
+  end
+
+  describe 'instance' do
+    pending '#one_line_title'
+
+    describe 'private' do
+      describe 'callbacks' do
+        # Nothing so far.
+      end
+    end
   end
 end

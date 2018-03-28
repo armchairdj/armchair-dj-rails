@@ -13,6 +13,10 @@ RSpec.describe User, type: :model do
     # Nothing so far.
   end
 
+  describe 'nested_attributes' do
+    # Nothing so far.
+  end
+
   describe 'enums' do
     it { should define_enum_for(:role).with({
       guest:       0,
@@ -56,27 +60,33 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'instance' do
-    describe '#set_default_role' do
-      it "sets role to guest if no role" do
-        user = build(:minimal_user, role: nil)
-
-        user.set_default_role
-
-        expect(user.role).to eq("guest")
-      end
-
-      it "does nothing if role is set" do
-        user = build(:minimal_user, role: :admin)
-
-        user.set_default_role
-
-        expect(user.role).to eq("admin")
-      end
-    end
-  end
-
   describe 'class' do
     # Nothing so far.
+  end
+
+  describe 'instance' do
+    pending '#display_name'
+
+    describe 'private' do
+      describe 'callbacks' do
+        describe '#set_default_role' do
+          it "sets role to guest if no role" do
+            user = build(:minimal_user, role: nil)
+
+            user.set_default_role
+
+            expect(user.role).to eq("guest")
+          end
+
+          it "does nothing if role is set" do
+            user = build(:minimal_user, role: :admin)
+
+            user.set_default_role
+
+            expect(user.role).to eq("admin")
+          end
+        end
+      end
+    end
   end
 end

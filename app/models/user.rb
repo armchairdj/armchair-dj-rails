@@ -9,8 +9,6 @@ class User < ApplicationRecord
   #############################################################################
 
   devise(
-    # :omniauthable,
-    # :timeoutable,
     :confirmable,
     :database_authenticatable,
     :lockable,

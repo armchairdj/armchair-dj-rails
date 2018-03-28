@@ -14,6 +14,10 @@ RSpec.describe Work, type: :model do
     it { should have_many(:posts) }
   end
 
+  describe 'nested_attributes' do
+    # Nothing so far.
+  end
+
   describe 'enums' do
     # Nothing so far.
   end
@@ -31,11 +35,11 @@ RSpec.describe Work, type: :model do
     # Nothing so far.
   end
 
-  describe 'instance' do
-
+  describe 'class' do
+    # Nothing so far.
   end
 
-  describe 'class' do
+  describe 'instance' do
     # Nothing so far.
   end
 end

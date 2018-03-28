@@ -1,0 +1,57 @@
+en:
+  activerecord:
+    attributes:
+      contribution:
+        _destroy: "Remove this contribution"
+        roles:
+          credited_creator:            "Creator"
+          featured_creator:            "Co-Creator"
+
+          musical_artist:              "Artist"
+          musical_featured_artist:     "Featured Artist"
+          songwriter:                  "Songwriter"
+          lyricist:                    "Lyricist"
+          music_producer:              "Producer"
+          music_executive_producer:    "Executive Producer"
+          music_co_producer:           "Co-Producer"
+          music_engineer:              "Engineer"
+          singer:                      "Singer"
+          musician:                    "Musician"
+
+          author:                      "Author"
+          editor:                      "Editor"
+
+          director:                    "Director"
+          producer:                    "Producer"
+          executive_producer:          "Executive Producer"
+          co_producer:                 "Co-Producer"
+          show_runner:                 "Showrunner"
+          cinematographer:             "Cinematographer"
+          screenwriter:                "Screenwriter"
+          film_editor:                 "Editor"
+
+          artist:                      "Artist"
+
+          programmer:                  "Programmer"
+      post:
+        work: "Work"
+      work:
+        media:
+          song:     "Song"
+          album:    "Album or EP"
+          film:     "Movie"
+          tv_show:  "TV Show"
+          book:     "Book"
+          artwork:  "Artwork"
+          software: "App"
+    errors:
+      models:
+        post:
+          attributes:
+            title:
+              has_work_and_title: "Please choose a work or a title but not both."
+              needs_work_or_title: "Please choose either a work or a title."
+        work:
+          attributes:
+            contributions:
+              missing: "Please choose at least one credited creator."

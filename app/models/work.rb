@@ -15,7 +15,7 @@ class Work < ApplicationRecord
   has_many :contributions
 
   has_many :creators, -> {
-    where(param => { role: WorkContribution.roles["credited_creator"] })
+    where(contributions: { role: Contribution.roles["credited_creator"] })
   }, through: :contributions
 
   has_many :contributors, through: :contributions,
@@ -36,14 +36,17 @@ class Work < ApplicationRecord
   #############################################################################
 
   enum medium: {
-    song:       0,
-    album:      1,
-
-    book:     100,
+    song:     100,
+    album:    101,
 
     film:     200,
+    tv_show:  201,
 
-    tv_show:  300
+    book:     300,
+
+    artwork:  400,
+
+    software: 500
   }
 
   #############################################################################
@@ -79,9 +82,27 @@ class Work < ApplicationRecord
     self.all.to_a.sort_by { |c| c.display_name_with_creator }
   end
 
+  def self.grouped_select_options_for_post
+    {
+      songs:    self.song.alphabetical,
+      albums:   self.album.alphabetical,
+      films:    self.film.alphabetical,
+      tv_shows: self.tv_show.alphabetical,
+      books:    self.book.alphabetical,
+      artwork:  self.artwork.alphabetical,
+      software: self.software.alphabetical
+    }.to_a
+  end
+
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def prepare_contributions
+    count_needed = self.class.max_contributions - self.contributions.length
+
+    count_needed.times { self.contributions.build }
+  end
 
   def display_name_with_creator
     "#{self.display_creator}: #{self.title}"
@@ -94,8 +115,8 @@ class Work < ApplicationRecord
 private
 
   def reject_blank_contributions(attributes)
-    # work_contributions_atrributes
-    #  work_contributions_atrributes
+    # contributions_atrributes
+    #  contributions_atrributes
     attributes["creator_id"].blank?
   end
 

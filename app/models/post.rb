@@ -33,7 +33,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   validate do
-    ensure_postable_or_title
+    ensure_work_or_title
   end
 
   validates :body, presence: true
@@ -50,17 +50,9 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def postable_gid
-    self.postable.to_global_id if self.postable.present?
-  end
-
-  def postable_gid=(postable)
-    self.postable = GlobalID::Locator.locate postable
-  end
-
   def one_line_title
-    if self.postable
-      self.postable.display_name_with_creator
+    if self.work
+      self.work.display_name_with_creator
     else
       self.title
     end
@@ -68,8 +60,8 @@ class Post < ApplicationRecord
 
 private
 
-  def ensure_postable_or_title
-    has_work  = self.postable.present?
+  def ensure_work_or_title
+    has_work  = self.work.present?
     has_title = self.title.present?
 
     if has_work && has_title

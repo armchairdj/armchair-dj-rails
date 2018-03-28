@@ -15,6 +15,10 @@ RSpec.describe WorkContribution, type: :model do
     # Nothing so far.
   end
 
+  describe 'nested_attributes' do
+    # Nothing so far.
+  end
+
   describe 'enums' do
     # Nothing so far.
   end
@@ -31,12 +35,15 @@ RSpec.describe WorkContribution, type: :model do
     # Nothing so far.
   end
 
-  describe 'instance' do
-    # Nothing so far.
-  end
-
   describe 'class' do
     # Nothing so far.
   end
 
+  describe 'instance' do
+    describe 'private' do
+      describe 'callbacks' do
+        # Nothing so far.
+      end
+    end
+  end
 end

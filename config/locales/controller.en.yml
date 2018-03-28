@@ -11,11 +11,6 @@ en:
   admin:
     authentication:
       error: "You must be an admin to view this resource."
-  work:
-    notice:
-      create: "Work created."
-      destroy: "Work destroyed."
-      update: "Work Updated."
   creator:
     notice:
       create: "Creator created."

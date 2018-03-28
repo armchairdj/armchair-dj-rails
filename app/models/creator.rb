@@ -14,7 +14,7 @@ class Creator < ApplicationRecord
 
   has_many :contributions
 
-  has_many :credited_works, -> { where(contributions: {
+  has_many :works, -> { where(contributions: {
     role: Contribution.roles["credited_creator"] })
   }, through: :contributions, source: :work, class_name: "Work"
 
@@ -22,7 +22,7 @@ class Creator < ApplicationRecord
     role: Contribution.roles["credited_creator"] })
   }, through: :contributions, source: :work, class_name: "Work"
 
-  has_many :posts, through: :credited_works
+  has_many :posts, through: :works
 
   #############################################################################
   # NESTED ATTRIBUTES.

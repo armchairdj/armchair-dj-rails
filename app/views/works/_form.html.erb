@@ -3,11 +3,15 @@
 
   <%= content_tag(:div, class: "form-inputs") do %>
 
+    <%= f.input :medium, as: :select,
+      collection: Work.human_enum_collection(:media, alphabetical: true)
+    %>
+
     <%= f.input :title %>
 
     <%= render partial: "shared/contribution_fields", locals: {
       f:           f,
-      association: :work_contributions,
+      association: :contributions,
       creators:     @creators_for_select,
       roles:       @roles_for_select
     } %>
