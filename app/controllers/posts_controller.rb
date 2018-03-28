@@ -115,17 +115,24 @@ private
     params.fetch(:post, {}).permit(
       :title,
       :body,
-      :postable_gid,
-      :postable_attributes => [
+      :work_id,
+      :work_attributes => [
         :id,
         :_destroy,
+        :post_id,
         :title,
-        :work_contributions_attributes => [
+        :contributions_attributes => [
           :id,
           :_destroy,
           :work_id,
+          :role,
           :creator_id,
-          :role
+          :creator_attributes => [
+            :id,
+            :_destroy,
+            :contribution_id,
+            :name
+          ]
         ]
       ]
     )

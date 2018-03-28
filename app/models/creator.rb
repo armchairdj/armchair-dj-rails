@@ -12,15 +12,21 @@ class Creator < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :work_contributions, inverse_of: :creator
-  has_many :works, -> { where(:work_contributions => {
-    role: WorkContribution.roles["credited_creator"] })
-  }, through: :work_contributions
+  has_many :contributions
 
-  has_many :work_contributions, inverse_of: :creator
-  has_many :works, -> { where(:work_contributions => {
-    role: WorkContribution.roles["credited_creator"] })
-  }, through: :work_contributions
+  has_many :credited_works, -> { where(contributions: {
+    role: Contribution.roles["credited_creator"] })
+  }, through: :contributions, source: :work, class_name: "Work"
+
+  has_many :contributed_works, -> { where.not(contributions: {
+    role: Contribution.roles["credited_creator"] })
+  }, through: :contributions, source: :work, class_name: "Work"
+
+  has_many :posts, through: :credited_works
+
+  #############################################################################
+  # NESTED ATTRIBUTES.
+  #############################################################################
 
   #############################################################################
   # ENUMS.

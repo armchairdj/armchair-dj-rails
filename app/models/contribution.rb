@@ -8,17 +8,67 @@ class WorkContribution < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
-  include Contribution
-
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
   belongs_to :work, required: true
+  belongs_to :creator, required: true
+
+  #############################################################################
+  # NESTED ATTRIBUTES.
+  #############################################################################
+
+  accepts_nested_attributes_for :creator, allow_destroy: true
 
   #############################################################################
   # ENUMS.
   #############################################################################
+
+  enum role: {
+    credited_creator:          0,
+    featured_creator:          1,
+
+    # Music
+
+    musical_artist:          100,
+    musical_featured_artist: 101,
+
+    songwriter:              110,
+    lyricist:                111,
+
+    producer:                120,
+    executive_producer:      121,
+    co_producer:             122,
+
+    engineer:                130,
+
+    singer:                  140,
+
+    musician:                150,
+
+    # Prose
+
+    author:                  200,
+
+    # Film
+
+    director:                300,
+
+    producer:                320,
+    executive_producer:      321,
+    co_producer:             322,
+
+    cinematographer:         330,
+
+    # Art
+
+    artist:                  400,
+
+    # Software
+
+    programmer:              400,
+  }
 
   #############################################################################
   # SCOPES.
@@ -27,6 +77,10 @@ class WorkContribution < ApplicationRecord
   #############################################################################
   # VALIDATIONS.
   #############################################################################
+
+  validates :work, presence: true
+  validates :creator, presence: true
+  validates :role, presence: true
 
   validates :creator_id, uniqueness: {
     scope:   [:work_id, :role],

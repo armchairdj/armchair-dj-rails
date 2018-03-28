@@ -6,7 +6,7 @@ en:
         roles:
           credited_creator:    "Credited Creator"
           featured_creator:    "Featured Creator"
-          workwriter:         "Workwriter"
+          songwriter:         "Workwriter"
           producer:           "Producer"
           executive_producer: "Executive Producer"
           co_producer:        "Co-Producer"
@@ -17,7 +17,7 @@ en:
         roles:
           credited_creator:    "Credited Creator"
           featured_creator:    "Featured Creator"
-          workwriter:         "Workwriter"
+          songwriter:         "Workwriter"
           producer:           "Producer"
           executive_producer: "Executive Producer"
           co_producer:        "Co-Producer"
