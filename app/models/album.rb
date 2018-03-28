@@ -8,7 +8,7 @@ class Album < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
-  include Contributable
+  include Work
 
   #############################################################################
   # ASSOCIATIONS.

@@ -1,4 +1,4 @@
-module Contributable
+module Work
   extend ActiveSupport::Concern
 
   included do

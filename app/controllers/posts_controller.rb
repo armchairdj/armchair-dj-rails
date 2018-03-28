@@ -112,6 +112,22 @@ private
   end
 
   def instance_params
-    params.fetch(:post, {}).permit(:title, :body, :postable_gid)
+    params.fetch(:post, {}).permit(
+      :title,
+      :body,
+      :postable_gid,
+      :song_attributes => [
+        :id,
+        :_destroy,
+        :title,
+        :song_contributions_attributes => [
+          :id,
+          :_destroy,
+          :song_id,
+          :artist_id,
+          :role
+        ]
+      ]
+    )
   end
 end

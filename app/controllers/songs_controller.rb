@@ -125,10 +125,10 @@ private
       :title,
       :song_contributions_attributes => [
         :id,
+        :_destroy,
         :song_id,
         :artist_id,
-        :role,
-        :_destroy
+        :role
       ]
     )
   end

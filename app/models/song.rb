@@ -8,7 +8,7 @@ class Song < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
-  include Contributable
+  include Work
 
   #############################################################################
   # ASSOCIATIONS.
