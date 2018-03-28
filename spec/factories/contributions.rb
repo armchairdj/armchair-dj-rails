@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :work_contributor do
+  factory :contribution do
     
   end
 end

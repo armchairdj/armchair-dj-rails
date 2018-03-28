@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180328163256) do
+ActiveRecord::Schema.define(version: 20180328165629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,11 +35,9 @@ ActiveRecord::Schema.define(version: 20180328163256) do
     t.string "title"
     t.text "body"
     t.datetime "published_at"
-    t.string "postable_type"
-    t.bigint "postable_id"
+    t.bigint "work_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["postable_type", "postable_id"], name: "index_posts_on_postable_type_and_postable_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -76,7 +74,7 @@ ActiveRecord::Schema.define(version: 20180328163256) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "category"
+    t.integer "medium"
   end
 
 end

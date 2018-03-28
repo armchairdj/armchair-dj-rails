@@ -15,7 +15,7 @@ FactoryBot.define do
   factory :work do
     factory :single_creator_work do
       title { generate(:work_title) }
-      association :creator, factory: :minimal_creator
+      association :contribution, factory: :minimal_contribution, role: :credited_artist
 
       factory :minimal_work do
         # Just a single-creator work

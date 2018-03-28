@@ -12,7 +12,7 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :postable, polymorphic: true, required: false
+  belongs_to :work, required: false
 
   #############################################################################
   # ENUMS.
