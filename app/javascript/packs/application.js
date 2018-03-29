@@ -12,28 +12,28 @@ window.$ = window.jQuery = $;
 
 /* jQuery config */
 
-$(function() {
+document.addEventListener("turbolinks:load", function() {
   $.ajaxSetup({
     headers:  { "X-CSRF-Token": $('meta[name="csrf-token"]').attr("content") },
     dataType: "json"
   });
-});
+})
 
 /* jQuery plugins */
 
 import "selectize";
+
+/* Turbolinks */
+
+const Turbolinks = require("turbolinks");
+
+Turbolinks.start();
 
 /* UJS */
 
 const Rails = require("rails-ujs");
 
 Rails.start();
-
-/* Turbolinks */
-
-const Turbolinks = require("turbolinks");
-
-Turbolinks.start()
 
 /* Stimulus */
 

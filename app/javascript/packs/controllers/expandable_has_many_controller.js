@@ -1,13 +1,17 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  initialize() {
+  connect() {
     this.$node   = $(this.element);
     this.$items  = this.$node.find("fieldset");
     this.$hidden = this.$items.filter(this.shouldHide);
 
+    this.deploy();
+  }
+
+  deploy() {
     if (this.hideItems()) {
-      this.appendLink();
+      this.ensureLink();
     }
   }
 
@@ -33,10 +37,14 @@ export default class extends Controller {
     return $(this.$hidden.splice(0, 1));
   }
 
-  appendLink() {
-    this.$link = this.getLinkHtml();
+  ensureLink() {
+    this.$link = this.$node.find("[data-expand-link]");
 
-    this.$node.append(this.$link);
+    if (!this.$link[0]) {
+      this.$link = this.getLinkHtml();
+
+      this.$node.append(this.$link);
+    }
   }
 
   removeLink() {
@@ -44,7 +52,7 @@ export default class extends Controller {
   }
 
   getLinkHtml() {
-    return $('<div class="expand"><a href="#" data-action="click->expandable-has-many#expand">add another</a></div>');
+    return $('<div class="expand" data-expand-link="true"><a href="#" data-action="click->expandable-has-many#expand">add another</a></div>');
   }
 
   expand(evt) {
@@ -55,7 +63,7 @@ export default class extends Controller {
     this.grabNextItem().show();
 
     if (this.$hidden.length > 0) {
-      this.appendLink();
+      this.ensureLink();
     }
   }
 }

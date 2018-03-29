@@ -1,16 +1,16 @@
 import SelectizeController from "packs/controllers/selectize_controller";
 
 export default class extends SelectizeController {
-  constructSelectizeOptions() {
-    return Object.assign({}, super.constructSelectizeOptions(), {
+  constructOptions() {
+    return Object.assign({}, super.constructOptions(), {
       create: _.bind(this.createItem, this)
     });
   }
 
   createItem(userInput, callback) {
     $.ajax({
-      method:   this.options.selectizeCreateMethod,
-      url:      this.options.selectizeCreateAction,
+      method:   this.data.get("method"),
+      url:      this.data.get("action"),
       data:     this.postParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
@@ -20,15 +20,15 @@ export default class extends SelectizeController {
   postParams(userInput) {
     var params = {};
 
-    params[this.options.selectizeCreateParam] = userInput;
+    params[this.data.get("param")] = userInput;
 
     return params;
   }
 
-  ajaxSuccess(callback, data, status, xhr) {
+  ajaxSuccess(callback, response, status, xhr) {
     callback({
-      value: data.id,
-      text:  data.name
+      value: response.id,
+      text:  response.name
     });
   }
 

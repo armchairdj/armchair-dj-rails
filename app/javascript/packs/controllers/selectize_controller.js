@@ -2,13 +2,20 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
-    this.$select = $(this.element);
-    this.options = this.$select.data();
+    document.addEventListener("turbolinks:visit", _.bind(this.teardown, this));
 
-    this.$select.selectize(this.constructSelectizeOptions());
+    $(this.element).selectize(this.constructOptions());
   }
 
-  constructSelectizeOptions() {
+  teardown(evt) {
+    const selectizeInstance = $(this.element)[0].selectize;
+
+    if (selectizeInstance) {
+      selectizeInstance.destroy();
+    }
+  }
+
+  constructOptions() {
     return {
       plugins: [
         "restore_on_backspace",
