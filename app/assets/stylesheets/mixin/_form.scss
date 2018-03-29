@@ -38,7 +38,7 @@
 
   &:focus {
     background-color: $input-bg-color-focus;
-    @include input-focus-outline();
+    @include focus-outline();
   }
 
   &:disabled {
@@ -61,12 +61,13 @@
   border-color: $error-color;
 }
 
-@mixin no-focus-outline() {
+@mixin focus-no-outline() {
   &:focus {
     outline: none;
+    @include box-shadow(0 0 0 0 transparent);
   }
 }
 
-@mixin input-focus-outline($blur: 6px, $spread: 3px) {
+@mixin focus-outline($blur: 6px, $spread: 3px) {
   @include box-shadow(0 0 $blur $spread $focus-outline-color);
 }

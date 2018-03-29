@@ -1,21 +1,16 @@
-import { Controller } from "stimulus"
+import SelectizeController from "packs/controllers/selectize_controller";
 
-import $ from "jquery";
-
-export default class extends Controller {
-  connect() {
-    this.$select = $(this.element);
-    this.options = this.$select.data();
-
-    this.$select.selectize({
+export default class extends SelectizeController {
+  constructSelectizeOptions() {
+    return Object.assign({}, super.constructSelectizeOptions(), {
       create: _.bind(this.createItem, this)
     });
   }
 
   createItem(userInput, callback) {
     $.ajax({
-      method:   this.options.selectCreateMethod,
-      url:      this.options.selectCreateAction,
+      method:   this.options.selectizeCreateMethod,
+      url:      this.options.selectizeCreateAction,
       data:     this.postParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
@@ -25,7 +20,7 @@ export default class extends Controller {
   postParams(userInput) {
     var params = {};
 
-    params[this.options.selectCreateParam] = userInput;
+    params[this.options.selectizeCreateParam] = userInput;
 
     return params;
   }

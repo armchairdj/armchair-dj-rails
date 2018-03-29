@@ -1,5 +1,5 @@
 [type=file] {
   margin-bottom: $small-spacing;
   width: 100%;
-  @include input-focus-outline();
+  @include focus-outline();
 }

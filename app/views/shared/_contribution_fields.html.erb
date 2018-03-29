@@ -26,10 +26,10 @@
             include_blank: true,
             error:         false,
             input_html:    {
-              "data-controller":           "select-create",
-              "data-select-create-action": creators_path,
-              "data-select-create-method": "POST",
-              "data-select-create-param":  "creator[name]"
+              "data-controller":           "selectize-create",
+              "data-selectize-create-action": creators_path,
+              "data-selectize-create-method": "POST",
+              "data-selectize-create-param":  "creator[name]"
             }
           %>
 
@@ -38,7 +38,8 @@
             collection:    roles,
             required:      false,
             include_blank: false,
-            error:         false
+            error:         false,
+            input_html:    { "data-controller": "selectize" }
           %>
         <% end %>
 

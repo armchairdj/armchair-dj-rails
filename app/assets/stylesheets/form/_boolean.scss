@@ -11,7 +11,7 @@
 [type=radio] {
   display: inline;
   margin-right: $tiny-spacing;
-  @include no-focus-outline();
+  @include focus-no-outline();
 }
 
 .form-field.boolean,
@@ -35,7 +35,7 @@
 
   [type=checkbox]:focus + span.custom-boolean-indicator,
   [type=radio]:focus + span.custom-boolean-indicator {
-    @include input-focus-outline();
+    @include focus-outline();
   }
 
   &.with-error {

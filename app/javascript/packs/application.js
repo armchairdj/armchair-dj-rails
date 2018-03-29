@@ -25,13 +25,13 @@ import "selectize";
 
 /* UJS */
 
-const Rails = require("rails-ujs")
+const Rails = require("rails-ujs");
 
 Rails.start();
 
 /* Turbolinks */
 
-const Turbolinks = require("turbolinks")
+const Turbolinks = require("turbolinks");
 
 Turbolinks.start()
 
