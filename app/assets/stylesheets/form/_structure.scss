@@ -32,6 +32,7 @@ fieldset {
   }
 
   &.contribution {
+    @include border-bottom($padding: .5rem, $color: $armchair-blue-lightest, $style: solid);
     @include bottom-margin-only(.5rem);
 
     .stacked {

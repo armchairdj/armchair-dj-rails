@@ -1,5 +1,5 @@
 article.style-guide {
   section {
-    @include standard-border-bottom();
+    @include border-bottom();
   }
 }

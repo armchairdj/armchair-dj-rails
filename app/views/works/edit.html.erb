@@ -1,5 +1,5 @@
 <%
-  @headline = @title = "Edit Work"
+  @headline = @title = "Edit #{@work.human_enum_label(:medium)}"
 %>
 
 <%= render 'form', work: @work %>

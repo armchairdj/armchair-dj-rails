@@ -114,13 +114,14 @@ class Work < ApplicationRecord
 
 private
 
-  def reject_blank_contributions(attributes)
-    attributes["creator_id"].blank?
+  def reject_blank_contributions(contribution_attributes)
+    contribution_attributes["creator_id"].blank?
   end
 
   def validate_contributions
     available = self.contributions.reject(&:marked_for_destruction?)
-    creators  = available.keep_if { |c| c.role == Contribution.roles[:creator] }
+
+    creators  = available.keep_if { |c| c.role == "creator" }
 
     return if creators.any?
 

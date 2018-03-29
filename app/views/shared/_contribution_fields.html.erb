@@ -24,7 +24,13 @@
             collection:    creators,
             required:      false,
             include_blank: true,
-            error:         false
+            error:         false,
+            input_html:    {
+              "data-controller":           "select-create",
+              "data-select-create-action": creators_path,
+              "data-select-create-method": "POST",
+              "data-select-create-param":  "creator[name]"
+            }
           %>
 
           <%= ff.input :role,

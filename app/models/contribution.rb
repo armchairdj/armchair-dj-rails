@@ -56,7 +56,7 @@ class Contribution < ApplicationRecord
     show_runner:                  223,
 
     cinematographer:              230,
-    editor:                       231,
+    film_editor:                  231,
 
     screenwriter:                 240,
 

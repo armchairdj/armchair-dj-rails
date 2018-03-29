@@ -8,8 +8,12 @@ export default class extends Controller {
     this.$items  = this.$node.find("fieldset");
     this.$hidden = this.$items.filter(this.shouldHide);
 
+    this.deploy();
+  }
+
+  deploy() {
     if (this.hideItems()) {
-      this.createNodes();
+      this.appendLink();
     }
   }
 
@@ -28,14 +32,13 @@ export default class extends Controller {
     return this.$hidden.length > 0;
   }
 
-  createNodes() {
-    this.$link = this.getLinkHtml();
+  appendLink() {
+    this.$wrapper = $('<div class="expand">');
+    this.$link    = this.getLinkHtml();
 
-    var $wrapper = $('<div class="expand">');
+    this.$node.append(this.$wrapper);
 
-    this.$node.append($wrapper);
-
-    $wrapper.append(this.$link);
+    this.$wrapper.append(this.$link);
   }
 
   getLinkHtml() {
@@ -45,10 +48,12 @@ export default class extends Controller {
   expand(evt) {
     evt.preventDefault();
 
-    $(this.$hidden.splice(0, 1)).remove().insertBefore(this.$link).show();
+    this.$wrapper.remove();
 
-    if (this.$hidden.length === 0) {
-      this.$link.remove();
+    $(this.$hidden.splice(0, 1)).show();
+
+    if (this.$hidden.length > 0) {
+      this.appendLink();
     }
   }
 }

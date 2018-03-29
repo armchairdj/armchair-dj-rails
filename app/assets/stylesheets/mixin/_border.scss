@@ -1,5 +1,5 @@
-@mixin standard-border-top($padding: $standard-spacing, $all: false) {
-  border-top: $standard-border;
+@mixin border-top($padding: $standard-spacing, $color: $standard-border-color, $style: solid, $all: false) {
+  border-top: 1px $style $color;
   padding-top: $padding;
 
   @if $all == false {
@@ -10,8 +10,8 @@
   }
 }
 
-@mixin standard-border-bottom($padding: $standard-spacing, $all: false) {
-  border-bottom: $standard-border;
+@mixin border-bottom($padding: $standard-spacing, $color: $standard-border-color, $style: solid, $all: false) {
+  border-bottom: 1px $style $color;
   padding-bottom: $padding;
 
   @if $all == false {

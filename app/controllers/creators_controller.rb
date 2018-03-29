@@ -48,7 +48,6 @@ class CreatorsController < ApplicationController
   # POST /creators
   # POST /creators.json
   def create
-
     respond_to do |format|
       if @creator.save
         format.html { redirect_to @creator, notice: I18n.t("creator.notice.create") }

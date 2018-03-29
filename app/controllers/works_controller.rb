@@ -137,12 +137,7 @@ private
         :_destroy,
         :role,
         :work_id,
-        :creator_id,
-        :creator_attributes => [
-          :id,
-          :_destroy,
-          :name
-        ]
+        :creator_id
       ]
     )
   end
