@@ -1,12 +1,13 @@
 class PostsController < ApplicationController
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
   before_action :find_collection, only: [
     :index
+  ]
+
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
   ]
 
   before_action :build_new_instance, only: [
@@ -17,11 +18,10 @@ class PostsController < ApplicationController
     :create
   ]
 
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
   ]
 
   before_action :authorize_instance, only: [
@@ -31,11 +31,16 @@ class PostsController < ApplicationController
     :destroy
   ]
 
-  before_action :prepare_work_attributes_fields, only: [
+  before_action :prepare_dropdowns, only: [
     :new,
     :create,
     :edit,
     :update
+  ]
+
+  before_action :prepare_work_attributes_fields, only: [
+    :new,
+    :edit
   ]
 
   # GET /posts
@@ -63,6 +68,8 @@ class PostsController < ApplicationController
         format.html { redirect_to @post, notice: I18n.t("post.notice.create") }
         format.json { render :show, status: :created, location: @post }
       else
+        prepare_work_attributes_fields
+
         format.html { render :new }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
@@ -82,6 +89,8 @@ class PostsController < ApplicationController
         format.html { redirect_to @post, notice: I18n.t("post.notice.update") }
         format.json { render :show, status: :ok, location: @post }
       else
+        prepare_work_attributes_fields
+
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
@@ -126,29 +135,15 @@ private
   end
 
   def instance_params
-    fetched = instance_params_with_existing_work
-
-    if fetched[:work_id].present?
-      puts "has existing work"
-      return fetched
-    end
-
     fetched = instance_params_with_new_work
 
-    if fetched[:work_attributes][:title].present?
-      puts "has new work"
-      return fetched
-    end
+    return fetched if fetched[:work_attributes][:title].present?
 
-    puts "has title"
+    fetched = instance_params_with_existing_work
+
+    return fetched if fetched[:work_id].present?
+
     instance_params_with_title
-  end
-
-  def instance_params_with_existing_work
-    params.fetch(:post, {}).permit(
-      :body,
-      :work_id
-    )
   end
 
   def instance_params_with_new_work
@@ -177,6 +172,13 @@ private
     )
   end
 
+  def instance_params_with_existing_work
+    params.fetch(:post, {}).permit(
+      :body,
+      :work_id
+    )
+  end
+
   def instance_params_with_title
     params.fetch(:post, {}).permit(
       :body,
@@ -184,10 +186,12 @@ private
     )
   end
 
-  def prepare_work_attributes_fields
+  def prepare_dropdowns
     @creators = policy_scope(Creator)
     @roles    = Contribution.human_enum_collection(:role)
+  end
 
+  def prepare_work_attributes_fields
     return if @post.work.present?
 
     @post.build_work

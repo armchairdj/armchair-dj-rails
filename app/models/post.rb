@@ -70,14 +70,8 @@ private
   end
 
   def ensure_work_or_title
-    has_work  = self.work.persisted? || self.work.valid?
+    has_work  = self.work.present?
     has_title = self.title.present?
-
-    puts "ensure_work_or_title"
-    puts "has_work", has_work
-    puts "has_title", has_title
-    puts self.title.inspect
-    puts "======="
 
     if has_work && has_title
       self.errors.add(:title, :has_work_and_title)
