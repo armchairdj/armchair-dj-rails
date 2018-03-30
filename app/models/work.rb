@@ -84,13 +84,13 @@ class Work < ApplicationRecord
 
   def self.grouped_select_options_for_post
     {
-      songs:    self.song.alphabetical,
-      albums:   self.album.alphabetical,
-      films:    self.film.alphabetical,
-      tv_shows: self.tv_show.alphabetical,
-      books:    self.book.alphabetical,
-      artwork:  self.artwork.alphabetical,
-      software: self.software.alphabetical
+      :"Albums"   => self.album.alphabetical,
+      :"Songs"    => self.song.alphabetical,
+      :"Films"    => self.film.alphabetical,
+      :"TV Shows" => self.tv_show.alphabetical,
+      :"Books"    => self.book.alphabetical,
+      :"Software" => self.software.alphabetical,
+      :"Artwork"  => self.artwork.alphabetical,
     }.to_a
   end
 

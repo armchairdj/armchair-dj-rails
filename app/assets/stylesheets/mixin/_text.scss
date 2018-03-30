@@ -8,3 +8,8 @@
   font-size: 1.4rem;
   margin: 0;
 }
+
+@mixin tab-text() {
+  font-size: $tab-font-size;
+  text-transform: uppercase;
+}

@@ -2,7 +2,7 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
-    document.addEventListener("turbolinks:visit", _.bind(this.teardown, this));
+    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
 
     $(this.element).selectize(this.constructOptions());
   }

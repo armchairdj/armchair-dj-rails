@@ -18,6 +18,10 @@ class Post < ApplicationRecord
   # NESTED ATTRIBUTES.
   #############################################################################
 
+  accepts_nested_attributes_for :work,
+    allow_destroy: true,
+    reject_if:     :reject_blank_work
+
   #############################################################################
   # ENUMS.
   #############################################################################
@@ -59,6 +63,10 @@ class Post < ApplicationRecord
   end
 
 private
+
+  def reject_blank_work(work_attributes)
+    work_attributes["title"].blank?
+  end
 
   def ensure_work_or_title
     has_work  = self.work.present?

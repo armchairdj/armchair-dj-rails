@@ -28,6 +28,13 @@ class PostsController < ApplicationController
     :destroy
   ]
 
+  before_action :prepare_work_attributes_fields, only: [
+    :new,
+    :create,
+    :edit,
+    :update
+  ]
+
   # GET /posts
   # GET /posts.json
   def index
@@ -120,6 +127,7 @@ private
         :id,
         :_destroy,
         :post_id,
+        :medium,
         :title,
         :contributions_attributes => [
           :id,
@@ -136,5 +144,15 @@ private
         ]
       ]
     )
+  end
+
+  def prepare_work_attributes_fields
+    @creators = policy_scope(Creator)
+    @roles    = Contribution.human_enum_collection(:role)
+
+    return if @post.work.present?
+
+    @post.build_work
+    @post.work.prepare_contributions
   end
 end

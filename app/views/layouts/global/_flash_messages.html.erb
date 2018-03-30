@@ -7,9 +7,9 @@
     <%= content_tag(:div, class: "flash flash-#{type}", "data-controller": "dismissable") do %>
       <%= content_tag(:div, class: "constrain-wide flash-inner") do %>
         <%= link_to "&#215;".html_safe, "javascript:window.location.reload();",
-          class: "closeable",
-          title: "dismiss this message",
-          "data-action": "click->dismissable#dismiss".html_safe
+          class:         "closeable",
+          title:         "dismiss this message",
+          "data-action": "dismissable#dismiss"
         %>
 
         <%= content_tag(:p, message) %>

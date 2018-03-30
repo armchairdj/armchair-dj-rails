@@ -47,7 +47,7 @@ class WorksController < ApplicationController
 
   # GET /works/new
   def new
-
+    return render_new_as_json if request.xhr?
   end
 
   # POST /works
@@ -55,12 +55,16 @@ class WorksController < ApplicationController
   def create
     respond_to do |format|
       if @work.save
-        format.html { redirect_to @work, notice: I18n.t("work.notice.create") }
+        format.html {
+          redirect_to @work, notice: I18n.t("work.notice.create")
+        }
         format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions_attributes_fields
 
-        format.html { render :new }
+        format.html {
+          request.xhr? ? render_new_as_json : render(:new)
+        }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -123,8 +127,8 @@ private
   def prepare_contributions_attributes_fields
     @work.prepare_contributions
 
-    @creators_for_select = Creator.all.alphabetical
-    @roles_for_select    = Contribution.human_enum_collection(:role)
+    @creators = policy_scope(Creator)
+    @roles    = Contribution.human_enum_collection(:role)
   end
 
   def instance_params
@@ -140,5 +144,9 @@ private
         :creator_id
       ]
     )
+  end
+
+  def render_new_as_json
+    render "works/new.json.jbuilder"
   end
 end

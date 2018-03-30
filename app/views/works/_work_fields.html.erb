@@ -1,0 +1,12 @@
+<%= f.input :medium, as: :select,
+  collection: Work.human_enum_collection(:media, alphabetical: true),
+  input_html: { "data-controller": "selectize" }
+%>
+
+<%= f.input :title %>
+
+<%= render partial: "works/work_fields_contributions", locals: {
+  f:        f,
+  creators: creators,
+  roles:    roles
+} %>

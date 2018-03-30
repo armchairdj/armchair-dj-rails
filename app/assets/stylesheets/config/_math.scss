@@ -10,15 +10,15 @@ $standard-z-index:             0;
 
 /* Font-size. */
 
-$page-headline-font-size: 2rem;
-$standard-font-size: 1rem;
-
-$legend-font-size: 1.2rem;
-$label-font-size: 1rem;
-$input-font-size: 1.2rem;
-$hint-font-size: .8rem;
-$form-field-error-font-size: .8rem;
-$button-font-size: 1rem;
+$page-headline-font-size:    2rem;
+$standard-font-size:         1rem;
+$legend-font-size:           1.2rem;
+$label-font-size:            1rem;
+$input-font-size:            1.2rem;
+$hint-font-size:             0.8rem;
+$form-field-error-font-size: 0.8rem;
+$button-font-size:           1rem;
+$tab-font-size:              0.7rem;
 
 /* Font-weight. */
 
@@ -40,7 +40,7 @@ $fixed-masthead-width: 16.65em;
 /* Buttons. */
 
 $button-border-radius: $standard-border-radius;
-$button-spacing:       .5rem;
+$button-spacing:       $small-spacing;
 
 
 /* Breakpoints. */

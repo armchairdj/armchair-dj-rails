@@ -62,12 +62,12 @@ dl {
       @include bold();
       clear: left;
       width: 40%;
-      margin: 0 .5rem .75rem;
+      margin: 0 $small-spacing (1.5 * $small-spacing);
     }
 
     dd {
       width: 40%;
-      margin: 0 0 .75rem;
+      margin: 0 0 (1.5 * $small-spacing);
     }
   }
 }

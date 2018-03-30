@@ -1,0 +1,54 @@
+<%= content_tag(:div, class: "tabgroup",
+  "data-controller":       "tabgroup",
+  "data-tabgroup-default": "post-review-choose"
+) do %>
+  <%= content_tag(:ul, class: "tabs") do %>
+    <%= content_tag(:li, "Choose Work", class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-choose") %>
+    <%= content_tag(:li, "New Work",    class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-new") %>
+    <%= content_tag(:li, "Standalone",  class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-standalone") %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-standalone") do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Standalone") %>
+
+      <%= f.input :title, required: false %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-review-choose") do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Choose Work") %>
+
+      <%= f.input :work, as: :grouped_select,
+        collection:         Work.grouped_select_options_for_post,
+        required:           false,
+        group_label_method: :first,
+        group_method:       :last,
+        label_method:       :display_name_with_creator,
+        value_method:       :id,
+        include_blank:      true,
+        input_html:         {
+          "data-controller":           "selectize-tab",
+          "data-selectize-tab-target": "post-review-new"
+        }
+      %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-review-new") do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "New Work") %>
+
+      <%= f.simple_fields_for :work do |ff| %>
+        <%= render partial: 'works/work_fields', locals: {
+          f:        ff,
+          creators: creators,
+          roles:    roles
+        } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= f.input :body %>

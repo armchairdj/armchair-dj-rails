@@ -2,7 +2,7 @@ import SelectizeController from "packs/controllers/selectize_controller";
 
 export default class extends SelectizeController {
   constructOptions() {
-    return Object.assign({}, super.constructOptions(), {
+    return Object.assign(super.constructOptions(), {
       create: _.bind(this.createItem, this)
     });
   }

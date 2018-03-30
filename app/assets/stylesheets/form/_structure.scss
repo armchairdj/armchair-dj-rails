@@ -1,43 +1,43 @@
 .error-notification {
   color: $error-color;
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only(1.5 * $standard-spacing);
 }
 
 .form-inputs {
-  @include bottom-margin-only(2rem);
+  @include bottom-margin-only(2 * $standard-spacing);
 }
 
 fieldset {
   border: 0;
   padding: 0;
   background-color: transparent;
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only(1.5 * $standard-spacing);
 
   &.legendary {
     > legend {
-      @include bottom-margin-only(.75rem);
+      @include bottom-margin-only(.75 * $standard-spacing);
       @include legend-text();
     }
 
     > .hint {
-      margin: -.75rem 0 .75rem;
+      margin: -(.75 * $standard-spacing) 0 (.75 * $standard-spacing);
       @include hint-text();
     }
   }
 
   &.compact {
     .form-field {
-      @include bottom-margin-only(.5rem);
+      @include bottom-margin-only($small-spacing);
     }
   }
 
   &.contribution {
-    @include border-bottom($padding: .5rem, $color: $armchair-blue-lightest, $style: solid);
-    @include bottom-margin-only(.5rem);
+    @include border-bottom($padding: $small-spacing, $color: $armchair-blue-lightest, $style: solid);
+    @include bottom-margin-only($small-spacing);
 
     .stacked {
       @include clearfix();
-      @include bottom-margin-only(.5rem);
+      @include bottom-margin-only($small-spacing);
 
       .form-field:first-child {
         float: left;
@@ -55,7 +55,7 @@ fieldset {
 }
 
 .form-field {
-  @include bottom-margin-only(1.5rem);
+  @include bottom-margin-only(1.5 * $standard-spacing);
 
   &.with-error {
     label,

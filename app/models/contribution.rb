@@ -19,7 +19,9 @@ class Contribution < ApplicationRecord
   # NESTED ATTRIBUTES.
   #############################################################################
 
-  accepts_nested_attributes_for :creator, allow_destroy: true
+  accepts_nested_attributes_for :creator,
+    allow_destroy: true,
+    reject_if:     :reject_blank_creator
 
   #############################################################################
   # ENUMS.
@@ -100,4 +102,9 @@ class Contribution < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+private
+
+  def reject_blank_creator(creator_attributes)
+    creator_attributes["name"].blank?
+  end
 end

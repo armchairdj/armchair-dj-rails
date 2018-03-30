@@ -1,7 +1,7 @@
 nav#masthead {
   @include clearfix();
   background-color: $black;
-  padding: .5rem 0;
+  padding: $small-spacing 0;
 
   header {
     float: left;

@@ -2,4 +2,7 @@
   @headline = @title = "Create Work"
 %>
 
-<%= render 'form', work: @work %>
+<%= render partial: 'work_form', work: @work, locals: {
+  roles:    @roles,
+  creators: @creators
+} %>

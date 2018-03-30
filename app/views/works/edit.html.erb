@@ -2,4 +2,7 @@
   @headline = @title = "Edit #{@work.human_enum_label(:medium)}"
 %>
 
-<%= render 'form', work: @work %>
+<%= render partial: 'work_form', work: @work, locals: {
+  roles:    @roles,
+  creators: @creators
+} %>

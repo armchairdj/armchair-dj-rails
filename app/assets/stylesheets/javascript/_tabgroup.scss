@@ -1,0 +1,36 @@
+.tabgroup {
+  @include bottom-margin-only($standard-spacing);
+
+  ul.tabs {
+    margin: 0;
+
+    li {
+      margin-left: $small-spacing;
+      cursor: pointer;
+      display: inline-block;
+      padding: .2rem .75rem;
+      margin-bottom: -1px;
+      background-color: $white;
+      border-radius: $standard-border-radius $standard-border-radius 0 0;
+      border: 1px solid $white;
+      color: $link-color;
+      font-size: $tab-font-size;
+
+      &.tab-active {
+        border-bottom-color: $armchair-blacktop;
+        background-color: $armchair-blacktop;
+        color: $white;
+      }
+    }
+  }
+
+  .tab {
+    border-radius: $standard-border-radius;
+    border: 1px solid $white;
+    padding: $standard-spacing;
+
+    &.tab-inactive {
+      display: none;
+    }
+  }
+}
