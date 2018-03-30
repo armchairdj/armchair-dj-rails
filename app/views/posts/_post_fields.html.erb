@@ -20,7 +20,7 @@
     <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Choose Work") %>
 
-      <%= f.input :work, as: :grouped_select,
+      <%= f.input :work_id, as: :grouped_select,
         collection:         Work.grouped_select_options_for_post,
         required:           false,
         group_label_method: :first,

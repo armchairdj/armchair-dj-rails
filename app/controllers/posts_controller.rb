@@ -10,7 +10,10 @@ class PostsController < ApplicationController
   ]
 
   before_action :build_new_instance, only: [
-    :new,
+    :new
+  ]
+
+  before_action :build_new_instance_from_params, only: [
     :create
   ]
 
@@ -107,6 +110,10 @@ private
   end
 
   def build_new_instance
+    @post = Post.new
+  end
+
+  def build_new_instance_from_params
     @post = Post.new(instance_params)
   end
 
@@ -119,30 +126,61 @@ private
   end
 
   def instance_params
+    fetched = instance_params_with_existing_work
+
+    if fetched[:work_id].present?
+      puts "has existing work"
+      return fetched
+    end
+
+    fetched = instance_params_with_new_work
+
+    if fetched[:work_attributes][:title].present?
+      puts "has new work"
+      return fetched
+    end
+
+    puts "has title"
+    instance_params_with_title
+  end
+
+  def instance_params_with_existing_work
     params.fetch(:post, {}).permit(
-      :title,
       :body,
-      :work_id,
+      :work_id
+    )
+  end
+
+  def instance_params_with_new_work
+    params.fetch(:post, {}).permit(
+      :body,
       :work_attributes => [
+        :post_id,
         :id,
         :_destroy,
-        :post_id,
         :medium,
         :title,
         :contributions_attributes => [
+          :work_id,
           :id,
           :_destroy,
-          :work_id,
           :role,
           :creator_id,
           :creator_attributes => [
+            :contribution_id,
             :id,
             :_destroy,
-            :contribution_id,
             :name
           ]
         ]
       ]
+    )
+  end
+
+  def instance_params_with_title
+    params.fetch(:post, {}).permit(
+      :body,
+      :title
     )
   end
 
