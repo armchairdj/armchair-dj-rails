@@ -12,7 +12,11 @@
   <% end %>
 
   <%= content_tag(:div, class: "hint") do %>
-    Choose at least one creator.
+    <% if f.object.errors[:contributions].any? %>
+      <%= f.error :contributions %>
+    <% else %>
+      Choose at least one creator.
+    <% end %>
   <% end %>
 
   <% f.object.contributions.each do |contribution| %>
@@ -53,6 +57,4 @@
       <% end %>
     <% end %>
   <% end %>
-
-  <%= f.error :contributions %>
 <% end %>

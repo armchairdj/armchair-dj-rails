@@ -68,9 +68,13 @@ fieldset {
 label,
 legend {
   padding: 0;
-  display: block;
   @include bottom-margin-only(.05rem);
   @include label-text();
+  @include pseudo-block();
+}
+
+label {
+  cursor: pointer;
 }
 
 .hint {

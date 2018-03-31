@@ -1,4 +1,4 @@
-import SelectizeController from "packs/controllers/selectize_controller";
+import SelectizeController from "controllers/selectize_controller";
 
 export default class extends SelectizeController {
   constructOptions() {

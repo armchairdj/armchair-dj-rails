@@ -3,6 +3,7 @@ class PostsController < ApplicationController
     :index
   ]
 
+
   before_action :find_instance, only: [
     :show,
     :edit,
@@ -14,8 +15,18 @@ class PostsController < ApplicationController
     :new
   ]
 
+  before_action :sanitize_params, only: [
+    :create,
+    :update
+  ]
+
   before_action :build_new_instance_from_params, only: [
     :create
+  ]
+
+  before_action :prepare_view, only: [
+    :new,
+    :edit
   ]
 
   before_action :authorize_collection, only: [
@@ -29,11 +40,6 @@ class PostsController < ApplicationController
     :edit,
     :update,
     :destroy
-  ]
-
-  before_action :prepare_view, only: [
-    :new,
-    :edit
   ]
 
   # GET /posts
@@ -78,7 +84,7 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-      if @post.update(sanitized_instance_params)
+      if @post.update(@sanitized_params)
         format.html { redirect_to posts_path, notice: I18n.t("post.notice.update") }
         format.json { render :show, status: :ok, location: @post }
       else
@@ -111,37 +117,40 @@ private
     @posts = policy_scope(Post)
   end
 
+  def find_instance
+    @post = Post.find(params[:id])
+  end
+
   def build_new_instance
     @post = Post.new
   end
 
   def build_new_instance_from_params
-    @post = Post.new(sanitized_instance_params)
-  end
-
-  def find_instance
-    @post = Post.find(params[:id])
+    @post = Post.new(@sanitized_params)
   end
 
   def authorize_instance
     authorize @post
   end
 
-  def sanitized_instance_params
+  def sanitize_params
     fetched = instance_params
 
     if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
+      puts "new work"
       fetched.delete(:title)
       fetched.delete(:work_id)
     elsif fetched [:work_id].present?
+      puts "existing work"
       fetched.delete(:title)
       fetched.delete(:work_attributes)
     else
+      puts "standalone"
       fetched.delete(:work_id)
       fetched.delete(:work_attributes)
     end
 
-    fetched
+    @sanitized_params = fetched
   end
 
   def instance_params
@@ -185,7 +194,7 @@ private
     else
       @allow_new_work = true
 
-      @post.build_work
+      @post.build_work unless @post.work.present?
       @post.work.prepare_contributions
     end
   end
@@ -200,18 +209,28 @@ private
   end
 
   def which_tab
-    if action_name == "new" || @post.title.blank?
+    puts action_name
+
+    case action_name
+    when "new"
       return "post-choose-work"
+    when "create"
+      if @sanitized_params[:work_attributes].present?
+        return "post-new-work"
+      elsif @post.title.present?
+        return "post-standalone"
+      else
+        return "post-choose-work"
+      end
+    when "edit", "update"
+      puts "edit or update"
+      if @post.title.present?
+        puts "title present"
+        return "post-standalone"
+      else
+        puts "else"
+        return "post-choose-work"
+      end
     end
-
-    if @post.title.present?
-      return "post-standalone"
-    end
-
-    if @allow_new_work
-      return "post-new-work"
-    end
-
-    "post-choose-work"
   end
 end

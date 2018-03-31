@@ -5085,6 +5085,10 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
+selectize-plugin-clear@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/selectize-plugin-clear/-/selectize-plugin-clear-0.0.3.tgz#33c08c4a93c294740a64e8160527802a897a9b7b"
+
 selectize@^0.12.4:
   version "0.12.4"
   resolved "https://registry.yarnpkg.com/selectize/-/selectize-0.12.4.tgz#50c697526b609dea11da153cf7252b98948f4c0e"
