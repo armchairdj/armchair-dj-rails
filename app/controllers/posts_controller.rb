@@ -135,13 +135,13 @@ private
   end
 
   def instance_params
-    fetched = instance_params_with_new_work
-
-    return fetched if fetched[:work_attributes][:title].present?
-
     fetched = instance_params_with_existing_work
 
     return fetched if fetched[:work_id].present?
+
+    fetched = instance_params_with_new_work
+
+    return fetched if fetched[:work_attributes][:title].present?
 
     instance_params_with_title
   end
@@ -187,12 +187,17 @@ private
   end
 
   def prepare_dropdowns
-    @creators = policy_scope(Creator)
-    @roles    = Contribution.human_enum_collection(:role)
+    if @post.work_id.present?
+      @show_new_work = false
+    else
+      @show_new_work = true
+      @creators      = policy_scope(Creator)
+      @roles         = Contribution.human_enum_collection(:role)
+    end
   end
 
   def prepare_work_attributes_fields
-    return if @post.work.present?
+    return if @post.work_id.present?
 
     @post.build_work
     @post.work.prepare_contributions

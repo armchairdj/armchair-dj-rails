@@ -4,15 +4,14 @@
 ) do %>
   <%= content_tag(:ul, class: "tabs") do %>
     <%= content_tag(:li, "Choose Work", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-choose") %>
-    <%= content_tag(:li, "New Work",    "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-new") %>
+
+    <% if @show_new_work %>
+      <%= content_tag(:li, "New Work",    "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-new") %>
+    <% end %>
+
     <%= content_tag(:li, "Standalone",  "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-standalone") %>
   <% end %>
 
-  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-standalone") do %>
-    <%= content_tag(:fieldset) do %>
-      <%= f.input :title, required: false %>
-    <% end %>
-  <% end %>
 
   <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-review-choose") do %>
     <%= content_tag(:fieldset) do %>
@@ -34,17 +33,25 @@
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-review-new") do %>
-    <%= content_tag(:fieldset) do %>
-      <%= f.simple_fields_for :work do |ff| %>
-        <%= render partial: 'works/work_fields', locals: {
-          f:        ff,
-          creators: creators,
-          roles:    roles
-        } %>
+  <% if @show_new_work %>
+    <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-review-new") do %>
+      <%= content_tag(:fieldset) do %>
+        <%= f.simple_fields_for :work do |ff| %>
+          <%= render partial: 'works/work_fields', locals: {
+            f:        ff,
+            creators: creators,
+            roles:    roles
+          } %>
+        <% end %>
       <% end %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-standalone") do %>
+    <%= content_tag(:fieldset) do %>
+      <%= f.input :title, required: false %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= f.input :body, input_html: { class: "x-large" } %>
+<%= f.input :body, input_html: { class: "large" } %>

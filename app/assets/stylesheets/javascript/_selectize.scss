@@ -22,9 +22,9 @@
   }
 
   &.dropdown-active {
-    border-radius: $standard-border-radius $standard-border-radius 0 0;
     background-color: $input-bg-color-focus;
     @include form-field-focused();
+    @include top-border-radius();
 
     &:before {
       content: ' ';
@@ -90,10 +90,10 @@
   background: $white;
   margin: -12px 0 0 0;
   border-top: 0 none;
-  border-radius: 0 0 $standard-border-radius $standard-border-radius;
+  @include bottom-border-radius();
 
   &.single {
-    border-color: #b8b8b8;
+    border-color: $standard-border-color;
   }
 
   &.plugin-optgroup_columns {
@@ -141,7 +141,7 @@
   }
 
   .optgroup {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px dotted #ccc;
 
     &:first-child {
       border-top: 0 none;
@@ -171,7 +171,7 @@
   padding: 5px 8px;
   border-bottom: 1px solid #d0d0d0;
   background: #f8f8f8;
-  border-radius: $standard-border-radius $standard-border-radius 0 0;
+  @include top-border-radius();
 }
 
 .selectize-dropdown-header-close {
@@ -194,10 +194,12 @@
   overflow-x: hidden;
   max-height: 200px;
   -webkit-overflow-scrolling: touch;
+  border-top: 1px dotted #ccc;
 }
 
 .selectize-control {
   position: relative;
+  margin-bottom: -.42rem;
 
   &.single {
     .selectize-input {
@@ -331,7 +333,7 @@
         display: inline-block;
         padding: 2px 0 0 0;
         border-left: 1px solid #0073bb;
-        border-radius: 0 2px 2px 0;
+        @include right-border-radius(2px);
 
         &:hover {
           background: rgba(0, 0, 0, 0.05);

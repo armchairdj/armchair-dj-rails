@@ -3,6 +3,18 @@ import Selectize from "selectize";
 window.Selectize = Selectize;
 
 _.extend(Selectize.prototype, {
+  positionDropdown: function() {
+    var $control = this.$control;
+    var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
+    offset.top += $control.outerHeight(false);
+
+    this.$dropdown.css({
+      width : $control.outerWidth(false),
+      top   : offset.top,
+      left  : offset.left
+    });
+  },
+
   getOptionByText: function(text) {
     return this.getElementWithText(text, this.$dropdown_content.find('[data-selectable]'));
   },
