@@ -4,9 +4,9 @@ export default class extends Controller {
   static targets = [ "trigger", "tab" ];
 
   connect() {
-    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
-
     this.setup();
+
+    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
   }
 
   setup() {
@@ -17,12 +17,18 @@ export default class extends Controller {
     this.listener = $(document).on("tabgroup:activate", _.bind(this.activateFromAfar, this));
   }
 
-  activateFromAfar(evt, data) {
-    this.showTab(data.tabName);
+  teardown(evt) {
+    $document.off("tabgroup:activate", this.listener);
+
+    this.$targets.removeClass("tab-active tab-inactive");
   }
 
   activate(evt) {
     this.showTab($(evt.target).attr("data-tab-name"));
+  }
+
+  activateFromAfar(evt, data) {
+    this.showTab(data.tabName);
   }
 
   showTab(tabName) {
@@ -31,11 +37,5 @@ export default class extends Controller {
 
     $active.removeClass("tab-inactive").addClass("tab-active");
     $inactive.removeClass("tab-active").addClass("tab-inactive");
-  }
-
-  teardown(evt) {
-    $document.off("tabgroup:activate", this.listener);
-
-    this.$targets.removeClass("tab-active tab-inactive");
   }
 }

@@ -21,7 +21,7 @@ $(document).on("turbolinks:load", function () {
 
 /* jQuery plugins */
 
-import "selectize";
+require("monkey_patches/selectize");
 
 /* Turbolinks */
 

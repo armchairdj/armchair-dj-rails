@@ -52,7 +52,7 @@ en:
         creator:
         post:
           attributes:
-            title:
+            base:
               has_work_and_title: "Please choose a work or a title but not both."
               needs_work_or_title: "Please choose either a work or a title."
         work:

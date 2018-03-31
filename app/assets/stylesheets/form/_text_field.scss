@@ -11,6 +11,22 @@ textarea {
 }
 
 textarea {
-  height: 6rem;
   resize: vertical;
+
+  &.small {
+    height: 4rem;
+  }
+
+  &,
+  &.medium {
+    height: 8rem;
+  }
+
+  &.large {
+    height: 12rem;
+  }
+
+  &.x-large {
+    height: 16rem;
+  }
 }

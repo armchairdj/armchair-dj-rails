@@ -65,7 +65,6 @@ class Post < ApplicationRecord
 private
 
   def reject_blank_work(work_attributes)
-    puts "reject_blank_work"
     work_attributes["title"].blank?
   end
 
@@ -74,9 +73,9 @@ private
     has_title = self.title.present?
 
     if has_work && has_title
-      self.errors.add(:title, :has_work_and_title)
+      self.errors.add(:base, :has_work_and_title)
     elsif !has_work && !has_title
-      self.errors.add(:title, :needs_work_or_title)
+      self.errors.add(:base, :needs_work_or_title)
     end
   end
 end
