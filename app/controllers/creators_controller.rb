@@ -50,7 +50,7 @@ class CreatorsController < ApplicationController
   def create
     respond_to do |format|
       if @creator.save
-        format.html { redirect_to @creator, notice: I18n.t("creator.notice.create") }
+        format.html { redirect_to creators_path, notice: I18n.t("creator.notice.create") }
         format.json { render :show, status: :created, location: @creator }
       else
         format.html { render :new }
@@ -69,7 +69,7 @@ class CreatorsController < ApplicationController
   def update
     respond_to do |format|
       if @creator.update(instance_params)
-        format.html { redirect_to @creator, notice: I18n.t("creator.notice.update") }
+        format.html { redirect_to creators_path, notice: I18n.t("creator.notice.update") }
         format.json { render :show, status: :ok, location: @creator }
       else
         format.html { render :edit }
@@ -84,7 +84,7 @@ class CreatorsController < ApplicationController
     @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to creators_url, notice: I18n.t("creator.notice.destroy") }
+      format.html { redirect_to creators_path, notice: I18n.t("creator.notice.destroy") }
       format.json { head :no_content }
     end
   end

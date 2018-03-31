@@ -31,14 +31,7 @@ class PostsController < ApplicationController
     :destroy
   ]
 
-  before_action :prepare_dropdowns, only: [
-    :new,
-    :create,
-    :edit,
-    :update
-  ]
-
-  before_action :prepare_work_attributes_fields, only: [
+  before_action :prepare_view, only: [
     :new,
     :edit
   ]
@@ -65,10 +58,10 @@ class PostsController < ApplicationController
   def create
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: I18n.t("post.notice.create") }
+        format.html { redirect_to posts_path, notice: I18n.t("post.notice.create") }
         format.json { render :show, status: :created, location: @post }
       else
-        prepare_work_attributes_fields
+        prepare_view
 
         format.html { render :new }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -85,11 +78,11 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
-      if @post.update(instance_params)
-        format.html { redirect_to @post, notice: I18n.t("post.notice.update") }
+      if @post.update(sanitized_instance_params)
+        format.html { redirect_to posts_path, notice: I18n.t("post.notice.update") }
         format.json { render :show, status: :ok, location: @post }
       else
-        prepare_work_attributes_fields
+        prepare_view
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -103,7 +96,7 @@ class PostsController < ApplicationController
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to posts_url, notice: I18n.t("post.notice.destroy") }
+      format.html { redirect_to posts_path, notice: I18n.t("post.notice.destroy") }
       format.json { head :no_content }
     end
   end
@@ -123,7 +116,7 @@ private
   end
 
   def build_new_instance_from_params
-    @post = Post.new(instance_params)
+    @post = Post.new(sanitized_instance_params)
   end
 
   def find_instance
@@ -134,21 +127,28 @@ private
     authorize @post
   end
 
-  def instance_params
-    fetched = instance_params_with_existing_work
+  def sanitized_instance_params
+    fetched = instance_params
 
-    return fetched if fetched[:work_id].present?
+    if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
+      fetched.delete(:title)
+      fetched.delete(:work_id)
+    elsif fetched [:work_id].present?
+      fetched.delete(:title)
+      fetched.delete(:work_attributes)
+    else
+      fetched.delete(:work_id)
+      fetched.delete(:work_attributes)
+    end
 
-    fetched = instance_params_with_new_work
-
-    return fetched if fetched[:work_attributes][:title].present?
-
-    instance_params_with_title
+    fetched
   end
 
-  def instance_params_with_new_work
+  def instance_params
     params.fetch(:post, {}).permit(
       :body,
+      :title,
+      :work_id,
       :work_attributes => [
         :post_id,
         :id,
@@ -172,34 +172,46 @@ private
     )
   end
 
-  def instance_params_with_existing_work
-    params.fetch(:post, {}).permit(
-      :body,
-      :work_id
-    )
-  end
+  def prepare_view
+    prepare_work_attributes_fields
+    prepare_dropdowns
 
-  def instance_params_with_title
-    params.fetch(:post, {}).permit(
-      :body,
-      :title
-    )
-  end
-
-  def prepare_dropdowns
-    if @post.work_id.present?
-      @show_new_work = false
-    else
-      @show_new_work = true
-      @creators      = policy_scope(Creator)
-      @roles         = Contribution.human_enum_collection(:role)
-    end
+    @selected_tab = which_tab
   end
 
   def prepare_work_attributes_fields
-    return if @post.work_id.present?
+    if @post.persisted? || @post.work_id.present?
+      @allow_new_work = false
+    else
+      @allow_new_work = true
 
-    @post.build_work
-    @post.work.prepare_contributions
+      @post.build_work
+      @post.work.prepare_contributions
+    end
+  end
+
+  def prepare_dropdowns
+    @works    = Work.grouped_select_options_for_post
+
+    return unless @allow_new_work
+
+    @creators = policy_scope(Creator)
+    @roles    = Contribution.human_enum_collection(:role)
+  end
+
+  def which_tab
+    if action_name == "new" || @post.title.blank?
+      return "post-choose-work"
+    end
+
+    if @post.title.present?
+      return "post-standalone"
+    end
+
+    if @allow_new_work
+      return "post-new-work"
+    end
+
+    "post-choose-work"
   end
 end

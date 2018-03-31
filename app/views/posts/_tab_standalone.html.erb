@@ -1,0 +1,11 @@
+<% content_for(:tab_triggers) do %>
+  <%= content_tag(:li, "Standalone", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-standalone") %>
+<% end %>
+
+<% content_for(:tabs) do %>
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-standalone") do %>
+    <%= content_tag(:fieldset) do %>
+      <%= f.input :title, required: false %>
+    <% end %>
+  <% end %>
+<% end %>

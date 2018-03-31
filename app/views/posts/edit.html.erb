@@ -3,7 +3,10 @@
 %>
 
 <%= render partial: 'post_form', locals: {
-  post:     @post,
-  roles:    @roles,
-  creators: @creators
+  post:           @post,
+  works:          @works,
+  roles:          @roles,
+  creators:       @creators,
+  selected_tab:   @selected_tab,
+  allow_new_work: @allow_new_work
 } %>

@@ -1,0 +1,35 @@
+<%
+  input_html = if allow_new_work
+    {
+      "data-controller": "selectize"
+    }
+  else
+    {
+      "data-controller":                     "selectize-post",
+      "data-selectize-post-tab-name":        "post-new-work",
+      "data-selectize-post-title-selector":  "#post_work_attributes_title",
+      "data-selectize-post-artist-selector": "#post_work_attributes_contributions_attributes_0_creator_id"
+    }
+  end
+%>
+
+<% content_for(:tab_triggers) do %>
+  <%= content_tag(:li, "Choose Work", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-choose-work") %>
+<% end %>
+
+<% content_for(:tabs) do %>
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-choose-work") do %>
+    <%= content_tag(:fieldset) do %>
+      <%= f.input :work_id, as: :grouped_select,
+        collection:         works,
+        required:           false,
+        group_label_method: :first,
+        group_method:       :last,
+        label_method:       :display_name_with_creator,
+        value_method:       :id,
+        include_blank:      true,
+        input_html:         input_html
+      %>
+    <% end %>
+  <% end %>
+<% end %>

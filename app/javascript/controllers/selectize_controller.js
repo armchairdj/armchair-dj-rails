@@ -18,7 +18,6 @@ export default class extends Controller {
   constructOptions() {
     return {
       plugins: [
-        "restore_on_backspace",
         "remove_button"
       ]
     };

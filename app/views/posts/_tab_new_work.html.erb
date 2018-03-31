@@ -1,0 +1,19 @@
+<% return unless allow_new_work %>
+
+<% content_for(:tab_triggers) do %>
+  <%= content_tag(:li, "New Work", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-new-work") %>
+<% end %>
+
+<% content_for(:tabs) do %>
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-new-work") do %>
+    <%= content_tag(:fieldset) do %>
+      <%= f.simple_fields_for :work do |ff| %>
+        <%= render partial: 'works/work_fields', locals: {
+          f:        ff,
+          creators: creators,
+          roles:    roles
+        } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

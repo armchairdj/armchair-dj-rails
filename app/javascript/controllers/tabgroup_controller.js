@@ -12,7 +12,7 @@ export default class extends Controller {
   setup() {
     this.$targets = $(this.triggerTargets).add(this.tabTargets);
 
-    this.showTab(this.data.get("default"));
+    this.showTab(this.data.get("selected-tab"));
 
     this.listener = $(document).on("tabgroup:activate", _.bind(this.activateFromAfar, this));
   }

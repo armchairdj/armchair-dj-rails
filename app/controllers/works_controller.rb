@@ -55,7 +55,7 @@ class WorksController < ApplicationController
   def create
     respond_to do |format|
       if @work.save
-        format.html { redirect_to @work, notice: I18n.t("work.notice.create") }
+        format.html { redirect_to works_path, notice: I18n.t("work.notice.create") }
         format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -76,7 +76,7 @@ class WorksController < ApplicationController
   def update
     respond_to do |format|
       if @work.update(instance_params)
-        format.html { redirect_to @work, notice: I18n.t("work.notice.update") }
+        format.html { redirect_to works_path, notice: I18n.t("work.notice.update") }
         format.json { render :show, status: :ok, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -93,7 +93,7 @@ class WorksController < ApplicationController
     @work.destroy
 
     respond_to do |format|
-      format.html { redirect_to works_url, notice: I18n.t("work.notice.destroy") }
+      format.html { redirect_to works_path, notice: I18n.t("work.notice.destroy") }
       format.json { head :no_content }
     end
   end
