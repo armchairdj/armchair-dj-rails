@@ -3,9 +3,9 @@
   "data-tabgroup-default": "post-review-choose"
 ) do %>
   <%= content_tag(:ul, class: "tabs") do %>
-    <%= content_tag(:li, "Choose Work", class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-choose") %>
-    <%= content_tag(:li, "New Work",    class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-new") %>
-    <%= content_tag(:li, "Standalone",  class: "tab-title", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-standalone") %>
+    <%= content_tag(:li, "Choose Work", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-choose") %>
+    <%= content_tag(:li, "New Work",    "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-review-new") %>
+    <%= content_tag(:li, "Standalone",  "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": "post-standalone") %>
   <% end %>
 
   <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": "post-standalone") do %>
@@ -29,8 +29,8 @@
         value_method:       :id,
         include_blank:      true,
         input_html:         {
-          "data-controller":           "selectize-tab",
-          "data-selectize-tab-target": "post-review-new"
+          "data-controller":             "selectize-tab",
+          "data-selectize-tab-tab-name": "post-review-new"
         }
       %>
     <% end %>

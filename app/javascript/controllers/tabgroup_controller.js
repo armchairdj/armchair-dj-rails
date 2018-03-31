@@ -13,6 +13,12 @@ export default class extends Controller {
     this.$targets = $(this.triggerTargets).add(this.tabTargets);
 
     this.showTab(this.data.get("default"));
+
+    this.listener = $(document).on("tabgroup:activate", _.bind(this.activateFromAfar, this));
+  }
+
+  activateFromAfar(evt, data) {
+    this.showTab(data.tabName);
   }
 
   activate(evt) {
@@ -28,6 +34,8 @@ export default class extends Controller {
   }
 
   teardown(evt) {
+    $document.off("tabgroup:activate", this.listener);
+
     this.$targets.removeClass("tab-active tab-inactive");
   }
 }
