@@ -35,10 +35,11 @@
   border-radius: $standard-border-radius;
   box-sizing: border-box;
   width: 100%;
+}
 
+@mixin form-field-states() {
   &:focus {
-    background-color: $input-bg-color-focus;
-    @include focus-outline();
+    @include form-field-focused();
   }
 
   &:disabled {
@@ -53,12 +54,25 @@
 
 @mixin form-field-spacing() {
   display: block;
-  padding: 4px $small-spacing;
   @include bottom-margin-only($tiny-spacing);
+  @include form-field-padding();
+}
+
+@mixin form-field-padding() {
+  padding: 4px $small-spacing;
 }
 
 @mixin form-field-with-error() {
   border-color: $error-color;
+}
+
+@mixin form-field-focused() {
+  background-color: $input-bg-color-focus;
+  @include focus-outline();
+}
+
+@mixin focus-outline($blur: 6px, $spread: 3px) {
+  @include box-shadow(0 0 $blur $spread $focus-outline-color);
 }
 
 @mixin focus-no-outline() {
@@ -66,8 +80,4 @@
     outline: none;
     @include box-shadow(0 0 0 0 transparent);
   }
-}
-
-@mixin focus-outline($blur: 6px, $spread: 3px) {
-  @include box-shadow(0 0 $blur $spread $focus-outline-color);
 }
