@@ -17,7 +17,9 @@ export default class extends Controller {
 
   constructOptions() {
     return {
-      plugins: [
+      maxItems: 1,
+      mode:     "multi",
+      plugins:  [
         "remove_button"
       ]
     };
