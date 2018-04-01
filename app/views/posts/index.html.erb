@@ -1,29 +1,34 @@
 <%
-  @headline = @title = "Posts"
+  @title = "Posts"
 %>
 
-<% content_for(:before_page_headline) do %>
-  <%= create_link(Post) %>
+<%= content_tag(:header, class: "crud") do %>
+  <%= content_tag(:h1, @title) %>
+
+  <%= crud_create_link(Post) %>
 <% end %>
 
-<%= content_tag(:table) do %>
+<%= content_tag(:table, class: "crud") do %>
   <%= content_tag(:thead) do %>
     <%= content_tag(:tr) do %>
       <%= content_tag :th, "Type" %>
       <%= content_tag :th, "Name" %>
-      <%= content_tag :th, "Actions", class: "right" %>
+      <%= content_tag :th, "Actions", class: "actions" %>
     <% end %>
   <% end %>
   <%= content_tag(:tbody) do %>
     <% @posts.each do |post| %>
       <%= content_tag(:tr) do %>
         <%= content_tag :td, post_type(post) %>
-        <%= content_tag :td, link_to_post(post, full: true) %>
-        <%= content_tag :td, class: "right" do %>
-          <%= edit_link(post) %>
-          <%= destroy_link(post) %>
+        <%= content_tag :td, post.work.title_with_creator %>
+        <%= content_tag :td, class: "actions" do %>
+          <%= crud_show_link    post %> 
+          <%= crud_update_link  post %>
+          <%= crud_destroy_link post %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
+
+<%= paginate @posts %>

@@ -28,7 +28,6 @@ RSpec.configure do |config|
   config.include RSpecHtmlMatchers
 
   config.include InlineSvg::ActionView::Helpers
-  config.include WillPaginate::ViewHelpers
 
   config.use_transactional_fixtures = true
 

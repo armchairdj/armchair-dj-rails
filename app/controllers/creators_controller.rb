@@ -96,7 +96,7 @@ private
   end
 
   def find_collection
-    @creators = policy_scope(Creator)
+    @creators = policy_scope(Creator).page(params[:page])
   end
 
   def build_new_instance

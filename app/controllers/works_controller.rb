@@ -105,7 +105,7 @@ private
   end
 
   def find_collection
-    @works = policy_scope(Work)
+    @works = policy_scope(Work).page(params[:page])
   end
 
   def build_new_instance

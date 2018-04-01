@@ -1,7 +1,7 @@
 class WorkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      scope.all.alphabetical
     end
   end
 end

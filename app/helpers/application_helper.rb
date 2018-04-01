@@ -1,7 +1,15 @@
 require 'ffaker'
 
 module ApplicationHelper
-  def create_link(model)
+  def crud_show_link(model)
+    svg = semantic_svg_image("open_iconic/eye.svg", "eyeball", "eyeball icon")
+
+    link_to svg, polymorphic_path(model),
+      title: "view #{model.model_name.singular}",
+      class: "crud show"
+  end
+
+  def crud_create_link(model)
     svg = semantic_svg_image("open_iconic/plus.svg", "plus sign", "addition icon")
 
     link_to svg, new_polymorphic_path(model),
@@ -9,7 +17,7 @@ module ApplicationHelper
       class: "crud create"
   end
 
-  def edit_link(instance)
+  def crud_update_link(instance)
     svg = semantic_svg_image("open_iconic/pencil.svg", "pencil", "pencil icon")
 
     link_to svg, edit_polymorphic_path(instance),
@@ -17,7 +25,7 @@ module ApplicationHelper
       class: "crud edit"
   end
 
-  def destroy_link(instance)
+  def crud_destroy_link(instance)
     svg = semantic_svg_image("open_iconic/x.svg", "x", "delete icon")
 
     link_to svg, polymorphic_path(instance),

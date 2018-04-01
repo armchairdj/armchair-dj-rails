@@ -1,33 +1,36 @@
 <%
-  @headline = @title = "Works"
+  @title = "Works"
 %>
 
-<% content_for(:before_page_headline) do %>
-  <%= create_link(Work) %>
+<%= content_tag(:header, class: "crud") do %>
+  <%= content_tag(:h1, @title) %>
+
+  <%= crud_create_link(Work) %>
 <% end %>
 
-<%= content_tag(:table) do %>
+<%= content_tag(:table, class: "crud") do %>
   <%= content_tag(:thead) do %>
     <%= content_tag(:tr) do %>
-      <%= content_tag :th, "Name" %>
+      <%= content_tag :th, "Medium" %>
+      <%= content_tag :th, "Title" %>
       <%= content_tag :th, "Creators" %>
-      <%= content_tag :th, "Actions", class: "right" %>
+      <%= content_tag :th, "Actions", class: "actions" %>
     <% end %>
   <% end %>
   <%= content_tag(:tbody) do %>
     <% @works.each do |work| %>
       <%= content_tag(:tr) do %>
-        <%= content_tag :td, link_to(work.title, work) %>
-        <%= content_tag :td do %>
-          <% work.creators.each do |creator| %>
-            <%= link_to(creator.name, creator) %>
-          <% end %>
-        <% end %>
-        <%= content_tag :td, class: "right" do %>
-          <%= edit_link(work) %>
-          <%= destroy_link(work) %>
+        <%= content_tag :td, work.human_enum_label(:medium) %>
+        <%= content_tag :td, work.title %>
+        <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(" & ").html_safe%>
+        <%= content_tag :td, class: "actions" do %>
+          <%= crud_show_link    work %> 
+          <%= crud_update_link  work %>
+          <%= crud_destroy_link work %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
+
+<%= paginate @works %>

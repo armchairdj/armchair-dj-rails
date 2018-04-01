@@ -1,29 +1,36 @@
 <%
-  @headline = @title = "Creators"
+  @title = "Creators"
 %>
 
-<% content_for(:before_page_headline) do %>
-  <%= create_link(Creator) %>
+<%= content_tag(:header, class: "crud") do %>
+  <%= content_tag(:h1, @title) %>
+
+  <%= crud_create_link(Creator) %>
 <% end %>
 
-<%= content_tag(:table) do %>
+<%= content_tag(:table, class: "crud") do %>
   <%= content_tag(:thead) do %>
     <%= content_tag(:tr) do %>
       <%= content_tag :th, "Name" %>
-      <%= content_tag :th, "Works" %>
-      <%= content_tag :th, "Actions", class: "right" %>
+      <%= content_tag :th, "Works", class: "count" %>
+      <%= content_tag :th, "Posts", class: "count" %>
+      <%= content_tag :th, "Actions", class: "actions" %>
     <% end %>
   <% end %>
   <%= content_tag(:tbody) do %>
     <% @creators.each do |creator| %>
       <%= content_tag(:tr) do %>
-        <%= content_tag :td, link_to(creator.name, creator) %>
-        <%= content_tag :td, creator.works.count %>
-        <%= content_tag :td, class: "right" do %>
-          <%= edit_link(creator) %>
-          <%= destroy_link(creator) %>
+        <%= content_tag :td, creator.name %>
+        <%= content_tag :td, creator.works.count, class: "count" %>
+        <%= content_tag :td, creator.posts.count, class: "count" %>
+        <%= content_tag :td, class: "actions" do %>
+          <%= crud_show_link    creator %> 
+          <%= crud_update_link  creator %>
+          <%= crud_destroy_link creator %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
+
+<%= paginate @creators %>

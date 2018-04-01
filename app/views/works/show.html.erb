@@ -4,8 +4,8 @@
 
 <% content_for(:page_header) do %>
   <%= content_tag(:header, class: "page-header work") do %>
-    <%= destroy_link(@work) %>
-    <%= edit_link(@work) %>
+    <%= crud_destroy_link(@work) %>
+    <%= crud_update_link(@work) %>
 
     <%= content_tag(:h2, @work.display_creator) %>
     <%= content_tag(:h1, @work.title) %>

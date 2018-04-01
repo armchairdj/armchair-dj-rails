@@ -114,7 +114,7 @@ private
   end
 
   def find_collection
-    @posts = policy_scope(Post)
+    @posts = policy_scope(Post).page(params[:page])
   end
 
   def find_instance
@@ -137,15 +137,12 @@ private
     fetched = instance_params
 
     if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
-      puts "new work"
       fetched.delete(:title)
       fetched.delete(:work_id)
     elsif fetched [:work_id].present?
-      puts "existing work"
       fetched.delete(:title)
       fetched.delete(:work_attributes)
     else
-      puts "standalone"
       fetched.delete(:work_id)
       fetched.delete(:work_attributes)
     end
@@ -209,8 +206,6 @@ private
   end
 
   def which_tab
-    puts action_name
-
     case action_name
     when "new"
       return "post-choose-work"
@@ -223,12 +218,9 @@ private
         return "post-choose-work"
       end
     when "edit", "update"
-      puts "edit or update"
       if @post.title.present?
-        puts "title present"
         return "post-standalone"
       else
-        puts "else"
         return "post-choose-work"
       end
     end

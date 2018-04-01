@@ -1,14 +1,10 @@
+$crud-headline-size: 1.5rem;
+
 a.crud {
   display: inline-block;
   padding: 2px;
   @include underline-never();
-  @include left-margin-only(.5rem);
-
-
-  .page-header & {
-    line-height: $h1-font-size * $readable;
-    @include right-margin-only(.5rem);
-  }
+  @include left-margin-only($small-spacing);
 
   @include inline-block-svg() {
     @include square(1rem);
@@ -23,5 +19,58 @@ a.crud {
 
   &.destroy {
     @include svg-path-fill($error-color);
+  }
+}
+
+header.crud {
+  @include bottom-margin();
+
+  h1 {
+    font-size: $crud-headline-size;
+    line-height: $readable;
+    display: inline-block;
+    text-transform: uppercase;
+    @include right-margin-only($tiny-spacing);
+  }
+
+  a.crud {
+    display: inline-block;
+    line-height: $crud-headline-size * $readable;
+  }
+}
+
+table.crud {
+  @include bottom-margin();
+
+  tbody {
+    vertical-align: middle;
+  }
+
+  tr {
+    border-bottom: 1px solid $armchair-smoke;
+  }
+
+  th,
+  td {
+    &.actions,
+    &.count {
+      text-align: right;
+    }
+  }
+
+  th {
+    text-transform: uppercase;
+    color: $armchair-smoke;
+  }
+
+  td {
+    line-height: 1;
+    padding: .2rem 0;
+
+    &.actions {
+      a.crud {
+        @include square(1rem);
+      }
+    }
   }
 }

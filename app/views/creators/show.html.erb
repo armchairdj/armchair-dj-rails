@@ -3,6 +3,6 @@
 %>
 
 <% content_for(:before_page_headline) do %>
-  <%= destroy_link(@creator) %>
-  <%= edit_link(@creator) %>
+  <%= crud_destroy_link(@creator) %>
+  <%= crud_update_link(@creator) %>
 <% end %>
