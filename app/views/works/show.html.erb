@@ -1,11 +1,11 @@
 <%
-  @title = @work.display_name_with_creator
+  @title = @work.title_with_creator
 %>
 
 <% content_for(:page_header) do %>
   <%= content_tag(:header, class: "page-header work") do %>
-    <%= link_to("Edit", edit_work_path(@work), class: "crud") %>
-    <%= link_to("Destroy", work_path(@work), method: :delete, class: "crud", "data-confirm": "Are you sure?") %>
+    <%= destroy_link(@work) %>
+    <%= edit_link(@work) %>
 
     <%= content_tag(:h2, @work.display_creator) %>
     <%= content_tag(:h1, @work.title) %>

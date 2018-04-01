@@ -1,0 +1,27 @@
+a.crud {
+  display: inline-block;
+  padding: 2px;
+  @include underline-never();
+  @include left-margin-only(.5rem);
+
+
+  .page-header & {
+    line-height: $h1-font-size * $readable;
+    @include right-margin-only(.5rem);
+  }
+
+  @include inline-block-svg() {
+    @include square(1rem);
+    @include svg-path-fill($link-color);
+  }
+
+  &:hover {
+    @include svg() {
+      @include svg-path-fill($link-color-hover);
+    }
+  }
+
+  &.destroy {
+    @include svg-path-fill($error-color);
+  }
+}

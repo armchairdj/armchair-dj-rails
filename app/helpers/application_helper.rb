@@ -1,6 +1,35 @@
 require 'ffaker'
 
 module ApplicationHelper
+  def create_link(model)
+    svg = semantic_svg_image("open_iconic/plus.svg", "plus sign", "addition icon")
+
+    link_to svg, new_polymorphic_path(model),
+      title: "edit #{model.model_name.singular}",
+      class: "crud create"
+  end
+
+  def edit_link(instance)
+    svg = semantic_svg_image("open_iconic/pencil.svg", "pencil", "pencil icon")
+
+    link_to svg, edit_polymorphic_path(instance),
+      title: "edit #{instance.model_name.singular}",
+      class: "crud edit"
+  end
+
+  def destroy_link(instance)
+    svg = semantic_svg_image("open_iconic/x.svg", "x", "delete icon")
+
+    link_to svg, polymorphic_path(instance),
+      method: :delete, "data-confirm": "Are you sure?",
+      title: "destroy #{instance.model_name.singular}",
+      class: "crud destroy"
+  end
+
+  def post_type(post)
+    post.work ? "#{post.work.human_enum_label(:medium).downcase} review" : "standalone"
+  end
+
   def content_for_unless_empty(key)
     return unless content_for?(key.to_sym)
 
@@ -19,12 +48,14 @@ module ApplicationHelper
     work.creators.map { |a| link_to(a.name, a) }.join(" & ").html_safe
   end
 
-  def link_to_post(post)
-    if post.work
-      link_to post.work.display_name_with_creator, post
+  def link_to_post(post, full: false)
+    text = if post.work
+      full ?  post.work.title_with_creator : post.work.title
     else
-      link_to post.title, post
+      post.title
     end
+
+    link_to text, post
   end
 
   def link_to_work(work)
@@ -35,17 +66,17 @@ module ApplicationHelper
     FFaker::Lorem.paragraphs(num).map { |p| content_tag(:p, p) }.join.html_safe
   end
 
-  def non_semantic_svg_image(image_path, label = nil, desc = nil)
+  def non_semantic_svg_image(image_path, title = nil, desc = nil)
     opts = {
       nocomment: true,
       aria:      false,
       class:     "scalable-image"
     }
 
-    if label.present? && desc.present?
+    if title.present? && desc.present?
       opts = opts.merge({
         aria:  true,
-        title: label,
+        title: title,
         desc:  desc,
       })
     end
@@ -67,8 +98,8 @@ module ApplicationHelper
     I18n.t("simple_form.required.html").html_safe
   end
 
-  def semantic_svg_image(image_path, label, desc)
-    non_semantic_svg_image(image_path, label, desc)
+  def semantic_svg_image(image_path, title, desc)
+    non_semantic_svg_image(image_path, title, desc)
   end
 
   def site_logo

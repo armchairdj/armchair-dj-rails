@@ -3,7 +3,7 @@
 %>
 
 <% content_for(:before_page_headline) do %>
-  <%= link_to("New", new_work_path, class: "crud") %>
+  <%= create_link(Work) %>
 <% end %>
 
 <%= content_tag(:table) do %>
@@ -11,6 +11,7 @@
     <%= content_tag(:tr) do %>
       <%= content_tag :th, "Name" %>
       <%= content_tag :th, "Creators" %>
+      <%= content_tag :th, "Actions", class: "right" %>
     <% end %>
   <% end %>
   <%= content_tag(:tbody) do %>
@@ -21,6 +22,10 @@
           <% work.creators.each do |creator| %>
             <%= link_to(creator.name, creator) %>
           <% end %>
+        <% end %>
+        <%= content_tag :td, class: "right" do %>
+          <%= edit_link(work) %>
+          <%= destroy_link(work) %>
         <% end %>
       <% end %>
     <% end %>

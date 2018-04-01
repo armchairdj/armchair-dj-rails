@@ -1,9 +1,13 @@
 table {
-  table-layout: fixed;
   border-collapse: collapse;
   margin: 0;
   text-align: left;
   width: 100%;
+  table-layout: auto;
+
+  &.fixed {
+    table-layout: fixed;
+  }
 }
 
 thead {
@@ -20,10 +24,14 @@ tr {
 }
 
 th {
-
+  @include normal();
 }
 
 th,
 td {
   padding: 0;
+
+  &.right {
+    text-align: right;
+  }
 }

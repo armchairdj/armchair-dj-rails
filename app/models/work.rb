@@ -79,7 +79,7 @@ class Work < ApplicationRecord
   end
 
   def self.alphabetical_with_creator
-    self.all.to_a.sort_by { |c| c.display_name_with_creator }
+    self.all.to_a.sort_by { |c| c.title_with_creator }
   end
 
   def self.grouped_select_options_for_post
@@ -104,7 +104,7 @@ class Work < ApplicationRecord
     count_needed.times { self.contributions.build }
   end
 
-  def display_name_with_creator
+  def title_with_creator
     "#{self.display_creator}: #{self.title}"
   end
 

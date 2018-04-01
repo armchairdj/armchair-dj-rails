@@ -56,7 +56,7 @@ class Post < ApplicationRecord
 
   def one_line_title
     if self.work
-      self.work.display_name_with_creator
+      self.work.title_with_creator
     else
       self.title
     end
