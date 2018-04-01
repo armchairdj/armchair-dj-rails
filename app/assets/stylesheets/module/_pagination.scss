@@ -1,0 +1,49 @@
+nav.pagination {
+  @include bottom-margin();
+  font-size: $pagination-font-size;
+
+  ul {
+    display: inline-block;
+  }
+
+  li {
+    display: inline-block;
+    line-height: 1;
+    @include right-margin-only($small-spacing);
+
+    span,
+    a {
+      padding: $tiny-spacing $small-spacing;
+      border-radius: $standard-border-radius;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    a {
+      @include underline-never();
+      @include no-hover-link($color: $white);
+      border-color: $link-color;
+      background-color: $link-color;
+
+      &:hover {
+        background-color: $link-color-hover;
+        border-color: $link-color-hover;
+      }
+    }
+
+    span {
+      background-color: $armchair-smoke;
+      border-color: $armchair-smoke;
+    }
+
+    &.page-next,
+    &.page-prev,
+    &.page {
+      a {}
+    }
+
+    &.page-current {
+      span {}
+    }
+  }
+}

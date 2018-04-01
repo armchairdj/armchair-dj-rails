@@ -23,7 +23,8 @@ a.crud {
 }
 
 header.crud {
-  @include bottom-margin();
+  @include clearfix();
+  border-bottom: 1px solid $armchair-smoke;
 
   h1 {
     font-size: $crud-headline-size;
@@ -34,6 +35,7 @@ header.crud {
   }
 
   a.crud {
+    float: right;
     display: inline-block;
     line-height: $crud-headline-size * $readable;
   }
@@ -52,9 +54,24 @@ table.crud {
 
   th,
   td {
+    line-height: 1;
+    padding: $tiny-spacing;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
     &.actions,
     &.count {
       text-align: right;
+    }
+
+    &.actions {
+      white-space: nowrap;
     }
   }
 
@@ -64,9 +81,6 @@ table.crud {
   }
 
   td {
-    line-height: 1;
-    padding: .2rem 0;
-
     &.actions {
       a.crud {
         @include square(1rem);
