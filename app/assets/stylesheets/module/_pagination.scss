@@ -8,18 +8,19 @@ nav.pagination {
 
   li {
     display: inline-block;
-    line-height: 1;
-    @include right-margin-only($small-spacing);
+    @include right-margin-only($spacing-s);
 
     span,
     a {
-      padding: $tiny-spacing $small-spacing;
+      padding: $spacing-xs $spacing-s;
       border-radius: $standard-border-radius;
       border-width: 1px;
       border-style: solid;
     }
 
     a {
+      display: inline-block;
+      line-height: 1;
       @include underline-never();
       @include no-hover-link($color: $white);
       border-color: $link-color;
@@ -32,18 +33,15 @@ nav.pagination {
     }
 
     span {
-      background-color: $armchair-smoke;
+      background-color: transparent;
       border-color: $armchair-smoke;
     }
 
     &.page-next,
-    &.page-prev,
-    &.page {
-      a {}
-    }
-
-    &.page-current {
-      span {}
+    &.page-prev {
+      span {
+        opacity: 0.2;
+      }
     }
   }
 }

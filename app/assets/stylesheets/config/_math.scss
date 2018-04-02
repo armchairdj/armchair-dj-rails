@@ -1,9 +1,14 @@
+/* Spacing. */
+
+$spacing-xl:    2rem;
+$spacing-l:   1.5rem;
+$spacing-m:     1rem;
+$spacing-s:   0.5rem;
+$spacing-xs: 0.25rem;
+
 /* Standards. */
 
 $standard-border-radius:       4px;
-$standard-spacing:             1rem;
-$small-spacing:                $standard-spacing / 2;
-$tiny-spacing:                 $standard-spacing / 4;
 $standard-transition-duration: 300ms;
 $standard-transition-function: ease;
 $standard-z-index:             0;
@@ -17,15 +22,18 @@ $h4-font-size: 1.4rem;
 $h5-font-size: 1.2rem;
 $h6-font-size: 1rem;
 
-$standard-font-size:         1rem;
+$standard-font-size:           1rem;
 $legend-font-size:           1.2rem;
-$label-font-size:            1rem;
+$label-font-size:              1rem;
 $input-font-size:            1.2rem;
 $hint-font-size:             0.8rem;
 $form-field-error-font-size: 0.8rem;
-$button-font-size:           1rem;
+$button-font-size:             1rem;
 $tab-font-size:              0.7rem;
-$pagination-font-size:       0.8rem;
+
+$crud-headline-size:   1.5rem;
+$crud-table-font-size: 0.8rem;
+$pagination-font-size: 0.8rem;
 
 /* Font-weight. */
 
@@ -47,13 +55,13 @@ $fixed-masthead-width: 16.65em;
 /* Buttons. */
 
 $button-border-radius: $standard-border-radius;
-$button-spacing:       $small-spacing;
+$button-spacing:       $spacing-s;
 
 
 /* Breakpoints. */
 
-$breakpoint-x-small: 375px;
-$breakpoint-small:   480px;
-$breakpoint-medium:  600px;
-$breakpoint-large:   768px;
+$breakpoint-x-small:  375px;
+$breakpoint-small:    480px;
+$breakpoint-medium:   600px;
+$breakpoint-large:    768px;
 $breakpoint-x-large: 1024px;

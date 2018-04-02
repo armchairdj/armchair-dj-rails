@@ -43,11 +43,11 @@ dl {
 
   dt {
     @include bold();
-    @include bottom-margin($standard-spacing * .25);
+    @include bottom-margin($spacing-m * .25);
   }
 
   dd {
-    @include bottom-margin($standard-spacing * .75);
+    @include bottom-margin($spacing-m * .75);
   }
 
   &.horizontal {
@@ -62,12 +62,12 @@ dl {
       @include bold();
       clear: left;
       width: 40%;
-      margin: 0 $small-spacing (1.5 * $small-spacing);
+      margin: 0 $spacing-s ($spacing-s * .75);
     }
 
     dd {
       width: 40%;
-      margin: 0 0 (1.5 * $small-spacing);
+      margin: 0 0 ($spacing-s * 1.5);
     }
   }
 }

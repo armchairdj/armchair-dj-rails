@@ -3,7 +3,7 @@ $footer-logo-radius: $footer-logo-width / 2;
 
 footer#page-footer {
   background-color: $flash-bg;
-  padding: (2 * $standard-spacing) 0;
+  padding: ($spacing-xl) 0;
   text-align: center;
 
   nav.links {
@@ -26,7 +26,7 @@ footer#page-footer {
     display: block;
     width: $footer-logo-width;
     height: $footer-logo-width;
-    margin: $standard-spacing auto 0;
+    margin: $spacing-m auto 0;
     padding: 20px;
     border-radius: $footer-logo-radius;
     background-color: $black;
@@ -48,7 +48,7 @@ footer#page-footer {
     .logo {
       clear: right;
       float: right;
-      margin: $standard-spacing 0 0;
+      margin: $spacing-m 0 0;
     }
   }
 }

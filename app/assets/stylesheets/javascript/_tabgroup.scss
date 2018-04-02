@@ -1,11 +1,11 @@
 .tabgroup {
-  @include bottom-margin-only($standard-spacing);
+  @include bottom-margin-only($spacing-m);
 
   ul.tabs {
     margin: 0;
 
     li {
-      margin-left: $small-spacing;
+      margin-left: $spacing-s;
       cursor: pointer;
       display: inline-block;
       padding: .2rem .75rem;
@@ -27,7 +27,7 @@
   .tab {
     border-radius: $standard-border-radius;
     border: 1px solid $white;
-    padding: $standard-spacing;
+    padding: $spacing-m;
 
     &.tab-inactive {
       display: none;

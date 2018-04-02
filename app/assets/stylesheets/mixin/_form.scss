@@ -54,12 +54,12 @@
 
 @mixin form-field-spacing() {
   display: block;
-  @include bottom-margin-only($tiny-spacing);
+  @include bottom-margin-only($spacing-xs);
   @include form-field-padding();
 }
 
 @mixin form-field-padding() {
-  padding: 4px $small-spacing;
+  padding: 4px $spacing-s;
 }
 
 @mixin form-field-with-error() {

@@ -1,4 +1,4 @@
-@mixin top-margin($margin: $standard-spacing) {
+@mixin top-margin($margin: $spacing-m) {
   margin-top: $margin;
 
   &:first-child {
@@ -6,13 +6,13 @@
   }
 }
 
-@mixin top-margin-only($margin: $standard-spacing) {
+@mixin top-margin-only($margin: $spacing-m) {
   margin: 0;
 
   @include top-margin($margin);
 }
 
-@mixin right-margin($margin: $standard-spacing) {
+@mixin right-margin($margin: $spacing-m) {
   margin-right: $margin;
 
   &:last-child {
@@ -20,13 +20,13 @@
   }
 }
 
-@mixin right-margin-only($margin: $standard-spacing) {
+@mixin right-margin-only($margin: $spacing-m) {
   margin: 0;
 
   @include right-margin($margin);
 }
 
-@mixin bottom-margin($margin: $standard-spacing) {
+@mixin bottom-margin($margin: $spacing-m) {
   margin-bottom: $margin;
 
   &:last-child {
@@ -34,13 +34,13 @@
   }
 }
 
-@mixin bottom-margin-only($margin: $standard-spacing) {
+@mixin bottom-margin-only($margin: $spacing-m) {
   margin: 0;
 
   @include bottom-margin($margin);
 }
 
-@mixin left-margin($margin: $standard-spacing) {
+@mixin left-margin($margin: $spacing-m) {
   margin-left: $margin;
 
   &:first-child {
@@ -48,7 +48,7 @@
   }
 }
 
-@mixin left-margin-only($margin: $standard-spacing) {
+@mixin left-margin-only($margin: $spacing-m) {
   margin: 0;
 
   @include left-margin($margin);

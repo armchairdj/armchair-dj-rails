@@ -1,10 +1,13 @@
-$crud-headline-size: 1.5rem;
+@mixin crud-rule-line() {
+  border-bottom: 1px solid $armchair-smoke;
+}
 
 a.crud {
   display: inline-block;
   padding: 2px;
   @include underline-never();
-  @include left-margin-only($small-spacing);
+  @include left-margin-only($spacing-s);
+  @include square(1rem);
 
   @include inline-block-svg() {
     @include square(1rem);
@@ -18,44 +21,55 @@ a.crud {
   }
 
   &.destroy {
-    @include svg-path-fill($error-color);
+    @include svg() {
+      @include svg-path-fill($error-color);
+    }
+
+    &:hover {
+      @include svg() {
+        @include svg-path-fill($error-color-hover);
+      }
+    }
   }
 }
 
 header.crud {
-  @include clearfix();
-  border-bottom: 1px solid $armchair-smoke;
+  @include crud-rule-line();
+  position: relative;
+  padding-right: 1.25rem;
 
   h1 {
     font-size: $crud-headline-size;
     line-height: $readable;
     display: inline-block;
     text-transform: uppercase;
-    @include right-margin-only($tiny-spacing);
+    @include right-margin-only($spacing-xs);
   }
 
   a.crud {
-    float: right;
-    display: inline-block;
-    line-height: $crud-headline-size * $readable;
+    position: absolute;
+    right: 0;
+    bottom: $spacing-s;
+    display: block;
   }
 }
 
 table.crud {
   @include bottom-margin();
+  font-size: $crud-table-font-size;
 
   tbody {
     vertical-align: middle;
   }
 
   tr {
-    border-bottom: 1px solid $armchair-smoke;
+    @include crud-rule-line();
   }
 
   th,
   td {
     line-height: 1;
-    padding: $tiny-spacing;
+    padding: $spacing-xs;
 
     &:first-child {
       padding-left: 0;
@@ -82,9 +96,7 @@ table.crud {
 
   td {
     &.actions {
-      a.crud {
-        @include square(1rem);
-      }
+
     }
   }
 }

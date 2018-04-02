@@ -28,6 +28,7 @@ $bone:                   #e2dbbe;
 $success-color:          #a2d729;
 $info-color:             $light-grey;
 $error-color:            #dd1c1a;
+$error-color-hover:      scale-color($error-color, $lightness: 20%);
 
 /* Text. */
 
