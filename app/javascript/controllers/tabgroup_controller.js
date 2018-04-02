@@ -24,6 +24,8 @@ export default class extends Controller {
   }
 
   activate(evt) {
+    evt.preventDefault();
+
     this.showTab($(evt.target).attr("data-tab-name"));
   }
 

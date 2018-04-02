@@ -105,7 +105,9 @@ private
   end
 
   def find_collection
-    @works = policy_scope(Work).page(params[:page])
+    @scope = (params[:scope] || "all").to_sym
+    @page  = params[:page]
+    @works = policy_scope(Work).send(@scope).page(@page)
   end
 
   def build_new_instance

@@ -5,28 +5,48 @@
     margin: 0;
 
     li {
-      margin-left: $spacing-s;
-      cursor: pointer;
       display: inline-block;
-      padding: .2rem .75rem;
-      margin-bottom: -1px;
-      background-color: $white;
-      border-radius: $standard-border-radius $standard-border-radius 0 0;
-      border: 1px solid $white;
-      color: $link-color;
-      font-size: $tab-font-size;
+      margin-left: $spacing-s;
 
-      &.tab-active {
+      span,
+      a {
+        @include top-border-radius();
+        display: inline-block;
+        padding: .2rem .75rem;
+        margin-bottom: -1px;
+        font-size: $tab-font-size;
+      }
+
+      a {
+        @include no-hover-link($white);
+        @include underline-never();
+        border: 1px solid $link-color;
+        background-color: $link-color;
+
+        &:hover {
+          background-color: $link-color-hover;
+          border-color: $link-color-hover;
+        }
+      }
+
+      a.tab-active,
+      span {
+        border: 1px solid $armchair-smoke;
         border-bottom-color: $armchair-blacktop;
         background-color: $armchair-blacktop;
         color: $white;
+
+        &:hover {
+          border-bottom-color: $armchair-blacktop;
+          background-color: $armchair-blacktop;
+        }
       }
     }
   }
 
   .tab {
     border-radius: $standard-border-radius;
-    border: 1px solid $white;
+    border: 1px solid $armchair-smoke;
     padding: $spacing-m;
 
     &.tab-inactive {

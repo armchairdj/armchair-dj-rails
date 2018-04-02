@@ -34,6 +34,7 @@ a.crud {
 }
 
 header.crud {
+  @include bottom-margin();
   @include crud-rule-line();
   position: relative;
   padding-right: 1.25rem;
