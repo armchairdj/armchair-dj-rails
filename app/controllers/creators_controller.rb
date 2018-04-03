@@ -1,4 +1,6 @@
 class CreatorsController < ApplicationController
+  prepend_before_action :is_crud
+
   before_action :authorize_collection, only: [
     :index,
     :new,

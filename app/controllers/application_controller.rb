@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
 private
 
   def determine_layout
-    "global"
+    @crud ? "crud" : "public"
+  end
+
+  def is_crud
+    @crud = true
   end
 end

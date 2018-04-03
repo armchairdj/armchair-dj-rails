@@ -1,6 +1,23 @@
 require 'ffaker'
 
 module ApplicationHelper
+  def wrapper_classes
+    [
+      "wrapper",
+      @crud ? "crud" : "public"
+    ].flatten.join(" ")
+  end
+
+  def page_container_tag
+    @page_container || :article
+  end
+
+  def page_container_classes
+    [
+      @page_container_class
+    ].flatten.join(" ")
+  end
+
   def crud_show_link(model)
     svg = semantic_svg_image("open_iconic/eye.svg", "eyeball", "eyeball icon")
 

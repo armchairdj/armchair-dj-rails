@@ -1,7 +1,7 @@
 class CreatorPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all.alphabetical
+      scope.all.alphabetical.with_counts
     end
   end
 end

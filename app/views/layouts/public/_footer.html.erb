@@ -3,12 +3,6 @@
 
     <%= content_tag(:nav, class: "links") do %>
       <%= content_tag(:ul, class: "arrowed") do %>
-        <%= content_tag :li, link_to("Posts",    posts_path   ) %>
-        <%= content_tag :li, link_to("Creators", creators_path) %>
-        <%= content_tag :li, link_to("Works",    works_path   ) %>
-      <% end %>
-
-      <%= content_tag(:ul, class: "arrowed") do %>
         <%= content_tag :li, link_to("Home", root_path) %>
 
         <% if user_signed_in? %>
@@ -22,8 +16,7 @@
 
       <% if user_signed_in? && current_user.admin? %>
         <%= content_tag(:ul, class: "arrowed") do %>
-          <%= content_tag :li, link_to("Admin",       admin_root_path  ) %>
-          <%= content_tag :li, link_to("Style Guide", style_guides_path) %>
+          <%= content_tag :li, link_to("Admin",       creators_path  ) %>
         <% end %>
       <% end %>
 

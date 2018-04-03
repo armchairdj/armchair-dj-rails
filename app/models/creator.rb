@@ -36,7 +36,13 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(:name) }
+  scope :alphabetical, -> { order("LOWER(creators.name)") }
+
+  scope :with_counts, -> {
+    left_outer_joins(works: :posts).select(
+      "creators.*, COUNT(works.id) as work_count, COUNT(posts.id) as post_count"
+    ).group("creators.id")
+  }
 
   #############################################################################
   # VALIDATIONS.

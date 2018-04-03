@@ -7,14 +7,15 @@
 
 <body>
 
-<%= render "layouts/global/masthead" %>
+<%= content_for_unless_empty :pre_masthead %>
+<%= content_for_unless_empty :masthead %>
 
 <%= content_tag(:main, role: "main") do %>
   <%= render "layouts/global/flash_messages" %>
 
-  <%= content_tag(:div, class: "wrapper") do %>
+  <%= content_tag(:div, class: wrapper_classes) do %>
     <%= content_tag(:div, class: "constrain") do %>
-      <%= content_tag(@page_container || :article, class: @page_container_class || "") do %>
+      <%= content_tag(page_container_tag, class: page_container_classes) do %>
         <%= content_for_unless_empty :pre_header %>
         <%= render "layouts/global/header" %>
         <%= content_for_unless_empty :post_header %>
@@ -27,7 +28,8 @@
   <% end %>
 <% end %>
 
-<%= render "layouts/global/footer" %>
+<%= content_for_unless_empty :footer %>
+
 <%= render "layouts/global/foot" %>
 
 </body>

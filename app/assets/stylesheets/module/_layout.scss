@@ -6,13 +6,7 @@
   max-width: 100%;
 }
 
-.constrain {
-  @include breakpoint(medium) {
-    padding: 0 40px;
-    max-width: 800px;
-  }
-}
-
+.constrain,
 .constrain-wide {
   @include breakpoint(medium) {
     padding: 0 40px;
@@ -24,7 +18,17 @@
   background-color: $armchair-blacktop;
   min-height: 400px;
 
-  @include breakpoint(large) {
-    @include fixed-widthable();
+  &.crud {}
+
+  &.public {
+    @include breakpoint(large) {
+      @include fixed-widthable();
+    }
+
+    .constrain {
+      @include breakpoint(medium) {
+        max-width: 800px;
+      }
+    }
   }
 }

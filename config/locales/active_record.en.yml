@@ -41,6 +41,7 @@ en:
           film:     "Movie"
           tv_show:  "TV Show"
           book:     "Book"
+          comic:    "Comic Book"
           artwork:  "Artwork"
           software: "App"
     errors:

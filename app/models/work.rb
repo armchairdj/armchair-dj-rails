@@ -36,24 +36,25 @@ class Work < ApplicationRecord
   #############################################################################
 
   enum medium: {
-    song:     100,
-    album:    101,
+    song:       100,
+    album:      101,
 
-    film:     200,
-    tv_show:  201,
+    film:       200,
+    tv_show:    201,
 
-    book:     300,
+    book:       300,
+    comic:      301,
 
-    artwork:  400,
+    artwork:    400,
 
-    software: 500
+    software:   500
   }
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(:title) }
+  scope :alphabetical, -> { order("LOWER(title)") }
 
   #############################################################################
   # VALIDATIONS.
@@ -89,6 +90,7 @@ class Work < ApplicationRecord
       :"TV"     => self.tv_show.alphabetical,
       :"Films"  => self.film.alphabetical,
       :"Books"  => self.book.alphabetical,
+      :"Comics" => self.comic.alphabetical,
       :"Apps"   => self.software.alphabetical,
       :"Art"    => self.artwork.alphabetical,
     }.to_a
@@ -102,6 +104,7 @@ class Work < ApplicationRecord
       :"TV"    => :tv_show,
       :"Film"  => :film,
       :"Book"  => :book,
+      :"Comic" => :comic,
       :"App"   => :software,
       :"Art"   => :artwork,
     }

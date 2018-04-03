@@ -21,8 +21,8 @@
     <% @creators.each do |creator| %>
       <%= content_tag(:tr) do %>
         <%= content_tag :td, creator.name %>
-        <%= content_tag :td, creator.works.count, class: "count" %>
-        <%= content_tag :td, creator.posts.count, class: "count" %>
+        <%= content_tag :td, creator.work_count, class: "count" %>
+        <%= content_tag :td, creator.post_count, class: "count" %>
         <%= content_tag :td, class: "actions" do %>
           <%= crud_show_link    creator %> 
           <%= crud_update_link  creator %>

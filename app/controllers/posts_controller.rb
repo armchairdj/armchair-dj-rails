@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  prepend_before_action :is_crud
+
   before_action :find_collection, only: [
     :index
   ]

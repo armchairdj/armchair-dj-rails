@@ -35,7 +35,7 @@ footer#page-footer {
       display: block;
     }
   }
-  
+
   @include breakpoint(large) {
     @include fixed-widthable();
     @include clearfix();
