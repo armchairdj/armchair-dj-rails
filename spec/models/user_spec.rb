@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
           it "sets role to guest if no role" do
             user = build(:minimal_user, role: nil)
 
-            user.set_default_role
+            user.send(:set_default_role)
 
             expect(user.role).to eq("guest")
           end
@@ -81,7 +81,7 @@ RSpec.describe User, type: :model do
           it "does nothing if role is set" do
             user = build(:minimal_user, role: :admin)
 
-            user.set_default_role
+            user.send(:set_default_role)
 
             expect(user.role).to eq("admin")
           end

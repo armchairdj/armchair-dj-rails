@@ -62,7 +62,7 @@ class Contribution < ApplicationRecord
 
     screenwriter:                 240,
 
-    # Prose
+    # Books & Comics
 
     author:                       300,
     editor:                       310,

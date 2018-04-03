@@ -10,25 +10,46 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'associations' do
-    it { should belong_to(:creator) }
+    it { should have_many(:contributions) }
+
+    it { should have_many(:creators    ).through(:contributions) }
+    it { should have_many(:contributors).through(:contributions) }
+
     it { should have_many(:posts) }
   end
 
   describe 'nested_attributes' do
-    # Nothing so far.
+    pending "contributions"
   end
 
   describe 'enums' do
-    # Nothing so far.
+    it { should define_enum_for(:medium).with({
+      song:       100,
+      album:      101,
+
+      film:       200,
+      tv_show:    201,
+
+      book:       300,
+      comic:      301,
+
+      artwork:    400,
+
+      software:   500
+    }) }
   end
 
   describe 'scopes' do
     pending 'alphabetical'
-    pending 'alphabetical_by_creator'
   end
 
   describe 'validations' do
     it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:medium) }
+
+    context 'custom' do
+      pending '#validate_contributions'
+    end
   end
 
   describe 'hooks' do
@@ -36,10 +57,29 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'class' do
-    # Nothing so far.
+    pending 'self#max_contributions'
+    pending 'self#alphabetical_with_creator'
+    pending 'self#grouped_select_options_for_post'
+    pending 'self#admin_scopes'
   end
 
   describe 'instance' do
-    # Nothing so far.
+    pending '#prepare_contributions'
+    pending '#title_with_creator'
+    pending '#display_creator'
+
+    context 'private' do
+      context 'nested_attributes' do
+        pending '#reject_blank_contributions'
+      end
+
+      context 'validation' do
+        pending '#validate_contributions'
+      end
+
+      context 'callbacks' do
+        # Nothing so far.
+      end
+    end
   end
 end
