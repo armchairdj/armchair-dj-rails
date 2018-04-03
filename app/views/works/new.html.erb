@@ -1,6 +1,10 @@
 <%
-  @headline = @title = "Create Work"
+  @title = "New Work"
 %>
+
+<%= content_tag(:header, class: "crud") do %>
+  <%= content_tag(:h1, @title) %>
+<% end %>
 
 <%= render partial: 'work_form', locals: {
   work:     @work,

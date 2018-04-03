@@ -10,6 +10,6 @@ module PostsHelper
   end
 
   def post_type(post)
-    post.work ? "#{post.work.human_enum_label(:medium).downcase} review" : "standalone"
+    post.work ? "#{post.work.human_enum_value(:medium).downcase} review" : "standalone"
   end
 end

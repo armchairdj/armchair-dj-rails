@@ -20,7 +20,7 @@ aside.flash-messages {
     margin: 0;
 
     .flash-inner {
-      padding: 20px 60px 20px 20px;
+      padding: 1rem 1.25rem 1rem 0;
       position: relative;
     }
 
@@ -29,13 +29,15 @@ aside.flash-messages {
 
       &.closeable {
         position: absolute;
-        top: 20px;
-        right: 20px;
-        @include underline-never();
-        @include no-hover-link($white);
-        @include bold();
-        font-size: 2rem;
-        line-height: .6;
+        top: 1rem;
+        right: 0;
+        display: block;
+        @include square(1rem);
+
+        @include inline-block-svg() {
+          @include square(1rem);
+          @include svg-path-fill($white);
+        }
       }
     }
   }

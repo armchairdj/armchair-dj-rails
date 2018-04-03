@@ -5,7 +5,9 @@
 <%= content_tag(:header, class: "crud") do %>
   <%= content_tag(:h1, @title) %>
 
-  <%= crud_create_link(Post) %>
+  <%= content_tag(:div, class: "actions") do %>
+    <%= crud_create_link(Post) %>
+  <% end %>
 <% end %>
 
 <%= content_tag(:table, class: "crud") do %>

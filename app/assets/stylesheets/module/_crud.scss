@@ -62,8 +62,9 @@ a.crud {
 header.crud {
   @include bottom-margin();
   @include crud-rule-line();
+  @include clearfix();
   position: relative;
-  padding-right: 1.25rem;
+  padding-right: 3rem;
 
   h1 {
     font-size: $crud-headline-size;
@@ -73,11 +74,15 @@ header.crud {
     @include right-margin-only($spacing-xs);
   }
 
-  a.crud {
+  .actions {
     position: absolute;
     right: 0;
-    bottom: $spacing-s;
-    display: block;
+    bottom: 0;
+
+    a.crud {
+      display: inline-block;
+      margin-bottom: $spacing-s;
+    }
   }
 }
 
