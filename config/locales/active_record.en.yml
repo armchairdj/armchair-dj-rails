@@ -3,6 +3,7 @@ en:
     attributes:
       contribution:
         _destroy: "Remove this contribution"
+        id: "ID"
         roles:
           creator:                     "Creator"
 
@@ -32,9 +33,15 @@ en:
           artist:                      "Artist"
 
           programmer:                  "Programmer"
+      creator:
+        id: "ID"
       post:
+        id: "ID"
         work: "Work"
+      user:
+        id: "ID"
       work:
+        id: "ID"
         media:
           song:     "Song"
           album:    "Album"

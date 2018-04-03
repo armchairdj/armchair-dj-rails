@@ -20,5 +20,10 @@ module ArmchairDjRails
 
     # Custom error pages.
     config.exceptions_app = self.routes
+
+    # Make my helpers available in Administrate.
+    config.to_prepare do
+      Administrate::ApplicationController.helper ArmchairDjRails::Application.helpers
+    end
   end
 end

@@ -31,11 +31,10 @@ to display a collection of resources in an HTML table.
         <%= link_to(sanitized_order_params.merge(
           collection_presenter.order_params_for(attr_name)
         )) do %>
-        <%= t(
+        <%= titleize_except_acronyms(t(
           "helpers.label.#{collection_presenter.resource_name}.#{attr_name}",
-          default: attr_name.to_s,
-        ).titleize %>
-
+          default: t("activerecord.attributes.#{collection_presenter.resource_name}.#{attr_name}", default: attr_name.to_s)
+        )) %>
             <% if collection_presenter.ordered_by?(attr_name) %>
               <span class="cell-label__sort-indicator cell-label__sort-indicator--<%= collection_presenter.ordered_html_class(attr_name) %>">
                 <svg aria-hidden="true">
@@ -46,10 +45,7 @@ to display a collection of resources in an HTML table.
           <% end %>
         </th>
       <% end %>
-      <% [valid_action?(:edit, collection_presenter.resource_name),
-          valid_action?(:destroy, collection_presenter.resource_name)].count(true).times do %>
-        <th scope="col"></th>
-      <% end %>
+      <th scope="col actions">Actions</th>
     </tr>
   </thead>
 
@@ -73,23 +69,19 @@ to display a collection of resources in an HTML table.
           </td>
         <% end %>
 
+        <td class="actions">
+        <% if valid_action? :show, collection_presenter.resource_name %>
+          <%= crud_show_link([namespace, resource]) %>
+        <% end %>
+
         <% if valid_action? :edit, collection_presenter.resource_name %>
-          <td><%= link_to(
-            t("administrate.actions.edit"),
-            [:edit, namespace, resource],
-            class: "action-edit",
-          ) if show_action? :edit, resource%></td>
+          <%= crud_update_link([namespace, resource]) %>
         <% end %>
 
         <% if valid_action? :destroy, collection_presenter.resource_name %>
-          <td><%= link_to(
-            t("administrate.actions.destroy"),
-            [namespace, resource],
-            class: "text-color-red",
-            method: :delete,
-            data: { confirm: t("administrate.actions.confirm") }
-          ) if show_action? :destroy, resource %></td>
+          <%= crud_destroy_link([namespace, resource]) %>
         <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
