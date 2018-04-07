@@ -1,4 +1,4 @@
-class CreatorPolicy < ApplicationPolicy
+class CreatorPolicy < CrudPolicy
   class Scope < Scope
     def resolve
       scope.all.alphabetical.with_counts

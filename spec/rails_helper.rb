@@ -1,8 +1,11 @@
 require 'simplecov'
 
 SimpleCov.start 'rails' do
-  add_group 'Concerns', 'app/models/concerns'
   add_group 'Policies', 'app/policies'
+
+  add_filter "/src"
+  add_filter "/lib/generators"
+  add_filter "/lib/templates"
 end
 
 require 'spec_helper'

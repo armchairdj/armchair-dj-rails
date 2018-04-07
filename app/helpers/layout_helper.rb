@@ -1,6 +1,6 @@
 module LayoutHelper
   def body_classes
-    join_class_names ("crud" if @crud)
+    join_class_names (@crud ? "crud" : "public")
   end
 
   def copyright_notice

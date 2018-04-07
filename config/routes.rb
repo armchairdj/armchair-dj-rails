@@ -2,7 +2,7 @@
 # http://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
-  root "pages#index"
+  root "pages#homepage"
 
   #############################################################################
   # Users.

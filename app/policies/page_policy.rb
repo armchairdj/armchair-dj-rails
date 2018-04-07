@@ -1,5 +1,5 @@
 class PagePolicy < Struct.new(:user, :page)
-  def index?
+  def show?
     true
   end
 end
