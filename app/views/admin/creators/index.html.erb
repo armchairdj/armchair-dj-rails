@@ -2,15 +2,15 @@
   @title = 'Creators'
 %>
 
-<%= content_tag(:header, class: 'crud') do %>
+<%= content_tag(:header, class: 'admin') do %>
   <%= content_tag(:h1, @title) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= crud_create_link(Creator) %>
+    <%= admin_create_link(Creator) %>
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'crud') do %>
+<%= content_tag(:table, class: 'admin') do %>
   <%= content_tag(:thead) do %>
     <%= content_tag(:tr) do %>
       <%= content_tag :th, 'Name' %>
@@ -26,9 +26,9 @@
         <%= content_tag :td, creator.work_count, class: 'count' %>
         <%= content_tag :td, creator.post_count, class: 'count' %>
         <%= content_tag :td, class: 'actions' do %>
-          <%= crud_view_link    creator %> 
-          <%= crud_update_link  creator %>
-          <%= crud_destroy_link creator %>
+          <%= admin_view_link    creator %> 
+          <%= admin_update_link  creator %>
+          <%= admin_destroy_link creator %>
         <% end %>
       <% end %>
     <% end %>

@@ -1,4 +1,4 @@
-class CrudPolicy < ApplicationPolicy
+class AdminPolicy < ApplicationPolicy
   def index?
     force_admin_login
 

@@ -3,15 +3,15 @@ require 'rails_helper'
 RSpec.describe LayoutHelper, type: :helper do
   describe "#body_classes" do
     it "works on non-admin pages" do
-      assign(:crud, false)
+      assign(:admin, false)
 
       expect(helper.body_classes).to eq(nil)
     end
 
     it "works on admin pages" do
-      assign(:crud, true)
+      assign(:admin, true)
 
-      expect(helper.body_classes).to eq("crud")
+      expect(helper.body_classes).to eq("admin")
     end
   end
 
@@ -121,15 +121,15 @@ RSpec.describe LayoutHelper, type: :helper do
 
   describe "#wrapper_classes" do
     it "works on non-admin pages" do
-      assign(:crud, false)
+      assign(:admin, false)
 
       expect(helper.wrapper_classes).to eq("public wrapper")
     end
 
     it "works on admin pages" do
-      assign(:crud, true)
+      assign(:admin, true)
 
-      expect(helper.wrapper_classes).to eq("crud wrapper")
+      expect(helper.wrapper_classes).to eq("admin wrapper")
     end
   end
 

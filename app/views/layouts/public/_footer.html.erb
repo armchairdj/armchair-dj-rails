@@ -3,20 +3,18 @@
 
     <%= content_tag(:nav, class: 'links') do %>
       <%= content_tag(:ul, class: 'arrowed') do %>
-        <%= content_tag :li, link_to('Home', root_path) %>
+        <%= content_tag(:li, link_to('Home',     root_path    )) %>
+        <%= content_tag(:li, link_to('Creators', creators_path)) %>
+        <%= content_tag(:li, link_to('Works',    works_path   )) %>
+        <%= content_tag(:li, link_to('Posts',    posts_path   )) %>
 
         <% if user_signed_in? %>
-          <%= content_tag :li, link_to('Settings', settings_path            ) %>
-          <%= content_tag :li, link_to('Log Out',  destroy_user_session_path) %>
+          <%= content_tag(:li, link_to('Settings', settings_path            )) %>
+          <%= content_tag(:li, link_to('Admin',    admin_root_path          )) if current_user.admin? %>
+          <%= content_tag(:li, link_to('Log Out',  destroy_user_session_path)) %>
         <% else %>
-          <%= content_tag :li, link_to('Register', new_user_registration_path) %>
-          <%= content_tag :li, link_to('Log In',   new_user_session_path     ) %>
-        <% end %>
-      <% end %>
-
-      <% if user_signed_in? && current_user.admin? %>
-        <%= content_tag(:ul, class: 'arrowed') do %>
-          <%= content_tag :li, link_to('Admin', admin_path) %>
+          <%= content_tag(:li, link_to('Register', new_user_registration_path)) %>
+          <%= content_tag(:li, link_to('Log In',   new_user_session_path     )) %>
         <% end %>
       <% end %>
 

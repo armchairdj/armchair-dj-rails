@@ -1,7 +1,5 @@
 module Admin
-  class WorksController < ApplicationController
-    prepend_before_action :is_crud
-
+  class WorksController < AdminController
     before_action :authorize_collection, only: [
       :index,
       :new,

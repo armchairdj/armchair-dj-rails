@@ -18,7 +18,7 @@
   background-color: $armchair-blacktop;
   min-height: 400px;
 
-  &.crud {}
+  &.admin {}
 
   &.public {
     @include breakpoint(large) {

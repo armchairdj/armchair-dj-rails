@@ -14,10 +14,10 @@ class ApplicationController < ActionController::Base
 private
 
   def determine_layout
-    @crud ? "crud" : "public"
+    @admin ? "admin" : "public"
   end
 
-  def is_crud
-    @crud = true
+  def is_admin
+    @admin = true
   end
 end

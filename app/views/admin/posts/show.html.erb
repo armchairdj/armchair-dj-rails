@@ -4,8 +4,8 @@
 
 <% content_for(:page_header) do %>
   <%= content_tag(:header, class: 'page-header work') do %>
-    <%= crud_destroy_link(@post) %>
-    <%= crud_update_link(@post) %>
+    <%= admin_destroy_link(@post) %>
+    <%= admin_update_link(@post) %>
 
     <% if @post.work %>
       <%= content_tag(:h2, @post.work.display_creator) %>

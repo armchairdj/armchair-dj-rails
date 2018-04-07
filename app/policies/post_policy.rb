@@ -1,4 +1,4 @@
-class PostPolicy < CrudPolicy
+class PostPolicy < AdminPolicy
   class Scope < Scope
     def resolve
       scope.all.reverse_cron

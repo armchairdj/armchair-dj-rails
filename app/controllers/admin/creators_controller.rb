@@ -1,7 +1,5 @@
 module Admin
-  class CreatorsController < ApplicationController
-    prepend_before_action :is_crud
-
+  class CreatorsController < AdminController
     before_action :authorize_collection, only: [
       :index,
       :new,
@@ -48,6 +46,11 @@ module Admin
 
     end
 
+    # GET /creators/1/edit
+    def edit
+
+    end
+
     # POST /creators
     # POST /creators.json
     def create
@@ -60,11 +63,6 @@ module Admin
           format.json { render json: @creator.errors, status: :unprocessable_entity }
         end
       end
-    end
-
-    # GET /creators/1/edit
-    def edit
-
     end
 
     # PATCH/PUT /creators/1

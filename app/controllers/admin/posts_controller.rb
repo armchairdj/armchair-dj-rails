@@ -1,11 +1,8 @@
 module Admin
-  class PostsController < ApplicationController
-    prepend_before_action :is_crud
-
+  class PostsController < AdminController
     before_action :find_collection, only: [
       :index
     ]
-
 
     before_action :find_instance, only: [
       :show,

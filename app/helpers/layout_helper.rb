@@ -1,6 +1,6 @@
 module LayoutHelper
   def body_classes
-    join_class_names (@crud ? "crud" : "public")
+    join_class_names (@admin ? "admin" : "public")
   end
 
   def copyright_notice
@@ -38,6 +38,6 @@ module LayoutHelper
   end
 
   def wrapper_classes
-    join_class_names "wrapper", (@crud ? "crud" : "public")
+    join_class_names "wrapper", (@admin ? "admin" : "public")
   end
 end

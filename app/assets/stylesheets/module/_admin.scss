@@ -1,12 +1,12 @@
-@mixin crud-rule-line() {
+@mixin admin-rule-line() {
   border-bottom: 1px solid $armchair-smoke;
 }
 
-form.crud {
+form.admin {
   max-width: 800px;
 }
 
-header#crud-masthead {
+header#admin-masthead {
   @include clearfix();
   background-color: $black;
   padding: $spacing-s;
@@ -32,7 +32,7 @@ header#crud-masthead {
   }
 }
 
-a.crud {
+a.admin {
   display: inline-block;
   padding: 2px;
   @include underline-never();
@@ -63,15 +63,15 @@ a.crud {
   }
 }
 
-header.crud {
+header.admin {
   @include bottom-margin();
-  @include crud-rule-line();
+  @include admin-rule-line();
   @include clearfix();
   position: relative;
   padding-right: 3rem;
 
   h1 {
-    font-size: $crud-headline-size;
+    font-size: $admin-headline-size;
     line-height: $readable;
     display: inline-block;
     text-transform: uppercase;
@@ -83,23 +83,23 @@ header.crud {
     right: 0;
     bottom: 0;
 
-    a.crud {
+    a.admin {
       display: inline-block;
       margin-bottom: $spacing-s;
     }
   }
 }
 
-table.crud {
+table.admin {
   @include bottom-margin();
-  font-size: $crud-table-font-size;
+  font-size: $admin-table-font-size;
 
   tbody {
     vertical-align: middle;
   }
 
   tr {
-    @include crud-rule-line();
+    @include admin-rule-line();
   }
 
   th,
