@@ -97,7 +97,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 private
 
   def authorize_collection
-    authorize class_name
+    authorize @<%= plural_table_name %>
   end
 
   def find_collection

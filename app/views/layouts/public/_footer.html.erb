@@ -16,7 +16,7 @@
 
       <% if user_signed_in? && current_user.admin? %>
         <%= content_tag(:ul, class: 'arrowed') do %>
-          <%= content_tag :li, link_to('Admin', admin_posts_path) %>
+          <%= content_tag :li, link_to('Admin', admin_path) %>
         <% end %>
       <% end %>
 

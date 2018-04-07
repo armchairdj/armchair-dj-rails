@@ -16,7 +16,7 @@
       <% if @scope == scope %>
         <%= content_tag(:li, content_tag(:span, scope_label, class: 'tab-active')) %>
       <% else %>
-        <%= content_tag(:li, link_to(scope_label, works_path(scope: scope))) %>
+        <%= content_tag(:li, link_to(scope_label, admin_works_path(scope: scope))) %>
       <% end %>
     <% end %>
   <% end %>
