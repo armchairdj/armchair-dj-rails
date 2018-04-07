@@ -5,7 +5,7 @@ RSpec.describe 'creators/show', type: :view do
     @creator = assign(:creator, create(:minimal_creator))
   end
 
-  it "renders attributes in <p>" do
+  it "renders" do
     render
   end
 end

@@ -14,7 +14,7 @@
   <%= content_tag(:thead) do %>
     <%= content_tag(:tr) do %>
       <%= content_tag :th, "Type" %>
-      <%= content_tag :th, "Name" %>
+      <%= content_tag :th, "Title" %>
       <%= content_tag :th, "Actions", class: "actions" %>
     <% end %>
   <% end %>
@@ -22,7 +22,7 @@
     <% @posts.each do |post| %>
       <%= content_tag(:tr) do %>
         <%= content_tag :td, post_type(post) %>
-        <%= content_tag :td, post.work.title_with_creator %>
+        <%= content_tag :td, post.one_line_title %>
         <%= content_tag :td, class: "actions" do %>
           <%= crud_show_link    post %> 
           <%= crud_update_link  post %>

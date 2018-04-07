@@ -1,6 +1,6 @@
 module PostsHelper
   def link_to_post(post, full: false)
-    text = if post.work
+    text = if post.work.present?
       full ?  post.work.title_with_creator : post.work.title
     else
       post.title

@@ -5,7 +5,7 @@ RSpec.describe 'works/show', type: :view do
     @work = assign(:work, create(:minimal_work))
   end
 
-  it "renders attributes in <p>" do
+  it "renders" do
     render
   end
 end

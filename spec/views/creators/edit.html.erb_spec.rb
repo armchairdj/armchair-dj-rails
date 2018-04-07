@@ -5,7 +5,7 @@ RSpec.describe 'creators/edit', type: :view do
     @creator = assign(:creator, create(:minimal_creator))
   end
 
-  it "renders the edit creator form" do
+  it "renders edit creator form" do
     render
 
     assert_select "form[action=?][method=?]", creator_path(@creator), "post" do

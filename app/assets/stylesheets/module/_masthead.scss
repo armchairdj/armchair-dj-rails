@@ -65,7 +65,7 @@ nav#masthead {
 
     header {
       float: none;
-      margin: 0 auto;
+      @include center-horizontal();
 
       .headlines {
         float: right;

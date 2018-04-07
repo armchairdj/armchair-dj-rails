@@ -13,9 +13,20 @@ FactoryBot.define do
   #############################################################################
 
   factory :work do
-    factory :single_creator_work do
+    factory :work_for_contribution_factory do
+      medium :song
+
       title { generate(:work_title) }
-      association :contribution, factory: :minimal_contribution, role: :creator
+    end
+
+    factory :single_creator_work do
+      medium :song
+
+      title { generate(:work_title) }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator).id)
+      } }
 
       factory :minimal_work do
         # Just a single-creator work

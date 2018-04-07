@@ -4,7 +4,7 @@ FactoryBot.define do
   # SEQUENCES.
   #############################################################################
 
-  sequence :naked_post_title do |n|
+  sequence :standalone_post_title do |n|
     "Naked Post Title #{n}"
   end
 
@@ -13,8 +13,8 @@ FactoryBot.define do
   #############################################################################
 
   factory :post do
-    factory :naked_post do
-      title { generate(:naked_post_title) }
+    factory :standalone_post do
+      title { generate(:standalone_post_title) }
       body "This is come content."
 
       factory :minimal_post do

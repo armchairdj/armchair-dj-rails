@@ -5,7 +5,7 @@ RSpec.describe 'posts/show', type: :view do
     @post = assign(:post, create(:minimal_post))
   end
 
-  it "renders attributes in <p>" do
+  it "renders" do
     render
   end
 end
