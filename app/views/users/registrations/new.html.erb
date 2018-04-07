@@ -1,12 +1,12 @@
 <%
-  @headline = @title = "Register"
+  @headline = @title = 'Register'
 %>
 
 <% content_for(:page_header) do %>
-  <%= content_tag(:header, class: "page-header auth") do %>
+  <%= content_tag(:header, class: 'page-header auth') do %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @headline) %>
-      <%= link_to("(Or Log In)", new_user_session_path) %>
+      <%= link_to('(Or Log In)', new_user_session_path) %>
     <% end %>
   <% end %>
 <% end %>
@@ -14,7 +14,7 @@
 <%= simple_form_for(@user, url: settings_path) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= content_tag(:div, class: 'form-inputs') do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -25,16 +25,16 @@
 
     <%= f.input :email,
       required: true,
-      placeholder: "name@domain.com"
+      placeholder: 'name@domain.com'
     %>
 
     <%= f.input :password,
       required: true,
-      placeholder: ("#{@minimum_password_length} or more characters")
+      placeholder: ('#{@minimum_password_length} or more characters')
     %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Sign up" %>
+  <%= content_tag(:div, class: 'button-group') do %>
+    <%= f.button :submit, 'Sign up' %>
   <% end %>
 <% end %>

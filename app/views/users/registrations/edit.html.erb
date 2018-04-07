@@ -1,11 +1,11 @@
 <%
-  @headline = @title = "Settings"
+  @headline = @title = 'Settings'
 %>
 
 <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= content_tag(:div, class: 'form-inputs') do %>
     <%= f.input :first_name,
       required: true
     %>
@@ -16,12 +16,12 @@
 
     <%= f.input :email,
       required: true,
-      placeholder: "name@domain.com"
+      placeholder: 'name@domain.com'
     %>
 
     <%= f.input :current_password,
       required: true,
-      hint: "We need your current password to confirm your changes"
+      hint: 'We need your current password to confirm your changes'
     %>
   <% end %>
 
@@ -29,7 +29,7 @@
     <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Update" %>
+  <%= content_tag(:div, class: 'button-group') do %>
+    <%= f.button :submit, 'Update' %>
   <% end %>
 <% end %>

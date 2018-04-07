@@ -10,7 +10,7 @@ RSpec.describe WorksHelper, type: :helper do
       instance = create(:kate_bush_hounds_of_love)
       actual   = helper.link_to_work(instance)
 
-      expect(actual).to have_tag('a[href^="/works/"]',
+      expect(actual).to have_tag('a[href^="/admin/works/"]',
         text:  "Hounds of Love",
         count: 1
       )
@@ -26,7 +26,7 @@ RSpec.describe WorksHelper, type: :helper do
 
       expect(actual).to have_tag('a', count: 1)
 
-      expect(actual).to have_tag('a[href^="/creators/"]',
+      expect(actual).to have_tag('a[href^="/admin/creators/"]',
         text:  "Kate Bush",
         count: 1
       )
@@ -40,12 +40,12 @@ RSpec.describe WorksHelper, type: :helper do
 
       expect(actual).to match("> & <")
 
-      expect(actual).to have_tag('a[href^="/creators/"]',
+      expect(actual).to have_tag('a[href^="/admin/creators/"]',
         text:  "Green Velvet",
         count: 1
       )
 
-      expect(actual).to have_tag('a[href^="/creators/"]',
+      expect(actual).to have_tag('a[href^="/admin/creators/"]',
         text:  "Carl Craig",
         count: 1
       )

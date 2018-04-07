@@ -1,28 +1,28 @@
 <%
-  @headline = "Quotations"
-  @title    = ["Style Guide", @headline]
+  @headline = 'Quotations'
+  @title    = ['Style Guide', @headline]
 
-  @page_container_class = "style-guide"
+  @page_container_class = 'style-guide'
 %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Block quote w/ simple caption") %>
+    <%= content_tag(:h3, 'Block quote w/ simple caption') %>
   <% end %>
 
-  <%= render layout: "shared/blockquote", locals: { caption: "Kate Bush" } do %>
+  <%= render layout: 'shared/blockquote', locals: { caption: 'Kate Bush' } do %>
     Be kind to my mistakes.
   <% end %>
 <% end %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Block quote w/ complex caption & cite") %>
+    <%= content_tag(:h3, 'Block quote w/ complex caption & cite') %>
   <% end %>
 
-  <%= render layout: "shared/blockquote", locals: { caption: capture { %>
-    <%= content_tag(:strong, "Pet Shop Boys") %>,
-    <%= content_tag(:cite, "Being Boring") %>
+  <%= render layout: 'shared/blockquote', locals: { caption: capture { %>
+    <%= content_tag(:strong, 'Pet Shop Boys') %>,
+    <%= content_tag(:cite, 'Being Boring') %>
   <% } } do %>
     When I went, I left from the station<br>
     With a haversack and some trepidation
@@ -31,10 +31,10 @@
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Inline quote") %>
+    <%= content_tag(:h3, 'Inline quote') %>
   <% end %>
 
   <%= content_tag(:p) do %>
-    As Sarah Cracknell once sang, <%= content_tag(:q, "Plane or a boat / Get away / Gotta go.") %>
+    As Sarah Cracknell once sang, <%= content_tag(:q, 'Plane or a boat / Get away / Gotta go.') %>
   <% end %>
 <% end %>

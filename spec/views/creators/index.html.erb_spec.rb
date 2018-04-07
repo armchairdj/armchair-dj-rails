@@ -2,14 +2,21 @@ require 'rails_helper'
 
 RSpec.describe 'creators/index', type: :view do
   before(:each) do
-    21.times do
-      create(:minimal_creator)
-    end
-
-    @creators = assign(:creators, Creator.all.alphabetical.with_counts.page(1))
+    assign(:creators, [
+      Creator.create!(
+        :index => "Index",
+        :show => "Show"
+      ),
+      Creator.create!(
+        :index => "Index",
+        :show => "Show"
+      )
+    ])
   end
 
   it "renders a list of creators" do
     render
+    assert_select "tr>td", :text => "Index".to_s, :count => 2
+    assert_select "tr>td", :text => "Show".to_s, :count => 2
   end
 end

@@ -1,36 +1,25 @@
 <%
-  @title = "Posts"
+  @headline = @title = "Posts"
 %>
 
-<%= content_tag(:header, class: "crud") do %>
-  <%= content_tag(:h1, @title) %>
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
 
-  <%= content_tag(:div, class: "actions") do %>
-    <%= crud_create_link(Post) %>
-  <% end %>
-<% end %>
-
-<%= content_tag(:table, class: "crud") do %>
-  <%= content_tag(:thead) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag :th, "Type" %>
-      <%= content_tag :th, "Title" %>
-      <%= content_tag :th, "Actions", class: "actions" %>
-    <% end %>
-  <% end %>
-  <%= content_tag(:tbody) do %>
+  <tbody>
     <% @posts.each do |post| %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag :td, post_type(post) %>
-        <%= content_tag :td, post.one_line_title %>
-        <%= content_tag :td, class: "actions" do %>
-          <%= crud_view_link    post %> 
-          <%= crud_update_link  post %>
-          <%= crud_destroy_link post %>
-        <% end %>
-      <% end %>
+      <tr>
+        <td><%= link_to 'Show', post %></td>
+        <td><%= link_to 'Edit', edit_post_path(post) %></td>
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
     <% end %>
-  <% end %>
-<% end %>
+  </tbody>
+</table>
 
-<%= paginate @posts %>
+<br>
+
+<%= link_to 'New Post', new_post_path %>

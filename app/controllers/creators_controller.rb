@@ -1,6 +1,4 @@
 class CreatorsController < ApplicationController
-  prepend_before_action :is_crud
-
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -52,7 +50,7 @@ class CreatorsController < ApplicationController
   def create
     respond_to do |format|
       if @creator.save
-        format.html { redirect_to creators_path, notice: I18n.t("creator.notice.create") }
+        format.html { redirect_to @creator, notice: I18n.t("#{singular_table_name}.notice.create") }
         format.json { render :show, status: :created, location: @creator }
       else
         format.html { render :new }
@@ -71,7 +69,7 @@ class CreatorsController < ApplicationController
   def update
     respond_to do |format|
       if @creator.update(instance_params)
-        format.html { redirect_to creators_path, notice: I18n.t("creator.notice.update") }
+        format.html { redirect_to @creator, notice: I18n.t("#{singular_table_name}.notice.update") }
         format.json { render :show, status: :ok, location: @creator }
       else
         format.html { render :edit }
@@ -86,7 +84,7 @@ class CreatorsController < ApplicationController
     @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to creators_path, notice: I18n.t("creator.notice.destroy") }
+      format.html { redirect_to creators_url, notice: I18n.t("#{singular_table_name}.notice.destroy") }
       format.json { head :no_content }
     end
   end
@@ -94,11 +92,11 @@ class CreatorsController < ApplicationController
 private
 
   def authorize_collection
-    authorize Creator
+    authorize class_name
   end
 
   def find_collection
-    @creators = policy_scope(Creator).page(params[:page])
+    @creators = policy_scope(Creator)
   end
 
   def build_new_instance
@@ -114,6 +112,6 @@ private
   end
 
   def instance_params
-    params.fetch(:creator, {}).permit(:name)
+    params.fetch(:creator, {}).permit(:index, :show)
   end
 end

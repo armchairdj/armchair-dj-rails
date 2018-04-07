@@ -1,8 +1,8 @@
-<%= simple_form_for(post, html: { class: "crud"}) do |f| %>
+<%= simple_form_for([:admin, post], html: { class: 'crud'}) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: 'posts/post_fields', locals: {
+  <%= content_tag(:div, class: 'form-inputs') do %>
+    <%= render partial: 'admin/posts/post_fields', locals: {
       f:              f,
       works:          works,
       creators:       creators,
@@ -12,7 +12,7 @@
     } %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
+  <%= content_tag(:div, class: 'button-group') do %>
     <%= f.button :submit %>
   <% end %>
 <% end %>

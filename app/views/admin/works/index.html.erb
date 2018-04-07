@@ -1,0 +1,52 @@
+<%
+  @title = 'Works'
+%>
+
+<%= content_tag(:header, class: 'crud') do %>
+  <%= content_tag(:h1, @title) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
+    <%= crud_create_link(Work) %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:div, class: 'tabgroup') do %>
+  <%= content_tag(:ul, class: 'tabs') do %>
+    <% Work.admin_scopes.each do |scope_label, scope| %>
+      <% if @scope == scope %>
+        <%= content_tag(:li, content_tag(:span, scope_label, class: 'tab-active')) %>
+      <% else %>
+        <%= content_tag(:li, link_to(scope_label, works_path(scope: scope))) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: 'tab') do %>
+    <%= content_tag(:table, class: 'crud') do %>
+      <%= content_tag(:thead) do %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, 'Medium') if @scope == :all %>
+          <%= content_tag :th, 'Title' %>
+          <%= content_tag :th, 'Creators' %>
+          <%= content_tag :th, 'Actions', class: 'actions' %>
+        <% end %>
+      <% end %>
+      <%= content_tag(:tbody) do %>
+        <% @works.each do |work| %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag(:td, work.human_enum_value(:medium)) if @scope == :all %>
+            <%= content_tag :td, work.title %>
+            <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(' & ').html_safe%>
+            <%= content_tag :td, class: 'actions' do %>
+              <%= crud_view_link    work %> 
+              <%= crud_update_link  work %>
+              <%= crud_destroy_link work %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= paginate @works %>

@@ -8,7 +8,7 @@ RSpec.describe PostsHelper, type: :helper do
     it "uses title for standalone" do
       actual = helper.link_to_post(standalone_post)
 
-      expect(actual).to have_tag('a[href^="/posts/"]',
+      expect(actual).to have_tag('a[href^="/admin/posts/"]',
         text:  "Standalone",
         count: 1
       )
@@ -17,7 +17,7 @@ RSpec.describe PostsHelper, type: :helper do
     it "by default uses work title for review" do
       actual = helper.link_to_post(hounds_of_love_review)
 
-      expect(actual).to have_tag('a[href^="/posts/"]',
+      expect(actual).to have_tag('a[href^="/admin/posts/"]',
         text:  "Hounds of Love",
         count: 1
       )
@@ -26,7 +26,7 @@ RSpec.describe PostsHelper, type: :helper do
     it "can use creator name and work title for review" do
       actual = helper.link_to_post(hounds_of_love_review, full: true)
 
-      expect(actual).to have_tag('a[href^="/posts/"]',
+      expect(actual).to have_tag('a[href^="/admin/posts/"]',
         text:  "Kate Bush: Hounds of Love",
         count: 1
       )

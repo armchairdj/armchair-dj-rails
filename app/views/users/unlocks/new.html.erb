@@ -1,16 +1,16 @@
 <%
-  @headline = @title = "Resend Unlock Instructions"
+  @headline = @title = 'Resend Unlock Instructions'
 %>
 
 <%= simple_form_for(@user, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
   <%= f.error_notification %>
   <%= f.full_error :unlock_token %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= content_tag(:div, class: 'form-inputs') do %>
     <%= f.input :email, required: true, autofocus: true %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Resend unlock instructions" %>
+  <%= content_tag(:div, class: 'button-group') do %>
+    <%= f.button :submit, 'Resend unlock instructions' %>
   <% end %>
 <% end %>

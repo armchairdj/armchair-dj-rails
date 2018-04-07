@@ -1,19 +1,19 @@
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset='utf-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
 <%= content_tag(:title, page_title) %>
 
-<%= tag(:link, rel: "apple-touch-icon-precomposed",        href: "/apple-touch-icon-precomposed.png") %>
-<%= tag(:link, rel: "icon", sizes: "192x192",              href: "/favicon.ico") %>
-<%= tag(:link, rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico") %>
+<%= tag(:link, rel: 'apple-touch-icon-precomposed',        href: '/apple-touch-icon-precomposed.png') %>
+<%= tag(:link, rel: 'icon', sizes: '192x192',              href: '/favicon.ico') %>
+<%= tag(:link, rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico') %>
 
-<%= javascript_include_tag "modernizr", defer: true, "data-turbolinks-track": "reload" %>
-<%= javascript_pack_tag "application", defer: true, "data-turbolinks-track": "reload" %>
+<%= javascript_include_tag 'modernizr', defer: true, 'data-turbolinks-track': 'reload' %>
+<%= javascript_pack_tag 'application', defer: true, 'data-turbolinks-track': 'reload' %>
 
-<%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Raleway:200,500,700", media: "all" %>
-<%= stylesheet_link_tag "application", "data-turbolinks-track": "reload" %>
+<%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Raleway:200,500,700', media: 'all' %>
+<%= stylesheet_link_tag 'application', 'data-turbolinks-track': 'reload' %>
 
 <%= csrf_meta_tags %>
-<meta name="turbolinks-cache-control" content="no-preview">
+<meta name='turbolinks-cache-control' content='no-preview'>
 </head>

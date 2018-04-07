@@ -1,0 +1,15 @@
+<%= simple_form_for([:admin, work], html: { class: 'crud'}) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: 'form-inputs') do %>
+    <%= render partial: 'admin/works/work_fields', locals: {
+      f:        f,
+      creators: creators,
+      roles:    roles
+    } %>
+  <% end %>
+
+  <%= content_tag(:div, class: 'button-group') do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

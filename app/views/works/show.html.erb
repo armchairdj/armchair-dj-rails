@@ -1,16 +1,4 @@
 <%
-  @title = [
-    "View #{@work.human_enum_value(:medium)}",
-    @work.display_creator,
-    @work.title
-  ]
+  @headline = @title = "Work"
 %>
 
-<%= content_tag(:header, class: "crud") do %>
-  <%= content_tag(:h1, @title.first) %>
-
-  <%= content_tag(:div, class: "actions") do %>
-    <%= crud_destroy_link(@work) %>
-    <%= crud_update_link(@work) %>
-  <% end %>
-<% end %>

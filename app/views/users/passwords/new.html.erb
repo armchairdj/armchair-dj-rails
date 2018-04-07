@@ -1,15 +1,15 @@
 <%
-  @headline = @title = "Forgot Your Password?"
+  @headline = @title = 'Forgot Your Password?'
 %>
 
 <%= simple_form_for(@user, url: user_password_path, html: { method: :post }) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= content_tag(:div, class: 'form-inputs') do %>
     <%= f.input :email, required: true, autofocus: true %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Send me reset password instructions" %>
+  <%= content_tag(:div, class: 'button-group') do %>
+    <%= f.button :submit, 'Send me reset password instructions' %>
   <% end %>
 <% end %>

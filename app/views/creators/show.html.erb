@@ -1,8 +1,14 @@
 <%
-  @headline = @title = @creator.name
+  @headline = @title = "Creator"
 %>
 
-<% content_for(:before_page_headline) do %>
-  <%= crud_destroy_link(@creator) %>
-  <%= crud_update_link(@creator) %>
-<% end %>
+<p>
+  <strong>Index:</strong>
+  <%= @creator.index %>
+</p>
+
+<p>
+  <strong>Show:</strong>
+  <%= @creator.show %>
+</p>
+

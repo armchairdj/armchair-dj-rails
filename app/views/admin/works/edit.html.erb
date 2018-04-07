@@ -1,0 +1,21 @@
+<%
+  @title = [
+    "Edit #{@work.human_enum_value(:medium)}",
+    @work.display_creator,
+    @work.title
+  ]
+%>
+
+<%= content_tag(:header, class: 'crud') do %>
+  <%= content_tag(:h1, @title.first) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
+    <%= crud_destroy_link(@work) %>
+  <% end %>
+<% end %>
+
+<%= render partial: 'work_form', locals: {
+  work:     @work,
+  roles:    @roles,
+  creators: @creators
+} %>

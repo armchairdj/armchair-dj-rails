@@ -33,19 +33,19 @@ Rails.application.routes.draw do
   # Creators.
   #############################################################################
 
-  resources :creators
+  resources :creators, only: [:index, :show]
 
   #############################################################################
   # Works.
   #############################################################################
 
-  resources :works
+  resources :works, only: [:index, :show]
 
   #############################################################################
   # Posts.
   #############################################################################
 
-  resources :posts
+  resources :posts, only: [:index, :show]
 
   #############################################################################
   # Admin.
@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     resources :works
     resources :posts
 
-    root to: "users#index"
+    root to: "posts#index"
   end
 
   #############################################################################

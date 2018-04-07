@@ -1,58 +1,58 @@
 <%
-  @headline = @title = "Style Guide"
+  @headline = @title = 'Style Guide'
 
-  @page_container_class = "style-guide"
+  @page_container_class = 'style-guide'
 %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "General") %>
+    <%= content_tag(:h3, 'General') %>
   <% end %>
 
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <%= content_tag(:li, link_to("Headlines",       style_guides_item_path(template: :headline ))) %>
-    <%= content_tag(:li, link_to("Text Treatments", style_guides_item_path(template: :text     ))) %>
-    <%= content_tag(:li, link_to("Quotations",      style_guides_item_path(template: :quotation))) %>
-    <%= content_tag(:li, link_to("Lists",           style_guides_item_path(template: :list     ))) %>
-    <%= content_tag(:li, link_to("SVGs",            style_guides_item_path(template: :svg      ))) %>
-    <%= content_tag(:li, link_to("Posts",           style_guides_item_path(template: :post     ))) %>
-  <% end %>
-<% end %>
-
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Forms") %>
-  <% end %>
-
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <%= content_tag(:li, link_to("Buttons",        style_guides_item_path(template: :button    ))) %>
-    <%= content_tag(:li, link_to("Form",           style_guides_item_path(template: :form      ))) %>
-    <%= content_tag(:li, link_to("Form w/ Errors", style_guides_item_path(template: :form_error))) %>
+  <%= content_tag(:ul, class: 'bulleted') do %>
+    <%= content_tag(:li, link_to('Headlines',       style_guides_item_path(template: :headline ))) %>
+    <%= content_tag(:li, link_to('Text Treatments', style_guides_item_path(template: :text     ))) %>
+    <%= content_tag(:li, link_to('Quotations',      style_guides_item_path(template: :quotation))) %>
+    <%= content_tag(:li, link_to('Lists',           style_guides_item_path(template: :list     ))) %>
+    <%= content_tag(:li, link_to('SVGs',            style_guides_item_path(template: :svg      ))) %>
+    <%= content_tag(:li, link_to('Posts',           style_guides_item_path(template: :post     ))) %>
   <% end %>
 <% end %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Flash Messages") %>
+    <%= content_tag(:h3, 'Forms') %>
   <% end %>
 
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <%= content_tag(:li, link_to("Alert",   style_guides_flash_path(flash_type: :alert  ))) %>
-    <%= content_tag(:li, link_to("Error",   style_guides_flash_path(flash_type: :error  ))) %>
-    <%= content_tag(:li, link_to("Info",    style_guides_flash_path(flash_type: :info   ))) %>
-    <%= content_tag(:li, link_to("Notice",  style_guides_flash_path(flash_type: :notice ))) %>
-    <%= content_tag(:li, link_to("Success", style_guides_flash_path(flash_type: :success))) %>
+  <%= content_tag(:ul, class: 'bulleted') do %>
+    <%= content_tag(:li, link_to('Buttons',        style_guides_item_path(template: :button    ))) %>
+    <%= content_tag(:li, link_to('Form',           style_guides_item_path(template: :form      ))) %>
+    <%= content_tag(:li, link_to('Form w/ Errors', style_guides_item_path(template: :form_error))) %>
   <% end %>
 <% end %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Error Pages") %>
+    <%= content_tag(:h3, 'Flash Messages') %>
   <% end %>
 
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <%= content_tag(:li, link_to("500", style_guides_error_path(error_type: :internal_server_error))) %>
-    <%= content_tag(:li, link_to("404", style_guides_error_path(error_type: :not_found            ))) %>
-    <%= content_tag(:li, link_to("403", style_guides_error_path(error_type: :permission_denied    ))) %>
+  <%= content_tag(:ul, class: 'bulleted') do %>
+    <%= content_tag(:li, link_to('Alert',   style_guides_flash_path(flash_type: :alert  ))) %>
+    <%= content_tag(:li, link_to('Error',   style_guides_flash_path(flash_type: :error  ))) %>
+    <%= content_tag(:li, link_to('Info',    style_guides_flash_path(flash_type: :info   ))) %>
+    <%= content_tag(:li, link_to('Notice',  style_guides_flash_path(flash_type: :notice ))) %>
+    <%= content_tag(:li, link_to('Success', style_guides_flash_path(flash_type: :success))) %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, 'Error Pages') %>
+  <% end %>
+
+  <%= content_tag(:ul, class: 'bulleted') do %>
+    <%= content_tag(:li, link_to('500', style_guides_error_path(error_type: :internal_server_error))) %>
+    <%= content_tag(:li, link_to('404', style_guides_error_path(error_type: :not_found            ))) %>
+    <%= content_tag(:li, link_to('403', style_guides_error_path(error_type: :permission_denied    ))) %>
   <% end %>
 <% end %>

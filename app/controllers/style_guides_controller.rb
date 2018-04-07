@@ -1,4 +1,5 @@
 class StyleGuidesController < ApplicationController
+  before_action :authorize_page
   before_action :set_template,   only: [:show         ]
   before_action :set_flash_type, only: [:flash_message]
   before_action :set_error_type, only: [:error_page   ]
@@ -18,6 +19,10 @@ class StyleGuidesController < ApplicationController
   end
 
 private
+
+  def authorize_page
+    authorize :style_guide, :show?
+  end
 
   def set_template
     @template = params[:template]
