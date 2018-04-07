@@ -1,0 +1,6 @@
+en:
+  exceptions:
+    helpers:
+      layout:
+        title:
+          missing: "This page needs a title"

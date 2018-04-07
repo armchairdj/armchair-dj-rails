@@ -1,0 +1,8 @@
+en:
+  site:
+    name: "Armchair DJ"
+    name_html: "Armchair <span>DJ</span>"
+    name_with_tagline: "Armchair DJ | a monologue about music, with occasional mixtapes"
+    owner: "Brian J. Dillard"
+    tagline: "A monologue about music, with occasional mixtapes"
+    tagline_html: "<span>A monologue about music,</span> <span>with occasional mixtapes<span>"

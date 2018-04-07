@@ -1,15 +1,9 @@
 <% hint  = nil if local_assigns[:hint ].nil? %>
 <% error = nil if local_assigns[:error].nil? %>
 
-<% wrapper_class = [
-  "form-field",
-  "radio-buttons",
-  ("with-error" if error.present?)
-].compact.join(" ") %>
-
 <%= f.input(name, as: :radio_buttons, label: false,
   wrapper_tag:   :fieldset,
-  wrapper_class: wrapper_class
+  wrapper_class: join_class_names("form-field", "radio-buttons", ("with-error" if error.present?))
 ) do |b| %>
   <%= content_tag(:legend, class: "label") do %>
     <%= legend %> <%= required_indicator %>

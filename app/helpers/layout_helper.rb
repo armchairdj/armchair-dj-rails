@@ -1,19 +1,6 @@
 module LayoutHelper
-  def page_container_tag
-    @page_container || :article
-  end
-
-  def page_container_classes
-    [
-      @page_container_class
-    ].flatten.join(" ")
-  end
-
-  def wrapper_classes
-    [
-      "wrapper",
-      @crud ? "crud" : "public"
-    ].flatten.join(" ")
+  def body_classes
+    join_class_names ("crud" if @crud)
   end
 
   def copyright_notice
@@ -21,24 +8,36 @@ module LayoutHelper
     now       = Time.now.strftime "%Y"
     daterange = start == now ? start : "#{start}-#{now}"
 
-    "&copy; #{daterange} Brian J. Dillard".html_safe
+    "&copy; #{daterange} #{t('site.owner')}".html_safe
   end
 
-  def site_logo
-    image_tag("armchair.jpg", class: "chair")
+  def join_class_names(*args)
+    attr = [args].flatten.compact.join(" ").gsub(/\s+/, " ").strip.split(" ").uniq.sort.join(" ")
+
+    attr.blank? ? nil : attr
   end
 
-  def site_title
-    "Armchair#{content_tag(:span, "DJ")}".html_safe
+  def page_container_classes
+    join_class_names @page_container_class
+  end
+
+  def page_container_tag
+    @page_container || :article
   end
 
   def page_title
-    if @homepage
-      return "Armchair DJ: a monologue about music, with occasional mixtapes"
-    end
+    return t("site.name_with_tagline") if @homepage
 
-    raise NoMethodError.new("This page needs a title") unless @title
+    raise NoMethodError.new(t("exceptions.helpers.layout.title.missing")) unless @title
 
-    [@title, "Armchair DJ"].flatten.compact.join(" | ")
+    [t("site.name"), @title].flatten.compact.join(" | ")
+  end
+
+  def site_logo
+    image_tag("armchair.jpg", class: "chair", alt: "#{t("site.name")} logo")
+  end
+
+  def wrapper_classes
+    join_class_names "wrapper", (@crud ? "crud" : "public")
   end
 end

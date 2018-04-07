@@ -13,7 +13,7 @@ module ArmchairDjRails
       g.scaffold_stylesheet false
       g.stylesheets false
       g.system_tests nil
-      g.helper false
+      g.helper true
       g.pundit true
       g.scaffold_controller :scaffold_controller_with_pundit
     end

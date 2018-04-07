@@ -10,14 +10,11 @@
 
       <%= content_tag(:div, class: "headlines") do %>
         <% if @homepage %>
-          <%= content_tag(:h1, site_title) %>
+          <%= content_tag(:h1, t("site.name_html")) %>
         <% else %>
-          <%= content_tag :h1, link_to(site_title, root_path, title: "back to homepage") %>
+          <%= content_tag(:h1, link_to(t("site.name_html"), root_path, title: "back to homepage")) %>
         <% end %>
-        <%= content_tag(:h2) do %>
-          <%= content_tag(:span, "A monologue about music,") %>
-          <%= content_tag(:span, "with occasional mixtapes.") %>
-        <% end %>
+        <%= content_tag(:h2, t("site.tagline_html")) %>
       <% end %>
     <% end %>
 
