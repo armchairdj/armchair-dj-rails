@@ -1,5 +1,25 @@
+require 'ffaker'
 require 'rails_helper'
 
 RSpec.describe StyleGuidesHelper, type: :helper do
-  pending "#lorem_html_paragraphs"
+  describe "#lorem_html_paragraphs" do
+    before(:each) do
+      allow(FFaker::Lorem).to receive(:paragraphs).with(2).and_return(["first", "second"])
+      allow(FFaker::Lorem).to receive(:paragraphs).with(3).and_return(["first", "second", "third"])
+    end
+
+    it "gives 2 paragraphs by default" do
+      expected = "<p>first</p>\n<p>second</p>"
+      actual   = helper.lorem_html_paragraphs
+
+      expect(actual).to eq(expected)
+    end
+
+    it "gives arbitrary paragraphs" do
+      expected = "<p>first</p>\n<p>second</p>\n<p>third</p>"
+      actual   = helper.lorem_html_paragraphs(3)
+
+      expect(actual).to eq(expected)
+    end
+  end
 end

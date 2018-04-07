@@ -7,7 +7,7 @@ RSpec.describe 'posts/index', type: :view do
     end
 
     11.times do
-      create(:work_post)
+      create(:review_post)
     end
 
     @posts = assign(:posts, Post.all.reverse_cron.page(1))

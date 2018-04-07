@@ -12,7 +12,7 @@
             title:         "dismiss this message",
             "data-action": "dismissable#dismiss"
           ) do %>
-            <%= semantic_svg_image("open_iconic/x.svg", "x", "close icon") %>
+            <%= semantic_svg_image("open_iconic/x.svg", title: "x", desc: "dismiss icon") %>
           <% end %>
 
           <%= content_tag(:p, message) %>
