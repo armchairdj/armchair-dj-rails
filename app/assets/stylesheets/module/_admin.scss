@@ -6,9 +6,16 @@ form.admin {
   max-width: 800px;
 }
 
+header.admin-nav {
+  background-color: $black;
+}
+
+footer.admin-nav {
+  background-color: $flash-bg;
+}
+
 .admin-nav {
   @include clearfix();
-  background-color: $black;
   padding: $spacing-s;
 
   .logo {
