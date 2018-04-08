@@ -50,8 +50,6 @@ module Errorable
     def respond_with_error(code, template, exception = nil)
       render_error_response(code, template)
       log_error(code, exception)
-
-      false
     end
 
     def render_error_response(code, template)

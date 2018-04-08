@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::PostPolicy do
-
+RSpec.describe WorkPolicy do
   let(:user) { User.new }
 
   subject { described_class }

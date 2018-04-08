@@ -4,8 +4,8 @@ require 'rails_helper'
 RSpec.describe StyleGuidesHelper, type: :helper do
   describe "#lorem_html_paragraphs" do
     before(:each) do
-      allow(FFaker::Lorem).to receive(:paragraphs).with(2).and_return(["first", "second"])
-      allow(FFaker::Lorem).to receive(:paragraphs).with(3).and_return(["first", "second", "third"])
+      allow(FFaker::HipsterIpsum).to receive(:paragraphs).with(2).and_return(["first", "second"])
+      allow(FFaker::HipsterIpsum).to receive(:paragraphs).with(3).and_return(["first", "second", "third"])
     end
 
     it "gives 2 paragraphs by default" do

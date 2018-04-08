@@ -1,29 +1,16 @@
+require 'ffaker'
+
 FactoryBot.define do
-
-  #############################################################################
-  # SEQUENCES.
-  #############################################################################
-
-  sequence :standalone_post_title do |n|
-    "Naked Post Title #{n}"
-  end
-
-  #############################################################################
-  # FACTORIES.
-  #############################################################################
-
   factory :post do
-    factory :standalone_post do
-      title { generate(:standalone_post_title) }
-      body "This is come content."
+    factory :minimal_post, parent: :standalone_post do; end
 
-      factory :minimal_post do
-        # Just a naked post.
-      end
+    factory :standalone_post do
+      title FFaker::HipsterIpsum.unique.phrase
+      body "This is a standalone post about, like, deep thoughts."
     end
 
     factory :review_post do
-      body "This is a post about a work."
+      body "This is a review."
       association :work, factory: :minimal_work
     end
 

@@ -1,3 +1,5 @@
+require 'ffaker'
+
 FactoryBot.define do
   factory :contribution do
     factory :minimal_contribution do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CreatorPolicy do
+RSpec.describe Admin::CreatorPolicy do
 
   let(:user) { User.new }
 
