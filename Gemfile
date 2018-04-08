@@ -137,7 +137,9 @@ gem 'ffaker'
 gem 'devise'
 
 # Authorization framework.
-gem 'pundit'
+# gem 'pundit', path: "/Users/armchairdj/Sites/personal/pundit"
+gem "pundit", git: "https://github.com/armchairdj/pundit",
+  ref: "a1968e4041b33d0329c25d937fef09a0f724638d"
 
 ###############################################################################
 # DEPLOYMENT.

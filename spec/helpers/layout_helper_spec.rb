@@ -5,7 +5,7 @@ RSpec.describe LayoutHelper, type: :helper do
     it "works on non-admin pages" do
       assign(:admin, false)
 
-      expect(helper.body_classes).to eq(nil)
+      expect(helper.body_classes).to eq("public")
     end
 
     it "works on admin pages" do

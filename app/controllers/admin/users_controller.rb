@@ -1,4 +1,3 @@
-module Admin
-  class UsersController
-  end
+class Admin::UsersController
+
 end

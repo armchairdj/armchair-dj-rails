@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/armchairdj/pundit
+  revision: a1968e4041b33d0329c25d937fef09a0f724638d
+  ref: a1968e4041b33d0329c25d937fef09a0f724638d
+  specs:
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -159,8 +167,6 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     public_suffix (3.0.2)
     puma (3.10.0)
-    pundit (1.1.0)
-      activesupport (>= 3.0.0)
     pundit-matchers (1.4.1)
       pundit (~> 1.1, >= 1.1.0)
       rspec-rails (>= 3.0.0)
@@ -318,7 +324,7 @@ DEPENDENCIES
   pg
   premailer-rails
   puma (~> 3.7)
-  pundit
+  pundit!
   pundit-matchers
   rails (= 5.1.5)
   rails-controller-testing

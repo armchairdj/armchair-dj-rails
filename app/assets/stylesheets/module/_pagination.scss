@@ -32,14 +32,18 @@ nav.pagination {
       }
     }
 
-    span {
-      background-color: transparent;
-      border-color: $armchair-smoke;
+    &.page-current {
+      span {
+        background-color: $armchair-smoke;
+        border-color: $armchair-smoke;
+      }
     }
 
     &.page-next,
     &.page-prev {
       span {
+        background-color: transparent;
+        border-color: $armchair-smoke;
         opacity: 0.2;
       }
     }

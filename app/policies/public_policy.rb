@@ -8,14 +8,14 @@ class PublicPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    false
   end
 
   def update?
-    true
+    false
   end
 
   def destroy?
-    true
+    false
   end
 end

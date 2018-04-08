@@ -1,4 +1,17 @@
 module AdminHelper
+
+  #############################################################################
+  # FORMS.
+  #############################################################################
+
+  def admin_submit_button(f)
+    f.button :submit, f.object.new_record? ? "Create" : "Update"
+  end
+
+  #############################################################################
+  # LINKS.
+  #############################################################################
+
   def admin_create_link(model)
     svg   = semantic_svg_image("open_iconic/plus.svg", title: "plus sign", desc: "addition icon")
     path  = new_polymorphic_path([:admin, model])

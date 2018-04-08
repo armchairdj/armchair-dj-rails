@@ -1,7 +1,7 @@
-class CreatorPolicy < AdminPolicy
+class CreatorPolicy < PublicPolicy
   class Scope < Scope
     def resolve
-      scope.all.alphabetical.with_counts
+      scope.joins(:posts).alphabetical
     end
   end
 end

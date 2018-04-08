@@ -54,7 +54,7 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order("LOWER(title)") }
+  scope :alphabetical, -> { order("LOWER(works.title)") }
 
   #############################################################################
   # VALIDATIONS.

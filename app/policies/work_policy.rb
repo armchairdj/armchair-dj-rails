@@ -1,7 +1,7 @@
-class WorkPolicy < AdminPolicy
+class WorkPolicy < PublicPolicy
   class Scope < Scope
     def resolve
-      scope.all.alphabetical
+      scope.joins(:posts).alphabetical
     end
   end
 end
