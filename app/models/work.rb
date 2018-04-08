@@ -60,8 +60,9 @@ class Work < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :title, presence: true
   validates :medium, presence: true
+
+  validates :title, presence: true
 
   validate do
     validate_contributions
