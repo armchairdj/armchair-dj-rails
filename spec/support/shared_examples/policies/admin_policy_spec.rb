@@ -1,8 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe StyleGuidePolicy do
-  let(:record) { true }
-
+RSpec.shared_examples "an admin policy" do
   subject { described_class.new(user, record) }
 
   context "as guest" do
@@ -12,8 +10,11 @@ RSpec.describe StyleGuidePolicy do
       [
         :index,
         :show,
-        :flash_message,
-        :error_page
+        :new,
+        :create,
+        :edit,
+        :update,
+        :destroy
       ].each do |method|
         expect {
           subject.send("#{method.to_s}?")
@@ -29,8 +30,11 @@ RSpec.describe StyleGuidePolicy do
       [
         :index,
         :show,
-        :flash_message,
-        :error_page
+        :new,
+        :create,
+        :edit,
+        :update,
+        :destroy
       ].each do |method|
         expect {
           subject.send("#{method.to_s}?")
@@ -46,8 +50,11 @@ RSpec.describe StyleGuidePolicy do
       [
         :index,
         :show,
-        :flash_message,
-        :error_page
+        :new,
+        :create,
+        :edit,
+        :update,
+        :destroy
       ].each do |method|
         expect {
           subject.send("#{method.to_s}?")
@@ -62,8 +69,11 @@ RSpec.describe StyleGuidePolicy do
     specify { is_expected.to permit_actions([
       :index,
       :show,
-      :flash_message,
-      :error_page
+      :new,
+      :create,
+      :edit,
+      :update,
+      :destroy
     ]) }
   end
 end

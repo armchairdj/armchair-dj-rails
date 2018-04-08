@@ -5,9 +5,9 @@ FactoryBot.define do
     factory :minimal_user, parent: :guest do end
 
     trait :valid do
-      first_name FFaker::Name.unique.first_name
-      last_name  FFaker::Name.unique.last_name
-      email      FFaker::Internet.unique.email
+      first_name { FFaker::Name.unique.first_name }
+      last_name  { FFaker::Name.unique.last_name }
+      email      { FFaker::Internet.unique.email }
       password   "password1234"
     end
 
@@ -25,6 +25,7 @@ FactoryBot.define do
     end
 
     factory :member do
+      valid
       role :member
     end
 
@@ -33,6 +34,7 @@ FactoryBot.define do
     end
 
     factory :contributor do
+      valid
       role :contributor
     end
 
@@ -41,6 +43,7 @@ FactoryBot.define do
     end
 
     factory :admin do
+      valid
       role :admin
     end
 

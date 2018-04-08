@@ -1,4 +1,6 @@
 class ApplicationPolicy
+  include PolicyMethods
+
   attr_reader :user, :record
 
   class Scope
@@ -49,33 +51,5 @@ class ApplicationPolicy
 
   def destroy?
     false
-  end
-
-protected
-
-  def admin?
-    user.admin?
-  end
-
-  def owner_or_admin?
-    (user.admin? || user == record.user)
-  end
-
-  def force_login
-    raise Pundit::NotAuthenticatedError, "must be logged in" unless user
-  end
-
-  def force_admin_login
-    force_login
-
-    raise Pundit::NotAuthorizedError, "must be admin" unless user.admin?
-  end
-
-  def raise_unauthorized
-    raise Pundit::NotAuthorizedError, "unauthorized" unless record_in_scope?
-  end
-
-  def record_in_scope?
-    scope.where(id: record.id).exists?
   end
 end

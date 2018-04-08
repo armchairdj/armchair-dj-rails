@@ -5,7 +5,7 @@ FactoryBot.define do
     factory :minimal_post, parent: :standalone_post do; end
 
     factory :standalone_post do
-      title FFaker::HipsterIpsum.unique.phrase
+      title { FFaker::HipsterIpsum.unique.phrase }
       body "This is a standalone post about, like, deep thoughts."
     end
 

@@ -62,7 +62,7 @@ protected
   end
 
   def force_admin_login
-    force_login
+    logged_in?
 
     raise Pundit::NotAuthorizedError, "must be admin" unless user.admin?
   end

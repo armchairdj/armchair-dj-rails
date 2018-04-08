@@ -6,7 +6,7 @@ FactoryBot.define do
 
     factory :work_for_contribution_factory do
       medium :song
-      title  FFaker::Music.unique.song
+      title  { FFaker::Music.unique.song }
     end
 
     ###########################################################################
@@ -15,7 +15,7 @@ FactoryBot.define do
 
     factory :song do
       medium :song
-      title  FFaker::Music.unique.song
+      title  { FFaker::Music.unique.song }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
@@ -24,7 +24,7 @@ FactoryBot.define do
 
     factory :collaborative_song do
       medium :song
-      title  FFaker::Music.unique.song
+      title  { FFaker::Music.unique.song }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
@@ -38,7 +38,7 @@ FactoryBot.define do
 
     factory :album do
       medium :album
-      title  FFaker::Music.unique.album
+      title  { FFaker::Music.unique.album }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
@@ -47,7 +47,7 @@ FactoryBot.define do
 
     factory :collaborative_album do
       medium :album
-      title  FFaker::Music.unique.album
+      title  { FFaker::Music.unique.album }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
@@ -61,7 +61,7 @@ FactoryBot.define do
 
     factory :film do
       medium :film
-      title  FFaker::Movie.unique.title
+      title  { FFaker::Movie.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
@@ -70,7 +70,7 @@ FactoryBot.define do
 
     factory :collaborative_film do
       medium :film
-      title  FFaker::Movie.unique.title
+      title  { FFaker::Movie.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id),
@@ -84,7 +84,7 @@ FactoryBot.define do
 
     factory :tv_show do
       medium :tv_show
-      title  FFaker::Movie.unique.title
+      title  { FFaker::Movie.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id)
@@ -93,7 +93,7 @@ FactoryBot.define do
 
     factory :collaborative_tv_show do
       medium :tv_show
-      title  FFaker::Movie.unique.title
+      title  { FFaker::Movie.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id),
@@ -107,7 +107,7 @@ FactoryBot.define do
 
     factory :book do
       medium :book
-      title  FFaker::Book.unique.title
+      title  { FFaker::Book.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
@@ -116,7 +116,7 @@ FactoryBot.define do
 
     factory :collaborative_book do
       medium :book
-      title  FFaker::Book.unique.title
+      title  { FFaker::Book.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id),
@@ -130,7 +130,7 @@ FactoryBot.define do
 
     factory :comic do
       medium :comic
-      title  FFaker::Book.unique.title
+      title  { FFaker::Book.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:cartoonist).id)
@@ -139,7 +139,7 @@ FactoryBot.define do
 
     factory :collaborative_comic do
       medium :comic
-      title  FFaker::Book.unique.title
+      title  { FFaker::Book.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:cartoonist).id),
@@ -153,7 +153,7 @@ FactoryBot.define do
 
     factory :artwork do
       medium :artwork
-      title  FFaker::CheesyLingo.unique.title
+      title  { FFaker::CheesyLingo.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:artist).id)
@@ -162,7 +162,7 @@ FactoryBot.define do
 
     factory :collaborative_artwork do
       medium :artwork
-      title  FFaker::CheesyLingo.unique.title
+      title  { FFaker::CheesyLingo.unique.title }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:artist).id),
@@ -176,7 +176,7 @@ FactoryBot.define do
 
     factory :software do
       medium :software
-      title  FFaker::Product.unique.brand
+      title  { FFaker::Product.unique.brand }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:programmer).id)
@@ -185,7 +185,7 @@ FactoryBot.define do
 
     factory :collaborative_software do
       medium :software
-      title  FFaker::Product.unique.brand
+      title  { FFaker::Product.unique.brand }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:programmer).id),

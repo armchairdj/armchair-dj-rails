@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PagePolicy do
+  let(:user  ) { create(:guest) }
+  let(:record) { true }
 
-  let(:user) { User.new }
+  subject { described_class.new(user, record) }
 
-  subject { described_class }
-
-  describe :index? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  specify { is_expected.to permit_action(:show) }
 end

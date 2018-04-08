@@ -1,31 +1,21 @@
 class AdminPolicy < ApplicationPolicy
   def index?
-    force_admin_login
-
-    admin?
+    logged_in_as_admin?
   end
 
   def show?
-    force_admin_login
-
-    admin?
+    logged_in_as_admin?
   end
 
   def create?
-    force_admin_login
-
-    admin?
+    logged_in_as_admin?
   end
 
   def update?
-    force_admin_login
-
-    admin?
+    logged_in_as_admin?
   end
 
   def destroy?
-    force_admin_login
-
-    admin?
+    logged_in_as_admin?
   end
 end
