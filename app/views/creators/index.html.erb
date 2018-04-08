@@ -2,10 +2,14 @@
   @headline = @title = "Creators"
 %>
 
-<% if @creators.any? %>
+<% if @creators.empty? %>
+  <%= content_tag(:p, "Nothing so far.") %>
+<% else %>
   <%= content_tag(:ul, class: "bulleted") do %>
     <% @creators.each do |creator| %>
       <%= content_tag(:li, link_to(creator.name, creator)) %>
     <% end %>
   <% end %>
+
+  <%= paginate @creators %>
 <% end %>

@@ -1,7 +1,30 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+require 'ffaker'
+
+10.times do
+  FactoryBot.create(                  :song_review, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))
+  FactoryBot.create(                  :song_review, body: FFaker::HipsterIpsum.paragraphs(11).join("\n\n"))
+  FactoryBot.create(              :standalone_post, body: FFaker::HipsterIpsum.paragraphs( 5).join("\n\n"))
+  FactoryBot.create(                 :album_review, body: FFaker::HipsterIpsum.paragraphs( 9).join("\n\n"))
+  FactoryBot.create(                  :film_review, body: FFaker::HipsterIpsum.paragraphs( 5).join("\n\n"))
+  FactoryBot.create(              :standalone_post, body: FFaker::HipsterIpsum.paragraphs(17).join("\n\n"))
+  FactoryBot.create(                  :song_review, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))
+  FactoryBot.create(               :tv_show_review, body: FFaker::HipsterIpsum.paragraphs( 2).join("\n\n"))
+  FactoryBot.create(                  :book_review, body: FFaker::HipsterIpsum.paragraphs( 4).join("\n\n"))
+  FactoryBot.create(                 :album_review, body: FFaker::HipsterIpsum.paragraphs(15).join("\n\n"))
+  FactoryBot.create(              :standalone_post, body: FFaker::HipsterIpsum.paragraphs( 9).join("\n\n"))
+  FactoryBot.create(              :software_review, body: FFaker::HipsterIpsum.paragraphs( 1).join("\n\n"))
+  FactoryBot.create(                 :comic_review, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))
+  FactoryBot.create(                  :song_review, body: FFaker::HipsterIpsum.paragraphs( 2).join("\n\n"))
+  FactoryBot.create(               :artwork_review, body: FFaker::HipsterIpsum.paragraphs(10).join("\n\n"))
+  FactoryBot.create(              :standalone_post, body: FFaker::HipsterIpsum.paragraphs(12).join("\n\n"))
+  FactoryBot.create(              :software_review, body: FFaker::HipsterIpsum.paragraphs(30).join("\n\n"))
+
+  FactoryBot.create(    :collaborative_book_review, body: FFaker::HipsterIpsum.paragraphs( 6).join("\n\n"))
+  FactoryBot.create(    :collaborative_song_review, body: FFaker::HipsterIpsum.paragraphs( 9).join("\n\n"))
+  FactoryBot.create(   :collaborative_album_review, body: FFaker::HipsterIpsum.paragraphs( 7).join("\n\n"))
+  FactoryBot.create(   :collaborative_comic_review, body: FFaker::HipsterIpsum.paragraphs( 8).join("\n\n"))
+  FactoryBot.create( :collaborative_artwork_review, body: FFaker::HipsterIpsum.paragraphs( 1).join("\n\n"))
+  FactoryBot.create(    :collaborative_film_review, body: FFaker::HipsterIpsum.paragraphs( 4).join("\n\n"))
+  FactoryBot.create( :collaborative_tv_show_review, body: FFaker::HipsterIpsum.paragraphs( 2).join("\n\n"))
+  FactoryBot.create(:collaborative_software_review, body: FFaker::HipsterIpsum.paragraphs(45).join("\n\n"))
+end

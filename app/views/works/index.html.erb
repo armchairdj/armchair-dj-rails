@@ -2,10 +2,14 @@
   @headline = @title = "Works"
 %>
 
-<% if @works.any? %>
+<% if @works.empty? %>
+  <%= content_tag(:p, "Nothing so far.") %>
+<% else %>
   <%= content_tag(:ul, class: "bulleted") do %>
     <% @works.each do |work| %>
       <%= content_tag(:li, link_to_work(work)) %>
     <% end %>
   <% end %>
+
+  <%= paginate @works %>
 <% end %>

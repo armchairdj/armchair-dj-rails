@@ -23,7 +23,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "with records" do
         before(:each) do
-          ( per_page / 2     ).times { create(:review_post) }
+          ( per_page / 2     ).times { create(:song_review) }
           ((per_page / 2) + 1).times { create(:standalone_post) }
         end
 

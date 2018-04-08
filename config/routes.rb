@@ -5,6 +5,14 @@ Rails.application.routes.draw do
   root "pages#homepage"
 
   #############################################################################
+  # Concerns.
+  #############################################################################
+
+  concern :paginatable do
+    get "(page/:page)", action: :index, on: :collection, as: ''
+  end
+
+  #############################################################################
   # Users.
   #############################################################################
 
@@ -33,19 +41,19 @@ Rails.application.routes.draw do
   # Creators.
   #############################################################################
 
-  resources :creators, only: [:index, :show]
+  resources :creators, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # Works.
   #############################################################################
 
-  resources :works, only: [:index, :show]
+  resources :works, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # Posts.
   #############################################################################
 
-  resources :posts, only: [:index, :show]
+  resources :posts, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # Admin.
