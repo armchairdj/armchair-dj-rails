@@ -30,7 +30,7 @@ class WorksController < ApplicationController
 private
 
   def find_collection
-    @works = policy_scope(Work)
+    @works = policy_scope(Work).page(params[:page])
   end
 
   def find_instance

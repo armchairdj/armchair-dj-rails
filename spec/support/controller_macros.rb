@@ -1,7 +1,7 @@
 module ControllerMacros
   def login_member
     before(:each) do
-      user = FactoryGirl.create(:member)
+      user = FactoryBot.create(:member)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 
@@ -11,7 +11,7 @@ module ControllerMacros
 
   def login_contributor
     before(:each) do
-      user = FactoryGirl.create(:contributor)
+      user = FactoryBot.create(:contributor)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 
@@ -21,7 +21,7 @@ module ControllerMacros
 
   def login_admin
     before(:each) do
-      user = FactoryGirl.create(:pro)
+      user = FactoryBot.create(:admin)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 

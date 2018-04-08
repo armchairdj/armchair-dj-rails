@@ -6,6 +6,7 @@ SimpleCov.start 'rails' do
   add_filter "/src"
   add_filter "/lib/generators"
   add_filter "/lib/templates"
+  add_filter "/app/controllers/users"
 end
 
 require 'spec_helper'

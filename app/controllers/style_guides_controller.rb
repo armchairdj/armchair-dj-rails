@@ -11,7 +11,7 @@ class StyleGuidesController < ApplicationController
   end
 
   def flash_message
-    flash.now[@flash_type] = "This is a flash #{@flash_type.to_sym} message."
+    flash.now[@flash_type] = "This is a flash #{@flash_type} message."
   end
 
   def error_page

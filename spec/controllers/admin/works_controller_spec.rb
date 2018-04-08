@@ -1,136 +1,170 @@
 require 'rails_helper'
 
 RSpec.describe Admin::WorksController, type: :controller do
+  let(:per_page) { Kaminari.config.default_per_page }
 
-  let(:valid_attributes) { {
-    title: "Work Title",
-    creator_id: create(:minimal_creator).id
-  } }
+  context "as admin" do
+    login_admin
 
-  let(:invalid_attributes) { {
-    title: "",
-    creator_id: nil
-  } }
+    describe 'GET #index' do
+      pending "scopes"
 
-  describe 'GET #index' do
-    let(:works) { [
-      create(:minimal_work),
-      create(:minimal_work)
-    ] }
+      context "without records" do
+        it "renders" do
+          get :index
 
-    it "returns a success response" do
-      get :index, params: {}
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
 
-      expect(response).to be_success
+          expect(assigns(:works).total_count).to eq(0)
+          expect(assigns(:works).size       ).to eq(0)
+        end
+      end
+
+      context "with records" do
+        before(:each) do
+          (per_page + 1).times { create(:minimal_work) }
+        end
+
+        it "renders" do
+          get :index
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(per_page)
+        end
+
+        it "renders second page" do
+          get :index, params: { page: 2 }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(1)
+        end
+      end
     end
-  end
 
-  describe 'GET #show' do
-    let(:work) {
-      create(:minimal_work)
-    }
+    describe 'GET #show' do
+      let(:work) { create(:minimal_work) }
 
-    it "returns a success response" do
-      get :show, params: {id: work.to_param}
+      it "renders" do
+        get :show, params: { id: work.to_param }
 
-      expect(response).to be_success
+        expect(response).to be_success
+        expect(response).to render_template("admin/works/show")
+
+        expect(assigns(:work)).to eq(work)
+      end
     end
-  end
 
-  describe 'GET #new' do
-    it "returns a success response" do
-      get :new, params: {}
+    describe 'GET #new' do
+      it "returns a success response" do
+        get :new
 
-      expect(response).to be_success
+        expect(response).to be_success
+        expect(response).to render_template("admin/works/new")
+
+        expect(assigns(:work)).to be_a_new(Work)
+      end
     end
-  end
 
-  describe 'POST #create' do
-    context "with valid params" do
-      it "creates a new Work" do
+    describe 'POST #create' do
+      let(  :valid_attributes) { attributes_for(:minimal_work) }
+      let(:invalid_attributes) { attributes_for(:minimal_work).except(:title) }
+
+      context "with valid params" do
+        it "creates a new Work" do
+          expect {
+            post :create, params: { work: valid_attributes }
+          }.to change(Work, :count).by(1)
+        end
+
+        it "redirects to index" do
+          post :create, params: { work: valid_attributes }
+
+          expect(response).to redirect_to(admin_works_path)
+        end
+      end
+
+      context "with invalid params" do
+        it "renders new" do
+          post :create, params: { work: invalid_attributes }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/new")
+
+          expect(assigns(:work)       ).to be_a_new(Work)
+          expect(assigns(:work).valid?).to eq(false)
+        end
+      end
+    end
+
+    describe 'GET #edit' do
+      let(:work) { create(:minimal_work) }
+
+      it "returns a success response" do
+        get :edit, params: { id: work.to_param }
+
+        expect(response).to be_success
+        expect(response).to render_template("admin/works/edit")
+
+        expect(assigns(:work)).to eq(work)
+      end
+    end
+
+    describe 'PUT #update' do
+      let(:work) { create(:minimal_work) }
+
+      let(  :valid_attributes) { { title: "New Title" } }
+      let(:invalid_attributes) { { title: ""          } }
+
+      context "with valid params" do
+        it "updates the requested work" do
+          put :update, params: { id: work.to_param, work: valid_attributes }
+
+          work.reload
+
+          expect(work.title).to eq(valid_attributes[:title])
+        end
+
+        it "redirects to index" do
+          put :update, params: { id: work.to_param, work: valid_attributes }
+
+          expect(response).to redirect_to(admin_works_path)
+        end
+      end
+
+      context "with invalid params" do
+        it "renders edit" do
+          put :update, params: { id: work.to_param, work: invalid_attributes }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/edit")
+
+          expect(assigns(:work)       ).to eq(work)
+          expect(assigns(:work).valid?).to eq(false)
+        end
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let!(:work) { create(:minimal_work) }
+
+      it "destroys the requested work" do
         expect {
-          post :create, params: {work: valid_attributes}
-        }.to change(Work, :count).by(1)
+          delete :destroy, params: { id: work.to_param }
+        }.to change(Work, :count).by(-1)
       end
 
-      it "redirects to the created work" do
-        post :create, params: {work: valid_attributes}
+      it "redirects to index" do
+        delete :destroy, params: { id: work.to_param }
 
-        expect(response).to redirect_to(Work.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {work: invalid_attributes}
-
-        expect(response).to be_success
+        expect(response).to redirect_to(admin_works_path)
       end
     end
   end
-
-  describe 'GET #edit' do
-    let(:work) {
-      create(:minimal_work)
-    }
-
-    it "returns a success response" do
-      get :edit, params: {id: work.to_param}
-
-      expect(response).to be_success
-    end
-  end
-
-  describe 'PUT #update' do
-    let(:work) {
-      create(:minimal_work)
-    }
-
-    context "with valid params" do
-      let(:new_attributes) { {
-        title: "New Work Title"
-      } }
-
-      it "updates the requested work" do
-        put :update, params: {id: work.to_param, work: new_attributes}
-
-        work.reload
-
-        expect(work.title).to eq(new_attributes[:title])
-      end
-
-      it "redirects to the work" do
-        put :update, params: {id: work.to_param, work: valid_attributes}
-
-        expect(response).to redirect_to(work)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
-        put :update, params: {id: work.to_param, work: invalid_attributes}
-
-        expect(response).to be_success
-      end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    let!(:work) {
-      create(:minimal_work)
-    }
-
-    it "destroys the requested work" do
-      expect {
-        delete :destroy, params: {id: work.to_param}
-      }.to change(Work, :count).by(-1)
-    end
-
-    it "redirects to the works list" do
-      delete :destroy, params: {id: work.to_param}
-
-      expect(response).to redirect_to(works_url)
-    end
-  end
-
 end

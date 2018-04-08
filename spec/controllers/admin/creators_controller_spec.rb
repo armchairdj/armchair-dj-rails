@@ -1,135 +1,170 @@
 require 'rails_helper'
 
 RSpec.describe Admin::CreatorsController, type: :controller do
+  let(:per_page) { Kaminari.config.default_per_page }
 
-  let(:valid_attributes) { {
-    name: "Kate Bush"
-  } }
+  context "as admin" do
+    login_admin
 
-  let(:invalid_attributes) { {
-    name: ""
-  } }
+    describe 'GET #index' do
+      pending "scopes"
 
-  describe 'GET #index' do
-    let(:creators) { [
-      create(:minimal_creator),
-      create(:minimal_creator)
-    ] }
+      context "without records" do
+        it "renders" do
+          get :index
 
-    it "returns a success response" do
-      get :index, params: {}
+          expect(response).to be_success
+          expect(response).to render_template("admin/creators/index")
 
-      expect(response).to be_success
-
-      expect(assigns(:creators)).to match_array(creators)
-    end
-  end
-
-  describe 'GET #show' do
-    let(:creator) {
-      create(:minimal_creator)
-    }
-
-    it "returns a success response" do
-      get :show, params: {id: creator.to_param}
-
-      expect(response).to be_success
-    end
-  end
-
-  describe 'GET #new' do
-    it "returns a success response" do
-      get :new, params: {}
-
-      expect(response).to be_success
-    end
-  end
-
-  describe 'POST #create' do
-    context "with valid params" do
-      it "creates a new Creator" do
-        expect {
-          post :create, params: {creator: valid_attributes}
-        }.to change(Creator, :count).by(1)
+          expect(assigns(:creators).total_count).to eq(0)
+          expect(assigns(:creators).length     ).to eq(0)
+        end
       end
 
-      it "redirects to the created creator" do
-        post :create, params: {creator: valid_attributes}
+      context "with records" do
+        before(:each) do
+          (per_page + 1).times { create(:minimal_creator) }
+        end
 
-        expect(response).to redirect_to(Creator.last)
+        it "renders" do
+          get :index
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/creators/index")
+
+          expect(assigns(:creators).total_count).to eq(per_page + 1)
+          expect(assigns(:creators).length     ).to eq(per_page)
+        end
+
+        it "renders second page" do
+          get :index, params: { page: 2 }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/creators/index")
+
+          expect(assigns(:creators).total_count).to eq(per_page + 1)
+          expect(assigns(:creators).length     ).to eq(1)
+        end
       end
     end
 
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {creator: invalid_attributes}
+    describe 'GET #show' do
+      let(:creator) { create(:minimal_creator) }
+
+      it "renders" do
+        get :show, params: { id: creator.to_param }
 
         expect(response).to be_success
-      end
-    end
-  end
+        expect(response).to render_template("admin/creators/show")
 
-  describe 'GET #edit' do
-    let(:creator) {
-      create(:minimal_creator)
-    }
-
-    it "returns a success response" do
-      get :edit, params: {id: creator.to_param}
-
-      expect(response).to be_success
-    end
-  end
-
-  describe 'PUT #update' do
-    let(:creator) {
-      create(:minimal_creator)
-    }
-
-    context "with valid params" do
-      let(:new_attributes) { {
-        name: "Updated name"
-      } }
-
-      it "updates the requested creator" do
-        put :update, params: { id: creator.to_param, creator: new_attributes}
-
-        creator.reload
-
-        expect(creator.name).to eq(new_attributes[:name])
-      end
-
-      it "redirects to the creator" do
-        put :update, params: {id: creator.to_param, creator: valid_attributes}
-
-        expect(response).to redirect_to(creator)
+        expect(assigns(:creator)).to eq(creator)
       end
     end
 
-    context "with invalid params" do
+    describe 'GET #new' do
       it "returns a success response" do
-        put :update, params: {id: creator.to_param, creator: invalid_attributes}
+        get :new
 
         expect(response).to be_success
+        expect(response).to render_template("admin/creators/new")
+
+        expect(assigns(:creator)).to be_a_new(Creator)
       end
     end
-  end
 
-  describe 'DELETE #destroy' do
-    let!(:creator) {
-      create(:minimal_creator)
-    }
+    describe 'POST #create' do
+      let(  :valid_attributes) { attributes_for(:minimal_creator) }
+      let(:invalid_attributes) { attributes_for(:minimal_creator).except(:name) }
 
-    it "destroys the requested creator" do
-      expect {
-        delete :destroy, params: {id: creator.to_param}
-      }.to change(Creator, :count).by(-1)
+      context "with valid params" do
+        it "creates a new Creator" do
+          expect {
+            post :create, params: { creator: valid_attributes }
+          }.to change(Creator, :count).by(1)
+        end
+
+        it "redirects to index" do
+          post :create, params: { creator: valid_attributes }
+
+          expect(response).to redirect_to(admin_creators_path)
+        end
+      end
+
+      context "with invalid params" do
+        it "renders new" do
+          post :create, params: { creator: invalid_attributes }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/creators/new")
+
+          expect(assigns(:creator)       ).to be_a_new(Creator)
+          expect(assigns(:creator).valid?).to eq(false)
+        end
+      end
     end
 
-    it "redirects to the creators list" do
-      delete :destroy, params: {id: creator.to_param}
+    describe 'GET #edit' do
+      let(:creator) { create(:minimal_creator) }
 
-      expect(response).to redirect_to(creators_url)
+      it "returns a success response" do
+        get :edit, params: { id: creator.to_param }
+
+        expect(response).to be_success
+        expect(response).to render_template("admin/creators/edit")
+
+        expect(assigns(:creator)).to eq(creator)
+      end
+    end
+
+    describe 'PUT #update' do
+      let(:creator) { create(:minimal_creator) }
+
+      let(  :valid_attributes) { { name: "New Name" } }
+      let(:invalid_attributes) { { name: ""         } }
+
+      context "with valid params" do
+        it "updates the requested creator" do
+          put :update, params: { id: creator.to_param, creator: valid_attributes }
+
+          creator.reload
+
+          expect(creator.name).to eq(valid_attributes[:name])
+        end
+
+        it "redirects to index" do
+          put :update, params: { id: creator.to_param, creator: valid_attributes }
+
+          expect(response).to redirect_to(admin_creators_path)
+        end
+      end
+
+      context "with invalid params" do
+        it "renders edit" do
+          put :update, params: { id: creator.to_param, creator: invalid_attributes }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/creators/edit")
+
+          expect(assigns(:creator)       ).to eq(creator)
+          expect(assigns(:creator).valid?).to eq(false)
+        end
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let!(:creator) { create(:minimal_creator) }
+
+      it "destroys the requested creator" do
+        expect {
+          delete :destroy, params: { id: creator.to_param }
+        }.to change(Creator, :count).by(-1)
+      end
+
+      it "redirects to index" do
+        delete :destroy, params: { id: creator.to_param }
+
+        expect(response).to redirect_to(admin_creators_path)
+      end
     end
   end
 end

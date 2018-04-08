@@ -30,7 +30,7 @@ class PostsController < ApplicationController
 private
 
   def find_collection
-    @posts = policy_scope(Post)
+    @posts = policy_scope(Post).page(params[:page])
   end
 
   def find_instance
