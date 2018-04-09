@@ -4,7 +4,7 @@ RSpec.describe "Works", type: :request do
   describe "GET /works" do
     it "works! (now write some real specs)" do
       get works_path
-      expect(response).to have_http_status(200)
+      expect(response).to be_success
     end
   end
 end

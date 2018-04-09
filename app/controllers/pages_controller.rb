@@ -1,10 +1,11 @@
 class PagesController < ApplicationController
   before_action :authorize_page
 
-  # GET /
-  def homepage
-    @homepage = true
-  end
+  # GET /about
+  def about; end
+
+  # GET /credits
+  def credits; end
 
 private
 

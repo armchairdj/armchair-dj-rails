@@ -2,7 +2,6 @@
 # http://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
-  root "pages#homepage"
 
   #############################################################################
   # Concerns.
@@ -38,34 +37,36 @@ Rails.application.routes.draw do
   }
 
   #############################################################################
-  # Creators.
+  # Public.
   #############################################################################
+
+  get "/posts/page/1", to: redirect("/"), as: "redirect_posts_page_one"
+  get "/posts",        to: redirect("/"), as: "redirect_posts_index"
 
   resources :creators, only: [:index, :show], concerns: :paginatable
+  resources :works,    only: [:index, :show], concerns: :paginatable
+  resources :posts,    only: [:index, :show], concerns: :paginatable
+
+  root "posts#index"
 
   #############################################################################
-  # Works.
+  # Pages.
   #############################################################################
 
-  resources :works, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # Posts.
-  #############################################################################
-
-  resources :posts, only: [:index, :show], concerns: :paginatable
+  get "about",   to: "pages#about"
+  get "credits", to: "pages#credits"
 
   #############################################################################
   # Admin.
   #############################################################################
 
   namespace :admin do
+    root to: "posts#index"
+
     resources :users
     resources :creators
     resources :works
     resources :posts
-
-    root to: "posts#index"
   end
 
   #############################################################################

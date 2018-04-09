@@ -1,12 +1,10 @@
 <%= content_tag(:footer, id: 'page-footer') do %>
   <%= content_tag(:div, class: 'constrain-wide') do %>
-
     <%= content_tag(:nav, class: 'links') do %>
       <%= content_tag(:ul, class: 'arrowed') do %>
-        <%= content_tag(:li, link_to('Home',     root_path    )) %>
+        <%= content_tag(:li, link_to('Posts',    root_path    )) %>
         <%= content_tag(:li, link_to('Creators', creators_path)) %>
         <%= content_tag(:li, link_to('Works',    works_path   )) %>
-        <%= content_tag(:li, link_to('Posts',    posts_path   )) %>
 
         <% if user_signed_in? %>
           <%= content_tag(:li, link_to('Settings', settings_path            )) %>
@@ -19,6 +17,11 @@
       <% end %>
 
       <%= content_tag(:div, copyright_notice, class: 'copyright') %>
+
+      <%= content_tag(:ul, class: 'arrowed') do %>
+        <%= content_tag(:li, link_to('About',   about_path  )) %>
+        <%= content_tag(:li, link_to('Credits', credits_path)) %>
+      <% end %>
     <% end %>
 
     <% if @homepage %>
@@ -26,6 +29,5 @@
     <% else %>
       <%= link_to(site_logo, root_path, title: 'back to homepage', class: 'logo') %>
     <% end %>
-
   <% end %>
 <% end %>

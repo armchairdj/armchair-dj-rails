@@ -18,7 +18,11 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
+    if params[:page].blank? || params[:page] == "1"
+      return redirect_to root_path unless request.url == root_url
+    end
 
+    @homepage = true if request.url == "/"
   end
 
   # GET /posts/1
