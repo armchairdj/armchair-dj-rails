@@ -62,7 +62,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe 'GET #new' do
-      it "returns a success response" do
+      it "renders" do
         get :new
 
         expect(response).to be_success
@@ -106,7 +106,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     describe 'GET #edit' do
       let(:work) { create(:minimal_work) }
 
-      it "returns a success response" do
+      it "renders" do
         get :edit, params: { id: work.to_param }
 
         expect(response).to be_success

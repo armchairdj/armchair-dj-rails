@@ -63,7 +63,7 @@ RSpec.describe Admin::PostsController, type: :controller do
     end
 
     describe 'GET #new' do
-      it "returns a success response" do
+      it "renders" do
         get :new
 
         expect(response).to be_success
@@ -74,32 +74,121 @@ RSpec.describe Admin::PostsController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(  :valid_attributes) { attributes_for(:minimal_post) }
-      let(:invalid_attributes) { attributes_for(:minimal_post).except(:title) }
+      context "standalone" do
+        let(  :valid_attributes) { attributes_for(:standalone_post) }
+        let(:invalid_attributes) { valid_attributes.except(:title) }
 
-      context "with valid params" do
-        it "creates a new Post" do
-          expect {
+        context "with valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: valid_attributes }
+            }.to change(Post, :count).by(1)
+          end
+
+          it "redirects to index" do
             post :create, params: { post: valid_attributes }
-          }.to change(Post, :count).by(1)
+
+            expect(response).to redirect_to(admin_posts_path)
+          end
         end
 
-        it "redirects to index" do
-          post :create, params: { post: valid_attributes }
+        context "with invalid params" do
+          it "renders new" do
+            post :create, params: { post: invalid_attributes }
 
-          expect(response).to redirect_to(admin_posts_path)
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/new")
+
+            expect(assigns(:post)       ).to be_a_new(Post)
+            expect(assigns(:post).valid?).to eq(false)
+          end
         end
       end
 
-      context "with invalid params" do
-        it "renders new" do
-          post :create, params: { post: invalid_attributes }
+      context "existing work" do
+        let(  :valid_attributes) { { "body" => "body", "work_id" => create(:song).id } }
+        let(:invalid_attributes) { valid_attributes.except("body") }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/new")
+        context "with valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: valid_attributes }
+            }.to change(Post, :count).by(1)
+          end
 
-          expect(assigns(:post)       ).to be_a_new(Post)
-          expect(assigns(:post).valid?).to eq(false)
+          it "redirects to index" do
+            post :create, params: { post: valid_attributes }
+
+            expect(response).to redirect_to(admin_posts_path)
+          end
+        end
+
+        context "with invalid params" do
+          it "renders new" do
+            post :create, params: { post: invalid_attributes }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/new")
+
+            expect(assigns(:post)       ).to be_a_new(Post)
+            expect(assigns(:post).valid?).to eq(false)
+          end
+        end
+      end
+
+      context "new work" do
+        let(:valid_attributes) { {
+          "body"            => "body",
+          "work_attributes" => {
+            "medium"                   => "song",
+            "title"                    => "Hounds of Love",
+            "contributions_attributes" => {
+              "0" => {
+                "role"       => "creator",
+                "creator_id" => create(:musician).id
+              }
+            }
+          }
+        } }
+
+        let(:invalid_attributes) { valid_attributes.except("body") }
+
+        context "with valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: valid_attributes }
+            }.to change(Post, :count).by(1)
+          end
+
+          it "creates a new Work" do
+            expect {
+              post :create, params: { post: valid_attributes }
+            }.to change(Work, :count).by(1)
+          end
+
+          it "creates a new Contribution" do
+            expect {
+              post :create, params: { post: valid_attributes }
+            }.to change(Contribution, :count).by(1)
+          end
+
+          it "redirects to index" do
+            post :create, params: { post: valid_attributes }
+
+            expect(response).to redirect_to(admin_posts_path)
+          end
+        end
+
+        context "with invalid params" do
+          it "renders new" do
+            post :create, params: { post: invalid_attributes }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/new")
+
+            expect(assigns(:post)       ).to be_a_new(Post)
+            expect(assigns(:post).valid?).to eq(false)
+          end
         end
       end
     end
@@ -107,7 +196,7 @@ RSpec.describe Admin::PostsController, type: :controller do
     describe 'GET #edit' do
       let(:post) { create(:minimal_post) }
 
-      it "returns a success response" do
+      it "renders" do
         get :edit, params: { id: post.to_param }
 
         expect(response).to be_success

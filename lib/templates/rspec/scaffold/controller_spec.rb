@@ -16,7 +16,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
 <% unless options[:singleton] -%>
   describe 'GET #index' do
-    it "returns a success response" do
+    it "renders" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :index, {}
@@ -29,7 +29,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
 <% end -%>
   describe 'GET #show' do
-    it "returns a success response" do
+    it "renders" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :show, {:id => <%= file_name %>.to_param}
@@ -41,7 +41,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   end
 
   describe 'GET #new' do
-    it "returns a success response" do
+    it "renders" do
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :new, {}
 <% else -%>
@@ -74,7 +74,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
 
     context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
+      it "renders (i.e. to display the 'new' template)" do
 <% if Rails::VERSION::STRING < '5.0' -%>
         post :create, {:<%= ns_file_name %> => invalid_attributes}
 <% else -%>
@@ -86,7 +86,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   end
 
   describe 'GET #edit' do
-    it "returns a success response" do
+    it "renders" do
       <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :edit, {:id => <%= file_name %>.to_param}
@@ -126,7 +126,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
 
     context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
+      it "renders (i.e. to display the 'edit' template)" do
         <%= file_name %> = <%= class_name %>.create! valid_attributes
 <% if Rails::VERSION::STRING < '5.0' -%>
         put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_attributes}

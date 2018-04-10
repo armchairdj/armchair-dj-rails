@@ -62,7 +62,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
 
     describe 'GET #new' do
-      it "returns a success response" do
+      it "renders" do
         get :new
 
         expect(response).to be_success
@@ -106,7 +106,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     describe 'GET #edit' do
       let(:creator) { create(:minimal_creator) }
 
-      it "returns a success response" do
+      it "renders" do
         get :edit, params: { id: creator.to_param }
 
         expect(response).to be_success
