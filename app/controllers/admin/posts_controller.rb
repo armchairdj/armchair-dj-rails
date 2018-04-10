@@ -198,7 +198,7 @@ private
   end
 
   def prepare_dropdowns
-    @works    = Work.grouped_select_options_for_post
+    @works = Work.grouped_select_options_for_post
 
     return unless @allow_new_work
 
@@ -213,7 +213,7 @@ private
     when "create"
       if @sanitized_params[:work_attributes].present?
         return "post-new-work"
-      elsif @post.title.present?
+      elsif @sanitized_params[:title].present?
         return "post-standalone"
       else
         return "post-choose-work"

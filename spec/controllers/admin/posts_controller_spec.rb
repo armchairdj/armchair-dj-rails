@@ -50,15 +50,30 @@ RSpec.describe Admin::PostsController, type: :controller do
     end
 
     describe 'GET #show' do
-      let(:post) { create(:minimal_post) }
+      context "standalone" do
+        let(:post) { create(:standalone_post) }
 
-      it "renders" do
-        get :show, params: { id: post.to_param }
+        it "renders" do
+          get :show, params: { id: post.to_param }
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/posts/show")
+          expect(response).to be_success
+          expect(response).to render_template("admin/posts/show")
 
-        expect(assigns(:post)).to eq(post)
+          expect(assigns(:post)).to eq(post)
+        end
+      end
+
+      context "review" do
+        let(:post) { create(:song_review) }
+
+        it "renders" do
+          get :show, params: { id: post.to_param }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/posts/show")
+
+          expect(assigns(:post)).to eq(post)
+        end
       end
     end
 
@@ -69,14 +84,24 @@ RSpec.describe Admin::PostsController, type: :controller do
         expect(response).to be_success
         expect(response).to render_template("admin/posts/new")
 
-        expect(assigns(:post)).to be_a_new(Post)
+        expect(assigns(:post)                          ).to be_a_new(Post)
+        expect(assigns(:post).work                     ).to be_a_new(Work)
+        expect(assigns(:post).work.contributions.length).to eq(10)
+
+        expect(assigns(:works)).to be_a_kind_of(Array)
+
+        expect(assigns(:allow_new_work)).to eq(true)
+        expect(assigns(:roles         )).to be_a_kind_of(Array)
+        expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
+
+        expect(assigns(:selected_tab)).to eq("post-choose-work")
       end
     end
 
     describe 'POST #create' do
       context "standalone" do
-        let(  :valid_attributes) { attributes_for(:standalone_post) }
-        let(:invalid_attributes) { valid_attributes.except(:title) }
+        let(  :valid_attributes) { { "title" => "title", "body" => "body" } }
+        let(:invalid_attributes) { valid_attributes.except("body") }
 
         context "with valid params" do
           it "creates a new Post" do
@@ -101,6 +126,14 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
+
+            expect(assigns(:works)).to be_a_kind_of(Array)
+
+            expect(assigns(:allow_new_work)).to eq(true)
+            expect(assigns(:roles         )).to be_a_kind_of(Array)
+            expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
+
+            expect(assigns(:selected_tab)).to eq("post-standalone")
           end
         end
       end
@@ -132,6 +165,14 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
+
+            expect(assigns(:works)).to be_a_kind_of(Array)
+
+            expect(assigns(:allow_new_work)).to eq(false)
+            expect(assigns(:roles         )).to eq(nil)
+            expect(assigns(:creators      )).to eq(nil)
+
+            expect(assigns(:selected_tab)).to eq("post-choose-work")
           end
         end
       end
@@ -188,55 +229,147 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
+
+            expect(assigns(:works)).to be_a_kind_of(Array)
+
+            expect(assigns(:allow_new_work)).to eq(true)
+            expect(assigns(:roles         )).to be_a_kind_of(Array)
+            expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
+
+            expect(assigns(:selected_tab)).to eq("post-new-work")
           end
         end
       end
     end
 
     describe 'GET #edit' do
-      let(:post) { create(:minimal_post) }
+      context "standalone" do
+        let(:post) { create(:minimal_post) }
 
-      it "renders" do
-        get :edit, params: { id: post.to_param }
-
-        expect(response).to be_success
-        expect(response).to render_template("admin/posts/edit")
-
-        expect(assigns(:post)).to eq(post)
-      end
-    end
-
-    describe 'PUT #update' do
-      let(:post) { create(:minimal_post) }
-
-      let(  :valid_attributes) { { title: "New Title" } }
-      let(:invalid_attributes) { { title: ""          } }
-
-      context "with valid params" do
-        it "updates the requested post" do
-          put :update, params: { id: post.to_param, post: valid_attributes }
-
-          post.reload
-
-          expect(post.title).to eq(valid_attributes[:title])
-        end
-
-        it "redirects to index" do
-          put :update, params: { id: post.to_param, post: valid_attributes }
-
-          expect(response).to redirect_to(admin_posts_path)
-        end
-      end
-
-      context "with invalid params" do
-        it "renders edit" do
-          put :update, params: { id: post.to_param, post: invalid_attributes }
+        it "renders" do
+          get :edit, params: { id: post.to_param }
 
           expect(response).to be_success
           expect(response).to render_template("admin/posts/edit")
 
-          expect(assigns(:post)       ).to eq(post)
-          expect(assigns(:post).valid?).to eq(false)
+          expect(assigns(:post)).to eq(post)
+
+          expect(assigns(:works)).to be_a_kind_of(Array)
+
+          expect(assigns(:allow_new_work)).to eq(false)
+          expect(assigns(:roles         )).to eq(nil)
+          expect(assigns(:creators      )).to eq(nil)
+
+          expect(assigns(:selected_tab)).to eq("post-standalone")
+        end
+      end
+
+      context "review" do
+        let(:post) { create(:song_review) }
+
+        it "renders" do
+          get :edit, params: { id: post.to_param }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/posts/edit")
+
+          expect(assigns(:post)).to eq(post)
+
+          expect(assigns(:works   )).to be_a_kind_of(Array)
+
+          expect(assigns(:allow_new_work)).to eq(false)
+          expect(assigns(:roles         )).to eq(nil)
+          expect(assigns(:creators      )).to eq(nil)
+
+          expect(assigns(:selected_tab)).to eq("post-choose-work")
+        end
+      end
+    end
+
+    describe 'PUT #update' do
+      context "standalone" do
+        let(:post) { create(:standalone_post) }
+
+        let(  :valid_attributes) { { "body" => "New body." } }
+        let(:invalid_attributes) { { "body" => ""          } }
+
+        context "with valid params" do
+          it "updates the requested post" do
+            put :update, params: { id: post.to_param, post: valid_attributes }
+
+            post.reload
+
+            expect(post.body).to eq(valid_attributes["body"])
+          end
+
+          it "redirects to index" do
+            put :update, params: { id: post.to_param, post: valid_attributes }
+
+            expect(response).to redirect_to(admin_posts_path)
+          end
+        end
+
+        context "with invalid params" do
+          it "renders edit" do
+            put :update, params: { id: post.to_param, post: invalid_attributes }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/edit")
+
+            expect(assigns(:post)       ).to eq(post)
+            expect(assigns(:post).valid?).to eq(false)
+
+            expect(assigns(:works)).to be_a_kind_of(Array)
+
+            expect(assigns(:allow_new_work)).to eq(false)
+            expect(assigns(:roles         )).to eq(nil)
+            expect(assigns(:creators      )).to eq(nil)
+
+            expect(assigns(:selected_tab)).to eq("post-standalone")
+          end
+        end
+      end
+
+      context "review" do
+        let(:post) { create(:song_review) }
+
+        let(  :valid_attributes) { { "body" => "New body." } }
+        let(:invalid_attributes) { { "body" => ""          } }
+
+        context "with valid params" do
+          it "updates the requested post" do
+            put :update, params: { id: post.to_param, post: valid_attributes }
+
+            post.reload
+
+            expect(post.body).to eq(valid_attributes["body"])
+          end
+
+          it "redirects to index" do
+            put :update, params: { id: post.to_param, post: valid_attributes }
+
+            expect(response).to redirect_to(admin_posts_path)
+          end
+        end
+
+        context "with invalid params" do
+          it "renders edit" do
+            put :update, params: { id: post.to_param, post: invalid_attributes }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/edit")
+
+            expect(assigns(:post)       ).to eq(post)
+            expect(assigns(:post).valid?).to eq(false)
+
+            expect(assigns(:works)).to be_a_kind_of(Array)
+
+            expect(assigns(:allow_new_work)).to eq(false)
+            expect(assigns(:roles         )).to eq(nil)
+            expect(assigns(:creators      )).to eq(nil)
+
+            expect(assigns(:selected_tab)).to eq("post-choose-work")
+          end
         end
       end
     end
