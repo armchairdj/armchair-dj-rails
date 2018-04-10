@@ -5,14 +5,14 @@
       <% if @homepage %>
         <%= content_tag(:span, site_logo, class: 'logo') %>
       <% else %>
-        <%= link_to(site_logo, root_path, title: 'back to homepage', class: 'logo') %>
+        <%= link_to(site_logo, posts_path, title: 'back to homepage', class: 'logo') %>
       <% end %>
 
       <%= content_tag(:div, class: 'headlines') do %>
         <% if @homepage %>
           <%= content_tag(:h1, t('site.name_html')) %>
         <% else %>
-          <%= content_tag(:h1, link_to(t('site.name_html'), root_path, title: 'back to homepage')) %>
+          <%= content_tag(:h1, link_to(t('site.name_html'), posts_path, title: 'back to homepage')) %>
         <% end %>
         <%= content_tag(:h2, t('site.tagline_html')) %>
       <% end %>

@@ -48,7 +48,7 @@ RSpec.describe PostsController, type: :controller do
     let(:post) { create(:minimal_post) }
 
     it "renders" do
-        get :show, params: { id: post.id }
+        get :show, params: { slug: post.id }
 
         expect(response).to be_success
         expect(response).to render_template("posts/show")

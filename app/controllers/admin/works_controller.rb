@@ -1,4 +1,6 @@
 class Admin::WorksController < AdminController
+  include SeoPaginatable
+
   before_action :authorize_collection, only: [
     :index,
     :new,

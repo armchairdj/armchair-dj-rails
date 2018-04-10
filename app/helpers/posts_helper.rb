@@ -6,7 +6,7 @@ module PostsHelper
       post.title
     end
 
-    link_to text, post
+    link_to text, post_permalink_path(slug: post.id)
   end
 
   def post_type(post)

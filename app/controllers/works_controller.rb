@@ -1,4 +1,6 @@
 class WorksController < ApplicationController
+  include SeoPaginatable
+
   before_action :find_collection, only: [
     :index
   ]

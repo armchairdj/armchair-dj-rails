@@ -131,7 +131,7 @@ protected
   end
 
   def after_sign_up_path_for(resource)
-    root_path
+    posts_path
   end
 
   # The path used after sign up for inactive accounts.

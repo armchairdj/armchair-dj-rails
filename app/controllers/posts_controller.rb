@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+  include SeoPaginatable
+
   before_action :find_collection, only: [
     :index
   ]
@@ -15,18 +17,14 @@ class PostsController < ApplicationController
     :show
   ]
 
-  # GET /posts
-  # GET /posts.json
+  # GET /
+  # GET /.json
   def index
-    if params[:page].blank? || params[:page] == "1"
-      return redirect_to root_path unless request.url == root_url
-    end
-
     @homepage = true if request.url == "/"
   end
 
-  # GET /posts/1
-  # GET /posts/1.json
+  # GET /posts/slug
+  # GET /posts/slug.json
   def show
 
   end
@@ -38,7 +36,7 @@ private
   end
 
   def find_instance
-    @post = Post.find(params[:id])
+    @post = Post.find(params[:slug])
   end
 
   def authorize_collection

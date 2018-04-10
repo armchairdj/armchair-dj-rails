@@ -37,19 +37,6 @@ Rails.application.routes.draw do
   }
 
   #############################################################################
-  # Public.
-  #############################################################################
-
-  get "/posts/page/1", to: redirect("/"), as: "redirect_posts_page_one"
-  get "/posts",        to: redirect("/"), as: "redirect_posts_index"
-
-  resources :creators, only: [:index, :show], concerns: :paginatable
-  resources :works,    only: [:index, :show], concerns: :paginatable
-  resources :posts,    only: [:index, :show], concerns: :paginatable
-
-  root "posts#index"
-
-  #############################################################################
   # Pages.
   #############################################################################
 
@@ -61,12 +48,10 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
-    root to: "posts#index"
-
-    resources :users
-    resources :creators
-    resources :works
-    resources :posts
+    resources :users,    concerns: :paginatable
+    resources :creators, concerns: :paginatable
+    resources :works,    concerns: :paginatable
+    resources :posts,    concerns: :paginatable
   end
 
   #############################################################################
@@ -86,4 +71,14 @@ Rails.application.routes.draw do
   get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
     error_type: /internal_server_error|not_found|permission_denied/
   }
+
+  #############################################################################
+  # Public.
+  #############################################################################
+
+  resources :creators, only: [:index, :show], concerns: :paginatable
+  resources :works,    only: [:index, :show], concerns: :paginatable
+  resources :posts,    only: [:index       ], concerns: :paginatable, path: "/"
+
+  get "posts/:slug", to: "posts#show", as: "post_permalink"
 end

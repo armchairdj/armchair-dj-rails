@@ -1,4 +1,6 @@
 class Admin::PostsController < AdminController
+  include SeoPaginatable
+
   before_action :find_collection, only: [
     :index
   ]

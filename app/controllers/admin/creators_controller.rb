@@ -1,4 +1,6 @@
 class Admin::CreatorsController < AdminController
+  include SeoPaginatable
+
   before_action :authorize_collection, only: [
     :index,
     :new,

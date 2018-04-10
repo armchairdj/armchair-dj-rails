@@ -1,9 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Pages', type: :request do
-  describe 'GET /pages' do
-    it "works! (now write some real specs)" do
-      get root_path
+  describe 'GET /about' do
+    it "works" do
+      get about_path
+
+      expect(response).to be_success
+    end
+  end
+
+  describe 'GET /credits' do
+    it "works" do
+      get credits_path
+
       expect(response).to be_success
     end
   end

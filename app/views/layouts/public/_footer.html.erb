@@ -2,13 +2,13 @@
   <%= content_tag(:div, class: 'constrain-wide') do %>
     <%= content_tag(:nav, class: 'links') do %>
       <%= content_tag(:ul, class: 'arrowed') do %>
-        <%= content_tag(:li, link_to('Posts',    root_path    )) %>
+        <%= content_tag(:li, link_to('Posts',    posts_path   )) %>
         <%= content_tag(:li, link_to('Creators', creators_path)) %>
         <%= content_tag(:li, link_to('Works',    works_path   )) %>
 
         <% if user_signed_in? %>
           <%= content_tag(:li, link_to('Settings', settings_path            )) %>
-          <%= content_tag(:li, link_to('Admin',    admin_root_path          )) if current_user.admin? %>
+          <%= content_tag(:li, link_to('Admin',    admin_posts_path         )) if current_user.admin? %>
           <%= content_tag(:li, link_to('Log Out',  destroy_user_session_path)) %>
         <% else %>
           <%= content_tag(:li, link_to('Register', new_user_registration_path)) %>
@@ -27,7 +27,7 @@
     <% if @homepage %>
       <%= content_tag(:span, site_logo, class: 'logo') %>
     <% else %>
-      <%= link_to(site_logo, root_path, title: 'back to homepage', class: 'logo') %>
+      <%= link_to(site_logo, posts_path, title: 'back to homepage', class: 'logo') %>
     <% end %>
   <% end %>
 <% end %>
