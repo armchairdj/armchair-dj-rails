@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Contribution, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   describe 'constants' do
     # Nothing so far.
   end
@@ -12,15 +10,38 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe 'associations' do
-    # Nothing so far.
+    it { should belong_to(:creator) }
+    it { should belong_to(:work   ) }
   end
 
   describe 'nested_attributes' do
-    # Nothing so far.
+    it { should accept_nested_attributes_for(:creator) }
+
+    describe "reject_if" do
+      it "rejects with blank creator name" do
+        instance = build(:contribution_with_new_creator, creator_attributes: {
+          "0" => { "name" => "" }
+        })
+
+        expect {
+          instance.save
+        }.to_not change {
+          Contribution.count
+        }
+
+        expect {
+          instance.save
+        }.to_not change {
+          Creator.count
+        }
+
+        expect(instance.valid?).to eq(false)
+      end
+    end
   end
 
   describe 'enums' do
-    # Nothing so far.
+    it { should define_enum_for(:role) }
   end
 
   describe 'scopes' do
@@ -28,7 +49,11 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe 'validations' do
-    # Nothing so far.
+    it { should validate_presence_of(:role   ) }
+    it { should validate_presence_of(:work   ) }
+    it { should validate_presence_of(:creator) }
+
+    it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role) }
   end
 
   describe 'hooks' do

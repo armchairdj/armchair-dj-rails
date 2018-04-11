@@ -197,7 +197,18 @@ FactoryBot.define do
     # SPECIFIC WORKS.
     ###########################################################################
 
-    factory :green_velvet_and_carl_craig_unity do
+    factory :global_communications_76_14 do
+      medium :album
+      title  "76:14"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator,        creator_id: create(:minimal_creator, name: "Global Communication").id),
+        "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Tom Middleton"       ).id),
+        "2" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Mark Pritchard"      ).id)
+      } }
+    end
+
+    factory :carl_craig_and_green_velvet_unity do
       medium :album
       title  "Unity"
 
@@ -210,6 +221,15 @@ FactoryBot.define do
     factory :kate_bush_hounds_of_love do
       medium :album
       title "Hounds of Love"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Kate Bush").id),
+      } }
+    end
+
+    factory :kate_bush_directors_cut do
+      medium :album
+      title "Director's Cut"
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Kate Bush").id),

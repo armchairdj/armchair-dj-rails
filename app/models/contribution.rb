@@ -12,7 +12,7 @@ class Contribution < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :work, required: true
+  belongs_to :work,    required: true
   belongs_to :creator, required: true
 
   #############################################################################

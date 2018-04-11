@@ -33,7 +33,7 @@ RSpec.describe WorksHelper, type: :helper do
     end
 
     it "generates multiple links for multi-creator work" do
-      instance = create(:green_velvet_and_carl_craig_unity)
+      instance = create(:carl_craig_and_green_velvet_unity)
       actual   = helper.links_to_creators_for_work(instance)
 
       expect(actual).to have_tag('a', count: 2)
@@ -52,7 +52,7 @@ RSpec.describe WorksHelper, type: :helper do
     end
 
     it "allows separator to be overridden" do
-      instance = create(:green_velvet_and_carl_craig_unity)
+      instance = create(:carl_craig_and_green_velvet_unity)
       actual   = helper.links_to_creators_for_work(instance, separator: "<br>")
 
       expect(actual).to match("><br><")

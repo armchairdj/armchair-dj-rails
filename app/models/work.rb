@@ -126,7 +126,7 @@ class Work < ApplicationRecord
   end
 
   def display_creator
-    self.creators.map(&:name).join(" & ")
+    self.creators.alphabetical.map(&:name).join(" & ")
   end
 
 private
