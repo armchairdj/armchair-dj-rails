@@ -86,28 +86,28 @@ class Work < ApplicationRecord
 
   def self.grouped_select_options_for_post
     {
-      :"Songs"  => self.song.alphabetical,
-      :"Albums" => self.album.alphabetical,
-      :"TV"     => self.tv_show.alphabetical,
-      :"Films"  => self.film.alphabetical,
-      :"Books"  => self.book.alphabetical,
-      :"Comics" => self.comic.alphabetical,
-      :"Apps"   => self.software.alphabetical,
-      :"Art"    => self.artwork.alphabetical,
+      "Songs"  => self.song.alphabetical,
+      "Albums" => self.album.alphabetical,
+      "TV"     => self.tv_show.alphabetical,
+      "Films"  => self.film.alphabetical,
+      "Books"  => self.book.alphabetical,
+      "Comics" => self.comic.alphabetical,
+      "Apps"   => self.software.alphabetical,
+      "Art"    => self.artwork.alphabetical,
     }.to_a
   end
 
   def self.admin_scopes
     {
-      :"All"   => :all,
-      :"Song"  => :song,
-      :"Album" => :album,
-      :"TV"    => :tv_show,
-      :"Film"  => :film,
-      :"Book"  => :book,
-      :"Comic" => :comic,
-      :"App"   => :software,
-      :"Art"   => :artwork,
+      "All"   => :all,
+      "Song"  => :song,
+      "Album" => :album,
+      "TV"    => :tv_show,
+      "Film"  => :film,
+      "Book"  => :book,
+      "Comic" => :comic,
+      "App"   => :software,
+      "Art"   => :artwork,
     }
   end
 
