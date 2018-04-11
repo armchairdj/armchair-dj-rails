@@ -43,7 +43,7 @@ module Enumable
         # Define instance methods
         self.class_eval do
           define_method :"human_#{attribute}" do
-            self.class.human_enum_value(attribute, self.send(attribute))
+            self.class.send(:"human_#{attribute}", self.send(attribute))
           end
         end
       end
