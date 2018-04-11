@@ -1,14 +1,4 @@
 class Admin::CreatorsController < AdminController
-  include SeoPaginatable
-
-  after_action :verify_authorized
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
   before_action :find_collection, only: [
     :index
   ]
@@ -23,6 +13,12 @@ class Admin::CreatorsController < AdminController
     :edit,
     :update,
     :destroy
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
   ]
 
   before_action :authorize_instance, only: [
@@ -59,7 +55,7 @@ class Admin::CreatorsController < AdminController
   def create
     respond_to do |format|
       if @creator.save
-        format.html { redirect_to admin_creators_path, notice: I18n.t("creator.notice.create") }
+        format.html { redirect_to admin_creators_path, notice: I18n.t("admin.creators.notice.create") }
         format.json { render :show, status: :created, location: @creator }
       else
         format.html { render :new }
@@ -73,7 +69,7 @@ class Admin::CreatorsController < AdminController
   def update
     respond_to do |format|
       if @creator.update(instance_params)
-        format.html { redirect_to admin_creators_path, notice: I18n.t("creator.notice.update") }
+        format.html { redirect_to admin_creators_path, notice: I18n.t("admin.creators.notice.update") }
         format.json { render :show, status: :ok, location: @creator }
       else
         format.html { render :edit }
@@ -88,7 +84,7 @@ class Admin::CreatorsController < AdminController
     @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_creators_path, notice: I18n.t("creator.notice.destroy") }
+      format.html { redirect_to admin_creators_path, notice: I18n.t("admin.creators.notice.destroy") }
       format.json { head :no_content }
     end
   end

@@ -1,14 +1,4 @@
 class Admin::WorksController < AdminController
-  include SeoPaginatable
-
-  after_action :verify_authorized
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
   before_action :find_collection, only: [
     :index
   ]
@@ -23,6 +13,12 @@ class Admin::WorksController < AdminController
     :edit,
     :update,
     :destroy
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
   ]
 
   before_action :authorize_instance, only: [
@@ -59,7 +55,7 @@ class Admin::WorksController < AdminController
   def create
     respond_to do |format|
       if @work.save
-        format.html { redirect_to admin_works_path, notice: I18n.t("work.notice.create") }
+        format.html { redirect_to admin_works_path, notice: I18n.t("admin.works.notice.create") }
         format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -80,7 +76,7 @@ class Admin::WorksController < AdminController
   def update
     respond_to do |format|
       if @work.update(instance_params)
-        format.html { redirect_to admin_works_path, notice: I18n.t("work.notice.update") }
+        format.html { redirect_to admin_works_path, notice: I18n.t("admin.works.notice.update") }
         format.json { render :show, status: :ok, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -97,7 +93,7 @@ class Admin::WorksController < AdminController
     @work.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_works_path, notice: I18n.t("work.notice.destroy") }
+      format.html { redirect_to admin_works_path, notice: I18n.t("admin.works.notice.destroy") }
       format.json { head :no_content }
     end
   end

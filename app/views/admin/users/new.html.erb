@@ -1,0 +1,9 @@
+<%
+  @title = 'New User'
+%>
+
+<%= content_tag(:header, class: 'admin') do %>
+  <%= content_tag(:h1, @title) %>
+<% end %>
+
+<%= render partial: 'user_form', locals: { user: @user } %>

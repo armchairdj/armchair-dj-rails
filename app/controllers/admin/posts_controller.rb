@@ -1,8 +1,4 @@
 class Admin::PostsController < AdminController
-  include SeoPaginatable
-
-  after_action :verify_authorized
-
   before_action :find_collection, only: [
     :index
   ]
@@ -67,7 +63,7 @@ class Admin::PostsController < AdminController
   def create
     respond_to do |format|
       if @post.save
-        format.html { redirect_to admin_posts_path, notice: I18n.t("post.notice.create") }
+        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.create") }
         format.json { render :show, status: :created, location: @post }
       else
         prepare_view
@@ -88,7 +84,7 @@ class Admin::PostsController < AdminController
   def update
     respond_to do |format|
       if @post.update(@sanitized_params)
-        format.html { redirect_to admin_posts_path, notice: I18n.t("post.notice.update") }
+        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.update") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_view
@@ -105,7 +101,7 @@ class Admin::PostsController < AdminController
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_posts_path, notice: I18n.t("post.notice.destroy") }
+      format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.destroy") }
       format.json { head :no_content }
     end
   end

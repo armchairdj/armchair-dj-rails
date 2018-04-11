@@ -1,0 +1,16 @@
+<%
+  @title = [
+    "Edit User",
+    @user.display_name
+  ]
+%>
+
+<%= content_tag(:header, class: 'admin') do %>
+  <%= content_tag(:h1, @title.first) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
+    <%= admin_destroy_link(@user) %>
+  <% end %>
+<% end %>
+
+<%= render partial: 'user_form', locals: { user: @user } %>

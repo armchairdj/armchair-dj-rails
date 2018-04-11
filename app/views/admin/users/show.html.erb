@@ -1,0 +1,8 @@
+<%
+  @headline = @title = @user.display_name
+%>
+
+<% content_for(:before_page_headline) do %>
+  <%= admin_destroy_link(@user) %>
+  <%= admin_update_link(@user) %>
+<% end %>
