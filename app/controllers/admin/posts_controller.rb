@@ -1,6 +1,8 @@
 class Admin::PostsController < AdminController
   include SeoPaginatable
 
+  after_action :verify_authorized
+
   before_action :find_collection, only: [
     :index
   ]

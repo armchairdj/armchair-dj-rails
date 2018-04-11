@@ -1,5 +1,5 @@
 class ErrorsController < ApplicationController
-  def forbidden
+  def permission_denied
     render_error_response(403, :permission_denied)
   end
 

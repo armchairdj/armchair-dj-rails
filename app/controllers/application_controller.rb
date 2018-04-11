@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit
 
-  after_action :verify_authorized, unless: :devise_controller?
-
   include Errorable
 
   protect_from_forgery with: :exception
