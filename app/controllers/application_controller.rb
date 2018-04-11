@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 private
 
   def determine_layout
-    @admin ? "admin" : "public"
+    @admin ? 'admin' : 'public'
   end
 
   def is_admin
