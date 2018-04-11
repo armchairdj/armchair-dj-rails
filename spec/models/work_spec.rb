@@ -21,11 +21,11 @@ RSpec.describe Work, type: :model do
   describe 'nested_attributes' do
     it { should accept_nested_attributes_for(:contributions) }
 
-    describe "reject_if" do
-      it "rejects contributions without a creator_id" do
+    describe 'reject_if' do
+      it 'rejects contributions without a creator_id' do
         instance = build(:song, contributions_attributes: {
-          "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
-          "1" => attributes_for(:contribution, role: :creator, creator_id: nil                 )
+          '0' => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
+          '1' => attributes_for(:contribution, role: :creator, creator_id: nil                 )
         })
 
         expect {
@@ -41,20 +41,22 @@ RSpec.describe Work, type: :model do
 
   describe 'enums' do
     it { should define_enum_for(:medium) }
+
+    it_behaves_like "an enumable model", [:medium]
   end
 
   describe 'scopes' do
     describe 'alphabetical' do
-      let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
-      let!(:lh   ) { create(:album, title: "lionheart"        ) }
-      let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }
-      let!(:td   ) { create(:album, title: "The Dreaming"     ) }
-      let!(:hol  ) { create(:album, title: "Hounds of Love"   ) }
-      let!(:tsw  ) { create(:album, title: "the sensual world") }
-      let!(:trs  ) { create(:album, title: "The Red Shoes"    ) }
-      let!(:a    ) { create(:album, title: "aerial"           ) }
+      let!(:tki  ) { create(:album, title: 'The Kick Inside'  ) }
+      let!(:lh   ) { create(:album, title: 'lionheart'        ) }
+      let!(:nfe  ) { create(:album, title: 'Never for Ever'   ) }
+      let!(:td   ) { create(:album, title: 'The Dreaming'     ) }
+      let!(:hol  ) { create(:album, title: 'Hounds of Love'   ) }
+      let!(:tsw  ) { create(:album, title: 'the sensual world') }
+      let!(:trs  ) { create(:album, title: 'The Red Shoes'    ) }
+      let!(:a    ) { create(:album, title: 'aerial'           ) }
       let!(:d    ) { create(:album, title: "Director's Cut"   ) }
-      let!(:fifty) { create(:album, title: "50 Words for Snow") }
+      let!(:fifty) { create(:album, title: '50 Words for Snow') }
 
       specify { expect(described_class.alphabetical.to_a).to eq([
         fifty,
@@ -77,13 +79,13 @@ RSpec.describe Work, type: :model do
 
     context 'custom' do
       describe '#validate_contributions' do
-        it "confirms at least one creator" do
+        it 'confirms at least one creator' do
           instance = build(:work_for_contribution_factory)
 
           expect(instance.valid?).to eq(false)
 
           expect(instance.errors[:contributions][0]).to eq(
-            I18n.t("activerecord.errors.models.work.attributes.contributions.missing")
+            I18n.t('activerecord.errors.models.work.attributes.contributions.missing')
           )
         end
       end
@@ -116,20 +118,20 @@ RSpec.describe Work, type: :model do
     end
 
     describe 'self#grouped_select_options_for_post' do
-      specify "first element of each sub-array is an optgroup heading" do
+      specify 'first element of each sub-array is an optgroup heading' do
         expect(described_class.grouped_select_options_for_post.to_h.keys).to eq([
-          "Songs",
-          "Albums",
-          "TV",
-          "Films",
-          "Books",
-          "Comics",
-          "Apps",
-          "Art",
+          'Songs',
+          'Albums',
+          'TV',
+          'Films',
+          'Books',
+          'Comics',
+          'Apps',
+          'Art',
         ])
       end
 
-      specify "second element of each sub-array is a list of options" do
+      specify 'second element of each sub-array is a list of options' do
         described_class.grouped_select_options_for_post.to_h.values.each do |rel|
           expect(rel).to be_a_kind_of(ActiveRecord::Relation)
         end
@@ -137,21 +139,21 @@ RSpec.describe Work, type: :model do
     end
 
     describe 'self#admin_scopes' do
-      specify "keys are short tab names" do
+      specify 'keys are short tab names' do
         expect(described_class.admin_scopes.keys).to eq([
-          "All",
-          "Song",
-          "Album",
-          "TV",
-          "Film",
-          "Book",
-          "Comic",
-          "App",
-          "Art",
+          'All',
+          'Song',
+          'Album',
+          'TV',
+          'Film',
+          'Book',
+          'Comic',
+          'App',
+          'Art',
         ])
       end
 
-      specify "values are symbols of scopes" do
+      specify 'values are symbols of scopes' do
         described_class.admin_scopes.values.each do |sym|
           expect(sym).to be_a_kind_of(Symbol)
 
@@ -163,7 +165,7 @@ RSpec.describe Work, type: :model do
 
   describe 'instance' do
     describe '#prepare_contributions' do
-      it "prepares max for new" do
+      it 'prepares max for new' do
         instance = described_class.new
 
         expect(instance.contributions.length).to eq(0)
@@ -173,7 +175,7 @@ RSpec.describe Work, type: :model do
         expect(instance.contributions.length).to eq(10)
       end
 
-      it "prepares up to max for saved" do
+      it 'prepares up to max for saved' do
         instance = create(:global_communications_76_14)
 
         expect(instance.contributions.length).to eq(3)
@@ -187,27 +189,27 @@ RSpec.describe Work, type: :model do
     describe '#title_with_creator' do
       specify {
         expect(create(:carl_craig_and_green_velvet_unity).title_with_creator).to eq(
-          "Carl Craig & Green Velvet: Unity"
+          'Carl Craig & Green Velvet: Unity'
         )
       }
 
       specify {
         expect(create(:kate_bush_hounds_of_love).title_with_creator).to eq(
-          "Kate Bush: Hounds of Love"
+          'Kate Bush: Hounds of Love'
         )
       }
     end
 
     describe '#display_creator' do
-      it "displays mutiple creators alphabetically" do
+      it 'displays mutiple creators alphabetically' do
         expect(create(:carl_craig_and_green_velvet_unity).display_creator).to eq(
-          "Carl Craig & Green Velvet"
+          'Carl Craig & Green Velvet'
         )
       end
 
-      it "displays single creators" do
+      it 'displays single creators' do
         expect(create(:kate_bush_hounds_of_love).display_creator).to eq(
-          "Kate Bush"
+          'Kate Bush'
         )
       end
     end

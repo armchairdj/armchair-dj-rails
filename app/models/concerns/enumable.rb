@@ -1,23 +1,56 @@
 module Enumable
   extend ActiveSupport::Concern
 
-  class_methods do
-    def human_enum_collection(enum_name, alphabetical: false)
-      collection = send(enum_name.to_s.pluralize).keys.collect do |enum_value|
-        [self.human_enum_value(enum_name, enum_value), enum_value]
-      end
+  included do
+    class_attribute :_enumable_attributes, instance_accessor: false
 
-      alphabetical ? collection.sort_by { |arr| arr.first } : collection
-    end
-
-    def human_enum_value(enum_name, enum_value)
-      I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{enum_name.to_s.pluralize}.#{enum_value}")
-    end
+    self._enumable_attributes = []
   end
 
-  def human_enum_value(enum_name)
-    return unless enum_value = self.send(enum_name)
+  class_methods do
+    def human_enum_collection(attribute, alphabetical: false)
+      collection = send(attribute.to_s.pluralize).keys.collect do |val|
+        [self.human_enum_value(attribute, val), val]
+      end
 
-    self.class.human_enum_value(enum_name, enum_value)
+      alphabetical ? collection.sort_by(&:first) : collection
+    end
+
+    def human_enum_value(attribute, val)
+      I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{attribute.to_s.pluralize}.#{val}")
+    end
+
+    def enumable_attributes(*attributes)
+      self._enumable_attributes = Set.new(attributes.map(&:to_sym))
+
+      attributes.map(&:to_s).each do |attribute|
+
+        # Define class methods
+        singleton_class.instance_eval do
+          define_method :"human_#{attribute.pluralize}" do
+            self.human_enum_collection(attribute)
+          end
+
+          define_method :"alphabetical_human_#{attribute.pluralize}" do
+            self.human_enum_collection(attribute, alphabetical: true)
+          end
+
+          define_method :"human_#{attribute}" do |val|
+            self.human_enum_value(attribute, val)
+          end
+        end
+
+        # Define instance methods
+        self.class_eval do
+          define_method :"human_#{attribute}" do
+            self.class.human_enum_value(attribute, self.send(attribute))
+          end
+        end
+      end
+    end
+
+    def retrieve_enumable_attributes
+      self._enumable_attributes
+    end
   end
 end

@@ -55,4 +55,10 @@ RSpec.describe WorksController, type: :controller do
         expect(assigns(:work)).to eq(work)
     end
   end
+
+  context "concerns" do
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { works_path }
+    end
+  end
 end

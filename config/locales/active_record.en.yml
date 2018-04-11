@@ -40,6 +40,11 @@ en:
         work: "Work"
       user:
         id: "ID"
+        roles:
+          guest:       "Guest"
+          member:      "Member"
+          contributor: "Contributor"
+          admin:       "Admin"
       work:
         id: "ID"
         media:

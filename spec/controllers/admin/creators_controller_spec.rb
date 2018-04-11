@@ -167,4 +167,10 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       end
     end
   end
+
+  context "concerns" do
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { admin_creators_path }
+    end
+  end
 end

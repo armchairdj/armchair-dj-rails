@@ -3,7 +3,7 @@ require 'ffaker'
 FactoryBot.define do
   factory :contribution do
     factory :minimal_contribution do
-      association :work, factory: :work_for_contribution_factory
+      association :work, factory: :minimal_work
       association :creator, factory: :minimal_creator
       role :creator
     end

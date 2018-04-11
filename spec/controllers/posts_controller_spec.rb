@@ -56,4 +56,10 @@ RSpec.describe PostsController, type: :controller do
         expect(assigns(:post)).to eq(post)
     end
   end
+
+  context "concerns" do
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { posts_path }
+    end
+  end
 end

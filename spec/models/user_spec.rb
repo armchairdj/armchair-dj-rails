@@ -18,12 +18,9 @@ RSpec.describe User, type: :model do
   end
 
   describe 'enums' do
-    it { should define_enum_for(:role).with({
-      guest:       0,
-      member:      1,
-      contributor: 2,
-      admin:       3
-    }) }
+    it { should define_enum_for(:role) }
+
+    it_behaves_like "an enumable model", [:role]
   end
 
   describe 'scopes' do

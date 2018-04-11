@@ -42,6 +42,8 @@ RSpec.describe Contribution, type: :model do
 
   describe 'enums' do
     it { should define_enum_for(:role) }
+
+    it_behaves_like "an enumable model", [:role]
   end
 
   describe 'scopes' do

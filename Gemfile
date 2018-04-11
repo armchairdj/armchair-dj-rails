@@ -180,7 +180,7 @@ group :development, :test do
   # Restore behavior of Rails <5 controller tests (assigns and assert_template).
   gem 'rails-controller-testing'
 
-  # Rspec + plugins
+  # RSpec + plugins
   gem 'rspec-rails'
   gem 'rspec-html-matchers'
   gem 'shoulda-matchers'

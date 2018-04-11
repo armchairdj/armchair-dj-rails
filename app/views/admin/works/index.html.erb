@@ -34,7 +34,7 @@
       <%= content_tag(:tbody) do %>
         <% @works.each do |work| %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:td, work.human_enum_value(:medium)) if @scope == :all %>
+            <%= content_tag(:td, work.human_medium) if @scope == :all %>
             <%= content_tag :td, work.title %>
             <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(' & ').html_safe%>
             <%= content_tag :td, class: 'actions' do %>

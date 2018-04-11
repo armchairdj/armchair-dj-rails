@@ -1,5 +1,5 @@
 <%= f.input :medium, as: :select,
-  collection: Work.human_enum_collection(:media),
+  collection: Work.human_media,
   input_html: { 'data-controller': 'selectize' }
 %>
 

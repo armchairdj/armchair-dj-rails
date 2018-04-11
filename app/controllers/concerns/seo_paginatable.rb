@@ -10,6 +10,10 @@ private
   def prevent_duplicate_first_page
     return unless (params[:page] || "").to_s == "1"
 
-    redirect_to polymorphic_path(controller_name.classify.constantize)
+    const       = controller_name.classify.constantize
+    parent      = self.class.parent
+    url_options = parent == Object ? const : [parent.name.downcase.to_sym, const]
+
+    redirect_to polymorphic_path(url_options), status: 301
   end
 end

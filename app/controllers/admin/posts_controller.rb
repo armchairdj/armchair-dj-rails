@@ -203,7 +203,7 @@ private
     return unless @allow_new_work
 
     @creators = policy_scope(Creator)
-    @roles    = Contribution.human_enum_collection(:role)
+    @roles    = Contribution.human_roles
   end
 
   def which_tab

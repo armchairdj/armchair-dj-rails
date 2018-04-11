@@ -128,7 +128,7 @@ private
     @work.prepare_contributions
 
     @creators = policy_scope(Creator)
-    @roles    = Contribution.human_enum_collection(:role)
+    @roles    = Contribution.human_roles
   end
 
   def instance_params

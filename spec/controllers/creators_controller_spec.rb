@@ -55,4 +55,10 @@ RSpec.describe CreatorsController, type: :controller do
         expect(assigns(:creator)).to eq(creator)
     end
   end
+
+  context "concerns" do
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { creators_path }
+    end
+  end
 end
