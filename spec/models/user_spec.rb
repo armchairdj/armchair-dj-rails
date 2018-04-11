@@ -28,9 +28,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'validations' do
+    let(:subject) { create(:minimal_user) }
+
     it { should validate_presence_of(:first_name) }
     it { should validate_presence_of(:last_name) }
-    skip { should validate_presence_of(:role) }
+    it { should validate_presence_of(:role) }
   end
 
   describe 'hooks' do
@@ -62,7 +64,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'instance' do
-    pending '#display_name'
+    describe '#display_name' do
+      let(:subject) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
+
+      specify { expect(subject.display_name).to eq("Derrick May") }
+    end
 
     describe 'private' do
       describe 'callbacks' do
