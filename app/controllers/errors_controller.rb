@@ -1,6 +1,14 @@
 class ErrorsController < ApplicationController
+  def forbidden
+    render_error_response(403, :permission_denied)
+  end
+
   def not_found
     render_error_response(404, :not_found)
+  end
+
+  def bad_request
+    render_error_response(422, :bad_request)
   end
 
   def internal_server_error

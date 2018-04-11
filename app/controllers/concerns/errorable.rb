@@ -37,6 +37,10 @@ module Errorable
       respond_with_error(404, :not_found, exception)
     end
 
+    def handle_422(exception = nil)
+      respond_with_error(422, :bad_request, exception)
+    end
+
     def handle_500(exception = nil)
       respond_with_error(500, :internal_server_error, exception)
     end
@@ -57,6 +61,7 @@ module Errorable
         return render json: {}, status: code
       end
 
+      # errors/bad_request
       # errors/internal_server_error
       # errors/not_found
       # errors/permission_denied
@@ -78,6 +83,8 @@ module Errorable
       case code
       when 500
         "ARMCHAIRDJ_WHOOPS (500)"
+      when 422
+        "ARMCHAIRDJ_NOT_FOUND (404)"
       when 404
         "ARMCHAIRDJ_NOT_FOUND (404)"
       when 403

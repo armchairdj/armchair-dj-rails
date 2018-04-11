@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   }
 
   get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
-    error_type: /internal_server_error|not_found|permission_denied/
+    error_type: /bad_request|internal_server_error|not_found|permission_denied/
   }
 
   #############################################################################
@@ -78,6 +78,7 @@ Rails.application.routes.draw do
 
   resources :creators, only: [:index, :show], concerns: :paginatable
   resources :works,    only: [:index, :show], concerns: :paginatable
+
   resources :posts,    only: [:index       ], concerns: :paginatable, path: "/"
 
   get "posts/:slug", to: "posts#show", as: "post_permalink"

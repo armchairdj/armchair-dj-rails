@@ -79,6 +79,13 @@ RSpec.describe StyleGuidesController, type: :controller do
     end
 
     describe 'GET #error_page' do
+      it "renders bad_request" do
+        get :error_page, params: { error_type: "bad_request" }
+
+        expect(response).to be_success
+        expect(response).to render_template("errors/bad_request")
+      end
+
       it "renders internal_server_error" do
         get :error_page, params: { error_type: "internal_server_error" }
 

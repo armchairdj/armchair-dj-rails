@@ -52,6 +52,7 @@
 
   <%= content_tag(:ul, class: 'bulleted') do %>
     <%= content_tag(:li, link_to('500', style_guides_error_path(error_type: :internal_server_error))) %>
+    <%= content_tag(:li, link_to('422', style_guides_error_path(error_type: :bad_request          ))) %>
     <%= content_tag(:li, link_to('404', style_guides_error_path(error_type: :not_found            ))) %>
     <%= content_tag(:li, link_to('403', style_guides_error_path(error_type: :permission_denied    ))) %>
   <% end %>
