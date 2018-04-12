@@ -20,11 +20,11 @@ RSpec.describe User, type: :model do
   describe 'enums' do
     it { should define_enum_for(:role) }
 
-    it_behaves_like "an enumable model", [:role]
+    it_behaves_like 'an enumable model', [:role]
   end
 
   describe 'scopes' do
-    # Nothing so far.
+    pending 'alphabetical'
   end
 
   describe 'validations' do
@@ -65,36 +65,36 @@ RSpec.describe User, type: :model do
 
   describe 'instance' do
     describe '#display_name' do
-      describe "no middle name" do
-        let(:subject) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
+      describe 'no middle name' do
+        let(:subject) { create(:minimal_user, first_name: 'Derrick', last_name: 'May') }
 
-        specify { expect(subject.display_name).to eq("Derrick May") }
+        specify { expect(subject.display_name).to eq('Derrick May') }
       end
 
-      describe "with middle name" do
-        let(:subject) { create(:minimal_user, first_name: "Brian", middle_name: "J.", last_name: "Dillard") }
+      describe 'with middle name' do
+        let(:subject) { create(:minimal_user, first_name: 'Brian', middle_name: 'J.', last_name: 'Dillard') }
 
-        specify { expect(subject.display_name).to eq("Brian J. Dillard") }
+        specify { expect(subject.display_name).to eq('Brian J. Dillard') }
       end
     end
 
     describe 'private' do
       describe 'callbacks' do
         describe '#set_default_role' do
-          it "sets role to guest if no role" do
+          it 'sets role to guest if no role' do
             user = build(:minimal_user, role: nil)
 
             user.send(:set_default_role)
 
-            expect(user.role).to eq("guest")
+            expect(user.role).to eq('guest')
           end
 
-          it "does nothing if role is set" do
+          it 'does nothing if role is set' do
             user = build(:minimal_user, role: :admin)
 
             user.send(:set_default_role)
 
-            expect(user.role).to eq("admin")
+            expect(user.role).to eq('admin')
           end
         end
       end

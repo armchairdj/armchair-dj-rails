@@ -1,7 +1,7 @@
 class Admin::PostPolicy < AdminPolicy
   class Scope < Scope
     def resolve
-      scope.all.reverse_cron
+      scope.for_admin.reverse_cron
     end
   end
 end

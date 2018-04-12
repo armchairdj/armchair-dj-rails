@@ -82,13 +82,21 @@ Rails.application.routes.draw do
   }
 
   #############################################################################
-  # Public.
+  # POSTS.
+  #############################################################################
+
+  resources :posts, only: [:index], concerns: :paginatable, path: '/'
+
+  get 'posts/:slug', to: 'posts#show', as: 'post_permalink'
+
+  scope format: true, constraints: { format: 'rss' } do
+    get '/feed', to: "posts#feed"
+  end
+
+  #############################################################################
+  # TAXONOMY.
   #############################################################################
 
   resources :creators, only: [:index, :show], concerns: :paginatable
   resources :works,    only: [:index, :show], concerns: :paginatable
-
-  resources :posts,    only: [:index       ], concerns: :paginatable, path: '/'
-
-  get 'posts/:slug', to: 'posts#show', as: 'post_permalink'
 end

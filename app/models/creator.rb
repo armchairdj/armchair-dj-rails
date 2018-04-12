@@ -12,7 +12,7 @@ class Creator < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :contributions
+  has_many :contributions, dependent: :destroy
 
   has_many :works, -> { where(contributions: {
     role: Contribution.roles["creator"] })

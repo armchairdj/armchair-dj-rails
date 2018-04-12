@@ -16,10 +16,27 @@ RSpec.describe PostsController, type: :controller do
       end
     end
 
-    context 'with records' do
+    context 'with unpublished records' do
       before(:each) do
-        ( per_page / 2     ).times { create(:song_review) }
+        ( per_page / 2     ).times { create(:song_review    ) }
         ((per_page / 2) + 1).times { create(:standalone_post) }
+      end
+
+      it 'renders' do
+        get :index
+
+        expect(response).to be_success
+        expect(response).to render_template('posts/index')
+
+        expect(assigns(:posts).total_count).to eq(0)
+        expect(assigns(:posts).size       ).to eq(0)
+      end
+    end
+
+    context 'with published records' do
+      before(:each) do
+        ( per_page / 2     ).times { create(:song_review,     :published) }
+        ((per_page / 2) + 1).times { create(:standalone_post, :published) }
       end
 
       it 'renders' do
@@ -55,6 +72,10 @@ RSpec.describe PostsController, type: :controller do
 
         expect(assigns(:post)).to eq(post)
     end
+  end
+
+  describe 'GET #feed' do
+    pending 'renders rss'
   end
 
   context 'concerns' do

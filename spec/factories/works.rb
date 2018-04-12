@@ -268,7 +268,7 @@ FactoryBot.define do
 
     factory :game do
       medium :game
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id)
@@ -277,7 +277,7 @@ FactoryBot.define do
 
     factory :collaborative_game do
       medium :game
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id),
@@ -291,7 +291,7 @@ FactoryBot.define do
 
     factory :software do
       medium :software
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id)
@@ -300,7 +300,7 @@ FactoryBot.define do
 
     factory :collaborative_software do
       medium :software
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id),
@@ -314,7 +314,7 @@ FactoryBot.define do
 
     factory :hardware do
       medium :hardware
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id)
@@ -323,7 +323,7 @@ FactoryBot.define do
 
     factory :collaborative_hardware do
       medium :hardware
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id),
@@ -337,7 +337,7 @@ FactoryBot.define do
 
     factory :product do
       medium :product
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id)
@@ -346,7 +346,7 @@ FactoryBot.define do
 
     factory :collaborative_product do
       medium :product
-      title  { FFaker::Product.name }
+      title  { FFaker::Product.product_name }
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id),

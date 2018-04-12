@@ -31,6 +31,8 @@ class Post < ApplicationRecord
   #############################################################################
 
   scope :reverse_cron, -> { order(published_at: :desc) }
+  scope :for_admin,    -> { includes(work: { contributions: :creator } ) }
+  scope :for_site,     -> { for_admin.where.not(published_at: nil) }
 
   #############################################################################
   # VALIDATIONS.

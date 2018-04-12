@@ -23,6 +23,8 @@ RSpec.describe Post, type: :model do
 
   describe 'scopes' do
     pending 'reverse_cron'
+    pending 'for_admin'
+    pending 'for_site'
   end
 
   describe 'validations' do

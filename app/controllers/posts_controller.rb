@@ -29,6 +29,13 @@ class PostsController < ApplicationController
 
   end
 
+  # GET /feed.rss
+  def feed
+    @posts = policy_scope(Post)
+
+    render layout: false
+  end
+
 private
 
   def find_collection
