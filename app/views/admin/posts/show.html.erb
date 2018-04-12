@@ -1,18 +1,13 @@
 <%
-  @title = @post.one_line_title
+  @title = ["View Post", @post.one_line_title]
 %>
 
-<% content_for(:page_header) do %>
-  <%= content_tag(:header, class: 'page-header work') do %>
+<%= content_tag(:header, class: 'admin') do %>
+  <%= content_tag(:h1, @title.first) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
     <%= admin_destroy_link(@post) %>
     <%= admin_update_link(@post) %>
-
-    <% if @post.work %>
-      <%= content_tag(:h2, @post.work.display_creator) %>
-      <%= content_tag(:h1, @post.work.title) %>
-    <% else %>
-      <%= content_tag(:h1, @post.title) %>
-    <% end %>
   <% end %>
 <% end %>
 

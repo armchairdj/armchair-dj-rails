@@ -1,8 +1,12 @@
 <%
-  @headline = @title = @user.display_name
+  @title = ["View User", @user.display_name ]
 %>
 
-<% content_for(:before_page_headline) do %>
-  <%= admin_destroy_link(@user) %>
-  <%= admin_update_link(@user) %>
+<%= content_tag(:header, class: 'admin') do %>
+  <%= content_tag(:h1, @title.first) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
+    <%= admin_destroy_link(@user) %>
+    <%= admin_update_link(@user) %>
+  <% end %>
 <% end %>
