@@ -1,6 +1,10 @@
 require 'ffaker'
 
 FactoryBot.define do
+  sequence :post_slug do |n|
+    "slug/for_post_#{n}"
+  end
+
   factory :post do
     factory :minimal_post, parent: :standalone_post do; end
 
@@ -10,6 +14,10 @@ FactoryBot.define do
 
     trait :published do
       published_at Time.now
+
+      before(:create) do |post, evaluator|
+        post.slug = generate(:post_slug)
+      end
     end
 
     ###########################################################################

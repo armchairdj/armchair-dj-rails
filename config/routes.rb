@@ -87,7 +87,7 @@ Rails.application.routes.draw do
 
   resources :posts, only: [:index], concerns: :paginatable, path: '/'
 
-  get 'posts/:slug', to: 'posts#show', as: 'post_permalink'
+  get 'posts/*slug', to: 'posts#show', as: 'post_permalink'
 
   scope format: true, constraints: { format: 'rss' } do
     get '/feed', to: "posts#feed"

@@ -31,7 +31,7 @@ class PostsController < ApplicationController
 
   # GET /feed.rss
   def feed
-    @posts = policy_scope(Post)
+    @posts = policy_scope(Post).page(1).per(100)
 
     render layout: false
   end
@@ -43,7 +43,7 @@ private
   end
 
   def find_instance
-    @post = Post.find(params[:slug])
+    @post = Post.where(slug: params[:slug]).first!
   end
 
   def authorize_collection

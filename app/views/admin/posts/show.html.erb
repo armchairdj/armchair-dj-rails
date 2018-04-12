@@ -14,6 +14,11 @@
 <%= content_tag(:table, class: 'admin admin-view') do %>
   <%= content_tag(:tbody) do %>
     <%= content_tag(:tr) do %>
+      <%= content_tag(:th, "Slug") %>
+      <%= content_tag(:td, @post.slug) %>
+    <% end %>
+
+    <%= content_tag(:tr) do %>
       <%= content_tag(:th, "Type") %>
       <%= content_tag(:td, post_type(@post)) %>
     <% end %>

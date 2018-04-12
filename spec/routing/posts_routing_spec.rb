@@ -11,7 +11,7 @@ RSpec.describe PostsController, type: :routing do
     end
 
     it "routes to #show" do
-      expect(get: "/posts/1").to route_to("posts#show", slug: "1")
+      expect(get: "/posts/foo/bar/bat").to route_to("posts#show", slug: "foo/bar/bat")
     end
 
     describe "does not route to RESTful" do
@@ -24,7 +24,7 @@ RSpec.describe PostsController, type: :routing do
       end
 
       it "#edit" do
-        expect(get: "/posts/1/edit").to_not be_routable
+        expect(get: "/posts/1/edit").to route_to("posts#show", slug: "1/edit")
       end
 
       it "#update via PUT" do

@@ -30,23 +30,36 @@ RSpec.describe Post, type: :model do
   describe 'validations' do
     it { should validate_presence_of(:body) }
 
-    pending '#ensure_work_or_title'
+    it { should validate_uniqueness_of(:slug) }
+
+    context 'custom' do
+      pending 'calls #ensure_work_or_title'
+    end
+
+    context 'conditional' do
+      pending 'slug presence'
+    end
   end
 
   describe 'hooks' do
-    # Nothing so far.
+    describe 'after_initialize' do
+      pending 'calls #ensure_slug'
+    end
   end
 
   describe 'class' do
-    # Nothing so far.
+    pending 'self#slugify'
   end
 
   describe 'instance' do
     pending '#one_line_title'
+    describe '#published?'
 
     describe 'private' do
       describe 'callbacks' do
-        # Nothing so far.
+        pending '#ensure_work_or_title'
+        pending '#ensure_slug'
+        pending '#generate_slug'
       end
     end
   end

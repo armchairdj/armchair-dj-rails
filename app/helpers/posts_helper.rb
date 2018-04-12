@@ -1,6 +1,12 @@
 module PostsHelper
+  def formatted_post_body(post)
+    return if post.body.blank?
+
+    post.body.strip.split("\n\n").map { |p| content_tag(:p, p.squish) }.join("\n").html_safe
+  end
+
   def link_to_post(post, full: false)
-    link_to post_title(post, full: full), post_permalink_path(slug: post.id)
+    link_to post_title(post, full: full), post_permalink_path(slug: post.slug)
   end
 
   def post_title(post, full: false)

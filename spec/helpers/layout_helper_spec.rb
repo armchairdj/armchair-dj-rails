@@ -21,6 +21,8 @@ RSpec.describe LayoutHelper, type: :helper do
         expect(helper.copyright_notice).to eq("&copy; 1996-2050 #{t("site.owner")}")
       end
     end
+
+    pending 'plain english'
   end
 
   describe "#join_class_names" do

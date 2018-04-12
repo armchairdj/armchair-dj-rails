@@ -1,7 +1,7 @@
 require 'ffaker'
 
 FactoryBot.define do
-  sequence :email do |n|
+  sequence :user_email do |n|
     "user#{n}@example.com"
   end
 
@@ -11,7 +11,7 @@ FactoryBot.define do
     trait :valid do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }
-      email      { generate(:email) }
+      email      { generate(:user_email) }
       password   "password1234"
     end
 
