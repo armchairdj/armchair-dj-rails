@@ -112,6 +112,12 @@ private
   end
 
   def instance_params
-    params.fetch(:user, {}).permit(:first_name, :last_name, :role)
+    params.fetch(:user, {}).permit(
+      :first_name,
+      :last_name,
+      :email,
+      :password,
+      :role
+    )
   end
 end
