@@ -1,40 +1,41 @@
 <%
-  @headline = @title = 'Register'
+  @title = 'Register'
 %>
 
-<% content_for(:page_header) do %>
-  <%= content_tag(:header, class: 'page-header auth') do %>
-    <%= content_tag(:h1) do %>
-      <%= content_tag(:span, @headline) %>
-      <%= link_to('(Or Log In)', new_user_session_path) %>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: 'shared/user_tabs', locals: { selected_tab: :register } %>
+
+  <%= content_tag(:div, class: 'tab') do %>
+    <%= simple_form_for(@user, url: settings_path) do |f| %>
+      <%= f.error_notification %>
+
+      <%= content_tag(:div, class: 'form-inputs') do %>
+        <%= f.input :first_name,
+          required: true
+        %>
+
+        <%= f.input :middle_name,
+          required: false
+        %>
+
+        <%= f.input :last_name,
+          required: true
+        %>
+
+        <%= f.input :email,
+          required:    true,
+          placeholder: 'name@domain.com'
+        %>
+
+        <%= f.input :password,
+          required: true,
+          hint:     "#{@minimum_password_length} or more characters"
+        %>
+      <% end %>
+
+      <%= content_tag(:div, class: 'button-group') do %>
+        <%= f.button :submit, 'Register' %>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
-
-<%= simple_form_for(@user, url: settings_path) do |f| %>
-  <%= f.error_notification %>
-
-  <%= content_tag(:div, class: 'form-inputs') do %>
-    <%= f.input :first_name,
-      required: true
-    %>
-
-    <%= f.input :last_name,
-      required: true
-    %>
-
-    <%= f.input :email,
-      required: true,
-      placeholder: 'name@domain.com'
-    %>
-
-    <%= f.input :password,
-      required: true,
-      hint:     "#{@minimum_password_length} or more characters"
-    %>
-  <% end %>
-
-  <%= content_tag(:div, class: 'button-group') do %>
-    <%= f.button :submit, 'Sign up' %>
   <% end %>
 <% end %>
