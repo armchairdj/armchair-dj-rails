@@ -65,9 +65,17 @@ RSpec.describe User, type: :model do
 
   describe 'instance' do
     describe '#display_name' do
-      let(:subject) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
+      describe "no middle name" do
+        let(:subject) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
 
-      specify { expect(subject.display_name).to eq("Derrick May") }
+        specify { expect(subject.display_name).to eq("Derrick May") }
+      end
+
+      describe "with middle name" do
+        let(:subject) { create(:minimal_user, first_name: "Brian", middle_name: "J.", last_name: "Dillard") }
+
+        specify { expect(subject.display_name).to eq("Brian J. Dillard") }
+      end
     end
 
     describe 'private' do

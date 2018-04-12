@@ -69,7 +69,7 @@ class User < ApplicationRecord
   #############################################################################
 
   def display_name
-    [first_name, last_name].compact.join(" ")
+    [first_name, middle_name, last_name].compact.join(" ")
   end
 
 private

@@ -101,6 +101,10 @@ table.admin {
   @include bottom-margin();
   font-size: $admin-table-font-size;
 
+  &.admin-view {
+    table-layout: fixed;
+  }
+
   tbody {
     vertical-align: middle;
   }

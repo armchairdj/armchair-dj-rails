@@ -5,6 +5,10 @@ RSpec.describe AdminHelper, type: :helper do
     pending "#admin_submit_button"
   end
 
+  describe "formatting methods" do
+    pending "#admin_date"
+  end
+
   describe "link methods" do
     before(:each) do
       allow(helper).to receive(   :semantic_svg_image).and_return("svg")

@@ -11,4 +11,40 @@
   <% end %>
 <% end %>
 
-<%= @post.body %>
+<%= content_tag(:table, class: 'admin admin-view') do %>
+  <%= content_tag(:tbody) do %>
+    <%= content_tag(:tr) do %>
+      <%= content_tag(:th, "Type") %>
+      <%= content_tag(:td, post_type(@post)) %>
+    <% end %>
+
+    <% if @post.work.present? %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Creator") %>
+        <%= content_tag(:td, @post.work.display_creator) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Title") %>
+        <%= content_tag(:td, @post.work.title) %>
+      <% end %>
+    <% else %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Title") %>
+        <%= content_tag(:td, @post.title) %>
+      <% end %>
+    <% end %>
+
+    <%= content_tag(:tr) do %>
+      <%= content_tag(:th, "Created") %>
+      <%= content_tag(:td, admin_date(@post.created_at)) %>
+    <% end %>
+
+    <%= content_tag(:tr) do %>
+      <%= content_tag(:th, "Updated") %>
+      <%= content_tag(:td, admin_date(@post.updated_at)) %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:div, @post.body) %>
