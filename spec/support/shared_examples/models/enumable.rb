@@ -5,6 +5,14 @@ RSpec.shared_examples "an enumable model" do |attributes|
     single_attr = attribute.to_s
     plural_attr = single_attr.pluralize
 
+    context "i18n for #{single_attr}" do
+      described_class.send(plural_attr).keys.each do |val|
+        it "has a localized string for #{val}" do
+          expect(described_class.send("human_#{single_attr}", val)).to_not match(/translation missing/i)
+        end
+      end
+    end
+
     context "for #{single_attr}" do
       context "class" do
         before(:each) do
@@ -80,7 +88,7 @@ RSpec.shared_examples "an enumable model" do |attributes|
       specify { expect(described_class.respond_to?(:enumable_attributes)).to eq(true) }
     end
 
-    describe "enumable" do
+    describe "self#retrieve_enumable_attributes" do
       specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
     end
   end

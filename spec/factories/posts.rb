@@ -42,17 +42,17 @@ FactoryBot.define do
     end
 
     ###########################################################################
-    # FILM REVIEWS.
+    # MOVIE REVIEWS.
     ###########################################################################
 
-    factory :film_review do
-      body "This is a film review."
-      association :work, factory: :film
+    factory :movie_review do
+      body "This is a movie review."
+      association :work, factory: :movie
     end
 
-    factory :collaborative_film_review do
-      body "This is a film review."
-      association :work, factory: :collaborative_film
+    factory :collaborative_movie_review do
+      body "This is a movie review."
+      association :work, factory: :collaborative_movie
     end
 
     ###########################################################################
@@ -67,6 +67,34 @@ FactoryBot.define do
     factory :collaborative_tv_show_review do
       body "This is a tv_show review."
       association :work, factory: :collaborative_tv_show
+    end
+
+    ###########################################################################
+    # RADIO SHOW REVIEWS.
+    ###########################################################################
+
+    factory :radio_show_review do
+      body "This is a radio_show review."
+      association :work, factory: :radio_show
+    end
+
+    factory :collaborative_radio_show_review do
+      body "This is a radio_show review."
+      association :work, factory: :collaborative_radio_show
+    end
+
+    ###########################################################################
+    # PODCAST REVIEWS.
+    ###########################################################################
+
+    factory :podcast_review do
+      body "This is a podcast review."
+      association :work, factory: :podcast
+    end
+
+    factory :collaborative_podcast_review do
+      body "This is a podcast review."
+      association :work, factory: :collaborative_podcast
     end
 
     ###########################################################################
@@ -98,6 +126,34 @@ FactoryBot.define do
     end
 
     ###########################################################################
+    # NEWSPAPER REVIEWS.
+    ###########################################################################
+
+    factory :newspaper_review do
+      body "This is a newspaper review."
+      association :work, factory: :newspaper
+    end
+
+    factory :collaborative_newspaper_review do
+      body "This is a newspaper review."
+      association :work, factory: :collaborative_newspaper
+    end
+
+    ###########################################################################
+    # MAGAZINE REVIEWS.
+    ###########################################################################
+
+    factory :magazine_review do
+      body "This is a magazine review."
+      association :work, factory: :magazine
+    end
+
+    factory :collaborative_magazine_review do
+      body "This is a magazine review."
+      association :work, factory: :collaborative_magazine
+    end
+
+    ###########################################################################
     # ARTWORK REVIEWS.
     ###########################################################################
 
@@ -112,6 +168,20 @@ FactoryBot.define do
     end
 
     ###########################################################################
+    # GAME REVIEWS.
+    ###########################################################################
+
+    factory :game_review do
+      body "This is a game review."
+      association :work, factory: :game
+    end
+
+    factory :collaborative_game_review do
+      body "This is a game review."
+      association :work, factory: :collaborative_game
+    end
+
+    ###########################################################################
     # SOFTWARE REVIEWS.
     ###########################################################################
 
@@ -123,6 +193,34 @@ FactoryBot.define do
     factory :collaborative_software_review do
       body "This is a software review."
       association :work, factory: :collaborative_software
+    end
+
+    ###########################################################################
+    # HARDWARE REVIEWS.
+    ###########################################################################
+
+    factory :hardware_review do
+      body "This is a hardware review."
+      association :work, factory: :hardware
+    end
+
+    factory :collaborative_hardware_review do
+      body "This is a hardware review."
+      association :work, factory: :collaborative_hardware
+    end
+
+    ###########################################################################
+    # PRODUCT REVIEWS.
+    ###########################################################################
+
+    factory :product_review do
+      body "This is a product review."
+      association :work, factory: :product
+    end
+
+    factory :collaborative_product_review do
+      body "This is a product review."
+      association :work, factory: :collaborative_product
     end
 
     ###########################################################################

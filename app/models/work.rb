@@ -36,18 +36,26 @@ class Work < ApplicationRecord
   #############################################################################
 
   enum medium: {
-    song:       100,
-    album:      101,
+    song:        100,
+    album:       101,
 
-    film:       200,
-    tv_show:    201,
+    movie:       200,
+    tv_show:     220,
+    radio_show:  240,
+    podcast:     260,
 
-    book:       300,
-    comic:      301,
+    book:        300,
+    comic:       310,
+    newspaper:   350,
+    magazine:    370,
 
-    artwork:    400,
+    artwork:     400,
 
-    software:   500
+    game:        500,
+    software:    501,
+    hardware:    502,
+
+    product:     600
   }
 
   enumable_attributes :medium
@@ -88,28 +96,42 @@ class Work < ApplicationRecord
 
   def self.grouped_select_options_for_post
     {
-      "Songs"  => self.song.alphabetical,
-      "Albums" => self.album.alphabetical,
-      "TV"     => self.tv_show.alphabetical,
-      "Films"  => self.film.alphabetical,
-      "Books"  => self.book.alphabetical,
-      "Comics" => self.comic.alphabetical,
-      "Apps"   => self.software.alphabetical,
-      "Art"    => self.artwork.alphabetical,
+      "Songs"       => self.song.alphabetical,
+      "Albums"      => self.album.alphabetical,
+      "Movies"      => self.movie.alphabetical,
+      "TV"          => self.tv_show.alphabetical,
+      "Radio"       => self.radio_show.alphabetical,
+      "Podcast"     => self.podcast.alphabetical,
+      "Books"       => self.book.alphabetical,
+      "Comics"      => self.comic.alphabetical,
+      "Newspapers"  => self.newspaper.alphabetical,
+      "Magazines"   => self.magazine.alphabetical,
+      "Art"         => self.artwork.alphabetical,
+      "Game"        => self.game.alphabetical,
+      "Software"    => self.software.alphabetical,
+      "Hardware"    => self.hardware.alphabetical,
+      "Product"     => self.product.alphabetical,
     }.to_a
   end
 
   def self.admin_scopes
     {
-      "All"   => :all,
-      "Song"  => :song,
-      "Album" => :album,
-      "TV"    => :tv_show,
-      "Film"  => :film,
-      "Book"  => :book,
-      "Comic" => :comic,
-      "App"   => :software,
-      "Art"   => :artwork,
+      "All"         => :all,
+      "Song"        => :song,
+      "Album"       => :album,
+      "Movie"       => :movie,
+      "TV"          => :tv_show,
+      "Radio"       => :radio_show,
+      "Pod"         => :podcast,
+      "Book"        => :book,
+      "Comic"       => :comic,
+      "News"        => :newspaper,
+      "Mag"         => :magazine,
+      "Art"         => :artwork,
+      "Game"        => :game,
+      "Software"    => :software,
+      "Hardware"    => :hardware,
+      "Product"     => :product,
     }
   end
 

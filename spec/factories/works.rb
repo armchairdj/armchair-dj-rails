@@ -59,8 +59,8 @@ FactoryBot.define do
     # FILMS.
     ###########################################################################
 
-    factory :film do
-      medium :film
+    factory :movie do
+      medium :movie
       title  { FFaker::Movie.title }
 
       contributions_attributes { {
@@ -68,8 +68,8 @@ FactoryBot.define do
       } }
     end
 
-    factory :collaborative_film do
-      medium :film
+    factory :collaborative_movie do
+      medium :movie
       title  { FFaker::Movie.title }
 
       contributions_attributes { {
@@ -98,6 +98,52 @@ FactoryBot.define do
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id),
         "1" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id)
+      } }
+    end
+
+    ###########################################################################
+    # RADIO SHOWS.
+    ###########################################################################
+
+    factory :radio_show do
+      medium :radio_show
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id)
+      } }
+    end
+
+    factory :collaborative_radio_show do
+      medium :radio_show
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id)
+      } }
+    end
+
+    ###########################################################################
+    # PODCASTS.
+    ###########################################################################
+
+    factory :podcast do
+      medium :podcast
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id)
+      } }
+    end
+
+    factory :collaborative_podcast do
+      medium :podcast
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id)
       } }
     end
 
@@ -148,6 +194,52 @@ FactoryBot.define do
     end
 
     ###########################################################################
+    # NEWSPAPERS.
+    ###########################################################################
+
+    factory :newspaper do
+      medium :newspaper
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      } }
+    end
+
+    factory :collaborative_newspaper do
+      medium :newspaper
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      } }
+    end
+
+    ###########################################################################
+    # MAGAZINES.
+    ###########################################################################
+
+    factory :magazine do
+      medium :magazine
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      } }
+    end
+
+    factory :collaborative_magazine do
+      medium :magazine
+      title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      } }
+    end
+
+    ###########################################################################
     # ARTWORKS.
     ###########################################################################
 
@@ -171,25 +263,94 @@ FactoryBot.define do
     end
 
     ###########################################################################
+    # GAMES.
+    ###########################################################################
+
+    factory :game do
+      medium :game
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id)
+      } }
+    end
+
+    factory :collaborative_game do
+      medium :game
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id)
+      } }
+    end
+
+    ###########################################################################
     # SOFTWARE.
     ###########################################################################
 
     factory :software do
       medium :software
-      title  { FFaker::Product.brand }
+      title  { FFaker::Product.name }
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:programmer).id)
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id)
       } }
     end
 
     factory :collaborative_software do
       medium :software
-      title  { FFaker::Product.brand }
+      title  { FFaker::Product.name }
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:programmer).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:programmer).id)
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id)
+      } }
+    end
+
+    ###########################################################################
+    # HARDWARE.
+    ###########################################################################
+
+    factory :hardware do
+      medium :hardware
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id)
+      } }
+    end
+
+    factory :collaborative_hardware do
+      medium :hardware
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id)
+      } }
+    end
+
+    ###########################################################################
+    # PRODUCT.
+    ###########################################################################
+
+    factory :product do
+      medium :product
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id)
+      } }
+    end
+
+    factory :collaborative_product do
+      medium :product
+      title  { FFaker::Product.name }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id),
+        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id)
       } }
     end
 

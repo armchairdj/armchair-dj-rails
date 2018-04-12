@@ -48,32 +48,57 @@ class Contribution < ApplicationRecord
 
     musician:                     150,
 
-    # Film & TV
+    # Broadcasting
 
     director:                     200,
 
     producer:                     220,
     executive_producer:           221,
+    showrunner:                   222,
     co_producer:                  222,
-    show_runner:                  223,
 
     cinematographer:              230,
     film_editor:                  231,
 
     screenwriter:                 240,
 
-    # Books & Comics
+    radio_host:                   250,
+    podcaster:                    260,
+
+    # Print
 
     author:                       300,
     editor:                       310,
+
+    book_imprint:                 320,
+    comics_imprint:               321,
+    magazine_publisher:           322,
+    newspaper_publisher:          323,
+
+    cartoonist:                   330,
+    penciller:                    331,
+    inker:                        332,
+    colorist:                     333,
+    letterer:                     334,
 
     # Art
 
     artist:                       400,
 
-    # Software
+    # Tech
 
-    programmer:                   500,
+    game_platform:                500,
+    game_studio:                  510,
+
+    software_platform:            520,
+    software_comapny:             521,
+    programmer:                   522,
+
+    hardware_company:             550,
+
+    # Product
+
+    brand:                        600,
   }
 
   enumable_attributes :role

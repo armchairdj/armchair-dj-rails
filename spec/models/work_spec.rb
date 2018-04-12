@@ -120,14 +120,21 @@ RSpec.describe Work, type: :model do
     describe 'self#grouped_select_options_for_post' do
       specify 'first element of each sub-array is an optgroup heading' do
         expect(described_class.grouped_select_options_for_post.to_h.keys).to eq([
-          'Songs',
-          'Albums',
-          'TV',
-          'Films',
-          'Books',
-          'Comics',
-          'Apps',
-          'Art',
+          "Songs",
+          "Albums",
+          "Movies",
+          "TV",
+          "Radio",
+          "Podcast",
+          "Books",
+          "Comics",
+          "Newspapers",
+          "Magazines",
+          "Art",
+          "Game",
+          "Software",
+          "Hardware",
+          "Product"
         ])
       end
 
@@ -144,12 +151,19 @@ RSpec.describe Work, type: :model do
           'All',
           'Song',
           'Album',
+          'Movie',
           'TV',
-          'Film',
+          'Radio',
+          'Pod',
           'Book',
           'Comic',
-          'App',
+          'News',
+          'Mag',
           'Art',
+          'Game',
+          'Software',
+          'Hardware',
+          'Product'
         ])
       end
 
