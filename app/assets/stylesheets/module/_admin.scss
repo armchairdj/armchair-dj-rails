@@ -93,7 +93,7 @@ table.admin {
   font-size: $admin-table-font-size;
 
   &.admin-view {
-    table-layout: fixed;
+//    table-layout: fixed;
   }
 
   tbody {
@@ -106,7 +106,7 @@ table.admin {
 
   th,
   td {
-    line-height: 1;
+    line-height: $spacious;
     padding: $spacing-xs;
 
     &:first-child {

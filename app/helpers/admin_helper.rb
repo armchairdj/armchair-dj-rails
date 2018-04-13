@@ -40,21 +40,29 @@ module AdminHelper
     )
   end
 
+  def admin_public_view_link(instance, path = nil)
+    path  ||= polymorphic_path(instance)
+
+    svg   = semantic_svg_image("open_iconic/link-intact.svg", title: "link", desc: "public view icon")
+    title = "view #{instance.model_name.singular} on site"
+
+    link_to(svg, path, title: title, class: "admin public-view",
+      target: "_blank"
+    )
+  end
+
+  def admin_public_view_post_link(post)
+    return unless post.slug
+
+    admin_public_view_link(post, post_permalink_path(slug: post.slug))
+  end
+
   def admin_view_link(instance)
     svg   = semantic_svg_image("open_iconic/eye.svg", title: "eyeball", desc: "view icon")
     path  ||= polymorphic_path([:admin, instance])
     title = "view #{instance.model_name.singular}"
 
     link_to(svg, path, title: title, class: "admin view")
-  end
-
-  def admin_public_view_link(instance, path = nil)
-    path  ||= polymorphic_path(instance)
-
-    svg   = semantic_svg_image("open_iconic/eye.svg", title: "globe", desc: "public view icon")
-    title = "view #{instance.model_name.singular} on site"
-
-    link_to(svg, path, title: title, class: "admin public-view")
   end
 
   def admin_update_link(instance)

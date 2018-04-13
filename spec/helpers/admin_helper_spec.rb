@@ -40,6 +40,12 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
+    describe "#admin_public_view_link" do
+      pending "generates link"
+      pending "overrides url"
+      pending "includes target"
+    end
+
     describe "#admin_update_link" do
       it "generates link" do
         expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
@@ -55,7 +61,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with([:admin, instance])
 
         expect(helper.admin_view_link(instance)).to eq(
-          "<a title=\"view creator\" class=\"admin show\" href=\"path\">svg</a>"
+          "<a title=\"view creator\" class=\"admin view\" href=\"path\">svg</a>"
         )
       end
     end

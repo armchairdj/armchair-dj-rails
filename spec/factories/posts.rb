@@ -20,7 +20,10 @@ FactoryBot.define do
 
     trait :published do
       after(:create) do |post, evaluator|
-        post.slug = generate(:post_slug) unless post.slug.present?
+        unless post.slug.present? || post.update(slug: post.send(:generate_slug))
+          post.update!(slug: generate(:post_slug))
+        end
+
         post.publish!
       end
     end
