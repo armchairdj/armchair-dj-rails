@@ -6,31 +6,38 @@
   <%= content_tag(:h1, @title.first) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_destroy_link(@work) %>
+    <%= admin_public_view_link(@work) %>
     <%= admin_update_link(@work) %>
+    <%= admin_destroy_link(@work) %>
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-view') do %>
-  <%= content_tag(:tbody) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Title") %>
-      <%= content_tag(:td, @work.title) %>
-    <% end %>
+<%= content_tag(:section, class: 'admin-section') do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Medium") %>
-      <%= content_tag(:td, @work.human_medium) %>
-    <% end %>
+  <%= content_tag(:table, class: 'admin admin-view') do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Title") %>
+        <%= content_tag(:td, @work.title) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Created") %>
-      <%= content_tag(:td, admin_date(@work.created_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Medium") %>
+        <%= content_tag(:td, @work.human_medium) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Updated") %>
-      <%= content_tag(:td, admin_date(@work.updated_at)) %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@work.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@work.updated_at)) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

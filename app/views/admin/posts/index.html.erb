@@ -36,9 +36,10 @@
             <%= content_tag :td, post_type(post) %>
             <%= content_tag :td, post.one_line_title %>
             <%= content_tag :td, class: 'actions' do %>
-              <%= admin_view_link    post %>
-              <%= admin_update_link  post %>
-              <%= admin_destroy_link post %>
+              <%= admin_public_view_link post, post_permalink_path(slug: post.slug) %>
+              <%= admin_view_link        post %>
+              <%= admin_update_link      post %>
+              <%= admin_destroy_link     post %>
             <% end %>
           <% end %>
         <% end %>

@@ -6,96 +6,102 @@
   <%= content_tag(:h1, @title.first) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_destroy_link(@user) %>
     <%= admin_update_link(@user) %>
+    <%= admin_destroy_link(@user) %>
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-view') do %>
-  <%= content_tag(:tbody) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Role") %>
-      <%= content_tag(:td, @user.human_role) %>
-    <% end %>
+<%= content_tag(:section, class: 'admin-section') do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Name") %>
-      <%= content_tag(:td, @user.display_name) %>
-    <% end %>
+  <%= content_tag(:table, class: 'admin admin-view') do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Role") %>
+        <%= content_tag(:td, @user.human_role) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Email") %>
-      <%= content_tag(:td, @user.email) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @user.display_name) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Unconfirmed Email") %>
-      <%= content_tag(:td, @user.unconfirmed_email) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Email") %>
+        <%= content_tag(:td, @user.email) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Created") %>
-      <%= content_tag(:td, admin_date(@user.created_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Unconfirmed Email") %>
+        <%= content_tag(:td, @user.unconfirmed_email) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Updated") %>
-      <%= content_tag(:td, admin_date(@user.updated_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@user.created_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Confirmed") %>
-      <%= content_tag(:td, admin_date(@user.confirmed_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@user.updated_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Confirmation Sent") %>
-      <%= content_tag(:td, admin_date(@user.confirmation_sent_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Confirmed") %>
+        <%= content_tag(:td, admin_date(@user.confirmed_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Logins") %>
-      <%= content_tag(:td, @user.sign_in_count) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Confirmation Sent") %>
+        <%= content_tag(:td, admin_date(@user.confirmation_sent_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Current Login") %>
-      <%= content_tag(:td, admin_date(@user.current_sign_in_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Logins") %>
+        <%= content_tag(:td, @user.sign_in_count) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Current Login IP") %>
-      <%= content_tag(:td, @user.current_sign_in_ip) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Current Login") %>
+        <%= content_tag(:td, admin_date(@user.current_sign_in_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Last Login") %>
-      <%= content_tag(:td, admin_date(@user.last_sign_in_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Current Login IP") %>
+        <%= content_tag(:td, @user.current_sign_in_ip) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Last Login IP") %>
-      <%= content_tag(:td, @user.last_sign_in_ip) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Last Login") %>
+        <%= content_tag(:td, admin_date(@user.last_sign_in_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Remember Me") %>
-      <%= content_tag(:td, admin_date(@user.remember_created_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Last Login IP") %>
+        <%= content_tag(:td, @user.last_sign_in_ip) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Password Reset") %>
-      <%= content_tag(:td, @user.reset_password_sent_at) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Remember Me") %>
+        <%= content_tag(:td, admin_date(@user.remember_created_at)) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Locked") %>
-      <%= content_tag(:td, admin_date(@user.locked_at)) %>
-    <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Password Reset") %>
+        <%= content_tag(:td, @user.reset_password_sent_at) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Failed Attempts") %>
-      <%= content_tag(:td, @user.failed_attempts) %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Locked") %>
+        <%= content_tag(:td, admin_date(@user.locked_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Failed Attempts") %>
+        <%= content_tag(:td, @user.failed_attempts) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

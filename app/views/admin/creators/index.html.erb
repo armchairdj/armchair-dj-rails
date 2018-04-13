@@ -26,9 +26,10 @@
         <%= content_tag :td, creator.work_count, class: 'count' %>
         <%= content_tag :td, creator.post_count, class: 'count' %>
         <%= content_tag :td, class: 'actions' do %>
-          <%= admin_view_link    creator %>
-          <%= admin_update_link  creator %>
-          <%= admin_destroy_link creator %>
+          <%= admin_public_view_link creator %>
+          <%= admin_view_link        creator %>
+          <%= admin_update_link      creator %>
+          <%= admin_destroy_link     creator %>
         <% end %>
       <% end %>
     <% end %>

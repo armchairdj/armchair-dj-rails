@@ -28,7 +28,6 @@ $bone:                   #e2dbbe;
 $success-color:          #a2d729;
 $info-color:             $light-grey;
 $error-color:            #dd1c1a;
-$error-color-hover:      scale-color($error-color, $lightness: 20%);
 
 /* Text. */
 
@@ -63,19 +62,19 @@ $tagline-color: $armchair-smoke;
 
 /* Buttons: Primary. */
 
-$button-bg-primary:     $armchair-blue-darkest;
-$button-border-primary: $button-bg-primary;
-$button-text-primary:   $white;
+$button-bg-primary:             $armchair-blue-darkest;
+$button-border-primary:         $button-bg-primary;
+$button-text-primary:           $white;
 
-$button-bg-primary-hover:     scale-color($button-bg-primary, $lightness: -20%);
-$button-border-primary-hover: $button-border-primary;
-$button-text-primary-hover:   $button-text-primary;
+$button-bg-primary-hover:       scale-color($button-bg-primary, $lightness: -20%);
+$button-border-primary-hover:   $button-border-primary;
+$button-text-primary-hover:     $button-text-primary;
 
 /* Buttons: Secondary. */
 
-$button-bg-secondary:     $armchair-blue-medium;
-$button-border-secondary: $button-bg-secondary;
-$button-text-secondary:   $white;
+$button-bg-secondary:           $armchair-blue-medium;
+$button-border-secondary:       $button-bg-secondary;
+$button-text-secondary:         $white;
 
 $button-bg-secondary-hover:     scale-color($button-bg-secondary, $lightness: -20%);
 $button-border-secondary-hover: $button-border-secondary;
@@ -83,26 +82,40 @@ $button-text-secondary-hover:   $button-text-secondary;
 
 /* Buttons: Tertiary. */
 
-$button-bg-tertiary:     $medium-grey;
-$button-border-tertiary: $button-bg-tertiary;
-$button-text-tertiary:   $white;
+$button-bg-tertiary:            $medium-grey;
+$button-border-tertiary:        $button-bg-tertiary;
+$button-text-tertiary:          $white;
 
-$button-bg-tertiary-hover:     scale-color($button-bg-tertiary, $lightness: -20%);
-$button-border-tertiary-hover: $button-border-tertiary;
-$button-text-tertiary-hover:   $button-text-tertiary;
+$button-bg-tertiary-hover:      scale-color($button-bg-tertiary, $lightness: -20%);
+$button-border-tertiary-hover:  $button-border-tertiary;
+$button-text-tertiary-hover:    $button-text-tertiary;
 
 /* Buttons: Danger. */
 
-$button-bg-danger:     scale-color($error-color, $lightness: -30%);
-$button-border-danger: $button-bg-danger;
-$button-text-danger:   $white;
+$button-bg-danger:              scale-color($error-color, $lightness: -30%);
+$button-border-danger:          $button-bg-danger;
+$button-text-danger:            $white;
 
-$button-bg-danger-hover:     scale-color($button-bg-danger, $lightness: -20%);
-$button-border-danger-hover: $button-border-danger;
-$button-text-danger-hover:   $button-text-danger;
+$button-bg-danger-hover:        scale-color($button-bg-danger, $lightness: -20%);
+$button-border-danger-hover:    $button-border-danger;
+$button-text-danger-hover:      $button-text-danger;
 
 /* Buttons: Disabled. */
 
-$button-bg-disabled:     transparentize($darkest-grey, 0.6);
-$button-border-disabled: $medium-grey;
-$button-text-disabled:   $white;
+$button-bg-disabled:            transparentize($darkest-grey, 0.6);
+$button-border-disabled:        $medium-grey;
+$button-text-disabled:          $white;
+
+/* SVG links. */
+
+$svg-link-color:                 $button-bg-primary;
+$svg-link-color-hover:           $button-bg-primary-hover;
+
+$svg-link-color-secondary:       $button-bg-secondary;
+$svg-link-color-secondary-hover: $button-bg-secondary-hover;
+
+$svg-link-color-tertiary:        $button-bg-tertiary;
+$svg-link-color-tertiary-hover:  $button-bg-tertiary-hover;
+
+$svg-link-color-danger:          $button-bg-danger;
+$svg-link-color-danger-hover:    $button-bg-danger-hover;

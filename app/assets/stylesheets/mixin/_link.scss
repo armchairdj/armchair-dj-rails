@@ -59,3 +59,15 @@
     text-decoration: none;
   }
 }
+
+@mixin colored-svg-link($color: $svg-link-color, $hover: $svg-link-color-hover) {
+  @include svg() {
+    @include svg-path-fill($color);
+  }
+
+  &:hover {
+    @include svg() {
+      @include svg-path-fill($hover);
+    }
+  }
+}

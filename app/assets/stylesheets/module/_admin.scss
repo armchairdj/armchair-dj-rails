@@ -48,25 +48,16 @@ a.admin {
 
   @include inline-block-svg() {
     @include square(1rem);
-    @include svg-path-fill($link-color);
   }
 
-  &:hover {
-    @include svg() {
-      @include svg-path-fill($link-color-hover);
-    }
-  }
+  @include colored-svg-link();
 
   &.destroy {
-    @include svg() {
-      @include svg-path-fill($error-color);
-    }
+    @include colored-svg-link($svg-link-color-danger, $svg-link-color-danger-hover);
+  }
 
-    &:hover {
-      @include svg() {
-        @include svg-path-fill($error-color-hover);
-      }
-    }
+  &.public-view {
+    @include colored-svg-link($svg-link-color-tertiary, $svg-link-color-tertiary-hover);
   }
 }
 

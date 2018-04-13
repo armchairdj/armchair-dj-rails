@@ -6,50 +6,63 @@
   <%= content_tag(:h1, @title.first) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_destroy_link(@post) %>
+    <%= admin_public_view_link(@post, post_permalink_path(slug: @post.slug)) %>
     <%= admin_update_link(@post) %>
+    <%= admin_destroy_link(@post) %>
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-view') do %>
-  <%= content_tag(:tbody) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Slug") %>
-      <%= content_tag(:td, @post.slug) %>
-    <% end %>
+<%= content_tag(:section, class: 'admin-section') do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Type") %>
-      <%= content_tag(:td, post_type(@post)) %>
-    <% end %>
-
-    <% if @post.work.present? %>
+  <%= content_tag(:table, class: 'admin admin-view') do %>
+    <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Creator") %>
-        <%= content_tag(:td, @post.work.display_creator) %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td, @post.slug) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Title") %>
-        <%= content_tag(:td, @post.work.title) %>
+        <%= content_tag(:th, "Type") %>
+        <%= content_tag(:td, post_type(@post)) %>
       <% end %>
-    <% else %>
+
+      <% if @post.work.present? %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Creator") %>
+          <%= content_tag(:td, @post.work.display_creator) %>
+        <% end %>
+
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Title") %>
+          <%= content_tag(:td, @post.work.title) %>
+        <% end %>
+      <% else %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Title") %>
+          <%= content_tag(:td, @post.title) %>
+        <% end %>
+      <% end %>
+
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Title") %>
-        <%= content_tag(:td, @post.title) %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@post.created_at)) %>
       <% end %>
-    <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Created") %>
-      <%= content_tag(:td, admin_date(@post.created_at)) %>
-    <% end %>
-
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Updated") %>
-      <%= content_tag(:td, admin_date(@post.updated_at)) %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@post.updated_at)) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= content_tag(:div, @post.body) %>
+<%= content_tag(:section, class: 'admin-section') do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Post Body") %>
+  <% end %>
+
+  <%= content_tag(:div, formatted_post_body(@post)) %>
+<% end %>

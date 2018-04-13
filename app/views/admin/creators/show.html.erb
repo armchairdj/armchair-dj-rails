@@ -6,26 +6,33 @@
   <%= content_tag(:h1, @title.first) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_destroy_link(@creator) %>
+    <%= admin_public_view_link(@creator) %>
     <%= admin_update_link(@creator) %>
+    <%= admin_destroy_link(@creator) %>
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-view') do %>
-  <%= content_tag(:tbody) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Name") %>
-      <%= content_tag(:td, @creator.name) %>
-    <% end %>
+<%= content_tag(:section, class: 'admin-section') do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Created") %>
-      <%= content_tag(:td, admin_date(@creator.created_at)) %>
-    <% end %>
+  <%= content_tag(:table, class: 'admin admin-view') do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @creator.name) %>
+      <% end %>
 
-    <%= content_tag(:tr) do %>
-      <%= content_tag(:th, "Updated") %>
-      <%= content_tag(:td, admin_date(@creator.updated_at)) %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@creator.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@creator.updated_at)) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
