@@ -10,27 +10,41 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-index') do %>
-  <%= content_tag(:thead) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag :th, 'Type' %>
-      <%= content_tag :th, 'Title' %>
-      <%= content_tag :th, 'Actions', class: 'actions' %>
-    <% end %>
-  <% end %>
-  <%= content_tag(:tbody) do %>
-    <% @posts.each do |post| %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag :td, post_type(post) %>
-        <%= content_tag :td, post.one_line_title %>
-        <%= content_tag :td, class: 'actions' do %>
-          <%= admin_view_link    post %>
-          <%= admin_update_link  post %>
-          <%= admin_destroy_link post %>
-        <% end %>
+<%= content_tag(:div, class: 'tabgroup') do %>
+  <%= content_tag(:ul, class: 'tabs') do %>
+    <% Post.admin_scopes.each do |scope_label, scope| %>
+      <% if @scope == scope %>
+        <%= content_tag(:li, content_tag(:span, scope_label, class: 'tab-active')) %>
+      <% else %>
+        <%= content_tag(:li, link_to(scope_label, admin_posts_path(scope: scope))) %>
       <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<%= paginate @posts %>
+  <%= content_tag(:div, class: 'tab') do %>
+    <%= content_tag(:table, class: 'admin admin-index') do %>
+      <%= content_tag(:thead) do %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag :th, 'Type' %>
+          <%= content_tag :th, 'Title' %>
+          <%= content_tag :th, 'Actions', class: 'actions' %>
+        <% end %>
+      <% end %>
+      <%= content_tag(:tbody) do %>
+        <% @posts.each do |post| %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag :td, post_type(post) %>
+            <%= content_tag :td, post.one_line_title %>
+            <%= content_tag :td, class: 'actions' do %>
+              <%= admin_view_link    post %>
+              <%= admin_update_link  post %>
+              <%= admin_destroy_link post %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= paginate @posts %>
+  <% end %>
+<% end %>

@@ -115,7 +115,9 @@ private
   end
 
   def find_collection
-    @posts = policy_scope(Post).page(params[:page])
+    @scope = (params[:scope] || "all").to_sym
+    @page  = params[:page]
+    @posts = policy_scope(Post).send(@scope).page(@page)
   end
 
   def find_instance

@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20180412222925) do
     t.string "slug"
     t.integer "status", default: 0, null: false
     t.index ["slug"], name: "index_posts_on_slug", unique: true
+    t.index ["status"], name: "index_posts_on_status"
   end
 
   create_table "users", force: :cascade do |t|
