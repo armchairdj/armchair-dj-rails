@@ -13,23 +13,26 @@ en:
       error: "You must be an admin to view this resource."
     creators:
       notice:
-        create: "Creator created."
+        create:  "Creator created."
         destroy: "Creator destroyed."
-        update: "Creator updated."
+        update:  "Creator updated."
     posts:
       notice:
-        create: "Post created."
+        create:  "Post created."
         destroy: "Post destroyed."
-        update: "Post updated."
+        update:  "Post updated."
+        publish: "Post published."
+      error:
+        publish: "Post could not be published."
     users:
       notice:
-        create: "User created."
+        create:  "User created."
         destroy: "User destroyed."
-        update: "User updated."
+        update:  "User updated."
     works:
       notice:
-        create: "Work created."
+        create:  "Work created."
         destroy: "Work destroyed."
-        update: "Work updated."
+        update:  "Work updated."
   session:
     missing: "Please log in to access that."

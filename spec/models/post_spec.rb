@@ -18,47 +18,133 @@ RSpec.describe Post, type: :model do
   end
 
   describe 'enums' do
-    # Nothing so far.
+    describe 'status' do
+      it { should define_enum_for(:status) }
+
+      it_behaves_like 'an enumable model', [:status]
+    end
   end
 
   describe 'scopes' do
+    pending 'draft'
+    pending 'published'
+
     pending 'reverse_cron'
+
+    pending 'eager'
+
     pending 'for_admin'
     pending 'for_site'
   end
 
   describe 'validations' do
+    it { should validate_uniqueness_of(:slug) }
+
     it { should validate_presence_of(:body) }
 
-    it { should validate_uniqueness_of(:slug) }
+    context 'aasm' do
+      pending 'slug presence'
+      pending 'published_at presence'
+    end
 
     context 'custom' do
       pending 'calls #ensure_work_or_title'
     end
 
     context 'conditional' do
-      pending 'slug presence'
+      context 'published' do
+        pending 'slug presence'
+        pending 'published_at presence'
+      end
     end
   end
 
   describe 'hooks' do
     describe 'after_initialize' do
-      pending 'calls #ensure_slug'
+      pending 'calls #set_slug'
+    end
+  end
+
+  describe 'aasm' do
+    let!(    :draft) { build(:standalone_post             ) }
+    let!(:published) { create(:standalone_post, :published) }
+
+    describe 'initial' do
+    end
+
+    describe 'states' do
+      describe 'exist' do
+        specify { expect(    draft).to have_state(:draft    ) }
+        specify { expect(published).to have_state(:published) }
+      end
+    end
+
+    describe 'transitions' do
+      describe 'publish' do
+        specify { expect(    draft).to     allow_transition_to(:published) }
+        specify { expect(published).to_not allow_transition_to(:published) }
+      end
+    end
+
+    describe 'callbacks' do
+      describe 'publish' do
+        it 'calls prepare_to_publish' do
+           allow(draft).to receive(:prepare_to_publish).and_call_original
+          expect(draft).to receive(:prepare_to_publish)
+
+          draft.publish!
+        end
+      end
+    end
+
+    describe 'scopes' do
+      specify { expect(described_class.draft    ).to be_a_kind_of(ActiveRecord::Relation) }
+      specify { expect(described_class.published).to be_a_kind_of(ActiveRecord::Relation) }
+    end
+
+    describe 'methods' do
+      specify { expect(draft.respond_to?(    :draft?)).to eq(true) }
+      specify { expect(draft.respond_to?(:published?)).to eq(true) }
     end
   end
 
   describe 'class' do
-    pending 'self#slugify'
+    describe 'self#slugify' do
+      specify { expect(described_class.slugify('xxx')).to eq('xxx') }
+      pending 'special characters'
+      pending 'non-ASCII characters'
+      pending 'whitespace'
+      pending '&'
+    end
+
+    describe 'self#admin_scopes' do
+      specify 'keys are short tab names' do
+        expect(described_class.admin_scopes.keys).to eq([
+          'All',
+          'Draft',
+          'Published',
+        ])
+      end
+
+      specify 'values are symbols of scopes' do
+        described_class.admin_scopes.values.each do |sym|
+          expect(sym).to be_a_kind_of(Symbol)
+
+          expect(described_class.respond_to?(sym)).to eq(true)
+        end
+      end
+    end
   end
 
   describe 'instance' do
     pending '#one_line_title'
-    describe '#published?'
 
     describe 'private' do
       describe 'callbacks' do
         pending '#ensure_work_or_title'
-        pending '#ensure_slug'
+        pending '#prepare_to_boublish'
+        pending '#set_published_at'
+        pending '#set_slug'
         pending '#generate_slug'
       end
     end

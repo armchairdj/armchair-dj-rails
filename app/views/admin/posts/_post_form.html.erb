@@ -13,6 +13,14 @@
   <% end %>
 
   <%= content_tag(:div, class: 'button-group') do %>
-    <%= admin_submit_button(f) %>
+    <%= f.button :submit, "Save" %>
+
+    <% if post.persisted? %>
+      <%= f.button :submit, "Publish",
+        name:           "step",
+        value:          "publish",
+        class:          "danger",
+        "data-confirm": "Are you sure?" %>
+    <% end %>
   <% end %>
 <% end %>

@@ -61,6 +61,9 @@ en:
       post:
         id: "ID"
         work: "Work"
+        statuses:
+          draft:     "Draft"
+          published: "Published"
       user:
         id: "ID"
         roles:

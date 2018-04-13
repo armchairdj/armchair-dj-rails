@@ -23,7 +23,7 @@ class Admin::PostsController < AdminController
     :create
   ]
 
-  before_action :prepare_view, only: [
+  before_action :prepare_form, only: [
     :new,
     :edit
   ]
@@ -66,7 +66,7 @@ class Admin::PostsController < AdminController
         format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.create") }
         format.json { render :show, status: :created, location: @post }
       else
-        prepare_view
+        prepare_form
 
         format.html { render :new }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -82,12 +82,14 @@ class Admin::PostsController < AdminController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+    return respond_to_publish if publishing?
+
     respond_to do |format|
       if @post.update(@sanitized_params)
         format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.update") }
         format.json { render :show, status: :ok, location: @post }
       else
-        prepare_view
+        prepare_form
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -177,7 +179,7 @@ private
     )
   end
 
-  def prepare_view
+  def prepare_form
     prepare_work_attributes_fields
     prepare_dropdowns
 
@@ -221,6 +223,34 @@ private
         return "post-standalone"
       else
         return "post-choose-work"
+      end
+    end
+  end
+
+  def publishing?
+    params[:step] == "publish"
+  end
+
+  def respond_to_publish
+    saved     = @post.update(@sanitized_params) 
+
+    begin
+      published = @post.publish!
+    rescue AASM::InvalidTransition => err
+      published = false
+    end
+
+    respond_to do |format|
+      if saved && published
+        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.publish") }
+        format.json { render :show, status: :ok, location: @post }
+      else
+        prepare_form
+
+        flash.now[:error] = I18n.t("admin.posts.error.publish") unless published
+
+        format.html { render :edit }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
   end

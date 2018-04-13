@@ -8,6 +8,8 @@ class Post < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
+  include AASM
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -26,13 +28,21 @@ class Post < ApplicationRecord
   # ENUMS.
   #############################################################################
 
+  enum status: {
+    draft:      0,
+    published: 10
+  }
+
+  enumable_attributes :status
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :reverse_cron, -> { order(published_at: :desc) }
-  scope :for_admin,    -> { includes(work: { contributions: :creator } ) }
-  scope :for_site,     -> { for_admin.where.not(published_at: nil) }
+  scope :for_admin,    -> { eager                                       }
+  scope :for_site,     -> { eager.published.reverse_cron                }
+  scope :eager,        -> { includes(work: { contributions: :creator }) }
+  scope :reverse_cron, -> { order(published_at: :desc)                  }
 
   #############################################################################
   # VALIDATIONS.
@@ -42,16 +52,40 @@ class Post < ApplicationRecord
     ensure_work_or_title
   end
 
+  validates :status, presence: true
+
   validates :body, presence: true
 
   validates :slug, uniqueness: true, allow_blank: true
-  validates :slug, presence: true, if: :published?
+
+  validates :slug,         presence: true, if: :published?
+  validates :published_at, presence: true, if: :published?
 
   #############################################################################
   # HOOKS.
   #############################################################################
 
-  after_initialize :ensure_slug
+  after_initialize :set_slug
+
+  #############################################################################
+  # STATE MACHINE.
+  #############################################################################
+
+  aasm(
+    column:               :status,
+    whiny_persistence:    false,
+    whiny_transitions:    true,
+    enum:                 true,
+    no_direct_assignment: true,
+    create_scopes:        true
+  ) do
+    state :draft, initial: true
+    state :published
+
+    event :publish, before: :prepare_to_publish do
+      transitions from: :draft, to: :published
+    end
+  end
 
   #############################################################################
   # CLASS.
@@ -59,6 +93,14 @@ class Post < ApplicationRecord
 
   def self.slugify(str)
     str.gsub("&", "and").gsub(/[[:punct:]|[:blank:]]/, "_").underscore.gsub(/[^[:word:]]/, "")
+  end
+
+  def self.admin_scopes
+    {
+      "All"       => :all,
+      "Draft"     => :draft,
+      "Published" => :published,
+    }
   end
 
   #############################################################################
@@ -71,10 +113,6 @@ class Post < ApplicationRecord
     else
       self.title
     end
-  end
-
-  def published?
-    self.published_at.present?
   end
 
 private
@@ -94,7 +132,16 @@ private
     end
   end
 
-  def ensure_slug
+  def prepare_to_publish
+    set_published_at
+    set_slug
+  end
+
+  def set_published_at
+    self.published_at = Time.now
+  end
+
+  def set_slug
     return unless self.slug.blank?
     return unless self.work.present? || self.title.present?
 

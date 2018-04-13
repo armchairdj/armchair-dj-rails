@@ -21,6 +21,7 @@ require 'rspec/rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
+require 'aasm/rspec'
 require 'support/factory_bot'
 require 'vcr'
 

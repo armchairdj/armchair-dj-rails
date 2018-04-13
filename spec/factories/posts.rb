@@ -6,17 +6,22 @@ FactoryBot.define do
   end
 
   factory :post do
+    draft
+
     factory :minimal_post, parent: :standalone_post do; end
 
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
-    trait :published do
-      published_at Time.now
+    trait :draft do
+      # status :draft
+    end
 
-      before(:create) do |post, evaluator|
-        post.slug = generate(:post_slug)
+    trait :published do
+      after(:create) do |post, evaluator|
+        post.slug = generate(:post_slug) unless post.slug.present?
+        post.publish!
       end
     end
 

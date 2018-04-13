@@ -40,9 +40,11 @@ RSpec.describe Work, type: :model do
   end
 
   describe 'enums' do
-    it { should define_enum_for(:medium) }
+    describe "medium" do
+      it { should define_enum_for(:medium) }
 
-    it_behaves_like "an enumable model", [:medium]
+      it_behaves_like "an enumable model", [:medium]
+    end
   end
 
   describe 'scopes' do
