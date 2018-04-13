@@ -139,7 +139,7 @@ gem 'devise'
 # Authorization framework.
 # gem 'pundit', path: "/Users/armchairdj/Sites/personal/pundit"
 gem "pundit", git: "https://github.com/armchairdj/pundit",
-  ref: "edd68828dddfcea75deacff19af49427ae6fe9e1"
+  ref: "a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d"
 
 ###############################################################################
 # DEPLOYMENT.

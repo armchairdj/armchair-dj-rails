@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/armchairdj/pundit
-  revision: edd68828dddfcea75deacff19af49427ae6fe9e1
-  ref: edd68828dddfcea75deacff19af49427ae6fe9e1
+  revision: a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d
+  ref: a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d
   specs:
     pundit (1.1.0)
       activesupport (>= 3.0.0)
