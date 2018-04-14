@@ -9,30 +9,32 @@
 #   'true': 'foo'
 en:
   admin:
-    authentication:
-      error: "You must be an admin to view this resource."
-    creators:
-      notice:
-        create:  "Creator created."
-        destroy: "Creator destroyed."
-        update:  "Creator updated."
-    posts:
-      notice:
-        create:  "Post created."
-        destroy: "Post destroyed."
-        update:  "Post updated."
-        publish: "Post published."
-      error:
-        publish: "Post could not be published."
-    users:
-      notice:
-        create:  "User created."
-        destroy: "User destroyed."
-        update:  "User updated."
-    works:
-      notice:
-        create:  "Work created."
-        destroy: "Work destroyed."
-        update:  "Work updated."
-  session:
-    missing: "Please log in to access that."
+    content:
+      no_records: "Nothing to see here, folks."
+    flash:
+      creators:
+        notice:
+          create:  "Creator created."
+          destroy: "Creator destroyed."
+          update:  "Creator updated."
+      posts:
+        notice:
+          create:  "Post created."
+          destroy: "Post destroyed."
+          update:  "Post updated."
+          publish: "Post published."
+        error:
+          publish: "Post could not be published."
+      sessions:
+        notice:
+          missing: "Please log in to access that."
+      users:
+        notice:
+          create:  "User created."
+          destroy: "User destroyed."
+          update:  "User updated."
+      works:
+        notice:
+          create:  "Work created."
+          destroy: "Work destroyed."
+          update:  "Work updated."

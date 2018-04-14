@@ -38,30 +38,32 @@ RSpec.describe Post, type: :model do
   end
 
   context 'validations' do
-    it { should validate_presence_of(:body) }
-
     context 'custom' do
       pending 'calls #ensure_work_or_title'
     end
 
     context 'conditional' do
+      let(:subject) { create(:minimal_post, :published) }
+
       context 'published' do
-        pending 'slug presence'
-        pending 'published_at presence'
+        it { should validate_presence_of(:body) }
+        it { should validate_presence_of(:slug) }
+        it { should validate_presence_of(:published_at) }
       end
     end
   end
 
   context 'hooks' do
-    # Nothing so far.
+    context 'before_create' do
+      pending 'set_slug'
+    end
   end
 
   context 'aasm' do
     let!(    :draft) { build(:standalone_post             ) }
     let!(:published) { create(:standalone_post, :published) }
 
-    describe 'initial' do
-    end
+    pending 'initial'
 
     describe 'states' do
       describe 'exist' do
@@ -79,9 +81,9 @@ RSpec.describe Post, type: :model do
 
     describe 'callbacks' do
       describe 'publish' do
-        it 'calls prepare_to_publish' do
-           allow(draft).to receive(:prepare_to_publish).and_call_original
-          expect(draft).to receive(:prepare_to_publish)
+        it 'calls set_published_at' do
+           allow(draft).to receive(:set_published_at).and_call_original
+          expect(draft).to receive(:set_published_at)
 
           draft.publish!
         end
@@ -110,9 +112,9 @@ RSpec.describe Post, type: :model do
     describe 'self#admin_scopes' do
       specify 'keys are short tab names' do
         expect(described_class.admin_scopes.keys).to eq([
-          'All',
           'Draft',
           'Published',
+          'All',
         ])
       end
 
@@ -128,11 +130,11 @@ RSpec.describe Post, type: :model do
 
   context 'instance' do
     pending '#one_line_title'
+    pending '#can_publish?'
 
     describe 'private' do
       describe 'callbacks' do
         pending '#ensure_work_or_title'
-        pending '#prepare_to_publish'
         pending '#set_published_at'
         pending '#set_slug'
         pending '#sluggable_parts'

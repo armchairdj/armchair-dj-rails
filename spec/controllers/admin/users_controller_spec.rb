@@ -61,18 +61,18 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(  :valid_attributes) { attributes_for(:minimal_user) }
-      let(:invalid_attributes) { attributes_for(:minimal_user).except(:first_name) }
+      let(  :valid_params) { attributes_for(:minimal_user) }
+      let(:invalid_params) { attributes_for(:minimal_user).except(:first_name) }
 
       context "with valid params" do
         it "creates a new User" do
           expect {
-            post :create, params: { user: valid_attributes }
+            post :create, params: { user: valid_params }
           }.to change(User, :count).by(1)
         end
 
         it "redirects to index" do
-          post :create, params: { user: valid_attributes }
+          post :create, params: { user: valid_params }
 
           expect(response).to redirect_to(admin_users_path)
         end
@@ -80,7 +80,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { user: invalid_attributes }
+          post :create, params: { user: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/users/new")
@@ -107,20 +107,20 @@ RSpec.describe Admin::UsersController, type: :controller do
     describe 'PUT #update' do
       let(:user) { create(:minimal_user) }
 
-      let(  :valid_attributes) { { first_name: "New First Name" } }
-      let(:invalid_attributes) { { first_name: ""         } }
+      let(  :valid_params) { { first_name: "New First Name" } }
+      let(:invalid_params) { { first_name: ""         } }
 
       context "with valid params" do
         it "updates the requested user" do
-          put :update, params: { id: user.to_param, user: valid_attributes }
+          put :update, params: { id: user.to_param, user: valid_params }
 
           user.reload
 
-          expect(user.first_name).to eq(valid_attributes[:first_name])
+          expect(user.first_name).to eq(valid_params[:first_name])
         end
 
         it "redirects to index" do
-          put :update, params: { id: user.to_param, user: valid_attributes }
+          put :update, params: { id: user.to_param, user: valid_params }
 
           expect(response).to redirect_to(admin_users_path)
         end
@@ -128,7 +128,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: user.to_param, user: invalid_attributes }
+          put :update, params: { id: user.to_param, user: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/users/edit")

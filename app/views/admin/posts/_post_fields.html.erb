@@ -26,8 +26,6 @@
   <%= content_for(:tabs) %>
 <% end %>
 
-<% if f.object.persisted? %>
-  <%= f.input :slug %>
-<% end %>
-
 <%= f.input :body, input_html: { class: 'large' } %>
+
+<%= f.input(:slug) if f.object.persisted? %>

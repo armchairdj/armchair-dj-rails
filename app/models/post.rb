@@ -55,14 +55,15 @@ class Post < ApplicationRecord
 
   validates :status, presence: true
 
-  validates :body, presence: true
-
+  validates :body,         presence: true, if: :published?
   validates :slug,         presence: true, if: :published?
   validates :published_at, presence: true, if: :published?
 
   #############################################################################
   # HOOKS.
   #############################################################################
+
+  before_create :set_slug
 
   #############################################################################
   # STATE MACHINE.
@@ -79,7 +80,7 @@ class Post < ApplicationRecord
     state :draft, initial: true
     state :published
 
-    event :publish, before: :prepare_to_publish do
+    event :publish, before: :set_published_at do
       transitions from: :draft, to: :published
     end
   end
@@ -90,9 +91,9 @@ class Post < ApplicationRecord
 
   def self.admin_scopes
     {
-      "All"       => :all,
       "Draft"     => :draft,
       "Published" => :published,
+      "All"       => :all,
     }
   end
 
@@ -100,6 +101,11 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def can_publish?
+    persisted? && valid? && slug.present? && body.present?
+  end
+
+  # TODO Include post Type and Version
   def one_line_title
     if self.work
       self.work.title_with_creator
@@ -125,19 +131,15 @@ private
     end
   end
 
-  def prepare_to_publish
-    set_published_at
-    set_slug
-  end
-
   def set_published_at
     self.published_at = Time.now
   end
 
   def set_slug
-    self.slugify(:slug, sluggable_parts) if self.slug.blank?
+    self.slugify(:slug, sluggable_parts)
   end
 
+  # TODO include work version
   def sluggable_parts
     if self.title.present?
       [ self.title ]

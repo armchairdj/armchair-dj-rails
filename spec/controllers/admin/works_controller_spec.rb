@@ -73,18 +73,18 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(  :valid_attributes) { attributes_for(:minimal_work) }
-      let(:invalid_attributes) { attributes_for(:minimal_work).except(:title) }
+      let(  :valid_params) { attributes_for(:minimal_work) }
+      let(:invalid_params) { attributes_for(:minimal_work).except(:title) }
 
       context "with valid params" do
         it "creates a new Work" do
           expect {
-            post :create, params: { work: valid_attributes }
+            post :create, params: { work: valid_params }
           }.to change(Work, :count).by(1)
         end
 
         it "redirects to index" do
-          post :create, params: { work: valid_attributes }
+          post :create, params: { work: valid_params }
 
           expect(response).to redirect_to(admin_works_path)
         end
@@ -92,7 +92,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { work: invalid_attributes }
+          post :create, params: { work: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/works/new")
@@ -119,20 +119,20 @@ RSpec.describe Admin::WorksController, type: :controller do
     describe 'PUT #update' do
       let(:work) { create(:minimal_work) }
 
-      let(  :valid_attributes) { { title: "New Title" } }
-      let(:invalid_attributes) { { title: ""          } }
+      let(  :valid_params) { { title: "New Title" } }
+      let(:invalid_params) { { title: ""          } }
 
       context "with valid params" do
         it "updates the requested work" do
-          put :update, params: { id: work.to_param, work: valid_attributes }
+          put :update, params: { id: work.to_param, work: valid_params }
 
           work.reload
 
-          expect(work.title).to eq(valid_attributes[:title])
+          expect(work.title).to eq(valid_params[:title])
         end
 
         it "redirects to index" do
-          put :update, params: { id: work.to_param, work: valid_attributes }
+          put :update, params: { id: work.to_param, work: valid_params }
 
           expect(response).to redirect_to(admin_works_path)
         end
@@ -140,7 +140,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: work.to_param, work: invalid_attributes }
+          put :update, params: { id: work.to_param, work: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/works/edit")

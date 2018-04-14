@@ -100,26 +100,28 @@ RSpec.describe Admin::PostsController, type: :controller do
 
     describe 'POST #create' do
       context 'standalone' do
-        let(  :valid_attributes) { { 'title' => 'title', 'body' => 'body' } }
-        let(:invalid_attributes) { valid_attributes.except('body') }
+        let(  :valid_params) { { 'title' => 'title', 'body' => 'body' } }
+        let(:invalid_params) { valid_params.except('title') }
+
+        pending 'incomplete'
 
         context 'with valid params' do
           it 'creates a new Post' do
             expect {
-              post :create, params: { post: valid_attributes }
+              post :create, params: { post: valid_params }
             }.to change(Post, :count).by(1)
           end
 
-          it 'redirects to index' do
-            post :create, params: { post: valid_attributes }
+          it 'redirects to post' do
+            post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_posts_path)
+            expect(response).to redirect_to(admin_post_path(assigns[:post]))
           end
         end
 
         context 'with invalid params' do
           it 'renders new' do
-            post :create, params: { post: invalid_attributes }
+            post :create, params: { post: invalid_params }
 
             expect(response).to be_success
             expect(response).to render_template('admin/posts/new')
@@ -133,32 +135,34 @@ RSpec.describe Admin::PostsController, type: :controller do
             expect(assigns(:roles         )).to be_a_kind_of(Array)
             expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
 
-            expect(assigns(:selected_tab)).to eq('post-standalone')
+            expect(assigns(:selected_tab)).to eq('post-choose-work')
           end
         end
       end
 
       context 'existing work' do
-        let(  :valid_attributes) { { 'body' => 'body', 'work_id' => create(:song).id } }
-        let(:invalid_attributes) { valid_attributes.except('body') }
+        let(  :valid_params) { { 'body' => 'body', 'work_id' => create(:song).id } }
+        let(:invalid_params) { valid_params.except('work_id') }
+
+        pending 'incomplete'
 
         context 'with valid params' do
           it 'creates a new Post' do
             expect {
-              post :create, params: { post: valid_attributes }
+              post :create, params: { post: valid_params }
             }.to change(Post, :count).by(1)
           end
 
-          it 'redirects to index' do
-            post :create, params: { post: valid_attributes }
+          it 'redirects to post' do
+            post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_posts_path)
+            expect(response).to redirect_to(admin_post_path(assigns[:post]))
           end
         end
 
         context 'with invalid params' do
           it 'renders new' do
-            post :create, params: { post: invalid_attributes }
+            post :create, params: { post: invalid_params }
 
             expect(response).to be_success
             expect(response).to render_template('admin/posts/new')
@@ -168,9 +172,9 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             expect(assigns(:works)).to be_a_kind_of(Array)
 
-            expect(assigns(:allow_new_work)).to eq(false)
-            expect(assigns(:roles         )).to eq(nil)
-            expect(assigns(:creators      )).to eq(nil)
+            expect(assigns(:allow_new_work)).to eq(true)
+            expect(assigns(:roles         )).to be_a_kind_of(Array)
+            expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
 
             expect(assigns(:selected_tab)).to eq('post-choose-work')
           end
@@ -178,7 +182,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context 'new work' do
-        let(:valid_attributes) { {
+        let(:valid_params) { {
           'body'            => 'body',
           'work_attributes' => {
             'medium'                   => 'song',
@@ -192,37 +196,39 @@ RSpec.describe Admin::PostsController, type: :controller do
           }
         } }
 
-        let(:invalid_attributes) { valid_attributes.except('body') }
+        let(:invalid_params) { valid_params.except('work_attributes') }
+
+        pending 'incomplete'
 
         context 'with valid params' do
           it 'creates a new Post' do
             expect {
-              post :create, params: { post: valid_attributes }
+              post :create, params: { post: valid_params }
             }.to change(Post, :count).by(1)
           end
 
           it 'creates a new Work' do
             expect {
-              post :create, params: { post: valid_attributes }
+              post :create, params: { post: valid_params }
             }.to change(Work, :count).by(1)
           end
 
           it 'creates a new Contribution' do
             expect {
-              post :create, params: { post: valid_attributes }
+              post :create, params: { post: valid_params }
             }.to change(Contribution, :count).by(1)
           end
 
-          it 'redirects to index' do
-            post :create, params: { post: valid_attributes }
+          it 'redirects to post' do
+            post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_posts_path)
+            expect(response).to redirect_to(admin_post_path(assigns[:post]))
           end
         end
 
         context 'with invalid params' do
           it 'renders new' do
-            post :create, params: { post: invalid_attributes }
+            post :create, params: { post: invalid_params }
 
             expect(response).to be_success
             expect(response).to render_template('admin/posts/new')
@@ -236,7 +242,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             expect(assigns(:roles         )).to be_a_kind_of(Array)
             expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
 
-            expect(assigns(:selected_tab)).to eq('post-new-work')
+            expect(assigns(:selected_tab)).to eq('post-choose-work')
           end
         end
       end
@@ -291,28 +297,28 @@ RSpec.describe Admin::PostsController, type: :controller do
         context 'standalone' do
           let(:post) { create(:standalone_post) }
 
-          let(  :valid_attributes) { { 'body' => 'New body.' } }
-          let(:invalid_attributes) { { 'body' => ''          } }
+          let(  :valid_params) { { 'title' => 'New Title' } }
+          let(:invalid_params) { { 'title' => ''          } }
 
           context 'with valid params' do
             it 'updates the requested post' do
-              put :update, params: { id: post.to_param, post: valid_attributes }
+              put :update, params: { id: post.to_param, post: valid_params }
 
               post.reload
 
-              expect(post.body).to eq(valid_attributes['body'])
+              expect(post.title).to eq(valid_params['title'])
             end
 
-            it 'redirects to index' do
-              put :update, params: { id: post.to_param, post: valid_attributes }
+            it 'redirects to post' do
+              put :update, params: { id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_posts_path)
+              expect(response).to redirect_to(admin_post_path(post))
             end
           end
 
           context 'with invalid params' do
             it 'renders edit' do
-              put :update, params: { id: post.to_param, post: invalid_attributes }
+              put :update, params: { id: post.to_param, post: invalid_params }
 
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')
@@ -326,7 +332,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:roles         )).to eq(nil)
               expect(assigns(:creators      )).to eq(nil)
 
-              expect(assigns(:selected_tab)).to eq('post-standalone')
+              expect(assigns(:selected_tab)).to eq('post-choose-work')
             end
           end
         end
@@ -334,28 +340,28 @@ RSpec.describe Admin::PostsController, type: :controller do
         context 'review' do
           let(:post) { create(:song_review) }
 
-          let(  :valid_attributes) { { 'body' => 'New body.' } }
-          let(:invalid_attributes) { { 'body' => ''          } }
+          let(  :valid_params) { { 'work_id' => create(:song).id } }
+          let(:invalid_params) { { 'work_id' => ''               } }
 
           context 'with valid params' do
             it 'updates the requested post' do
-              put :update, params: { id: post.to_param, post: valid_attributes }
+              put :update, params: { id: post.to_param, post: valid_params }
 
               post.reload
 
-              expect(post.body).to eq(valid_attributes['body'])
+              expect(post.work_id).to eq(valid_params['work_id'])
             end
 
-            it 'redirects to index' do
-              put :update, params: { id: post.to_param, post: valid_attributes }
+            it 'redirects to post' do
+              put :update, params: { id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_posts_path)
+              expect(response).to redirect_to(admin_post_path(post))
             end
           end
 
           context 'with invalid params' do
             it 'renders edit' do
-              put :update, params: { id: post.to_param, post: invalid_attributes }
+              put :update, params: { id: post.to_param, post: invalid_params }
 
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')
@@ -379,25 +385,25 @@ RSpec.describe Admin::PostsController, type: :controller do
         context 'standalone' do
           let(:post) { create(:standalone_post) }
 
-          let(  :valid_attributes) { { 'body' => 'New body.' } }
-          let(:invalid_attributes) { { 'body' => ''          } }
+          let(  :valid_params) { { 'body' => 'New body.' } }
+          let(:invalid_params) { { 'body' => ''          } }
 
           context 'with valid params' do
             it 'updates the requested post' do
-              put :update, params: { step: 'publish', id: post.to_param, post: valid_attributes }
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               post.reload
 
-              expect(post.body        ).to eq(valid_attributes['body'])
+              expect(post.body        ).to eq(valid_params['body'])
               expect(post.published?  ).to eq(true)
               expect(post.slug.blank? ).to eq(false)
               expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
-            it 'redirects to index' do
-              put :update, params: { step: 'publish', id: post.to_param, post: valid_attributes }
+            it 'redirects to post' do
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_posts_path)
+              expect(response).to redirect_to(admin_post_path(post))
             end
 
             pending 'flash'
@@ -405,7 +411,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context 'with invalid params' do
             it 'renders edit' do
-              put :update, params: { step: 'publish', id: post.to_param, post: invalid_attributes }
+              put :update, params: { step: 'publish', id: post.to_param, post: invalid_params }
 
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')
@@ -435,25 +441,25 @@ RSpec.describe Admin::PostsController, type: :controller do
         context 'review' do
           let(:post) { create(:song_review) }
 
-          let(  :valid_attributes) { { 'body' => 'New body.' } }
-          let(:invalid_attributes) { { 'body' => ''          } }
+          let(  :valid_params) { { 'body' => 'New body.' } }
+          let(:invalid_params) { { 'body' => ''          } }
 
           context 'with valid params' do
             it 'updates the requested post' do
-              put :update, params: { step: 'publish', id: post.to_param, post: valid_attributes }
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               post.reload
 
-              expect(post.body        ).to eq(valid_attributes['body'])
+              expect(post.body        ).to eq(valid_params['body'])
               expect(post.published?  ).to eq(true)
               expect(post.slug.blank? ).to eq(false)
               expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
-            it 'redirects to index' do
-              put :update, params: { step: 'publish', id: post.to_param, post: valid_attributes }
+            it 'redirects to post' do
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_posts_path)
+              expect(response).to redirect_to(admin_post_path(post))
             end
 
             pending 'flash'
@@ -461,7 +467,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context 'with invalid params' do
             it 'renders edit' do
-              put :update, params: { step: 'publish', id: post.to_param, post: invalid_attributes }
+              put :update, params: { step: 'publish', id: post.to_param, post: invalid_params }
 
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')

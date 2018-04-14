@@ -15,7 +15,7 @@
   <%= content_tag(:div, class: 'button-group') do %>
     <%= f.button :submit, "Save" %>
 
-    <% if post.persisted? %>
+    <% if post.can_publish? %>
       <%= f.button :submit, "Publish",
         name:           "step",
         value:          "publish",

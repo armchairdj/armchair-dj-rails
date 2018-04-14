@@ -6,18 +6,18 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   # This should return the minimal set of attributes required to create a valid
   # <%= class_name %>. As you add validations to <%= class_name %>, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
+  let(:valid_params) {
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_attributes) {
+  let(:invalid_params) {
     skip("Add a hash of attributes invalid for your model")
   }
 
 <% unless options[:singleton] -%>
   describe 'GET #index' do
     it "renders" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :index, {}
 <% else -%>
@@ -30,7 +30,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% end -%>
   describe 'GET #show' do
     it "renders" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :show, {:id => <%= file_name %>.to_param}
 <% else -%>
@@ -56,18 +56,18 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       it "creates a new <%= class_name %>" do
         expect {
 <% if Rails::VERSION::STRING < '5.0' -%>
-          post :create, {:<%= ns_file_name %> => valid_attributes}
+          post :create, {:<%= ns_file_name %> => valid_params}
 <% else -%>
-          post :create, params: {<%= ns_file_name %>: valid_attributes}, session: valid_session
+          post :create, params: {<%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         }.to change(<%= class_name %>, :count).by(1)
       end
 
       it "redirects to the created <%= ns_file_name %>" do
 <% if Rails::VERSION::STRING < '5.0' -%>
-        post :create, {:<%= ns_file_name %> => valid_attributes}
+        post :create, {:<%= ns_file_name %> => valid_params}
 <% else -%>
-        post :create, params: {<%= ns_file_name %>: valid_attributes}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         expect(response).to redirect_to(<%= class_name %>.last)
       end
@@ -76,9 +76,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     context "with invalid params" do
       it "renders (i.e. to display the 'new' template)" do
 <% if Rails::VERSION::STRING < '5.0' -%>
-        post :create, {:<%= ns_file_name %> => invalid_attributes}
+        post :create, {:<%= ns_file_name %> => invalid_params}
 <% else -%>
-        post :create, params: {<%= ns_file_name %>: invalid_attributes}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
         expect(response).to be_success
       end
@@ -87,7 +87,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
   describe 'GET #edit' do
     it "renders" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
       get :edit, {:id => <%= file_name %>.to_param}
 <% else -%>
@@ -104,7 +104,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       }
 
       it "updates the requested <%= ns_file_name %>" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
         put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => new_attributes}
 <% else -%>
@@ -115,11 +115,11 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       end
 
       it "redirects to the <%= ns_file_name %>" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => valid_attributes}
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => valid_params}
 <% else -%>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: valid_attributes}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         expect(response).to redirect_to(<%= file_name %>)
       end
@@ -127,11 +127,11 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
     context "with invalid params" do
       it "renders (i.e. to display the 'edit' template)" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_attributes}
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_params}
 <% else -%>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_attributes}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
         expect(response).to be_success
       end
@@ -140,7 +140,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
   describe 'DELETE #destroy' do
     it "destroys the requested <%= ns_file_name %>" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
       expect {
 <% if Rails::VERSION::STRING < '5.0' -%>
         delete :destroy, {:id => <%= file_name %>.to_param}
@@ -151,7 +151,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     end
 
     it "redirects to the <%= table_name %> list" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < '5.0' -%>
       delete :destroy, {:id => <%= file_name %>.to_param}
 <% else -%>

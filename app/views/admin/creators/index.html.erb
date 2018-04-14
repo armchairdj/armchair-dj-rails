@@ -10,30 +10,34 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:table, class: 'admin admin-index') do %>
-  <%= content_tag(:thead) do %>
-    <%= content_tag(:tr) do %>
-      <%= content_tag :th, 'Name' %>
-      <%= content_tag :th, 'Works',   class: 'count' %>
-      <%= content_tag :th, 'Posts',   class: 'count' %>
-      <%= content_tag :th, 'Actions', class: 'actions' %>
-    <% end %>
-  <% end %>
-  <%= content_tag(:tbody) do %>
-    <% @creators.each do |creator| %>
+<% if @creators.empty? %>
+  <%= content_tag(:p, I18n.t('admin.content.no_records')) %>
+<% else %>
+  <%= content_tag(:table, class: 'admin admin-index') do %>
+    <%= content_tag(:thead) do %>
       <%= content_tag(:tr) do %>
-        <%= content_tag :td, creator.name %>
-        <%= content_tag :td, creator.work_count, class: 'count' %>
-        <%= content_tag :td, creator.post_count, class: 'count' %>
-        <%= content_tag :td, class: 'actions' do %>
-          <%= admin_public_creator_link creator %>
-          <%= admin_view_link           creator %>
-          <%= admin_update_link         creator %>
-          <%= admin_destroy_link        creator %>
+        <%= content_tag :th, 'Name' %>
+        <%= content_tag :th, 'Works',   class: 'count' %>
+        <%= content_tag :th, 'Posts',   class: 'count' %>
+        <%= content_tag :th, 'Actions', class: 'actions' %>
+      <% end %>
+    <% end %>
+    <%= content_tag(:tbody) do %>
+      <% @creators.each do |creator| %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag :td, creator.name %>
+          <%= content_tag :td, creator.work_count, class: 'count' %>
+          <%= content_tag :td, creator.post_count, class: 'count' %>
+          <%= content_tag :td, class: 'actions' do %>
+            <%= admin_public_creator_link creator %>
+            <%= admin_view_link           creator %>
+            <%= admin_update_link         creator %>
+            <%= admin_destroy_link        creator %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<%= paginate @creators %>
+  <%= paginate @creators %>
+<% end %>

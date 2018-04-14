@@ -29,11 +29,11 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
   # This should return the minimal set of attributes required to create a valid
   # <%= class_name %>. As you add validations to <%= class_name %>, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
+  let(:valid_params) {
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_attributes) {
+  let(:invalid_params) {
     skip("Add a hash of attributes invalid for your model")
   }
 
@@ -45,7 +45,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% unless options[:singleton] -%>
   describe 'GET #index' do
     it "returns a success response" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < '1.9.3' -%>
       get :index, {}, valid_session
 <% else -%>
@@ -58,7 +58,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% end -%>
   describe 'GET #show' do
     it "returns a success response" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < '1.9.3' -%>
       get :show, {:id => <%= file_name %>.to_param}, valid_session
 <% else -%>
@@ -73,18 +73,18 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       it "creates a new <%= class_name %>" do
         expect {
 <% if RUBY_VERSION < '1.9.3' -%>
-          post :create, {:<%= ns_file_name %> => valid_attributes}, valid_session
+          post :create, {:<%= ns_file_name %> => valid_params}, valid_session
 <% else -%>
-          post :create, params: {<%= ns_file_name %>: valid_attributes}, session: valid_session
+          post :create, params: {<%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         }.to change(<%= class_name %>, :count).by(1)
       end
 
       it "renders a JSON response with the new <%= ns_file_name %>" do
 <% if RUBY_VERSION < '1.9.3' -%>
-        post :create, {:<%= ns_file_name %> => valid_attributes}, valid_session
+        post :create, {:<%= ns_file_name %> => valid_params}, valid_session
 <% else %>
-        post :create, params: {<%= ns_file_name %>: valid_attributes}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json')
@@ -95,9 +95,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     context "with invalid params" do
       it "renders a JSON response with errors for the new <%= ns_file_name %>" do
 <% if RUBY_VERSION < '1.9.3' -%>
-        post :create, {:<%= ns_file_name %> => invalid_attributes}, valid_session
+        post :create, {:<%= ns_file_name %> => invalid_params}, valid_session
 <% else %>
-        post :create, params: {<%= ns_file_name %>: invalid_attributes}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -112,7 +112,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       }
 
       it "updates the requested <%= ns_file_name %>" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < '1.9.3' -%>
         put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => new_attributes}, valid_session
 <% else -%>
@@ -123,11 +123,11 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       end
 
       it "renders a JSON response with the <%= ns_file_name %>" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < '1.9.3' -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => valid_attributes}, valid_session
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => valid_params}, valid_session
 <% else %>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: valid_attributes}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: valid_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
@@ -136,11 +136,11 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
     context "with invalid params" do
       it "renders a JSON response with errors for the <%= ns_file_name %>" do
-        <%= file_name %> = <%= class_name %>.create! valid_attributes
+        <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < '1.9.3' -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_attributes}, valid_session
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_params}, valid_session
 <% else %>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_attributes}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json')
@@ -150,7 +150,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 
   describe 'DELETE #destroy' do
     it "destroys the requested <%= ns_file_name %>" do
-      <%= file_name %> = <%= class_name %>.create! valid_attributes
+      <%= file_name %> = <%= class_name %>.create! valid_params
       expect {
 <% if RUBY_VERSION < '1.9.3' -%>
         delete :destroy, {:id => <%= file_name %>.to_param}, valid_session

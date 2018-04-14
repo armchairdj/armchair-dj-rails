@@ -55,7 +55,7 @@ class Admin::UsersController < AdminController
   def create
     respond_to do |format|
       if @user.save
-        format.html { redirect_to admin_users_path, notice: I18n.t("admin.users.notice.create") }
+        format.html { redirect_to admin_users_path, notice: I18n.t('admin.flash.users.notice.create') }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -69,7 +69,7 @@ class Admin::UsersController < AdminController
   def update
     respond_to do |format|
       if @user.update(instance_params)
-        format.html { redirect_to admin_users_path, notice: I18n.t("admin.users.notice.update") }
+        format.html { redirect_to admin_users_path, notice: I18n.t('admin.flash.users.notice.update') }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -84,7 +84,7 @@ class Admin::UsersController < AdminController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_users_path, notice: I18n.t("admin.users.notice.destroy") }
+      format.html { redirect_to admin_users_path, notice: I18n.t('admin.flash.users.notice.destroy') }
       format.json { head :no_content }
     end
   end

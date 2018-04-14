@@ -73,18 +73,18 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
 
     describe 'POST #create' do
-      let(  :valid_attributes) { attributes_for(:minimal_creator) }
-      let(:invalid_attributes) { attributes_for(:minimal_creator).except(:name) }
+      let(  :valid_params) { attributes_for(:minimal_creator) }
+      let(:invalid_params) { attributes_for(:minimal_creator).except(:name) }
 
       context "with valid params" do
         it "creates a new Creator" do
           expect {
-            post :create, params: { creator: valid_attributes }
+            post :create, params: { creator: valid_params }
           }.to change(Creator, :count).by(1)
         end
 
         it "redirects to index" do
-          post :create, params: { creator: valid_attributes }
+          post :create, params: { creator: valid_params }
 
           expect(response).to redirect_to(admin_creators_path)
         end
@@ -92,7 +92,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { creator: invalid_attributes }
+          post :create, params: { creator: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/creators/new")
@@ -119,20 +119,20 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     describe 'PUT #update' do
       let(:creator) { create(:minimal_creator) }
 
-      let(  :valid_attributes) { { name: "New Name" } }
-      let(:invalid_attributes) { { name: ""         } }
+      let(  :valid_params) { { name: "New Name" } }
+      let(:invalid_params) { { name: ""         } }
 
       context "with valid params" do
         it "updates the requested creator" do
-          put :update, params: { id: creator.to_param, creator: valid_attributes }
+          put :update, params: { id: creator.to_param, creator: valid_params }
 
           creator.reload
 
-          expect(creator.name).to eq(valid_attributes[:name])
+          expect(creator.name).to eq(valid_params[:name])
         end
 
         it "redirects to index" do
-          put :update, params: { id: creator.to_param, creator: valid_attributes }
+          put :update, params: { id: creator.to_param, creator: valid_params }
 
           expect(response).to redirect_to(admin_creators_path)
         end
@@ -140,7 +140,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: creator.to_param, creator: invalid_attributes }
+          put :update, params: { id: creator.to_param, creator: invalid_params }
 
           expect(response).to be_success
           expect(response).to render_template("admin/creators/edit")

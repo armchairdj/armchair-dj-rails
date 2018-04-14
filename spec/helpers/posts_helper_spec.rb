@@ -12,15 +12,17 @@ RSpec.describe PostsHelper, type: :helper do
   end
 
   describe '#link_to_post' do
-    it 'creates link to permalink' do
-      actual = helper.link_to_post(create(:standalone_post, title: 'Title', slug: 'slug/path'))
+    it 'creates link to permalink with short title' do
+      post   = create(:standalone_post, title: 'Title')
+      actual = helper.link_to_post(post)
 
-      expect(actual).to have_tag('a[href="/posts/slug/path"]',
+      expect(actual).to have_tag("a[href='/posts/#{post.slug}']",
         text:  'Title',
         count: 1
       )
     end
 
+    pending 'uses long title'
     pending 'nils without slug'
   end
 
