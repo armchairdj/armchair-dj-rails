@@ -9,6 +9,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   include AASM
+  include Sluggable
 
   #############################################################################
   # ASSOCIATIONS.
@@ -56,8 +57,6 @@ class Post < ApplicationRecord
 
   validates :body, presence: true
 
-  validates :slug, uniqueness: true, allow_blank: true
-
   validates :slug,         presence: true, if: :published?
   validates :published_at, presence: true, if: :published?
 
@@ -90,14 +89,6 @@ class Post < ApplicationRecord
   #############################################################################
   # CLASS.
   #############################################################################
-
-  def self.slugify(str)
-    str = str.gsub("&", "and")
-    str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
-    str = str.underscore
-    str = str.gsub(/[^[:word:]]/, "")
-    str = str.gsub(/_$/, "")
-  end
 
   def self.admin_scopes
     {
@@ -145,35 +136,19 @@ private
     self.published_at = Time.now
   end
 
-  def set_slug(index = nil)
-    index ||= 0
-
-    return unless index <= 10
-    return unless self.slug.blank?
-    return unless self.work.present? || self.title.present?
-
-    self.slug = generate_slug(index)
-
-    unless valid_attribute?(:slug)
-      self.slug = nil
-
-      self.set_slug(index + 1)
-    end
+  def set_slug
+    self.slugify(:slug, sluggable_parts) if self.slug.blank?
   end
 
-  def generate_slug(index = 0)
-    slug = if self.title.present?
-      self.class.slugify(self.title)
-    else
+  def sluggable_parts
+    if self.title.present?
+      [ self.title ]
+    elsif self.work.present?
       [
         self.work.human_medium,
-        self.work.creators.map(&:name).join(" and "),
+        self.work.display_creator(connector: " and "),
         self.work.title
-      ].map { |str| self.class.slugify(str) }.join("/")
+      ]
     end
-
-    slug = "#{slug}_#{index}" unless index == 0
-
-    slug
   end
 end

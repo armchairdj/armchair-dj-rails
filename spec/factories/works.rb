@@ -4,6 +4,26 @@ FactoryBot.define do
   factory :work do
     factory :minimal_work, parent: :song do; end
 
+    ###########################################################################
+    # TRAITS.
+    ###########################################################################
+
+    trait :with_draft_post do
+      after(:create) do |work|
+        create(:song_review, work_id: work.id)
+      end
+    end
+
+    trait :with_published_post do
+      after(:create) do |work|
+        create(:song_review, :published, work_id: work.id)
+      end
+    end
+
+    ###########################################################################
+    # STUBS FOR OTHER FACTORIES.
+    ###########################################################################
+
     factory :work_for_contribution_factory do
       medium :song
       title  { FFaker::Music.song }

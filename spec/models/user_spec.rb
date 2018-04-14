@@ -5,19 +5,19 @@ RSpec.describe User, type: :model do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     # Nothing so far.
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     # Nothing so far.
   end
 
-  describe 'enums' do
+  context 'enums' do
     describe "role" do
       it { should define_enum_for(:role) }
 
@@ -25,11 +25,11 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     pending 'alphabetical'
   end
 
-  describe 'validations' do
+  context 'validations' do
     let(:subject) { create(:minimal_user) }
 
     it { should validate_presence_of(:first_name) }
@@ -37,7 +37,7 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:role) }
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     describe 'before_validation' do
       before(:each) do
         allow_any_instance_of(User).to receive(:set_default_role)
@@ -61,11 +61,11 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'class' do
+  context 'class' do
     # Nothing so far.
   end
 
-  describe 'instance' do
+  context 'instance' do
     describe '#display_name' do
       describe 'no middle name' do
         let(:subject) { create(:minimal_user, first_name: 'Derrick', last_name: 'May') }
@@ -101,5 +101,9 @@ RSpec.describe User, type: :model do
         end
       end
     end
+  end
+
+  context 'concerns' do
+    # Nothing so far.
   end
 end

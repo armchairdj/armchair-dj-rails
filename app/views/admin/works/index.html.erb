@@ -38,7 +38,7 @@
             <%= content_tag :td, work.title %>
             <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(' & ').html_safe%>
             <%= content_tag :td, class: 'actions' do %>
-              <%= admin_public_view_link work %>
+              <%= admin_public_work_link work %>
               <%= admin_view_link        work %>
               <%= admin_update_link      work %>
               <%= admin_destroy_link     work %>

@@ -5,11 +5,11 @@ RSpec.describe Creator, type: :model do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     describe 'associations' do
       it { should have_many(:contributions) }
 
@@ -20,15 +20,15 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     # Nothing so far.
   end
 
-  describe 'enums' do
+  context 'enums' do
     # Nothing so far.
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     describe 'alphabetical' do
       let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
       let!(:amy_1  ) { create(:creator, name: "amy winehouse") }
@@ -66,25 +66,29 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  describe 'validations' do
+  context 'validations' do
     describe 'name' do
       it { should validate_presence_of(:name) }
     end
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     # Nothing so far.
   end
 
-  describe 'class' do
+  context 'class' do
     # Nothing so far.
   end
 
-  describe 'instance' do
+  context 'instance' do
     describe 'private' do
       describe 'callbacks' do
         # Nothing so far.
       end
     end
+  end
+
+  context 'concerns' do
+    it_behaves_like 'a publicly viewable model'
   end
 end

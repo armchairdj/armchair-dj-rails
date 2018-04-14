@@ -6,9 +6,9 @@
   <%= content_tag(:h1, @title.first) %>
 
   <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_public_view_link(@creator) %>
-    <%= admin_update_link(     @creator) %>
-    <%= admin_destroy_link(    @creator) %>
+    <%= admin_public_creator_link(@creator) %>
+    <%= admin_update_link(        @creator) %>
+    <%= admin_destroy_link(       @creator) %>
   <% end %>
 <% end %>
 

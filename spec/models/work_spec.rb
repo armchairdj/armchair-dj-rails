@@ -5,11 +5,11 @@ RSpec.describe Work, type: :model do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     it { should have_many(:contributions) }
 
     it { should have_many(:creators    ).through(:contributions) }
@@ -18,7 +18,7 @@ RSpec.describe Work, type: :model do
     it { should have_many(:posts) }
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     it { should accept_nested_attributes_for(:contributions) }
 
     describe 'reject_if' do
@@ -39,7 +39,7 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe 'enums' do
+  context 'enums' do
     describe "medium" do
       it { should define_enum_for(:medium) }
 
@@ -47,7 +47,7 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     describe 'alphabetical' do
       let!(:tki  ) { create(:album, title: 'The Kick Inside'  ) }
       let!(:lh   ) { create(:album, title: 'lionheart'        ) }
@@ -75,7 +75,7 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe 'validations' do
+  context 'validations' do
     it { should validate_presence_of(:medium) }
     it { should validate_presence_of(:title ) }
 
@@ -94,11 +94,11 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     # Nothing so far.
   end
 
-  describe 'class' do
+  context 'class' do
     describe 'self#max_contributions' do
       specify { expect(described_class.max_contributions).to eq(10) }
     end
@@ -179,7 +179,7 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  describe 'instance' do
+  context 'instance' do
     describe '#prepare_contributions' do
       it 'prepares max for new' do
         instance = described_class.new
@@ -235,5 +235,9 @@ RSpec.describe Work, type: :model do
         # Nothing so far.
       end
     end
+  end
+
+  context 'concerns' do
+    it_behaves_like 'a publicly viewable model'
   end
 end

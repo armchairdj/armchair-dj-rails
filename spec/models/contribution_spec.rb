@@ -5,16 +5,16 @@ RSpec.describe Contribution, type: :model do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     it { should belong_to(:creator) }
     it { should belong_to(:work   ) }
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     it { should accept_nested_attributes_for(:creator) }
 
     describe "reject_if" do
@@ -40,7 +40,7 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
-  describe 'enums' do
+  context 'enums' do
     describe "role" do
       it { should define_enum_for(:role) }
 
@@ -48,11 +48,11 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     # Nothing so far.
   end
 
-  describe 'validations' do
+  context 'validations' do
     it { should validate_presence_of(:role   ) }
     it { should validate_presence_of(:work   ) }
     it { should validate_presence_of(:creator) }
@@ -60,19 +60,23 @@ RSpec.describe Contribution, type: :model do
     it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role) }
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     # Nothing so far.
   end
 
-  describe 'class' do
+  context 'class' do
     # Nothing so far.
   end
 
-  describe 'instance' do
+  context 'instance' do
     describe 'private' do
       describe 'callbacks' do
         # Nothing so far.
       end
     end
+  end
+
+  context 'concerns' do
+    # Nothing so far.
   end
 end

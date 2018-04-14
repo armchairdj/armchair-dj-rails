@@ -4,43 +4,43 @@ require 'rails_helper'
 RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
   pending "add some examples to (or delete) #{__FILE__}"
 
-  describe 'constants' do
+  context 'constants' do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     # Nothing so far.
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     # Nothing so far.
   end
 
-  describe 'enums' do
+  context 'enums' do
     # Nothing so far.
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     # Nothing so far.
   end
 
-  describe 'validations' do
+  context 'validations' do
     # Nothing so far.
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     # Nothing so far.
   end
 
-  describe 'class' do
+  context 'class' do
     # Nothing so far.
   end
 
-  describe 'instance' do
+  context 'instance' do
     # Nothing so far.
 
     describe 'private' do
@@ -48,6 +48,10 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
         # Nothing so far.
       end
     end
+  end
+
+  context 'concerns' do
+    # Nothing so far.
   end
 end
 <% end -%>

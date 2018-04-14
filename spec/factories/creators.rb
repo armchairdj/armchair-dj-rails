@@ -4,6 +4,30 @@ FactoryBot.define do
   factory :creator do
     factory :minimal_creator, parent: :musician do; end
 
+    ###########################################################################
+    # TRAITS.
+    ###########################################################################
+
+    trait :with_draft_post do
+      after(:create) do |creator|
+        create(:song_review, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        }}))
+      end
+    end
+
+    trait :with_published_post do
+      after(:create) do |creator|
+        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        }}))
+      end
+    end
+
+    ###########################################################################
+    # FACTORIES.
+    ###########################################################################
+
     factory :musician do
       name { FFaker::Music.artist }
     end

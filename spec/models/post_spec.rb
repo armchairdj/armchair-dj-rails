@@ -5,19 +5,19 @@ RSpec.describe Post, type: :model do
     # Nothing so far.
   end
 
-  describe 'plugins' do
+  context 'plugins' do
     # Nothing so far.
   end
 
-  describe 'associations' do
+  context 'associations' do
     it { should belong_to(:work) }
   end
 
-  describe 'nested_attributes' do
+  context 'nested_attributes' do
     # Nothing so far.
   end
 
-  describe 'enums' do
+  context 'enums' do
     describe 'status' do
       it { should define_enum_for(:status) }
 
@@ -25,7 +25,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  describe 'scopes' do
+  context 'scopes' do
     pending 'draft'
     pending 'published'
 
@@ -37,7 +37,7 @@ RSpec.describe Post, type: :model do
     pending 'for_site'
   end
 
-  describe 'validations' do
+  context 'validations' do
     it { should validate_uniqueness_of(:slug) }
 
     it { should validate_presence_of(:body) }
@@ -59,13 +59,13 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  describe 'hooks' do
+  context 'hooks' do
     describe 'after_initialize' do
       pending 'calls #set_slug'
     end
   end
 
-  describe 'aasm' do
+  context 'aasm' do
     let!(    :draft) { build(:standalone_post             ) }
     let!(:published) { create(:standalone_post, :published) }
 
@@ -108,7 +108,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  describe 'class' do
+  context 'class' do
     describe 'self#slugify' do
       specify { expect(described_class.slugify('xxx')).to eq('xxx') }
       pending 'special characters'
@@ -136,7 +136,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  describe 'instance' do
+  context 'instance' do
     pending '#one_line_title'
 
     describe 'private' do
@@ -145,8 +145,12 @@ RSpec.describe Post, type: :model do
         pending '#prepare_to_boublish'
         pending '#set_published_at'
         pending '#set_slug'
-        pending '#generate_slug'
+        pending '#generate_base_slug'
       end
     end
+  end
+
+  context 'concerns' do
+    # Nothing so far.
   end
 end

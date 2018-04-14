@@ -40,6 +40,21 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
+    describe "#admin_public_creator_link" do
+      pending "generates link"
+      pending "nils unless published posts"
+    end
+
+    describe "#admin_public_post_link" do
+      pending "generates link"
+      pending "nils unless published"
+    end
+
+    describe "#admin_public_work_link" do
+      pending "generates link"
+      pending "nils unless published posts"
+    end
+
     describe "#admin_public_view_link" do
       pending "generates link"
       pending "overrides url"

@@ -8,6 +8,8 @@ class Work < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
+  include PubliclyViewable
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -149,8 +151,8 @@ class Work < ApplicationRecord
     "#{self.display_creator}: #{self.title}"
   end
 
-  def display_creator
-    self.creators.alphabetical.map(&:name).join(" & ")
+  def display_creator(connector: " & ")
+    self.creators.alphabetical.map(&:name).join(connector)
   end
 
 private

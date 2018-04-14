@@ -1,10 +1,6 @@
 require 'ffaker'
 
 FactoryBot.define do
-  sequence :post_slug do |n|
-    "slug/for_post_#{n}"
-  end
-
   factory :post do
     draft
 
@@ -20,10 +16,6 @@ FactoryBot.define do
 
     trait :published do
       after(:create) do |post, evaluator|
-        unless post.slug.present? || post.update(slug: post.send(:generate_slug))
-          post.update!(slug: generate(:post_slug))
-        end
-
         post.publish!
       end
     end
