@@ -63,7 +63,7 @@ class Admin::PostsController < AdminController
   def create
     respond_to do |format|
       if @post.save
-        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.create") }
+        format.html { redirect_to admin_posts_path, notice: I18n.t('admin.posts.notice.create') }
         format.json { render :show, status: :created, location: @post }
       else
         prepare_form
@@ -86,7 +86,7 @@ class Admin::PostsController < AdminController
 
     respond_to do |format|
       if @post.update(@sanitized_params)
-        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.update") }
+        format.html { redirect_to admin_posts_path, notice: I18n.t('admin.posts.notice.update') }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
@@ -103,7 +103,7 @@ class Admin::PostsController < AdminController
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.destroy") }
+      format.html { redirect_to admin_posts_path, notice: I18n.t('admin.posts.notice.destroy') }
       format.json { head :no_content }
     end
   end
@@ -115,7 +115,7 @@ private
   end
 
   def find_collection
-    @scope = (params[:scope] || "all").to_sym
+    @scope = (params[:scope] || 'all').to_sym
     @page  = params[:page]
     @posts = policy_scope(Post).send(@scope).page(@page)
   end
@@ -210,27 +210,27 @@ private
 
   def which_tab
     case action_name
-    when "new"
-      return "post-choose-work"
-    when "create"
+    when 'new'
+      return 'post-choose-work'
+    when 'create'
       if @sanitized_params[:work_attributes].present?
-        return "post-new-work"
+        return 'post-new-work'
       elsif @sanitized_params[:title].present?
-        return "post-standalone"
+        return 'post-standalone'
       else
-        return "post-choose-work"
+        return 'post-choose-work'
       end
-    when "edit", "update"
+    when 'edit', 'update'
       if @post.title.present?
-        return "post-standalone"
+        return 'post-standalone'
       else
-        return "post-choose-work"
+        return 'post-choose-work'
       end
     end
   end
 
   def publishing?
-    params[:step] == "publish"
+    params[:step] == 'publish'
   end
 
   def respond_to_publish
@@ -244,12 +244,12 @@ private
 
     respond_to do |format|
       if saved && published
-        format.html { redirect_to admin_posts_path, notice: I18n.t("admin.posts.notice.publish") }
+        format.html { redirect_to admin_posts_path, notice: I18n.t('admin.posts.notice.publish') }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
-        flash.now[:error] = I18n.t("admin.posts.error.publish") unless published
+        flash.now[:error] = I18n.t('admin.posts.error.publish') unless published
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }

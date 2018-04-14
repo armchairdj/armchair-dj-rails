@@ -1,15 +1,26 @@
 module Sluggable
   extend ActiveSupport::Concern
 
+  class_methods do
+    def generate_slug_part(str)
+      str = str.gsub("&", "and")
+      str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
+      str = str.underscore
+      str = str.gsub(/[^[:word:]]/, "")
+      str = str.gsub(/_$/, "")
+    end
+
+    def generate_slug(parts)
+      parts.map { |part| generate_slug_part(part) }.join("/")
+    end
+  end
+
   included do
     validates :slug, uniqueness: true, allow_blank: true
   end
 
   def slugify(attribute, *args)
     return unless parts = args.flatten.compact
-
-    puts attribute
-    puts parts.class
 
     self.send(:"#{attribute}=", generate_unique_slug(attribute, parts))
   end
@@ -29,19 +40,5 @@ module Sluggable
 
   def next_slug_index(slug)
     ( slug.match( /_(\d+)$/ ).try(:[], 1) || "0" ).to_i + 1
-  end
-
-  class_methods do
-    def generate_slug(parts)
-      parts.map { |part| generate_slug_part(part) }.join("/")
-    end
-
-    def generate_slug_part(str)
-      str = str.gsub("&", "and")
-      str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
-      str = str.underscore
-      str = str.gsub(/[^[:word:]]/, "")
-      str = str.gsub(/_$/, "")
-    end
   end
 end

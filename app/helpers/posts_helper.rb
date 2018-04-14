@@ -6,6 +6,8 @@ module PostsHelper
   end
 
   def link_to_post(post, full: false)
+    return unless post.slug
+
     link_to post_title(post, full: full), post_permalink_path(slug: post.slug)
   end
 

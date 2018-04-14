@@ -20,6 +20,8 @@ RSpec.describe PostsHelper, type: :helper do
         count: 1
       )
     end
+
+    pending 'nils without slug'
   end
 
   describe '#post_type' do

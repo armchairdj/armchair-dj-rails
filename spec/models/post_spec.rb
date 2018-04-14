@@ -38,14 +38,7 @@ RSpec.describe Post, type: :model do
   end
 
   context 'validations' do
-    it { should validate_uniqueness_of(:slug) }
-
     it { should validate_presence_of(:body) }
-
-    context 'aasm' do
-      pending 'slug presence'
-      pending 'published_at presence'
-    end
 
     context 'custom' do
       pending 'calls #ensure_work_or_title'
@@ -60,9 +53,7 @@ RSpec.describe Post, type: :model do
   end
 
   context 'hooks' do
-    describe 'after_initialize' do
-      pending 'calls #set_slug'
-    end
+    # Nothing so far.
   end
 
   context 'aasm' do
@@ -110,7 +101,6 @@ RSpec.describe Post, type: :model do
 
   context 'class' do
     describe 'self#slugify' do
-      specify { expect(described_class.slugify('xxx')).to eq('xxx') }
       pending 'special characters'
       pending 'non-ASCII characters'
       pending 'whitespace'
@@ -142,15 +132,15 @@ RSpec.describe Post, type: :model do
     describe 'private' do
       describe 'callbacks' do
         pending '#ensure_work_or_title'
-        pending '#prepare_to_boublish'
+        pending '#prepare_to_publish'
         pending '#set_published_at'
         pending '#set_slug'
-        pending '#generate_base_slug'
+        pending '#sluggable_parts'
       end
     end
   end
 
   context 'concerns' do
-    # Nothing so far.
+    it_behaves_like 'a sluggable model', :slug
   end
 end

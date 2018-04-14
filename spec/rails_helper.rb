@@ -30,12 +30,6 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  config.include Rails.application.routes.url_helpers
-
-  config.include RSpecHtmlMatchers
-
-  config.include InlineSvg::ActionView::Helpers
-
   config.use_transactional_fixtures = true
 
   config.infer_spec_type_from_file_location!
@@ -44,8 +38,12 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include Rails.application.routes.url_helpers
+  config.include RSpecHtmlMatchers
+  config.include InlineSvg::ActionView::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
+  config.include ModelHelpers
 
   config.extend ControllerMacros, type: :controller
 end
