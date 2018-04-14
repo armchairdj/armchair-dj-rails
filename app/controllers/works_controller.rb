@@ -39,10 +39,6 @@ private
     @work = Work.find(params[:id])
   end
 
-  def authorize_collection
-    authorize @works
-  end
-
   def authorize_instance
     authorize @work
   end

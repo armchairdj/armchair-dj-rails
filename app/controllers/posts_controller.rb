@@ -46,10 +46,6 @@ private
     @post = Post.where(slug: params[:slug]).first!
   end
 
-  def authorize_collection
-    authorize @posts
-  end
-
   def authorize_instance
     authorize @post
   end

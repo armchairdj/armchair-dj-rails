@@ -125,18 +125,18 @@ RSpec.describe Work, type: :model do
           "Songs",
           "Albums",
           "Movies",
-          "TV",
-          "Radio",
-          "Podcast",
+          "TV Shows",
+          "Radio Shows",
+          "Podcasts",
           "Books",
           "Comics",
           "Newspapers",
           "Magazines",
-          "Art",
-          "Game",
+          "Artworks",
+          "Games",
           "Software",
           "Hardware",
-          "Product"
+          "Products"
         ])
       end
 
@@ -147,30 +147,29 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe 'self#admin_scopes' do
+    describe 'self#admin_filters' do
       specify 'keys are short tab names' do
-        expect(described_class.admin_scopes.keys).to eq([
-          'All',
-          'Song',
-          'Album',
-          'Movie',
-          'TV',
-          'Radio',
-          'Pod',
-          'Book',
-          'Comic',
-          'News',
-          'Mag',
-          'Art',
-          'Game',
+        expect(described_class.admin_filters.keys).to eq([
+          'Songs',
+          'Albums',
+          'Movies',
+          'TV Shows',
+          'Radio Shows',
+          'Podcasts',
+          'Books',
+          'Comics',
+          'Newspapers',
+          'Magazines',
+          'Artworks',
+          'Games',
           'Software',
           'Hardware',
-          'Product'
+          'Products'
         ])
       end
 
       specify 'values are symbols of scopes' do
-        described_class.admin_scopes.values.each do |sym|
+        described_class.admin_filters.values.each do |sym|
           expect(sym).to be_a_kind_of(Symbol)
 
           expect(described_class.respond_to?(sym)).to eq(true)
@@ -238,6 +237,6 @@ RSpec.describe Work, type: :model do
   end
 
   context 'concerns' do
-    it_behaves_like 'a publicly viewable model'
+    it_behaves_like 'a viewable model'
   end
 end

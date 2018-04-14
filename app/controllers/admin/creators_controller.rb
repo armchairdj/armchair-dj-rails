@@ -91,12 +91,8 @@ class Admin::CreatorsController < AdminController
 
 private
 
-  def authorize_collection
-    authorize Creator
-  end
-
   def find_collection
-    @creators = policy_scope(Creator).page(params[:page])
+    @creators = scoped_and_sorted_index
   end
 
   def build_new_instance

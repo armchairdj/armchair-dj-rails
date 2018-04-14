@@ -17,7 +17,7 @@ protected
   end
 
   def logged_in_as_admin?
-    return true if logged_in? && admin?
+    return true if user && admin?
 
     raise Pundit::NotAuthorizedError, "must be admin"
   end

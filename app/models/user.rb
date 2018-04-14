@@ -60,24 +60,24 @@ class User < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  before_validation :set_default_role, if: :new_record?
-
   #############################################################################
   # CLASS.
   #############################################################################
+
+  def self.admin_scopes
+    {
+      'All'         => :all,
+      'Member'      => :member,
+      'Contributor' => :contributor,
+      'Admin'       => :admin,
+    }
+  end
 
   #############################################################################
   # INSTANCE.
   #############################################################################
 
   def display_name
-    [first_name, middle_name, last_name].compact.join(" ")
+    [first_name, middle_name, last_name].compact.join(' ')
   end
-
-private
-
-  def set_default_role
-    self.role = :guest if self.role.nil?
-  end
-
 end

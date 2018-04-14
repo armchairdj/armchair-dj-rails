@@ -7,7 +7,7 @@ RSpec.describe Admin::UsersController, type: :controller do
     login_admin
 
     describe 'GET #index' do
-      pending "scopes"
+      pending 'scopes'
 
       context "with records" do
         before(:each) do

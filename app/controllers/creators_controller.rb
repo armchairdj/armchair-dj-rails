@@ -39,10 +39,6 @@ private
     @creator = Creator.find(params[:id])
   end
 
-  def authorize_collection
-    authorize @creators
-  end
-
   def authorize_instance
     authorize @creator
   end

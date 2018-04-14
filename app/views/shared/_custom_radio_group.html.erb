@@ -3,7 +3,7 @@
 
 <%= f.input(name, as: :radio_buttons, label: false,
   wrapper_tag:   :fieldset,
-  wrapper_class: join_class_names('form-field', 'radio-buttons', ('with-error' if error.present?))
+  wrapper_class: join_class_names('form-field', 'radio-buttons', ('with-error' if error))
 ) do |b| %>
   <%= content_tag(:legend, class: 'label') do %>
     <%= legend %> <%= required_indicator %>

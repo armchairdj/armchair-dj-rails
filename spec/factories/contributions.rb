@@ -13,7 +13,7 @@ FactoryBot.define do
       role :creator
 
       creator_attributes { {
-        "0" => { "name" => FFaker::Music.artist }
+        '0' => { 'name' => FFaker::Music.artist }
       } }
     end
   end

@@ -11,15 +11,7 @@
 <% end %>
 
 <%= content_tag(:div, class: 'tabgroup') do %>
-  <%= content_tag(:ul, class: 'tabs') do %>
-    <% Work.admin_scopes.each do |scope_label, scope| %>
-      <% if @scope == scope %>
-        <%= content_tag(:li, content_tag(:span, scope_label, class: 'tab-active')) %>
-      <% else %>
-        <%= content_tag(:li, link_to(scope_label, admin_works_path(scope: scope))) %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= render partial: 'admin/shared/index_tabs', locals: { model: Work } %>
 
   <%= content_tag(:div, class: 'tab') do %>
     <% if @works.empty? %>
@@ -34,6 +26,7 @@
             <%= content_tag :th, 'Actions', class: 'actions' %>
           <% end %>
         <% end %>
+
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>

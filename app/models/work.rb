@@ -8,7 +8,7 @@ class Work < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
-  include PubliclyViewable
+  include Viewable
 
   #############################################################################
   # ASSOCIATIONS.
@@ -96,45 +96,28 @@ class Work < ApplicationRecord
     self.all.to_a.sort_by { |c| c.title_with_creator }
   end
 
-  def self.grouped_select_options_for_post
+  def self.admin_filters
     {
-      "Songs"       => self.song.alphabetical,
-      "Albums"      => self.album.alphabetical,
-      "Movies"      => self.movie.alphabetical,
-      "TV"          => self.tv_show.alphabetical,
-      "Radio"       => self.radio_show.alphabetical,
-      "Podcast"     => self.podcast.alphabetical,
-      "Books"       => self.book.alphabetical,
-      "Comics"      => self.comic.alphabetical,
-      "Newspapers"  => self.newspaper.alphabetical,
-      "Magazines"   => self.magazine.alphabetical,
-      "Art"         => self.artwork.alphabetical,
-      "Game"        => self.game.alphabetical,
-      "Software"    => self.software.alphabetical,
-      "Hardware"    => self.hardware.alphabetical,
-      "Product"     => self.product.alphabetical,
-    }.to_a
-  end
-
-  def self.admin_scopes
-    {
-      "All"         => :all,
-      "Song"        => :song,
-      "Album"       => :album,
-      "Movie"       => :movie,
-      "TV"          => :tv_show,
-      "Radio"       => :radio_show,
-      "Pod"         => :podcast,
-      "Book"        => :book,
-      "Comic"       => :comic,
-      "News"        => :newspaper,
-      "Mag"         => :magazine,
-      "Art"         => :artwork,
-      "Game"        => :game,
+      "Songs"       => :song,
+      "Albums"      => :album,
+      "Movies"      => :movie,
+      "TV Shows"    => :tv_show,
+      "Radio Shows" => :radio_show,
+      "Podcasts"    => :podcast,
+      "Books"       => :book,
+      "Comics"      => :comic,
+      "Newspapers"  => :newspaper,
+      "Magazines"   => :magazine,
+      "Artworks"    => :artwork,
+      "Games"       => :game,
       "Software"    => :software,
       "Hardware"    => :hardware,
-      "Product"     => :product,
+      "Products"    => :product,
     }
+  end
+
+  def self.grouped_select_options_for_post
+    self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).alphabetical] }
   end
 
   #############################################################################

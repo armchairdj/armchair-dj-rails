@@ -105,7 +105,7 @@ module Errorable
     end
 
     def url_identifier
-      request.url.present? ? request.url : "unknown URL"
+      request.url ? request.url : "unknown URL"
     end
 
     def user_identifier

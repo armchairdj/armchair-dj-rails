@@ -80,7 +80,7 @@ class Post < ApplicationRecord
     state :draft, initial: true
     state :published
 
-    event :publish, before: :set_published_at do
+    event :publish, before: :set_published_at, after: :update_counts do
       transitions from: :draft, to: :published
     end
   end
@@ -91,9 +91,9 @@ class Post < ApplicationRecord
 
   def self.admin_scopes
     {
-      "Draft"     => :draft,
-      "Published" => :published,
-      "All"       => :all,
+      'Draft'     => :draft,
+      'Published' => :published,
+      'All'       => :all,
     }
   end
 
@@ -117,12 +117,12 @@ class Post < ApplicationRecord
 private
 
   def reject_blank_work(work_attributes)
-    work_attributes["title"].blank?
+    work_attributes['title'].blank?
   end
 
   def ensure_work_or_title
-    has_work  = self.work.present?
-    has_title = self.title.present?
+    has_work  = self.work
+    has_title = self.title
 
     if has_work && has_title
       self.errors.add(:base, :has_work_and_title)
@@ -146,9 +146,16 @@ private
     elsif self.work.present?
       [
         self.work.human_medium,
-        self.work.display_creator(connector: " and "),
+        self.work.display_creator(connector: ' and '),
         self.work.title
       ]
     end
+  end
+
+  def update_counts
+    return unless self.work.present?
+
+    self.work.save
+    self.work.creators.each { |c| c.save }
   end
 end

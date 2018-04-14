@@ -1,31 +1,20 @@
 require 'ffaker'
 
 FactoryBot.define do
-  sequence :user_email do |n|
-    "user#{n}@example.com"
-  end
+  sequence :user_email { |n| "user#{n}@example.com" }
 
   factory :user do
-    factory :minimal_user, parent: :guest do end
+    factory :minimal_user, parent: :member do end
 
     trait :valid do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }
       email      { generate(:user_email) }
-      password   "password1234"
+      password   'password1234'
     end
 
     trait :confirmed do
       confirmed_at Time.now
-    end
-
-    factory :guest do
-      valid
-      role :guest
-    end
-
-    factory :confirmed_guest, parent: :guest do
-      confirmed
     end
 
     factory :member do

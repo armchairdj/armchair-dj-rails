@@ -9,13 +9,19 @@ class ApplicationController < ActionController::Base
 
   add_flash_types :error, :success, :info
 
-private
+protected
 
-  def determine_layout
-    @admin ? 'admin' : 'public'
+  def model_class
+    @model_class ||= controller_name.classify.constantize
   end
 
-  def is_admin
-    @admin = true
+private
+
+  def authorize_collection
+    authorize model_class
+  end
+
+  def determine_layout
+    'public'
   end
 end

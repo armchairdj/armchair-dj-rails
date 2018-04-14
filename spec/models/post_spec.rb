@@ -43,7 +43,7 @@ RSpec.describe Post, type: :model do
     end
 
     context 'conditional' do
-      let(:subject) { create(:minimal_post, :published) }
+      subject { create(:minimal_post, :published) }
 
       context 'published' do
         it { should validate_presence_of(:body) }
@@ -60,16 +60,17 @@ RSpec.describe Post, type: :model do
   end
 
   context 'aasm' do
-    let!(    :draft) { build(:standalone_post             ) }
+    let!(    :draft) { create(:standalone_post            ) }
     let!(:published) { create(:standalone_post, :published) }
 
-    pending 'initial'
+    describe 'initial' do
+      specify { expect(Post.new).to have_state(:draft) }
+
+    end
 
     describe 'states' do
-      describe 'exist' do
-        specify { expect(    draft).to have_state(:draft    ) }
-        specify { expect(published).to have_state(:published) }
-      end
+      specify { expect(    draft).to have_state(:draft    ) }
+      specify { expect(published).to have_state(:published) }
     end
 
     describe 'transitions' do
@@ -79,13 +80,26 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    describe 'callbacks' do
+    describe 'events' do
       describe 'publish' do
-        it 'calls set_published_at' do
-           allow(draft).to receive(:set_published_at).and_call_original
-          expect(draft).to receive(:set_published_at)
+        describe 'callbacks' do
+          describe 'before' do
+            it 'calls #set_published_at' do
+               allow(draft).to receive(:set_published_at).and_call_original
+              expect(draft).to receive(:set_published_at)
 
-          draft.publish!
+              expect(draft.publish!).to eq(true)
+            end
+          end
+
+          describe 'after' do
+            it 'calls #update_counts' do
+               allow(draft).to receive(:update_counts).and_call_original
+              expect(draft).to receive(:update_counts)
+
+              expect(draft.publish!).to eq(true)
+            end
+          end
         end
       end
     end
@@ -102,13 +116,6 @@ RSpec.describe Post, type: :model do
   end
 
   context 'class' do
-    describe 'self#slugify' do
-      pending 'special characters'
-      pending 'non-ASCII characters'
-      pending 'whitespace'
-      pending '&'
-    end
-
     describe 'self#admin_scopes' do
       specify 'keys are short tab names' do
         expect(described_class.admin_scopes.keys).to eq([
@@ -126,6 +133,10 @@ RSpec.describe Post, type: :model do
         end
       end
     end
+
+    describe 'self#default_admin_scope' do
+      specify { expect(described_class.default_admin_scope).to eq(:draft) }
+    end
   end
 
   context 'instance' do
@@ -138,6 +149,7 @@ RSpec.describe Post, type: :model do
         pending '#set_published_at'
         pending '#set_slug'
         pending '#sluggable_parts'
+        pending '#update_counts'
       end
     end
   end

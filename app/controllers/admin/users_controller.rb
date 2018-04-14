@@ -91,12 +91,8 @@ class Admin::UsersController < AdminController
 
 private
 
-  def authorize_collection
-    authorize User
-  end
-
   def find_collection
-    @users = policy_scope(User).page(params[:page])
+    @users = scoped_and_sorted_index
   end
 
   def build_new_instance

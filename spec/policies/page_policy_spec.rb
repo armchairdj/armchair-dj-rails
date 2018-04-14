@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PagePolicy do
-  let(:user  ) { create(:guest) }
+  let(:user  ) { nil }
   let(:record) { true }
 
   subject { described_class.new(user, record) }

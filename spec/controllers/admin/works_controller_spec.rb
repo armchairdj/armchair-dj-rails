@@ -7,7 +7,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     login_admin
 
     describe 'GET #index' do
-      pending "scopes"
+      pending 'scopes'
 
       context "without records" do
         it "renders" do

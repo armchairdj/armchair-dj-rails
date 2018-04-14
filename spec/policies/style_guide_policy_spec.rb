@@ -6,7 +6,7 @@ RSpec.describe StyleGuidePolicy do
   subject { described_class.new(user, record) }
 
   context "as guest" do
-    let(:user) { create(:guest) }
+    let(:user) { nil }
 
     it "403s" do
       [

@@ -12,7 +12,7 @@ module PostsHelper
   end
 
   def post_title(post, full: false)
-    if post.work.present?
+    if post.work
       full ? post.work.title_with_creator : post.work.title
     else
       post.title

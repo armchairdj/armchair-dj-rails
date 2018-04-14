@@ -100,14 +100,8 @@ class Admin::WorksController < AdminController
 
 private
 
-  def authorize_collection
-    authorize Work
-  end
-
   def find_collection
-    @scope = (params[:scope] || "all").to_sym
-    @page  = params[:page]
-    @works = policy_scope(Work).send(@scope).page(@page)
+    @works = scoped_and_sorted_index
   end
 
   def build_new_instance

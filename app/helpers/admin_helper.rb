@@ -39,7 +39,7 @@ module AdminHelper
   end
 
   def admin_public_creator_link(creator)
-    return unless creator.is_public?
+    return unless creator.viewable?
 
     admin_public_view_link(creator)
   end
@@ -51,7 +51,7 @@ module AdminHelper
   end
 
   def admin_public_work_link(work)
-    return unless work.is_public?
+    return unless work.viewable?
 
     admin_public_view_link(work)
   end

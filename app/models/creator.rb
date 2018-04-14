@@ -8,7 +8,7 @@ class Creator < ApplicationRecord
   # CONCERNS & PLUGINS.
   #############################################################################
 
-  include PubliclyViewable
+  include Viewable
 
   #############################################################################
   # ASSOCIATIONS.
@@ -17,12 +17,12 @@ class Creator < ApplicationRecord
   has_many :contributions, dependent: :destroy
 
   has_many :works, -> { where(contributions: {
-    role: Contribution.roles["creator"] })
-  }, through: :contributions, source: :work, class_name: "Work"
+    role: Contribution.roles['creator'] })
+  }, through: :contributions, source: :work, class_name: 'Work'
 
   has_many :contributed_works, -> { where.not(contributions: {
-    role: Contribution.roles["creator"] })
-  }, through: :contributions, source: :work, class_name: "Work"
+    role: Contribution.roles['creator'] })
+  }, through: :contributions, source: :work, class_name: 'Work'
 
   has_many :posts, through: :works
 
@@ -38,13 +38,7 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order("LOWER(creators.name)") }
-
-  scope :with_counts, -> {
-    left_outer_joins(works: :posts).select(
-      "creators.*, COUNT(works.id) as work_count, COUNT(posts.id) as post_count"
-    ).group("creators.id")
-  }
+  scope :alphabetical, -> { order('LOWER(creators.name)') }
 
   #############################################################################
   # VALIDATIONS.

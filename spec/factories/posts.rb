@@ -26,7 +26,7 @@ FactoryBot.define do
 
     factory :standalone_post do
       title { FFaker::HipsterIpsum.phrase.titleize }
-      body "This is a standalone post about, like, deep thoughts."
+      body 'This is a standalone post about, like, deep thoughts.'
     end
 
     ###########################################################################
@@ -34,12 +34,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :song_review do
-      body "This is a song review."
+      body 'This is a song review.'
       association :work, factory: :song
     end
 
     factory :collaborative_song_review do
-      body "This is a song review."
+      body 'This is a song review.'
       association :work, factory: :collaborative_song
     end
 
@@ -48,12 +48,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :album_review do
-      body "This is an album review."
+      body 'This is an album review.'
       association :work, factory: :album
     end
 
     factory :collaborative_album_review do
-      body "This is an album review."
+      body 'This is an album review.'
       association :work, factory: :collaborative_album
     end
 
@@ -62,12 +62,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :movie_review do
-      body "This is a movie review."
+      body 'This is a movie review.'
       association :work, factory: :movie
     end
 
     factory :collaborative_movie_review do
-      body "This is a movie review."
+      body 'This is a movie review.'
       association :work, factory: :collaborative_movie
     end
 
@@ -76,12 +76,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :tv_show_review do
-      body "This is a tv_show review."
+      body 'This is a tv_show review.'
       association :work, factory: :tv_show
     end
 
     factory :collaborative_tv_show_review do
-      body "This is a tv_show review."
+      body 'This is a tv_show review.'
       association :work, factory: :collaborative_tv_show
     end
 
@@ -90,12 +90,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :radio_show_review do
-      body "This is a radio_show review."
+      body 'This is a radio_show review.'
       association :work, factory: :radio_show
     end
 
     factory :collaborative_radio_show_review do
-      body "This is a radio_show review."
+      body 'This is a radio_show review.'
       association :work, factory: :collaborative_radio_show
     end
 
@@ -104,12 +104,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :podcast_review do
-      body "This is a podcast review."
+      body 'This is a podcast review.'
       association :work, factory: :podcast
     end
 
     factory :collaborative_podcast_review do
-      body "This is a podcast review."
+      body 'This is a podcast review.'
       association :work, factory: :collaborative_podcast
     end
 
@@ -118,12 +118,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :book_review do
-      body "This is a book review."
+      body 'This is a book review.'
       association :work, factory: :book
     end
 
     factory :collaborative_book_review do
-      body "This is a book review."
+      body 'This is a book review.'
       association :work, factory: :collaborative_book
     end
 
@@ -132,12 +132,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :comic_review do
-      body "This is a comic review."
+      body 'This is a comic review.'
       association :work, factory: :comic
     end
 
     factory :collaborative_comic_review do
-      body "This is a comic review."
+      body 'This is a comic review.'
       association :work, factory: :collaborative_comic
     end
 
@@ -146,12 +146,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :newspaper_review do
-      body "This is a newspaper review."
+      body 'This is a newspaper review.'
       association :work, factory: :newspaper
     end
 
     factory :collaborative_newspaper_review do
-      body "This is a newspaper review."
+      body 'This is a newspaper review.'
       association :work, factory: :collaborative_newspaper
     end
 
@@ -160,12 +160,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :magazine_review do
-      body "This is a magazine review."
+      body 'This is a magazine review.'
       association :work, factory: :magazine
     end
 
     factory :collaborative_magazine_review do
-      body "This is a magazine review."
+      body 'This is a magazine review.'
       association :work, factory: :collaborative_magazine
     end
 
@@ -174,12 +174,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :artwork_review do
-      body "This is a artwork review."
+      body 'This is a artwork review.'
       association :work, factory: :artwork
     end
 
     factory :collaborative_artwork_review do
-      body "This is a artwork review."
+      body 'This is a artwork review.'
       association :work, factory: :collaborative_artwork
     end
 
@@ -188,12 +188,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :game_review do
-      body "This is a game review."
+      body 'This is a game review.'
       association :work, factory: :game
     end
 
     factory :collaborative_game_review do
-      body "This is a game review."
+      body 'This is a game review.'
       association :work, factory: :collaborative_game
     end
 
@@ -202,12 +202,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :software_review do
-      body "This is a software review."
+      body 'This is a software review.'
       association :work, factory: :software
     end
 
     factory :collaborative_software_review do
-      body "This is a software review."
+      body 'This is a software review.'
       association :work, factory: :collaborative_software
     end
 
@@ -216,12 +216,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :hardware_review do
-      body "This is a hardware review."
+      body 'This is a hardware review.'
       association :work, factory: :hardware
     end
 
     factory :collaborative_hardware_review do
-      body "This is a hardware review."
+      body 'This is a hardware review.'
       association :work, factory: :collaborative_hardware
     end
 
@@ -230,12 +230,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :product_review do
-      body "This is a product review."
+      body 'This is a product review.'
       association :work, factory: :product
     end
 
     factory :collaborative_product_review do
-      body "This is a product review."
+      body 'This is a product review.'
       association :work, factory: :collaborative_product
     end
 

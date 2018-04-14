@@ -110,14 +110,8 @@ class Admin::PostsController < AdminController
 
 private
 
-  def authorize_collection
-    authorize Post
-  end
-
   def find_collection
-    @scope = (params[:scope] || 'draft').to_sym
-    @page  = params[:page]
-    @posts = policy_scope(Post).send(@scope).page(@page)
+    @posts = scoped_and_sorted_index
   end
 
   def find_instance
@@ -189,12 +183,12 @@ private
   end
 
   def prepare_work_attributes_fields
-    if @post.persisted? || @post.work_id.present?
+    if @post.persisted? || @post.work_id
       @allow_new_work = false
     else
       @allow_new_work = true
 
-      @post.build_work unless @post.work.present?
+      @post.build_work unless @post.work
       @post.work.prepare_contributions
     end
   end
