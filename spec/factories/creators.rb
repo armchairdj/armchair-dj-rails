@@ -10,9 +10,13 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
-          '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
-        }}))
+        create(:post, body: 'body', work_attributes: {
+          'title'                    => "#{FFaker::Music.song}",
+          'medium'                   => 'song',
+          'contributions_attributes' => {
+            '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          }
+        })
 
         creator.reload
       end
@@ -20,9 +24,13 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
-          '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
-        }}))
+        create(:post, :published, body: 'body', work_attributes: {
+          'title'                    => "#{FFaker::Music.song}",
+          'medium'                   => 'song',
+          'contributions_attributes' => {
+            '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          }
+        })
 
         creator.reload
       end

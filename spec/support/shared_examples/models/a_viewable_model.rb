@@ -18,19 +18,11 @@ RSpec.shared_examples 'a viewable model' do
       let!(:non_viewable_instance) { create_minimal_instance(:with_draft_post    ) }
 
       describe 'viewable' do
-        specify {
-          puts ">>", described_class.all.count
-
-          expect(described_class.viewable.to_a).to eq([viewable_instance])
-        }
+        specify { expect(described_class.viewable.to_a).to eq([viewable_instance]) }
       end
 
       describe 'non_viewable' do
-        specify {
-          puts ">>", described_class.all.count
-
-          expect(described_class.non_viewable.to_a).to eq([non_viewable_instance])
-        }
+        specify { expect(described_class.non_viewable.to_a).to eq([non_viewable_instance]) }
       end
     end
   end

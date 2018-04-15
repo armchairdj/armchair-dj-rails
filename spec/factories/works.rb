@@ -37,7 +37,7 @@ FactoryBot.define do
     # STUBS FOR OTHER FACTORIES.
     ###########################################################################
 
-    factory :work_for_contribution_factory do
+    factory :work_without_contributions do
       medium :song
       title  { FFaker::Music.song }
     end

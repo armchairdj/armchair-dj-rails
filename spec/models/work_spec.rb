@@ -82,7 +82,7 @@ RSpec.describe Work, type: :model do
     context 'custom' do
       describe '#validate_contributions' do
         it 'confirms at least one creator' do
-          instance = build(:work_for_contribution_factory)
+          instance = build(:work_without_contributions)
 
           expect(instance.valid?).to eq(false)
 

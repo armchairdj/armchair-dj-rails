@@ -21,6 +21,15 @@ FactoryBot.define do
     end
 
     ###########################################################################
+    # FOR OTHER FACTORIES.
+    ###########################################################################
+
+    factory :song_review_without_creators do
+      body 'This is a song review.'
+      association :work, factory: :work_without_contributions
+    end
+
+    ###########################################################################
     # STANDALONE.
     ###########################################################################
 
