@@ -8,10 +8,6 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
   end
 
-  context 'plugins' do
-    # Nothing so far.
-  end
-
   context 'associations' do
     # Nothing so far.
   end

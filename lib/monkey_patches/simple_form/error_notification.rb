@@ -1,5 +1,13 @@
 module SimpleForm
   class ErrorNotification
+    delegate :object, :object_name, :template, to: :@builder
+
+    def initialize(builder, options)
+      @builder = builder
+      @message = options.delete(:message)
+      @options = options
+    end
+
     def render
       if has_errors?
         content = [
@@ -11,14 +19,14 @@ module SimpleForm
       end
     end
 
-    protected
+  protected
 
     def errors
       object.errors
     end
 
     def has_errors?
-      object && object.respond_to?(:errors) && errors
+      object && object.respond_to?(:errors) && errors.present?
     end
 
     def error_message

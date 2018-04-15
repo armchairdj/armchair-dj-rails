@@ -1,11 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'constants' do
-    # Nothing so far.
-  end
-
-  context 'plugins' do
+  context 'constants' do
     # Nothing so far.
   end
 
@@ -14,7 +10,7 @@ RSpec.describe Post, type: :model do
   end
 
   context 'nested_attributes' do
-    # Nothing so far.
+    pending 'work'
   end
 
   context 'enums' do
@@ -57,7 +53,6 @@ RSpec.describe Post, type: :model do
     end
 
     pending 'eager'
-
     pending 'for_admin'
     pending 'for_site'
   end
@@ -255,8 +250,34 @@ RSpec.describe Post, type: :model do
   end
 
   context 'instance' do
-    pending '#one_line_title'
-    pending '#simulate_validation_for_publishing'
+    context 'booleans' do
+      let(:unsaved_standalone) {  build(:standalone_post) }
+      let(  :saved_standalone) { create(:standalone_post) }
+      let(    :unsaved_review) {  build(:song_review    ) }
+      let(      :saved_review) { create(:song_review    ) }
+
+      describe '#standalone?' do
+        specify { expect(unsaved_standalone.standalone?).to eq(true ) }
+        specify { expect(  saved_standalone.standalone?).to eq(true ) }
+        specify { expect(    unsaved_review.standalone?).to eq(false) }
+        specify { expect(      saved_review.standalone?).to eq(false) }
+      end
+
+      describe '#review?' do
+        specify { expect(unsaved_standalone.review?).to eq(false) }
+        specify { expect(  saved_standalone.review?).to eq(false) }
+        specify { expect(    unsaved_review.review?).to eq(true ) }
+        specify { expect(      saved_review.review?).to eq(true ) }
+      end
+    end
+
+    describe '#one_line_title' do
+
+    end
+
+    describe '#simulate_validation_for_publishing' do
+
+    end
 
     describe 'private' do
       describe 'callbacks' do

@@ -107,6 +107,14 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def standalone?
+    title.present?
+  end
+
+  def review?
+    work.present?
+  end
+
   # TODO Include post Type and Version
   def one_line_title
     work ? work.title_with_creator : title

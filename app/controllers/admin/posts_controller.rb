@@ -10,22 +10,12 @@ class Admin::PostsController < AdminController
     :destroy
   ]
 
-  before_action :build_new_instance, only: [
-    :new
-  ]
-
-  before_action :sanitize_params, only: [
+  before_action :sanitize_create_params, only: [
     :create,
+  ]
+
+  before_action :sanitize_update_params, only: [
     :update
-  ]
-
-  before_action :build_new_instance_from_params, only: [
-    :create
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
   ]
 
   before_action :authorize_collection, only: [
@@ -55,12 +45,16 @@ class Admin::PostsController < AdminController
 
   # GET /posts/new
   def new
+    @post = Post.new
 
+    prepare_form
   end
 
   # POST /posts
   # POST /posts.json
   def create
+    @post = Post.new(@sanitized_params)
+
     respond_to do |format|
       if @post.save
         format.html { redirect_to admin_post_path(@post), notice: I18n.t('admin.flash.posts.notice.create') }
@@ -76,7 +70,7 @@ class Admin::PostsController < AdminController
 
   # GET /posts/1/edit
   def edit
-
+    prepare_form
   end
 
   # PATCH/PUT /posts/1
@@ -119,19 +113,7 @@ private
     @post = Post.find(params[:id])
   end
 
-  def build_new_instance
-    @post = Post.new
-  end
-
-  def build_new_instance_from_params
-    @post = Post.new(@sanitized_params)
-  end
-
-  def authorize_instance
-    authorize @post
-  end
-
-  def sanitize_params
+  def sanitize_create_params
     fetched = instance_params
 
     if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
@@ -143,6 +125,19 @@ private
     else
       fetched.delete(:work_id)
       fetched.delete(:work_attributes)
+    end
+
+    @sanitized_params = fetched
+  end
+
+  def sanitize_update_params
+    fetched = instance_params
+
+    if @post.standalone?
+      fetched.delete(:work_id)
+      fetched.delete(:work_attributes)
+    elsif @post.review?
+      fetched.delete(:title)
     end
 
     @sanitized_params = fetched
@@ -202,6 +197,10 @@ private
 
     @creators = policy_scope(Creator)
     @roles    = Contribution.human_roles
+  end
+
+  def authorize_instance
+    authorize @post
   end
 
   def which_tab

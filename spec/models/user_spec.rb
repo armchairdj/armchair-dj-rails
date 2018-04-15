@@ -1,11 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'constants' do
-    # Nothing so far.
-  end
-
-  context 'plugins' do
+  context 'constants' do
     # Nothing so far.
   end
 
