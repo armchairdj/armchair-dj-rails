@@ -1,25 +1,12 @@
 RSpec.shared_examples 'a viewable model' do
-  let!(    :viewable_instance) { create_minimal_instance(:with_published_post) }
-  let!(:non_viewable_instance) { create_minimal_instance(:with_draft_post    ) }
-
-  let(:instance_with_accurate_counts) {
-    create_minimal_instance(:with_published_post_and_draft_post)
-  }
-
-  let(:instance_with_inaccurate_counts) {
-    instance = instance_with_accurate_counts
-    instance.update_columns(viewable_post_count: 0, non_viewable_post_count: 0)
-    instance
-  }
-
   context 'included' do
     context 'hooks' do
       describe 'before_save' do
         subject { build_minimal_instance }
 
-        it 'calls #change_counts' do
-           allow(subject).to receive(:change_counts).and_call_original
-          expect(subject).to receive(:change_counts)
+        it 'calls #refresh_counts' do
+           allow(subject).to receive(:refresh_counts).and_call_original
+          expect(subject).to receive(:refresh_counts)
 
           subject.save
         end
@@ -27,12 +14,23 @@ RSpec.shared_examples 'a viewable model' do
     end
 
     context 'scopes' do
+      let!(    :viewable_instance) { create_minimal_instance(:with_published_post) }
+      let!(:non_viewable_instance) { create_minimal_instance(:with_draft_post    ) }
+
       describe 'viewable' do
-        specify { expect(described_class.viewable.to_a    ).to eq([viewable_instance    ]) }
+        specify {
+          puts ">>", described_class.all.count
+
+          expect(described_class.viewable.to_a).to eq([viewable_instance])
+        }
       end
 
       describe 'non_viewable' do
-        specify { expect(described_class.non_viewable.to_a).to eq([non_viewable_instance]) }
+        specify {
+          puts ">>", described_class.all.count
+
+          expect(described_class.non_viewable.to_a).to eq([non_viewable_instance])
+        }
       end
     end
   end
@@ -62,9 +60,12 @@ RSpec.shared_examples 'a viewable model' do
   end
 
   context 'instance' do
+    let(    :viewable_instance) { create_minimal_instance(:with_published_post) }
+    let(:non_viewable_instance) { create_minimal_instance(:with_draft_post    ) }
+
     describe '#viewable?' do
-      specify { expect(    viewable_instance.reload.viewable?).to eq(true ) }
-      specify { expect(non_viewable_instance.reload.viewable?).to eq(false) }
+      specify { expect(    viewable_instance.viewable?).to eq(true ) }
+      specify { expect(non_viewable_instance.viewable?).to eq(false) }
     end
 
     describe '#non_viewable?' do
@@ -93,10 +94,20 @@ RSpec.shared_examples 'a viewable model' do
     end
 
     describe '#update_counts' do
+      let(:instance_with_accurate_counts) {
+        create_minimal_instance(:with_published_post_and_draft_post)
+      }
+
+      let(:instance_with_inaccurate_counts) {
+        instance = instance_with_accurate_counts
+        instance.update_columns(viewable_post_count: 0, non_viewable_post_count: 0)
+        instance
+      }
+
       before(:each) do
-         allow(subject).to receive(:save         ).and_call_original
-         allow(subject).to receive(:change_counts).and_call_original
-        expect(subject).to receive(:change_counts)
+         allow(subject).to receive(:save          ).and_call_original
+         allow(subject).to receive(:refresh_counts).and_call_original
+        expect(subject).to receive(:refresh_counts)
       end
 
       describe 'with changes' do
@@ -108,28 +119,12 @@ RSpec.shared_examples 'a viewable model' do
 
           expect(subject).to receive(:save)
 
-          subject.update_counts
+          expect(subject.update_counts).to eq(true)
+
           subject.reload
 
-          expect(subject.non_viewable_post_count).to eq(1)
           expect(subject.viewable_post_count    ).to eq(1)
-        end
-      end
-
-      describe 'with changes' do
-        subject { instance_with_inaccurate_counts }
-
-        it 'caches counts and saves' do
-          expect(subject.viewable_post_count    ).to eq(0)
-          expect(subject.non_viewable_post_count).to eq(0)
-
-          expect(subject).to receive(:save)
-
-          subject.update_counts
-          subject.reload
-
           expect(subject.non_viewable_post_count).to eq(1)
-          expect(subject.viewable_post_count    ).to eq(1)
         end
       end
 
@@ -153,27 +148,48 @@ RSpec.shared_examples 'a viewable model' do
 
     context 'private' do
       describe 'callbacks' do
-        describe '#change_counts' do
-          subject { instance_with_inaccurate_counts }
+        describe '#refresh_counts' do
+          let(:instance_with_accurate_counts) {
+            create_minimal_instance(:with_published_post_and_draft_post)
+          }
+
+          let(:instance_with_inaccurate_counts) {
+            instance = instance_with_accurate_counts
+            instance.update_columns(viewable_post_count: 0, non_viewable_post_count: 0)
+            instance
+          }
 
           before(:each) do
              allow(subject).to     receive(:save).and_call_original
             expect(subject).to_not receive(:save)
           end
 
-          it 'caches counts without saving' do
-            expect(subject.viewable_post_count    ).to eq(0)
-            expect(subject.non_viewable_post_count).to eq(0)
+          describe 'with changes' do
+            subject { instance_with_inaccurate_counts }
 
-            subject.send(:change_counts)
+            it 'caches counts without saving' do
+              expect(subject.viewable_post_count    ).to eq(0)
+              expect(subject.non_viewable_post_count).to eq(0)
 
-            expect(subject.non_viewable_post_count).to eq(1)
-            expect(subject.viewable_post_count    ).to eq(1)
+              expect(subject.send(:refresh_counts)).to eq(true)
 
-            subject.reload
+              expect(subject.non_viewable_post_count).to eq(1)
+              expect(subject.viewable_post_count    ).to eq(1)
+            end
+          end
 
-            expect(subject.non_viewable_post_count).to eq(0)
-            expect(subject.viewable_post_count    ).to eq(0)
+          describe 'without changes' do
+            subject { instance_with_accurate_counts }
+
+            it 'caches counts without saving' do
+              expect(subject.viewable_post_count    ).to eq(1)
+              expect(subject.non_viewable_post_count).to eq(1)
+
+              expect(subject.send(:refresh_counts)).to eq(false)
+
+              expect(subject.non_viewable_post_count).to eq(1)
+              expect(subject.viewable_post_count    ).to eq(1)
+            end
           end
         end
       end

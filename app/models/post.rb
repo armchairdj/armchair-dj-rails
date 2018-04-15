@@ -149,7 +149,7 @@ private
   end
 
   def can_publish?
-    persisted? && draft? && valid? && body && slug
+    persisted? && draft? && valid? && body.present? && slug.present?
   end
 
   def can_unpublish?
