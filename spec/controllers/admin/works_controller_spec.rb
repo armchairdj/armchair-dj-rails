@@ -7,11 +7,39 @@ RSpec.describe Admin::WorksController, type: :controller do
     login_admin
 
     describe 'GET #index' do
-      pending 'scopes'
-
       context "without records" do
-        it "renders" do
+        it "renders default" do
           get :index
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(0)
+          expect(assigns(:works).size       ).to eq(0)
+        end
+
+        it "renders viewable" do
+          get :index, params: { scope: :viewable }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(0)
+          expect(assigns(:works).size       ).to eq(0)
+        end
+
+        it "renders non_viewable" do
+          get :index, params: { scope: :non_viewable }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(0)
+          expect(assigns(:works).size       ).to eq(0)
+        end
+
+        it "renders all" do
+          get :index, params: { scope: :all }
 
           expect(response).to be_success
           expect(response).to render_template("admin/works/index")
@@ -21,9 +49,9 @@ RSpec.describe Admin::WorksController, type: :controller do
         end
       end
 
-      context "with records" do
+      context ':viewable scope (default)' do
         before(:each) do
-          (per_page + 1).times { create(:minimal_work) }
+          (per_page + 1).times { create(:song_review, :published) }
         end
 
         it "renders" do
@@ -38,6 +66,59 @@ RSpec.describe Admin::WorksController, type: :controller do
 
         it "renders second page" do
           get :index, params: { page: 2 }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(1)
+        end
+      end
+
+      context ':non_viewable scope' do
+        before(:each) do
+          (per_page + 1).times { create(:minimal_work) }
+        end
+
+        it "renders" do
+          get :index, params: { scope: :non_viewable }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(per_page)
+        end
+
+        it "renders second page" do
+          get :index, params: { scope: :non_viewable, page: 2 }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(1)
+        end
+      end
+
+      context ':all scope' do
+        before(:each) do
+          ( per_page / 2     ).times { create(:song_review, :published) }
+          ((per_page / 2) + 1).times { create(:minimal_work) }
+        end
+
+        it "renders" do
+          get :index, params: { scope: :all }
+
+          expect(response).to be_success
+          expect(response).to render_template("admin/works/index")
+
+          expect(assigns(:works).total_count).to eq(per_page + 1)
+          expect(assigns(:works).size       ).to eq(per_page)
+        end
+
+        it "renders second page" do
+          get :index, params: { scope: :all, page: 2 }
 
           expect(response).to be_success
           expect(response).to render_template("admin/works/index")
@@ -168,9 +249,10 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
   end
 
-  context "concerns" do
-    it_behaves_like "an seo paginatable controller" do
-      let(:expected_redirect) { admin_works_path }
+  context 'concerns' do
+    it_behaves_like 'an admin controller' do
+      let(:expected_redirect_for_seo_paginatable) { admin_works_path }
+      let(:instance                             ) { create(:minimal_work) }
     end
   end
 end

@@ -15,7 +15,7 @@ private
     @admin = true
   end
 
-  def scoped_and_sorted_index
+  def scoped_and_sorted_collection
     @scope = (params[:scope] || model_class.default_admin_scope).to_sym
     @page  = params[:page]
 

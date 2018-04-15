@@ -101,7 +101,7 @@ class Admin::WorksController < AdminController
 private
 
   def find_collection
-    @works = scoped_and_sorted_index
+    @works = scoped_and_sorted_collection
   end
 
   def build_new_instance

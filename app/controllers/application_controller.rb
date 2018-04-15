@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include Pundit
-
   include Errorable
 
   protect_from_forgery with: :exception

@@ -514,8 +514,9 @@ RSpec.describe Admin::PostsController, type: :controller do
   end
 
   context 'concerns' do
-    it_behaves_like 'an seo paginatable controller' do
-      let(:expected_redirect) { admin_posts_path }
+    it_behaves_like 'an admin controller' do
+      let(:expected_redirect_for_seo_paginatable) { admin_posts_path }
+      let(:instance                             ) { create(:minimal_post) }
     end
   end
 end
