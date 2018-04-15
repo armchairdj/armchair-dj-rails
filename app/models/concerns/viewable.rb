@@ -2,7 +2,7 @@ module Viewable
   extend ActiveSupport::Concern
 
   included do
-    before_save :update_counts
+    before_save :change_counts
 
     scope     :viewable, -> { where.not(viewable_post_count: 0) }
     scope :non_viewable, -> {     where(viewable_post_count: 0) }
@@ -42,10 +42,22 @@ module Viewable
     self.non_viewable_posts.map(&:work).uniq
   end
 
+  def update_counts
+    change_counts && save
+  end
+
 private
 
-  def update_counts
-        self.viewable_post_count = self.posts.published.count
-    self.non_viewable_post_count = self.posts.draft.count
+  def change_counts
+    draft     = posts.draft.count
+    published = posts.published.count
+    changed   = non_viewable_post_count == draft && viewable_post_count == published
+
+    if changed
+      non_viewable_post_count = draft
+          viewable_post_count = published
+    end
+
+    changed
   end
 end

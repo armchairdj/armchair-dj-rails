@@ -72,7 +72,7 @@ class Post < ApplicationRecord
   aasm(
     column:               :status,
     whiny_persistence:    false,
-    whiny_transitions:    true,
+    whiny_transitions:    false,
     enum:                 true,
     no_direct_assignment: true,
     create_scopes:        true
@@ -80,9 +80,15 @@ class Post < ApplicationRecord
     state :draft, initial: true
     state :published
 
-    event :publish, before: :set_published_at, after: :update_counts do
-      transitions from: :draft, to: :published
-    end
+    event(:publish,
+      before: :prepare_to_publish,
+      after:  :update_viewable_counts
+    ) { transitions from: :draft, to: :published, guards: [:can_publish?] }
+
+    event(:unpublish,
+      before: :prepare_to_unpublish,
+      after:  :update_viewable_counts
+    ) { transitions from: :published, to: :draft, guards: [:can_unpublish?] }
   end
 
   #############################################################################
@@ -101,17 +107,14 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def can_publish?
-    persisted? && valid? && slug.present? && body.present?
-  end
-
   # TODO Include post Type and Version
   def one_line_title
-    if self.work
-      self.work.title_with_creator
-    else
-      self.title
-    end
+    work ? work.title_with_creator : title
+  end
+
+  def simulate_validation_for_publishing
+    self.errors.add(:body, :blank) unless body.present?
+    self.errors.add(:slug, :blank) unless slug.present?
   end
 
 private
@@ -121,41 +124,50 @@ private
   end
 
   def ensure_work_or_title
-    has_work  = self.work
-    has_title = self.title
-
-    if has_work && has_title
+    if work && title
       self.errors.add(:base, :has_work_and_title)
-    elsif !has_work && !has_title
+    elsif !work && !title
       self.errors.add(:base, :needs_work_or_title)
     end
   end
 
-  def set_published_at
-    self.published_at = Time.now
-  end
-
   def set_slug
-    self.slugify(:slug, sluggable_parts)
+    slugify(:slug, sluggable_parts)
   end
 
   # TODO include work version
   def sluggable_parts
-    if self.title.present?
-      [ self.title ]
-    elsif self.work.present?
+    if title.present?
+      [ title ]
+    elsif work.present?
       [
-        self.work.human_medium,
-        self.work.display_creator(connector: ' and '),
-        self.work.title
+        work.human_medium,
+        work.display_creator(connector: ' and '),
+        work.title
       ]
     end
   end
 
-  def update_counts
-    return unless self.work.present?
+  def can_publish?
+    persisted? && draft? && valid? && body && slug
+  end
 
-    self.work.save
-    self.work.creators.each { |c| c.save }
+  def can_unpublish?
+    published?
+  end
+
+  def prepare_to_publish
+    self.published_at = Time.now
+  end
+
+  def prepare_to_unpublish
+    self.published_at = nil
+  end
+
+  def update_viewable_counts
+    return unless work.present?
+
+    work.update_counts
+    work.creators.each(&:update_counts)
   end
 end

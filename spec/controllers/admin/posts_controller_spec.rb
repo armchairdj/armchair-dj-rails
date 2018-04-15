@@ -386,17 +386,16 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:post) { create(:standalone_post) }
 
           let(  :valid_params) { { 'body' => 'New body.' } }
-          let(:invalid_params) { { 'body' => ''          } }
+          let(:invalid_params) { { 'body' => '', 'slug' => ''} }
 
           context 'with valid params' do
-            it 'updates the requested post' do
+            it 'updates and publishes the requested post' do
               put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               post.reload
 
               expect(post.body        ).to eq(valid_params['body'])
               expect(post.published?  ).to eq(true)
-              expect(post.slug.blank? ).to eq(false)
               expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
@@ -404,9 +403,26 @@ RSpec.describe Admin::PostsController, type: :controller do
               put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               expect(response).to redirect_to(admin_post_path(post))
+
+              expect(flash[:notice]).to eq(I18n.t('admin.flash.posts.notice.publish'))
+            end
+          end
+
+          context 'with failed transition' do
+            before(:each) do
+              post.publish!
             end
 
-            pending 'flash'
+            it 'renders edit with message' do
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template('admin/posts/edit')
+
+              expect(assigns(:post).valid?).to eq(true)
+
+              expect(flash[:error]).to eq(I18n.t('admin.flash.posts.error.publish'))
+            end
           end
 
           context 'with invalid params' do
@@ -416,25 +432,15 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')
 
-              expect(assigns(:post)       ).to eq(post)
-              expect(assigns(:post).valid?).to eq(false)
+              expect(assigns(:post)                 ).to eq(post)
+              expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
+              expect(assigns(:post).errors[:slug][0]).to be_a_kind_of(String)
 
-              expect(assigns(:works)).to be_a_kind_of(Array)
-
-              expect(assigns(:allow_new_work)).to eq(false)
-              expect(assigns(:roles         )).to eq(nil)
-              expect(assigns(:creators      )).to eq(nil)
-
-              expect(assigns(:selected_tab)).to eq('post-standalone')
+              expect(flash[:error]).to eq(I18n.t('admin.flash.posts.error.publish'))
 
               expect(post.published_at).to eq(nil)
               expect(post.published?  ).to eq(false)
-              expect(post.slug.blank? ).to eq(true)
             end
-          end
-
-          context 'with failed transition' do
-            pending 'renders edit with message'
           end
         end
 
@@ -442,17 +448,16 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:post) { create(:song_review) }
 
           let(  :valid_params) { { 'body' => 'New body.' } }
-          let(:invalid_params) { { 'body' => ''          } }
+          let(:invalid_params) { { 'body' => '', 'slug' => ''} }
 
           context 'with valid params' do
-            it 'updates the requested post' do
+            it 'updates and publishes the requested post' do
               put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               post.reload
 
               expect(post.body        ).to eq(valid_params['body'])
               expect(post.published?  ).to eq(true)
-              expect(post.slug.blank? ).to eq(false)
               expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
@@ -460,9 +465,26 @@ RSpec.describe Admin::PostsController, type: :controller do
               put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
 
               expect(response).to redirect_to(admin_post_path(post))
+
+              expect(flash[:notice]).to eq(I18n.t('admin.flash.posts.notice.publish'))
+            end
+          end
+
+          context 'with failed transition' do
+            before(:each) do
+              post.publish!
             end
 
-            pending 'flash'
+            it 'renders edit with message' do
+              put :update, params: { step: 'publish', id: post.to_param, post: valid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template('admin/posts/edit')
+
+              expect(assigns(:post).valid?).to eq(true)
+
+              expect(flash[:error]).to eq(I18n.t('admin.flash.posts.error.publish'))
+            end
           end
 
           context 'with invalid params' do
@@ -472,25 +494,15 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(response).to be_success
               expect(response).to render_template('admin/posts/edit')
 
-              expect(assigns(:post)       ).to eq(post)
-              expect(assigns(:post).valid?).to eq(false)
+              expect(assigns(:post)                 ).to eq(post)
+              expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
+              expect(assigns(:post).errors[:slug][0]).to be_a_kind_of(String)
 
-              expect(assigns(:works)).to be_a_kind_of(Array)
-
-              expect(assigns(:allow_new_work)).to eq(false)
-              expect(assigns(:roles         )).to eq(nil)
-              expect(assigns(:creators      )).to eq(nil)
-
-              expect(assigns(:selected_tab)).to eq('post-choose-work')
+              expect(flash[:error]).to eq(I18n.t('admin.flash.posts.error.publish'))
 
               expect(post.published_at).to eq(nil)
               expect(post.published?  ).to eq(false)
-              expect(post.slug.blank? ).to eq(true)
             end
-          end
-
-          context 'with failed transition' do
-            pending 'renders edit with message'
           end
         end
       end

@@ -23,8 +23,10 @@ en:
           destroy: "Post destroyed."
           update:  "Post updated."
           publish: "Post published."
+          publish: "Post unpublished."
         error:
           publish: "Post could not be published."
+          unpublish: "Post could not be unpublished."
       sessions:
         notice:
           missing: "Please log in to access that."

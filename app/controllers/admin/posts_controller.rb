@@ -82,7 +82,8 @@ class Admin::PostsController < AdminController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    return respond_to_publish if publishing?
+    return respond_to_publish   if publishing?
+    return respond_to_unpublish if unpublishing?
 
     respond_to do |format|
       if @post.update(@sanitized_params)
@@ -151,6 +152,7 @@ private
     params.fetch(:post, {}).permit(
       :body,
       :title,
+      :slug,
       :work_id,
       :work_attributes => [
         :post_id,
@@ -227,14 +229,13 @@ private
     params[:step] == 'publish'
   end
 
-  def respond_to_publish
-    saved     = @post.update(@sanitized_params) 
+  def unpublishing?
+    params[:step] == 'unpublish'
+  end
 
-    begin
-      published = @post.publish!
-    rescue AASM::InvalidTransition => err
-      published = false
-    end
+  def respond_to_publish
+    saved     = @post.update(@sanitized_params)
+    published = @post.publish!
 
     respond_to do |format|
       if saved && published
@@ -243,7 +244,28 @@ private
       else
         prepare_form
 
-        flash.now[:error] = I18n.t('admin.flash.posts.error.publish') unless published
+        @post.simulate_validation_for_publishing
+
+        flash.now[:error] = I18n.t('admin.flash.posts.error.publish')
+
+        format.html { render :edit }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def respond_to_unpublish
+    unpublished = @post.unpublish!
+    saved       = @post.update(@sanitized_params)
+
+    respond_to do |format|
+      if unpublished && saved
+        format.html { redirect_to admin_post_path(@post), notice: I18n.t('admin.flash.posts.notice.unpublish') }
+        format.json { render :show, status: :ok, location: @post }
+      else
+        prepare_form
+
+        flash.now[:error] = I18n.t('admin.flash.posts.error.unpublish')
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }

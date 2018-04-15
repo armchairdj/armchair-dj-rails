@@ -15,10 +15,16 @@
   <%= content_tag(:div, class: 'button-group') do %>
     <%= f.button :submit, "Save" %>
 
-    <% if post.can_publish? %>
+    <% if post.may_publish? %>
       <%= f.button :submit, "Publish",
         name:           "step",
         value:          "publish",
+        class:          "danger",
+        "data-confirm": "Are you sure?" %>
+    <% elsif post.may_unpublish? %>
+      <%= f.button :submit, "Unpublish",
+        name:           "step",
+        value:          "unpublish",
         class:          "danger",
         "data-confirm": "Are you sure?" %>
     <% end %>
