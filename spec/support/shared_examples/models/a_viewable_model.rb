@@ -17,13 +17,8 @@ RSpec.shared_examples 'a viewable model' do
     end
 
     context 'scopes' do
-      describe 'viewable' do
-        specify { expect(described_class.viewable.to_a    ).to eq([viewable_instance    ]) }
-      end
-
-      describe 'non_viewable' do
-        specify { expect(described_class.non_viewable.to_a).to eq([non_viewable_instance]) }
-      end
+      specify { expect(described_class.viewable.to_a    ).to eq([viewable_instance    ]) }
+      specify { expect(described_class.non_viewable.to_a).to eq([non_viewable_instance]) }
     end
   end
 
@@ -53,8 +48,8 @@ RSpec.shared_examples 'a viewable model' do
 
   context 'instance' do
     describe '#viewable?' do
-      specify { expect(    viewable_instance.viewable?).to eq(true ) }
-      specify { expect(non_viewable_instance.viewable?).to eq(false) }
+      specify { expect(    viewable_instance.reload.viewable?).to eq(true ) }
+      specify { expect(non_viewable_instance.reload.viewable?).to eq(false) }
     end
 
     describe '#non_viewable?' do
@@ -88,7 +83,7 @@ RSpec.shared_examples 'a viewable model' do
           subject { create_minimal_instance(:with_published_post_and_draft_post) }
 
           it 'caches counts' do
-            subject.update!(viewable_post_count: 0, non_viewable_post_count: 0)
+            subject.update_columns(viewable_post_count: 0, non_viewable_post_count: 0)
 
             expect(subject.viewable_post_count    ).to eq(0)
             expect(subject.non_viewable_post_count).to eq(0)

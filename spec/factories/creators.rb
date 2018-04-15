@@ -10,33 +10,35 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        create(:song_review, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
           '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
         }}))
+
+        creator.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |creator|
-        to_publish = create(:song_review, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
           '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
         }}))
 
-        to_publish.publish!
+        creator.reload
       end
     end
 
     trait :with_published_post_and_draft_post do
       after(:create) do |creator|
-        create(:song_review, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
           '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
         }}))
 
-        to_publish = create(:song_review, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
           '0' => attributes_for(:contribution, role: :creator, creator_id: creator.id)
         }}))
 
-        to_publish.publish!
+        creator.reload
       end
     end
 

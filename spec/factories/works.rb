@@ -10,24 +10,26 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |work|
-        create(:song_review, work_id: work.id)
+        create(:song_review, :draft, work_id: work.id)
+
+        work.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |work|
-        to_publish = create(:song_review, work_id: work.id)
+        create(:song_review, :published, work_id: work.id)
 
-        to_publish.publish!
+        work.reload
       end
     end
 
     trait :with_published_post_and_draft_post do
       after(:create) do |work|
-                     create(:song_review, work_id: work.id)
-        to_publish = create(:song_review, work_id: work.id)
+        create(:song_review, :draft,     work_id: work.id)
+        create(:song_review, :published, work_id: work.id)
 
-        to_publish.publish!
+        work.reload
       end
     end
 
