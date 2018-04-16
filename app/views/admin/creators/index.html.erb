@@ -4,7 +4,8 @@
 
 <%= render partial: "admin/shared/admin_header", locals: {
   action:   :index,
-  headline: @title
+  headline: @title,
+  prehead:  pluralize(@creators.total_count, "Total Record")
 } %>
 
 <%= content_tag(:div, class: "tabgroup") do %>

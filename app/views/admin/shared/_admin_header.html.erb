@@ -1,5 +1,8 @@
 <%= content_tag(:header, class: "admin") do %>
+  <%= content_tag(:h4, prehead ) if local_assigns[:prehead].present? %>
   <%= content_tag(:h1, headline) %>
+  <%= content_tag(:h2, subhead ) if local_assigns[:subhead].present? %>
+  <%= content_tag(:h3, deck    ) if local_assigns[:deck   ].present? %>
 
   <%= content_tag(:div, class: "actions") do %>
     <% if action == :index %>

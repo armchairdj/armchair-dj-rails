@@ -32,7 +32,7 @@ RSpec.describe WorksController, type: :controller do
       end
 
       it "renders second page" do
-        get :index, params: { page: 2 }
+        get :index, params: { page: "2" }
 
         expect(response).to be_success
         expect(response).to render_template("works/index")

@@ -8,123 +8,121 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        it "renders default" do
-          get :index
+        context ":viewable scope (default)" do
+          it "renders" do
+            get :index
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
 
-          expect(assigns(:creators).total_count).to eq(0)
-          expect(assigns(:creators).size       ).to eq(0)
+            expect(assigns(:creators).total_count).to eq(0)
+            expect(assigns(:creators).size       ).to eq(0)
+          end
         end
 
-        it "renders viewable" do
-          get :index, params: { scope: :viewable }
+        context ":non_viewable scope" do
+          it "renders" do
+            get :index, params: { scope: "non_viewable" }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
 
-          expect(assigns(:creators).total_count).to eq(0)
-          expect(assigns(:creators).size       ).to eq(0)
+            expect(assigns(:creators).total_count).to eq(0)
+            expect(assigns(:creators).size       ).to eq(0)
+          end
         end
 
-        it "renders non_viewable" do
-          get :index, params: { scope: :non_viewable }
+        context ":all scope" do
+          it "renders" do
+            get :index, params: { scope: "all" }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
 
-          expect(assigns(:creators).total_count).to eq(0)
-          expect(assigns(:creators).size       ).to eq(0)
-        end
-
-        it "renders all" do
-          get :index, params: { scope: :all }
-
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
-
-          expect(assigns(:creators).total_count).to eq(0)
-          expect(assigns(:creators).size       ).to eq(0)
+            expect(assigns(:creators).total_count).to eq(0)
+            expect(assigns(:creators).size       ).to eq(0)
+          end
         end
       end
 
-      context ":viewable scope (default)" do
-        before(:each) do
-          (per_page + 1).times { create(:song_review, :published) }
+      context "with records" do
+        context ":viewable scope (default)" do
+          before(:each) do
+            (per_page + 1).times { create(:song_review, :published) }
+          end
+
+          it "renders" do
+            get :index
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
+
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
+
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(1)
+          end
         end
 
-        it "renders" do
-          get :index
+        context ":non_viewable scope" do
+          before(:each) do
+            (per_page + 1).times { create(:minimal_creator) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+          it "renders" do
+            get :index, params: { scope: "non_viewable" }
 
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(per_page)
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
+
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "non_viewable", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
+
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(1)
+          end
         end
 
-        it "renders second page" do
-          get :index, params: { page: 2 }
+        context ":all scope" do
+          before(:each) do
+            ( per_page / 2     ).times { create(:song_review, :published) }
+            ((per_page / 2) + 1).times { create(:minimal_creator) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+          it "renders" do
+            get :index, params: { scope: "all" }
 
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(1)
-        end
-      end
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
 
-      context ":non_viewable scope" do
-        before(:each) do
-          (per_page + 1).times { create(:minimal_creator) }
-        end
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(per_page)
+          end
 
-        it "renders" do
-          get :index, params: { scope: :non_viewable }
+          it "renders second page" do
+            get :index, params: { scope: "all", page: "2" }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
+            expect(response).to be_success
+            expect(response).to render_template("admin/creators/index")
 
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(per_page)
-        end
-
-        it "renders second page" do
-          get :index, params: { scope: :non_viewable, page: 2 }
-
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
-
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(1)
-        end
-      end
-
-      context ":all scope" do
-        before(:each) do
-          ( per_page / 2     ).times { create(:song_review, :published) }
-          ((per_page / 2) + 1).times { create(:minimal_creator) }
-        end
-
-        it "renders" do
-          get :index, params: { scope: :all }
-
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
-
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(per_page)
-        end
-
-        it "renders second page" do
-          get :index, params: { scope: :all, page: 2 }
-
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/index")
-
-          expect(assigns(:creators).total_count).to eq(per_page + 1)
-          expect(assigns(:creators).size       ).to eq(1)
+            expect(assigns(:creators).total_count).to eq(per_page + 1)
+            expect(assigns(:creators).size       ).to eq(1)
+          end
         end
       end
     end

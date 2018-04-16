@@ -7,44 +7,126 @@ RSpec.describe Admin::PostsController, type: :controller do
     login_admin
 
     describe "GET #index" do
-      pending "scopes"
-
       context "without records" do
-        it "renders" do
-          get :index
+        context ":draft scope (default)" do
+          it "renders" do
+            get :index
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/index")
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
 
-          expect(assigns(:posts).total_count).to eq(0)
-          expect(assigns(:posts).size       ).to eq(0)
+            expect(assigns(:posts).total_count).to eq(0)
+            expect(assigns(:posts).size       ).to eq(0)
+          end
+        end
+
+        context ":published scope" do
+          it "renders" do
+            get :index, params: { scope: "published" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(0)
+            expect(assigns(:posts).size       ).to eq(0)
+          end
+        end
+
+        context ":all scope" do
+          it "renders" do
+            get :index, params: { scope: "all" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(0)
+            expect(assigns(:posts).size       ).to eq(0)
+          end
         end
       end
 
       context "with records" do
-        before(:each) do
-          ( per_page / 2     ).times { create(:song_review    ) }
-          ((per_page / 2) + 1).times { create(:standalone_post) }
+        context ":draft scope (default)" do
+          before(:each) do
+            ( per_page / 2     ).times { create(:song_review,     :draft) }
+            ((per_page / 2) + 1).times { create(:standalone_post, :draft) }
+          end
+
+          it "renders" do
+            get :index
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(1)
+          end
         end
 
-        it "renders" do
-          get :index
+        context ":published scope" do
+          before(:each) do
+            ( per_page / 2     ).times { create(:song_review,     :published) }
+            ((per_page / 2) + 1).times { create(:standalone_post, :published) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/index")
+          it "renders" do
+            get :index, params: { scope: "published" }
 
-          expect(assigns(:posts).total_count).to eq(per_page + 1)
-          expect(assigns(:posts).size       ).to eq(per_page)
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "published", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(1)
+          end
         end
 
-        it "renders second page" do
-          get :index, params: { page: 2 }
+        context ":all scope" do
+          before(:each) do
+            ((per_page / 4)    ).times { create(:song_review,     :draft    ) }
+            ((per_page / 4)    ).times { create(:standalone_post, :draft    ) }
+            ((per_page / 4)    ).times { create(:song_review,     :published) }
+            ((per_page / 4) + 1).times { create(:standalone_post, :published) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/index")
+          it "renders" do
+            get :index, params: { scope: "all" }
 
-          expect(assigns(:posts).total_count).to eq(per_page + 1)
-          expect(assigns(:posts).size       ).to eq(1)
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "all", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/posts/index")
+
+            expect(assigns(:posts).total_count).to eq(per_page + 1)
+            expect(assigns(:posts).size       ).to eq(1)
+          end
         end
       end
     end

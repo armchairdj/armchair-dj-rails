@@ -68,10 +68,17 @@ header.admin {
   position: relative;
   padding-right: 3rem;
 
+  h4 {
+    font-size: 14px;
+    line-height: $readable;
+    text-transform: uppercase;
+    @include right-margin-only($spacing-xs);
+    color: $trolley-grey;
+  }
+
   h1 {
     font-size: $admin-headline-size;
     line-height: $readable;
-    display: inline-block;
     text-transform: uppercase;
     @include right-margin-only($spacing-xs);
   }
