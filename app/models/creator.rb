@@ -17,12 +17,12 @@ class Creator < ApplicationRecord
   has_many :contributions, dependent: :destroy
 
   has_many :works, -> { where(contributions: {
-    role: Contribution.roles['creator'] })
-  }, through: :contributions, source: :work, class_name: 'Work'
+    role: Contribution.roles["creator"] })
+  }, through: :contributions, source: :work, class_name: "Work"
 
   has_many :contributed_works, -> { where.not(contributions: {
-    role: Contribution.roles['creator'] })
-  }, through: :contributions, source: :work, class_name: 'Work'
+    role: Contribution.roles["creator"] })
+  }, through: :contributions, source: :work, class_name: "Work"
 
   has_many :posts, through: :works
 
@@ -38,7 +38,7 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order('LOWER(creators.name)') }
+  scope :alphabetical, -> { order("LOWER(creators.name)") }
 
   #############################################################################
   # VALIDATIONS.

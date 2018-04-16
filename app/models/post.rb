@@ -97,9 +97,9 @@ class Post < ApplicationRecord
 
   def self.admin_scopes
     {
-      'Draft'     => :draft,
-      'Published' => :published,
-      'All'       => :all,
+      "Draft"     => :draft,
+      "Published" => :published,
+      "All"       => :all,
     }
   end
 
@@ -128,7 +128,7 @@ class Post < ApplicationRecord
 private
 
   def reject_blank_work(work_attributes)
-    work_attributes['title'].blank?
+    work_attributes["title"].blank?
   end
 
   def ensure_work_or_title
@@ -150,7 +150,7 @@ private
     elsif work.present?
       [
         work.human_medium,
-        work.display_creator(connector: ' and '),
+        work.display_creator(connector: " and "),
         work.title
       ]
     end

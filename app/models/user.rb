@@ -66,10 +66,10 @@ class User < ApplicationRecord
 
   def self.admin_scopes
     {
-      'All'         => :all,
-      'Member'      => :member,
-      'Contributor' => :contributor,
-      'Admin'       => :admin,
+      "All"         => :all,
+      "Member"      => :member,
+      "Contributor" => :contributor,
+      "Admin"       => :admin,
     }
   end
 
@@ -78,6 +78,6 @@ class User < ApplicationRecord
   #############################################################################
 
   def display_name
-    [first_name, middle_name, last_name].compact.join(' ')
+    [first_name, middle_name, last_name].compact.join(" ")
   end
 end
