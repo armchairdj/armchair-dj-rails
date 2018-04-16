@@ -38,33 +38,33 @@ module AdminHelper
     link_to(svg, path, title: title, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")
   end
 
-  def admin_index_link(model)
+  def admin_list_link(model)
     title = "back to #{model.model_name.plural} list"
     svg   = semantic_svg_image("open_iconic/list.svg", title: title, desc: "list icon")
     path  = polymorphic_path([:admin, model])
 
-    link_to(svg, path, title: title, class: "admin create")
+    link_to(svg, path, title: title, class: "admin list")
   end
 
   def admin_public_creator_link(creator)
     return unless creator.viewable?
 
-    admin_public_link_link(creator)
+    admin_public_link(creator)
   end
 
   def admin_public_post_link(post)
     return unless post.published?
 
-    admin_public_link_link(post, post_permalink_path(slug: post.slug))
+    admin_public_link(post, post_permalink_path(slug: post.slug))
   end
 
   def admin_public_work_link(work)
     return unless work.viewable?
 
-    admin_public_link_link(work)
+    admin_public_link(work)
   end
 
-  def admin_public_link_link(instance, path = nil)
+  def admin_public_link(instance, path = nil)
     path ||= polymorphic_path(instance)
 
     title = "view #{instance.model_name.singular} on site"
