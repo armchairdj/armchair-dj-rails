@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Admin::CreatorsController, type: :controller do
   let(:per_page) { Kaminari.config.default_per_page }
 
-  context 'as admin' do
+  context "as admin" do
     login_admin
 
-    describe 'GET #index' do
+    describe "GET #index" do
       context "without records" do
         it "renders default" do
           get :index
@@ -49,7 +49,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
       end
 
-      context ':viewable scope (default)' do
+      context ":viewable scope (default)" do
         before(:each) do
           (per_page + 1).times { create(:song_review, :published) }
         end
@@ -75,7 +75,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
       end
 
-      context ':non_viewable scope' do
+      context ":non_viewable scope" do
         before(:each) do
           (per_page + 1).times { create(:minimal_creator) }
         end
@@ -101,7 +101,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
       end
 
-      context ':all scope' do
+      context ":all scope" do
         before(:each) do
           ( per_page / 2     ).times { create(:song_review, :published) }
           ((per_page / 2) + 1).times { create(:minimal_creator) }
@@ -129,54 +129,54 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       end
     end
 
-    describe 'GET #show' do
+    describe "GET #show" do
       let(:creator) { create(:minimal_creator) }
 
-      it 'renders' do
+      it "renders" do
         get :show, params: { id: creator.to_param }
 
         expect(response).to be_success
-        expect(response).to render_template('admin/creators/show')
+        expect(response).to render_template("admin/creators/show")
 
         expect(assigns(:creator)).to eq(creator)
       end
     end
 
-    describe 'GET #new' do
-      it 'renders' do
+    describe "GET #new" do
+      it "renders" do
         get :new
 
         expect(response).to be_success
-        expect(response).to render_template('admin/creators/new')
+        expect(response).to render_template("admin/creators/new")
 
         expect(assigns(:creator)).to be_a_new(Creator)
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       let(  :valid_params) { attributes_for(:minimal_creator) }
       let(:invalid_params) { attributes_for(:minimal_creator).except(:name) }
 
-      context 'with valid params' do
-        it 'creates a new Creator' do
+      context "with valid params" do
+        it "creates a new Creator" do
           expect {
             post :create, params: { creator: valid_params }
           }.to change(Creator, :count).by(1)
         end
 
-        it 'redirects to index' do
+        it "redirects to index" do
           post :create, params: { creator: valid_params }
 
           expect(response).to redirect_to(admin_creators_path)
         end
       end
 
-      context 'with invalid params' do
-        it 'renders new' do
+      context "with invalid params" do
+        it "renders new" do
           post :create, params: { creator: invalid_params }
 
           expect(response).to be_success
-          expect(response).to render_template('admin/creators/new')
+          expect(response).to render_template("admin/creators/new")
 
           expect(assigns(:creator)       ).to be_a_new(Creator)
           expect(assigns(:creator).valid?).to eq(false)
@@ -184,27 +184,27 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       end
     end
 
-    describe 'GET #edit' do
+    describe "GET #edit" do
       let(:creator) { create(:minimal_creator) }
 
-      it 'renders' do
+      it "renders" do
         get :edit, params: { id: creator.to_param }
 
         expect(response).to be_success
-        expect(response).to render_template('admin/creators/edit')
+        expect(response).to render_template("admin/creators/edit")
 
         expect(assigns(:creator)).to eq(creator)
       end
     end
 
-    describe 'PUT #update' do
+    describe "PUT #update" do
       let(:creator) { create(:minimal_creator) }
 
-      let(  :valid_params) { { name: 'New Name' } }
-      let(:invalid_params) { { name: ''         } }
+      let(  :valid_params) { { name: "New Name" } }
+      let(:invalid_params) { { name: ""         } }
 
-      context 'with valid params' do
-        it 'updates the requested creator' do
+      context "with valid params" do
+        it "updates the requested creator" do
           put :update, params: { id: creator.to_param, creator: valid_params }
 
           creator.reload
@@ -212,19 +212,19 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           expect(creator.name).to eq(valid_params[:name])
         end
 
-        it 'redirects to index' do
+        it "redirects to index" do
           put :update, params: { id: creator.to_param, creator: valid_params }
 
           expect(response).to redirect_to(admin_creators_path)
         end
       end
 
-      context 'with invalid params' do
-        it 'renders edit' do
+      context "with invalid params" do
+        it "renders edit" do
           put :update, params: { id: creator.to_param, creator: invalid_params }
 
           expect(response).to be_success
-          expect(response).to render_template('admin/creators/edit')
+          expect(response).to render_template("admin/creators/edit")
 
           expect(assigns(:creator)       ).to eq(creator)
           expect(assigns(:creator).valid?).to eq(false)
@@ -232,16 +232,16 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       let!(:creator) { create(:minimal_creator) }
 
-      it 'destroys the requested creator' do
+      it "destroys the requested creator" do
         expect {
           delete :destroy, params: { id: creator.to_param }
         }.to change(Creator, :count).by(-1)
       end
 
-      it 'redirects to index' do
+      it "redirects to index" do
         delete :destroy, params: { id: creator.to_param }
 
         expect(response).to redirect_to(admin_creators_path)
@@ -249,8 +249,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
   end
 
-  context 'concerns' do
-    it_behaves_like 'an admin controller' do
+  context "concerns" do
+    it_behaves_like "an admin controller" do
       let(:expected_redirect_for_seo_paginatable) { admin_creators_path }
       let(:instance                             ) { create(:minimal_creator) }
     end

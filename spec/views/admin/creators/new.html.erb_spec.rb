@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe 'admin/creators/new', type: :view do
+RSpec.describe "admin/creators/new", type: :view do
   before(:each) do
     @model_class = assign(:model_name, Creator)
     @creator     = assign(:creator, build(:creator))

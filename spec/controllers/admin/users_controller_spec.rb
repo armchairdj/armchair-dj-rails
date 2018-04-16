@@ -6,8 +6,8 @@ RSpec.describe Admin::UsersController, type: :controller do
   context "as admin" do
     login_admin
 
-    describe 'GET #index' do
-      pending 'scopes'
+    describe "GET #index" do
+      pending "scopes"
 
       context "with records" do
         before(:each) do
@@ -36,7 +36,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'GET #show' do
+    describe "GET #show" do
       let(:user) { create(:minimal_user) }
 
       it "renders" do
@@ -49,7 +49,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'GET #new' do
+    describe "GET #new" do
       it "renders" do
         get :new
 
@@ -60,7 +60,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       let(  :valid_params) { attributes_for(:minimal_user) }
       let(:invalid_params) { attributes_for(:minimal_user).except(:first_name) }
 
@@ -91,7 +91,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'GET #edit' do
+    describe "GET #edit" do
       let(:user) { create(:minimal_user) }
 
       it "renders" do
@@ -104,7 +104,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'PUT #update' do
+    describe "PUT #update" do
       let(:user) { create(:minimal_user) }
 
       let(  :valid_params) { { first_name: "New First Name" } }
@@ -139,7 +139,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       let!(:user) { create(:minimal_user) }
 
       it "destroys the requested user" do
@@ -156,8 +156,8 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
   end
 
-  context 'concerns' do
-    it_behaves_like 'an admin controller' do
+  context "concerns" do
+    it_behaves_like "an admin controller" do
       let(:expected_redirect_for_seo_paginatable) { admin_users_path }
       let(:instance                             ) { create(:minimal_user) }
     end

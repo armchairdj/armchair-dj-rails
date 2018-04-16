@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe 'admin/works/new', type: :view do
+RSpec.describe "admin/works/new", type: :view do
   before(:each) do
     @model_class = assign(:model_name, Work)
     @work        = assign(:work, build(:work))

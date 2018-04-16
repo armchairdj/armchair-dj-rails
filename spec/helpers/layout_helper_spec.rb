@@ -22,7 +22,7 @@ RSpec.describe LayoutHelper, type: :helper do
       end
     end
 
-    pending 'plain english'
+    pending "plain english"
   end
 
   describe "#join_class_names" do

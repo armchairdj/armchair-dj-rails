@@ -1,3 +1,3 @@
-RSpec.describe 'posts' do
+RSpec.describe "posts" do
 
 end

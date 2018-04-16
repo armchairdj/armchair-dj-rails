@@ -11,7 +11,7 @@ FactoryBot.define do
 
     factory :contribution_with_new_creator, parent: :contribution_without_creators do
       creator_attributes { {
-        '0' => { 'name' => FFaker::Music.artist }
+        "0" => { "name" => FFaker::Music.artist }
       } }
     end
 

@@ -4,49 +4,49 @@ require "rails_helper"
 RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
   pending "add some examples to (or delete) #{__FILE__}"
 
-  context 'constants' do
+  context "constants" do
     # Nothing so far.
   end
 
-  context 'associations' do
+  context "associations" do
     # Nothing so far.
   end
 
-  context 'nested_attributes' do
+  context "nested_attributes" do
     # Nothing so far.
   end
 
-  context 'enums' do
+  context "enums" do
     # Nothing so far.
   end
 
-  context 'scopes' do
+  context "scopes" do
     # Nothing so far.
   end
 
-  context 'validations' do
+  context "validations" do
     # Nothing so far.
   end
 
-  context 'hooks' do
+  context "hooks" do
     # Nothing so far.
   end
 
-  context 'class' do
+  context "class" do
     # Nothing so far.
   end
 
-  context 'instance' do
+  context "instance" do
     # Nothing so far.
 
-    describe 'private' do
-      describe 'callbacks' do
+    describe "private" do
+      describe "callbacks" do
         # Nothing so far.
       end
     end
   end
 
-  context 'concerns' do
+  context "concerns" do
     # Nothing so far.
   end
 end

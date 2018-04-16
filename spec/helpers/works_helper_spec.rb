@@ -24,7 +24,7 @@ RSpec.describe WorksHelper, type: :helper do
       instance = create(:kate_bush_hounds_of_love)
       actual   = helper.links_to_creators_for_work(instance)
 
-      expect(actual).to have_tag('a', count: 1)
+      expect(actual).to have_tag("a", count: 1)
 
       expect(actual).to have_tag('a[href^="/creators/"]',
         text:  "Kate Bush",
@@ -36,7 +36,7 @@ RSpec.describe WorksHelper, type: :helper do
       instance = create(:carl_craig_and_green_velvet_unity)
       actual   = helper.links_to_creators_for_work(instance)
 
-      expect(actual).to have_tag('a', count: 2)
+      expect(actual).to have_tag("a", count: 2)
 
       expect(actual).to match("> & <")
 

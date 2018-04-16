@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe 'admin/works/index', type: :view do
+RSpec.describe "admin/works/index", type: :view do
   before(:each) do
     21.times do
       create(:minimal_work)

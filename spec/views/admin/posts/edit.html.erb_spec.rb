@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe 'admin/posts/edit', type: :view do
+RSpec.describe "admin/posts/edit", type: :view do
   before(:each) do
     @model_class = assign(:model_name, Post)
     @post        = assign(:post, create(:minimal_post))

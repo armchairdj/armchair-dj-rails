@@ -14,9 +14,9 @@ SimpleForm.setup do |config|
   }
 
   config.wrappers(:default,
-    class:       'form-field',
-    hint_class:  'with-hint',
-    error_class: 'with-error'
+    class:       "form-field",
+    hint_class:  "with-hint",
+    error_class: "with-error"
   ) do |b|
     b.use :html5
     b.use :placeholder
@@ -25,34 +25,34 @@ SimpleForm.setup do |config|
 
     ## Inputs
     b.use :label
-    b.use :hint,  wrap_with: { tag: :div, class: 'hint' }
+    b.use :hint,  wrap_with: { tag: :div, class: "hint" }
     b.use :input
-    b.use :error, wrap_with: { tag: :div, class: 'error' }
+    b.use :error, wrap_with: { tag: :div, class: "error" }
 
     ## full_messages_for
     # If you want to display the full error message for the attribute, you can
     # use the component :full_error, like:
     #
-    # b.use :full_error, wrap_with: { tag: :span, class: 'error' }
+    # b.use :full_error, wrap_with: { tag: :span, class: "error" }
   end
 
   config.wrappers(:custom_checkbox,
-    class:       'form-field',
-    hint_class:  'with-hint',
-    error_class: 'with-error'
+    class:       "form-field",
+    hint_class:  "with-hint",
+    error_class: "with-error"
   ) do |b|
     b.use :html5
 
-    b.wrapper tag: 'label' do |item|
+    b.wrapper tag: "label" do |item|
       item.use :input
-      item.use :hint,       wrap_with: { tag: :span, class: 'custom-boolean-indicator' }
-      item.use :label_text, wrap_with: { tag: :span, class: 'label-text' }
+      item.use :hint,       wrap_with: { tag: :span, class: "custom-boolean-indicator" }
+      item.use :label_text, wrap_with: { tag: :span, class: "label-text" }
     end
 
-    b.use :error, wrap_with: { tag: :div, class: 'error' }
+    b.use :error, wrap_with: { tag: :div, class: "error" }
   end
 
-  config.button_class = 'button'
+  config.button_class = "button"
 
   # Method used to tidy up errors. Specify any Rails Array method.
   # :first lists the first message for each field.
@@ -63,7 +63,7 @@ SimpleForm.setup do |config|
   config.error_notification_tag = :div
 
   # CSS class to add for error notification helper.
-  config.error_notification_class = 'error-notification'
+  config.error_notification_class = "error-notification"
 
   # ID to add for error notification helper.
   # config.error_notification_id = nil
@@ -87,7 +87,7 @@ SimpleForm.setup do |config|
 
   # You can define the default class to be used on forms. Can be overriden
   # with `html: { :class }`. Defaulting to none.
-  config.default_form_class = 'simple-form'
+  config.default_form_class = "simple-form"
 
   # You can define which elements should obtain additional classes
   # config.generate_additional_classes_for = [:wrapper, :label, :input]
@@ -110,7 +110,7 @@ SimpleForm.setup do |config|
 
   # Namespaces where SimpleForm should look for custom input classes that
   # override default inputs.
-  # config.custom_inputs_namespaces << 'CustomInputs'
+  # config.custom_inputs_namespaces << "CustomInputs"
 
   # Default priority for time_zone inputs.
   # config.time_zone_priority = nil
@@ -121,7 +121,7 @@ SimpleForm.setup do |config|
   # When false, do not use translations for labels.
   # config.translate_labels = true
 
-  # Automatically discover new inputs in Rails' autoload path.
+  # Automatically discover new inputs in Rails" autoload path.
   # config.inputs_discovery = true
 
   # Cache SimpleForm inputs discovery
@@ -131,12 +131,12 @@ SimpleForm.setup do |config|
   # config.input_class = nil
 
   # Define the default class of the input wrapper of the boolean input.
-  config.boolean_label_class = 'checkbox'
+  config.boolean_label_class = "checkbox"
 
   # Defines if the default input wrapper class should be included in radio
   # collection wrappers.
   config.include_default_input_wrapper_class = true
 
   # Defines which i18n scope will be used in Simple Form.
-  # config.i18n_scope = 'simple_form'
+  # config.i18n_scope = "simple_form"
 end

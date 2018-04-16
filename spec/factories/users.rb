@@ -10,7 +10,7 @@ FactoryBot.define do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }
       email      { generate(:user_email) }
-      password   'password1234'
+      password   "password1234"
     end
 
     trait :confirmed do

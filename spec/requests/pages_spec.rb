@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe 'Pages', type: :request do
-  describe 'GET /about' do
+RSpec.describe "Pages", type: :request do
+  describe "GET /about" do
     it "works" do
       get about_path
 
@@ -9,7 +9,7 @@ RSpec.describe 'Pages', type: :request do
     end
   end
 
-  describe 'GET /credits' do
+  describe "GET /credits" do
     it "works" do
       get credits_path
 

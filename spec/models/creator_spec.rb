@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Creator, type: :model do
-  context 'constants' do
+  context "constants" do
     # Nothing so far.
   end
 
-  context 'associations' do
-    describe 'associations' do
+  context "associations" do
+    describe "associations" do
       it { should have_many(:contributions) }
 
       it { should have_many(:works   ).through(:contributions) }
@@ -16,22 +16,22 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  context 'nested_attributes' do
+  context "nested_attributes" do
     # Nothing so far.
   end
 
-  context 'enums' do
+  context "enums" do
     # Nothing so far.
   end
 
-  context 'scopes' do
-    describe 'alphabetical' do
-      let!(:zorro  ) { create(:creator, name: 'Zorro the Gay Blade') }
-      let!(:amy_1  ) { create(:creator, name: 'amy winehouse') }
-      let!(:kate   ) { create(:creator, name: 'Kate Bush') }
-      let!(:amy_2  ) { create(:creator, name: 'Amy Wino') }
-      let!(:anthony) { create(:creator, name: 'Anthony Childs') }
-      let!(:zero   ) { create(:creator, name: '0773') }
+  context "scopes" do
+    describe "alphabetical" do
+      let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
+      let!(:amy_1  ) { create(:creator, name: "amy winehouse") }
+      let!(:kate   ) { create(:creator, name: "Kate Bush") }
+      let!(:amy_2  ) { create(:creator, name: "Amy Wino") }
+      let!(:anthony) { create(:creator, name: "Anthony Childs") }
+      let!(:zero   ) { create(:creator, name: "0773") }
 
       specify { expect(described_class.alphabetical.to_a).to eq([
         zero,
@@ -44,29 +44,29 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  context 'validations' do
-    describe 'name' do
+  context "validations" do
+    describe "name" do
       it { should validate_presence_of(:name) }
     end
   end
 
-  context 'hooks' do
+  context "hooks" do
     # Nothing so far.
   end
 
-  context 'class' do
+  context "class" do
     # Nothing so far.
   end
 
-  context 'instance' do
-    describe 'private' do
-      describe 'callbacks' do
+  context "instance" do
+    describe "private" do
+      describe "callbacks" do
         # Nothing so far.
       end
     end
   end
 
-  context 'concerns' do
-    it_behaves_like 'a viewable model'
+  context "concerns" do
+    it_behaves_like "a viewable model"
   end
 end

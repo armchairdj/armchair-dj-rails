@@ -1,3 +1,3 @@
-RSpec.describe 'admin works' do
+RSpec.describe "admin works" do
 
 end

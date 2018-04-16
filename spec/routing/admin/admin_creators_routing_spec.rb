@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::CreatorsController, type: :routing do
-  describe 'routing' do
+  describe "routing" do
 
     it "routes to #index" do
       expect(get: "/admin/creators").to route_to("admin/creators#index")

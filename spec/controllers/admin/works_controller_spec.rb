@@ -6,7 +6,7 @@ RSpec.describe Admin::WorksController, type: :controller do
   context "as admin" do
     login_admin
 
-    describe 'GET #index' do
+    describe "GET #index" do
       context "without records" do
         it "renders default" do
           get :index
@@ -49,7 +49,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         end
       end
 
-      context ':viewable scope (default)' do
+      context ":viewable scope (default)" do
         before(:each) do
           (per_page + 1).times { create(:song_review, :published) }
         end
@@ -75,7 +75,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         end
       end
 
-      context ':non_viewable scope' do
+      context ":non_viewable scope" do
         before(:each) do
           (per_page + 1).times { create(:minimal_work) }
         end
@@ -101,7 +101,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         end
       end
 
-      context ':all scope' do
+      context ":all scope" do
         before(:each) do
           ( per_page / 2     ).times { create(:song_review, :published) }
           ((per_page / 2) + 1).times { create(:minimal_work) }
@@ -129,7 +129,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'GET #show' do
+    describe "GET #show" do
       let(:work) { create(:minimal_work) }
 
       it "renders" do
@@ -142,7 +142,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'GET #new' do
+    describe "GET #new" do
       it "renders" do
         get :new
 
@@ -153,7 +153,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'POST #create' do
+    describe "POST #create" do
       let(  :valid_params) { attributes_for(:minimal_work) }
       let(:invalid_params) { attributes_for(:minimal_work).except(:title) }
 
@@ -184,7 +184,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'GET #edit' do
+    describe "GET #edit" do
       let(:work) { create(:minimal_work) }
 
       it "renders" do
@@ -197,7 +197,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'PUT #update' do
+    describe "PUT #update" do
       let(:work) { create(:minimal_work) }
 
       let(  :valid_params) { { title: "New Title" } }
@@ -232,7 +232,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    describe 'DELETE #destroy' do
+    describe "DELETE #destroy" do
       let!(:work) { create(:minimal_work) }
 
       it "destroys the requested work" do
@@ -249,8 +249,8 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
   end
 
-  context 'concerns' do
-    it_behaves_like 'an admin controller' do
+  context "concerns" do
+    it_behaves_like "an admin controller" do
       let(:expected_redirect_for_seo_paginatable) { admin_works_path }
       let(:instance                             ) { create(:minimal_work) }
     end

@@ -1,7 +1,7 @@
 require "simplecov"
 
-SimpleCov.start 'rails' do
-  add_group 'Policies', 'app/policies'
+SimpleCov.start "rails" do
+  add_group "Policies", "app/policies"
 
   add_filter "/src"
   add_filter "/lib/generators"
@@ -11,9 +11,9 @@ end
 
 require "spec_helper"
 
-ENV['RAILS_ENV'] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path("../../config/environment", __FILE__)
 
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
@@ -25,7 +25,7 @@ require "aasm/rspec"
 require "support/factory_bot"
 require "vcr"
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -66,6 +66,6 @@ VCR.configure do |config|
   }
 
   # To filter credentials from environment variables
-  # config.filter_sensitive_data('<GREETING>') { 'Hello' }
-  # config.filter_sensitive_data('<LOCATION>') { 'World' }
+  # config.filter_sensitive_data("<GREETING>") { "Hello" }
+  # config.filter_sensitive_data("<LOCATION>") { "World" }
 end
