@@ -78,7 +78,7 @@ RSpec.describe User, type: :model do
     end
 
     describe "private" do
-      describe "callbacks" do
+      context "callbacks" do
         # Nothing so far.
       end
     end

@@ -40,7 +40,7 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
 
     describe "private" do
-      describe "callbacks" do
+      context "callbacks" do
         # Nothing so far.
       end
     end

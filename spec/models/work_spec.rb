@@ -76,16 +76,13 @@ RSpec.describe Work, type: :model do
     it { should validate_presence_of(:title ) }
 
     context "custom" do
-      describe "#validate_contributions" do
-        it "confirms at least one creator" do
-          instance = build(:work_without_contributions)
+      subject { build(:work) }
 
-          expect(instance.valid?).to eq(false)
+      it "calls #validate_contributions" do
+         allow(subject).to receive(:validate_contributions)
+        expect(subject).to receive(:validate_contributions)
 
-          expect(instance.errors[:contributions][0]).to eq(
-            I18n.t("activerecord.errors.models.work.attributes.contributions.missing")
-          )
-        end
+        subject.valid?
       end
     end
   end
@@ -198,17 +195,21 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#title_with_creator" do
-      specify {
-        expect(create(:carl_craig_and_green_velvet_unity).title_with_creator).to eq(
-          "Carl Craig & Green Velvet: Unity"
-        )
-      }
-
-      specify {
+      it "displays with one creator" do
         expect(create(:kate_bush_hounds_of_love).title_with_creator).to eq(
           "Kate Bush: Hounds of Love"
         )
-      }
+      end
+
+      it "displays with multiple creators" do
+        expect(create(:carl_craig_and_green_velvet_unity).title_with_creator).to eq(
+          "Carl Craig & Green Velvet: Unity"
+        )
+      end
+
+      it "nils unless persisted" do
+        expect(build(:kate_bush_hounds_of_love).title_with_creator).to eq(nil)
+      end
     end
 
     describe "#display_creator" do
@@ -218,16 +219,34 @@ RSpec.describe Work, type: :model do
         )
       end
 
-      it "displays single creators" do
+      it "displays single creator" do
         expect(create(:kate_bush_hounds_of_love).display_creator).to eq(
           "Kate Bush"
         )
+      end
+
+      it "nils unless persisted" do
+        expect(build(:kate_bush_hounds_of_love).display_creator).to eq(nil)
       end
     end
 
     context "private" do
       context "callbacks" do
         # Nothing so far.
+      end
+
+      context "custom validators" do
+        describe "#validate_contributions" do
+          it "confirms at least one creator" do
+            instance = build(:work_without_contributions)
+
+            instance.send(:validate_contributions)
+
+            expect(instance.errors[:contributions][0]).to eq(
+              I18n.t("activerecord.errors.models.work.attributes.contributions.missing")
+            )
+          end
+        end
       end
     end
   end

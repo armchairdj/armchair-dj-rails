@@ -131,11 +131,15 @@ class Work < ApplicationRecord
   end
 
   def title_with_creator
-    "#{self.display_creator}: #{self.title}"
+    return unless persisted?
+
+    [display_creator, title].join(": ")
   end
 
   def display_creator(connector: " & ")
-    self.creators.alphabetical.map(&:name).join(connector)
+    return unless persisted?
+
+    creators.alphabetical.to_a.map(&:name).join(connector)
   end
 
 private

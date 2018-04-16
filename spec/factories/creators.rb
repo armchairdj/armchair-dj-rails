@@ -105,5 +105,14 @@ FactoryBot.define do
     factory :brand do
       name { FFaker::Product.brand }
     end
+
+    ###########################################################################
+    # SPECIFIC FACTORIES.
+    ###########################################################################
+
+    factory :kate_bush do
+      name "Kate Bush"
+    end
+
   end
 end

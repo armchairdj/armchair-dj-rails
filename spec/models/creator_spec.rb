@@ -60,7 +60,7 @@ RSpec.describe Creator, type: :model do
 
   context "instance" do
     describe "private" do
-      describe "callbacks" do
+      context "callbacks" do
         # Nothing so far.
       end
     end

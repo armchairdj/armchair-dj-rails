@@ -139,7 +139,7 @@ RSpec.shared_examples "a viewable model" do
     end
 
     context "private" do
-      describe "callbacks" do
+      context "callbacks" do
         describe "#refresh_counts" do
           let(:instance_with_accurate_counts) {
             create_minimal_instance(:with_published_post_and_draft_post)

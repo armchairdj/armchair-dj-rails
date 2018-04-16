@@ -10,7 +10,21 @@ RSpec.describe Post, type: :model do
   end
 
   context "nested_attributes" do
-    pending "work"
+    it { should accept_nested_attributes_for(:work) }
+
+    describe "reject_if" do
+      it "rejects with blank title" do
+        instance = build(:post, body: "body", work_attributes: {
+          "0" => { "title" => "" }
+        })
+
+        expect {
+          instance.save
+        }.to_not change {
+          Work.count
+        }
+      end
+    end
   end
 
   context "enums" do
@@ -152,7 +166,7 @@ RSpec.describe Post, type: :model do
 
     describe "events" do
       describe "publish" do
-        describe "callbacks" do
+        context "callbacks" do
           describe "before" do
             it "calls #prepare_to_publish" do
                allow(draft).to receive(:prepare_to_publish).and_call_original
@@ -183,7 +197,7 @@ RSpec.describe Post, type: :model do
       end
 
       describe "unpublish" do
-        describe "callbacks" do
+        context "callbacks" do
           describe "before" do
             it "calls #prepare_to_unpublish" do
                allow(published).to receive(:prepare_to_unpublish).and_call_original
@@ -272,27 +286,96 @@ RSpec.describe Post, type: :model do
     end
 
     describe "#one_line_title" do
-
+      specify { expect(create(:hounds_of_love_album_review).one_line_title).to eq("Kate Bush: Hounds of Love") }
+      specify { expect(create(:tiny_standalone_post       ).one_line_title).to eq("Hello") }
     end
 
     describe "#simulate_validation_for_publishing" do
+      let(:neither) { build(:post) }
+      let(:no_body) { build(:post, body: "",     slug: "a/b/c") }
+      let(:no_slug) { build(:post, body: "body", slug: ""     ) }
 
+      it "manually adds error to both" do
+        neither.simulate_validation_for_publishing
+
+        expect(neither.errors.details[:body].first[:error]).to eq(:blank)
+        expect(neither.errors.details[:slug].first[:error]).to eq(:blank)
+      end
+
+      it "manually adds error to body" do
+        no_body.simulate_validation_for_publishing
+
+        expect(no_body.errors.details[:body].first[:error]).to eq(:blank)
+      end
+
+      it "manually adds error to slug" do
+        no_slug.simulate_validation_for_publishing
+
+        expect(no_slug.errors.details[:slug].first[:error]).to eq(:blank)
+      end
     end
 
     describe "private" do
-      describe "callbacks" do
-        describe "#set_slug" do
+      context "callbacks" do
+        describe "#set_slug and #sluggable_parts" do
+          let(    :review) { create(:hounds_of_love_album_review) }
+          let(    :collab) { create(:unity_album_review) }
+          let(:standalone) { create(:tiny_standalone_post) }
 
-        end
+          before(:each) do
+            allow_any_instance_of(described_class).to receive(:slugify)
+          end
 
-        describe "#sluggable_parts" do
+          specify "for review" do
+            expect(review).to receive(:slugify).with(:slug, ["Album", "Kate Bush", "Hounds of Love"])
 
+            review.send(:set_slug)
+          end
+
+          specify "for review of collaborative work" do
+            expect(collab).to receive(:slugify).with(:slug, ["Album", "Carl Craig and Green Velvet", "Unity"])
+
+            collab.send(:set_slug)
+          end
+
+          specify "for standalone" do
+            expect(standalone).to receive(:slugify).with(:slug, ["Hello"])
+
+            standalone.send(:set_slug)
+          end
         end
       end
 
-      describe "custom validators" do
+      context "custom validators" do
         describe "#ensure_work_or_title" do
+          let(:neither) { build(:post                                                   ) }
+          let(   :both) { build(:post, title: "title", work_id: create(:minimal_work).id) }
+          let(  :title) { build(:post, title: ""                                        ) }
+          let(   :work) { build(:post,                 work_id: create(:minimal_work).id) }
 
+          specify 'with neither' do
+            neither.send(:ensure_work_or_title)
+
+            expect(neither.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+          end
+
+          specify 'with both' do
+            both.send(:ensure_work_or_title)
+
+            expect(both.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+          end
+
+          specify 'with work' do
+            work.send(:ensure_work_or_title)
+
+            expect(work.errors.details[:base]).to eq([])
+          end
+
+          specify 'with title' do
+            title.send(:ensure_work_or_title)
+
+            expect(title.errors.details[:base]).to eq([])
+          end
         end
       end
 
@@ -348,7 +431,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        describe "callbacks" do
+        context "callbacks" do
           describe "#prepare_to_publish" do
 
           end

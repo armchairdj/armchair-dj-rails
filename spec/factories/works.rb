@@ -417,7 +417,7 @@ FactoryBot.define do
       title "Hounds of Love"
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Kate Bush").id),
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:kate_bush).id),
       } }
     end
 
@@ -426,7 +426,7 @@ FactoryBot.define do
       title "Director's Cut"
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Kate Bush").id),
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:kate_bush).id),
       } }
     end
 
