@@ -9,7 +9,7 @@ module LayoutHelper
     daterange   = start == now ? start : "#{start}-#{now}"
     declaration = english ? "Copyright" : "&copy;"
 
-    "#{declaration} #{daterange} #{t('site.owner')}".html_safe
+    "#{declaration} #{daterange} #{t("site.owner")}".html_safe
   end
 
   def join_class_names(*args)

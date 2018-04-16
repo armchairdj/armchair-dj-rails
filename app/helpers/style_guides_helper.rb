@@ -1,4 +1,4 @@
-require 'ffaker'
+require "ffaker"
 
 module StyleGuidesHelper
   def lorem_html_paragraphs(num = 2)

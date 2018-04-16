@@ -16,7 +16,7 @@
   z-index: 1;
 
   &:after {
-    content: ' ';
+    content: " ";
     display: block;
     clear: left;
   }
@@ -27,7 +27,7 @@
     @include top-border-radius();
 
     &:before {
-      content: ' ';
+      content: " ";
       display: block;
       position: absolute;
       background: #f0f0f0;
@@ -225,7 +225,7 @@
       }
 
       &:after {
-        content: ' ';
+        content: " ";
         display: block;
         position: absolute;
         top: 50%;
