@@ -1,13 +1,13 @@
 <%
-  @title = 'Create Work'
+  @title = "Create Work"
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:   :new,
   headline: @title
 } %>
 
-<%= render partial: 'work_form', locals: {
+<%= render partial: "work_form", locals: {
   work:     @work,
   roles:    @roles,
   creators: @creators

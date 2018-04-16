@@ -1,71 +1,71 @@
 <%
-  @headline = 'Forms With Errors'
-  @title    = ['Style Guide', @headline]
+  @headline = "Forms With Errors"
+  @title    = ["Style Guide", @headline]
 
-  @page_container_class = 'style-guide'
+  @page_container_class = "style-guide"
 %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
-  <%= content_tag(:div, class: 'error-notification') do %>
+  <%= content_tag(:div, class: "error-notification") do %>
     Page-level form error notification.
   <% end %>
 
-  <%= content_tag(:div, class: 'form-inputs') do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
 
-    <%= content_tag(:fieldset, class: 'legendary') do %>
-      <%= content_tag(:legend, 'Fields With Errors') %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Fields With Errors") %>
 
       <%= f.input(:string_with_error,
-        wrapper_html: { class: 'with-error' },
-        hint: 'Hint for string.'
+        wrapper_html: { class: "with-error" },
+        hint: "Hint for string."
       ) do %>
-        <%= f.text_field :string_with_error, placeholder: 'Placeholder for string' %>
-        <%= content_tag(:div, 'Error message for string.', class: 'error') %>
+        <%= f.text_field :string_with_error, placeholder: "Placeholder for string" %>
+        <%= content_tag(:div, "Error message for string.", class: "error") %>
       <% end %>
 
-      <%= render partial: 'shared/custom_radio_group', locals: {
+      <%= render partial: "shared/custom_radio_group", locals: {
         f:          f,
         name:       :radios_with_error,
-        legend:     'Radios',
-        hint:       'Hint for radios.',
-        collection: [[1, 'one'], [2, 'two'], [3, 'three']],
-        error:      'Error message for radios.'
+        legend:     "Radios",
+        hint:       "Hint for radios.",
+        collection: [[1, "one"], [2, "two"], [3, "three"]],
+        error:      "Error message for radios."
       } %>
 
       <%= f.input(:select_with_error, as: :select,
-        wrapper_html: { class: 'with-error' },
-        hint: 'Hint for select.'
+        wrapper_html: { class: "with-error" },
+        hint: "Hint for select."
       ) do %>
         <%= f.select :select_with_error,
           [true, false],
-          include_blank: 'Please choose'
+          include_blank: "Please choose"
         %>
-        <%= content_tag(:div, 'Error message for select.', class: 'error') %>
+        <%= content_tag(:div, "Error message for select.", class: "error") %>
       <% end %>
 
       <%= f.input(:checkbox_with_error,
         label: false,
-        wrapper_html: { class: 'boolean with-error' }
+        wrapper_html: { class: "boolean with-error" }
       ) do %>
         <%= content_tag(:label) do %>
           <%= f.check_box(:checkbox_with_error) %>
-          <%= content_tag(:span, '&nbsp;'.html_safe, class: 'custom-boolean-indicator') %>
-          <%= content_tag(:span, 'Checkbox with error', class: 'label-text') %>
-          <%= content_tag(:div, 'Error message for checkbox.', class: 'error') %>
+          <%= content_tag(:span, "&nbsp;".html_safe, class: "custom-boolean-indicator") %>
+          <%= content_tag(:span, "Checkbox with error", class: "label-text") %>
+          <%= content_tag(:div, "Error message for checkbox.", class: "error") %>
         <% end %>
       <% end %>
 
       <%= f.input(:textarea_with_error,
-        wrapper_html: { class: 'with-error' },
-        hint: 'Hint for textarea.'
+        wrapper_html: { class: "with-error" },
+        hint: "Hint for textarea."
       ) do %>
-        <%= f.text_area :textarea_with_error, placeholder: 'Placeholder for textarea' %>
-        <%= content_tag(:div, 'Error message for textarea.', class: 'error') %>
+        <%= f.text_area :textarea_with_error, placeholder: "Placeholder for textarea" %>
+        <%= content_tag(:div, "Error message for textarea.", class: "error") %>
       <% end %>
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: 'button-group') do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit %>
   <% end %>
 <% end %>

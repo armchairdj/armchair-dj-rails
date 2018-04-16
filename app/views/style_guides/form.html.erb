@@ -1,33 +1,33 @@
 <%
-  @headline = 'Forms'
-  @title    = ['Style Guide', @headline]
+  @headline = "Forms"
+  @title    = ["Style Guide", @headline]
 
-  @page_container_class = 'style-guide'
+  @page_container_class = "style-guide"
 %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
-  <%= content_tag(:div, class: 'form-inputs') do %>
-    <%= content_tag(:fieldset, class: 'legendary') do %>
-      <%= content_tag(:legend, 'Plain Fields') %>
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Plain Fields") %>
 
       <%= f.input :string, as: :string %>
 
-      <%= render partial: 'shared/custom_radio_group', locals: {
+      <%= render partial: "shared/custom_radio_group", locals: {
         f:          f,
         name:       :radios,
-        legend:     'Radios',
-        hint:       'Hint for radios.',
-        collection: [[1, 'one'], [2, 'two'], [3, 'three']]
+        legend:     "Radios",
+        hint:       "Hint for radios.",
+        collection: [[1, "one"], [2, "two"], [3, "three"]]
       } %>
 
       <%= f.input :select, as: :select do %>
         <%= f.select :select,
           [true, false],
-          include_blank: 'Please choose'
+          include_blank: "Please choose"
         %>
       <% end %>
 
-      <%= render partial: 'shared/custom_checkbox', locals: {
+      <%= render partial: "shared/custom_checkbox", locals: {
         f:    f,
         name: :checkbox
       } %>
@@ -35,31 +35,31 @@
       <%= f.input :textarea, as: :text %>
     <% end %>
 
-    <%= content_tag(:fieldset, class: 'legendary') do %>
-      <%= content_tag(:legend, 'Optional Fields') %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Optional Fields") %>
 
       <%= f.input :optional_string, as: :string, required: false %>
 
       <%= f.input :optional_select, required: false do %>
         <%= f.select :optional_select,
           [true, false],
-          include_blank: 'Please choose'
+          include_blank: "Please choose"
         %>
       <% end %>
 
       <%= f.input :optional_textarea, as: :text, required: false %>
     <% end %>
 
-    <%= content_tag(:fieldset, class: 'legendary') do %>
-      <%= content_tag(:legend, 'Tricked-Out Fields') %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Tricked-Out Fields") %>
 
       <%= f.input :string_with_extras, as: :string,
-        placeholder: 'Placeholder for string',
-        hint:        'Hint for string.'
+        placeholder: "Placeholder for string",
+        hint:        "Hint for string."
       %>
 
       <%= f.input(:select_with_extras_and_no_blank, as: :select,
-        hint: 'Hint for select.'
+        hint: "Hint for select."
       ) do %>
         <%= f.select :select_with_extras_and_no_blank,
           [true, false],
@@ -68,13 +68,13 @@
       <% end %>
 
       <%= f.input :textarea_with_extras, as: :text,
-        placeholder: 'Placeholder for textarea',
-        hint:        'Hint for textarea.'
+        placeholder: "Placeholder for textarea",
+        hint:        "Hint for textarea."
       %>
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: 'button-group') do %>
+  <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit %>
   <% end %>
 <% end %>

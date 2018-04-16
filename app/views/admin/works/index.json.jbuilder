@@ -1,1 +1,1 @@
-json.array! @works, partial: 'admin/works/work', as: :work
+json.array! @works, partial: "admin/works/work", as: :work

@@ -1,29 +1,29 @@
 <%
-  @title = 'Log In'
+  @title = "Log In"
 %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: 'shared/user_tabs', locals: { selected_tab: :login } %>
+  <%= render partial: "shared/user_tabs", locals: { selected_tab: :login } %>
 
-  <%= content_tag(:div, class: 'tab') do %>
+  <%= content_tag(:div, class: "tab") do %>
     <%= simple_form_for(@user, url: session_path(resource_name)) do |f| %>
-      <%= content_tag(:div, class: 'form-inputs') do %>
+      <%= content_tag(:div, class: "form-inputs") do %>
         <%= f.input :email, required: false %>
         <%= f.input :password, required: false %>
 
-        <%= render(partial: 'shared/custom_checkbox', locals: {
+        <%= render(partial: "shared/custom_checkbox", locals: {
           f:    f,
           name: :remember_me
         }) if devise_mapping.rememberable? %>
       <% end %>
 
-      <%= content_tag(:div, class: 'button-group') do %>
-        <%= f.button :submit, 'Log in' %>
+      <%= content_tag(:div, class: "button-group") do %>
+        <%= f.button :submit, "Log in" %>
       <% end %>
 
       <%= content_tag(:ul) do %>
-        <%= content_tag :li, link_to('Forgot your password?', new_user_password_path) %>
-        <%= content_tag :li, link_to("Didn't receive confirmation instructions?", new_user_confirmation_path) %>
+        <%= content_tag :li, link_to("Forgot your password?", new_user_password_path) %>
+        <%= content_tag :li, link_to("Didn"t receive confirmation instructions?", new_user_confirmation_path) %>
       <% end %>
     <% end %>
   <% end %>

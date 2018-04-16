@@ -1,13 +1,13 @@
 <%
-  @title = 'Create Post'
+  @title = "Create Post"
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:   :new,
   headline: @title
 } %>
 
-<%= render partial: 'post_form', locals: {
+<%= render partial: "post_form", locals: {
   post:           @post,
   works:          @works,
   roles:          @roles,

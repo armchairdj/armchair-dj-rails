@@ -1,10 +1,10 @@
 <%
-  @title = 'Create User'
+  @title = "Create User"
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:   :new,
   headline: @title
 } %>
 
-<%= render partial: 'user_form', locals: { user: @user } %>
+<%= render partial: "user_form", locals: { user: @user } %>

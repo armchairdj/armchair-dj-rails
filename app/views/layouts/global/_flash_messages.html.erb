@@ -1,18 +1,18 @@
 <% return if flash.empty? %>
 
-<%= content_tag(:aside, class: 'flash-messages', data: {
-  behavior: 'Closeable'
+<%= content_tag(:aside, class: "flash-messages", data: {
+  behavior: "Closeable"
 }) do %>
   <% flash.each do |type, message| %>
-    <%= content_tag(:div, class: "flash flash-#{type}", 'data-controller': 'dismissable') do %>
-      <%= content_tag(:div, class: 'constrain-wide') do %>
-        <%= content_tag(:div, class: 'flash-inner') do %>
-          <%= link_to('javascript:window.location.reload();',
-            class:         'closeable',
-            title:         'dismiss this message',
-            'data-action': 'dismissable#dismiss'
+    <%= content_tag(:div, class: "flash flash-#{type}", "data-controller": "dismissable") do %>
+      <%= content_tag(:div, class: "constrain-wide") do %>
+        <%= content_tag(:div, class: "flash-inner") do %>
+          <%= link_to("javascript:window.location.reload();",
+            class:         "closeable",
+            title:         "dismiss this message",
+            "data-action": "dismissable#dismiss"
           ) do %>
-            <%= semantic_svg_image('open_iconic/x.svg', title: 'x', desc: 'dismiss icon') %>
+            <%= semantic_svg_image("open_iconic/x.svg", title: "x", desc: "dismiss icon") %>
           <% end %>
 
           <%= content_tag(:p, message) %>

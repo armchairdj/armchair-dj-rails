@@ -1,1 +1,1 @@
-json.array! @creators, partial: 'creators/creator', as: :creator
+json.array! @creators, partial: "creators/creator", as: :creator

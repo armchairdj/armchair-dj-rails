@@ -1,9 +1,9 @@
-<%= content_tag(:ul, class: 'tabs') do %>
+<%= content_tag(:ul, class: "tabs") do %>
   <% if selected_tab == :register %>
-    <%= content_tag(:li, content_tag(:span, 'Register', class: 'tab-active')) %>
-    <%= content_tag(:li, link_to('Log In', new_user_session_path)) %>
+    <%= content_tag(:li, content_tag(:span, "Register", class: "tab-active")) %>
+    <%= content_tag(:li, link_to("Log In", new_user_session_path)) %>
   <% else %>
-    <%= content_tag(:li, link_to('Register', new_user_registration_path)) %>
-    <%= content_tag(:li, content_tag(:span, 'Log In', class: 'tab-active')) %>
+    <%= content_tag(:li, link_to("Register", new_user_registration_path)) %>
+    <%= content_tag(:li, content_tag(:span, "Log In", class: "tab-active")) %>
   <% end %>
 <% end %>

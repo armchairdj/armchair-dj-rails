@@ -1,25 +1,25 @@
 <%
-  @title = 'Creators'
+  @title = "Creators"
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:   :index,
   headline: @title
 } %>
 
-<%= content_tag(:div, class: 'tabgroup') do %>
-  <%= render partial: 'admin/shared/index_tabs', locals: { model: Creator } %>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Creator } %>
 
-  <%= content_tag(:div, class: 'tab') do %>
+  <%= content_tag(:div, class: "tab") do %>
     <% if @creators.empty? %>
-      <%= content_tag(:p, I18n.t('admin.content.no_records')) %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
     <% else %>
-      <%= content_tag(:table, class: 'admin admin-index') do %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag :th, 'Name' %>
-            <%= content_tag :th, 'Public?' %>
-            <%= content_tag :th, 'Actions', class: 'actions' %>
+            <%= content_tag :th, "Name" %>
+            <%= content_tag :th, "Public?" %>
+            <%= content_tag :th, "Actions", class: "actions" %>
           <% end %>
         <% end %>
 
@@ -28,7 +28,7 @@
             <%= content_tag(:tr) do %>
               <%= content_tag :td, creator.name %>
               <%= content_tag :td, creator.viewable? %>
-              <%= content_tag :td, class: 'actions' do %>
+              <%= content_tag :td, class: "actions" do %>
                 <%= admin_public_creator_link(creator) %>
                 <%= admin_view_link(creator) %>
                 <%= admin_update_link(creator) %>

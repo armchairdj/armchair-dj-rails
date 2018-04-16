@@ -1,7 +1,7 @@
-<%= content_tag(:header, class: 'admin') do %>
+<%= content_tag(:header, class: "admin") do %>
   <%= content_tag(:h1, headline) %>
 
-  <%= content_tag(:div, class: 'actions') do %>
+  <%= content_tag(:div, class: "actions") do %>
     <% if action == :index %>
       <%= admin_create_link(@model_class) %>
     <% elsif action == :new %>

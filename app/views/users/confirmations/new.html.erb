@@ -1,16 +1,16 @@
 <%
-  @headline = @title = 'Resend Confirmation Instructions'
+  @headline = @title = "Resend Confirmation Instructions"
 %>
 
 <%= simple_form_for(@user, url: user_confirmation_path, html: { method: :post }) do |f| %>
   <%= f.error_notification %>
   <%= f.full_error :confirmation_token %>
 
-  <%= content_tag(:div, class: 'form-inputs') do %>
+  <%= content_tag(:div, class: "form-inputs") do %>
     <%= f.input :email, required: true %>
   <% end %>
 
-  <%= content_tag(:div, class: 'button-group') do %>
-    <%= f.button :submit, 'Resend confirmation instructions' %>
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :submit, "Resend confirmation instructions" %>
   <% end %>
 <% end %>

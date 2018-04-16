@@ -1,204 +1,204 @@
   <%
-    @headline = 'Buttons'
-    @title    = ['Style Guide', @headline]
+    @headline = "Buttons"
+    @title    = ["Style Guide", @headline]
 
-    @page_container_class = 'style-guide'
+    @page_container_class = "style-guide"
   %>
 
 <%= simple_form_for(:user, method: :get) do |f| %>
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Primary Buttons') %>
+      <%= content_tag(:h3, "Primary Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :submit, 'Submit Input' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :submit, "Submit Input" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Submit Button', type: :submit %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Submit Button", type: :submit %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Plain Button', type: :button %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Plain Button", type: :button %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= link_to('Button Link', posts_path, class: 'button') %>
-    <% end %>
-  <% end %>
-
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Secondary Buttons') %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :submit, 'Submit Input', class: 'secondary' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Submit Button', type: :submit, class: 'secondary' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Plain Button', type: :button, class: 'secondary' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= link_to('Button Link', posts_path, class: 'button secondary') %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= link_to("Button Link", posts_path, class: "button") %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Tertiary Buttons') %>
+      <%= content_tag(:h3, "Secondary Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :submit, 'Submit Input', class: 'tertiary' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :submit, "Submit Input", class: "secondary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Submit Button', type: :submit, class: 'tertiary' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Submit Button", type: :submit, class: "secondary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Plain Button', type: :button, class: 'tertiary' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Plain Button", type: :button, class: "secondary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= link_to('Button Link', posts_path, class: 'button tertiary') %>
-    <% end %>
-  <% end %>
-
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Danger Buttons') %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :submit, 'Submit Input', class: 'danger' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Submit Button', type: :submit, class: 'danger' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Plain Button', type: :button, class: 'danger' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= link_to('Button Link', posts_path, class: 'button danger') %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= link_to("Button Link", posts_path, class: "button secondary") %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Disabled Buttons') %>
+      <%= content_tag(:h3, "Tertiary Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :submit, 'Submit Input', disabled: true %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :submit, "Submit Input", class: "tertiary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Submit Button', type: :submit, disabled: true %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Submit Button", type: :submit, class: "tertiary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Plain Button', type: :button, disabled: true %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Plain Button", type: :button, class: "tertiary" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= link_to('Button Link', posts_path, class: 'button disabled') %>
-    <% end %>
-  <% end %>
-
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Two Buttons') %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Secondary', type: :submit, class: 'secondary' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Danger', type: :submit, class: 'danger' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Tertiary', type: :submit, class: 'tertiary' %>
-    <% end %>
-
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Disabled', type: :submit, disabled: true %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= link_to("Button Link", posts_path, class: "button tertiary") %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Three Buttons') %>
+      <%= content_tag(:h3, "Danger Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Secondary', type: :submit, class: 'secondary' %>
-      <%= f.button :button, 'Tertiary', type: :submit, class: 'tertiary' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :submit, "Submit Input", class: "danger" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Tertiary', type: :submit, class: 'tertiary' %>
-      <%= f.button :button, 'Danger', type: :submit, class: 'danger' %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Submit Button", type: :submit, class: "danger" %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Secondary', type: :submit, class: 'secondary' %>
-      <%= f.button :button, 'Disabled', type: :submit, disabled: true %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Plain Button", type: :button, class: "danger" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= link_to("Button Link", posts_path, class: "button danger") %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Button With Link') %>
+      <%= content_tag(:h3, "Disabled Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= link_to 'Alternate', posts_path %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :submit, "Submit Input", disabled: true %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Submit Button", type: :submit, disabled: true %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Plain Button", type: :button, disabled: true %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= link_to("Button Link", posts_path, class: "button disabled") %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Two Buttons With Link') %>
+      <%= content_tag(:h3, "Two Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Secondary', type: :submit, class: 'secondary' %>
-      <%= link_to 'Alternate', posts_path %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Danger", type: :submit, class: "danger" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Disabled", type: :submit, disabled: true %>
     <% end %>
   <% end %>
 
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h3, 'Three Buttons With Link') %>
+      <%= content_tag(:h3, "Three Buttons") %>
     <% end %>
 
-    <%= content_tag(:div, class: 'button-group') do %>
-      <%= f.button :button, 'Primary', type: :submit %>
-      <%= f.button :button, 'Secondary', type: :submit, class: 'secondary' %>
-      <%= f.button :button, 'Tertiary', type: :submit, class: 'tertiary' %>
-      <%= link_to 'Alternate', posts_path %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
+      <%= f.button :button, "Danger", type: :submit, class: "danger" %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= f.button :button, "Disabled", type: :submit, disabled: true %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h3, "Button With Link") %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= link_to "Alternate", posts_path %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h3, "Two Buttons With Link") %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= link_to "Alternate", posts_path %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h3, "Three Buttons With Link") %>
+    <% end %>
+
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Primary", type: :submit %>
+      <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
+      <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
+      <%= link_to "Alternate", posts_path %>
     <% end %>
   <% end %>
 <% end %>

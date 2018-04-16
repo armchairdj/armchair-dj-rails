@@ -1,7 +1,7 @@
-<li class='page-next'>
+<li class="page-next">
   <% if current_page.last? %>
-    <%= content_tag :span, t('views.pagination.next').html_safe %>
+    <%= content_tag :span, t("views.pagination.next").html_safe %>
   <% else %>
-    <%= link_to t('views.pagination.next').html_safe, url, :rel => 'next', :remote => remote %>
+    <%= link_to t("views.pagination.next").html_safe, url, :rel => "next", :remote => remote %>
   <% end %>
 </li>

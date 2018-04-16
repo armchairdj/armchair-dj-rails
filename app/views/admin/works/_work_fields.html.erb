@@ -1,11 +1,11 @@
 <%= f.input :medium, as: :select,
   collection: Work.human_media,
-  input_html: { 'data-controller': 'selectize' }
+  input_html: { "data-controller": "selectize" }
 %>
 
 <%= f.input :title %>
 
-<%= render partial: 'admin/works/work_fields_contributions', locals: {
+<%= render partial: "admin/works/work_fields_contributions", locals: {
   f:        f,
   creators: creators,
   roles:    roles

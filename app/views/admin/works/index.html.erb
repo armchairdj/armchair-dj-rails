@@ -1,26 +1,26 @@
 <%
-  @title = 'Works'
+  @title = "Works"
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:   :index,
   headline: @title
 } %>
 
-<%= content_tag(:div, class: 'tabgroup') do %>
-  <%= render partial: 'admin/shared/index_tabs', locals: { model: Work } %>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Work } %>
 
-  <%= content_tag(:div, class: 'tab') do %>
+  <%= content_tag(:div, class: "tab") do %>
     <% if @works.empty? %>
-      <%= content_tag(:p, I18n.t('admin.content.no_records')) %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
     <% else %>
-      <%= content_tag(:table, class: 'admin admin-index') do %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, 'Medium') if @scope == :all %>
-            <%= content_tag :th, 'Title' %>
-            <%= content_tag :th, 'Creators' %>
-            <%= content_tag :th, 'Actions', class: 'actions' %>
+            <%= content_tag(:th, "Medium") if @scope == :all %>
+            <%= content_tag :th, "Title" %>
+            <%= content_tag :th, "Creators" %>
+            <%= content_tag :th, "Actions", class: "actions" %>
           <% end %>
         <% end %>
 
@@ -29,8 +29,8 @@
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, work.human_medium) if @scope == :all %>
               <%= content_tag :td, work.title %>
-              <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(' & ').html_safe%>
-              <%= content_tag :td, class: 'actions' do %>
+              <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(" & ").html_safe%>
+              <%= content_tag :td, class: "actions" do %>
                 <%= admin_public_work_link(work) %>
                 <%= admin_view_link(work) %>
                 <%= admin_update_link(work) %>

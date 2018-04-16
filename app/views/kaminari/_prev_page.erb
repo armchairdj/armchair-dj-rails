@@ -1,7 +1,7 @@
-<li class='page-prev'>
+<li class="page-prev">
   <% if current_page.first? %>
-    <%= content_tag :span, t('views.pagination.previous').html_safe %>
+    <%= content_tag :span, t("views.pagination.previous").html_safe %>
   <% else %>
-    <%= link_to t('views.pagination.previous').html_safe, url, :rel => 'prev', :remote => remote %>
+    <%= link_to t("views.pagination.previous").html_safe, url, :rel => "prev", :remote => remote %>
   <% end %>
 </li>

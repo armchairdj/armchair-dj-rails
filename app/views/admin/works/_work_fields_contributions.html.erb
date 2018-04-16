@@ -1,12 +1,12 @@
 <%= content_tag(:fieldset,
-  class:  join_class_names('legendary', 'fields_for', ('fieldset-with-errors' if f.object.errors[:contributions].any?)),
-  'data-controller': 'expandable-has-many'
+  class:  join_class_names("legendary", "fields_for", ("fieldset-with-errors" if f.object.errors[:contributions].any?)),
+  "data-controller": "expandable-has-many"
 ) do %>
   <%= content_tag(:legend) do %>
     Contributors <%= required_indicator %>
   <% end %>
 
-  <%= content_tag(:div, class: 'hint') do %>
+  <%= content_tag(:div, class: "hint") do %>
     <% if f.object.errors[:contributions].any? %>
       <%= f.error :contributions %>
     <% else %>
@@ -16,8 +16,8 @@
 
   <% f.object.contributions.each do |contribution| %>
     <%= f.simple_fields_for :contributions, contribution do |ff| %>
-      <%= content_tag(:fieldset, class: 'contribution') do %>
-        <%= content_tag(:div, class: 'stacked') do %>
+      <%= content_tag(:fieldset, class: "contribution") do %>
+        <%= content_tag(:div, class: "stacked") do %>
           <%= ff.input :creator_id,
             as:            :select,
             collection:    creators,
@@ -25,10 +25,10 @@
             include_blank: true,
             error:         false,
             input_html:    {
-              'data-controller':              'selectize-create',
-              'data-selectize-create-action': admin_creators_path,
-              'data-selectize-create-method': 'POST',
-              'data-selectize-create-param':  'creator[name]'
+              "data-controller":              "selectize-create",
+              "data-selectize-create-action": admin_creators_path,
+              "data-selectize-create-method": "POST",
+              "data-selectize-create-param":  "creator[name]"
             }
           %>
 
@@ -38,14 +38,14 @@
             required:      false,
             include_blank: false,
             error:         false,
-            input_html:    { 'data-controller': 'selectize' }
+            input_html:    { "data-controller": "selectize" }
           %>
         <% end %>
 
         <%= ff.error :creator_id %>
         <%= ff.error :role %>
 
-        <%= render(partial: 'shared/custom_checkbox', locals: {
+        <%= render(partial: "shared/custom_checkbox", locals: {
           f:    ff,
           name: :_destroy
         }) unless ff.object.new_record? %>

@@ -2,11 +2,11 @@
   @title = ["Update User", @user.display_name]
 %>
 
-<%= render partial: 'admin/shared/admin_header', locals: {
+<%= render partial: "admin/shared/admin_header", locals: {
   action:      :edit,
   headline:    @title.first,
   instance:    @user,
   public_link: nil
 } %>
 
-<%= render partial: 'user_form', locals: { user: @user } %>
+<%= render partial: "user_form", locals: { user: @user } %>

@@ -1,13 +1,13 @@
-<% tab_name = 'post-standalone' %>
+<% tab_name = "post-standalone" %>
 
 <% content_for(:tab_triggers) do %>
   <%= content_tag(:li) do %>
-    <%= link_to('Standalone', "##{tab_name}", 'data-target': 'tabgroup.trigger', 'data-action': 'click->tabgroup#activate', 'data-tab-name': tab_name) %>
+    <%= link_to("Standalone", "##{tab_name}", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": tab_name) %>
   <% end %>
 <% end %>
 
 <% content_for(:tabs) do %>
-  <%= content_tag(:div, class: 'tab', 'data-target': 'tabgroup.tab', 'data-tab-name': tab_name, id: tab_name) do %>
+  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": tab_name, id: tab_name) do %>
     <%= content_tag(:fieldset) do %>
       <%= f.input :title, required: false %>
     <% end %>
