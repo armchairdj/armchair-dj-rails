@@ -57,19 +57,19 @@
     <% end %>
 
     <dt>From:</dt>
-    <dd><%= @email.header['from'] %></dd>
+    <dd><%= @email.header["from"] %></dd>
 
     <% if @email.reply_to %>
       <dt>Reply-To:</dt>
-      <dd><%= @email.header['reply-to'] %></dd>
+      <dd><%= @email.header["reply-to"] %></dd>
     <% end %>
 
     <dt>To:</dt>
-    <dd><%= @email.header['to'] %></dd>
+    <dd><%= @email.header["to"] %></dd>
 
     <% if @email.cc %>
       <dt>CC:</dt>
-      <dd><%= @email.header['cc'] %></dd>
+      <dd><%= @email.header["cc"] %></dd>
     <% end %>
 
     <dt>Date:</dt>
@@ -91,8 +91,8 @@
     <% if @email.multipart? %>
       <dd>
         <select onchange="formatChanged(this);">
-          <option <%= request.format == Mime[:html] ? 'selected' : '' %> value="?part=text%2Fhtml">View as HTML email</option>
-          <option <%= request.format == Mime[:text] ? 'selected' : '' %> value="?part=text%2Fplain">View as plain-text email</option>
+          <option <%= request.format == Mime[:html] ? "selected" : "" %> value="?part=text%2Fhtml">View as HTML email</option>
+          <option <%= request.format == Mime[:text] ? "selected" : "" %> value="?part=text%2Fplain">View as plain-text email</option>
         </select>
       </dd>
     <% end %>
@@ -111,12 +111,12 @@
 <script>
   function formatChanged(form) {
     var part_name = form.options[form.selectedIndex].value
-    var iframe =document.getElementsByName('messageBody')[0];
+    var iframe =document.getElementsByName("messageBody")[0];
     iframe.contentWindow.location.replace(part_name);
     if (history.replaceState) {
-      var url    = location.pathname.replace(/\.(txt|html)$/, '');
-      var format = /html/.test(part_name) ? '.html' : '.txt';
-      window.history.replaceState({}, '', url + format);
+      var url    = location.pathname.replace(/\.(txt|html)$/, "");
+      var format = /html/.test(part_name) ? ".html" : ".txt";
+      window.history.replaceState({}, "", url + format);
     }
   }
 </script>
