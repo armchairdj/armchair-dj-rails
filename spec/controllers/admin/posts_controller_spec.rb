@@ -588,6 +588,8 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
         end
       end
+
+      pending "unpublish"
     end
 
     describe "DELETE #destroy" do

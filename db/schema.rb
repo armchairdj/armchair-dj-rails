@@ -6,11 +6,11 @@
 # database schema. If you need to create the application database on another
 # system, you should be using db:schema:load, not running all the migrations
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you"ll amass, the slower it"ll run and the greater likelihood for issues).
+# you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414203931) do
+ActiveRecord::Schema.define(version: 20180416233346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20180414203931) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.integer "status", default: 0, null: false
+    t.boolean "dirty_slug", default: false, null: false
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
   end

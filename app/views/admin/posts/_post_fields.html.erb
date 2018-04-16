@@ -28,4 +28,8 @@
 
 <%= f.input :body, input_html: { class: "large" } %>
 
-<%= f.input(:slug) if f.object.persisted? %>
+<% if f.object.may_publish? %>
+  <%= f.input(:slug) %>
+<% elsif f.object.may_unpublish? %>
+  <%= f.input(:slug, readonly: true) %>
+<% end %>

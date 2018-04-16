@@ -14,7 +14,9 @@ FactoryBot.define do
 
     trait :published do
       after(:create) do |post, evaluator|
-        post.publish!
+        raise AASM::InvalidTransition unless post.publish!
+
+        post.reload
       end
     end
 

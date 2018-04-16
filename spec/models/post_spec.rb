@@ -93,14 +93,25 @@ RSpec.describe Post, type: :model do
   end
 
   context "hooks" do
-    context "before_create" do
-      subject { build(:minimal_post) }
+    context "before_save" do
+      context "calls #set_slug" do
+        specify "on new" do
+          instance = build(:minimal_post)
 
-      it "calls #set_slug" do
-         allow(subject).to receive(:set_slug).and_call_original
-        expect(subject).to receive(:set_slug)
+           allow(instance).to receive(:set_slug).and_call_original
+          expect(instance).to receive(:set_slug)
 
-        subject.save
+          instance.save
+        end
+
+        specify "on saved" do
+          instance = create(:minimal_post)
+
+           allow(instance).to receive(:set_slug).and_call_original
+          expect(instance).to receive(:set_slug)
+
+          instance.save
+        end
       end
     end
   end
@@ -318,30 +329,88 @@ RSpec.describe Post, type: :model do
     describe "private" do
       context "callbacks" do
         describe "#set_slug and #sluggable_parts" do
-          let(    :review) { create(:hounds_of_love_album_review) }
-          let(    :collab) { create(:unity_album_review) }
-          let(:standalone) { create(:tiny_standalone_post) }
-
           before(:each) do
-            allow_any_instance_of(described_class).to receive(:slugify)
+            allow_any_instance_of(described_class).to receive(:slugify).and_call_original
           end
 
-          specify "for review" do
-            expect(review).to receive(:slugify).with(:slug, ["Album", "Kate Bush", "Hounds of Love"])
+          context "new" do
+            let(    :review) { build(:hounds_of_love_album_review) }
+            let(    :collab) { build(:unity_album_review         ) }
+            let(:standalone) { build(:tiny_standalone_post       ) }
 
-            review.send(:set_slug)
+            pending "for review"
+            pending "for review of collaborative work"
+            pending "for standalone"
           end
 
-          specify "for review of collaborative work" do
-            expect(collab).to receive(:slugify).with(:slug, ["Album", "Carl Craig and Green Velvet", "Unity"])
+          context "saved" do
+            context "draft" do
+              let(    :review) { create(:hounds_of_love_album_review, :draft) }
+              let(    :collab) { create(:unity_album_review,          :draft) }
+              let(:standalone) { create(:tiny_standalone_post,        :draft) }
 
-            collab.send(:set_slug)
-          end
+              context "clean" do
+                specify "for review" do
+                  expect(review).to receive(:slugify).with(:slug, ["Album", "Kate Bush", "Hounds of Love"])
 
-          specify "for standalone" do
-            expect(standalone).to receive(:slugify).with(:slug, ["Hello"])
+                  review.send(:set_slug)
 
-            standalone.send(:set_slug)
+                  expect(review.dirty_slug?).to eq(false)
+                end
+
+                specify "for review of collaborative work" do
+                  expect(collab).to receive(:slugify).with(:slug, ["Album", "Carl Craig and Green Velvet", "Unity"])
+
+                  collab.send(:set_slug)
+
+                  expect(review.dirty_slug?).to eq(false)
+                end
+
+                specify "for standalone" do
+                  expect(standalone).to receive(:slugify).with(:slug, ["Hello"])
+
+                  standalone.send(:set_slug)
+
+                  expect(review.dirty_slug?).to eq(false)
+                end
+              end
+
+              context "dirty" do
+                context "newly dirty" do
+                  pending "sets dirty flag"
+                end
+
+                context "already dirty" do
+                  pending "does nothing if no change"
+                  pending "does nothing if changed to new dirty"
+                  pending "sets dirty to false and regenerates if nil"
+                end
+              end
+            end
+
+            context "published" do
+              let(    :review) { create(:hounds_of_love_album_review, :published) }
+              let(    :collab) { create(:unity_album_review,          :published) }
+              let(:standalone) { create(:tiny_standalone_post,        :published) }
+
+              specify "for review" do
+                expect(review).to_not receive(:slugify)
+
+                review.send(:set_slug)
+              end
+
+              specify "for review of collaborative work" do
+                expect(collab).to_not receive(:slugify)
+
+                collab.send(:set_slug)
+              end
+
+              specify "for standalone" do
+                expect(standalone).to_not receive(:slugify)
+
+                standalone.send(:set_slug)
+              end
+            end
           end
         end
       end

@@ -14,13 +14,13 @@ RSpec.shared_examples "a sluggable model" do |attribute|
       pending "leaves non-ASCII word characters"
     end
 
-    describe "self#generate_slug" do
+    describe "self#generate_slug_from_parts" do
       describe "one part" do
-        pending "generates part"
+        pending "generates"
       end
 
       describe "multiple parts" do
-        pending "generates parts and separates with slash"
+        pending "generates with separator"
       end
     end
   end
@@ -30,23 +30,31 @@ RSpec.shared_examples "a sluggable model" do |attribute|
   end
 
   describe "instance" do
+    describe "generate_slug" do
+      pending "returns unique slug for attribute with one part"
+      pending "returns unique slug for attribute with multiple parts"
+      pending "returns nil if no parts"
+    end
+
     describe "#slugify" do
-      pending "sets unique slug for attribute with one part"
-      pending "sets unique slug for attribute with multiple parts"
+      pending "sets attribute to unique slug with one part"
+      pending "sets attribute to unique slug with multiple parts"
       pending "does nothing if no parts"
     end
 
-    describe "#generate_unique_slug" do
-      pending "adds index for non-unique slug"
-    end
+    context "private" do
+      describe "#generate_unique_slug" do
+        pending "adds index for non-unique slug"
+      end
 
-    describe "#find_duplicate_slug" do
-      pending "finds max similar slug in database"
-    end
+      describe "#find_duplicate_slug" do
+        pending "finds max similar slug in database"
+      end
 
-    describe "#next_slug_index" do
-      pending "increments no index to 1"
-      pending "increments existing index by 1"
+      describe "#next_slug_index" do
+        pending "increments no index to 1"
+        pending "increments existing index by 1"
+      end
     end
   end
 end

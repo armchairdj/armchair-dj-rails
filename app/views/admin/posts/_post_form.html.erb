@@ -16,13 +16,13 @@
     <%= f.button :submit, "Save" %>
 
     <% if post.may_publish? %>
-      <%= f.button :submit, "Publish",
+      <%= f.button :submit, "Save & Publish",
         name:           "step",
         value:          "publish",
         class:          "danger",
         "data-confirm": "Are you sure?" %>
     <% elsif post.may_unpublish? %>
-      <%= f.button :submit, "Unpublish",
+      <%= f.button :submit, "Save & Unpublish",
         name:           "step",
         value:          "unpublish",
         class:          "danger",
