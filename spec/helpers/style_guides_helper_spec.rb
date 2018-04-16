@@ -1,5 +1,5 @@
-require 'ffaker'
-require 'rails_helper'
+require "ffaker"
+require "rails_helper"
 
 RSpec.describe StyleGuidesHelper, type: :helper do
   describe "#lorem_html_paragraphs" do

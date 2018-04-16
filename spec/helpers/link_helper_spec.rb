@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe LinkHelper, type: :helper do
   # Nothing so far.

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe WorksHelper, type: :helper do
   let(:unsaved) {  build(:minimal_work) }

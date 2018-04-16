@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe StyleGuidesController, type: :controller do
   context 'as admin' do

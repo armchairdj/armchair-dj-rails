@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe FormHelper, type: :helper do
   describe "#required_indicator" do

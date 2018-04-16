@@ -1,4 +1,4 @@
-require 'ffaker'
+require "ffaker"
 
 10.times do
   FactoryBot.create(                     :song_review, :published, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))

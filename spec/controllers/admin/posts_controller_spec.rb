@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Admin::PostsController, type: :controller do
   let(:per_page) { Kaminari.config.default_per_page }

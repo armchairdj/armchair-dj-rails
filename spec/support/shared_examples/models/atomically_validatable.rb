@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.shared_examples 'an atomically validatable model' do
   let(:instance) { create_minimal_instance }

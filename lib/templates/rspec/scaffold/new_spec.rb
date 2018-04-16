@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 <% output_attributes = attributes.reject{|attribute| [:datetime, :timestamp, :time, :date].index(attribute.type) } -%>
 RSpec.describe '<%= ns_table_name %>/new', <%= type_metatag(:view) %> do

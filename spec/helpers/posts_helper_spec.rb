@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PostsHelper, type: :helper do
   describe '#formatted_post_body' do

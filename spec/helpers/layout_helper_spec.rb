@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe LayoutHelper, type: :helper do
   describe "#body_classes" do

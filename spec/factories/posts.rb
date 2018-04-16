@@ -1,4 +1,4 @@
-require 'ffaker'
+require "ffaker"
 
 FactoryBot.define do
   factory :post do

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe MarkupHelper, type: :helper do
   describe "#content_for_unless_empty" do

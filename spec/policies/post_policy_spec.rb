@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PostPolicy do
   it_behaves_like "a public policy" do

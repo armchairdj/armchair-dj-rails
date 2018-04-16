@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -10,134 +10,134 @@ end
 # CORE.
 ###############################################################################
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.1.5'
+# Bundle edge Rails instead: gem "rails", github: "rails/rails"
+gem "rails", "5.1.5"
 
 # Use Postgres as the database for Active Record
-gem 'pg'
+gem "pg"
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+# gem "therubyracer", platforms: :ruby
 
 ###############################################################################
 # SERVER.
 ###############################################################################
 
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem "puma", "~> 3.7"
 
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+# gem "redis", "~> 3.0"
 
 ###############################################################################
 # CSS.
 ###############################################################################
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem "sass-rails", "~> 5.0"
 
 # Bourbon CSS toolbox + its offspring.
-gem 'bourbon'
-gem 'bitters'
-gem 'neat'
+gem "bourbon"
+gem "bitters"
+gem "neat"
 
 ###############################################################################
 # JAVASCRIPT.
 ###############################################################################
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem "uglifier", ">= 1.3.0"
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+gem "turbolinks", "~> 5"
 
 # JavaScript bundler.
-gem 'webpacker', '~> 3.4'
+gem "webpacker", "~> 3.4"
 
 # JavaScript libraries.
-gem 'jquery-rails'
+gem "jquery-rails"
 
 ###############################################################################
 # IMAGES.
 ###############################################################################
 
 # SVG inliner.
-gem 'inline_svg'
+gem "inline_svg"
 
 ###############################################################################
 # VIEWS.
 ###############################################################################
 
 # Form renderer.
-gem 'simple_form'
+gem "simple_form"
 
 # Markdown parser.
-gem 'redcarpet'
+gem "redcarpet"
 
 ###############################################################################
 # API.
 ###############################################################################
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
+gem "jbuilder", "~> 2.5"
 
 ###############################################################################
 # EMAIL.
 ###############################################################################
 
 # Email generator. Inlines CSS and automatically generates text versions from HTML.
-gem 'premailer-rails'
+gem "premailer-rails"
 
 # HTML parser for premailer-rails.
-gem 'nokogiri'
+gem "nokogiri"
 
 ###############################################################################
 # ACTIVE RECORD EXTENSIONS.
 ###############################################################################
 
 # Pagination.
-gem 'kaminari'
+gem "kaminari"
 
-# Don't allow empty strings into the database.
-gem 'nilify_blanks'
+# Don"t allow empty strings into the database.
+gem "nilify_blanks"
 
 # Ordinal ranking.
-gem 'acts_as_list'
+gem "acts_as_list"
 
 # Active Record tree structures.
-gem 'ancestry'
+gem "ancestry"
 
 # Soft deletes for Active Record.
-gem 'discard'
+gem "discard"
 
 # Acts As State Machine.
-gem 'aasm'
+gem "aasm"
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+# gem "bcrypt", "~> 3.1.7"
 
 ###############################################################################
 # UTILITIES.
 ###############################################################################
 
 # Configuration factory.
-gem 'simpleconfig'
+gem "simpleconfig"
 
 # HTTP client library.
-gem 'faraday'
+gem "faraday"
 
 # Test data.
-gem 'ffaker'
+gem "ffaker"
 
 ###############################################################################
 # AUTHENTICATION & AUTHORIZATION.
 ###############################################################################
 
 # Authentication framework.
-gem 'devise'
+gem "devise"
 
 # Authorization framework.
-# gem 'pundit', path: "/Users/armchairdj/Sites/personal/pundit"
+# gem "pundit", path: "/Users/armchairdj/Sites/personal/pundit"
 gem "pundit", git: "https://github.com/armchairdj/pundit",
   ref: "a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d"
 
@@ -146,7 +146,7 @@ gem "pundit", git: "https://github.com/armchairdj/pundit",
 ###############################################################################
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# gem "capistrano-rails", group: :development
 
 ###############################################################################
 # DEV & TEST.
@@ -154,62 +154,62 @@ gem "pundit", git: "https://github.com/armchairdj/pundit",
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  gem "web-console", ">= 3.3.0"
 
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem "listen", ">= 3.0.5", "< 3.2"
 
   # Application backgrounder.
-  gem 'spring'
+  gem "spring"
 
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem "spring-watcher-listen", "~> 2.0.0"
 
   # Procfile-based application runner.
-  gem 'foreman'
+  gem "foreman"
 end
 
 group :development, :test do
   # Pretty printer.
-  gem 'awesome_print'
+  gem "awesome_print"
 
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # Call "byebug" anywhere in the code to stop execution and get a debugger console
+  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
 
   # Environment variable loader.
-  gem 'dotenv-rails'
+  gem "dotenv-rails"
 
   # Restore behavior of Rails <5 controller tests (assigns and assert_template).
-  gem 'rails-controller-testing'
+  gem "rails-controller-testing"
 
   # RSpec + plugins
-  gem 'rspec-rails'
-  gem 'rspec-html-matchers'
-  gem 'shoulda-matchers'
-  # gem 'shoulda-callback-matchers' # Causes pundit-matchers to blow up
-  gem 'pundit-matchers'
-  gem 'accept_values_for'
+  gem "rspec-rails"
+  gem "rspec-html-matchers"
+  gem "shoulda-matchers"
+  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
+  gem "pundit-matchers"
+  gem "accept_values_for"
 
   # Fixture generator.
-  gem 'factory_bot_rails'
+  gem "factory_bot_rails"
 
   # Adds support for Capybara system testing and selenium driver
-  # gem 'capybara', '~> 2.13'
+  # gem "capybara", "~> 2.13"
 
-  # gem 'selenium-webdriver'
+  # gem "selenium-webdriver"
 end
 
 group :test do
   # Test database maintainer.
-  gem 'database_cleaner'
+  gem "database_cleaner"
 
   # Manipulate env variables.
-  gem 'climate_control'
+  gem "climate_control"
 
   # Manipulate time.
-  gem 'timecop'
+  gem "timecop"
 
   # Test coverage measurement tool.
-  gem 'simplecov', require: false, group: :test
+  gem "simplecov", require: false, group: :test
 
   # Cache http responses from third parties in specs.
-  gem 'vcr'
+  gem "vcr"
 end

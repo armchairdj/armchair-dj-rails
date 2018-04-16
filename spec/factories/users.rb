@@ -1,4 +1,4 @@
-require 'ffaker'
+require "ffaker"
 
 FactoryBot.define do
   sequence :user_email { |n| "user#{n}@example.com" }

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.shared_examples 'a sluggable model' do |attribute|
   let(:instance) { build_minimal_instance }
