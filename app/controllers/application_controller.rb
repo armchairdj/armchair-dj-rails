@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   include Pundit
   include Errorable
 
+  prepend_before_action :model_class
+
   protect_from_forgery with: :exception
 
   layout :determine_layout
@@ -12,6 +14,8 @@ protected
 
   def model_class
     @model_class ||= controller_name.classify.constantize
+  rescue NameError => e
+    @model_class = nil
   end
 
 private

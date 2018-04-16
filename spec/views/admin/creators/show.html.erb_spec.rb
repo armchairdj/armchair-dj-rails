@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'admin/creators/show', type: :view do
   before(:each) do
-    @creator = assign(:creator, create(:minimal_creator))
+    @model_class = assign(:model_name, Creator)
+    @creator     = assign(:creator, create(:minimal_creator))
   end
 
   it "renders" do

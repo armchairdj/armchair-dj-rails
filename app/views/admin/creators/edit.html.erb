@@ -1,9 +1,13 @@
 <%
-  @title = [
-    "Edit Creator",
-    @creator.name
-  ]
+  @title = ["Update Creator", @creator.name]
 %>
+
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @creator,
+  public_link: admin_public_creator_link(@creator)
+} %>
 
 <%= content_tag(:header, class: 'admin') do %>
   <%= content_tag(:h1, @title.first) %>

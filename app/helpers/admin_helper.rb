@@ -23,60 +23,68 @@ module AdminHelper
   #############################################################################
 
   def admin_create_link(model)
-    svg   = semantic_svg_image("open_iconic/plus.svg", title: "plus sign", desc: "create icon")
+    title = "create #{model.model_name.singular}"
+    svg   = semantic_svg_image("open_iconic/plus.svg", title: title, desc: "create icon")
     path  = new_polymorphic_path([:admin, model])
-    title = "new #{model.model_name.singular}"
 
     link_to(svg, path, title: title, class: "admin create")
   end
 
   def admin_destroy_link(instance)
-    svg   = semantic_svg_image("open_iconic/x.svg", title: "x", desc: "destroy icon")
-    path  = polymorphic_path([:admin, instance])
     title = "destroy #{instance.model_name.singular}"
+    svg   = semantic_svg_image("open_iconic/x.svg", title: title, desc: "destroy icon")
+    path  = polymorphic_path([:admin, instance])
 
     link_to(svg, path, title: title, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")
+  end
+
+  def admin_index_link(model)
+    title = "back to #{model.model_name.plural} list"
+    svg   = semantic_svg_image("open_iconic/list.svg", title: title, desc: "list icon")
+    path  = polymorphic_path([:admin, model])
+
+    link_to(svg, path, title: title, class: "admin create")
   end
 
   def admin_public_creator_link(creator)
     return unless creator.viewable?
 
-    admin_public_view_link(creator)
+    admin_public_link_link(creator)
   end
 
   def admin_public_post_link(post)
     return unless post.published?
 
-    admin_public_view_link(post, post_permalink_path(slug: post.slug))
+    admin_public_link_link(post, post_permalink_path(slug: post.slug))
   end
 
   def admin_public_work_link(work)
     return unless work.viewable?
 
-    admin_public_view_link(work)
+    admin_public_link_link(work)
   end
 
-  def admin_public_view_link(instance, path = nil)
+  def admin_public_link_link(instance, path = nil)
     path ||= polymorphic_path(instance)
 
-    svg   = semantic_svg_image("open_iconic/link-intact.svg", title: "link", desc: "public view icon")
     title = "view #{instance.model_name.singular} on site"
+    svg   = semantic_svg_image("open_iconic/link-intact.svg", title: title, desc: "public view icon")
 
     link_to(svg, path, title: title, class: "admin public-view", target: "_blank")
   end
 
   def admin_update_link(instance)
-    svg   = semantic_svg_image("open_iconic/pencil.svg", title: "pencil", desc: "update icon")
+    title = "update #{instance.model_name.singular}"
+    svg   = semantic_svg_image("open_iconic/pencil.svg", title: title, desc: "update icon")
     path  = edit_polymorphic_path([:admin, instance])
-    title = "edit #{instance.model_name.singular}"
 
     link_to(svg, path, title: title, class: "admin edit")
   end
 
   def admin_view_link(instance)
-    svg   = semantic_svg_image("open_iconic/eye.svg", title: "eyeball", desc: "view icon")
-    path  = polymorphic_path([:admin, instance])
     title = "view #{instance.model_name.singular}"
+    svg   = semantic_svg_image("open_iconic/eye.svg", title: title, desc: "view icon")
+    path  = polymorphic_path([:admin, instance])
 
     link_to(svg, path, title: title, class: "admin view")
   end

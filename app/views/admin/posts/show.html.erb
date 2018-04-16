@@ -2,15 +2,12 @@
   @title = ["View Post", @post.one_line_title]
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title.first) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_public_post_link(@post) %>
-    <%= admin_update_link(     @post) %>
-    <%= admin_destroy_link(    @post) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:      :show,
+  headline:    @title.first,
+  instance:    @post,
+  public_link: admin_public_post_link(@post)
+} %>
 
 <%= content_tag(:section, class: 'admin-section') do %>
   <%= content_tag(:header) do %>

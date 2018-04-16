@@ -1,6 +1,13 @@
 <%
-  @headline = @title = 'Edit Post'
+  @title = ['Update Post', post_title(@post)] %>
 %>
+
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @post,
+  public_link: admin_public_post_link(@post)
+} %>
 
 <%= render partial: 'post_form', locals: {
   post:           @post,

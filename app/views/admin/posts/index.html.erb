@@ -2,13 +2,10 @@
   @title = 'Posts'
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_create_link(Post) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:   :index,
+  headline: @title
+} %>
 
 <%= content_tag(:div, class: 'tabgroup') do %>
   <%= render partial: 'admin/shared/index_tabs', locals: { model: Post } %>
@@ -32,10 +29,10 @@
               <%= content_tag :td, post_type(post) %>
               <%= content_tag :td, post.one_line_title %>
               <%= content_tag :td, class: 'actions' do %>
-                <%= admin_public_post_link post %>
-                <%= admin_view_link        post %>
-                <%= admin_update_link      post %>
-                <%= admin_destroy_link     post %>
+                <%= admin_public_post_link(post) %>
+                <%= admin_view_link(post) %>
+                <%= admin_update_link(post) %>
+                <%= admin_destroy_link(post) %>
               <% end %>
             <% end %>
           <% end %>

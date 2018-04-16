@@ -1,9 +1,10 @@
 <%
-  @title = 'New Creator'
+  @title = 'Create Creator'
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title) %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:   :new,
+  headline: @title
+} %>
 
 <%= render partial: 'creator_form', locals: { creator: @creator } %>

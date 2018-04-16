@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'admin/works/new', type: :view do
   before(:each) do
-    assign(:work, build(:work))
+    @model_class = assign(:model_name, Work)
+    @work        = assign(:work, build(:work))
   end
 
   it "renders new work form" do

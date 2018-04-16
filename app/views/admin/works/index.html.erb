@@ -2,13 +2,10 @@
   @title = 'Works'
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_create_link(Work) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:   :index,
+  headline: @title
+} %>
 
 <%= content_tag(:div, class: 'tabgroup') do %>
   <%= render partial: 'admin/shared/index_tabs', locals: { model: Work } %>
@@ -34,10 +31,10 @@
               <%= content_tag :td, work.title %>
               <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(' & ').html_safe%>
               <%= content_tag :td, class: 'actions' do %>
-                <%= admin_public_work_link work %>
-                <%= admin_view_link        work %>
-                <%= admin_update_link      work %>
-                <%= admin_destroy_link     work %>
+                <%= admin_public_work_link(work) %>
+                <%= admin_view_link(work) %>
+                <%= admin_update_link(work) %>
+                <%= admin_destroy_link(work) %>
               <% end %>
             <% end %>
           <% end %>

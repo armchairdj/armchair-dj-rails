@@ -2,13 +2,10 @@
   @title = 'Creators'
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_create_link(Creator) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:   :index,
+  headline: @title
+} %>
 
 <%= content_tag(:div, class: 'tabgroup') do %>
   <%= render partial: 'admin/shared/index_tabs', locals: { model: Creator } %>
@@ -32,10 +29,10 @@
               <%= content_tag :td, creator.name %>
               <%= content_tag :td, creator.viewable? %>
               <%= content_tag :td, class: 'actions' do %>
-                <%= admin_public_creator_link creator %>
-                <%= admin_view_link           creator %>
-                <%= admin_update_link         creator %>
-                <%= admin_destroy_link        creator %>
+                <%= admin_public_creator_link(creator) %>
+                <%= admin_view_link(creator) %>
+                <%= admin_update_link(creator) %>
+                <%= admin_destroy_link(creator) %>
               <% end %>
             <% end %>
           <% end %>

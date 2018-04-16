@@ -25,7 +25,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:new_polymorphic_path).with([:admin, model])
 
         expect(helper.admin_create_link(model)).to eq(
-          "<a title=\"new creator\" class=\"admin create\" href=\"path\">svg</a>"
+          "<a title=\"create creator\" class=\"admin create\" href=\"path\">svg</a>"
         )
       end
     end
@@ -39,6 +39,8 @@ RSpec.describe AdminHelper, type: :helper do
         )
       end
     end
+
+    pending '#admin_index_link'
 
     describe "#admin_public_creator_link" do
       pending "generates link"
@@ -55,7 +57,7 @@ RSpec.describe AdminHelper, type: :helper do
       pending "nils unless published posts"
     end
 
-    describe "#admin_public_view_link" do
+    describe "#admin_public_link_link" do
       pending "generates link"
       pending "overrides url"
       pending "includes target"
@@ -66,7 +68,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
 
         expect(helper.admin_update_link(instance)).to eq(
-          "<a title=\"edit creator\" class=\"admin edit\" href=\"path\">svg</a>"
+          "<a title=\"update creator\" class=\"admin edit\" href=\"path\">svg</a>"
         )
       end
     end

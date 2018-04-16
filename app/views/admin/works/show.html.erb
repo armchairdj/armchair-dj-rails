@@ -2,15 +2,12 @@
   @title = ["View #{@work.human_medium}", @work.display_creator, @work.title]
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title.first) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_public_work_link(@work) %>
-    <%= admin_update_link(     @work) %>
-    <%= admin_destroy_link(    @work) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:      :show,
+  headline:    @title.first,
+  instance:    @work,
+  public_link: admin_public_work_link(@work)
+} %>
 
 <%= content_tag(:section, class: 'admin-section') do %>
   <%= content_tag(:header) do %>

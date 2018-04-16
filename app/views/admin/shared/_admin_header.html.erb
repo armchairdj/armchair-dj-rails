@@ -1,0 +1,21 @@
+<%= content_tag(:header, class: 'admin') do %>
+  <%= content_tag(:h1, headline) %>
+
+  <%= content_tag(:div, class: 'actions') do %>
+    <% if action == :index %>
+      <%= admin_create_link(@model_class) %>
+    <% elsif action == :new %>
+      <%= admin_index_link(@model_class) %>
+    <% elsif action == :edit %>
+      <%= public_link unless public_link.nil? %>
+      <%= admin_index_link(@model_class) %>
+      <%= admin_view_link(instance) %>
+      <%= admin_destroy_link(instance) %>
+    <% elsif action == :show %>
+      <%= public_link unless public_link.nil? %>
+      <%= admin_index_link(@model_class) %>
+      <%= admin_update_link(instance) %>
+      <%= admin_destroy_link(instance) %>
+    <% end %>
+  <% end %>
+<% end %>

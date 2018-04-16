@@ -1,16 +1,12 @@
 <%
-  @title = [
-    "Edit User",
-    @user.display_name
-  ]
+  @title = ["Update User", @user.display_name]
 %>
 
-<%= content_tag(:header, class: 'admin') do %>
-  <%= content_tag(:h1, @title.first) %>
-
-  <%= content_tag(:div, class: 'actions') do %>
-    <%= admin_destroy_link(@user) %>
-  <% end %>
-<% end %>
+<%= render partial: 'admin/shared/admin_header', locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @user,
+  public_link: nil
+} %>
 
 <%= render partial: 'user_form', locals: { user: @user } %>
