@@ -176,6 +176,6 @@ private
     return unless work.present?
 
     work.update_counts
-    work.creators.each(&:update_counts)
+    work.creators.each { |c| c.update_counts }
   end
 end

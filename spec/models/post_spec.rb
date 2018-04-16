@@ -433,16 +433,56 @@ RSpec.describe Post, type: :model do
 
         context "callbacks" do
           describe "#prepare_to_publish" do
+            it "sets published_at" do
+              instance = create(:standalone_post, :draft)
 
+              instance.send(:prepare_to_publish)
+
+              expect(instance.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+            end
           end
 
           describe "#prepare_to_unpublish" do
+            it "removes published_at" do
+              instance = create(:standalone_post, :published)
 
+              instance.send(:prepare_to_unpublish)
+
+              expect(instance.published_at).to eq(nil)
+            end
           end
         end
 
         describe "#update_viewable_counts" do
+          let(    :review) { create(:unity_album_review  ) }
+          let(:standalone) { create(:tiny_standalone_post) }
+          let(      :work) { double }
+          let(  :creators) { [double, double] }
 
+          it "updates counts for creators and works" do
+            allow(review).to receive(    :work).and_return(work)
+             allow( work).to receive(:creators).and_return(creators)
+
+             allow(          work).to receive(:update_counts)
+             allow(creators.first).to receive(:update_counts)
+             allow( creators.last).to receive(:update_counts)
+
+            expect(          work).to receive(:update_counts).once
+            expect(creators.first).to receive(:update_counts).once
+            expect( creators.last).to receive(:update_counts).once
+
+            review.send(:update_viewable_counts)
+          end
+
+          it "does nothing for standalone" do
+             allow_any_instance_of(Creator).to     receive(:update_counts)
+             allow_any_instance_of(   Work).to     receive(:update_counts)
+
+            expect_any_instance_of(Creator).to_not receive(:update_counts)
+            expect_any_instance_of(   Work).to_not receive(:update_counts)
+
+            standalone.send(:update_viewable_counts)
+          end
         end
       end
     end

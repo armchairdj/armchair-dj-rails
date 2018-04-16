@@ -4,7 +4,7 @@ FactoryBot.define do
   sequence :user_email { |n| "user#{n}@example.com" }
 
   factory :user do
-    factory :minimal_user, parent: :member do end
+    factory :minimal_user, parent: :member do; end
 
     trait :valid do
       first_name { FFaker::Name.first_name }
@@ -18,8 +18,8 @@ FactoryBot.define do
     end
 
     factory :member do
-      valid
       role :member
+      valid
     end
 
     factory :confirmed_member, parent: :member do
@@ -27,8 +27,8 @@ FactoryBot.define do
     end
 
     factory :contributor do
-      valid
       role :contributor
+      valid
     end
 
     factory :confirmed_contributor, parent: :contributor do
@@ -36,8 +36,8 @@ FactoryBot.define do
     end
 
     factory :admin do
-      valid
       role :admin
+      valid
     end
 
     factory :confirmed_admin, parent: :admin do
