@@ -25,6 +25,6 @@ private
   end
 
   def determine_layout
-    'public'
+    "public"
   end
 end

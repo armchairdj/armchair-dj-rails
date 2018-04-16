@@ -55,7 +55,7 @@ class Admin::CreatorsController < AdminController
   def create
     respond_to do |format|
       if @creator.save
-        format.html { redirect_to admin_creators_path, notice: I18n.t('admin.flash.creators.notice.create') }
+        format.html { redirect_to admin_creators_path, notice: I18n.t("admin.flash.creators.notice.create") }
         format.json { render :show, status: :created, location: @creator }
       else
         format.html { render :new }
@@ -69,7 +69,7 @@ class Admin::CreatorsController < AdminController
   def update
     respond_to do |format|
       if @creator.update(instance_params)
-        format.html { redirect_to admin_creators_path, notice: I18n.t('admin.flash.creators.notice.update') }
+        format.html { redirect_to admin_creators_path, notice: I18n.t("admin.flash.creators.notice.update") }
         format.json { render :show, status: :ok, location: @creator }
       else
         format.html { render :edit }
@@ -84,7 +84,7 @@ class Admin::CreatorsController < AdminController
     @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_creators_path, notice: I18n.t('admin.flash.creators.notice.destroy') }
+      format.html { redirect_to admin_creators_path, notice: I18n.t("admin.flash.creators.notice.destroy") }
       format.json { head :no_content }
     end
   end

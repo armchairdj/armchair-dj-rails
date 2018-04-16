@@ -55,7 +55,7 @@ class Admin::WorksController < AdminController
   def create
     respond_to do |format|
       if @work.save
-        format.html { redirect_to admin_works_path, notice: I18n.t('admin.flash.works.notice.create') }
+        format.html { redirect_to admin_works_path, notice: I18n.t("admin.flash.works.notice.create") }
         format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -76,7 +76,7 @@ class Admin::WorksController < AdminController
   def update
     respond_to do |format|
       if @work.update(instance_params)
-        format.html { redirect_to admin_works_path, notice: I18n.t('admin.flash.works.notice.update') }
+        format.html { redirect_to admin_works_path, notice: I18n.t("admin.flash.works.notice.update") }
         format.json { render :show, status: :ok, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -93,7 +93,7 @@ class Admin::WorksController < AdminController
     @work.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_works_path, notice: I18n.t('admin.flash.works.notice.destroy') }
+      format.html { redirect_to admin_works_path, notice: I18n.t("admin.flash.works.notice.destroy") }
       format.json { head :no_content }
     end
   end

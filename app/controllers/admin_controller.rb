@@ -8,7 +8,7 @@ class AdminController < ApplicationController
 private
 
   def determine_layout
-    'admin'
+    "admin"
   end
 
   def is_admin
