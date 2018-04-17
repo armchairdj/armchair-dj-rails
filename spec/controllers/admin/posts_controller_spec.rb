@@ -468,7 +468,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:post) { create(:standalone_post) }
 
           let(  :valid_params) { { "body" => "New body." } }
-          let(:invalid_params) { { "body" => "", "slug" => ""} }
+          let(:invalid_params) { { "body" => ""          } }
+
+          context "slug" do
+            pending "with custom slug"
+            pending "with blank slug"
+          end
 
           context "with valid params" do
             it "updates and publishes the requested post" do
@@ -516,7 +521,6 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(assigns(:post)                 ).to eq(post)
               expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
-              expect(assigns(:post).errors[:slug][0]).to be_a_kind_of(String)
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
@@ -530,7 +534,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:post) { create(:song_review) }
 
           let(  :valid_params) { { "body" => "New body." } }
-          let(:invalid_params) { { "body" => "", "slug" => ""} }
+          let(:invalid_params) { { "body" => ""          } }
+
+          context "slug" do
+            pending "with custom slug"
+            pending "with blank slug"
+          end
 
           context "with valid params" do
             it "updates and publishes the requested post" do
@@ -578,7 +587,6 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(assigns(:post)                 ).to eq(post)
               expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
-              expect(assigns(:post).errors[:slug][0]).to be_a_kind_of(String)
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 

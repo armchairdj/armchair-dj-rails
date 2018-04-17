@@ -17,29 +17,23 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td, @post.slug) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Type") %>
         <%= content_tag(:td, post_type(@post)) %>
       <% end %>
 
-      <% if @post.work.present? %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Creator") %>
-          <%= content_tag(:td, @post.work.display_creator) %>
-        <% end %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Status") %>
+        <%= content_tag(:td) do %>
+          <%= @post.human_status %>
+          <%= admin_date(@post.published_at) if @post.published? %>
+          <% end %>
+      <% end %>
 
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Title") %>
-          <%= content_tag(:td, @post.work.title) %>
-        <% end %>
-      <% else %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Title") %>
-          <%= content_tag(:td, @post.title) %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td) do %>
+          <%= @post.slug %>
+          <%= "(dirty)" if @post.dirty_slug? %>
         <% end %>
       <% end %>
 
@@ -58,7 +52,7 @@
 
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Post Body") %>
+    <%= content_tag(:h4, post_title(@post, full: true)) %>
   <% end %>
 
   <%= content_tag(:div, formatted_post_body(@post)) %>
