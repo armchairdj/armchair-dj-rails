@@ -101,6 +101,8 @@ en:
             base:
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
+            slug:
+              locked: "You cannot change the slug on a published post."
         work:
           attributes:
             contributions:

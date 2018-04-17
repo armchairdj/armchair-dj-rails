@@ -76,8 +76,8 @@ class Admin::PostsController < AdminController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    return respond_to_publish   if publishing?
-    return respond_to_unpublish if unpublishing?
+    return   publish_and_respond if params[:step] ==   "publish"
+    return unpublish_and_respond if params[:step] == "unpublish"
 
     respond_to do |format|
       if @post.update(@sanitized_params)
@@ -224,15 +224,7 @@ private
     end
   end
 
-  def publishing?
-    params[:step] == "publish"
-  end
-
-  def unpublishing?
-    params[:step] == "unpublish"
-  end
-
-  def respond_to_publish
+  def publish_and_respond
     saved     = @post.update(@sanitized_params)
     published = @post.publish!
 
@@ -253,7 +245,7 @@ private
     end
   end
 
-  def respond_to_unpublish
+  def unpublish_and_respond
     unpublished = @post.unpublish!
     saved       = @post.update(@sanitized_params)
 

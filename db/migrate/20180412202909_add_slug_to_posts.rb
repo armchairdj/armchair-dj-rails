@@ -4,7 +4,7 @@ class AddSlugToPosts < ActiveRecord::Migration[5.1]
     add_index :posts, :slug, unique: true
 
     Post.all.each do |post|
-      post.send(:set_slug)
+      post.send(:handle_slug)
       post.save
     end
   end

@@ -63,7 +63,7 @@ class Post < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  before_save :set_slug
+  before_save :handle_slug
 
   #############################################################################
   # STATE MACHINE.
@@ -139,17 +139,36 @@ private
     end
   end
 
-  def set_slug
-    return if published?
-    return if dirty_slug? && !slug_changed
+  def handle_slug
+    return if slug_published?
+    return if slug_already_dirty?
+    return if slug_newly_dirty?
 
-    if (slug_changed? && !slug.blank?)
-      self.dirty_slug = true
-    else
-      self.dirty_slug = false
+    self.dirty_slug = false
 
-      slugify(:slug, sluggable_parts)
-    end
+    slugify(:slug, sluggable_parts)
+  end
+
+  def slug_published?
+    return false unless published?
+
+    self.errors.add(:slug, :locked) if slug_changed?
+
+    true
+  end
+
+  def slug_already_dirty?
+    dirty_slug? && !slug_changed?
+  end
+
+  def slug_newly_dirty?
+    return false unless slug_changed? && !slug.blank?
+
+    self.dirty_slug = true
+
+    slugify(:slug, slug)
+
+    true
   end
 
   # TODO include work version
