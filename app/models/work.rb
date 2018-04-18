@@ -76,9 +76,7 @@ class Work < ApplicationRecord
 
   validates :title, presence: true
 
-  validate do
-    validate_contributions
-  end
+  validate { validate_contributions }
 
   #############################################################################
   # HOOKS.

@@ -329,9 +329,9 @@ RSpec.describe Post, type: :model do
     describe "private" do
       context "callbacks" do
         describe "#sluggable_parts" do
-          let(    :review) { create(:hounds_of_love_album_review) }
-          let(    :collab) { create(:unity_album_review         ) }
-          let(:standalone) { create(:tiny_standalone_post       ) }
+          let(    :review) { create(:hounds_of_love_album_review               ) }
+          let(    :collab) { create(:unity_album_review                        ) }
+          let(:standalone) { create(:standalone_post, title: "Standalone Title") }
 
           specify "for review" do
             expect(review.send(:sluggable_parts)) .to eq(["Album", "Kate Bush", "Hounds of Love"])
@@ -342,25 +342,25 @@ RSpec.describe Post, type: :model do
           end
 
           specify "for standalone" do
-            expect(standalone.send(:sluggable_parts)).to eq(["Hello"])
+            expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
           end
         end
 
         describe "#handle_slug" do
           before(:each) do
-            allow(instance).to receive(:sluggable_parts).and_return(["Hello"])
+            allow(instance).to receive(:sluggable_parts).and_return(["Standalone Title"])
 
             allow(instance).to receive(:slugify).and_call_original
 
-            allow(instance).to receive(:generate_slug).with(:slug, ["Hello"]    ).and_return("latest_slug")
-            allow(instance).to receive(:generate_slug).with(:slug, "Newly Dirty").and_return("newly_dirty")
+            allow(instance).to receive(:generate_slug).with(:slug, ["Standalone Title"]).and_return("latest_slug")
+            allow(instance).to receive(:generate_slug).with(:slug, "Newly Dirty"       ).and_return("newly_dirty")
           end
 
           context "unsaved draft" do
             let(:instance) { build(:tiny_standalone_post) }
 
             it "sets slug automatically" do
-              expect(instance).to receive(:slugify).with(:slug, ["Hello"])
+              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
 
               instance.send(:handle_slug)
 
@@ -374,7 +374,7 @@ RSpec.describe Post, type: :model do
 
             context "clean" do
               it "resets slug" do
-                expect(instance).to receive(:slugify).with(:slug, ["Hello"])
+                expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
 
                 instance.send(:handle_slug)
 
@@ -420,7 +420,7 @@ RSpec.describe Post, type: :model do
               end
 
               it "resets slug and sets dirty to false if new value is blank" do
-                expect(instance).to receive(:slugify).with(:slug, ["Hello"])
+                expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
 
                 instance.slug = ""
 

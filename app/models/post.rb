@@ -49,9 +49,7 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validate do
-    ensure_work_or_title
-  end
+  validate { ensure_work_or_title }
 
   validates :status, presence: true
 

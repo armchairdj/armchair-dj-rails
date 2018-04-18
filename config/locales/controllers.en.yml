@@ -23,7 +23,7 @@ en:
           destroy: "Post destroyed."
           update:  "Post updated."
           publish: "Post published."
-          publish: "Post unpublished."
+          unpublish: "Post unpublished."
         error:
           publish: "Post could not be published."
           unpublish: "Post could not be unpublished."
