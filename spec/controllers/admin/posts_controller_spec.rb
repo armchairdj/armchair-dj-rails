@@ -495,7 +495,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context "with failed transition" do
             before(:each) do
-              post.publish!
+              allow_any_instance_of(Post).to receive(:can_publish?).and_return(false)
             end
 
             it "updates post and renders edit with message" do
@@ -504,12 +504,17 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(response).to be_success
               expect(response).to render_template("admin/posts/edit")
 
-              expect(assigns(:post)       ).to eq(post)
-              expect(assigns(:post).title ).to eq(valid_params["title"])
-              expect(assigns(:post).body  ).to eq(valid_params["body" ])
-              expect(assigns(:post).valid?).to eq(true)
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).title       ).to eq(valid_params["title"])
+              expect(assigns(:post).body        ).to eq(valid_params["body" ])
+              expect(assigns(:post).valid?      ).to eq(true)
 
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
+              post.reload
+
+              expect(post.published?  ).to eq(false)
+              expect(post.published_at).to eq(nil)
+
+              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
             end
           end
 
@@ -567,7 +572,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context "with failed transition" do
             before(:each) do
-              post.publish!
+              allow_any_instance_of(Post).to receive(:can_publish?).and_return(false)
             end
 
             it "renders edit with message" do
@@ -581,7 +586,12 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post).work_id).to eq(valid_params["work_id"])
               expect(assigns(:post).valid? ).to eq(true)
 
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
+              post.reload
+
+              expect(post.published?  ).to eq(false)
+              expect(post.published_at).to eq(nil)
+
+              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
             end
           end
 
@@ -642,7 +652,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context "with failed transition" do
             before(:each) do
-              post.unpublish!
+              allow_any_instance_of(Post).to receive(:can_unpublish?).and_return(false)
             end
 
             it "renders edit with message" do
@@ -655,7 +665,12 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post).title).to eq(valid_params["title"])
               expect(assigns(:post).body ).to eq(nil)
 
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+              post.reload
+
+              expect(post.published?  ).to eq(true)
+              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+
+              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
             end
           end
 
@@ -712,7 +727,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           context "with failed transition" do
             before(:each) do
-              post.unpublish!
+              allow_any_instance_of(Post).to receive(:can_unpublish?).and_return(false)
             end
 
             it "renders edit with message" do
@@ -725,7 +740,12 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post).work_id).to eq(valid_params["work_id"])
               expect(assigns(:post).body   ).to eq(nil)
 
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+              post.reload
+
+              expect(post.published?  ).to eq(true)
+              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+
+              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
             end
           end
 

@@ -235,7 +235,7 @@ private
         if @post.published?
           flash.now[:notice] = I18n.t("admin.flash.posts.notice.publish")
         else
-          flash.now[:error] = I18n.t("admin.flash.posts.error.publish")
+          flash.now[:error]  = I18n.t("admin.flash.posts.error.publish")
         end
 
         format.html { render :edit }
@@ -255,7 +255,7 @@ private
         if @post.draft?
           flash.now[:notice] = I18n.t("admin.flash.posts.notice.unpublish")
         else
-          flash.now[:error] = I18n.t("admin.flash.posts.error.unpublish")
+          flash.now[:error]  = I18n.t("admin.flash.posts.error.unpublish")
         end
 
         format.html { render :edit }
