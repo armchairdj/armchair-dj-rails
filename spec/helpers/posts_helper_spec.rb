@@ -12,18 +12,54 @@ RSpec.describe PostsHelper, type: :helper do
   end
 
   describe "#link_to_post" do
-    it "creates link to permalink with short title" do
-      post   = create(:standalone_post, title: "Title")
-      actual = helper.link_to_post(post)
+    context "standalone" do
+      subject { build(:standalone_post, title: "Title") }
 
-      expect(actual).to have_tag("a[href='/posts/#{post.slug}']",
-        text:  "Title",
-        count: 1
-      )
+      it "nils without slug" do
+        expect(helper.link_to_post(subject)).to eq(nil)
+      end
+
+      it "creates link to permalink with post title" do
+        subject.save
+
+        actual = helper.link_to_post(subject)
+
+        expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
+          text:  "Title",
+          count: 1
+        )
+      end
     end
 
-    pending "uses long title"
-    pending "nils without slug"
+    context "review" do
+      subject { build(:song_review, work_id: create(:kate_bush_hounds_of_love).id) }
+
+      it "nils without slug" do
+        expect(helper.link_to_post(subject)).to eq(nil)
+      end
+
+      it "creates link to permalink with work short title" do
+        subject.save
+
+        actual = helper.link_to_post(subject)
+
+        expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
+          text:  "Hounds of Love",
+          count: 1
+        )
+      end
+
+      it "creates link to permalink with work long title" do
+        subject.save
+
+        actual = helper.link_to_post(subject, full: true)
+
+        expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
+          text:  "Kate Bush: Hounds of Love",
+          count: 1
+        )
+      end
+    end
   end
 
   describe "#post_type" do
