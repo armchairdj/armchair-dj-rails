@@ -3,10 +3,11 @@ module Sluggable
 
   class_methods do
     def generate_unique_slug(instance, attribute, parts)
-      base = self.generate_slug_from_parts(parts)
-      dupe = find_duplicate_slug(instance, attribute, base)
+      uniquify_slug instance, attribute, generate_slug_from_parts(parts)
+    end
 
-      return base if dupe.nil?
+    def uniquify_slug(instance, attribute, base)
+      return base unless dupe = find_duplicate_slug(instance, attribute, base)
 
       [base, self.next_slug_index(dupe).to_s].join("/")
     end

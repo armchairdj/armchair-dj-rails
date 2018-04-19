@@ -11,6 +11,14 @@
 
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
+    <%= content_tag(:h4, post_title(@post, full: true)) %>
+  <% end %>
+
+  <%= content_tag(:div, formatted_post_body(@post)) %>
+<% end %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Attributes") %>
   <% end %>
 
@@ -48,12 +56,4 @@
       <% end %>
     <% end %>
   <% end %>
-<% end %>
-
-<%= content_tag(:section, class: "admin-section") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, post_title(@post, full: true)) %>
-  <% end %>
-
-  <%= content_tag(:div, formatted_post_body(@post)) %>
 <% end %>
