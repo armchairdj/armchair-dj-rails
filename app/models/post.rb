@@ -54,8 +54,8 @@ class Post < ApplicationRecord
   validates :status, presence: true
 
   validates :body,         presence: true, if: :published?
-  validates :slug,         presence: true, if: :published?
   validates :published_at, presence: true, if: :published?
+  validates :slug,         presence: true, if: :published?
 
   #############################################################################
   # HOOKS.
@@ -127,19 +127,18 @@ class Post < ApplicationRecord
   end
 
   def update_and_publish(params)
-    # Always update. Only publish if succeeded.
     return true if self.update(params) && self.publish!
 
     self.errors.add(:body, :blank_during_publish) unless body.present?
-    self.errors.add(:slug, :blank_during_publish) unless slug.present?
 
     return false
   end
 
   def update_and_unpublish(params)
-    # Always try both.
+    # Unpublish first so validation rules change.
     unpublished = self.unpublish!
-    updated     = self.update(params)
+    # Must reload to clear published_at that was nilled in callback.
+    updated     = self.reload.update(params)
 
     unpublished && updated
   end

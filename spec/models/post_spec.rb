@@ -13,16 +13,12 @@ RSpec.describe Post, type: :model do
     it { should accept_nested_attributes_for(:work) }
 
     describe "reject_if" do
-      it "rejects with blank title" do
-        instance = build(:post, body: "body", work_attributes: {
-          "0" => { "title" => "" }
-        })
+      subject { build(:post, body: "body", work_attributes: { "0" => { "title" => "" } }) }
 
-        expect {
-          instance.save
-        }.to_not change {
-          Work.count
-        }
+      it "rejects works with blank titles" do
+        expect { subject.save }.to_not change { Work.count }
+
+        expect(subject.work).to eq(nil)
       end
     end
   end
@@ -72,6 +68,16 @@ RSpec.describe Post, type: :model do
   end
 
   context "validations" do
+    context "conditional" do
+      subject { create(:minimal_post, :published) }
+
+      context "published" do
+        it { should validate_presence_of(:body) }
+        it { should validate_presence_of(:published_at) }
+        it { should validate_presence_of(:slug) }
+      end
+    end
+
     context "custom" do
       it "calls #validate_work_and_title" do
          allow(subject).to receive(:validate_work_and_title).and_call_original
@@ -80,37 +86,26 @@ RSpec.describe Post, type: :model do
         subject.valid?
       end
     end
-
-    context "conditional" do
-      subject { create(:minimal_post, :published) }
-
-      context "published" do
-        it { should validate_presence_of(:body) }
-        it { should validate_presence_of(:slug) }
-        it { should validate_presence_of(:published_at) }
-      end
-    end
   end
 
   context "hooks" do
     context "before_save" do
       context "calls #handle_slug" do
-        specify "on new" do
-          instance = build(:minimal_post)
-
-           allow(instance).to receive(:handle_slug).and_call_original
-          expect(instance).to receive(:handle_slug)
-
-          instance.save
+        before(:each) do
+           allow(subject).to receive(:handle_slug).and_call_original
+          expect(subject).to receive(:handle_slug)
         end
 
-        specify "on saved" do
-          instance = create(:minimal_post)
+        context "on new" do
+          subject { build(:minimal_post) }
 
-           allow(instance).to receive(:handle_slug).and_call_original
-          expect(instance).to receive(:handle_slug)
+          specify { subject.save }
+        end
 
-          instance.save
+        context "on saved" do
+          subject { create(:minimal_post) }
+
+          specify { subject.save }
         end
       end
     end
@@ -127,14 +122,12 @@ RSpec.describe Post, type: :model do
     end
 
     describe "booleans" do
-      before(:each) do
-        allow(    draft).to receive(:can_publish?  ).and_return(true)
-        allow(    draft).to receive(:can_unpublish?).and_return(false)
-        allow(published).to receive(:can_publish?  ).and_return(false)
-        allow(published).to receive(:can_unpublish?).and_return(true)
-      end
-
       describe "may_publish?" do
+        before(:each) do
+          allow(    draft).to receive(:can_publish?  ).and_return(true )
+          allow(published).to receive(:can_publish?  ).and_return(false)
+        end
+
         specify "on published" do
           expect(published).to_not receive(:can_publish?)
 
@@ -149,6 +142,11 @@ RSpec.describe Post, type: :model do
       end
 
       describe "may_unpublish?" do
+        before(:each) do
+          allow(    draft).to receive(:can_unpublish?).and_return(false)
+          allow(published).to receive(:can_unpublish?).and_return(true )
+        end
+
         specify "on draft" do
           expect(draft).to_not receive(:can_unpublish?)
 
@@ -287,27 +285,23 @@ RSpec.describe Post, type: :model do
         specify { expect(    unsaved_review.standalone?).to eq(false) }
         specify { expect(      saved_review.standalone?).to eq(false) }
 
-        context "during data editing for saved" do
-          specify "for standalone" do
+        context "while editing saved" do
+          specify "true for standalone even if title nil" do
             saved_standalone.title = nil
 
             expect(saved_standalone.standalone?).to eq(true)
           end
 
-          context "for review" do
-            specify "work" do
-              saved_review.work = nil
+          specify "false for review even if work nil" do
+            saved_review.work = nil
 
-              expect(saved_review.standalone?).to eq(false)
-            end
+            expect(saved_review.standalone?).to eq(false)
           end
 
-          context "for review" do
-            specify "work_id" do
-              saved_review.work_id = nil
+          specify "false for review even if work_id nil" do
+            saved_review.work_id = nil
 
-              expect(saved_review.standalone?).to eq(false)
-            end
+            expect(saved_review.standalone?).to eq(false)
           end
         end
       end
@@ -318,27 +312,23 @@ RSpec.describe Post, type: :model do
         specify { expect(    unsaved_review.review?).to eq(true ) }
         specify { expect(      saved_review.review?).to eq(true ) }
 
-        context "during data editing for saved" do
-          specify "for standalone" do
+        context "while editing saved" do
+          specify "false for standalone even if title nil" do
             saved_standalone.title = nil
 
             expect(saved_standalone.review?).to eq(false)
           end
 
-          context "for review" do
-            specify "work" do
-              saved_review.work = nil
+          specify "true for review even if work nil" do
+            saved_review.work = nil
 
-              expect(saved_review.review?).to eq(true)
-            end
+            expect(saved_review.review?).to eq(true)
           end
 
-          context "for review" do
-            specify "work_id" do
-              saved_review.work_id = nil
+          specify "true for review even if work_id nil" do
+            saved_review.work_id = nil
 
-              expect(saved_review.review?).to eq(true)
-            end
+            expect(saved_review.review?).to eq(true)
           end
         end
       end
@@ -349,33 +339,144 @@ RSpec.describe Post, type: :model do
       specify { expect(create(:tiny_standalone_post       ).one_line_title).to eq("Hello") }
     end
 
-    describe "#prepare_to_publish" do
-      # let(:neither) { build(:post) }
-      # let(:no_body) { build(:post, body: "",     slug: "a/b/c") }
-      # let(:no_slug) { build(:post, body: "body", slug: ""     ) }
-      #
-      # it "manually adds error to both" do
-      #   neither.simulate_validation_for_publishing
-      #
-      #   expect(neither.errors.details[:body].first[:error]).to eq(:blank)
-      #   expect(neither.errors.details[:slug].first[:error]).to eq(:blank)
-      # end
-      #
-      # it "manually adds error to body" do
-      #   no_body.simulate_validation_for_publishing
-      #
-      #   expect(no_body.errors.details[:body].first[:error]).to eq(:blank)
-      # end
-      #
-      # it "manually adds error to slug" do
-      #   no_slug.simulate_validation_for_publishing
-      #
-      #   expect(no_slug.errors.details[:slug].first[:error]).to eq(:blank)
-      # end
+    describe "#update_and_publish" do
+      before(:each) do
+        allow(subject).to receive(:update  ).and_call_original
+        allow(subject).to receive(:publish!).and_call_original
+      end
+
+      subject { create(:standalone_post) }
+
+      context "valid params and valid transition" do
+        let(:params) { { "title" => "New title" } }
+
+        it "updates, publishes and returns true" do
+          expect(subject).to receive(:update  )
+          expect(subject).to receive(:publish!)
+
+          expect(subject.update_and_publish(params)).to eq(true)
+
+          subject.reload
+
+          expect(subject.title       ).to eq(params["title"])
+          expect(subject.published?  ).to eq(true)
+          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+        end
+      end
+
+      context "valid params and invalid transition" do
+        let(:params) { { "title" => "New title" } }
+
+        before(:each) do
+          allow(subject).to receive(:can_publish?).and_return(false)
+        end
+
+        it "updates, attempts publish and returns false" do
+          expect(subject).to receive(:update  )
+          expect(subject).to receive(:publish!)
+
+          expect(subject.update_and_publish(params)).to eq(false)
+
+          subject.reload
+
+          expect(subject.title       ).to eq(params["title"])
+          expect(subject.published?  ).to eq(false)
+          expect(subject.published_at).to eq(nil)
+        end
+      end
+
+      context "invalid params" do
+        let(:params) { { "title" => "", "body" => "" } }
+
+        it "does not update, does not attempt publish and returns false" do
+          expect(subject).to     receive(:update  )
+          expect(subject).to_not receive(:publish!)
+
+          expect(subject.update_and_publish(params)).to eq(false)
+
+          expect(subject.title).to eq(nil)
+
+          subject.reload
+
+          expect(subject.title       ).to_not eq(nil)
+          expect(subject.published?  ).to     eq(false)
+          expect(subject.published_at).to     eq(nil)
+        end
+
+        it "manually adds errors on empty body" do
+          subject.update_and_publish(params)
+
+          expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+        end
+      end
     end
 
-    describe "#prepare_to_unpublish" do
-      pending "works"
+    describe "#update_and_unpublish" do
+      before(:each) do
+        allow(subject).to receive(:update    ).and_call_original
+        allow(subject).to receive(:unpublish!).and_call_original
+      end
+
+      subject { create(:song_review, :published) }
+
+      context "valid params and valid transition" do
+        let(:params) { { "work_id" => create(:song).id } }
+
+        it "unpublishes, updates, and returns true" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(true)
+
+          subject.reload
+
+          expect(subject.work_id     ).to eq(params["work_id"])
+          expect(subject.published?  ).to eq(false)
+          expect(subject.published_at).to eq(nil)
+        end
+      end
+
+      context "valid params and invalid transition" do
+        let(:params) { { "work_id" => create(:song).id } }
+
+        before(:each) do
+          allow(subject).to receive(:can_unpublish?).and_return(false)
+        end
+
+        it "attempts unpublish, updates and returns false" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(false)
+
+          puts "xxx", subject.errors.inspect
+
+          subject.reload
+
+          expect(subject.work_id     ).to eq(params["work_id"])
+          expect(subject.published?  ).to eq(true)
+          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+        end
+      end
+
+      context "invalid params" do
+        let(:params) { { "work_id" => "", "body" => "" } }
+
+        it "unpublishes, does not update and returns false" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(false)
+
+          expect(subject.work_id).to eq(nil)
+
+          subject.reload
+
+          expect(subject.work_id     ).to_not eq(nil)
+          expect(subject.published?  ).to     eq(false)
+          expect(subject.published_at).to     eq(nil)
+        end
+      end
     end
 
     describe "private" do

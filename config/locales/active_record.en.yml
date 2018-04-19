@@ -104,7 +104,6 @@ en:
             body:
               blank_during_publish: "You cannot publish a post without a body."
             slug:
-              blank_during_publish: "You cannot pubish a post without a slug."
               locked: "You cannot change the slug on a published post."
         work:
           attributes:
