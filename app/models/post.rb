@@ -49,7 +49,7 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validate { ensure_work_or_title }
+  validate { validate_work_and_title }
 
   validates :status, presence: true
 
@@ -68,12 +68,12 @@ class Post < ApplicationRecord
   #############################################################################
 
   aasm(
-    column:               :status,
-    whiny_persistence:    false,
-    whiny_transitions:    false,
-    enum:                 true,
-    no_direct_assignment: true,
-    create_scopes:        true
+    column:                  :status,
+    create_scopes:            true,
+    enum:                     true,
+    no_direct_assignment:     true,
+    whiny_persistence:        false,
+    whiny_transitions:        false
   ) do
     state :draft, initial: true
     state :published
@@ -106,11 +106,19 @@ class Post < ApplicationRecord
   #############################################################################
 
   def standalone?
-    title.present?
+    if new_record?
+      return title.present?
+    else
+      return title_was.present?
+    end
   end
 
   def review?
-    work.present?
+    if new_record?
+      return work.present?
+    else
+      return work_id_was.present?
+    end
   end
 
   # TODO Include post Type and Version
@@ -118,9 +126,22 @@ class Post < ApplicationRecord
     work ? work.title_with_creator : title
   end
 
-  def simulate_validation_for_publishing
-    self.errors.add(:body, :blank) unless body.present?
-    self.errors.add(:slug, :blank) unless slug.present?
+  def update_and_publish(params)
+    # Always update. Only publish if succeeded.
+    return true if self.update(params) && self.publish!
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+    self.errors.add(:slug, :blank_during_publish) unless slug.present?
+
+    return false
+  end
+
+  def update_and_unpublish(params)
+    # Always try both.
+    unpublished = self.unpublish!
+    updated     = self.update(params)
+
+    unpublished && updated
   end
 
 private
@@ -129,12 +150,40 @@ private
     work_attributes["title"].blank?
   end
 
-  def ensure_work_or_title
+  def validate_work_and_title
+    ensure_work_or_title_for_new_record    ||
+    ensure_only_title_for_saved_standalone ||
+    ensure_only_work_for_saved_review
+  end
+
+  def ensure_work_or_title_for_new_record
+    return false unless new_record?
+
     if work && title
       self.errors.add(:base, :has_work_and_title)
     elsif !work && !title
       self.errors.add(:base, :needs_work_or_title)
     end
+
+    true
+  end
+
+  def ensure_only_title_for_saved_standalone
+    return false unless persisted? && standalone?
+
+    self.errors.add(:title,   :blank  ) if title.blank?
+    self.errors.add(:work_id, :present) if work_id.present?
+
+    true
+  end
+
+  def ensure_only_work_for_saved_review
+    return false unless persisted? && review?
+
+    self.errors.add(:title,   :present) if title.present?
+    self.errors.add(:work_id, :blank  ) if work_id.blank?
+
+    true
   end
 
   def handle_slug

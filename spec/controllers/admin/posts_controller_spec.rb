@@ -386,9 +386,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates the requested post" do
               put :update, params: { id: post.to_param, post: valid_params }
 
-              post.reload
-
-              expect(post.title).to eq(valid_params["title"])
+              expect(assigns(:post)      ).to eq(post)
+              expect(assigns(:post).title).to eq(valid_params["title"])
             end
 
             it "redirects to post" do
@@ -429,9 +428,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates the requested post" do
               put :update, params: { id: post.to_param, post: valid_params }
 
-              post.reload
-
-              expect(post.work_id).to eq(valid_params["work_id"])
+              expect(assigns(:post)        ).to eq(post)
+              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
             end
 
             it "redirects to post" do
@@ -467,8 +465,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         context "standalone" do
           let(:post) { create(:standalone_post) }
 
-          let(  :valid_params) { { "body" => "New body." } }
-          let(:invalid_params) { { "body" => ""          } }
+          let(  :valid_params) { { "body" => "New body.", "title" => "New title." } }
+          let(:invalid_params) { { "body" => ""         , "title" => ""           } }
 
           context "slug" do
             pending "with custom slug"
@@ -479,11 +477,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates and publishes the requested post" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              post.reload
-
-              expect(post.body        ).to eq(valid_params["body"])
-              expect(post.published?  ).to eq(true)
-              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).title       ).to eq(valid_params["title"])
+              expect(assigns(:post).body        ).to eq(valid_params["body" ])
+              expect(assigns(:post).published?  ).to eq(true)
+              expect(assigns(:post).published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
             it "redirects to post" do
@@ -500,32 +498,38 @@ RSpec.describe Admin::PostsController, type: :controller do
               post.publish!
             end
 
-            it "renders edit with message" do
+            it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
               expect(response).to be_success
               expect(response).to render_template("admin/posts/edit")
 
+              expect(assigns(:post)       ).to eq(post)
+              expect(assigns(:post).title ).to eq(valid_params["title"])
+              expect(assigns(:post).body  ).to eq(valid_params["body" ])
               expect(assigns(:post).valid?).to eq(true)
 
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
             end
           end
 
           context "with invalid params" do
-            it "renders edit" do
+            it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
               expect(response).to be_success
               expect(response).to render_template("admin/posts/edit")
 
-              expect(assigns(:post)                 ).to eq(post)
-              expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).title       ).to eq(nil)
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published_at).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+
+              expect(assigns(:post).errors.details[:body ].first).to eq({ error: :blank_during_publish })
+              expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
-
-              expect(post.published_at).to eq(nil)
-              expect(post.published?  ).to eq(false)
             end
           end
         end
@@ -533,8 +537,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         context "review" do
           let(:post) { create(:song_review) }
 
-          let(  :valid_params) { { "body" => "New body." } }
-          let(:invalid_params) { { "body" => ""          } }
+          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id } }
+          let(:invalid_params) { { "body" => ""         , "work_id" => ""               } }
 
           context "slug" do
             pending "with custom slug"
@@ -545,11 +549,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates and publishes the requested post" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              post.reload
-
-              expect(post.body        ).to eq(valid_params["body"])
-              expect(post.published?  ).to eq(true)
-              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).body        ).to eq(valid_params["body"   ])
+              expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
+              expect(assigns(:post).published?  ).to eq(true)
+              expect(assigns(:post).published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
             end
 
             it "redirects to post" do
@@ -572,9 +576,12 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(response).to be_success
               expect(response).to render_template("admin/posts/edit")
 
-              expect(assigns(:post).valid?).to eq(true)
+              expect(assigns(:post)        ).to eq(post)
+              expect(assigns(:post).body   ).to eq(valid_params["body"   ])
+              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
+              expect(assigns(:post).valid? ).to eq(true)
 
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
             end
           end
 
@@ -585,19 +592,163 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(response).to be_success
               expect(response).to render_template("admin/posts/edit")
 
-              expect(assigns(:post)                 ).to eq(post)
-              expect(assigns(:post).errors[:body][0]).to be_a_kind_of(String)
+
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).work_id     ).to eq(nil)
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published_at).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+
+              expect(assigns(:post).errors.details[:body   ].first).to eq({ error: :blank_during_publish })
+              expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
-
-              expect(post.published_at).to eq(nil)
-              expect(post.published?  ).to eq(false)
             end
           end
         end
       end
 
-      pending "unpublish"
+      context "unpublish" do
+        context "standalone" do
+          let(:post) { create(:standalone_post, :published) }
+
+          let(  :valid_params) { { "body" => "", "title" => "New title."} }
+          let(:invalid_params) { { "body" => "", "title" => ""          } }
+
+          context "slug" do
+            pending "with custom slug"
+            pending "with blank slug"
+          end
+
+          context "with valid params" do
+            it "unpublishes and updates the requested post" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).title       ).to eq(valid_params["title"])
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+              expect(assigns(:post).published_at).to eq(nil)
+            end
+
+            it "redirects to post" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(response).to redirect_to(admin_post_path(post))
+
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+            end
+          end
+
+          context "with failed transition" do
+            before(:each) do
+              post.unpublish!
+            end
+
+            it "renders edit with message" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template("admin/posts/edit")
+
+              expect(assigns(:post)      ).to eq(post)
+              expect(assigns(:post).title).to eq(valid_params["title"])
+              expect(assigns(:post).body ).to eq(nil)
+
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+            end
+          end
+
+          context "with invalid params" do
+            it "unpublishes and renders edit with errors" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template("admin/posts/edit")
+
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).title       ).to eq(nil)
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
+
+              expect(flash[:error]).to eq(nil)
+            end
+          end
+        end
+
+        context "review" do
+          let(:post) { create(:song_review, :published) }
+
+          let(  :valid_params) { { "body" => "", "work_id" => create(:song).id } }
+          let(:invalid_params) { { "body" => "", "work_id" => ""               } }
+
+          context "slug" do
+            pending "with custom slug"
+            pending "with blank slug"
+          end
+
+          context "with valid params" do
+            it "unpublishes and updates the requested post" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+              expect(assigns(:post).published_at).to eq(nil)
+            end
+
+            it "redirects to post" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(response).to redirect_to(admin_post_path(post))
+
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+            end
+          end
+
+          context "with failed transition" do
+            before(:each) do
+              post.unpublish!
+            end
+
+            it "renders edit with message" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template("admin/posts/edit")
+
+              expect(assigns(:post)        ).to eq(post)
+              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
+              expect(assigns(:post).body   ).to eq(nil)
+
+              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+            end
+          end
+
+          context "with invalid params" do
+            it "unpublishes and renders edit with errors" do
+              put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
+
+              expect(response).to be_success
+              expect(response).to render_template("admin/posts/edit")
+
+              expect(assigns(:post)             ).to eq(post)
+              expect(assigns(:post).work_id     ).to eq(nil)
+              expect(assigns(:post).body        ).to eq(nil)
+              expect(assigns(:post).published?  ).to eq(false)
+              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
+
+              expect(flash[:error]).to eq(nil)
+            end
+          end
+        end
+      end
     end
 
     describe "DELETE #destroy" do

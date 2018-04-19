@@ -73,9 +73,9 @@ RSpec.describe Post, type: :model do
 
   context "validations" do
     context "custom" do
-      it "calls #ensure_work_or_title" do
-         allow(subject).to receive(:ensure_work_or_title).and_call_original
-        expect(subject).to receive(:ensure_work_or_title)
+      it "calls #validate_work_and_title" do
+         allow(subject).to receive(:validate_work_and_title).and_call_original
+        expect(subject).to receive(:validate_work_and_title)
 
         subject.valid?
       end
@@ -286,6 +286,30 @@ RSpec.describe Post, type: :model do
         specify { expect(  saved_standalone.standalone?).to eq(true ) }
         specify { expect(    unsaved_review.standalone?).to eq(false) }
         specify { expect(      saved_review.standalone?).to eq(false) }
+
+        context "during data editing for saved" do
+          specify "for standalone" do
+            saved_standalone.title = nil
+
+            expect(saved_standalone.standalone?).to eq(true)
+          end
+
+          context "for review" do
+            specify "work" do
+              saved_review.work = nil
+
+              expect(saved_review.standalone?).to eq(false)
+            end
+          end
+
+          context "for review" do
+            specify "work_id" do
+              saved_review.work_id = nil
+
+              expect(saved_review.standalone?).to eq(false)
+            end
+          end
+        end
       end
 
       describe "#review?" do
@@ -293,6 +317,30 @@ RSpec.describe Post, type: :model do
         specify { expect(  saved_standalone.review?).to eq(false) }
         specify { expect(    unsaved_review.review?).to eq(true ) }
         specify { expect(      saved_review.review?).to eq(true ) }
+
+        context "during data editing for saved" do
+          specify "for standalone" do
+            saved_standalone.title = nil
+
+            expect(saved_standalone.review?).to eq(false)
+          end
+
+          context "for review" do
+            specify "work" do
+              saved_review.work = nil
+
+              expect(saved_review.review?).to eq(true)
+            end
+          end
+
+          context "for review" do
+            specify "work_id" do
+              saved_review.work_id = nil
+
+              expect(saved_review.review?).to eq(true)
+            end
+          end
+        end
       end
     end
 
@@ -301,29 +349,33 @@ RSpec.describe Post, type: :model do
       specify { expect(create(:tiny_standalone_post       ).one_line_title).to eq("Hello") }
     end
 
-    describe "#simulate_validation_for_publishing" do
-      let(:neither) { build(:post) }
-      let(:no_body) { build(:post, body: "",     slug: "a/b/c") }
-      let(:no_slug) { build(:post, body: "body", slug: ""     ) }
+    describe "#prepare_to_publish" do
+      # let(:neither) { build(:post) }
+      # let(:no_body) { build(:post, body: "",     slug: "a/b/c") }
+      # let(:no_slug) { build(:post, body: "body", slug: ""     ) }
+      #
+      # it "manually adds error to both" do
+      #   neither.simulate_validation_for_publishing
+      #
+      #   expect(neither.errors.details[:body].first[:error]).to eq(:blank)
+      #   expect(neither.errors.details[:slug].first[:error]).to eq(:blank)
+      # end
+      #
+      # it "manually adds error to body" do
+      #   no_body.simulate_validation_for_publishing
+      #
+      #   expect(no_body.errors.details[:body].first[:error]).to eq(:blank)
+      # end
+      #
+      # it "manually adds error to slug" do
+      #   no_slug.simulate_validation_for_publishing
+      #
+      #   expect(no_slug.errors.details[:slug].first[:error]).to eq(:blank)
+      # end
+    end
 
-      it "manually adds error to both" do
-        neither.simulate_validation_for_publishing
-
-        expect(neither.errors.details[:body].first[:error]).to eq(:blank)
-        expect(neither.errors.details[:slug].first[:error]).to eq(:blank)
-      end
-
-      it "manually adds error to body" do
-        no_body.simulate_validation_for_publishing
-
-        expect(no_body.errors.details[:body].first[:error]).to eq(:blank)
-      end
-
-      it "manually adds error to slug" do
-        no_slug.simulate_validation_for_publishing
-
-        expect(no_slug.errors.details[:slug].first[:error]).to eq(:blank)
-      end
+    describe "#prepare_to_unpublish" do
+      pending "works"
     end
 
     describe "private" do
@@ -463,34 +515,73 @@ RSpec.describe Post, type: :model do
       end
 
       context "custom validators" do
-        describe "#ensure_work_or_title" do
-          let(:neither) { build(:post                                                   ) }
-          let(   :both) { build(:post, title: "title", work_id: create(:minimal_work).id) }
-          let(  :title) { build(:post, title: ""                                        ) }
-          let(   :work) { build(:post,                 work_id: create(:minimal_work).id) }
+        describe "#validate_work_and_title" do
+          describe "with just work" do
+            subject { build(:post, work_id: create(:minimal_work).id) }
 
-          specify 'with neither' do
-            neither.send(:ensure_work_or_title)
+            specify "ok" do
+              subject.send(:validate_work_and_title)
 
-            expect(neither.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+              expect(subject.errors.details[:base]).to eq([])
+            end
           end
 
-          specify 'with both' do
-            both.send(:ensure_work_or_title)
+          describe "with just title" do
+            subject { build(:post, title: "") }
 
-            expect(both.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+            specify "ok" do
+              subject.send(:validate_work_and_title)
+
+              expect(subject.errors.details[:base]).to eq([])
+            end
           end
 
-          specify 'with work' do
-            work.send(:ensure_work_or_title)
+          describe "with neither" do
+            subject { build(:post) }
 
-            expect(work.errors.details[:base]).to eq([])
+            specify "errors" do
+              subject.send(:validate_work_and_title)
+
+              expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+            end
           end
 
-          specify 'with title' do
-            title.send(:ensure_work_or_title)
+          describe "with both" do
+            subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
 
-            expect(title.errors.details[:base]).to eq([])
+            specify "errors" do
+              subject.send(:validate_work_and_title)
+
+              expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+            end
+          end
+
+          describe "saved review" do
+            subject { create(:song_review) }
+
+            it "ensures work and no title" do
+              subject.work_id = ""
+              subject.title   = "title"
+
+              subject.send(:validate_work_and_title)
+
+              expect(subject.errors.details[:work_id].first).to eq({ error: :blank   })
+              expect(subject.errors.details[:title  ].first).to eq({ error: :present })
+            end
+          end
+
+          describe "saved standalone" do
+            subject { create(:standalone_post) }
+
+            it "ensures title and no work" do
+              subject.title   = ""
+              subject.work_id = create(:song).id
+
+              subject.send(:validate_work_and_title)
+
+              expect(subject.errors.details[:title  ].first).to eq({ error: :blank   })
+              expect(subject.errors.details[:work_id].first).to eq({ error: :present })
+            end
           end
         end
       end

@@ -101,7 +101,10 @@ en:
             base:
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
+            body:
+              blank_during_publish: "You cannot publish a post without a body."
             slug:
+              blank_during_publish: "You cannot pubish a post without a slug."
               locked: "You cannot change the slug on a published post."
         work:
           attributes:

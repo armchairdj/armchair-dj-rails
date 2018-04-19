@@ -225,19 +225,18 @@ private
   end
 
   def publish_and_respond
-    saved     = @post.update(@sanitized_params)
-    published = @post.publish!
-
     respond_to do |format|
-      if saved && published
+      if @post.update_and_publish(@sanitized_params)
         format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.publish") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
-        @post.simulate_validation_for_publishing
-
-        flash.now[:error] = I18n.t("admin.flash.posts.error.publish")
+        if @post.published?
+          flash.now[:notice] = I18n.t("admin.flash.posts.notice.publish")
+        else
+          flash.now[:error] = I18n.t("admin.flash.posts.error.publish")
+        end
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -246,17 +245,18 @@ private
   end
 
   def unpublish_and_respond
-    unpublished = @post.unpublish!
-    saved       = @post.update(@sanitized_params)
-
     respond_to do |format|
-      if unpublished && saved
+      if @post.update_and_unpublish(@sanitized_params)
         format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.unpublish") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
-        flash.now[:error] = I18n.t("admin.flash.posts.error.unpublish")
+        if @post.draft?
+          flash.now[:notice] = I18n.t("admin.flash.posts.notice.unpublish")
+        else
+          flash.now[:error] = I18n.t("admin.flash.posts.error.unpublish")
+        end
 
         format.html { render :edit }
         format.json { render json: @post.errors, status: :unprocessable_entity }
