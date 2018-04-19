@@ -40,10 +40,13 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :for_admin,    -> { eager                                       }
-  scope :for_site,     -> { eager.published.reverse_cron                }
+  scope :review,       -> { joins(:work) }
+  scope :standalone,   -> { where(work_id: nil) }
+
   scope :eager,        -> { includes(work: { contributions: :creator }) }
   scope :reverse_cron, -> { order(published_at: :desc)                  }
+  scope :for_admin,    -> { eager                                       }
+  scope :for_site,     -> { eager.published.reverse_cron                }
 
   #############################################################################
   # VALIDATIONS.

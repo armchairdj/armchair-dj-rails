@@ -37,7 +37,7 @@ RSpec.describe Post, type: :model do
     let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
     let!(:published_standalone) { create(:standalone_post, :published) }
 
-    describe "for status" do
+    context "for status" do
       describe "draft" do
         specify { expect(described_class.draft).to match_array([
           draft_review,
@@ -53,6 +53,22 @@ RSpec.describe Post, type: :model do
       end
     end
 
+    context "for type" do
+      describe "standalone" do
+        specify { expect(described_class.standalone).to match_array([
+          draft_standalone,
+          published_standalone
+        ]) }
+      end
+
+      describe "review" do
+        specify { expect(described_class.review).to match_array([
+          draft_review,
+          published_review
+        ]) }
+      end
+    end
+
     describe "reverse_cron" do
       specify { expect(described_class.reverse_cron.to_a).to eq([
         draft_review,
@@ -62,9 +78,23 @@ RSpec.describe Post, type: :model do
       ]) }
     end
 
+    describe "for_admin" do
+      specify { expect(described_class.for_admin).to match_array([
+        draft_review,
+        draft_standalone,
+        published_standalone,
+        published_review
+      ]) }
+    end
+
+    describe "for_site" do
+      specify { expect(described_class.for_site).to match_array([
+        published_standalone,
+        published_review
+      ]) }
+    end
+
     pending "eager"
-    pending "for_admin"
-    pending "for_site"
   end
 
   context "validations" do

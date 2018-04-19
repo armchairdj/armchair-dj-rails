@@ -44,7 +44,7 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(:first_name, :middle_name, :last_name) }
+  scope :alphabetical, -> { order(:first_name, :last_name) }
 
   #############################################################################
   # VALIDATIONS.
