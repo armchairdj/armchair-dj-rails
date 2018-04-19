@@ -65,17 +65,27 @@ RSpec.describe PostsController, type: :controller do
     let(:post) { create(:minimal_post, slug: "slug/path") }
 
     it "renders" do
-        get :show, params: { slug: post.slug }
+      get :show, params: { slug: post.slug }
 
-        expect(response).to be_success
-        expect(response).to render_template("posts/show")
+      expect(response).to be_success
+      expect(response).to render_template("posts/show")
 
-        expect(assigns(:post)).to eq(post)
+      expect(assigns(:post)).to eq(post)
     end
   end
 
   describe "GET #feed" do
-    pending "renders rss"
+    before(:each) do
+      101.times { create(:minimal_post, :published) }
+    end
+
+    it "renders last 100 published posts as rss" do
+      get :feed, params: { format: :rss }
+
+      expect(response).to be_success
+
+      expect(assigns(:posts).length).to eq(100)
+    end
   end
 
   context "concerns" do

@@ -20,6 +20,11 @@ module Errorable
     # 422
     rescue_from ActionController::UnknownFormat,     with: :handle_422
 
+    # 500
+    unless Rails.application.config.consider_all_requests_local
+      rescue_from StandardError,                     with: :handle_500
+    end
+
   protected
 
     def handle_403_recoverable(exception = nil)
@@ -94,13 +99,11 @@ module Errorable
       when 500
         "ARMCHAIRDJ_WHOOPS (500)"
       when 422
-        "ARMCHAIRDJ_NOT_FOUND (404)"
+        "ARMCHAIRDJ_BAD_FORMAT (422)"
       when 404
         "ARMCHAIRDJ_NOT_FOUND (404)"
       when 403
         "ARMCHAIRDJ_FORBIDDEN (403)"
-      else
-        "ARMCHAIRDJ_EXCEPTION (#{code})"
       end
     end
 

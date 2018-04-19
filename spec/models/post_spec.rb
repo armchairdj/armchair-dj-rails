@@ -449,8 +449,6 @@ RSpec.describe Post, type: :model do
 
           expect(subject.update_and_unpublish(params)).to eq(false)
 
-          puts "xxx", subject.errors.inspect
-
           subject.reload
 
           expect(subject.work_id     ).to eq(params["work_id"])

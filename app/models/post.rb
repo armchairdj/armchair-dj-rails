@@ -137,7 +137,6 @@ class Post < ApplicationRecord
   def update_and_unpublish(params)
     # Unpublish first so validation rules change.
     unpublished = self.unpublish!
-    # Must reload to clear published_at that was nilled in callback.
     updated     = self.reload.update(params)
 
     unpublished && updated

@@ -287,6 +287,65 @@ RSpec.shared_examples "an errorable controller" do
         end
       end
     end
+
+    describe "#handle_500" do
+      controller do
+        rescue_from StandardError, with: :handle_500
+
+        def index
+          raise StandardError
+        end
+      end
+
+      context "behavior" do
+        before(:each) do
+          expect(Rails.logger).to receive(:error)
+        end
+
+        context "html" do
+          it "renders error page" do
+            get :index
+
+            expect(response).to render_template("errors/internal_server_error")
+          end
+        end
+
+        context "xhr" do
+          it "renders json" do
+            get :index, { xhr: true }
+
+            expect(response     ).to have_http_status(500)
+            expect(response.body).to eq("{}")
+          end
+        end
+
+        context "json" do
+          before(:each) do
+            request.headers.merge! json_headers
+          end
+
+          it "renders json" do
+            get :index
+
+            expect(response     ).to have_http_status(500)
+            expect(response.body).to eq("{}")
+          end
+        end
+      end
+
+      context "rescue_from" do
+        before(:each) do
+          allow(controller).to  receive(:handle_500)
+          expect(controller).to receive(:handle_500)
+        end
+
+        describe "StandardError" do
+          it "handles error" do
+            get :index
+          end
+        end
+      end
+    end
   end
 
   context "private" do
