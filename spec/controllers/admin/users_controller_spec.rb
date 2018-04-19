@@ -7,31 +7,161 @@ RSpec.describe Admin::UsersController, type: :controller do
     login_admin
 
     describe "GET #index" do
-      pending "scopes"
+      context "without records" do
+        context ":all scope (default)" do
+          it "renders with one record because there has to be at least one admin" do
+            get :index
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(1)
+            expect(assigns(:users).size       ).to eq(1)
+          end
+        end
+
+        context ":member scope" do
+          it "renders" do
+            get :index, params: { scope: "member" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(0)
+            expect(assigns(:users).size       ).to eq(0)
+          end
+        end
+
+        context ":contributor scope" do
+          it "renders" do
+            get :index, params: { scope: "contributor" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(0)
+            expect(assigns(:users).size       ).to eq(0)
+          end
+        end
+
+        context ":admin scope" do
+          it "renders with one record because there has to be at least one admin" do
+            get :index, params: { scope: "admin" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(1)
+            expect(assigns(:users).size       ).to eq(1)
+          end
+        end
+      end
 
       context "with records" do
-        before(:each) do
-          (per_page).times { create(:minimal_user) }
+        context ":all scope (default)" do
+          before(:each) do
+            (per_page / 4).times { create(:admin) }
+            (per_page / 4).times { create(:contributor) }
+            (per_page / 2).times { create(:member) }
+          end
+
+          it "renders" do
+            get :index
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(1)
+          end
         end
 
-        it "renders" do
-          get :index
+        context ":member scope" do
+          before(:each) do
+            (per_page + 1).times { create(:member) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/users/index")
+          it "renders" do
+            get :index, params: { scope: "member" }
 
-          expect(assigns(:users).total_count).to eq(per_page + 1)
-          expect(assigns(:users).length     ).to eq(per_page)
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "member", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(1)
+          end
         end
 
-        it "renders second page" do
-          get :index, params: { page: "2" }
+        context ":contributor scope" do
+          before(:each) do
+            (per_page + 1).times { create(:contributor) }
+          end
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/users/index")
+          it "renders" do
+            get :index, params: { scope: "contributor" }
 
-          expect(assigns(:users).total_count).to eq(per_page + 1)
-          expect(assigns(:users).length     ).to eq(1)
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "contributor", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(1)
+          end
+        end
+
+        context ":admin scope" do
+          before(:each) do
+            (per_page).times { create(:admin) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "admin" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(per_page)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "admin", page: "2" }
+
+            expect(response).to be_success
+            expect(response).to render_template("admin/users/index")
+
+            expect(assigns(:users).total_count).to eq(per_page + 1)
+            expect(assigns(:users).length     ).to eq(1)
+          end
         end
       end
     end
