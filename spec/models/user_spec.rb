@@ -56,14 +56,6 @@ RSpec.describe User, type: :model do
           "Admin",
         ])
       end
-
-      specify "values are symbols of scopes" do
-        described_class.admin_scopes.values.each do |sym|
-          expect(sym).to be_a_kind_of(Symbol)
-
-          expect(described_class.respond_to?(sym)).to eq(true)
-        end
-      end
     end
 
     describe "self#default_admin_scope" do
@@ -94,6 +86,9 @@ RSpec.describe User, type: :model do
   end
 
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an application record"
+    it_behaves_like "an atomically validatable model", { first_name: nil, last_name: nil } do
+      subject { create(:minimal_user) }
+    end
   end
 end

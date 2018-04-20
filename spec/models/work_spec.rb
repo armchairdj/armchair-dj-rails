@@ -252,6 +252,10 @@ RSpec.describe Work, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an application record"
     it_behaves_like "a viewable model"
+    it_behaves_like "an atomically validatable model", { title: nil, medium: nil } do
+      subject { create(:minimal_work) }
+    end
   end
 end

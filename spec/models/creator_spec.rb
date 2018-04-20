@@ -67,6 +67,10 @@ RSpec.describe Creator, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an application record"
     it_behaves_like "a viewable model"
+    it_behaves_like "an atomically validatable model", { name: nil } do
+      subject { create(:minimal_creator) }
+    end
   end
 end

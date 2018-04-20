@@ -36,14 +36,6 @@ RSpec.shared_examples "a viewable model" do
           "All",
         ])
       end
-
-      specify "values are symbols of scopes" do
-        described_class.admin_scopes.values.each do |sym|
-          expect(sym).to be_a_kind_of(Symbol)
-
-          expect(described_class.respond_to?(sym)).to eq(true)
-        end
-      end
     end
 
     describe "self#default_admin_scope" do

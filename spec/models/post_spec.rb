@@ -287,14 +287,6 @@ RSpec.describe Post, type: :model do
           "All",
         ])
       end
-
-      specify "values are symbols of scopes" do
-        described_class.admin_scopes.values.each do |sym|
-          expect(sym).to be_a_kind_of(Symbol)
-
-          expect(described_class.respond_to?(sym)).to eq(true)
-        end
-      end
     end
 
     describe "self#default_admin_scope" do
@@ -825,6 +817,10 @@ RSpec.describe Post, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an application record"
     it_behaves_like "a sluggable model", :slug
+    it_behaves_like "an atomically validatable model", { body: nil, slug: nil, published_at: nil } do
+      subject { create(:standalone_post, :published) }
+    end
   end
 end

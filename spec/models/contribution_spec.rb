@@ -73,6 +73,9 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an application record"
+    # it_behaves_like "an atomically validatable model", { work: nil, creator: nil } do
+    #   subject { create(:minimal_contribution) }
+    # end
   end
 end
