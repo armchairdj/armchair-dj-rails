@@ -15,7 +15,7 @@ RSpec.shared_examples "an application record" do
 
       specify { expect(subject).to eq(described_class.admin_scopes.values.first) }
 
-      specify { expect(described_class.respond_to?(subject)).to eq(true) }
+      specify { expect(described_class).to respond_to(subject) }
     end
 
     describe "admin_scopes" do
@@ -33,7 +33,7 @@ RSpec.shared_examples "an application record" do
         described_class.admin_scopes.values.each do |sym|
           expect(sym).to be_a_kind_of(Symbol)
 
-          expect(described_class.respond_to?(sym)).to eq(true)
+          expect(described_class).to respond_to(sym)
         end
       end
     end

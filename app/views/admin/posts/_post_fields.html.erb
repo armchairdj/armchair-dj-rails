@@ -1,19 +1,17 @@
 <% render partial: "tab_choose_work", locals: {
   f:              f,
   works:          works,
-  allow_new_work: allow_new_work,
-} %>
+} if available_tabs.include?("post-choose-work") %>
 
 <% render partial: "tab_new_work", locals: {
   f:              f,
   creators:       creators,
   roles:          roles,
-  allow_new_work: allow_new_work
-} %>
+} if available_tabs.include?("post-new-work") %>
 
 <% render partial: "tab_standalone", locals: {
   f: f
-} %>
+} if available_tabs.include?("post-standalone") %>
 
 <%= content_tag(:div, class: "tabgroup",
   "data-controller":            "tabgroup",

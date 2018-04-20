@@ -100,14 +100,14 @@ RSpec.describe Work, type: :model do
       specify { expect(described_class.max_contributions).to eq(10) }
     end
 
-    describe "self#alphabetical_with_creator" do
+    describe "self#alphabetical_by_creator" do
       let!(:madonna_ray_of_light             ) { create(:madonna_ray_of_light             ) }
       let!(:global_communications_76_14      ) { create(:global_communications_76_14      ) }
       let!(:kate_bush_directors_cut          ) { create(:kate_bush_directors_cut          ) }
       let!(:carl_craig_and_green_velvet_unity) { create(:carl_craig_and_green_velvet_unity) }
       let!(:kate_bush_hounds_of_love         ) { create(:kate_bush_hounds_of_love         ) }
 
-      specify { expect(described_class.alphabetical_with_creator.to_a).to eq([
+      specify { expect(described_class.alphabetical_by_creator.to_a).to eq([
         carl_craig_and_green_velvet_unity,
         global_communications_76_14,
         kate_bush_directors_cut,
@@ -139,9 +139,11 @@ RSpec.describe Work, type: :model do
 
       specify "second element of each sub-array is a list of options" do
         described_class.grouped_select_options_for_post.to_h.values.each do |rel|
-          expect(rel).to be_a_kind_of(ActiveRecord::Relation)
+          expect(rel).to be_a_kind_of(Array)
         end
       end
+
+      pending "alphabetical by creator"
     end
 
     describe "self#admin_filters" do
@@ -169,7 +171,7 @@ RSpec.describe Work, type: :model do
         described_class.admin_filters.values.each do |sym|
           expect(sym).to be_a_kind_of(Symbol)
 
-          expect(described_class.respond_to?(sym)).to eq(true)
+          expect(described_class).to respond_to(sym)
         end
       end
     end

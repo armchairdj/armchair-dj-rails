@@ -3,13 +3,7 @@ module Sluggable
 
   class_methods do
     def generate_unique_slug(instance, attribute, parts)
-      uniquify_slug instance, attribute, generate_slug_from_parts(parts)
-    end
-
-    def uniquify_slug(instance, attribute, base)
-      return base unless dupe = find_duplicate_slug(instance, attribute, base)
-
-      [base, self.next_slug_index(dupe).to_s].join("/")
+      uniquify_slug(instance, attribute, generate_slug_from_parts(parts))
     end
 
     def generate_slug_from_parts(parts)
@@ -24,10 +18,18 @@ module Sluggable
       str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
     end
 
+    def uniquify_slug(instance, attribute, base)
+      return base unless dupe = find_duplicate_slug(instance, attribute, base)
+
+      incremented = [base, self.next_slug_index(dupe).to_s].join("/")
+
+      incremented
+    end
+
     def find_duplicate_slug(instance, attribute, slug)
       scope = self.where("#{attribute} LIKE ?", "#{slug}%")
       scope = scope.where.not(id: instance.id) if instance.persisted?
-      dupe = scope.maximum(attribute.to_sym)
+      dupe  = scope.maximum(attribute.to_sym)
 
       dupe
     end

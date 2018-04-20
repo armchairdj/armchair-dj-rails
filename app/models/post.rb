@@ -18,6 +18,12 @@ class Post < ApplicationRecord
   belongs_to :work, required: false
 
   #############################################################################
+  # VIRTUAL ATTRIBUTES.
+  #############################################################################
+
+  attr_accessor :current_work_id
+
+  #############################################################################
   # NESTED ATTRIBUTES.
   #############################################################################
 
@@ -123,9 +129,15 @@ class Post < ApplicationRecord
     end
   end
 
-  # TODO Include post Type and Version
+  # TODO Include post type and version
   def one_line_title
     work ? work.title_with_creator : title
+  end
+
+  def prepare_work_for_editing
+    self.current_work_id = self.work_id
+    self.build_work
+    self.work.prepare_contributions
   end
 
   def update_and_publish(params)
@@ -172,7 +184,7 @@ private
     return false unless persisted? && standalone?
 
     self.errors.add(:title,   :blank  ) if title.blank?
-    self.errors.add(:work_id, :present) if work_id.present?
+    self.errors.add(:work_id, :present) if work.present?
 
     true
   end
@@ -181,7 +193,7 @@ private
     return false unless persisted? && review?
 
     self.errors.add(:title,   :present) if title.present?
-    self.errors.add(:work_id, :blank  ) if work_id.blank?
+    self.errors.add(:work_id, :blank  ) if work.blank?
 
     true
   end

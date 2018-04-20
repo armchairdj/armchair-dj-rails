@@ -9,6 +9,13 @@ RSpec.describe Post, type: :model do
     it { should belong_to(:work) }
   end
 
+  context "virtual_attributes" do
+    describe "#current_work" do
+      it { should respond_to(:current_work_id ) }
+      it { should respond_to(:current_work_id=) }
+    end
+  end
+
   context "nested_attributes" do
     it { should accept_nested_attributes_for(:work) }
 
@@ -273,8 +280,8 @@ RSpec.describe Post, type: :model do
     end
 
     describe "methods" do
-      specify { expect(draft.respond_to?(    :draft?)).to eq(true) }
-      specify { expect(draft.respond_to?(:published?)).to eq(true) }
+      specify { expect(draft).to respond_to(:draft?    ) }
+      specify { expect(draft).to respond_to(:published?) }
     end
   end
 

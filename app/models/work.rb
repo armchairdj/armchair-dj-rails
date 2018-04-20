@@ -93,7 +93,7 @@ class Work < ApplicationRecord
     10
   end
 
-  def self.alphabetical_with_creator
+  def self.alphabetical_by_creator
     self.all.to_a.sort_by { |c| c.title_with_creator }
   end
 
@@ -118,7 +118,7 @@ class Work < ApplicationRecord
   end
 
   def self.grouped_select_options_for_post
-    self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).alphabetical] }
+    self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).eager.alphabetical_by_creator] }
   end
 
   #############################################################################

@@ -25,23 +25,34 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Type") %>
-        <%= content_tag(:td, post_type(@post)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Status") %>
         <%= content_tag(:td) do %>
           <%= @post.human_status %>
           <%= admin_date(@post.published_at) if @post.published? %>
-          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Type") %>
+        <%= content_tag(:td, post_type(@post)) %>
+      <% end %>
+
+      <% if @post.review? %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Subject") %>
+          <%= content_tag(:td, link_to_work(@post.work, full: true)) %>
+        <% end %>
+      <% else %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Title") %>
+          <%= content_tag(:td, @post.title) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Slug") %>
         <%= content_tag(:td) do %>
-          <%= @post.slug %>
-          <%= "(dirty)" if @post.dirty_slug? %>
+          <%= @post.slug %> <%= "(dirty)" if @post.dirty_slug? %>
         <% end %>
       <% end %>
 

@@ -14,11 +14,7 @@ RSpec.shared_examples "an atomically validatable model" do |invalid_params|
         end
 
         it "validates multiple attributes" do
-          puts "xx", attributes
-
           expect(subject.valid_attributes?(attributes)).to eq(true)
-
-          puts "xx", subject.errors.inspect
 
           expect(subject.errors.messages.keys.length).to eq(0)
         end

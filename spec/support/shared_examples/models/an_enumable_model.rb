@@ -70,15 +70,15 @@ RSpec.shared_examples "an enumable model" do |attributes|
 
   context "class" do
     describe "self#human_enum_collection" do
-      specify { expect(described_class.respond_to?(:human_enum_collection)).to eq(true) }
+      specify { expect(described_class).to respond_to(:human_enum_collection) }
     end
 
     describe "self#human_enum_value" do
-      specify { expect(described_class.respond_to?(:human_enum_value)).to eq(true) }
+      specify { expect(described_class).to respond_to(:human_enum_value) }
     end
 
     describe "self#enumable_attributes" do
-      specify { expect(described_class.respond_to?(:enumable_attributes)).to eq(true) }
+      specify { expect(described_class).to respond_to(:enumable_attributes) }
     end
 
     describe "self#retrieve_enumable_attributes" do

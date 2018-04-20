@@ -134,10 +134,14 @@ private
     fetched = instance_params
 
     if @post.standalone?
-      fetched.delete(:work_id)
       fetched.delete(:work_attributes)
+      fetched.delete(:work_id)
     elsif @post.review?
       fetched.delete(:title)
+
+      if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
+        fetched[:work_id] = nil
+      end
     end
 
     @sanitized_params = fetched
@@ -160,66 +164,59 @@ private
           :id,
           :_destroy,
           :role,
-          :creator_id,
-          # :creator_attributes => [
-          #   :contribution_id,
-          #   :id,
-          #   :_destroy,
-          #   :name
-          # ]
+          :creator_id
         ]
       ]
     )
   end
 
   def prepare_form
-    prepare_work_attributes_fields
-    prepare_dropdowns
+    @available_tabs = which_tabs
+    @selected_tab   = which_tab
 
-    @selected_tab = which_tab
-  end
+    return if @post.persisted? && @post.standalone?
 
-  def prepare_work_attributes_fields
-    if @post.persisted? || @post.work_id
-      @allow_new_work = false
-    else
-      @allow_new_work = true
-
-      @post.build_work unless @post.work
-      @post.work.prepare_contributions
-    end
-  end
-
-  def prepare_dropdowns
-    @works = Work.grouped_select_options_for_post
-
-    return unless @allow_new_work
+    @post.prepare_work_for_editing
 
     @creators = policy_scope(Creator)
     @roles    = Contribution.human_roles
+    @works    = Work.grouped_select_options_for_post
   end
 
   def authorize_instance
     authorize @post
   end
 
+  def which_tabs
+    case action_name
+    when "new", "create"
+      ["post-choose-work", "post-new-work", "post-standalone"]
+    when "edit", "update"
+      if @post.standalone?
+        ["post-standalone"]
+      else
+        ["post-choose-work", "post-new-work"]
+      end
+    end
+  end
+
   def which_tab
     case action_name
     when "new"
-      return "post-choose-work"
+      "post-choose-work"
     when "create"
       if @sanitized_params[:work_attributes].present?
-        return "post-new-work"
+        "post-new-work"
       elsif @sanitized_params[:title].present?
-        return "post-standalone"
+        "post-standalone"
       else
-        return "post-choose-work"
+        "post-choose-work"
       end
     when "edit", "update"
-      if @post.title.present?
-        return "post-standalone"
+      if @post.standalone?
+        "post-standalone"
       else
-        return "post-choose-work"
+        "post-choose-work"
       end
     end
   end
