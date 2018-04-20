@@ -31,6 +31,7 @@
 
       a.tab-active,
       span {
+        cursor: default;
         border: 1px solid $armchair-smoke;
         border-bottom-color: $armchair-blacktop;
         background-color: $armchair-blacktop;
