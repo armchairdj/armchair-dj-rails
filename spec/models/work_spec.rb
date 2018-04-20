@@ -69,6 +69,10 @@ RSpec.describe Work, type: :model do
         tsw
       ]) }
     end
+
+    pending "eager"
+    pending "for_admin"
+    pending "for_site"
   end
 
   context "validations" do

@@ -1,7 +1,7 @@
 class CreatorPolicy < PublicPolicy
   class Scope < Scope
     def resolve
-      scope.includes(:posts).alphabetical
+      scope.for_site
     end
   end
 end

@@ -165,6 +165,9 @@ group :development do
 
   # Procfile-based application runner.
   gem "foreman"
+
+  # Query optimizer.
+  gem "bullet"
 end
 
 group :development, :test do

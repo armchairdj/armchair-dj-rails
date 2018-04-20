@@ -1,7 +1,7 @@
 class Admin::CreatorPolicy < AdminPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      scope.for_admin
     end
   end
 end

@@ -67,6 +67,9 @@ class Work < ApplicationRecord
   #############################################################################
 
   scope :alphabetical, -> { order("LOWER(works.title)") }
+  scope :eager,        -> { includes(:creators).includes(contributions: :creator).where(contributions: { role: Contribution.roles["creator"] }) }
+  scope :for_admin,    -> { eager }
+  scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }
 
   #############################################################################
   # VALIDATIONS.

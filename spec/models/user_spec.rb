@@ -32,6 +32,10 @@ RSpec.describe User, type: :model do
         brian_j_dillard, brian_dillard, michelle_dillard, michelle_dillardo
       ]) }
     end
+
+    pending "eager"
+    pending "for_admin"
+    pending "for_site"
   end
 
   context "validations" do

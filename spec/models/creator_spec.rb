@@ -42,6 +42,9 @@ RSpec.describe Creator, type: :model do
         zorro
       ]) }
     end
+    pending "eager"
+    pending "for_admin"
+    pending "for_site"
   end
 
   context "validations" do

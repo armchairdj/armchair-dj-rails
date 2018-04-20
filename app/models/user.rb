@@ -45,6 +45,9 @@ class User < ApplicationRecord
   #############################################################################
 
   scope :alphabetical, -> { order(:first_name, :last_name) }
+  scope :eager,        -> { all }
+  scope :for_admin,    -> { eager }
+  scope :for_site,     -> { eager }
 
   #############################################################################
   # VALIDATIONS.
