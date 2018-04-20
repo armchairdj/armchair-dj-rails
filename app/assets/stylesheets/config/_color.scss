@@ -40,12 +40,12 @@ $link-color-hover: scale-color($link-color, $lightness: 15%);
 
 /* Forms. */
 
-$legend-color:          $armchair-blue-lightest;
 $label-color:           $standard-color;
 $input-bg-color:        scale-color($armchair-blue-lightest, $lightness: 50%);
 $input-bg-color-focus:  #fff;
 $placeholder-color:     scale-color($darkest-grey, $lightness: 30%);
 $focus-outline-color:   transparentize($armchair-blue-lightest, 0.4);
+$chunk-legend-color:    $armchair-blue-lightest;
 
 /* Flash. */
 

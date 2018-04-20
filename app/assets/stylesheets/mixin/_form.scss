@@ -1,8 +1,14 @@
-@mixin legend-text {
-  font-size: $legend-font-size;
-  color: $legend-color;
+@mixin chunk-legend-text {
+  font-size: $chunk-legend-font-size;
+  color: $chunk-legend-color;
   text-transform: uppercase;
   letter-spacing: 0.15em;
+}
+
+@mixin legendary-legend-text {
+  font-size: $legendary-legend-font-size;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
 }
 
 @mixin label-text {

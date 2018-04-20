@@ -1,7 +1,7 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  static targets = [ "trigger", "tab" ];
+  static targets = [ "trigger", "tab", "remove" ];
 
   connect() {
     this.setup();
@@ -10,17 +10,20 @@ export default class extends Controller {
   }
 
   setup() {
-    this.$targets = $(this.triggerTargets).add(this.tabTargets);
+    this.$managed = $(this.triggerTargets).add(this.tabTargets);
 
     this.showTab(this.data.get("selected-tab"));
 
     this.listener = $(document).on("tabgroup:activate", _.bind(this.activateFromAfar, this));
+
+    $(this.removeTargets).remove();
+    $(this.element).addClass("initialized");
   }
 
   teardown(evt) {
     $document.off("tabgroup:activate", this.listener);
 
-    this.$targets.removeClass("tab-active tab-inactive");
+    this.$managed.removeClass("tab-active tab-inactive");
   }
 
   activate(evt) {
@@ -34,10 +37,10 @@ export default class extends Controller {
   }
 
   showTab(tabName) {
-    const $active   = this.$targets.filter(`[data-tab-name=${tabName}]`);
-    const $inactive = this.$targets.not($active);
+    const $active   = this.$managed.filter(`[data-tab-name=${tabName}]`);
+    const $inactive = this.$managed.not($active);
 
-    $active.removeClass("tab-inactive").addClass("tab-active");
-    $inactive.removeClass("tab-active").addClass("tab-inactive");
+    $active.removeClass(  "tab-inactive").addClass("tab-active"  );
+    $inactive.removeClass("tab-active"  ).addClass("tab-inactive");
   }
 }

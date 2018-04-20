@@ -8,7 +8,9 @@
 
 <% content_for(:tabs) do %>
   <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": tab_name, id: tab_name) do %>
-    <%= content_tag(:fieldset) do %>
+    <%= content_tag(:fieldset, class: "chunk") do %>
+      <%= content_tag(:legend, "New Work", "data-target": "tabgroup.remove") %>
+
       <%= f.simple_fields_for :work do |ff| %>
         <%= render partial: "admin/works/work_fields", locals: {
           f:        ff,

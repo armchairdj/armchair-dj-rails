@@ -49,9 +49,29 @@
     border-radius: $standard-border-radius;
     border: 1px solid $armchair-smoke;
     padding: $spacing-m;
+  }
 
-    &.tab-inactive {
+  &.same-page {
+    ul.tabs {
       display: none;
+    }
+
+    .tab {
+      @include bottom-margin-only($spacing-m);
+    }
+
+    &.initialized {
+      ul.tabs {
+        display: block;
+      }
+
+      .tab {
+        @include bottom-margin-only(0);
+
+        &.tab-inactive {
+          display: none;
+        }
+      }
     }
   }
 }

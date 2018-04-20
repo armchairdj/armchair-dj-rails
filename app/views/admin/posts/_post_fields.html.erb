@@ -13,10 +13,14 @@
   f: f
 } if available_tabs.include?("post-standalone") %>
 
-<%= content_tag(:div, class: "tabgroup",
+<%= content_tag(:div, class: "tabgroup same-page",
   "data-controller":            "tabgroup",
   "data-tabgroup-selected-tab": selected_tab
 ) do %>
+  <%= content_tag(:p, "data-target": "tabgroup.remove") do %>
+    Choose a work to review, create a new work, or write a standalone post.
+  <% end %>
+
   <%= content_tag(:ul, class: "tabs") do %>
     <%= content_for(:tab_triggers) %>
   <% end %>

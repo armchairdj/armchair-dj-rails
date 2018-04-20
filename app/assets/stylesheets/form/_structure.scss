@@ -13,10 +13,17 @@ fieldset {
   background-color: transparent;
   @include bottom-margin-only($spacing-l);
 
+  &.chunk {
+    > legend {
+      @include bottom-margin-only($spacing-m * .75);
+      @include chunk-legend-text();
+    }
+  }
+
   &.legendary {
     > legend {
       @include bottom-margin-only($spacing-m * .75);
-      @include legend-text();
+      @include legendary-legend-text();
     }
 
     > .hint {
