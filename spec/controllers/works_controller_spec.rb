@@ -18,7 +18,7 @@ RSpec.describe WorksController, type: :controller do
 
     context "with records" do
       before(:each) do
-        (per_page + 1).times { create(:song_review) }
+        (per_page + 1).times { create(:song_review, :published) }
       end
 
       it "renders" do
