@@ -19,9 +19,9 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= content_tag(:th, "Medium") if @scope == :all %>
-            <%= content_tag :th, "Title" %>
-            <%= content_tag :th, "Creators" %>
-            <%= content_tag :th, "Actions", class: "actions" %>
+            <%= content_tag(:th, "Title") %>
+            <%= content_tag(:th, "Creators") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
 
@@ -29,9 +29,9 @@
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, work.human_medium) if @scope == :all %>
-              <%= content_tag :td, work.title %>
-              <%= content_tag :td, work.creators.map { |c| link_to(c.name, c) }.join(" & ").html_safe%>
-              <%= content_tag :td, class: "actions" do %>
+              <%= content_tag(:td, work.title) %>
+              <%= content_tag(:td, links_to_creators_for_work(work)) %>
+              <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_work_link(work) %>
                 <%= admin_view_link(work) %>
                 <%= admin_update_link(work) %>

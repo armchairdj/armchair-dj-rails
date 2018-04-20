@@ -63,8 +63,8 @@ RSpec.describe PostsHelper, type: :helper do
   end
 
   describe "#post_type" do
-    specify{ expect(helper.post_type(create(:standalone_post))).to eq("standalone post") }
-    specify{ expect(helper.post_type(create(:album_review   ))).to eq("album review"   ) }
+    specify{ expect(helper.post_type(create(:standalone_post))).to eq("Standalone Post") }
+    specify{ expect(helper.post_type(create(:album_review   ))).to eq("Album Review"   ) }
   end
 
   describe "#post_title" do

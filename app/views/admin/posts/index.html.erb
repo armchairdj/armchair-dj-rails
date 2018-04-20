@@ -18,18 +18,20 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag :th, "Type" %>
-            <%= content_tag :th, "Title" %>
-            <%= content_tag :th, "Actions", class: "actions" %>
+            <%= content_tag(:th, "Type") %>
+            <%= content_tag(:th, "Status") if @scope == :all %>
+            <%= content_tag(:th, "Title") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
 
         <%= content_tag(:tbody) do %>
           <% @posts.each do |post| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag :td, post_type(post) %>
-              <%= content_tag :td, post.one_line_title %>
-              <%= content_tag :td, class: "actions" do %>
+              <%= content_tag(:td, post_type(post)) %>
+              <%= content_tag(:td, post.human_status) if @scope == :all %>
+              <%= content_tag(:td, post.one_line_title) %>
+              <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_post_link(post) %>
                 <%= admin_view_link(post) %>
                 <%= admin_update_link(post) %>
