@@ -1,27 +1,33 @@
 module Sluggable
   extend ActiveSupport::Concern
 
+  PART_SEPARATOR    =                       "/".freeze
+  VERSION_SEPARATOR =                      "/v".freeze
+  FIND_V2_OR_HIGHER = /\/v([2-9]|[1-9]\d{1,})$/.freeze
+
   class_methods do
     def generate_unique_slug(instance, attribute, parts)
       uniquify_slug(instance, attribute, generate_slug_from_parts(parts))
     end
 
     def generate_slug_from_parts(parts)
-      parts.map { |part| generate_slug_part(part) }.join("/")
+      parts.map { |part| generate_slug_part(part) }.join(PART_SEPARATOR)
     end
 
     def generate_slug_part(str)
+      str = str.underscore.to_ascii.strip
       str = str.gsub("&", "_and_")
       str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
       str = str.gsub(/[^[:word:]]/, "")
-      str = str.underscore
       str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
+
+      str.blank? ? "_" : str
     end
 
     def uniquify_slug(instance, attribute, base)
       return base unless dupe = find_duplicate_slug(instance, attribute, base)
 
-      incremented = [base, self.next_slug_index(dupe).to_s].join("/")
+      incremented = [base, self.next_slug_index(dupe).to_s].join(VERSION_SEPARATOR)
 
       incremented
     end
@@ -35,7 +41,7 @@ module Sluggable
     end
 
     def next_slug_index(slug)
-      (slug.match( /\/(\d+)$/).try(:[], 1) || "0" ).to_i + 1
+      (slug.match(FIND_V2_OR_HIGHER).try(:[], 1) || "1" ).to_i + 1
     end
   end
 
@@ -50,7 +56,7 @@ module Sluggable
   end
 
   def generate_slug(attribute, *args)
-    parts = args.flatten.compact.map { |p| p.split("/") }.flatten.compact
+    parts = args.flatten.compact.map { |p| p.split(PART_SEPARATOR) }.flatten.compact
 
     return unless parts.any?
 

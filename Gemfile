@@ -74,6 +74,9 @@ gem "simple_form"
 # Markdown parser.
 gem "redcarpet"
 
+# International character translator.
+gem "unidecoder"
+
 ###############################################################################
 # API.
 ###############################################################################
