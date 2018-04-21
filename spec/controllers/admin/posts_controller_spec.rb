@@ -109,7 +109,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/show").assigning(post).as(:post)
+          should successfully_render("admin/posts/show").assigning(post, :post)
         end
       end
 
@@ -119,7 +119,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/show").assigning(post).as(:post)
+          should successfully_render("admin/posts/show").assigning(post, :post)
         end
       end
     end
@@ -130,20 +130,16 @@ RSpec.describe Admin::PostsController, type: :controller do
 
         should successfully_render("admin/posts/new")
 
-        expect(assigns(:post)                          ).to be_a_new(Post)
-        expect(assigns(:post).work                     ).to be_a_new(Work)
-        expect(assigns(:post).work.contributions.length).to eq(10)
-
         should define_all_tabs.and_select("post-choose-work")
+
+        expect(assigns(:post)).to be_a_populated_new_post
       end
     end
 
     describe "POST #create" do
       context "standalone" do
-        let(  :valid_params) { { "title" => "title", "body" => "body" } }
-        let(:invalid_params) { valid_params.except("title") }
-
-        pending "incomplete"
+        let(  :valid_params) { { "title" => "title" } }
+        let(:invalid_params) { { "body" => "only the body" } }
 
         context "with valid params" do
           it "creates a new Post" do
@@ -155,7 +151,9 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -165,19 +163,16 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             should successfully_render("admin/posts/new")
 
-            expect(assigns(:post)       ).to be_a_new(Post)
-            expect(assigns(:post).valid?).to eq(false)
-
             should define_all_tabs.and_select("post-choose-work")
+
+            expect(assigns(:post)).to be_a_populated_new_post
           end
         end
       end
 
       context "existing work" do
-        let(  :valid_params) { { "body" => "body", "work_id" => create(:song).id } }
-        let(:invalid_params) { valid_params.except("work_id") }
-
-        pending "incomplete"
+        let(  :valid_params) { { "work_id" => create(:song).id } }
+        let(:invalid_params) { { "body" => "only the body" } }
 
         context "with valid params" do
           it "creates a new Post" do
@@ -189,7 +184,9 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -199,17 +196,15 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             should successfully_render("admin/posts/new")
 
-            expect(assigns(:post)       ).to be_a_new(Post)
-            expect(assigns(:post).valid?).to eq(false)
-
             should define_all_tabs.and_select("post-choose-work")
+
+            expect(assigns(:post)).to be_a_populated_new_post
           end
         end
       end
 
       context "new work" do
         let(:valid_params) { {
-          "body"            => "body",
           "work_attributes" => {
             "medium"                   => "song",
             "title"                    => "Hounds of Love",
@@ -222,9 +217,18 @@ RSpec.describe Admin::PostsController, type: :controller do
           }
         } }
 
-        let(:invalid_params) { valid_params.except("work_attributes") }
-
-        pending "incomplete"
+        let(:invalid_params) { {
+          "work_attributes" => {
+            "medium"                   => "",
+            "title"                    => "Hounds of Love",
+            "contributions_attributes" => {
+              "0" => {
+                "role"       => "creator",
+                "creator_id" => create(:musician).id
+              }
+            }
+          }
+        } }
 
         context "with valid params" do
           it "creates a new Post" do
@@ -248,7 +252,9 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -258,10 +264,9 @@ RSpec.describe Admin::PostsController, type: :controller do
 
             should successfully_render("admin/posts/new")
 
-            expect(assigns(:post)       ).to be_a_new(Post)
-            expect(assigns(:post).valid?).to eq(false)
+            should define_all_tabs.and_select("post-new-work")
 
-            should define_all_tabs.and_select("post-choose-work")
+            expect(assigns(:post)).to be_a_populated_new_post
           end
         end
       end
@@ -274,7 +279,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/edit").assigning(post).as(:post)
+          should successfully_render("admin/posts/edit").assigning(post, :post)
+
           should define_only_the_standalone_tab
         end
       end
@@ -285,7 +291,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/edit").assigning(post).as(:post)
+          should successfully_render("admin/posts/edit").assigning(post, :post)
 
           should define_only_the_review_tabs.and_select("post-choose-work")
         end
@@ -301,27 +307,26 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:invalid_params) { { "title" => ""          } }
 
           context "with valid params" do
+            before(:each) do
+              put :update, params: { id: post.to_param, post: valid_params }
+            end
+
             it "updates the requested post" do
-              put :update, params: { id: post.to_param, post: valid_params }
-
-              expect(assigns(:post)      ).to eq(post)
-              expect(assigns(:post).title).to eq(valid_params["title"])
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
             end
 
-            it "redirects to post" do
-              put :update, params: { id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.update")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.update"
+            ) }
           end
 
           context "with invalid params" do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post).as(:post)
+              should successfully_render("admin/posts/edit").assigning(post, :post)
 
-              expect(assigns(:post).valid?).to eq(false)
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).and_be_invalid
 
               should define_only_the_standalone_tab
             end
@@ -335,27 +340,26 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:invalid_params) { { "work_id" => ""               } }
 
           context "with valid params" do
+            before(:each) do
+              put :update, params: { id: post.to_param, post: valid_params }
+            end
+
             it "updates the requested post" do
-              put :update, params: { id: post.to_param, post: valid_params }
-
-              expect(assigns(:post)        ).to eq(post)
-              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
             end
 
-            it "redirects to post" do
-              put :update, params: { id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.update")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.update"
+            ) }
           end
 
           context "with invalid params" do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post).as(:post)
+              should successfully_render("admin/posts/edit").assigning(post, :post)
 
-              expect(assigns(:post).valid?).to eq(false)
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).and_be_invalid
 
               should define_only_the_review_tabs.and_select("post-choose-work")
             end
@@ -370,27 +374,20 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(  :valid_params) { { "body" => "New body.", "title" => "New title." } }
           let(:invalid_params) { { "body" => ""         , "title" => ""           } }
 
-          context "slug" do
-            pending "with custom slug"
-            pending "with blank slug"
-          end
-
           context "with valid params" do
-            it "updates and publishes the requested post" do
+            before(:each) do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
+            end
 
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).title       ).to eq(valid_params["title"])
-              expect(assigns(:post).body        ).to eq(valid_params["body" ])
+            it "updates and publishes the requested post" do
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
 
-            it "redirects to post" do
-              put :update, params: { step: "publish", id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.publish")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.publish"
+            ) }
           end
 
           context "with failed transition" do
@@ -401,13 +398,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post).as(:post).with_flash(
+              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
                 :error, "admin.flash.posts.error.publish"
               )
 
-              expect(assigns(:post).title ).to eq(valid_params["title"])
-              expect(assigns(:post).body  ).to eq(valid_params["body" ])
-              expect(assigns(:post).valid?).to eq(true)
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
 
               should define_only_the_standalone_tab
 
@@ -419,19 +414,18 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post).as(:post)
-
-              expect(assigns(:post).title       ).to eq(nil)
-              expect(assigns(:post).body        ).to eq(nil)
-
-              expect(assigns(:post)).to be_draft
-
-              expect(assigns(:post).errors.details[:body ].first).to eq({ error: :blank_during_publish })
-              expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
+              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
+                :error, "admin.flash.posts.error.publish"
+              )
 
               should define_only_the_standalone_tab
 
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+                body:  :blank_during_publish,
+                title: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
             end
           end
         end
@@ -442,27 +436,20 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id } }
           let(:invalid_params) { { "body" => ""         , "work_id" => ""               } }
 
-          context "slug" do
-            pending "with custom slug"
-            pending "with blank slug"
-          end
-
           context "with valid params" do
-            it "updates and publishes the requested post" do
+            before(:each) do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
+            end
 
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).body        ).to eq(valid_params["body"   ])
-              expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
+            it "updates and publishes the requested post" do
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
 
-            it "redirects to post" do
-              put :update, params: { step: "publish", id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.publish")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.publish"
+            ) }
           end
 
           context "with failed transition" do
@@ -473,17 +460,18 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post).as(:post)
-
-              expect(assigns(:post).body   ).to eq(valid_params["body"   ])
-              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
-              expect(assigns(:post).valid? ).to eq(true)
-
-              expect(post.reload).to_not be_published
-
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
+              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
+                :error, "admin.flash.posts.error.publish"
+              )
 
               should define_only_the_review_tabs.and_select("post-choose-work")
+
+              expect(assigns(:post)).to update_params_for(post).with({
+                body:            valid_params["body"   ],
+                current_work_id: valid_params["work_id"]
+              })
+
+              expect(post.reload).to be_draft
             end
           end
 
@@ -491,21 +479,18 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit")
-
-
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).work_id     ).to eq(nil)
-              expect(assigns(:post).body        ).to eq(nil)
-
-              expect(assigns(:post)).to_not be_published
-
-              expect(assigns(:post).errors.details[:body   ].first).to eq({ error: :blank_during_publish })
-              expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
-
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.publish"
+              )
 
               should define_only_the_review_tabs.and_select("post-choose-work")
+
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+                body:    :blank_during_publish,
+                work_id: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
             end
           end
         end
@@ -518,27 +503,20 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(  :valid_params) { { "body" => "", "title" => "New title."} }
           let(:invalid_params) { { "body" => "", "title" => ""          } }
 
-          context "slug" do
-            pending "with custom slug"
-            pending "with blank slug"
-          end
-
           context "with valid params" do
-            it "unpublishes and updates the requested post" do
+            before(:each) do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+            end
 
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).title       ).to eq(valid_params["title"])
-              expect(assigns(:post).body        ).to eq(nil)
+            it "unpublishes and updates the requested post" do
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
 
-            it "redirects to post" do
-              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.unpublish")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.unpublish"
+            ) }
           end
 
           context "with failed transition" do
@@ -549,17 +527,15 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit")
-
-              expect(assigns(:post)      ).to eq(post)
-              expect(assigns(:post).title).to eq(valid_params["title"])
-              expect(assigns(:post).body ).to eq(nil)
-
-              expect(post.reload).to_not be_draft
-
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.unpublish"
+              )
 
               should define_only_the_standalone_tab
+
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_invalid
+
+              expect(post.reload).to_not be_draft
             end
           end
 
@@ -567,19 +543,15 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit")
-
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).title       ).to eq(nil)
-              expect(assigns(:post).body        ).to eq(nil)
-
-              expect(assigns(:post)).to be_draft
-
-              expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
-
-              expect(flash[:error]).to eq(nil)
+              should successfully_render("admin/posts/edit").with_flash(:error, nil)
 
               should define_only_the_standalone_tab
+
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+                title: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
             end
           end
         end
@@ -590,27 +562,20 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(  :valid_params) { { "body" => "", "work_id" => create(:song).id } }
           let(:invalid_params) { { "body" => "", "work_id" => ""               } }
 
-          context "slug" do
-            pending "with custom slug"
-            pending "with blank slug"
-          end
-
           context "with valid params" do
-            it "unpublishes and updates the requested post" do
+            before(:each) do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
+            end
 
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
-              expect(assigns(:post).body        ).to eq(nil)
+            it "unpublishes and updates the requested post" do
+              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
 
-            it "redirects to post" do
-              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
-
-              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.unpublish")
-            end
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.unpublish"
+            ) }
           end
 
           context "with failed transition" do
@@ -621,17 +586,18 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit")
-
-              expect(assigns(:post)        ).to eq(post)
-              expect(assigns(:post).work_id).to eq(valid_params["work_id"])
-              expect(assigns(:post).body   ).to eq(nil)
-
-              expect(post.reload).to be_published
-
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.unpublish"
+              )
 
               should define_only_the_review_tabs.and_select("post-choose-work")
+
+              expect(assigns(:post)).to update_params_for(post).with({
+                body:            valid_params["body"   ],
+                current_work_id: valid_params["work_id"]
+              }).and_be_invalid
+
+              expect(post.reload).to be_published
             end
           end
 
@@ -639,21 +605,58 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit")
-
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).work_id     ).to eq(nil)
-              expect(assigns(:post).body        ).to eq(nil)
-
-              expect(assigns(:post)).to be_draft
-
-              expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
-
-              expect(flash[:error]).to eq(nil)
+              should successfully_render("admin/posts/edit").with_flash(:error, nil)
 
               should define_only_the_review_tabs.and_select("post-choose-work")
+
+              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+                work_id: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
             end
           end
+        end
+      end
+
+      context "slug" do
+        let(:post) { create(:standalone_post) }
+
+        context "with custom slug" do
+          let(:valid_params) { { "slug" => "custom_slug" } }
+
+          before(:each) do
+            put :update, params: { id: post.to_param, post: valid_params }
+          end
+
+          it "sets custom slug" do
+            expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+
+            expect(assigns(:post).dirty_slug?).to eq(true)
+          end
+
+          it { should send_user_to(admin_post_path(post)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
+        end
+
+        context "with blank slug" do
+          let(:valid_params) { { "slug" => "" } }
+
+          before(:each) do
+            put :update, params: { id: post.to_param, post: valid_params }
+          end
+
+          it "regenerates slug" do
+            expect(assigns(:post)).to update_params_for(post).and_be_valid
+
+            expect(assigns(:post).slug).to_not be_blank
+            expect(assigns(:post).dirty_slug?).to eq(false)
+          end
+
+          it { should send_user_to(admin_post_path(post)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
         end
       end
     end
@@ -670,7 +673,9 @@ RSpec.describe Admin::PostsController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: post.to_param }
 
-        should send_user_to(admin_posts_path).with_flash(:notice, "admin.flash.posts.notice.destroy")
+        should send_user_to(admin_posts_path).with_flash(
+          :success, "admin.flash.posts.success.destroy"
+        )
       end
     end
   end

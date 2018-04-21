@@ -7,7 +7,7 @@ RSpec::Matchers.define :send_user_to do |url|
 
   chain :with_flash do |type, message|
     @type    = type
-    @message = I18n.t(message)
+    @message = message.nil? ? nil : I18n.t(message)
 
     expect(controller).to set_flash[@type].to(@message)
   end

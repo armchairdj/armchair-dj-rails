@@ -13,12 +13,12 @@ en:
       no_records: "Nothing to see here, folks."
     flash:
       creators:
-        notice:
+        success:
           create:  "Creator created."
           destroy: "Creator destroyed."
           update:  "Creator updated."
       posts:
-        notice:
+        success:
           create:  "Post created."
           destroy: "Post destroyed."
           update:  "Post updated."
@@ -28,15 +28,15 @@ en:
           publish: "Post could not be published."
           unpublish: "Post could not be unpublished."
       sessions:
-        notice:
+        success:
           missing: "Please log in to access that."
       users:
-        notice:
+        success:
           create:  "User created."
           destroy: "User destroyed."
           update:  "User updated."
       works:
-        notice:
+        success:
           create:  "Work created."
           destroy: "Work destroyed."
           update:  "Work updated."

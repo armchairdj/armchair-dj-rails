@@ -8,17 +8,18 @@ RSpec::Matchers.define :successfully_render do |template|
 
   chain :with_flash do |type, message|
     @type    = type
-    @message = I18n.t(message)
+    @message = message.nil? ? nil : I18n.t(message)
 
-    expect(controller).to set_flash.now[@type].to(@message)
+    if @message.nil?
+      expect(flash.now[@type]).to eq(nil)
+    else
+      expect(controller).to set_flash.now[@type].to(@message)
+    end
   end
 
-  chain :assigning do |instance|
+  chain :assigning do |instance, sym|
     @instance = instance
-  end
-
-  chain :as do |sym|
-    @sym = sym
+    @sym      = sym
 
     expect(assigns(@sym)).to eq(@instance)
   end

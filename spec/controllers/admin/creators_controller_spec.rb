@@ -11,7 +11,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(0).of_total(0).records
+            expect(assigns(:creators)).to paginate(0).of_total(0).records
           end
         end
 
@@ -20,7 +20,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index, params: { scope: "non_viewable" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(0).of_total(0).records
+            expect(assigns(:creators)).to paginate(0).of_total(0).records
           end
         end
 
@@ -29,7 +29,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index, params: { scope: "all" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(0).of_total(0).records
+            expect(assigns(:creators)).to paginate(0).of_total(0).records
           end
         end
       end
@@ -44,14 +44,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(20).of_total(21).records
+            expect(assigns(:creators)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(1).of_total(21).records
+            expect(assigns(:creators)).to paginate(1).of_total(21).records
           end
         end
 
@@ -64,14 +64,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index, params: { scope: "non_viewable" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(20).of_total(21).records
+            expect(assigns(:creators)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(1).of_total(21).records
+            expect(assigns(:creators)).to paginate(1).of_total(21).records
           end
         end
 
@@ -85,14 +85,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
             get :index, params: { scope: "all" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(20).of_total(21).records
+            expect(assigns(:creators)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
             expect(response).to successfully_render("admin/creators/index")
-            expect(assigns(:creators).to paginate(1).of_total(21).records
+            expect(assigns(:creators)).to paginate(1).of_total(21).records
           end
         end
       end

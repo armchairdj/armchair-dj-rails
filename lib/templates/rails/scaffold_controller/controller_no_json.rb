@@ -51,7 +51,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # POST <%= route_url %>
   def create
     if @<%= orm_instance.save %>
-      redirect_to @<%= singular_table_name %>, notice: I18n.t("#{singular_table_name}.notice.create")
+      redirect_to @<%= singular_table_name %>, success: I18n.t("#{singular_table_name}.success.create")
     else
       render :new
     end
@@ -65,7 +65,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # PATCH/PUT <%= route_url %>/1
   def update
     if @<%= orm_instance.update("instance_params") %>
-      redirect_to @<%= singular_table_name %>, notice: I18n.t("#{singular_table_name}.notice.update")
+      redirect_to @<%= singular_table_name %>, success: I18n.t("#{singular_table_name}.success.update")
     else
       render :edit
     end
@@ -75,7 +75,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   def destroy
     @<%= orm_instance.destroy %>
 
-    redirect_to <%= index_helper %>_url, notice: I18n.t("#{singular_table_name}.notice.destroy")
+    redirect_to <%= index_helper %>_url, success: I18n.t("#{singular_table_name}.success.destroy")
   end
 
 private

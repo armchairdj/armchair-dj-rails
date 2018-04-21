@@ -57,7 +57,7 @@ class Admin::PostsController < AdminController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.create") }
+        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.create") }
         format.json { render :show, status: :created, location: @post }
       else
         prepare_form
@@ -81,7 +81,7 @@ class Admin::PostsController < AdminController
 
     respond_to do |format|
       if @post.update(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.update") }
+        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.update") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
@@ -98,7 +98,7 @@ class Admin::PostsController < AdminController
     @post.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_posts_path, notice: I18n.t("admin.flash.posts.notice.destroy") }
+      format.html { redirect_to admin_posts_path, success: I18n.t("admin.flash.posts.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -224,13 +224,13 @@ private
   def publish_and_respond
     respond_to do |format|
       if @post.update_and_publish(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.publish") }
+        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.publish") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
         if @post.published?
-          flash.now[:notice] = I18n.t("admin.flash.posts.notice.publish")
+          flash.now[:success] = I18n.t("admin.flash.posts.success.publish")
         else
           flash.now[:error]  = I18n.t("admin.flash.posts.error.publish")
         end
@@ -244,13 +244,13 @@ private
   def unpublish_and_respond
     respond_to do |format|
       if @post.update_and_unpublish(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), notice: I18n.t("admin.flash.posts.notice.unpublish") }
+        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.unpublish") }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
         if @post.draft?
-          flash.now[:notice] = I18n.t("admin.flash.posts.notice.unpublish")
+          flash.now[:success] = I18n.t("admin.flash.posts.success.unpublish")
         else
           flash.now[:error]  = I18n.t("admin.flash.posts.error.unpublish")
         end
