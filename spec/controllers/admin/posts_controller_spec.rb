@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe Admin::PostsController, type: :controller do
   let(:per_page) { Kaminari.config.default_per_page }
 
-  pending "available_tabs"
-
   context "as admin" do
     login_admin
 
@@ -172,10 +170,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         expect(assigns(:post).work                     ).to be_a_new(Work)
         expect(assigns(:post).work.contributions.length).to eq(10)
 
-        expect(assigns(:works   )).to be_a_kind_of(Array)
-        expect(assigns(:roles   )).to be_a_kind_of(Array)
-        expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+        expect(assigns).to define_all_tabs
         expect(assigns(:selected_tab)).to eq("post-choose-work")
       end
     end
@@ -211,10 +206,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns(:works   )).to be_a_kind_of(Array)
-            expect(assigns(:roles   )).to be_a_kind_of(Array)
-            expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+            expect(assigns).to define_all_tabs
             expect(assigns(:selected_tab)).to eq("post-choose-work")
           end
         end
@@ -250,10 +242,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns(:works   )).to be_a_kind_of(Array)
-            expect(assigns(:roles   )).to be_a_kind_of(Array)
-            expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+            expect(assigns).to define_all_tabs
             expect(assigns(:selected_tab)).to eq("post-choose-work")
           end
         end
@@ -314,10 +303,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns(:works   )).to be_a_kind_of(Array)
-            expect(assigns(:roles   )).to be_a_kind_of(Array)
-            expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+            expect(assigns).to define_all_tabs
             expect(assigns(:selected_tab)).to eq("post-choose-work")
           end
         end
@@ -336,11 +322,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           expect(assigns(:post)).to eq(post)
 
-          expect(assigns(:works   )).to eq(nil)
-          expect(assigns(:roles   )).to eq(nil)
-          expect(assigns(:creators)).to eq(nil)
-
-          expect(assigns(:selected_tab)).to eq("post-standalone")
+          expect(assigns).to define_only_the_standalone_tab
         end
       end
 
@@ -355,10 +337,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
           expect(assigns(:post)).to eq(post)
 
-          expect(assigns(:works   )).to be_a_kind_of(Array)
-          expect(assigns(:roles   )).to be_a_kind_of(Array)
-          expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+          expect(assigns).to define_only_the_review_tabs
           expect(assigns(:selected_tab)).to eq("post-choose-work")
         end
       end
@@ -397,11 +376,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
 
-              expect(assigns(:works   )).to eq(nil)
-              expect(assigns(:roles   )).to eq(nil)
-              expect(assigns(:creators)).to eq(nil)
-
-              expect(assigns(:selected_tab)).to eq("post-standalone")
+              expect(assigns).to define_only_the_standalone_tab
             end
           end
         end
@@ -437,10 +412,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
 
-              expect(assigns(:works   )).to be_a_kind_of(Array)
-              expect(assigns(:roles   )).to be_a_kind_of(Array)
-              expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-
+              expect(assigns).to define_only_the_review_tabs
               expect(assigns(:selected_tab)).to eq("post-choose-work")
             end
           end
@@ -495,9 +467,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post).body        ).to eq(valid_params["body" ])
               expect(assigns(:post).valid?      ).to eq(true)
 
-              expect(assigns(:works   )).to eq(nil)
-              expect(assigns(:roles   )).to eq(nil)
-              expect(assigns(:creators)).to eq(nil)
+              expect(assigns).to define_only_the_standalone_tab
 
               post.reload
 
@@ -524,9 +494,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post).errors.details[:body ].first).to eq({ error: :blank_during_publish })
               expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
 
-              expect(assigns(:works   )).to eq(nil)
-              expect(assigns(:roles   )).to eq(nil)
-              expect(assigns(:creators)).to eq(nil)
+              expect(assigns).to define_only_the_standalone_tab
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
             end
@@ -587,9 +555,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns(:works   )).to be_a_kind_of(Array)
-              expect(assigns(:roles   )).to be_a_kind_of(Array)
-              expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
+              expect(assigns).to define_only_the_review_tabs
+              expect(assigns(:selected_tab)).to eq("post-choose-work")
             end
           end
 
@@ -612,9 +579,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns(:works   )).to be_a_kind_of(Array)
-              expect(assigns(:roles   )).to be_a_kind_of(Array)
-              expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
+              expect(assigns).to define_only_the_review_tabs
+              expect(assigns(:selected_tab)).to eq("post-choose-work")
             end
           end
         end
@@ -674,9 +640,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
 
-              expect(assigns(:works   )).to eq(nil)
-              expect(assigns(:roles   )).to eq(nil)
-              expect(assigns(:creators)).to eq(nil)
+              expect(assigns).to define_only_the_standalone_tab
             end
           end
 
@@ -697,9 +661,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(nil)
 
-              expect(assigns(:works   )).to eq(nil)
-              expect(assigns(:roles   )).to eq(nil)
-              expect(assigns(:creators)).to eq(nil)
+              expect(assigns).to define_only_the_standalone_tab
             end
           end
         end
@@ -757,9 +719,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
 
-              expect(assigns(:works   )).to be_a_kind_of(Array)
-              expect(assigns(:roles   )).to be_a_kind_of(Array)
-              expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
+              expect(assigns).to define_only_the_review_tabs
+              expect(assigns(:selected_tab)).to eq("post-choose-work")
             end
           end
 
@@ -780,9 +741,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(nil)
 
-              expect(assigns(:works   )).to be_a_kind_of(Array)
-              expect(assigns(:roles   )).to be_a_kind_of(Array)
-              expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
+              expect(assigns).to define_only_the_review_tabs
+              expect(assigns(:selected_tab)).to eq("post-choose-work")
             end
           end
         end
