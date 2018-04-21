@@ -10,10 +10,10 @@ RSpec::Matchers.define :define_the_standalone_tab do
   end
 
   failure_message do |actual|
-    "expected instance variables to set up the standalone tab, but they did not"
+    "expected #{actual} to set up the standalone tab, but did not"
   end
 
   failure_message_when_negated do |actual|
-    "expected instance variables not to set up standalone tab, but they did"
+    "expected #{actual} not to set up standalone tab, but they did"
   end
 end

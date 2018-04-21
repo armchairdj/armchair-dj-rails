@@ -20,10 +20,10 @@ RSpec::Matchers.define :define_the_review_tabs do
   end
 
   failure_message do |actual|
-    "expected instance variables to set up the review tabs, but they did not"
+    "expected #{actual} to set up the review tabs, but did not"
   end
 
   failure_message_when_negated do |actual|
-    "expected instance variables not to set up review tabs, but they did"
+    "expected #{actual} not to set up review tabs, but they did"
   end
 end

@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Admin::CreatorsController, type: :controller do
-  let(:per_page) { Kaminari.config.default_per_page }
-
   context "as admin" do
     login_admin
 
@@ -12,11 +10,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(0)
-            expect(assigns(:creators).size       ).to eq(0)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(0).of_total(0).records
           end
         end
 
@@ -24,11 +19,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(0)
-            expect(assigns(:creators).size       ).to eq(0)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(0).of_total(0).records
           end
         end
 
@@ -36,11 +28,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(0)
-            expect(assigns(:creators).size       ).to eq(0)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(0).of_total(0).records
           end
         end
       end
@@ -48,80 +37,62 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       context "with records" do
         context ":viewable scope (default)" do
           before(:each) do
-            (per_page + 1).times { create(:song_review, :published) }
+            21.times { create(:song_review, :published) }
           end
 
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(1)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(1).of_total(21).records
           end
         end
 
         context ":non_viewable scope" do
           before(:each) do
-            (per_page + 1).times { create(:minimal_creator) }
+            21.times { create(:minimal_creator) }
           end
 
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(1)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(1).of_total(21).records
           end
         end
 
         context ":all scope" do
           before(:each) do
-            ( per_page / 2     ).times { create(:song_review, :published) }
-            ((per_page / 2) + 1).times { create(:minimal_creator) }
+            10.times { create(:song_review, :published) }
+            11.times { create(:minimal_creator) }
           end
 
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/creators/index")
-
-            expect(assigns(:creators).total_count).to eq(per_page + 1)
-            expect(assigns(:creators).size       ).to eq(1)
+            expect(response).to successfully_render("admin/creators/index")
+            expect(assigns(:creators).to paginate(1).of_total(21).records
           end
         end
       end
@@ -133,8 +104,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "renders" do
         get :show, params: { id: creator.to_param }
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/creators/show")
+        expect(response).to successfully_render("admin/creators/show")
 
         expect(assigns(:creator)).to eq(creator)
       end
@@ -144,8 +114,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "renders" do
         get :new
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/creators/new")
+        expect(response).to successfully_render("admin/creators/new")
 
         expect(assigns(:creator)).to be_a_new(Creator)
       end
@@ -173,8 +142,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "renders new" do
           post :create, params: { creator: invalid_params }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/new")
+          expect(response).to successfully_render("admin/creators/new")
 
           expect(assigns(:creator)       ).to be_a_new(Creator)
           expect(assigns(:creator).valid?).to eq(false)
@@ -188,8 +156,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "renders" do
         get :edit, params: { id: creator.to_param }
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/creators/edit")
+        expect(response).to successfully_render("admin/creators/edit")
 
         expect(assigns(:creator)).to eq(creator)
       end
@@ -221,8 +188,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "renders edit" do
           put :update, params: { id: creator.to_param, creator: invalid_params }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/creators/edit")
+          expect(response).to successfully_render("admin/creators/edit")
 
           expect(assigns(:creator)       ).to eq(creator)
           expect(assigns(:creator).valid?).to eq(false)

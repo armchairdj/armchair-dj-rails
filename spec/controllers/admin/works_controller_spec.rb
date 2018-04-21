@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Admin::WorksController, type: :controller do
-  let(:per_page) { Kaminari.config.default_per_page }
-
   context "as admin" do
     login_admin
 
@@ -12,11 +10,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(0)
-            expect(assigns(:works).size       ).to eq(0)
+            expect(assigns(:works).to paginate(0).of_total(0).records
           end
         end
 
@@ -24,11 +20,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(0)
-            expect(assigns(:works).size       ).to eq(0)
+            expect(assigns(:works).to paginate(0).of_total(0).records
           end
         end
 
@@ -36,11 +30,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(0)
-            expect(assigns(:works).size       ).to eq(0)
+            expect(assigns(:works).to paginate(0).of_total(0).records
           end
         end
       end
@@ -48,80 +40,68 @@ RSpec.describe Admin::WorksController, type: :controller do
       context "with records" do
         context ":viewable scope (default)" do
           before(:each) do
-            (per_page + 1).times { create(:song_review, :published) }
+            21.times { create(:song_review, :published) }
           end
 
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(per_page)
+            expect(assigns(:works).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(1)
+            expect(assigns(:works).to paginate(1).of_total(21).records
           end
         end
 
         context ":non_viewable scope" do
           before(:each) do
-            (per_page + 1).times { create(:minimal_work) }
+            21.times { create(:minimal_work) }
           end
 
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(per_page)
+            expect(assigns(:works).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(1)
+            expect(assigns(:works).to paginate(1).of_total(21).records
           end
         end
 
         context ":all scope" do
           before(:each) do
-            ( per_page / 2     ).times { create(:song_review, :published) }
-            ((per_page / 2) + 1).times { create(:minimal_work) }
+            10.times { create(:song_review, :published) }
+            11.times { create(:minimal_work) }
           end
 
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(per_page)
+            expect(assigns(:works).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/works/index")
+            expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works).total_count).to eq(per_page + 1)
-            expect(assigns(:works).size       ).to eq(1)
+            expect(assigns(:works).to paginate(1).of_total(21).records
           end
         end
       end
@@ -133,8 +113,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :show, params: { id: work.to_param }
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/works/show")
+        expect(response).to successfully_render("admin/works/show")
 
         expect(assigns(:work)).to eq(work)
       end
@@ -144,8 +123,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :new
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/works/new")
+        expect(response).to successfully_render("admin/works/new")
 
         expect(assigns(:work)).to be_a_new(Work)
       end
@@ -173,8 +151,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         it "renders new" do
           post :create, params: { work: invalid_params }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/works/new")
+          expect(response).to successfully_render("admin/works/new")
 
           expect(assigns(:work)       ).to be_a_new(Work)
           expect(assigns(:work).valid?).to eq(false)
@@ -188,8 +165,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :edit, params: { id: work.to_param }
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/works/edit")
+        expect(response).to successfully_render("admin/works/edit")
 
         expect(assigns(:work)).to eq(work)
       end
@@ -221,8 +197,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         it "renders edit" do
           put :update, params: { id: work.to_param, work: invalid_params }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/works/edit")
+          expect(response).to successfully_render("admin/works/edit")
 
           expect(assigns(:work)       ).to eq(work)
           expect(assigns(:work).valid?).to eq(false)

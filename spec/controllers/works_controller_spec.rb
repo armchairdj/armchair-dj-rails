@@ -1,44 +1,36 @@
 require "rails_helper"
 
 RSpec.describe WorksController, type: :controller do
-  let(:per_page) { Kaminari.config.default_per_page }
-
   describe "GET #index" do
     context "without records" do
       it "renders" do
         get :index
 
-        expect(response).to be_success
-        expect(response).to render_template("works/index")
+        expect(response).to successfully_render("works/index")
 
-        expect(assigns(:works).total_count).to eq(0)
-        expect(assigns(:works).size       ).to eq(0)
+        expect(assigns(:works).to paginate(0).of_total(0).records
       end
     end
 
     context "with records" do
       before(:each) do
-        (per_page + 1).times { create(:song_review, :published) }
+        21.times { create(:song_review, :published) }
       end
 
       it "renders" do
         get :index
 
-        expect(response).to be_success
-        expect(response).to render_template("works/index")
+        expect(response).to successfully_render("works/index")
 
-        expect(assigns(:works).total_count).to eq(per_page + 1)
-        expect(assigns(:works).size       ).to eq(per_page)
+        expect(assigns(:works).to paginate(20).of_total(21).records
       end
 
       it "renders second page" do
         get :index, params: { page: "2" }
 
-        expect(response).to be_success
-        expect(response).to render_template("works/index")
+        expect(response).to successfully_render("works/index")
 
-        expect(assigns(:works).total_count).to eq(per_page + 1)
-        expect(assigns(:works).size       ).to eq(1)
+        expect(assigns(:works).to paginate(1).of_total(21).records
       end
     end
   end
@@ -49,8 +41,7 @@ RSpec.describe WorksController, type: :controller do
     it "renders" do
         get :show, params: { id: work.id }
 
-        expect(response).to be_success
-        expect(response).to render_template("works/show")
+        expect(response).to successfully_render("works/show")
 
         expect(assigns(:work)).to eq(work)
     end

@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Admin::PostsController, type: :controller do
-  let(:per_page) { Kaminari.config.default_per_page }
-
   context "as admin" do
     login_admin
 
@@ -12,11 +10,8 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(0)
-            expect(assigns(:posts).size       ).to eq(0)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
 
@@ -24,11 +19,8 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "published" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(0)
-            expect(assigns(:posts).size       ).to eq(0)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
 
@@ -36,11 +28,8 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(0)
-            expect(assigns(:posts).size       ).to eq(0)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
       end
@@ -48,84 +37,66 @@ RSpec.describe Admin::PostsController, type: :controller do
       context "with records" do
         context ":draft scope (default)" do
           before(:each) do
-            ( per_page / 2     ).times { create(:song_review,     :draft) }
-            ((per_page / 2) + 1).times { create(:standalone_post, :draft) }
+            10.times { create(:song_review,     :draft) }
+            11.times { create(:standalone_post, :draft) }
           end
 
           it "renders" do
             get :index
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(1)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
 
         context ":published scope" do
           before(:each) do
-            ( per_page / 2     ).times { create(:song_review,     :published) }
-            ((per_page / 2) + 1).times { create(:standalone_post, :published) }
+            10.times { create(:song_review,     :published) }
+            11.times { create(:standalone_post, :published) }
           end
 
           it "renders" do
             get :index, params: { scope: "published" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "published", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(1)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
 
         context ":all scope" do
           before(:each) do
-            ((per_page / 4)    ).times { create(:song_review,     :draft    ) }
-            ((per_page / 4)    ).times { create(:standalone_post, :draft    ) }
-            ((per_page / 4)    ).times { create(:song_review,     :published) }
-            ((per_page / 4) + 1).times { create(:standalone_post, :published) }
+            5.times { create(:song_review,     :draft    ) }
+            5.times { create(:standalone_post, :draft    ) }
+            5.times { create(:song_review,     :published) }
+            6.times { create(:standalone_post, :published) }
           end
 
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(per_page)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/index")
-
-            expect(assigns(:posts).total_count).to eq(per_page + 1)
-            expect(assigns(:posts).size       ).to eq(1)
+            expect(response).to successfully_render("admin/posts/index")
+            expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
       end
@@ -138,9 +109,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/show")
-
+          expect(response).to successfully_render("admin/posts/show")
           expect(assigns(:post)).to eq(post)
         end
       end
@@ -151,9 +120,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/show")
-
+          expect(response).to successfully_render("admin/posts/show")
           expect(assigns(:post)).to eq(post)
         end
       end
@@ -163,15 +130,13 @@ RSpec.describe Admin::PostsController, type: :controller do
       it "renders" do
         get :new
 
-        expect(response).to be_success
-        expect(response).to render_template("admin/posts/new")
+        expect(response).to successfully_render("admin/posts/new")
 
         expect(assigns(:post)                          ).to be_a_new(Post)
         expect(assigns(:post).work                     ).to be_a_new(Work)
         expect(assigns(:post).work.contributions.length).to eq(10)
 
-        expect(assigns).to define_all_tabs
-        expect(assigns(:selected_tab)).to eq("post-choose-work")
+        expect(assigns).to define_all_tabs.and_select("post-choose-work")
       end
     end
 
@@ -200,14 +165,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/new")
+            expect(response).to successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs
-            expect(assigns(:selected_tab)).to eq("post-choose-work")
+            expect(assigns).to define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -236,14 +199,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/new")
+            expect(response).to successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs
-            expect(assigns(:selected_tab)).to eq("post-choose-work")
+            expect(assigns).to define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -297,14 +258,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to be_success
-            expect(response).to render_template("admin/posts/new")
+            expect(response).to successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs
-            expect(assigns(:selected_tab)).to eq("post-choose-work")
+            expect(assigns).to define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -317,8 +276,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/edit")
+          expect(response).to successfully_render("admin/posts/edit")
 
           expect(assigns(:post)).to eq(post)
 
@@ -332,13 +290,11 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          expect(response).to be_success
-          expect(response).to render_template("admin/posts/edit")
+          expect(response).to successfully_render("admin/posts/edit")
 
           expect(assigns(:post)).to eq(post)
 
-          expect(assigns).to define_only_the_review_tabs
-          expect(assigns(:selected_tab)).to eq("post-choose-work")
+          expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
         end
       end
     end
@@ -370,8 +326,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
@@ -406,14 +361,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
 
-              expect(assigns).to define_only_the_review_tabs
-              expect(assigns(:selected_tab)).to eq("post-choose-work")
+              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
@@ -459,8 +412,9 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.publish"
+              )
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(valid_params["title"])
@@ -473,8 +427,6 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(post.published?  ).to eq(false)
               expect(post.published_at).to eq(nil)
-
-              expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
             end
           end
 
@@ -482,8 +434,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(nil)
@@ -540,8 +491,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)        ).to eq(post)
               expect(assigns(:post).body   ).to eq(valid_params["body"   ])
@@ -555,8 +505,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns).to define_only_the_review_tabs
-              expect(assigns(:selected_tab)).to eq("post-choose-work")
+              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
 
@@ -564,8 +513,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
 
               expect(assigns(:post)             ).to eq(post)
@@ -579,8 +527,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns).to define_only_the_review_tabs
-              expect(assigns(:selected_tab)).to eq("post-choose-work")
+              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
@@ -626,8 +573,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)      ).to eq(post)
               expect(assigns(:post).title).to eq(valid_params["title"])
@@ -648,8 +594,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(nil)
@@ -705,8 +650,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)        ).to eq(post)
               expect(assigns(:post).work_id).to eq(valid_params["work_id"])
@@ -719,8 +663,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
 
-              expect(assigns).to define_only_the_review_tabs
-              expect(assigns(:selected_tab)).to eq("post-choose-work")
+              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
 
@@ -728,8 +671,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              expect(response).to be_success
-              expect(response).to render_template("admin/posts/edit")
+              expect(response).to successfully_render("admin/posts/edit")
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).work_id     ).to eq(nil)
@@ -741,8 +683,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               expect(flash[:error]).to eq(nil)
 
-              expect(assigns).to define_only_the_review_tabs
-              expect(assigns(:selected_tab)).to eq("post-choose-work")
+              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
