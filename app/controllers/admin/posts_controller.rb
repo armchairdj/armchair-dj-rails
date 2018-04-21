@@ -212,9 +212,17 @@ private
       else
         "post-choose-work"
       end
-    when "edit", "update"
+    when "edit"
       if @post.standalone?
         "post-standalone"
+      else
+        "post-choose-work"
+      end
+    when "update"
+      if @post.standalone?
+        "post-standalone"
+      elsif @sanitized_params[:work_attributes].present?
+        "post-new-work"
       else
         "post-choose-work"
       end

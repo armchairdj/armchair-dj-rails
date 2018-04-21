@@ -365,9 +365,124 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
           end
         end
+
+        describe "replacing work_id with work_attributes" do
+          let!(:post) { create(:product_review) }
+
+          let(:kate_bush) { create(:musician, name: "Kate Bush") }
+
+          let(:valid_params) { {
+            "work_id"         => post.work.id,
+            "work_attributes" => {
+              "medium"                   => "song",
+              "title"                    => "Hounds of Love",
+              "contributions_attributes" => {
+                "0" => {
+                  "role"       => "creator",
+                  "creator_id" => kate_bush.id
+                }
+              }
+            }
+          } }
+
+          let(:invalid_params) { {
+            "work_id"         => post.work.id,
+            "work_attributes" => {
+              "medium"                   => "",
+              "title"                    => "Hounds of Love",
+              "contributions_attributes" => {
+                "0" => {
+                  "role"       => "creator",
+                  "creator_id" => kate_bush.id
+                }
+              }
+            }
+          } }
+
+          context "with valid params" do
+            it "updates the requested post, ignoring work_id in favor of work_attributes" do
+              expect {
+                put :update, params: { id: post.to_param, post: valid_params }
+              }.to change { Work.count }.by(1)
+
+              expect(assigns(:post)).to update_params_for(post).and_be_valid
+
+              expect(assigns(:post).work).to have_attributes(
+                medium: "song",
+                title:  "Hounds of Love"
+              )
+
+              expect(assigns(:post).work.contributors.first).to eq(kate_bush)
+            end
+
+            specify do
+              put :update, params: { id: post.to_param, post: valid_params }
+
+              should send_user_to(admin_post_path(post)).with_flash(
+                :success, "admin.flash.posts.success.update"
+              )
+            end
+          end
+
+          context "with invalid params" do
+            it "renders edit" do
+              put :update, params: { id: post.to_param, post: invalid_params }
+
+              should successfully_render("admin/posts/edit").assigning(post, :post)
+
+              expect(assigns(:post)).to update_params_for(post).and_be_invalid
+
+              expect(assigns(:post).work).to be_a_new(Work)
+              expect(assigns(:post).work).to be_invalid
+
+              should define_only_the_review_tabs.and_select("post-new-work")
+            end
+          end
+        end
       end
 
-      context "publish" do
+      context "replacing automatic slug" do
+        let(:post) { create(:standalone_post) }
+
+        context "with custom slug" do
+          let(:valid_params) { { "slug" => "custom/slug" } }
+
+          before(:each) do
+            put :update, params: { id: post.to_param, post: valid_params }
+          end
+
+          it "sets custom slug" do
+            expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+
+            expect(assigns(:post).dirty_slug?).to eq(true)
+          end
+
+          it { should send_user_to(admin_post_path(post)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
+        end
+
+        context "with blank slug" do
+          let(:valid_params) { { "slug" => "" } }
+
+          before(:each) do
+            put :update, params: { id: post.to_param, post: valid_params }
+          end
+
+          it "regenerates slug" do
+            expect(assigns(:post)).to update_params_for(post).and_be_valid
+
+            expect(assigns(:post).slug).to_not be_blank
+            expect(assigns(:post).dirty_slug?).to eq(false)
+          end
+
+          it { should send_user_to(admin_post_path(post)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
+        end
+      end
+
+      context "publishing" do
         context "standalone" do
           let(:post) { create(:standalone_post) }
 
@@ -496,7 +611,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
       end
 
-      context "unpublish" do
+      context "unpublishing" do
         context "standalone" do
           let(:post) { create(:standalone_post, :published) }
 
@@ -616,47 +731,6 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)).to be_draft
             end
           end
-        end
-      end
-
-      context "slug" do
-        let(:post) { create(:standalone_post) }
-
-        context "with custom slug" do
-          let(:valid_params) { { "slug" => "custom/slug" } }
-
-          before(:each) do
-            put :update, params: { id: post.to_param, post: valid_params }
-          end
-
-          it "sets custom slug" do
-            expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
-
-            expect(assigns(:post).dirty_slug?).to eq(true)
-          end
-
-          it { should send_user_to(admin_post_path(post)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-
-        context "with blank slug" do
-          let(:valid_params) { { "slug" => "" } }
-
-          before(:each) do
-            put :update, params: { id: post.to_param, post: valid_params }
-          end
-
-          it "regenerates slug" do
-            expect(assigns(:post)).to update_params_for(post).and_be_valid
-
-            expect(assigns(:post).slug).to_not be_blank
-            expect(assigns(:post).dirty_slug?).to eq(false)
-          end
-
-          it { should send_user_to(admin_post_path(post)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
         end
       end
     end

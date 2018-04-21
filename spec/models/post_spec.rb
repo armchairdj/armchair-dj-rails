@@ -368,6 +368,12 @@ RSpec.describe Post, type: :model do
       specify { expect(create(:tiny_standalone_post       ).one_line_title).to eq("Hello") }
     end
 
+    describe "#prepare_work_for_editing" do
+      pending "clean"
+      pending "dirty work_id"
+      pending "dirty work_attributes"
+    end
+
     describe "#update_and_publish" do
       before(:each) do
         allow(subject).to receive(:update  ).and_call_original

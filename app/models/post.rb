@@ -134,10 +134,16 @@ class Post < ApplicationRecord
     work ? work.title_with_creator : title
   end
 
+  # TODO handle work_id vs new work
   def prepare_work_for_editing
-    self.current_work_id = self.work_id
-    self.build_work
-    self.work.prepare_contributions
+    if work_id_changed?
+      self.current_work_id = self.work_id_was
+      self.work.prepare_contributions
+    else
+      self.current_work_id = self.work_id
+      self.build_work
+      self.work.prepare_contributions
+    end
   end
 
   def update_and_publish(params)
