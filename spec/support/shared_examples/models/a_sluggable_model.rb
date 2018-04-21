@@ -69,6 +69,14 @@ RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
 
           expect(actual).to eq("was_not_was/man_vs_the_empire_brain_building")
         end
+
+        specify do
+          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+            "Siouxsie & The Banshees", "Kiss Them For Me"
+          ])
+
+          expect(actual).to eq("siouxsie_and_the_banshees/kiss_them_for_me")
+        end
       end
     end
 
@@ -310,16 +318,26 @@ RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
     end
 
     describe "#slugify" do
-      it "sets attribute to unique slug with one part" do
+      before(:each) do
+        allow(subject).to receive(:"#{sluggable_attribute}=")
+      end
 
+      it "sets attribute to unique slug with one part" do
+        expect(subject).to receive(:"#{sluggable_attribute}=")
+
+        subject.slugify(sluggable_attribute, ["foo"])
       end
 
       it "sets attribute to unique slug with multiple parts" do
+        expect(subject).to receive(:"#{sluggable_attribute}=")
 
+        subject.slugify(sluggable_attribute, ["foo", "bar"])
       end
 
       it "does nothing if no parts" do
+        expect(subject).to_not receive(:"#{sluggable_attribute}=")
 
+        subject.slugify(sluggable_attribute, [])
       end
     end
   end
