@@ -10,7 +10,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
@@ -19,7 +19,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "published" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
@@ -28,7 +28,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(0).of_total(0).records
           end
         end
@@ -44,14 +44,14 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
@@ -65,14 +65,14 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "published" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "published", page: "2" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
@@ -88,14 +88,14 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(20).of_total(21).records
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
-            expect(response).to successfully_render("admin/posts/index")
+            should successfully_render("admin/posts/index")
             expect(assigns(:posts)).to paginate(1).of_total(21).records
           end
         end
@@ -109,8 +109,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          expect(response).to successfully_render("admin/posts/show")
-          expect(assigns(:post)).to eq(post)
+          should successfully_render("admin/posts/show").assigning(post).as(:post)
         end
       end
 
@@ -120,8 +119,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          expect(response).to successfully_render("admin/posts/show")
-          expect(assigns(:post)).to eq(post)
+          should successfully_render("admin/posts/show").assigning(post).as(:post)
         end
       end
     end
@@ -130,13 +128,13 @@ RSpec.describe Admin::PostsController, type: :controller do
       it "renders" do
         get :new
 
-        expect(response).to successfully_render("admin/posts/new")
+        should successfully_render("admin/posts/new")
 
         expect(assigns(:post)                          ).to be_a_new(Post)
         expect(assigns(:post).work                     ).to be_a_new(Work)
         expect(assigns(:post).work.contributions.length).to eq(10)
 
-        expect(assigns).to define_all_tabs.and_select("post-choose-work")
+        should define_all_tabs.and_select("post-choose-work")
       end
     end
 
@@ -157,7 +155,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_post_path(assigns[:post]))
+            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
           end
         end
 
@@ -165,12 +163,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to successfully_render("admin/posts/new")
+            should successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs.and_select("post-choose-work")
+            should define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -191,7 +189,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_post_path(assigns[:post]))
+            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
           end
         end
 
@@ -199,12 +197,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to successfully_render("admin/posts/new")
+            should successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs.and_select("post-choose-work")
+            should define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -250,7 +248,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
-            expect(response).to redirect_to(admin_post_path(assigns[:post]))
+            should send_user_to(admin_post_path(assigns(:post))).with_flash(:notice, "admin.flash.posts.notice.create")
           end
         end
 
@@ -258,12 +256,12 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "renders new" do
             post :create, params: { post: invalid_params }
 
-            expect(response).to successfully_render("admin/posts/new")
+            should successfully_render("admin/posts/new")
 
             expect(assigns(:post)       ).to be_a_new(Post)
             expect(assigns(:post).valid?).to eq(false)
 
-            expect(assigns).to define_all_tabs.and_select("post-choose-work")
+            should define_all_tabs.and_select("post-choose-work")
           end
         end
       end
@@ -276,11 +274,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          expect(response).to successfully_render("admin/posts/edit")
-
-          expect(assigns(:post)).to eq(post)
-
-          expect(assigns).to define_only_the_standalone_tab
+          should successfully_render("admin/posts/edit").assigning(post).as(:post)
+          should define_only_the_standalone_tab
         end
       end
 
@@ -290,11 +285,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          expect(response).to successfully_render("admin/posts/edit")
+          should successfully_render("admin/posts/edit").assigning(post).as(:post)
 
-          expect(assigns(:post)).to eq(post)
-
-          expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+          should define_only_the_review_tabs.and_select("post-choose-work")
         end
       end
     end
@@ -318,7 +311,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "redirects to post" do
               put :update, params: { id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.update")
             end
           end
 
@@ -326,12 +319,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit").assigning(post).as(:post)
 
-              expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
 
-              expect(assigns).to define_only_the_standalone_tab
+              should define_only_the_standalone_tab
             end
           end
         end
@@ -353,7 +345,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "redirects to post" do
               put :update, params: { id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.update")
             end
           end
 
@@ -361,12 +353,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit").assigning(post).as(:post)
 
-              expect(assigns(:post)       ).to eq(post)
               expect(assigns(:post).valid?).to eq(false)
 
-              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+              should define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
@@ -391,16 +382,14 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(valid_params["title"])
               expect(assigns(:post).body        ).to eq(valid_params["body" ])
-              expect(assigns(:post).published?  ).to eq(true)
-              expect(assigns(:post).published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+
+              expect(assigns(:post)).to be_published
             end
 
             it "redirects to post" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
-
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.publish")
             end
           end
 
@@ -412,21 +401,17 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to successfully_render("admin/posts/edit").with_flash(
+              should successfully_render("admin/posts/edit").assigning(post).as(:post).with_flash(
                 :error, "admin.flash.posts.error.publish"
               )
 
-              expect(assigns(:post)             ).to eq(post)
-              expect(assigns(:post).title       ).to eq(valid_params["title"])
-              expect(assigns(:post).body        ).to eq(valid_params["body" ])
-              expect(assigns(:post).valid?      ).to eq(true)
+              expect(assigns(:post).title ).to eq(valid_params["title"])
+              expect(assigns(:post).body  ).to eq(valid_params["body" ])
+              expect(assigns(:post).valid?).to eq(true)
 
-              expect(assigns).to define_only_the_standalone_tab
+              should define_only_the_standalone_tab
 
-              post.reload
-
-              expect(post.published?  ).to eq(false)
-              expect(post.published_at).to eq(nil)
+              expect(post.reload).to be_draft
             end
           end
 
@@ -434,18 +419,17 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit").assigning(post).as(:post)
 
-              expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(nil)
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published_at).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
+
+              expect(assigns(:post)).to be_draft
 
               expect(assigns(:post).errors.details[:body ].first).to eq({ error: :blank_during_publish })
               expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
 
-              expect(assigns).to define_only_the_standalone_tab
+              should define_only_the_standalone_tab
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
             end
@@ -470,16 +454,14 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).body        ).to eq(valid_params["body"   ])
               expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
-              expect(assigns(:post).published?  ).to eq(true)
-              expect(assigns(:post).published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+
+              expect(assigns(:post)).to be_published
             end
 
             it "redirects to post" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
-
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.publish"))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.publish")
             end
           end
 
@@ -491,21 +473,17 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit").assigning(post).as(:post)
 
-              expect(assigns(:post)        ).to eq(post)
               expect(assigns(:post).body   ).to eq(valid_params["body"   ])
               expect(assigns(:post).work_id).to eq(valid_params["work_id"])
               expect(assigns(:post).valid? ).to eq(true)
 
-              post.reload
-
-              expect(post.published?  ).to eq(false)
-              expect(post.published_at).to eq(nil)
+              expect(post.reload).to_not be_published
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+              should define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
 
@@ -513,21 +491,21 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit")
 
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).work_id     ).to eq(nil)
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published_at).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
+
+              expect(assigns(:post)).to_not be_published
 
               expect(assigns(:post).errors.details[:body   ].first).to eq({ error: :blank_during_publish })
               expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.publish"))
 
-              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+              should define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
@@ -552,16 +530,14 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(valid_params["title"])
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
-              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post)).to be_draft
             end
 
             it "redirects to post" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
-
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.unpublish")
             end
           end
 
@@ -573,20 +549,17 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit")
 
               expect(assigns(:post)      ).to eq(post)
               expect(assigns(:post).title).to eq(valid_params["title"])
               expect(assigns(:post).body ).to eq(nil)
 
-              post.reload
-
-              expect(post.published?  ).to eq(true)
-              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(post.reload).to_not be_draft
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
 
-              expect(assigns).to define_only_the_standalone_tab
+              should define_only_the_standalone_tab
             end
           end
 
@@ -594,19 +567,19 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit")
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).title       ).to eq(nil)
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
-              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post)).to be_draft
 
               expect(assigns(:post).errors.details[:title].first).to eq({ error: :blank })
 
               expect(flash[:error]).to eq(nil)
 
-              expect(assigns).to define_only_the_standalone_tab
+              should define_only_the_standalone_tab
             end
           end
         end
@@ -629,16 +602,14 @@ RSpec.describe Admin::PostsController, type: :controller do
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).work_id     ).to eq(valid_params["work_id"])
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
-              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post)).to be_draft
             end
 
             it "redirects to post" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to redirect_to(admin_post_path(post))
-
-              expect(flash[:notice]).to eq(I18n.t("admin.flash.posts.notice.unpublish"))
+              should send_user_to(admin_post_path(post)).with_flash(:notice, "admin.flash.posts.notice.unpublish")
             end
           end
 
@@ -650,20 +621,17 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit")
 
               expect(assigns(:post)        ).to eq(post)
               expect(assigns(:post).work_id).to eq(valid_params["work_id"])
               expect(assigns(:post).body   ).to eq(nil)
 
-              post.reload
-
-              expect(post.published?  ).to eq(true)
-              expect(post.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(post.reload).to be_published
 
               expect(flash[:error]).to eq(I18n.t("admin.flash.posts.error.unpublish"))
 
-              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+              should define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
 
@@ -671,19 +639,19 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
 
-              expect(response).to successfully_render("admin/posts/edit")
+              should successfully_render("admin/posts/edit")
 
               expect(assigns(:post)             ).to eq(post)
               expect(assigns(:post).work_id     ).to eq(nil)
               expect(assigns(:post).body        ).to eq(nil)
-              expect(assigns(:post).published?  ).to eq(false)
-              expect(assigns(:post).published_at).to eq(nil)
+
+              expect(assigns(:post)).to be_draft
 
               expect(assigns(:post).errors.details[:work_id].first).to eq({ error: :blank })
 
               expect(flash[:error]).to eq(nil)
 
-              expect(assigns).to define_only_the_review_tabs.and_select("post-choose-work")
+              should define_only_the_review_tabs.and_select("post-choose-work")
             end
           end
         end
@@ -702,7 +670,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: post.to_param }
 
-        expect(response).to redirect_to(admin_posts_path)
+        should send_user_to(admin_posts_path).with_flash(:notice, "admin.flash.posts.notice.destroy")
       end
     end
   end

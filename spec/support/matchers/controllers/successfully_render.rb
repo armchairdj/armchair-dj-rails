@@ -1,9 +1,9 @@
 require "rspec/expectations"
 
 RSpec::Matchers.define :successfully_render do |template|
-  match do |actual|
-    expect(actual).to be_success
-    expect(actual).to render_template(template)
+  match do
+    expect(response).to be_success
+    expect(response).to render_template(template)
   end
 
   chain :with_flash do |type, message|
@@ -13,11 +13,20 @@ RSpec::Matchers.define :successfully_render do |template|
     expect(controller).to set_flash.now[@type].to(@message)
   end
 
-  failure_message do |actual|
-    if @type && @message
-      "expected #{actual} to successfully render template #{template} with flash #{@type}=#{@message}, but did not"
-    else
-      "expected #{actual} to successfully render template #{template}, but did not"
-    end
+  chain :assigning do |instance|
+    @instance = instance
+  end
+
+  chain :as do |sym|
+    @sym = sym
+
+    expect(assigns(@sym)).to eq(@instance)
+  end
+
+  failure_message do
+    message  = "expected to successfully render template #{template}"
+    message += " with variable #{@sym} for #{@instance}" if @instance && @sym
+    message += " with flash #{@type}=#{@message}"        if @type && @message
+    message += ", but did not"
   end
 end
