@@ -50,7 +50,9 @@ module Sluggable
   end
 
   def generate_slug(attribute, *args)
-    return unless (parts = args.flatten.compact).any?
+    parts = args.flatten.compact.map { |p| p.split("/") }.flatten.compact
+
+    return unless parts.any?
 
     self.class.generate_unique_slug(self, attribute, parts)
   end

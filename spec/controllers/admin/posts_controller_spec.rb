@@ -623,7 +623,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         let(:post) { create(:standalone_post) }
 
         context "with custom slug" do
-          let(:valid_params) { { "slug" => "custom_slug" } }
+          let(:valid_params) { { "slug" => "custom/slug" } }
 
           before(:each) do
             put :update, params: { id: post.to_param, post: valid_params }
