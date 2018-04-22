@@ -470,6 +470,18 @@ RSpec.describe Post, type: :model do
             end
           end
 
+          describe "current work_id" do
+            it "moves current_work_id to saved work_id and sets up work_attributes" do
+              subject.prepare_work_for_editing({ "work_id" => song_id })
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
           describe "dirty work_id" do
             it "moves current_work_id to dirty work_id and sets up work_attributes" do
               subject.work_id = other_song_id
@@ -560,16 +572,146 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        pending "unsaved"
+        context "unsaved" do
+          subject { build(:song_review) }
+
+          let!(      :song_id) { subject.work_id }
+          let!(:other_song_id) { create(:song).id }
+
+          describe "clean" do
+            it "moves current_work_id to saved work_id and sets up work_attributes" do
+              subject.prepare_work_for_editing()
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "current work_id" do
+            it "moves current_work_id to saved work_id and sets up work_attributes" do
+              subject.prepare_work_for_editing({ "work_id" => song_id })
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "dirty work_id" do
+            it "moves current_work_id to dirty work_id and sets up work_attributes" do
+              subject.work_id = other_song_id
+
+              subject.prepare_work_for_editing({ "work_id" => other_song_id })
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(other_song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "nil work_id" do
+            it "nils work_id and current_work_id and sets up work_attributes" do
+              subject.work_id = nil
+
+              subject.prepare_work_for_editing({ "work_id" => nil })
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(nil)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "dirty work_attributes" do
+            let(:valid_attributes) { {
+              "medium"                   => "song",
+              "title"                    => "Hounds of Love",
+              "contributions_attributes" => {
+                "0" => { "role" => "creator", "creator_id" => create(:musician).id }
+              }
+            } }
+
+            let(:invalid_attributes) {
+              valid_attributes.except(:medium)
+            }
+
+            context "and clean work_id" do
+              it "sets current_work_id to current work_id and retains work_attributes" do
+                subject.work_id         = song_id
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(song_id)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+                expect(subject.work.title               ).to eq("Hounds of Love")
+              end
+            end
+
+            context "and dirty work_id" do
+              it "sets current_work_id to dirty work_id and retains work_attributes" do
+                subject.work_id         = other_song_id
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(other_song_id)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+              end
+            end
+
+            context "and nil work_id" do
+              it "sets current_work_id to nil and retains work_attributes" do
+                subject.work_id         = nil
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => nil }))
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(nil)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+                expect(subject.work.title               ).to eq("Hounds of Love")
+              end
+            end
+          end
+        end
       end
 
       context "standalone" do
-        subject { create(:standalone_post) }
+        context "saved" do
+          subject { create(:standalone_post) }
 
-        it "does nothing" do
-          subject.prepare_work_for_editing
+          it "does nothing" do
+            subject.prepare_work_for_editing
 
-          expect(subject.changed?).to eq(false)
+            expect(subject.work_id_changed?).to eq(false)
+          end
+        end
+
+        context "unsaved" do
+          subject { build(:standalone_post) }
+
+          it "does nothing" do
+            subject.prepare_work_for_editing
+
+            expect(subject.work_id_changed?).to eq(false)
+          end
         end
       end
     end
