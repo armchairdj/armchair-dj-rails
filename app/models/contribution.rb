@@ -4,6 +4,8 @@ class Contribution < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
+  ROLE_GROUPINGS = I18n.t("activerecord.attributes.contribution.role_groupings").freeze
+
   #############################################################################
   # CONCERNS.
   #############################################################################
@@ -11,6 +13,18 @@ class Contribution < ApplicationRecord
   #############################################################################
   # CLASS.
   #############################################################################
+
+  def self.grouped_roles_for_select
+    roles = Contribution.human_enum_collection_with_keys(:role)
+    roles = roles.group_by { |arr| arr.last / 100 }
+    roles = roles.reduce([]) do |memo, (key, val)|
+      memo << [
+        ROLE_GROUPINGS[key],
+        val.map { |o| [ o[0], o[1], { "data-raw-value" => o[2] == 0 ? nil : o[2] } ] }
+      ]
+      memo
+    end
+  end
 
   #############################################################################
   # SCOPES.
@@ -41,6 +55,7 @@ class Contribution < ApplicationRecord
 
     songwriter:                   110,
     lyricist:                     111,
+    composer:                     112,
 
     music_producer:               120,
     music_executive_producer:     121,
@@ -52,7 +67,7 @@ class Contribution < ApplicationRecord
 
     musician:                     150,
 
-    # Broadcasting
+    # Movies
 
     director:                     200,
 

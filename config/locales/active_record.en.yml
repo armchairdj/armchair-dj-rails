@@ -4,6 +4,14 @@ en:
       contribution:
         _destroy: "Remove this contribution"
         id: "ID"
+        role_groupings:
+          - "Creator"
+          - "Music"
+          - "Broadcasting"
+          - "Print"
+          - "Art"
+          - "Tech"
+          - "Product"
         roles:
           creator:                      "Creator"
 
@@ -11,6 +19,7 @@ en:
           musical_featured_artist:      "Featured Artist"
           songwriter:                   "Songwriter"
           lyricist:                     "Lyricist"
+          composer:                     "Composer"
           music_producer:               "Producer"
           music_executive_producer:     "Executive Producer"
           music_co_producer:            "Co-Producer"
@@ -27,8 +36,8 @@ en:
           screenwriter:                 "Screenwriter"
           film_editor:                  "Editor"
 
-          radio_host:                    "Radio Host"
-          podcaster:                     "Podcaster"
+          radio_host:                   "Radio Host"
+          podcaster:                    "Podcaster"
 
           author:                       "Author"
           editor:                       "Editor"

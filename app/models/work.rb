@@ -42,7 +42,7 @@ class Work < ApplicationRecord
     }
   end
 
-  def self.grouped_select_options_for_post
+  def self.grouped_for_select
     self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).eager.alphabetical_by_creator] }
   end
 

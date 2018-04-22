@@ -174,9 +174,9 @@ private
 
     @post.prepare_work_for_editing(@sanitized_params)
 
-    @creators = policy_scope(Creator)
-    @roles    = Contribution.human_roles
-    @works    = Work.grouped_select_options_for_post
+    @creators = policy_scope(Creator).alphabetical
+    @roles    = Contribution.grouped_roles_for_select
+    @works    = Work.grouped_for_select
   end
 
   def authorize_instance

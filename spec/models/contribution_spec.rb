@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Contribution, type: :model do
   context "constants" do
-    # Nothing so far.
+    specify { expect(described_class).to have_constant(:ROLE_GROUPINGS) }
   end
 
   context "concerns" do
@@ -13,7 +13,7 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "class" do
-    # Nothing so far.
+    pending "self#grouped_roles_for_select"
   end
 
   context "scopes" do

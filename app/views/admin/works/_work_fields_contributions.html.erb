@@ -32,13 +32,13 @@
             }
           %>
 
-          <%= ff.input :role,
-            as:            :select,
-            collection:    roles,
-            required:      false,
-            include_blank: false,
-            error:         false,
-            input_html:    { "data-controller": "selectize" }
+          <%= ff.input :role, as: :grouped_select,
+            collection:         roles,
+            required:           false,
+            group_label_method: :first,
+            group_method:       :last,
+            include_blank:      true,
+            input_html:         { "data-controller": "selectize" }
           %>
         <% end %>
 

@@ -34,9 +34,9 @@ RSpec.describe Work, type: :model do
       ]) }
     end
 
-    describe "self#grouped_select_options_for_post" do
+    describe "self#grouped_for_select" do
       specify "first element of each sub-array is an optgroup heading" do
-        expect(described_class.grouped_select_options_for_post.to_h.keys).to eq([
+        expect(described_class.grouped_for_select.to_h.keys).to eq([
           "Songs",
           "Albums",
           "Movies",
@@ -56,7 +56,7 @@ RSpec.describe Work, type: :model do
       end
 
       specify "second element of each sub-array is a list of options" do
-        described_class.grouped_select_options_for_post.to_h.values.each do |rel|
+        described_class.grouped_for_select.to_h.values.each do |rel|
           expect(rel).to be_a_kind_of(Array)
         end
       end

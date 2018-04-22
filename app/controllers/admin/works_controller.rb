@@ -119,8 +119,8 @@ private
   def prepare_contributions_attributes_fields
     @work.prepare_contributions
 
-    @creators = policy_scope(Creator)
-    @roles    = Contribution.human_roles
+    @creators = policy_scope(Creator).alphabetical
+    @roles    = Contribution.grouped_roles_for_select
   end
 
   def instance_params

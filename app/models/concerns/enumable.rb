@@ -16,6 +16,14 @@ module Enumable
       alphabetical ? collection.sort_by(&:first) : collection
     end
 
+    def human_enum_collection_with_keys(attribute, alphabetical: false)
+      collection = send(attribute.to_s.pluralize).collect do |val, key|
+        [self.human_enum_value(attribute, val), val, key]
+      end
+
+      alphabetical ? collection.sort_by(&:first) : collection
+    end
+
     def human_enum_value(attribute, val)
       I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{attribute.to_s.pluralize}.#{val}")
     end
@@ -27,6 +35,10 @@ module Enumable
 
         # Define class methods
         singleton_class.instance_eval do
+          define_method :"human_#{attribute.pluralize}_with_keys" do
+            self.human_enum_collection_with_keys(attribute)
+          end
+
           define_method :"human_#{attribute.pluralize}" do
             self.human_enum_collection(attribute)
           end

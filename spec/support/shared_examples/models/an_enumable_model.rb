@@ -48,6 +48,8 @@ RSpec.shared_examples "an enumable model" do |attributes|
           end
         end
 
+        pending "self#human_#{plural_attr}_with_keys"
+
         describe "self#human_#{single_attr}" do
           specify { expect(described_class.send("human_#{single_attr}", "b")).to eq("Z.") }
           specify { expect(described_class.send("human_#{single_attr}", "a")).to eq("Y.") }
@@ -71,6 +73,10 @@ RSpec.shared_examples "an enumable model" do |attributes|
   context "class" do
     describe "self#human_enum_collection" do
       specify { expect(described_class).to respond_to(:human_enum_collection) }
+    end
+
+    describe "self#human_enum_collection_with_keys" do
+      specify { expect(described_class).to respond_to(:human_enum_collection_with_keys) }
     end
 
     describe "self#human_enum_value" do
