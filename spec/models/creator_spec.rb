@@ -5,32 +5,15 @@ RSpec.describe Creator, type: :model do
     # Nothing so far.
   end
 
-  context "associations" do
-    describe "associations" do
-      it { should have_many(:contributions) }
-
-      it { should have_many(:works   ).through(:contributions) }
-      it { should have_many(:contributed_works).through(:contributions) }
-
-      it { should have_many(:posts).through(:works) }
+  context "concerns" do
+    it_behaves_like "an application record"
+    it_behaves_like "a viewable model"
+    it_behaves_like "an atomically validatable model", { name: nil } do
+      subject { create(:minimal_creator) }
     end
   end
 
-  context "nested_attributes" do
-    # Nothing so far.
-  end
-
-  context "enums" do
-    # Nothing so far.
-  end
-
-  context "validations" do
-    describe "name" do
-      it { should validate_presence_of(:name) }
-    end
-  end
-
-  context "hooks" do
+  context "class" do
     # Nothing so far.
   end
 
@@ -60,7 +43,34 @@ RSpec.describe Creator, type: :model do
     pending "for_site"
   end
 
-  context "class" do
+  context "associations" do
+    describe "associations" do
+      it { should have_many(:contributions) }
+
+      it { should have_many(:works   ).through(:contributions) }
+      it { should have_many(:contributed_works).through(:contributions) }
+
+      it { should have_many(:posts).through(:works) }
+    end
+  end
+
+  context "attributes" do
+    context "nested" do
+      # Nothing so far.
+    end
+
+    context "enums" do
+      # Nothing so far.
+    end
+  end
+
+  context "validations" do
+    describe "name" do
+      it { should validate_presence_of(:name) }
+    end
+  end
+
+  context "hooks" do
     # Nothing so far.
   end
 
@@ -69,14 +79,6 @@ RSpec.describe Creator, type: :model do
       context "callbacks" do
         # Nothing so far.
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an application record"
-    it_behaves_like "a viewable model"
-    it_behaves_like "an atomically validatable model", { name: nil } do
-      subject { create(:minimal_creator) }
     end
   end
 end

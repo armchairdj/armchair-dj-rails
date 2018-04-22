@@ -5,32 +5,29 @@ RSpec.describe User, type: :model do
     # Nothing so far.
   end
 
-  context "associations" do
-    # Nothing so far.
-  end
+  context "concerns" do
+    it_behaves_like "an application record"
 
-  context "nested_attributes" do
-    # Nothing so far.
-  end
-
-  context "enums" do
-    describe "role" do
-      it { should define_enum_for(:role) }
-
-      it_behaves_like "an enumable model", [:role]
+    it_behaves_like "an atomically validatable model", { first_name: nil, last_name: nil } do
+      subject { create(:minimal_user) }
     end
   end
 
-  context "validations" do
-    subject { create(:minimal_user) }
+  context "class" do
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "All",
+          "Member",
+          "Contributor",
+          "Admin",
+        ])
+      end
+    end
 
-    it { should validate_presence_of(:first_name) }
-    it { should validate_presence_of(:last_name) }
-    it { should validate_presence_of(:role) }
-  end
-
-  context "hooks" do
-    # Nothing so far.
+    describe "self#default_admin_scope" do
+      specify { expect(described_class.default_admin_scope).to eq(:all) }
+    end
   end
 
   context "scopes" do
@@ -52,21 +49,34 @@ RSpec.describe User, type: :model do
     pending "for_site"
   end
 
-  context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "All",
-          "Member",
-          "Contributor",
-          "Admin",
-        ])
-      end
+  context "associations" do
+    # Nothing so far.
+  end
+
+  context "attributes" do
+    context "nested" do
+      # Nothing so far.
     end
 
-    describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:all) }
+    context "enums" do
+      describe "role" do
+        it { should define_enum_for(:role) }
+
+        it_behaves_like "an enumable model", [:role]
+      end
     end
+  end
+
+  context "validations" do
+    subject { create(:minimal_user) }
+
+    it { should validate_presence_of(:first_name) }
+    it { should validate_presence_of(:last_name) }
+    it { should validate_presence_of(:role) }
+  end
+
+  context "hooks" do
+    # Nothing so far.
   end
 
   context "instance" do
@@ -88,13 +98,6 @@ RSpec.describe User, type: :model do
       context "callbacks" do
         # Nothing so far.
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an application record"
-    it_behaves_like "an atomically validatable model", { first_name: nil, last_name: nil } do
-      subject { create(:minimal_user) }
     end
   end
 end

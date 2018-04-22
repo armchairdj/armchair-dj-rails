@@ -5,36 +5,130 @@ RSpec.describe Post, type: :model do
     # Nothing so far.
   end
 
+  context "concerns" do
+    it_behaves_like "an application record"
+
+    it_behaves_like "a sluggable model", :slug
+
+    it_behaves_like "an atomically validatable model", { body: nil, slug: nil, published_at: nil } do
+      subject { create(:standalone_post, :published) }
+    end
+  end
+
+  context "class" do
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "Draft",
+          "Published",
+          "All",
+        ])
+      end
+    end
+
+    describe "self#default_admin_scope" do
+      specify { expect(described_class.default_admin_scope).to eq(:draft) }
+    end
+  end
+
+  context "scopes" do
+    let!(        :draft_review) { create(:song_review,     :draft    ) }
+    let!(    :published_review) { create(:song_review,     :published) }
+    let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
+    let!(:published_standalone) { create(:standalone_post, :published) }
+
+    context "for status" do
+      describe "draft" do
+        specify { expect(described_class.draft).to match_array([
+          draft_review,
+          draft_standalone
+        ]) }
+      end
+
+      describe "published" do
+        specify { expect(described_class.published).to match_array([
+          published_review,
+          published_standalone
+        ]) }
+      end
+    end
+
+    context "for type" do
+      describe "standalone" do
+        specify { expect(described_class.standalone).to match_array([
+          draft_standalone,
+          published_standalone
+        ]) }
+      end
+
+      describe "review" do
+        specify { expect(described_class.review).to match_array([
+          draft_review,
+          published_review
+        ]) }
+      end
+    end
+
+    describe "reverse_cron" do
+      specify { expect(described_class.reverse_cron.to_a).to eq([
+        draft_review,
+        draft_standalone,
+        published_standalone,
+        published_review,
+      ]) }
+    end
+
+    pending "eager"
+
+    describe "for_admin" do
+      specify { expect(described_class.for_admin).to match_array([
+        draft_review,
+        draft_standalone,
+        published_standalone,
+        published_review
+      ]) }
+    end
+
+    describe "for_site" do
+      specify { expect(described_class.for_site).to match_array([
+        published_standalone,
+        published_review
+      ]) }
+    end
+  end
+
   context "associations" do
     it { should belong_to(:work) }
   end
 
-  context "virtual_attributes" do
-    describe "#current_work" do
-      it { should respond_to(:current_work_id ) }
-      it { should respond_to(:current_work_id=) }
-    end
-  end
-
-  context "nested_attributes" do
-    it { should accept_nested_attributes_for(:work) }
-
-    describe "reject_if" do
-      subject { build(:post, body: "body", work_attributes: { "0" => { "title" => "" } }) }
-
-      it "rejects works with blank titles" do
-        expect { subject.save }.to_not change { Work.count }
-
-        expect(subject.work).to eq(nil)
+  context "attributes" do
+    context "virtual" do
+      describe "#current_work" do
+        it { should respond_to(:current_work_id ) }
+        it { should respond_to(:current_work_id=) }
       end
     end
-  end
 
-  context "enums" do
-    describe "status" do
-      it { should define_enum_for(:status) }
+    context "nested" do
+      it { should accept_nested_attributes_for(:work) }
 
-      it_behaves_like "an enumable model", [:status]
+      describe "reject_if" do
+        subject { build(:post, body: "body", work_attributes: { "0" => { "title" => "" } }) }
+
+        it "rejects works with blank titles" do
+          expect { subject.save }.to_not change { Work.count }
+
+          expect(subject.work).to eq(nil)
+        end
+      end
+    end
+
+    context "enums" do
+      describe "status" do
+        it { should define_enum_for(:status) }
+
+        it_behaves_like "an enumable model", [:status]
+      end
     end
   end
 
@@ -216,88 +310,6 @@ RSpec.describe Post, type: :model do
     describe "methods" do
       specify { expect(draft).to respond_to(:draft?    ) }
       specify { expect(draft).to respond_to(:published?) }
-    end
-  end
-
-  context "scopes" do
-    let!(        :draft_review) { create(:song_review,     :draft    ) }
-    let!(    :published_review) { create(:song_review,     :published) }
-    let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
-    let!(:published_standalone) { create(:standalone_post, :published) }
-
-    context "for status" do
-      describe "draft" do
-        specify { expect(described_class.draft).to match_array([
-          draft_review,
-          draft_standalone
-        ]) }
-      end
-
-      describe "published" do
-        specify { expect(described_class.published).to match_array([
-          published_review,
-          published_standalone
-        ]) }
-      end
-    end
-
-    context "for type" do
-      describe "standalone" do
-        specify { expect(described_class.standalone).to match_array([
-          draft_standalone,
-          published_standalone
-        ]) }
-      end
-
-      describe "review" do
-        specify { expect(described_class.review).to match_array([
-          draft_review,
-          published_review
-        ]) }
-      end
-    end
-
-    describe "reverse_cron" do
-      specify { expect(described_class.reverse_cron.to_a).to eq([
-        draft_review,
-        draft_standalone,
-        published_standalone,
-        published_review,
-      ]) }
-    end
-
-    pending "eager"
-
-    describe "for_admin" do
-      specify { expect(described_class.for_admin).to match_array([
-        draft_review,
-        draft_standalone,
-        published_standalone,
-        published_review
-      ]) }
-    end
-
-    describe "for_site" do
-      specify { expect(described_class.for_site).to match_array([
-        published_standalone,
-        published_review
-      ]) }
-    end
-  end
-
-  context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "Draft",
-          "Published",
-          "All",
-        ])
-      end
-    end
-
-    describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:draft) }
     end
   end
 
@@ -904,16 +916,6 @@ RSpec.describe Post, type: :model do
           end
         end
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an application record"
-
-    it_behaves_like "a sluggable model", :slug
-
-    it_behaves_like "an atomically validatable model", { body: nil, slug: nil, published_at: nil } do
-      subject { create(:standalone_post, :published) }
     end
   end
 end

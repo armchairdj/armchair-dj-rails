@@ -5,96 +5,12 @@ RSpec.describe Work, type: :model do
     # Nothing so far.
   end
 
-  context "associations" do
-    it { should have_many(:contributions) }
-
-    it { should have_many(:creators    ).through(:contributions) }
-    it { should have_many(:contributors).through(:contributions) }
-
-    it { should have_many(:posts) }
-  end
-
-  context "nested_attributes" do
-    it { should accept_nested_attributes_for(:contributions) }
-
-    describe "reject_if" do
-      it "rejects contributions without a creator_id" do
-        instance = build(:song, contributions_attributes: {
-          "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
-          "1" => attributes_for(:contribution, role: :creator, creator_id: nil                 )
-        })
-
-        expect {
-          instance.save
-        }.to change {
-          Contribution.count
-        }.by(1)
-
-        expect(instance.contributions.length).to eq(1)
-      end
+  context "concerns" do
+    it_behaves_like "an application record"
+    it_behaves_like "a viewable model"
+    it_behaves_like "an atomically validatable model", { title: nil, medium: nil } do
+      subject { create(:minimal_work) }
     end
-  end
-
-  context "enums" do
-    describe "medium" do
-      it { should define_enum_for(:medium) }
-
-      it_behaves_like "an enumable model", [:medium]
-    end
-  end
-
-  context "validations" do
-    it { should validate_presence_of(:medium) }
-    it { should validate_presence_of(:title ) }
-
-    context "custom" do
-      subject { build(:work) }
-
-      it "calls #validate_contributions" do
-         allow(subject).to receive(:validate_contributions)
-        expect(subject).to receive(:validate_contributions)
-
-        subject.valid?
-      end
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
-  end
-
-  context "scopes" do
-    describe "alphabetical" do
-      let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
-      let!(:lh   ) { create(:album, title: "lionheart"        ) }
-      let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }
-      let!(:td   ) { create(:album, title: "The Dreaming"     ) }
-      let!(:hol  ) { create(:album, title: "Hounds of Love"   ) }
-      let!(:tsw  ) { create(:album, title: "the sensual world") }
-      let!(:trs  ) { create(:album, title: "The Red Shoes"    ) }
-      let!(:a    ) { create(:album, title: "aerial"           ) }
-      let!(:d    ) { create(:album, title: "Director's Cut"   ) }
-      let!(:fifty) { create(:album, title: "50 Words for Snow") }
-
-      specify { expect(described_class.alphabetical.to_a).to eq([
-        fifty,
-        a,
-        d,
-        hol,
-        lh,
-        nfe,
-        td,
-        tki,
-        trs,
-        tsw
-      ]) }
-    end
-
-    pending "eager"
-
-    pending "for_admin"
-
-    pending "for_site"
   end
 
   context "class" do
@@ -179,6 +95,100 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  context "scopes" do
+    describe "alphabetical" do
+      let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
+      let!(:lh   ) { create(:album, title: "lionheart"        ) }
+      let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }
+      let!(:td   ) { create(:album, title: "The Dreaming"     ) }
+      let!(:hol  ) { create(:album, title: "Hounds of Love"   ) }
+      let!(:tsw  ) { create(:album, title: "the sensual world") }
+      let!(:trs  ) { create(:album, title: "The Red Shoes"    ) }
+      let!(:a    ) { create(:album, title: "aerial"           ) }
+      let!(:d    ) { create(:album, title: "Director's Cut"   ) }
+      let!(:fifty) { create(:album, title: "50 Words for Snow") }
+
+      specify { expect(described_class.alphabetical.to_a).to eq([
+        fifty,
+        a,
+        d,
+        hol,
+        lh,
+        nfe,
+        td,
+        tki,
+        trs,
+        tsw
+      ]) }
+    end
+
+    pending "eager"
+
+    pending "for_admin"
+
+    pending "for_site"
+  end
+
+  context "associations" do
+    it { should have_many(:contributions) }
+
+    it { should have_many(:creators    ).through(:contributions) }
+    it { should have_many(:contributors).through(:contributions) }
+
+    it { should have_many(:posts) }
+  end
+
+  context "attributes" do
+    context "nested" do
+      it { should accept_nested_attributes_for(:contributions) }
+
+      describe "reject_if" do
+        it "rejects contributions without a creator_id" do
+          instance = build(:song, contributions_attributes: {
+            "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
+            "1" => attributes_for(:contribution, role: :creator, creator_id: nil                 )
+          })
+
+          expect {
+            instance.save
+          }.to change {
+            Contribution.count
+          }.by(1)
+
+          expect(instance.contributions.length).to eq(1)
+        end
+      end
+    end
+
+    context "enums" do
+      describe "medium" do
+        it { should define_enum_for(:medium) }
+
+        it_behaves_like "an enumable model", [:medium]
+      end
+    end
+  end
+
+  context "validations" do
+    it { should validate_presence_of(:medium) }
+    it { should validate_presence_of(:title ) }
+
+    context "custom" do
+      subject { build(:work) }
+
+      it "calls #validate_contributions" do
+         allow(subject).to receive(:validate_contributions)
+        expect(subject).to receive(:validate_contributions)
+
+        subject.valid?
+      end
+    end
+  end
+
+  context "hooks" do
+    # Nothing so far.
+  end
+
   context "instance" do
     describe "#prepare_contributions" do
       it "prepares max for new" do
@@ -256,14 +266,6 @@ RSpec.describe Work, type: :model do
           end
         end
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an application record"
-    it_behaves_like "a viewable model"
-    it_behaves_like "an atomically validatable model", { title: nil, medium: nil } do
-      subject { create(:minimal_work) }
     end
   end
 end

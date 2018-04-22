@@ -5,42 +5,23 @@ class Post < ApplicationRecord
   #############################################################################
 
   #############################################################################
-  # CONCERNS & PLUGINS.
+  # CONCERNS.
   #############################################################################
 
   include AASM
   include Sluggable
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CLASS.
   #############################################################################
 
-  belongs_to :work, required: false
-
-  #############################################################################
-  # VIRTUAL ATTRIBUTES.
-  #############################################################################
-
-  attr_accessor :current_work_id
-
-  #############################################################################
-  # NESTED ATTRIBUTES.
-  #############################################################################
-
-  accepts_nested_attributes_for :work,
-    allow_destroy: true,
-    reject_if:     :reject_blank_work
-
-  #############################################################################
-  # ENUMS.
-  #############################################################################
-
-  enum status: {
-    draft:      0,
-    published: 10
-  }
-
-  enumable_attributes :status
+  def self.admin_scopes
+    {
+      "Draft"     => :draft,
+      "Published" => :published,
+      "All"       => :all,
+    }
+  end
 
   #############################################################################
   # SCOPES.
@@ -52,6 +33,29 @@ class Post < ApplicationRecord
   scope :eager,        -> { includes(work: { contributions: :creator }) }
   scope :for_admin,    -> { eager                                       }
   scope :for_site,     -> { eager.published.reverse_cron                }
+
+  #############################################################################
+  # ASSOCIATIONS.
+  #############################################################################
+
+  belongs_to :work, required: false
+
+  #############################################################################
+  # ATTRIBUTES.
+  #############################################################################
+
+  accepts_nested_attributes_for :work,
+    allow_destroy: true,
+    reject_if:     :reject_blank_work
+
+  enum status: {
+    draft:      0,
+    published: 10
+  }
+
+  enumable_attributes :status
+
+  attr_accessor :current_work_id
 
   #############################################################################
   # VALIDATIONS.
@@ -95,18 +99,6 @@ class Post < ApplicationRecord
       before: :prepare_to_unpublish,
       after:  :update_viewable_counts
     ) { transitions from: :published, to: :draft, guards: [:can_unpublish?] }
-  end
-
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
-  def self.admin_scopes
-    {
-      "Draft"     => :draft,
-      "Published" => :published,
-      "All"       => :all,
-    }
   end
 
   #############################################################################

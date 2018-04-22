@@ -5,32 +5,49 @@ RSpec.describe Contribution, type: :model do
     # Nothing so far.
   end
 
+  context "concerns" do
+    it_behaves_like "an application record"
+    # it_behaves_like "an atomically validatable model", { work: nil, creator: nil } do
+    #   subject { create(:minimal_contribution) }
+    # end
+  end
+
+  context "class" do
+    # Nothing so far.
+  end
+
+  context "scopes" do
+    # Nothing so far.
+  end
+
   context "associations" do
     it { should belong_to(:creator) }
     it { should belong_to(:work   ) }
   end
 
-  context "nested_attributes" do
-    it { should accept_nested_attributes_for(:creator) }
+  context "attributes" do
+    context "nested" do
+      it { should accept_nested_attributes_for(:creator) }
 
-    describe "reject_if" do
-      it "rejects with blank creator name" do
-        instance = build(:contribution_with_new_creator, creator_attributes: {
-          "0" => { "name" => "" }
-        })
+      describe "reject_if" do
+        it "rejects with blank creator name" do
+          instance = build(:contribution_with_new_creator, creator_attributes: {
+            "0" => { "name" => "" }
+          })
 
-        expect { instance.save }.to_not change { Contribution.count }
+          expect { instance.save }.to_not change { Contribution.count }
 
-        expect(instance).to have_errors(creator: :blank)
+          expect(instance).to have_errors(creator: :blank)
+        end
       end
     end
-  end
 
-  context "enums" do
-    describe "role" do
-      it { should define_enum_for(:role) }
+    context "enums" do
+      describe "role" do
+        it { should define_enum_for(:role) }
 
-      it_behaves_like "an enumable model", [:role]
+        it_behaves_like "an enumable model", [:role]
+      end
     end
   end
 
@@ -46,26 +63,11 @@ RSpec.describe Contribution, type: :model do
     # Nothing so far.
   end
 
-  context "scopes" do
-    # Nothing so far.
-  end
-
-  context "class" do
-    # Nothing so far.
-  end
-
   context "instance" do
     describe "private" do
       context "callbacks" do
         # Nothing so far.
       end
     end
-  end
-
-  context "concerns" do
-    it_behaves_like "an application record"
-    # it_behaves_like "an atomically validatable model", { work: nil, creator: nil } do
-    #   subject { create(:minimal_contribution) }
-    # end
   end
 end

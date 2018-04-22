@@ -5,85 +5,10 @@ class Work < ApplicationRecord
   #############################################################################
 
   #############################################################################
-  # CONCERNS & PLUGINS.
+  # CONCERNS.
   #############################################################################
 
   include Viewable
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_many :contributions
-
-  has_many :creators, -> {
-    where(contributions: { role: Contribution.roles["creator"] })
-  }, through: :contributions
-
-  has_many :contributors, through: :contributions,
-    source: :creator, class_name: "Creator"
-
-  has_many :posts, dependent: :destroy
-
-  #############################################################################
-  # NESTED ATTRIBUTES.
-  #############################################################################
-
-  accepts_nested_attributes_for :contributions,
-    allow_destroy: true,
-    reject_if:     :reject_blank_contributions
-
-  #############################################################################
-  # ENUMS.
-  #############################################################################
-
-  enum medium: {
-    song:        100,
-    album:       101,
-
-    movie:       200,
-    tv_show:     220,
-    radio_show:  240,
-    podcast:     260,
-
-    book:        300,
-    comic:       310,
-    newspaper:   350,
-    magazine:    370,
-
-    artwork:     400,
-
-    game:        500,
-    software:    501,
-    hardware:    502,
-
-    product:     600
-  }
-
-  enumable_attributes :medium
-
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :alphabetical, -> { order("LOWER(works.title)") }
-  scope :eager,        -> { includes(:creators).includes(contributions: :creator).where(contributions: { role: Contribution.roles["creator"] }) }
-  scope :for_admin,    -> { eager }
-  scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :medium, presence: true
-
-  validates :title, presence: true
-
-  validate { validate_contributions }
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
 
   #############################################################################
   # CLASS.
@@ -120,6 +45,77 @@ class Work < ApplicationRecord
   def self.grouped_select_options_for_post
     self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).eager.alphabetical_by_creator] }
   end
+
+  #############################################################################
+  # SCOPES.
+  #############################################################################
+
+  scope :alphabetical, -> { order("LOWER(works.title)") }
+  scope :eager,        -> { includes(:creators).includes(contributions: :creator).where(contributions: { role: Contribution.roles["creator"] }) }
+  scope :for_admin,    -> { eager }
+  scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }
+
+  #############################################################################
+  # ASSOCIATIONS.
+  #############################################################################
+
+  has_many :contributions
+
+  has_many :creators, -> {
+    where(contributions: { role: Contribution.roles["creator"] })
+  }, through: :contributions
+
+  has_many :contributors, through: :contributions,
+    source: :creator, class_name: "Creator"
+
+  has_many :posts, dependent: :destroy
+
+  #############################################################################
+  # ATTRIBUTES.
+  #############################################################################
+
+  accepts_nested_attributes_for :contributions,
+    allow_destroy: true,
+    reject_if:     :reject_blank_contributions
+
+  enum medium: {
+    song:        100,
+    album:       101,
+
+    movie:       200,
+    tv_show:     220,
+    radio_show:  240,
+    podcast:     260,
+
+    book:        300,
+    comic:       310,
+    newspaper:   350,
+    magazine:    370,
+
+    artwork:     400,
+
+    game:        500,
+    software:    501,
+    hardware:    502,
+
+    product:     600
+  }
+
+  enumable_attributes :medium
+
+  #############################################################################
+  # VALIDATIONS.
+  #############################################################################
+
+  validates :medium, presence: true
+
+  validates :title, presence: true
+
+  validate { validate_contributions }
+
+  #############################################################################
+  # HOOKS.
+  #############################################################################
 
   #############################################################################
   # INSTANCE.

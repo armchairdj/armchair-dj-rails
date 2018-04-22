@@ -8,23 +8,11 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
   end
 
-  context "associations" do
+  context "concerns" do
     # Nothing so far.
   end
 
-  context "nested_attributes" do
-    # Nothing so far.
-  end
-
-  context "enums" do
-    # Nothing so far.
-  end
-
-  context "validations" do
-    # Nothing so far.
-  end
-
-  context "hooks" do
+  context "class" do
     # Nothing so far.
   end
 
@@ -32,7 +20,25 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
   end
 
-  context "class" do
+  context "associations" do
+    # Nothing so far.
+  end
+
+  context "attributes" do
+    context "nested" do
+      # Nothing so far.
+    end
+
+    context "enums" do
+      # Nothing so far.
+    end
+  end
+
+  context "validations" do
+    # Nothing so far.
+  end
+
+  context "hooks" do
     # Nothing so far.
   end
 
@@ -44,10 +50,6 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
         # Nothing so far.
       end
     end
-  end
-
-  context "concerns" do
-    # Nothing so far.
   end
 end
 <% end -%>
