@@ -128,25 +128,12 @@ class Post < ApplicationRecord
     has_work_id      = work_id.present?
     original_work_id = persisted? && work_id_changed? ? work_id : work_id_was
 
-    puts ">>has_work", has_work, work.inspect
-    puts ">>has_work_id", has_work_id, work_id
-    puts ">>original_work_id", original_work_id
-
-    if has_work_id
-      puts ">>setting current_work_id to #{original_work_id}"
+    if work_id.present?
       self.current_work_id = work_id
       self.work_id         = nil
     end
 
-    if self.work
-      puts ">>already has work"
-    else
-      puts ">>building work"
-      build_work
-    end
-
-    puts ">>preparing contributions"
-
+    build_work unless self.work.present?
     work.prepare_contributions
   end
 

@@ -459,7 +459,7 @@ RSpec.describe Post, type: :model do
           let!(:other_song_id) { create(:song).id }
 
           describe "clean" do
-            it "moves saved work_id to current_work_id and sets up work_attributes" do
+            it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing
 
               expect(subject.changed?                 ).to eq(true)
@@ -471,7 +471,7 @@ RSpec.describe Post, type: :model do
           end
 
           describe "dirty work_id" do
-            it "moves dirty work_id to current_work_id and sets up work_attributes" do
+            it "moves current_work_id to dirty work_id and sets up work_attributes" do
               subject.work_id = other_song_id
 
               subject.prepare_work_for_editing
@@ -512,14 +512,14 @@ RSpec.describe Post, type: :model do
             }
 
             context "and clean work_id" do
-              it "sets saved work_id to current_work_id and sets up work_attributes" do
+              it "sets current_work_id to nil and retains work_attributes" do
                 subject.work_id         = song_id
                 subject.work_attributes = valid_attributes
 
                 subject.prepare_work_for_editing
 
                 expect(subject.changed?                 ).to eq(true)
-                expect(subject.current_work_id          ).to eq(song_id)
+                expect(subject.current_work_id          ).to eq(nil)
                 expect(subject.work_id                  ).to eq(nil)
                 expect(subject.work                     ).to be_a_new(Work)
                 expect(subject.work.contributions.length).to eq(10)
@@ -528,7 +528,7 @@ RSpec.describe Post, type: :model do
             end
 
             context "and nil work_id" do
-              it "sets saved work_id to current_work_id and sets up work_attributes" do
+              it "sets current_work_id to nil and retains work_attributes" do
                 subject.work_id         = nil
                 subject.work_attributes = valid_attributes
 
@@ -544,14 +544,14 @@ RSpec.describe Post, type: :model do
             end
 
             context "and dirty work_id" do
-              it "sets saved work_id to current_work_id and sets up work_attributes" do
+              it "sets current_work_id to nil and retains work_attributes" do
                 subject.work_id         = other_song_id
                 subject.work_attributes = valid_attributes
 
                 subject.prepare_work_for_editing
 
                 expect(subject.changed?                 ).to eq(true)
-                expect(subject.current_work_id          ).to eq(other_song_id)
+                expect(subject.current_work_id          ).to eq(nil)
                 expect(subject.work_id                  ).to eq(nil)
                 expect(subject.work                     ).to be_a_new(Work)
                 expect(subject.work.contributions.length).to eq(10)
