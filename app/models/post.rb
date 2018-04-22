@@ -121,15 +121,13 @@ class Post < ApplicationRecord
     end
   end
 
-  def prepare_work_for_editing
+  def prepare_work_for_editing(params = {})
     return if standalone?
 
-    has_work         = work.present?
-    has_work_id      = work_id.present?
-    original_work_id = persisted? && work_id_changed? ? work_id : work_id_was
+    current_work_id = params["work_id"] || work_id || work_id_was
 
     if work_id.present?
-      self.current_work_id = work_id
+      self.current_work_id = current_work_id
       self.work_id         = nil
     end
 

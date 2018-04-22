@@ -460,7 +460,7 @@ RSpec.describe Post, type: :model do
 
           describe "clean" do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
-              subject.prepare_work_for_editing
+              subject.prepare_work_for_editing()
 
               expect(subject.changed?                 ).to eq(true)
               expect(subject.current_work_id          ).to eq(song_id)
@@ -474,7 +474,7 @@ RSpec.describe Post, type: :model do
             it "moves current_work_id to dirty work_id and sets up work_attributes" do
               subject.work_id = other_song_id
 
-              subject.prepare_work_for_editing
+              subject.prepare_work_for_editing({ "work_id" => other_song_id })
 
               expect(subject.changed?                 ).to eq(true)
               expect(subject.current_work_id          ).to eq(other_song_id)
@@ -488,7 +488,7 @@ RSpec.describe Post, type: :model do
             it "nils work_id and current_work_id and sets up work_attributes" do
               subject.work_id = nil
 
-              subject.prepare_work_for_editing
+              subject.prepare_work_for_editing({ "work_id" => nil })
 
               expect(subject.changed?                 ).to eq(true)
               expect(subject.current_work_id          ).to eq(nil)
@@ -516,23 +516,7 @@ RSpec.describe Post, type: :model do
                 subject.work_id         = song_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing
-
-                expect(subject.changed?                 ).to eq(true)
-                expect(subject.current_work_id          ).to eq(nil)
-                expect(subject.work_id                  ).to eq(nil)
-                expect(subject.work                     ).to be_a_new(Work)
-                expect(subject.work.contributions.length).to eq(10)
-                expect(subject.work.title               ).to eq("Hounds of Love")
-              end
-            end
-
-            context "and nil work_id" do
-              it "sets current_work_id to nil and retains work_attributes" do
-                subject.work_id         = nil
-                subject.work_attributes = valid_attributes
-
-                subject.prepare_work_for_editing
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
 
                 expect(subject.changed?                 ).to eq(true)
                 expect(subject.current_work_id          ).to eq(nil)
@@ -548,13 +532,29 @@ RSpec.describe Post, type: :model do
                 subject.work_id         = other_song_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
 
                 expect(subject.changed?                 ).to eq(true)
                 expect(subject.current_work_id          ).to eq(nil)
                 expect(subject.work_id                  ).to eq(nil)
                 expect(subject.work                     ).to be_a_new(Work)
                 expect(subject.work.contributions.length).to eq(10)
+              end
+            end
+
+            context "and nil work_id" do
+              it "sets current_work_id to nil and retains work_attributes" do
+                subject.work_id         = nil
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => nil }))
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(nil)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+                expect(subject.work.title               ).to eq("Hounds of Love")
               end
             end
           end

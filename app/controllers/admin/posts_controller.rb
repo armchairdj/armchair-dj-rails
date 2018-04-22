@@ -138,10 +138,6 @@ private
       fetched.delete(:work_id)
     elsif @post.review?
       fetched.delete(:title)
-      #
-      # if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
-      #   fetched[:work_id] = nil
-      # end
     end
 
     @sanitized_params = fetched
@@ -176,7 +172,7 @@ private
 
     return if @post.persisted? && @post.standalone?
 
-    @post.prepare_work_for_editing
+    @post.prepare_work_for_editing(@sanitized_params)
 
     @creators = policy_scope(Creator)
     @roles    = Contribution.human_roles
