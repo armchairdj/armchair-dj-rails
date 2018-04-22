@@ -499,16 +499,63 @@ RSpec.describe Post, type: :model do
           end
 
           describe "dirty work_attributes" do
-            it "sets saved work_id to current_work_id and sets up work_attributes" do
-              subject.work_id = nil
+            let(:valid_attributes) { {
+              "medium"                   => "song",
+              "title"                    => "Hounds of Love",
+              "contributions_attributes" => {
+                "0" => { "role" => "creator", "creator_id" => create(:musician).id }
+              }
+            } }
 
-              subject.prepare_work_for_editing
+            let(:invalid_attributes) {
+              valid_attributes.except(:medium)
+            }
 
-              expect(subject.changed?                 ).to eq(true)
-              expect(subject.current_work_id          ).to eq(nil)
-              expect(subject.work_id                  ).to eq(nil)
-              expect(subject.work                     ).to be_a_new(Work)
-              expect(subject.work.contributions.length).to eq(10)
+            context "and clean work_id" do
+              it "sets saved work_id to current_work_id and sets up work_attributes" do
+                subject.work_id         = song_id
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(song_id)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+                expect(subject.work.title               ).to eq("Hounds of Love")
+              end
+            end
+
+            context "and nil work_id" do
+              it "sets saved work_id to current_work_id and sets up work_attributes" do
+                subject.work_id         = nil
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(nil)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+                expect(subject.work.title               ).to eq("Hounds of Love")
+              end
+            end
+
+            context "and dirty work_id" do
+              it "sets saved work_id to current_work_id and sets up work_attributes" do
+                subject.work_id         = other_song_id
+                subject.work_attributes = valid_attributes
+
+                subject.prepare_work_for_editing
+
+                expect(subject.changed?                 ).to eq(true)
+                expect(subject.current_work_id          ).to eq(other_song_id)
+                expect(subject.work_id                  ).to eq(nil)
+                expect(subject.work                     ).to be_a_new(Work)
+                expect(subject.work.contributions.length).to eq(10)
+              end
             end
           end
         end
@@ -517,24 +564,12 @@ RSpec.describe Post, type: :model do
       end
 
       context "standalone" do
-        context "unsaved" do
-          subject { build(:standalone_post) }
+        subject { create(:standalone_post) }
 
-          it "does nothing" do
-            subject.prepare_work_for_editing
+        it "does nothing" do
+          subject.prepare_work_for_editing
 
-            expect(subject.changed?).to eq(false)
-          end
-        end
-
-        context "saved" do
-          subject { create(:standalone_post) }
-
-          it "does nothing" do
-            subject.prepare_work_for_editing
-
-            expect(subject.changed?).to eq(false)
-          end
+          expect(subject.changed?).to eq(false)
         end
       end
     end

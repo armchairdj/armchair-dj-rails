@@ -124,14 +124,30 @@ class Post < ApplicationRecord
   def prepare_work_for_editing
     return if standalone?
 
-    if work_id_changed?
-      self.current_work_id = self.work_id_was
-      self.work.prepare_contributions if self.work.present?
-    else
-      self.current_work_id = self.work_id
-      self.build_work
-      self.work.prepare_contributions
+    has_work         = work.present?
+    has_work_id      = work_id.present?
+    original_work_id = persisted? && work_id_changed? ? work_id : work_id_was
+
+    puts ">>has_work", has_work, work.inspect
+    puts ">>has_work_id", has_work_id, work_id
+    puts ">>original_work_id", original_work_id
+
+    if has_work_id
+      puts ">>setting current_work_id to #{original_work_id}"
+      self.current_work_id = work_id
+      self.work_id         = nil
     end
+
+    if self.work
+      puts ">>already has work"
+    else
+      puts ">>building work"
+      build_work
+    end
+
+    puts ">>preparing contributions"
+
+    work.prepare_contributions
   end
 
   def update_and_publish(params)

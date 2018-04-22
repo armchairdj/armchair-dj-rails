@@ -138,10 +138,10 @@ private
       fetched.delete(:work_id)
     elsif @post.review?
       fetched.delete(:title)
-
-      if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
-        fetched[:work_id] = nil
-      end
+      #
+      # if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
+      #   fetched[:work_id] = nil
+      # end
     end
 
     @sanitized_params = fetched
