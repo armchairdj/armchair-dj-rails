@@ -7,8 +7,8 @@ module MetaHelper
       keywords_tag,
       turbolinks_tag,
       viewport_tag,
-      apple_touch_icon_tag,
-      icon_tag,
+      apple_icon_tag,
+      favicon_tag,
       shortcut_tag,
       rss_tag,
     ].delete_if(&:blank?).join("\n").html_safe
@@ -29,11 +29,11 @@ module MetaHelper
   end
 
   def description_tag
-    meta_tag("Description", @meta_description)
+    meta_tag("description", @meta_description)
   end
 
   def keywords_tag
-    meta_tag("Keywords", @meta_keywords)
+    meta_tag("keywords", @meta_keywords)
   end
 
   def turbolinks_tag
@@ -48,11 +48,11 @@ module MetaHelper
   # ICONS & LINKS.
   ###############################################################################
 
-  def apple_touch_icon_tag
+  def apple_icon_tag
     tag(:link, rel: "apple-touch-icon", href: image_url("apple-touch-icon-precomposed.png"))
   end
 
-  def icon_tag
+  def favicon_tag
     tag(:link, rel: "icon", sizes: "192x192", href: "/favicon.ico")
   end
 
