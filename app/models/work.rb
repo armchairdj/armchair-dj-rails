@@ -42,8 +42,18 @@ class Work < ApplicationRecord
     }
   end
 
-  def self.grouped_for_select
-    self.admin_filters.to_a.map { |arr| [arr.first, self.send(arr.last).eager.alphabetical_by_creator] }
+  def self.grouped_options
+    self.admin_filters.to_a.map do |arr|
+      [arr.first, self.send(arr.last).eager.alphabetical_by_creator]
+    end
+  end
+
+  def self.media_options
+    media = Work.human_media_with_keys.map do |medium|
+      medium[2] = { "data-work-grouping" => (medium[2] / 100).to_i }
+
+      medium
+    end
   end
 
   #############################################################################

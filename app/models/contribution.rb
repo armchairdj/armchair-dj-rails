@@ -14,13 +14,13 @@ class Contribution < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.grouped_roles_for_select
-    roles = Contribution.human_enum_collection_with_keys(:role)
+  def self.grouped_role_options
+    roles = Contribution.human_roles_with_keys
     roles = roles.group_by { |arr| arr.last / 100 }
     roles = roles.reduce([]) do |memo, (key, val)|
       memo << [
         ROLE_GROUPINGS[key],
-        val.map { |o| [ o[0], o[1], { "data-raw-value" => o[2] == 0 ? nil : o[2] } ] }
+        val.map { |o| [ o[0], o[1], { "data-work-grouping" => o[2] == 0 ? nil : key } ] }
       ]
       memo
     end

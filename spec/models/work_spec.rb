@@ -34,9 +34,9 @@ RSpec.describe Work, type: :model do
       ]) }
     end
 
-    describe "self#grouped_for_select" do
+    describe "self#grouped_options" do
       specify "first element of each sub-array is an optgroup heading" do
-        expect(described_class.grouped_for_select.to_h.keys).to eq([
+        expect(described_class.grouped_options.to_h.keys).to eq([
           "Songs",
           "Albums",
           "Movies",
@@ -56,13 +56,15 @@ RSpec.describe Work, type: :model do
       end
 
       specify "second element of each sub-array is a list of options" do
-        described_class.grouped_for_select.to_h.values.each do |rel|
+        described_class.grouped_options.to_h.values.each do |rel|
           expect(rel).to be_a_kind_of(Array)
         end
       end
 
       pending "alphabetical by creator"
     end
+
+    pending "self#media_options"
 
     describe "self#admin_filters" do
       specify "keys are short tab names" do
