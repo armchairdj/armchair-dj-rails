@@ -20,15 +20,15 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
   end
 
-  context "scopes" do
-    # Nothing so far.
-  end
-
   context "validations" do
     # Nothing so far.
   end
 
   context "hooks" do
+    # Nothing so far.
+  end
+
+  context "scopes" do
     # Nothing so far.
   end
 

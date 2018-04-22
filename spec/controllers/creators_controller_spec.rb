@@ -7,7 +7,7 @@ RSpec.describe CreatorsController, type: :controller do
         get :index
 
         expect(response).to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(0).of_total(0).records
+        expect(assigns(:creators)).to paginate(0).of_total_records(0)
       end
     end
 
@@ -20,14 +20,14 @@ RSpec.describe CreatorsController, type: :controller do
         get :index
 
         expect(response).to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(20).of_total(21).records
+        expect(assigns(:creators)).to paginate(20).of_total_records(21)
       end
 
       it "renders second page" do
         get :index, params: { page: "2" }
 
         expect(response).to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(1).of_total(21).records
+        expect(assigns(:creators)).to paginate(1).of_total_records(21)
       end
     end
   end

@@ -129,16 +129,12 @@ class Post < ApplicationRecord
     end
   end
 
-  # TODO Include post type and version
-  def one_line_title
-    work ? work.title_with_creator : title
-  end
-
-  # TODO handle work_id vs new work
   def prepare_work_for_editing
+    return if standalone?
+
     if work_id_changed?
       self.current_work_id = self.work_id_was
-      self.work.prepare_contributions
+      self.work.prepare_contributions if self.work.present?
     else
       self.current_work_id = self.work_id
       self.build_work
@@ -163,6 +159,10 @@ class Post < ApplicationRecord
   end
 
 private
+
+  #############################################################################
+  # VALIDATION.
+  #############################################################################
 
   def reject_blank_work(work_attributes)
     work_attributes["title"].blank?
@@ -203,6 +203,10 @@ private
 
     true
   end
+
+  #############################################################################
+  # SLUG.
+  #############################################################################
 
   def handle_slug
     return if slug_published?
@@ -249,6 +253,10 @@ private
     end
   end
 
+  #############################################################################
+  # PUBLISHING.
+  #############################################################################
+
   def can_publish?
     persisted? && draft? && valid? && body.present? && slug.present?
   end
@@ -264,6 +272,10 @@ private
   def prepare_to_unpublish
     self.published_at = nil
   end
+
+  #############################################################################
+  # MEMOIZATION.
+  #############################################################################
 
   def update_viewable_counts
     return unless work.present?

@@ -24,6 +24,16 @@ RSpec.describe Creator, type: :model do
     # Nothing so far.
   end
 
+  context "validations" do
+    describe "name" do
+      it { should validate_presence_of(:name) }
+    end
+  end
+
+  context "hooks" do
+    # Nothing so far.
+  end
+
   context "scopes" do
     describe "alphabetical" do
       let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
@@ -42,19 +52,12 @@ RSpec.describe Creator, type: :model do
         zorro
       ]) }
     end
+
     pending "eager"
+
     pending "for_admin"
+
     pending "for_site"
-  end
-
-  context "validations" do
-    describe "name" do
-      it { should validate_presence_of(:name) }
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
   end
 
   context "class" do

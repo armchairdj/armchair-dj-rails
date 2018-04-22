@@ -11,7 +11,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total(0).records
+            expect(assigns(:posts)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -20,7 +20,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index, params: { scope: "published" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total(0).records
+            expect(assigns(:posts)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -29,7 +29,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index, params: { scope: "all" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total(0).records
+            expect(assigns(:posts)).to paginate(0).of_total_records(0)
           end
         end
       end
@@ -45,14 +45,14 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total(21).records
+            expect(assigns(:posts)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total(21).records
+            expect(assigns(:posts)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -66,14 +66,14 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index, params: { scope: "published" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total(21).records
+            expect(assigns(:posts)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "published", page: "2" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total(21).records
+            expect(assigns(:posts)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -89,14 +89,14 @@ RSpec.describe Admin::PostsController, type: :controller do
             get :index, params: { scope: "all" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total(21).records
+            expect(assigns(:posts)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
             should successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total(21).records
+            expect(assigns(:posts)).to paginate(1).of_total_records(21)
           end
         end
       end
@@ -312,7 +312,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
             end
 
             it { should send_user_to(admin_post_path(post)).with_flash(
@@ -326,7 +326,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should successfully_render("admin/posts/edit").assigning(post, :post)
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).and_be_invalid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_be_invalid
 
               should define_only_the_standalone_tab
             end
@@ -345,7 +345,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
             end
 
             it { should send_user_to(admin_post_path(post)).with_flash(
@@ -359,7 +359,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should successfully_render("admin/posts/edit").assigning(post, :post)
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).and_be_invalid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_be_invalid
 
               should define_only_the_review_tabs.and_select("post-choose-work")
             end
@@ -405,7 +405,7 @@ RSpec.describe Admin::PostsController, type: :controller do
                 put :update, params: { id: post.to_param, post: valid_params }
               }.to change { Work.count }.by(1)
 
-              expect(assigns(:post)).to update_params_for(post).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).and_be_valid
 
               expect(assigns(:post).work).to have_attributes(
                 medium: "song",
@@ -430,7 +430,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should successfully_render("admin/posts/edit").assigning(post, :post)
 
-              expect(assigns(:post)).to update_params_for(post).and_be_invalid
+              expect(post).to be_assigned_to(assigns(:post)).and_be_invalid
 
               expect(assigns(:post).work).to be_a_new(Work)
               expect(assigns(:post).work).to be_invalid
@@ -452,7 +452,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
 
           it "sets custom slug" do
-            expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+            expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
             expect(assigns(:post).dirty_slug?).to eq(true)
           end
@@ -470,7 +470,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
 
           it "regenerates slug" do
-            expect(assigns(:post)).to update_params_for(post).and_be_valid
+            expect(post).to be_assigned_to(assigns(:post)).and_be_valid
 
             expect(assigns(:post).slug).to_not be_blank
             expect(assigns(:post).dirty_slug?).to eq(false)
@@ -495,7 +495,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates and publishes the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
@@ -517,7 +517,7 @@ RSpec.describe Admin::PostsController, type: :controller do
                 :error, "admin.flash.posts.error.publish"
               )
 
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
               should define_only_the_standalone_tab
 
@@ -535,7 +535,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_standalone_tab
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
                 body:  :blank_during_publish,
                 title: :blank
               })
@@ -557,7 +557,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates and publishes the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
@@ -581,7 +581,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(assigns(:post)).to update_params_for(post).with({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes({
                 body:            valid_params["body"   ],
                 current_work_id: valid_params["work_id"]
               })
@@ -600,7 +600,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
                 body:    :blank_during_publish,
                 work_id: :blank
               })
@@ -624,7 +624,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "unpublishes and updates the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
@@ -648,7 +648,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_standalone_tab
 
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_invalid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_invalid
 
               expect(post.reload).to_not be_draft
             end
@@ -662,7 +662,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_standalone_tab
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
                 title: :blank
               })
 
@@ -683,7 +683,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "unpublishes and updates the requested post" do
-              expect(assigns(:post)).to update_params_for(post).with(valid_params).and_be_valid
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
@@ -707,7 +707,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(assigns(:post)).to update_params_for(post).with({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes({
                 body:            valid_params["body"   ],
                 current_work_id: valid_params["work_id"]
               }).and_be_invalid
@@ -724,7 +724,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(assigns(:post)).to update_params_for(post).with(invalid_params).setting_errors({
+              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
                 work_id: :blank
               })
 

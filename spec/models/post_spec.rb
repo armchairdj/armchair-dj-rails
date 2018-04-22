@@ -38,72 +38,6 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  context "scopes" do
-    let!(        :draft_review) { create(:song_review,     :draft    ) }
-    let!(    :published_review) { create(:song_review,     :published) }
-    let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
-    let!(:published_standalone) { create(:standalone_post, :published) }
-
-    context "for status" do
-      describe "draft" do
-        specify { expect(described_class.draft).to match_array([
-          draft_review,
-          draft_standalone
-        ]) }
-      end
-
-      describe "published" do
-        specify { expect(described_class.published).to match_array([
-          published_review,
-          published_standalone
-        ]) }
-      end
-    end
-
-    context "for type" do
-      describe "standalone" do
-        specify { expect(described_class.standalone).to match_array([
-          draft_standalone,
-          published_standalone
-        ]) }
-      end
-
-      describe "review" do
-        specify { expect(described_class.review).to match_array([
-          draft_review,
-          published_review
-        ]) }
-      end
-    end
-
-    describe "reverse_cron" do
-      specify { expect(described_class.reverse_cron.to_a).to eq([
-        draft_review,
-        draft_standalone,
-        published_standalone,
-        published_review,
-      ]) }
-    end
-
-    describe "for_admin" do
-      specify { expect(described_class.for_admin).to match_array([
-        draft_review,
-        draft_standalone,
-        published_standalone,
-        published_review
-      ]) }
-    end
-
-    describe "for_site" do
-      specify { expect(described_class.for_site).to match_array([
-        published_standalone,
-        published_review
-      ]) }
-    end
-
-    pending "eager"
-  end
-
   context "validations" do
     context "conditional" do
       subject { create(:minimal_post, :published) }
@@ -285,6 +219,72 @@ RSpec.describe Post, type: :model do
     end
   end
 
+  context "scopes" do
+    let!(        :draft_review) { create(:song_review,     :draft    ) }
+    let!(    :published_review) { create(:song_review,     :published) }
+    let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
+    let!(:published_standalone) { create(:standalone_post, :published) }
+
+    context "for status" do
+      describe "draft" do
+        specify { expect(described_class.draft).to match_array([
+          draft_review,
+          draft_standalone
+        ]) }
+      end
+
+      describe "published" do
+        specify { expect(described_class.published).to match_array([
+          published_review,
+          published_standalone
+        ]) }
+      end
+    end
+
+    context "for type" do
+      describe "standalone" do
+        specify { expect(described_class.standalone).to match_array([
+          draft_standalone,
+          published_standalone
+        ]) }
+      end
+
+      describe "review" do
+        specify { expect(described_class.review).to match_array([
+          draft_review,
+          published_review
+        ]) }
+      end
+    end
+
+    describe "reverse_cron" do
+      specify { expect(described_class.reverse_cron.to_a).to eq([
+        draft_review,
+        draft_standalone,
+        published_standalone,
+        published_review,
+      ]) }
+    end
+
+    pending "eager"
+
+    describe "for_admin" do
+      specify { expect(described_class.for_admin).to match_array([
+        draft_review,
+        draft_standalone,
+        published_standalone,
+        published_review
+      ]) }
+    end
+
+    describe "for_site" do
+      specify { expect(described_class.for_site).to match_array([
+        published_standalone,
+        published_review
+      ]) }
+    end
+  end
+
   context "class" do
     describe "self#admin_scopes" do
       specify "keys are short tab names" do
@@ -363,15 +363,93 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    describe "#one_line_title" do
-      specify { expect(create(:hounds_of_love_album_review).one_line_title).to eq("Kate Bush: Hounds of Love") }
-      specify { expect(create(:tiny_standalone_post       ).one_line_title).to eq("Hello") }
-    end
-
     describe "#prepare_work_for_editing" do
-      pending "clean"
-      pending "dirty work_id"
-      pending "dirty work_attributes"
+      context "review" do
+        context "saved" do
+          subject { create(:song_review) }
+
+          let!(      :song_id) { subject.work_id }
+          let!(:other_song_id) { create(:song).id }
+
+          describe "clean" do
+            it "moves saved work_id to current_work_id and sets up work_attributes" do
+              subject.prepare_work_for_editing
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "dirty work_id" do
+            it "moves dirty work_id to current_work_id and sets up work_attributes" do
+              subject.work_id = other_song_id
+
+              subject.prepare_work_for_editing
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(other_song_id)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "nil work_id" do
+            it "nils work_id and current_work_id and sets up work_attributes" do
+              subject.work_id = nil
+
+              subject.prepare_work_for_editing
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(nil)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+
+          describe "dirty work_attributes" do
+            it "sets saved work_id to current_work_id and sets up work_attributes" do
+              subject.work_id = nil
+
+              subject.prepare_work_for_editing
+
+              expect(subject.changed?                 ).to eq(true)
+              expect(subject.current_work_id          ).to eq(nil)
+              expect(subject.work_id                  ).to eq(nil)
+              expect(subject.work                     ).to be_a_new(Work)
+              expect(subject.work.contributions.length).to eq(10)
+            end
+          end
+        end
+
+        pending "unsaved"
+      end
+
+      context "standalone" do
+        context "unsaved" do
+          subject { build(:standalone_post) }
+
+          it "does nothing" do
+            subject.prepare_work_for_editing
+
+            expect(subject.changed?).to eq(false)
+          end
+        end
+
+        context "saved" do
+          subject { create(:standalone_post) }
+
+          it "does nothing" do
+            subject.prepare_work_for_editing
+
+            expect(subject.changed?).to eq(false)
+          end
+        end
+      end
     end
 
     describe "#update_and_publish" do
@@ -831,7 +909,9 @@ RSpec.describe Post, type: :model do
 
   context "concerns" do
     it_behaves_like "an application record"
+
     it_behaves_like "a sluggable model", :slug
+
     it_behaves_like "an atomically validatable model", { body: nil, slug: nil, published_at: nil } do
       subject { create(:standalone_post, :published) }
     end

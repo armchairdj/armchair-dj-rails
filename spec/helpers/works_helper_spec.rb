@@ -7,20 +7,20 @@ RSpec.describe WorksHelper, type: :helper do
   describe "#link_to_work" do
     specify{ expect(helper.link_to_work(unsaved)).to eq(nil) }
 
-    it "generates link to title" do
+    it "by default uses creator and title" do
       actual = helper.link_to_work(saved)
 
       expect(actual).to have_tag('a[href^="/works/"]',
-        text:  "Hounds of Love",
+        text:  "Kate Bush: Hounds of Love",
         count: 1
       )
     end
 
-    it "generates link to creators and title" do
-      actual = helper.link_to_work(saved, full: true)
+    it "optionally uses just title" do
+      actual = helper.link_to_work(saved, full: false)
 
       expect(actual).to have_tag('a[href^="/works/"]',
-        text:  "Kate Bush: Hounds of Love",
+        text:  "Hounds of Love",
         count: 1
       )
     end

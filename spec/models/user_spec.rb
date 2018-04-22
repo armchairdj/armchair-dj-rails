@@ -21,6 +21,18 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context "validations" do
+    subject { create(:minimal_user) }
+
+    it { should validate_presence_of(:first_name) }
+    it { should validate_presence_of(:last_name) }
+    it { should validate_presence_of(:role) }
+  end
+
+  context "hooks" do
+    # Nothing so far.
+  end
+
   context "scopes" do
     describe "alphabetical" do
       let!(:michelle_dillardo) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillardo") }
@@ -34,20 +46,10 @@ RSpec.describe User, type: :model do
     end
 
     pending "eager"
+
     pending "for_admin"
+
     pending "for_site"
-  end
-
-  context "validations" do
-    subject { create(:minimal_user) }
-
-    it { should validate_presence_of(:first_name) }
-    it { should validate_presence_of(:last_name) }
-    it { should validate_presence_of(:role) }
-  end
-
-  context "hooks" do
-    # Nothing so far.
   end
 
   context "class" do

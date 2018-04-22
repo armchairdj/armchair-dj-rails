@@ -1,5 +1,5 @@
 <%
-  @title = ["View Post", @post.one_line_title]
+  @title = ["View Post", post_title(@post)]
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -40,7 +40,7 @@
       <% if @post.review? %>
         <%= content_tag(:tr) do %>
           <%= content_tag(:th, "Subject") %>
-          <%= content_tag(:td, link_to_work(@post.work, full: true)) %>
+          <%= content_tag(:td, link_to_work(@post.work)) %>
         <% end %>
       <% else %>
         <%= content_tag(:tr) do %>

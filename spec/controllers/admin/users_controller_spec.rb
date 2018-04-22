@@ -11,7 +11,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(1).records
+            expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
 
@@ -20,7 +20,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "member" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total(0).records
+            expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -29,7 +29,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "contributor" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total(0).records
+            expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -38,7 +38,7 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "admin" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(1).records
+            expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
       end
@@ -55,14 +55,14 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total(21).records
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(21).records
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -75,14 +75,14 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "member" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total(21).records
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "member", page: "2" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(21).records
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -95,14 +95,14 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "contributor" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total(21).records
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "contributor", page: "2" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(21).records
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -115,14 +115,14 @@ RSpec.describe Admin::UsersController, type: :controller do
             get :index, params: { scope: "admin" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total(21).records
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "admin", page: "2" }
 
             expect(response).to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total(21).records
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
       end

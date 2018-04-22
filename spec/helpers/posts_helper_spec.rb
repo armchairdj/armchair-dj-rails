@@ -38,10 +38,21 @@ RSpec.describe PostsHelper, type: :helper do
         expect(helper.link_to_post(subject)).to eq(nil)
       end
 
-      it "creates link to permalink with work short title" do
+      it "creates link to permalink with work creator and title" do
         subject.save
 
         actual = helper.link_to_post(subject)
+
+        expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
+          text:  "Kate Bush: Hounds of Love",
+          count: 1
+        )
+      end
+
+      it "creates link to permalink with work title only" do
+        subject.save
+
+        actual = helper.link_to_post(subject, full: false)
 
         expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
           text:  "Hounds of Love",
@@ -49,16 +60,6 @@ RSpec.describe PostsHelper, type: :helper do
         )
       end
 
-      it "creates link to permalink with work long title" do
-        subject.save
-
-        actual = helper.link_to_post(subject, full: true)
-
-        expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
-          text:  "Kate Bush: Hounds of Love",
-          count: 1
-        )
-      end
     end
   end
 
@@ -75,12 +76,12 @@ RSpec.describe PostsHelper, type: :helper do
       expect(helper.post_title(standalone_post)).to eq("Standalone")
     end
 
-    it "by default uses work title for review" do
-      expect(helper.post_title(hounds_of_love_review)).to eq("Hounds of Love")
+    it "by default uses creator and title for review" do
+      expect(helper.post_title(hounds_of_love_review)).to eq("Kate Bush: Hounds of Love")
     end
 
-    it "optionally includes creator for review" do
-      expect(helper.post_title(hounds_of_love_review, full: true)).to eq("Kate Bush: Hounds of Love")
+    it "optionally skips creator for review" do
+      expect(helper.post_title(hounds_of_love_review, full: false)).to eq("Hounds of Love")
     end
   end
 end

@@ -1,5 +1,5 @@
 module WorksHelper
-  def link_to_work(work, full: false)
+  def link_to_work(work, full: true)
     return unless work.persisted?
 
     name = full ? work.title_with_creator : work.title

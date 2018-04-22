@@ -30,7 +30,7 @@
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, post_type(post)) %>
               <%= content_tag(:td, post.human_status) if @scope == :all %>
-              <%= content_tag(:td, post.one_line_title) %>
+              <%= content_tag(:td, post_title(post)) %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_post_link(post) %>
                 <%= admin_view_link(post) %>

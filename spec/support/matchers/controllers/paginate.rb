@@ -6,11 +6,9 @@ RSpec::Matchers.define :paginate do |displayed|
     expect(actual.total_count).to eq(@total)
   end
 
-  chain :of_total do |total|
+  chain :of_total_records do |total|
     @total = total
   end
-
-  chain :records do; end
 
   failure_message do |actual|
     "expected #{actual} to display #{displayed} records out of #{@total}, but it didn't"

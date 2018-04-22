@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.shared_examples "an application record" do
   context "included" do
     describe "nilify_blanks" do
-      pending "runs before validation"
+      it { should nilify_blanks(before: :validation) }
     end
   end
 

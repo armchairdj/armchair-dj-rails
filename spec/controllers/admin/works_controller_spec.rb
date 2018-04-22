@@ -12,7 +12,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(0).of_total(0).records
+            expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -22,7 +22,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(0).of_total(0).records
+            expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
         end
 
@@ -32,7 +32,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(0).of_total(0).records
+            expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
         end
       end
@@ -48,7 +48,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(20).of_total(21).records
+            expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
@@ -56,7 +56,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(1).of_total(21).records
+            expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -70,7 +70,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(20).of_total(21).records
+            expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
@@ -78,7 +78,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(1).of_total(21).records
+            expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
         end
 
@@ -93,7 +93,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(20).of_total(21).records
+            expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
@@ -101,7 +101,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
             expect(response).to successfully_render("admin/works/index")
 
-            expect(assigns(:works)).to paginate(1).of_total(21).records
+            expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
         end
       end

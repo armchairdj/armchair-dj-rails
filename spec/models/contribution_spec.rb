@@ -19,19 +19,9 @@ RSpec.describe Contribution, type: :model do
           "0" => { "name" => "" }
         })
 
-        expect {
-          instance.save
-        }.to_not change {
-          Contribution.count
-        }
+        expect { instance.save }.to_not change { Contribution.count }
 
-        expect {
-          instance.save
-        }.to_not change {
-          Creator.count
-        }
-
-        expect(instance.valid?).to eq(false)
+        expect(instance).to have_errors(creator: :blank)
       end
     end
   end
@@ -44,10 +34,6 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
-  context "scopes" do
-    # Nothing so far.
-  end
-
   context "validations" do
     it { should validate_presence_of(:role   ) }
     it { should validate_presence_of(:work   ) }
@@ -57,6 +43,10 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "hooks" do
+    # Nothing so far.
+  end
+
+  context "scopes" do
     # Nothing so far.
   end
 

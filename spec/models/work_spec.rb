@@ -43,6 +43,26 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  context "validations" do
+    it { should validate_presence_of(:medium) }
+    it { should validate_presence_of(:title ) }
+
+    context "custom" do
+      subject { build(:work) }
+
+      it "calls #validate_contributions" do
+         allow(subject).to receive(:validate_contributions)
+        expect(subject).to receive(:validate_contributions)
+
+        subject.valid?
+      end
+    end
+  end
+
+  context "hooks" do
+    # Nothing so far.
+  end
+
   context "scopes" do
     describe "alphabetical" do
       let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
@@ -71,28 +91,10 @@ RSpec.describe Work, type: :model do
     end
 
     pending "eager"
+
     pending "for_admin"
+
     pending "for_site"
-  end
-
-  context "validations" do
-    it { should validate_presence_of(:medium) }
-    it { should validate_presence_of(:title ) }
-
-    context "custom" do
-      subject { build(:work) }
-
-      it "calls #validate_contributions" do
-         allow(subject).to receive(:validate_contributions)
-        expect(subject).to receive(:validate_contributions)
-
-        subject.valid?
-      end
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
   end
 
   context "class" do

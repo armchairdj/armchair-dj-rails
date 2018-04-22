@@ -24,6 +24,7 @@ require "rspec/rails"
 require "aasm/rspec"
 require "support/factory_bot"
 require "vcr"
+require "nilify_blanks/matchers"
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
