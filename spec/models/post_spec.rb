@@ -307,9 +307,84 @@ RSpec.describe Post, type: :model do
       specify { expect(described_class.published).to be_a_kind_of(ActiveRecord::Relation) }
     end
 
-    describe "methods" do
+    describe "booleans" do
       specify { expect(draft).to respond_to(:draft?    ) }
       specify { expect(draft).to respond_to(:published?) }
+    end
+
+    describe "private" do
+      context "guards" do
+        describe "#can_publish?" do
+          subject { build(:standalone_post) }
+
+          specify "true if saved, valid and has slug & body" do
+            subject.save
+
+            expect(subject.send(:can_publish?)).to eq(true)
+          end
+
+          specify "false unless saved" do
+            subject.slug = "foo_bar_bat"
+
+            expect(subject.send(:can_publish?)).to eq(false)
+          end
+
+          specify "false unless draft" do
+            subject.save
+            subject.publish!
+
+            expect(subject.send(:can_publish?)).to eq(false)
+          end
+
+          specify "false unless valid" do
+            subject.save
+            subject.title = nil
+
+            expect(subject.send(:can_publish?)).to eq(false)
+          end
+
+          specify "false unless slug" do
+            subject.save
+            subject.slug = nil
+
+            expect(subject.send(:can_publish?)).to eq(false)
+          end
+
+          specify "false unless body" do
+            subject.save
+            subject.body = nil
+
+            expect(subject.send(:can_publish?)).to eq(false)
+          end
+        end
+
+        describe "#can_unpublish?" do
+          specify { expect(create(:standalone_post, :published).send(:can_unpublish?)).to eq(true ) }
+          specify { expect(create(:standalone_post, :draft    ).send(:can_unpublish?)).to eq(false) }
+        end
+      end
+
+      context "callbacks" do
+        describe "#prepare_to_publish" do
+          it "sets published_at" do
+            instance = create(:standalone_post, :draft)
+
+            instance.send(:prepare_to_publish)
+
+            expect(instance.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+          end
+        end
+
+        describe "#prepare_to_unpublish" do
+          it "removes published_at" do
+            instance = create(:standalone_post, :published)
+
+            instance.send(:prepare_to_unpublish)
+
+            expect(instance.published_at).to eq(nil)
+          end
+        end
+      end
     end
   end
 
@@ -810,80 +885,7 @@ RSpec.describe Post, type: :model do
         end
       end
 
-      describe "aasm" do
-        describe "guards" do
-          describe "#can_publish?" do
-            subject { build(:standalone_post) }
-
-            specify "true if saved, valid and has slug & body" do
-              subject.save
-
-              expect(subject.send(:can_publish?)).to eq(true)
-            end
-
-            specify "false unless saved" do
-              subject.slug = "foo_bar_bat"
-
-              expect(subject.send(:can_publish?)).to eq(false)
-            end
-
-            specify "false unless draft" do
-              subject.save
-              subject.publish!
-
-              expect(subject.send(:can_publish?)).to eq(false)
-            end
-
-            specify "false unless valid" do
-              subject.save
-              subject.title = nil
-
-              expect(subject.send(:can_publish?)).to eq(false)
-            end
-
-            specify "false unless slug" do
-              subject.save
-              subject.slug = nil
-
-              expect(subject.send(:can_publish?)).to eq(false)
-            end
-
-            specify "false unless body" do
-              subject.save
-              subject.body = nil
-
-              expect(subject.send(:can_publish?)).to eq(false)
-            end
-          end
-
-          describe "#can_unpublish?" do
-            specify { expect(create(:standalone_post, :published).send(:can_unpublish?)).to eq(true ) }
-            specify { expect(create(:standalone_post, :draft    ).send(:can_unpublish?)).to eq(false) }
-          end
-        end
-
-        context "callbacks" do
-          describe "#prepare_to_publish" do
-            it "sets published_at" do
-              instance = create(:standalone_post, :draft)
-
-              instance.send(:prepare_to_publish)
-
-              expect(instance.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-            end
-          end
-
-          describe "#prepare_to_unpublish" do
-            it "removes published_at" do
-              instance = create(:standalone_post, :published)
-
-              instance.send(:prepare_to_unpublish)
-
-              expect(instance.published_at).to eq(nil)
-            end
-          end
-        end
-
+      context "memoization" do
         describe "#update_viewable_counts" do
           let(    :review) { create(:unity_album_review  ) }
           let(:standalone) { create(:tiny_standalone_post) }
