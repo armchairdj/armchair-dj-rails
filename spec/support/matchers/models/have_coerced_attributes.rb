@@ -1,11 +1,16 @@
 require "rspec/expectations"
 
-RSpec::Matchers.define :have_nillable_attributes do |attributes|
+RSpec::Matchers.define :have_coerced_attributes do |attributes|
   match do |actual|
     attributes.each do |key, val|
+      next if key.to_s.match(/password/)
+      next if val.is_a?(Hash)
+
       if val.blank?
         expect(actual.send(key)).to be_blank
       else
+        val = val.to_s if val.is_a? Symbol
+
         expect(actual.send(key)).to eq(val)
       end
     end

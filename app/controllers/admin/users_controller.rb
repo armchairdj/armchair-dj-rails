@@ -55,7 +55,7 @@ class Admin::UsersController < AdminController
   def create
     respond_to do |format|
       if @user.save
-        format.html { redirect_to admin_users_path, success: I18n.t("admin.flash.users.success.create") }
+        format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.create") }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -69,7 +69,7 @@ class Admin::UsersController < AdminController
   def update
     respond_to do |format|
       if @user.update(instance_params)
-        format.html { redirect_to admin_users_path, success: I18n.t("admin.flash.users.success.update") }
+        format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.update") }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }

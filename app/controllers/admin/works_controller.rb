@@ -55,7 +55,7 @@ class Admin::WorksController < AdminController
   def create
     respond_to do |format|
       if @work.save
-        format.html { redirect_to admin_works_path, success: I18n.t("admin.flash.works.success.create") }
+        format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.create") }
         format.json { render :show, status: :created, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -76,7 +76,7 @@ class Admin::WorksController < AdminController
   def update
     respond_to do |format|
       if @work.update(instance_params)
-        format.html { redirect_to admin_works_path, success: I18n.t("admin.flash.works.success.update") }
+        format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.update") }
         format.json { render :show, status: :ok, location: @work }
       else
         prepare_contributions_attributes_fields
@@ -127,7 +127,6 @@ private
     params.fetch(:work, {}).permit(
       :medium,
       :title,
-      :body,
       :contributions_attributes => [
         :work_id,
         :id,

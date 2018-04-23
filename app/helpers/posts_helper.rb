@@ -5,10 +5,13 @@ module PostsHelper
     post.body.strip.split("\n\n").map { |p| content_tag(:p, p.squish) }.join("\n").html_safe
   end
 
-  def link_to_post(post, full: true)
-    return unless post.slug
+  def link_to_post(post, full: true, admin: false)
+    return unless post.slug.present? || admin
 
-    link_to post_title(post, full: full), post_permalink_path(slug: post.slug)
+    text        = post_title(post, full: full)
+    url_options = admin ? admin_post_path(post) : post_permalink_path(slug: post.slug)
+
+    link_to(text, url_options)
   end
 
   def post_title(post, full: true)

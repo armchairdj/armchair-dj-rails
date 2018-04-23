@@ -22,6 +22,33 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Works") %>
+        <%= content_tag(:td) do %>
+          <% @creator.works.each do |work| %>
+            <%= link_to_work(work, admin: true, full: false) %><br>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Contributed Works") %>
+        <%= content_tag(:td) do %>
+          <% @creator.contributed_works.each do |work| %>
+            <%= link_to_work(work, admin: true) %><br>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Posts") %>
+        <%= content_tag(:td) do %>
+          <% @creator.posts.each do |post| %>
+            <%= link_to_post(post, admin: true) %><br>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@creator.created_at)) %>
       <% end %>

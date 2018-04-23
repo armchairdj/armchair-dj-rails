@@ -24,6 +24,15 @@ RSpec.describe WorksHelper, type: :helper do
         count: 1
       )
     end
+
+    it "links to admin" do
+      actual = helper.link_to_work(saved, admin: true)
+
+      expect(actual).to have_tag('a[href^="/admin/works/"]',
+        text:  "Kate Bush: Hounds of Love",
+        count: 1
+      )
+    end
   end
 
   describe "#links_to_creators_for_work" do

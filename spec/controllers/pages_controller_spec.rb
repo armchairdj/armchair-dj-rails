@@ -5,7 +5,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :about
 
-      expect(response).to successfully_render("pages/about")
+      should successfully_render("pages/about")
     end
   end
 
@@ -13,7 +13,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :credits
 
-      expect(response).to successfully_render("pages/credits")
+      should successfully_render("pages/credits")
     end
   end
 end

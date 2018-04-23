@@ -29,6 +29,17 @@ RSpec.describe PostsHelper, type: :helper do
           count: 1
         )
       end
+
+      it "creates link to admin" do
+        subject.save
+
+        actual = helper.link_to_post(subject, admin: true)
+
+        expect(actual).to have_tag("a[href='/admin/posts/#{subject.id}']",
+          text:  "Title",
+          count: 1
+        )
+      end
     end
 
     context "review" do
@@ -60,6 +71,16 @@ RSpec.describe PostsHelper, type: :helper do
         )
       end
 
+      it "creates link to admin" do
+        subject.save
+
+        actual = helper.link_to_post(subject, admin: true)
+
+        expect(actual).to have_tag("a[href='/admin/posts/#{subject.id}']",
+          text:  "Kate Bush: Hounds of Love",
+          count: 1
+        )
+      end
     end
   end
 

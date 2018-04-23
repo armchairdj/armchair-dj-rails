@@ -1,15 +1,18 @@
 module WorksHelper
-  def link_to_work(work, full: true)
+  def link_to_work(work, full: true, admin: false)
     return unless work.persisted?
 
-    name = full ? work.title_with_creator : work.title
+    text        = full ? work.title_with_creator : work.title
+    url_options = admin ? admin_work_path(work) : work
 
-    link_to(name, work)
+    link_to(text, url_options)
   end
 
-  def links_to_creators_for_work(work, separator: " & ")
+  def links_to_creators_for_work(work, separator: " & ", admin: false)
     return unless work.persisted?
 
-    work.creators.map { |a| link_to(a.name, a) }.join(separator).html_safe
+    work.creators.map {
+      |a| link_to(a.name, admin ? admin_creator_path(a) : a)
+    }.join(separator).html_safe
   end
 end

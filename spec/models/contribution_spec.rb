@@ -17,7 +17,8 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "scopes" do
-    # Nothing so far.
+    pending "primary"
+    pending "secondary"
   end
 
   context "associations" do

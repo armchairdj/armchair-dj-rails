@@ -17,13 +17,28 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Medium") %>
+        <%= content_tag(:td, @work.human_medium) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Title") %>
         <%= content_tag(:td, @work.title) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @work.human_medium) %>
+        <%= content_tag(:th, "Creators") %>
+        <%= content_tag(:td, links_to_creators_for_work(@work, admin: true)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Contributors") %>
+        <%= content_tag(:td) do %>
+          <% @work.contributions.secondary.each do |contribution| %>
+            <%= link_to_creator(contribution.creator, admin: true) %>:
+            <%= contribution.human_role %><br>
+          <% end %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>

@@ -6,7 +6,7 @@ RSpec.describe PostsController, type: :controller do
       it "renders" do
         get :index
 
-        expect(response).to successfully_render("posts/index")
+        should successfully_render("posts/index")
 
         expect(assigns(:posts)).to paginate(0).of_total_records(0)
       end
@@ -21,7 +21,7 @@ RSpec.describe PostsController, type: :controller do
       it "renders" do
         get :index
 
-        expect(response).to successfully_render("posts/index")
+        should successfully_render("posts/index")
 
         expect(assigns(:posts)).to paginate(0).of_total_records(0)
       end
@@ -36,7 +36,7 @@ RSpec.describe PostsController, type: :controller do
       it "renders" do
         get :index
 
-        expect(response).to successfully_render("posts/index")
+        should successfully_render("posts/index")
 
         expect(assigns(:posts)).to paginate(20).of_total_records(21)
       end
@@ -44,7 +44,7 @@ RSpec.describe PostsController, type: :controller do
       it "renders second page" do
         get :index, params: { page: "2" }
 
-        expect(response).to successfully_render("posts/index")
+        should successfully_render("posts/index")
 
         expect(assigns(:posts)).to paginate(1).of_total_records(21)
       end
@@ -57,7 +57,7 @@ RSpec.describe PostsController, type: :controller do
     it "renders" do
       get :show, params: { slug: post.slug }
 
-      expect(response).to successfully_render("posts/show")
+      should successfully_render("posts/show")
 
       expect(assigns(:post)).to eq(post)
     end

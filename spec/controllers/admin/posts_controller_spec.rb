@@ -109,7 +109,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/show").assigning(post, :post)
+          should successfully_render("admin/posts/show")
+          should assign(post, :post)
         end
       end
 
@@ -119,7 +120,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :show, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/show").assigning(post, :post)
+          should successfully_render("admin/posts/show")
+          should assign(post, :post)
         end
       end
     end
@@ -129,7 +131,6 @@ RSpec.describe Admin::PostsController, type: :controller do
         get :new
 
         should successfully_render("admin/posts/new")
-
         should define_all_tabs.and_select("post-choose-work")
 
         expect(assigns(:post)).to be_a_populated_new_post
@@ -148,6 +149,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             }.to change(Post, :count).by(1)
           end
 
+          it "creates the right attributes" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
+          end
+
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
@@ -166,6 +173,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             should define_all_tabs.and_select("post-choose-work")
 
             expect(assigns(:post)).to be_a_populated_new_post
+            expect(assigns(:post)).to have_coerced_attributes(invalid_params)
+            expect(assigns(:post)).to be_invalid
           end
         end
       end
@@ -181,6 +190,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             }.to change(Post, :count).by(1)
           end
 
+          it "creates the right attributes" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
+          end
+
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
@@ -199,6 +214,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             should define_all_tabs.and_select("post-choose-work")
 
             expect(assigns(:post)).to be_a_populated_new_post
+            expect(assigns(:post)).to have_coerced_attributes(invalid_params)
+            expect(assigns(:post)).to be_invalid
           end
         end
       end
@@ -249,6 +266,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             }.to change(Contribution, :count).by(1)
           end
 
+          it "creates the right attributes" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
+          end
+
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
@@ -267,6 +290,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             should define_all_tabs.and_select("post-new-work")
 
             expect(assigns(:post)).to be_a_populated_new_post
+            expect(assigns(:post)).to have_coerced_attributes(invalid_params)
+            expect(assigns(:post)).to be_invalid
           end
         end
       end
@@ -279,7 +304,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/edit").assigning(post, :post)
+          should successfully_render("admin/posts/edit")
+          should assign(post, :post)
 
           should define_only_the_standalone_tab
         end
@@ -291,7 +317,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         it "renders" do
           get :edit, params: { id: post.to_param }
 
-          should successfully_render("admin/posts/edit").assigning(post, :post)
+          should successfully_render("admin/posts/edit")
+          should assign(post, :post)
 
           should define_only_the_review_tabs.and_select("post-choose-work")
         end
@@ -312,7 +339,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
             end
 
             it { should send_user_to(admin_post_path(post)).with_flash(
@@ -324,9 +351,10 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post)
+              should successfully_render("admin/posts/edit")
+              should assign(post, :post)
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_be_invalid
+              should assign(post, :post).with_attributes(invalid_params).and_be_invalid
 
               should define_only_the_standalone_tab
             end
@@ -345,7 +373,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
             end
 
             it { should send_user_to(admin_post_path(post)).with_flash(
@@ -357,9 +385,9 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post)
+              should successfully_render("admin/posts/edit")
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_be_invalid
+              should assign(post, :post).with_attributes(invalid_params).and_be_invalid
 
               should define_only_the_review_tabs.and_select("post-choose-work")
             end
@@ -405,7 +433,7 @@ RSpec.describe Admin::PostsController, type: :controller do
                 put :update, params: { id: post.to_param, post: valid_params }
               }.to change { Work.count }.by(1)
 
-              expect(post).to be_assigned_to(assigns(:post)).and_be_valid
+              should assign(post, :post).and_be_valid
 
               expect(assigns(:post).work).to have_attributes(
                 medium: "song",
@@ -428,9 +456,9 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit" do
               put :update, params: { id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post)
+              should successfully_render("admin/posts/edit")
 
-              expect(post).to be_assigned_to(assigns(:post)).and_be_invalid
+              should assign(post, :post).and_be_invalid
 
               expect(assigns(:post).work).to be_a_new(Work)
               expect(assigns(:post).work).to be_invalid
@@ -452,7 +480,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
 
           it "sets custom slug" do
-            expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+            should assign(post, :post).with_attributes(valid_params).and_be_valid
 
             expect(assigns(:post).dirty_slug?).to eq(true)
           end
@@ -470,7 +498,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
 
           it "regenerates slug" do
-            expect(post).to be_assigned_to(assigns(:post)).and_be_valid
+            should assign(post, :post).and_be_valid
 
             expect(assigns(:post).slug).to_not be_blank
             expect(assigns(:post).dirty_slug?).to eq(false)
@@ -495,7 +523,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates and publishes the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
@@ -513,11 +541,11 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
+              should successfully_render("admin/posts/edit").with_flash(
                 :error, "admin.flash.posts.error.publish"
               )
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
 
               should define_only_the_standalone_tab
 
@@ -529,13 +557,13 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
+              should successfully_render("admin/posts/edit").with_flash(
                 :error, "admin.flash.posts.error.publish"
               )
 
               should define_only_the_standalone_tab
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
                 body:  :blank_during_publish,
                 title: :blank
               })
@@ -557,7 +585,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "updates and publishes the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_published
             end
@@ -575,13 +603,13 @@ RSpec.describe Admin::PostsController, type: :controller do
             it "renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
-              should successfully_render("admin/posts/edit").assigning(post, :post).with_flash(
+              should successfully_render("admin/posts/edit").with_flash(
                 :error, "admin.flash.posts.error.publish"
               )
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes({
+              should assign(post, :post).with_attributes({
                 body:            valid_params["body"   ],
                 current_work_id: valid_params["work_id"]
               })
@@ -600,7 +628,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
                 body:    :blank_during_publish,
                 work_id: :blank
               })
@@ -624,7 +652,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "unpublishes and updates the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
@@ -648,7 +676,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_standalone_tab
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_invalid
+              should assign(post, :post).with_attributes(valid_params).and_be_invalid
 
               expect(post.reload).to_not be_draft
             end
@@ -662,7 +690,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_standalone_tab
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
                 title: :blank
               })
 
@@ -683,7 +711,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
 
             it "unpublishes and updates the requested post" do
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(valid_params).and_be_valid
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
 
               expect(assigns(:post)).to be_draft
             end
@@ -707,7 +735,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes({
+              should assign(post, :post).with_attributes({
                 body:            valid_params["body"   ],
                 current_work_id: valid_params["work_id"]
               }).and_be_invalid
@@ -724,7 +752,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
               should define_only_the_review_tabs.and_select("post-choose-work")
 
-              expect(post).to be_assigned_to(assigns(:post)).with_attributes(invalid_params).and_have_errors({
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
                 work_id: :blank
               })
 

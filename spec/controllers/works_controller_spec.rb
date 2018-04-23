@@ -6,7 +6,7 @@ RSpec.describe WorksController, type: :controller do
       it "renders" do
         get :index
 
-        expect(response).to successfully_render("works/index")
+        should successfully_render("works/index")
 
         expect(assigns(:works)).to paginate(0).of_total_records(0)
       end
@@ -20,7 +20,7 @@ RSpec.describe WorksController, type: :controller do
       it "renders" do
         get :index
 
-        expect(response).to successfully_render("works/index")
+        should successfully_render("works/index")
 
         expect(assigns(:works)).to paginate(20).of_total_records(21)
       end
@@ -28,7 +28,7 @@ RSpec.describe WorksController, type: :controller do
       it "renders second page" do
         get :index, params: { page: "2" }
 
-        expect(response).to successfully_render("works/index")
+        should successfully_render("works/index")
 
         expect(assigns(:works)).to paginate(1).of_total_records(21)
       end
@@ -41,7 +41,7 @@ RSpec.describe WorksController, type: :controller do
     it "renders" do
         get :show, params: { id: work.id }
 
-        expect(response).to successfully_render("works/show")
+        should successfully_render("works/show")
 
         expect(assigns(:work)).to eq(work)
     end

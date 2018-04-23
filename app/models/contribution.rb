@@ -30,6 +30,9 @@ class Contribution < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope   :primary, -> { where(    role: roles["creator"]) }
+  scope :secondary, -> { where.not(role: roles["creator"]) }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################

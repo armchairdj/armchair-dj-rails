@@ -17,16 +17,8 @@ RSpec::Matchers.define :successfully_render do |template|
     end
   end
 
-  chain :assigning do |instance, sym|
-    @instance = instance
-    @sym      = sym
-
-    expect(assigns(@sym)).to eq(@instance)
-  end
-
   failure_message do
     message  = "expected to successfully render template #{template}"
-    message += " with variable #{@sym} for #{@instance}" if @instance && @sym
     message += " with flash #{@type}=#{@message}"        if @type && @message
     message += ", but did not"
   end

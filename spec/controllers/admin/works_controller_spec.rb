@@ -10,7 +10,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
@@ -20,7 +20,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
@@ -30,7 +30,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
@@ -46,7 +46,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
@@ -54,7 +54,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
@@ -68,7 +68,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
@@ -76,7 +76,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
@@ -91,7 +91,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders" do
             get :index, params: { scope: "all" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(20).of_total_records(21)
           end
@@ -99,7 +99,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           it "renders second page" do
             get :index, params: { scope: "all", page: "2" }
 
-            expect(response).to successfully_render("admin/works/index")
+            should successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
@@ -113,9 +113,8 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :show, params: { id: work.to_param }
 
-        expect(response).to successfully_render("admin/works/show")
-
-        expect(assigns(:work)).to eq(work)
+        should successfully_render("admin/works/show")
+        should assign(work, :work)
       end
     end
 
@@ -123,8 +122,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :new
 
-        expect(response).to successfully_render("admin/works/new")
-
+        should successfully_render("admin/works/new")
         expect(assigns(:work)).to be_a_new(Work)
       end
     end
@@ -140,10 +138,18 @@ RSpec.describe Admin::WorksController, type: :controller do
           }.to change(Work, :count).by(1)
         end
 
+        it "creates the right attributes" do
+          post :create, params: { work: valid_params }
+
+          should assign(Work.last, :work).with_attributes(valid_params).and_be_valid
+        end
+
         it "redirects to index" do
           post :create, params: { work: valid_params }
 
-          expect(response).to redirect_to(admin_works_path)
+          should send_user_to(
+            admin_work_path(assigns(:work))
+          ).with_flash(:success, "admin.flash.works.success.create")
         end
       end
 
@@ -151,10 +157,10 @@ RSpec.describe Admin::WorksController, type: :controller do
         it "renders new" do
           post :create, params: { work: invalid_params }
 
-          expect(response).to successfully_render("admin/works/new")
+          should successfully_render("admin/works/new")
 
-          expect(assigns(:work)       ).to be_a_new(Work)
-          expect(assigns(:work).valid?).to eq(false)
+          expect(assigns(:work)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:work)).to be_invalid
         end
       end
     end
@@ -165,9 +171,8 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "renders" do
         get :edit, params: { id: work.to_param }
 
-        expect(response).to successfully_render("admin/works/edit")
-
-        expect(assigns(:work)).to eq(work)
+        should successfully_render("admin/works/edit")
+        should assign(work, :work)
       end
     end
 
@@ -189,7 +194,9 @@ RSpec.describe Admin::WorksController, type: :controller do
         it "redirects to index" do
           put :update, params: { id: work.to_param, work: valid_params }
 
-          expect(response).to redirect_to(admin_works_path)
+          should send_user_to(
+            admin_work_path(assigns(:work))
+          ).with_flash(:success, "admin.flash.works.success.update")
         end
       end
 
@@ -197,7 +204,7 @@ RSpec.describe Admin::WorksController, type: :controller do
         it "renders edit" do
           put :update, params: { id: work.to_param, work: invalid_params }
 
-          expect(response).to successfully_render("admin/works/edit")
+          should successfully_render("admin/works/edit")
 
           expect(assigns(:work)       ).to eq(work)
           expect(assigns(:work).valid?).to eq(false)
@@ -217,7 +224,9 @@ RSpec.describe Admin::WorksController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: work.to_param }
 
-        expect(response).to redirect_to(admin_works_path)
+        should send_user_to(
+          admin_works_path
+        ).with_flash(:success, "admin.flash.works.success.destroy")
       end
     end
   end

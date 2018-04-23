@@ -149,6 +149,26 @@ class Work < ApplicationRecord
     creators.alphabetical.to_a.map(&:name).join(connector)
   end
 
+  # def contributions_attributes=(attributes)
+  #   puts "contributions_attributes="
+  #
+  #   uniques = (attributes.values.map do |item_attributes|
+  #     attrs = item_attributes.stringify_keys
+  #
+  #     { "creator_id" => attrs["creator_id"].to_s, "role" => attrs["role"].to_s }
+  #   end).compact.map.uniq
+  #
+  #   puts ">>uniques", uniques
+  #
+  #   deduped = uniques.each.with_index(0).inject({}) do |memo, (item, index)|
+  #     memo[index.to_s] = item; memo
+  #   end
+  #
+  #   puts ">>deduped", deduped
+  #
+  #   super(deduped)
+  # end
+
 private
 
   def reject_blank_contributions(contribution_attributes)
