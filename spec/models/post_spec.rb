@@ -34,14 +34,17 @@ RSpec.describe Post, type: :model do
 
   context "scopes" do
     let!(        :draft_review) { create(:song_review,     :draft    ) }
-    let!(    :published_review) { create(:song_review,     :published) }
+    let!(    :scheduled_review) { create(:song_review,     :scheduled) }
+    let!(         :live_review) { create(:song_review,     :published) }
     let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
-    let!(:published_standalone) { create(:standalone_post, :published) }
+    let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
+    let!(     :live_standalone) { create(:standalone_post, :published) }
+
+    before(:each) do
+      scheduled_standalone.update(published_at: 3.weeks.from_now)
+    end
 
     context "for status" do
-      pending "#live"
-      pending "#scheduled"
-
       describe "draft" do
         specify { expect(described_class.draft).to match_array([
           draft_review,
@@ -51,8 +54,24 @@ RSpec.describe Post, type: :model do
 
       describe "published" do
         specify { expect(described_class.published).to match_array([
-          published_review,
-          published_standalone
+          live_review,
+          live_standalone,
+          scheduled_review,
+          scheduled_standalone
+        ]) }
+      end
+
+      describe "#live" do
+        specify { expect(described_class.live).to match_array([
+          live_review,
+          live_standalone
+        ]) }
+      end
+
+      describe "#scheduled" do
+        specify { expect(described_class.scheduled).to match_array([
+          scheduled_standalone,
+          scheduled_review
         ]) }
       end
     end
@@ -61,14 +80,16 @@ RSpec.describe Post, type: :model do
       describe "standalone" do
         specify { expect(described_class.standalone).to match_array([
           draft_standalone,
-          published_standalone
+          live_standalone,
+          scheduled_standalone
         ]) }
       end
 
       describe "review" do
         specify { expect(described_class.review).to match_array([
           draft_review,
-          published_review
+          live_review,
+          scheduled_review
         ]) }
       end
     end
@@ -77,8 +98,10 @@ RSpec.describe Post, type: :model do
       specify { expect(described_class.reverse_cron.to_a).to eq([
         draft_review,
         draft_standalone,
-        published_standalone,
-        published_review,
+        scheduled_standalone,
+        scheduled_review,
+        live_standalone,
+        live_review,
       ]) }
     end
 
@@ -88,15 +111,17 @@ RSpec.describe Post, type: :model do
       specify { expect(described_class.for_admin).to match_array([
         draft_review,
         draft_standalone,
-        published_standalone,
-        published_review
+        live_standalone,
+        live_review,
+        scheduled_standalone,
+        scheduled_review
       ]) }
     end
 
     describe "for_site" do
       specify { expect(described_class.for_site).to match_array([
-        published_standalone,
-        published_review
+        live_standalone,
+        live_review
       ]) }
     end
   end
@@ -311,11 +336,6 @@ RSpec.describe Post, type: :model do
       specify { expect(described_class.published).to be_a_kind_of(ActiveRecord::Relation) }
     end
 
-    describe "booleans" do
-      specify { expect(draft).to respond_to(:draft?    ) }
-      specify { expect(draft).to respond_to(:published?) }
-    end
-
     describe "private" do
       context "guards" do
         describe "#can_publish?" do
@@ -455,9 +475,34 @@ RSpec.describe Post, type: :model do
         end
       end
 
-      context "for publication date" do
-        pending "#live?"
-        pending "#scheduled?"
+      context "for publication status" do
+        let(    :draft) { create(:standalone_post, :draft    ) }
+        let(:scheduled) { create(:standalone_post, :scheduled) }
+        let(     :live) { create(:standalone_post, :published) }
+
+        describe "#draft?" do
+          specify { expect(    draft.draft?).to eq(true ) }
+          specify { expect(scheduled.draft?).to eq(false) }
+          specify { expect(     live.draft?).to eq(false) }
+        end
+
+        describe "#published?" do
+          specify { expect(    draft.published?).to eq(false) }
+          specify { expect(scheduled.published?).to eq(true ) }
+          specify { expect(     live.published?).to eq(true ) }
+        end
+
+        describe "#live?" do
+          specify { expect(    draft.live?).to eq(false) }
+          specify { expect(scheduled.live?).to eq(false) }
+          specify { expect(     live.live?).to eq(true ) }
+        end
+
+        describe "#scheduled?" do
+          specify { expect(    draft.scheduled?).to eq(false) }
+          specify { expect(scheduled.scheduled?).to eq(true ) }
+          specify { expect(     live.scheduled?).to eq(false) }
+        end
       end
     end
 

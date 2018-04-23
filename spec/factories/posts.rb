@@ -20,6 +20,16 @@ FactoryBot.define do
       end
     end
 
+    trait :scheduled do
+      after(:create) do |post, evaluator|
+        raise AASM::InvalidTransition unless post.publish!
+
+        post.update!(published_at: 3.weeks.from_now)
+
+        post.reload
+      end
+    end
+
     ###########################################################################
     # FOR OTHER FACTORIES.
     ###########################################################################
