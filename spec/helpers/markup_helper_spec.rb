@@ -37,4 +37,8 @@ RSpec.describe MarkupHelper, type: :helper do
       expect(helper.content_for_unless_empty(:empty, wrapper: :div)).to eq(nil)
     end
   end
+
+  pending "#combine_attrs"
+
+  pending "#combine_classes"
 end

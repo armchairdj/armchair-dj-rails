@@ -19,7 +19,7 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= content_tag(:th, "Type") %>
-            <%= content_tag(:th, "Status") if @scope == :all %>
+            <%= content_tag(:th, "Status", class: "icon") %>
             <%= content_tag(:th, "Title") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
@@ -29,7 +29,7 @@
           <% @posts.each do |post| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, post_type(post)) %>
-              <%= content_tag(:td, post.human_status) if @scope == :all %>
+              <%= content_tag(:td, post_status_icon(post), class: "icon")%>
               <%= content_tag(:td, post_title(post)) %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_post_link(post) %>

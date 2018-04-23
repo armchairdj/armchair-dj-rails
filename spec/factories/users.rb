@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     trait :confirmed do
-      confirmed_at Time.now
+      confirmed_at DateTime.now
     end
 
     factory :member do

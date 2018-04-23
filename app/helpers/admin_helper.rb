@@ -32,7 +32,7 @@ module AdminHelper
 
   def admin_destroy_link(instance)
     title = "destroy #{instance.model_name.singular}"
-    svg   = semantic_svg_image("open_iconic/x.svg", title: title, desc: "destroy icon")
+    svg   = semantic_svg_image("open_iconic/trash.svg", title: title, desc: "trash icon")
     path  = polymorphic_path([:admin, instance])
 
     link_to(svg, path, title: title, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")

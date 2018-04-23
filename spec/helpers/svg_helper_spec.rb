@@ -37,6 +37,8 @@ RSpec.describe SvgHelper, type: :helper do
 
       expect(helper.non_semantic_svg_image("image_path", title: "title", desc: "desc")).to be_a_kind_of(String)
     end
+
+    pending "accepts extra html attributes"
   end
 
   describe "#semantic_svg_image" do
@@ -59,5 +61,9 @@ RSpec.describe SvgHelper, type: :helper do
         helper.semantic_svg_image("image_path", title: "title")
       }.to raise_exception(ArgumentError)
     end
+
+    pending "accepts extra html attributes"
   end
+
+  pending "#svg_icon"
 end

@@ -52,3 +52,10 @@
     @include svg-fill($color);
   }
 }
+
+@mixin standard-svg-icon {
+  @include inline-block-svg() {
+    @include square(1rem);
+    @content;
+  }
+}

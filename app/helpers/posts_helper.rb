@@ -25,4 +25,28 @@ module PostsHelper
   def post_type(post)
     post.work ? "#{post.work.human_medium} Review" : "Standalone Post"
   end
+
+  def post_status_icon(post)
+    return post_draft_icon     if post.draft?
+    return post_scheduled_icon if post.scheduled?
+    return post_live_icon      if post.live?
+  end
+
+  def post_draft_icon
+    svg_icon("open_iconic/lock-locked.svg",
+      title: "draft", desc: "draft icon", wrapper_class: "post-draft"
+    )
+  end
+
+  def post_live_icon
+    svg_icon("open_iconic/lock-unlocked.svg",
+      title: "published", desc: "published icon", wrapper_class: "post-live"
+    )
+  end
+
+  def post_scheduled_icon
+    svg_icon("open_iconic/clock.svg",
+      title: "scheduled to be published", desc: "scheduled icon", wrapper_class: "post-scheduled"
+    )
+  end
 end

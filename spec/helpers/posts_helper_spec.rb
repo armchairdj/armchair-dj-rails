@@ -105,4 +105,11 @@ RSpec.describe PostsHelper, type: :helper do
       expect(helper.post_title(hounds_of_love_review, full: false)).to eq("Hounds of Love")
     end
   end
+
+  describe "icon methods" do
+    pending "#post_status_icon"
+    pending "#post_draft_icon"
+    pending "#post_live_icon"
+    pending "#post_scheduled_icon"
+  end
 end

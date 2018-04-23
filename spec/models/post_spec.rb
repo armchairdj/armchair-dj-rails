@@ -38,6 +38,9 @@ RSpec.describe Post, type: :model do
     let!(:published_standalone) { create(:standalone_post, :published) }
 
     context "for status" do
+      pending "#live"
+      pending "#scheduled"
+
       describe "draft" do
         specify { expect(described_class.draft).to match_array([
           draft_review,
@@ -390,63 +393,70 @@ RSpec.describe Post, type: :model do
 
   context "instance" do
     context "booleans" do
-      let(:unsaved_standalone) {  build(:standalone_post) }
-      let(  :saved_standalone) { create(:standalone_post) }
-      let(    :unsaved_review) {  build(:song_review    ) }
-      let(      :saved_review) { create(:song_review    ) }
+      context "for type" do
+        let(:unsaved_standalone) {  build(:standalone_post) }
+        let(  :saved_standalone) { create(:standalone_post) }
+        let(    :unsaved_review) {  build(:song_review    ) }
+        let(      :saved_review) { create(:song_review    ) }
 
-      describe "#standalone?" do
-        specify { expect(unsaved_standalone.standalone?).to eq(true ) }
-        specify { expect(  saved_standalone.standalone?).to eq(true ) }
-        specify { expect(    unsaved_review.standalone?).to eq(false) }
-        specify { expect(      saved_review.standalone?).to eq(false) }
+        describe "#standalone?" do
+          specify { expect(unsaved_standalone.standalone?).to eq(true ) }
+          specify { expect(  saved_standalone.standalone?).to eq(true ) }
+          specify { expect(    unsaved_review.standalone?).to eq(false) }
+          specify { expect(      saved_review.standalone?).to eq(false) }
 
-        context "while editing saved" do
-          specify "true for standalone even if title nil" do
-            saved_standalone.title = nil
+          context "while editing saved" do
+            specify "true for standalone even if title nil" do
+              saved_standalone.title = nil
 
-            expect(saved_standalone.standalone?).to eq(true)
+              expect(saved_standalone.standalone?).to eq(true)
+            end
+
+            specify "false for review even if work nil" do
+              saved_review.work = nil
+
+              expect(saved_review.standalone?).to eq(false)
+            end
+
+            specify "false for review even if work_id nil" do
+              saved_review.work_id = nil
+
+              expect(saved_review.standalone?).to eq(false)
+            end
           end
+        end
 
-          specify "false for review even if work nil" do
-            saved_review.work = nil
+        describe "#review?" do
+          specify { expect(unsaved_standalone.review?).to eq(false) }
+          specify { expect(  saved_standalone.review?).to eq(false) }
+          specify { expect(    unsaved_review.review?).to eq(true ) }
+          specify { expect(      saved_review.review?).to eq(true ) }
 
-            expect(saved_review.standalone?).to eq(false)
-          end
+          context "while editing saved" do
+            specify "false for standalone even if title nil" do
+              saved_standalone.title = nil
 
-          specify "false for review even if work_id nil" do
-            saved_review.work_id = nil
+              expect(saved_standalone.review?).to eq(false)
+            end
 
-            expect(saved_review.standalone?).to eq(false)
+            specify "true for review even if work nil" do
+              saved_review.work = nil
+
+              expect(saved_review.review?).to eq(true)
+            end
+
+            specify "true for review even if work_id nil" do
+              saved_review.work_id = nil
+
+              expect(saved_review.review?).to eq(true)
+            end
           end
         end
       end
 
-      describe "#review?" do
-        specify { expect(unsaved_standalone.review?).to eq(false) }
-        specify { expect(  saved_standalone.review?).to eq(false) }
-        specify { expect(    unsaved_review.review?).to eq(true ) }
-        specify { expect(      saved_review.review?).to eq(true ) }
-
-        context "while editing saved" do
-          specify "false for standalone even if title nil" do
-            saved_standalone.title = nil
-
-            expect(saved_standalone.review?).to eq(false)
-          end
-
-          specify "true for review even if work nil" do
-            saved_review.work = nil
-
-            expect(saved_review.review?).to eq(true)
-          end
-
-          specify "true for review even if work_id nil" do
-            saved_review.work_id = nil
-
-            expect(saved_review.review?).to eq(true)
-          end
-        end
+      context "for publication date" do
+        pending "#live?"
+        pending "#scheduled?"
       end
     end
 

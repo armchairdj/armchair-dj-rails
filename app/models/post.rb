@@ -27,12 +27,14 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :live,         -> { published.where("created_at <= ?", DateTime.now) }
+  scope :scheduled,    -> { published.where("created_at > ?",  DateTime.now) }
   scope :review,       -> { where.not(work_id: nil) }
   scope :standalone,   -> { where(    work_id: nil) }
   scope :reverse_cron, -> { order(published_at: :desc)                  }
   scope :eager,        -> { includes(work: { contributions: :creator }) }
   scope :for_admin,    -> { eager                                       }
-  scope :for_site,     -> { eager.published.reverse_cron                }
+  scope :for_site,     -> { eager.live.reverse_cron                     }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -104,6 +106,14 @@ class Post < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def scheduled?
+    published? && published_at > DateTime.now
+  end
+
+  def live?
+    published? && published_at <= DateTime.now
+  end
 
   def standalone?
     if new_record?
@@ -258,7 +268,7 @@ private
   end
 
   def prepare_to_publish
-    self.published_at = Time.now
+    self.published_at = DateTime.now
   end
 
   def prepare_to_unpublish
