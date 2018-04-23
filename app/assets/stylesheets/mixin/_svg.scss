@@ -54,6 +54,10 @@
 }
 
 @mixin standard-svg-icon {
+  @include square(1.3rem);
+  display: inline-block;
+  padding: .3rem .15rem 0;
+
   @include inline-block-svg() {
     @include square(1rem);
     @content;
