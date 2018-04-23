@@ -134,10 +134,20 @@ RSpec.describe Work, type: :model do
   context "associations" do
     it { should have_many(:contributions) }
 
+    it { should have_many(:posts) }
+
     it { should have_many(:creators    ).through(:contributions) }
     it { should have_many(:contributors).through(:contributions) }
+    it { should have_many(:personnel   ).through(:contributions) }
 
-    it { should have_many(:posts) }
+    describe "creators vs. contributors" do
+      subject { create(:global_communications_76_14) }
+
+      specify { expect(subject.contributions.length).to eq(3) }
+      specify { expect(subject.personnel.length    ).to eq(3) }
+      specify { expect(subject.creators.length     ).to eq(1) }
+      specify { expect(subject.contributors.length ).to eq(2) }
+    end
   end
 
   context "attributes" do
@@ -192,6 +202,10 @@ RSpec.describe Work, type: :model do
   end
 
   context "instance" do
+    context "meta methods" do
+      pending "to_description"
+    end
+
     describe "#prepare_contributions" do
       it "prepares max for new" do
         instance = described_class.new

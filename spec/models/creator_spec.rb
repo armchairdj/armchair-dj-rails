@@ -75,6 +75,10 @@ RSpec.describe Creator, type: :model do
   end
 
   context "instance" do
+    context "meta methods" do
+      pending "to_description"
+    end
+
     describe "private" do
       context "callbacks" do
         # Nothing so far.

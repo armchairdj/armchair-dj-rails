@@ -4,7 +4,6 @@ module MetaHelper
       csrf_meta_tags,
       content_type_tag,
       description_tag,
-      keywords_tag,
       turbolinks_tag,
       viewport_tag,
       apple_icon_tag,
@@ -30,10 +29,6 @@ module MetaHelper
 
   def description_tag
     meta_tag("description", @meta_description)
-  end
-
-  def keywords_tag
-    meta_tag("keywords", @meta_keywords)
   end
 
   def turbolinks_tag

@@ -108,6 +108,10 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def to_description
+    "TODO"
+  end
+
   def scheduled?
     published? && published_at > DateTime.now
   end

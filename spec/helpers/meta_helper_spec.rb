@@ -6,7 +6,6 @@ RSpec.describe MetaHelper, type: :helper do
       allow(helper).to receive(  :csrf_meta_tags).and_return("csrf")
       allow(helper).to receive(:content_type_tag).and_return("content_type")
       allow(helper).to receive( :description_tag).and_return("description")
-      allow(helper).to receive(    :keywords_tag).and_return("keywords")
       allow(helper).to receive(  :turbolinks_tag).and_return("turbolinks")
       allow(helper).to receive(    :viewport_tag).and_return("viewport")
       allow(helper).to receive(  :apple_icon_tag).and_return("apple_icon")
@@ -20,7 +19,6 @@ RSpec.describe MetaHelper, type: :helper do
         "csrf",
         "content_type",
         "description",
-        "keywords",
         "turbolinks",
         "viewport",
         "apple_icon",
@@ -31,7 +29,6 @@ RSpec.describe MetaHelper, type: :helper do
     end
 
     it "ignores blank tags" do
-      allow(helper).to receive(   :keywords_tag).and_return(nil)
       allow(helper).to receive(:description_tag).and_return(nil)
 
       expect(helper.head_tags).to eq([
@@ -62,7 +59,7 @@ RSpec.describe MetaHelper, type: :helper do
       end
 
       it "removes quotation marks" do
-        expect(helper.meta_tag("keywords", '"Foo", "Bar"')).to eq('<meta name="keywords" content="Foo, Bar" />')
+        expect(helper.meta_tag("description", '"Foo", "Bar"')).to eq('<meta name="description" content="Foo, Bar" />')
       end
     end
 
@@ -81,18 +78,6 @@ RSpec.describe MetaHelper, type: :helper do
 
       it "nils if no description" do
         expect(helper.description_tag).to eq(nil)
-      end
-    end
-
-    describe "#keywords_tag" do
-      it "outputs the tag" do
-        assign(:meta_keywords, "keywords")
-
-        expect(helper.keywords_tag).to eq('<meta name="keywords" content="keywords" />')
-      end
-
-      it "nils if no keywords" do
-        expect(helper.keywords_tag).to eq(nil)
       end
     end
 

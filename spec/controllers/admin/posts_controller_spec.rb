@@ -440,7 +440,7 @@ RSpec.describe Admin::PostsController, type: :controller do
                 title:  "Hounds of Love"
               )
 
-              expect(assigns(:post).work.contributors.first).to eq(kate_bush)
+              expect(assigns(:post).work.creators.first).to eq(kate_bush)
             end
 
             specify do

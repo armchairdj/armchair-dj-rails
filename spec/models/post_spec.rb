@@ -413,6 +413,10 @@ RSpec.describe Post, type: :model do
   end
 
   context "instance" do
+    context "meta methods" do
+      pending "to_description"
+    end
+
     context "booleans" do
       context "for type" do
         let(:unsaved_standalone) {  build(:standalone_post) }

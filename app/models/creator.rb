@@ -57,4 +57,7 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def to_description
+    "TODO"
+  end
 end

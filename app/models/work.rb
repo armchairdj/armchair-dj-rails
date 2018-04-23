@@ -75,8 +75,11 @@ class Work < ApplicationRecord
     where(contributions: { role: Contribution.roles["creator"] })
   }, through: :contributions
 
-  has_many :contributors, through: :contributions,
-    source: :creator, class_name: "Creator"
+  has_many :contributors, -> {
+    where.not(contributions: { role: Contribution.roles["creator"] })
+  }, through: :contributions, source: :creator, class_name: "Creator"
+
+  has_many :personnel, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :posts, dependent: :destroy
 
@@ -130,6 +133,10 @@ class Work < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def to_description
+    "TODO"
+  end
 
   def prepare_contributions
     count_needed = self.class.max_contributions - self.contributions.length
