@@ -18,7 +18,8 @@ class Post < ApplicationRecord
   def self.admin_scopes
     {
       "Draft"     => :draft,
-      "Published" => :published,
+      "Scheduled" => :scheduled,
+      "Published" => :live,
       "All"       => :all,
     }
   end
@@ -27,8 +28,8 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :live,         -> { published.where("created_at <= ?", DateTime.now) }
-  scope :scheduled,    -> { published.where("created_at > ?",  DateTime.now) }
+  scope :live,         -> { published.where("published_at <= ?", DateTime.now) }
+  scope :scheduled,    -> { published.where("published_at > ?",  DateTime.now) }
   scope :review,       -> { where.not(work_id: nil) }
   scope :standalone,   -> { where(    work_id: nil) }
   scope :reverse_cron, -> { order(published_at: :desc)                  }

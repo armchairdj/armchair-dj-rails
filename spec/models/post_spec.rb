@@ -20,6 +20,7 @@ RSpec.describe Post, type: :model do
       specify "keys are short tab names" do
         expect(described_class.admin_scopes.keys).to eq([
           "Draft",
+          "Scheduled",
           "Published",
           "All",
         ])
