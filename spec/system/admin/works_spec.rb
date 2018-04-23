@@ -1,3 +1,3 @@
 RSpec.describe "admin works" do
-  pending "spec"
+  pending "add some admin work system specs"
 end

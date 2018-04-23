@@ -1,3 +1,3 @@
 RSpec.describe "works" do
-  pending "spec"
+  pending "add some work system tests"
 end

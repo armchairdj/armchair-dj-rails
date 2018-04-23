@@ -1,3 +1,3 @@
 RSpec.describe "admin creators" do
-  pending "spec"
+  pending "add some admin creator tests"
 end

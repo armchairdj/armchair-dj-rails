@@ -1,3 +1,3 @@
 RSpec.describe "admin posts" do
-  pending "spec"
+  pending "add some admin post system tests"
 end
