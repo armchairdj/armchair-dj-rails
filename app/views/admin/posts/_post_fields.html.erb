@@ -33,11 +33,11 @@
 <% if f.object.may_publish? %>
   <%= f.input(:slug) %>
 
-  <%= f.input :published_at, as: :date, html5: true,
+  <%= f.input :publish_on, as: :date, html5: true,
     hint: "Leave blank unless scheduling a post for future publication"
   %>
 <% elsif f.object.published? %>
   <%= f.input(:slug, readonly: true) %>
 
-  <%= f.input :published_at, as: :date, html5: true, readonly: true %>
+  <%= f.input :publish_on, as: :date, html5: true, readonly: true %>
 <% end %>

@@ -16,8 +16,10 @@ private
   end
 
   def scoped_and_sorted_collection
-    @scope = (params[:scope] || model_class.default_admin_scope).to_sym
     @page  = params[:page]
+    @scope = (params[:scope] || model_class.default_admin_scope).to_sym
+
+    raise Pundit::NotAuthorizedError unless model_class.admin_scopes.values.include? @scope
 
     policy_scope(model_class).send(@scope).page(@page)
   end

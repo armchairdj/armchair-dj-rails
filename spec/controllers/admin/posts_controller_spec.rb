@@ -754,8 +754,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         context "standalone" do
           let(:post) { create(:standalone_post, :draft) }
 
-          let(  :valid_params) { { "body" => "New body.", "title" => "New title.", published_at: "01/01/2050" } }
-          let(:invalid_params) { { "body" => "",          "title" => ""                                       } }
+          let(  :valid_params) { { "body" => "New body.", "title" => "New title.", publish_on: "01/01/2050" } }
+          let(:invalid_params) { { "body" => "",          "title" => ""                                     } }
 
           context "with valid params" do
             before(:each) do
@@ -816,8 +816,8 @@ RSpec.describe Admin::PostsController, type: :controller do
         context "review" do
           let(:post) { create(:song_review) }
 
-          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id, published_at: "01/01/2050" } }
-          let(:invalid_params) { { "body" => ""         , "work_id" => ""                                           } }
+          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id, publish_on: "01/01/2050" } }
+          let(:invalid_params) { { "body" => ""         , "work_id" => ""                                         } }
 
           context "with valid params" do
             before(:each) do

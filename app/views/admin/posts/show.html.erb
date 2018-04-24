@@ -31,7 +31,7 @@
           <% if @post.published? %>
             at <%= admin_date(@post.published_at) %>
           <% elsif @post.scheduled? %>
-            for <%= admin_date(@post.published_at) %>
+            for <%= admin_date(@post.publish_on) %>
           <% end %>
         <% end %>
       <% end %>
@@ -69,11 +69,6 @@
         <%= content_tag(:th, "Updated") %>
         <%= content_tag(:td, admin_date(@post.updated_at)) %>
       <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Published") %>
-        <%= content_tag(:td, admin_date(@post.published_at)) %>
-      <% end if @published %>
     <% end %>
   <% end %>
 <% end %>

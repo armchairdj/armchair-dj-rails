@@ -35,12 +35,13 @@ end
 
 RSpec::Matchers.define :be_scheduled do
   match do |actual|
-    expect(actual.scheduled?  ).to eq(true)
-    expect(actual.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+    expect(actual.scheduled?).to eq(true)
+    expect(actual.publish_on).to be_a_kind_of(ActiveSupport::TimeWithZone)
   end
 
   match_when_negated do
     expect(actual.scheduled?).to eq(false)
+    expect(actual.publish_on).to eq(nil)
   end
 
   failure_message do |actual|

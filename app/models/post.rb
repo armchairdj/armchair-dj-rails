@@ -74,7 +74,9 @@ class Post < ApplicationRecord
 
   validates :body,         presence: true, unless: :draft?
   validates :slug,         presence: true, unless: :draft?
-  validates :published_at, presence: true, unless: :draft?
+
+  validates :published_at, presence: true, if: :published?
+  validates :publish_on,   presence: true, if: :scheduled?
 
   #############################################################################
   # HOOKS.
@@ -105,7 +107,7 @@ class Post < ApplicationRecord
     end
 
     event(:unschedule,
-      before: :clear_published_at,
+      before: :clear_publish_on,
       after:  :update_counts_for_descendents
     ) do
       transitions from: :scheduled, to: :draft
@@ -167,28 +169,38 @@ class Post < ApplicationRecord
     work.prepare_contributions
   end
 
-  def update_and_publish(params, event: :publish!)
-    return true if self.update(params) && self.send(event)
+  def update_and_publish(params)
+    return true if self.update(params) && self.publish!
 
     self.errors.add(:body, :blank_during_publish) unless body.present?
 
     return false
   end
 
-  def update_and_unpublish(params, event: :unpublish!)
+  def update_and_unpublish(params)
     # Transition first to trigger validation rule change.
-    unpublished = self.send(event)
+    unpublished = self.unpublish!
     updated     = self.reload.update(params)
 
     unpublished && updated
   end
 
   def update_and_schedule(params)
-    update_and_publish(params, event: :schedule!)
+    return true if self.update(params) && self.schedule!
+
+    clear_publish_on_from_database
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+
+    return false
   end
 
   def update_and_unschedule(params)
-    update_and_unpublish(params, event: :unschedule!)
+    # Transition first to trigger validation rule change.
+    unscheduled = self.unschedule!
+    updated     = self.reload.update(params)
+
+    unscheduled && updated
   end
 
 private
@@ -295,11 +307,23 @@ private
   end
 
   def set_published_at
-    self.published_at = DateTime.now unless self.published_at.present?
+    self.published_at = DateTime.now
   end
 
   def clear_published_at
     self.published_at = nil
+  end
+
+  def clear_publish_on
+    self.publish_on = nil
+  end
+
+  def clear_publish_on_from_database
+    return unless temp = self.publish_on
+
+    self.update_column(:publish_on, nil)
+
+    self.publish_on = temp
   end
 
   #############################################################################

@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :scheduled do
-      published_at 3.weeks.from_now
+      publish_on 3.weeks.from_now
 
       after(:create) do |post, evaluator|
         raise AASM::InvalidTransition unless post.schedule!

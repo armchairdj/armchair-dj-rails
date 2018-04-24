@@ -20,6 +20,12 @@ module PostsHelper
     time_tag post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p")
   end
 
+  def post_scheduled_date(post)
+    return unless post.scheduled?
+
+    time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
+  end
+
   def post_title(post, full: true)
     if post.review?
       full ? post.work.title_with_creator : post.work.title

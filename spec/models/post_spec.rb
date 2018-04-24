@@ -165,22 +165,25 @@ RSpec.describe Post, type: :model do
         it { should_not validate_presence_of(:body        ) }
         it { should_not validate_presence_of(:slug        ) }
         it { should_not validate_presence_of(:published_at) }
+        it { should_not validate_presence_of(:publish_on  ) }
       end
 
       context "scheduled" do
         subject { create(:minimal_post, :scheduled) }
 
-        it { should validate_presence_of(:body        ) }
-        it { should validate_presence_of(:slug        ) }
-        it { should validate_presence_of(:published_at) }
+        it { should     validate_presence_of(:body        ) }
+        it { should     validate_presence_of(:slug        ) }
+        it { should_not validate_presence_of(:published_at) }
+        it { should     validate_presence_of(:publish_on  ) }
       end
 
       context "published" do
         subject { create(:minimal_post, :published) }
 
-        it { should validate_presence_of(:body        ) }
-        it { should validate_presence_of(:slug        ) }
-        it { should validate_presence_of(:published_at) }
+        it { should     validate_presence_of(:body        ) }
+        it { should     validate_presence_of(:slug        ) }
+        it { should     validate_presence_of(:published_at) }
+        it { should_not validate_presence_of(:publish_on  ) }
       end
     end
 
@@ -333,7 +336,7 @@ RSpec.describe Post, type: :model do
                allow(draft).to receive(:ready_to_publish?).and_call_original
               expect(draft).to receive(:ready_to_publish?)
 
-              draft.published_at = 3.weeks.from_now
+              draft.publish_on = 3.weeks.from_now
 
               expect(draft.schedule!).to eq(true)
             end
@@ -344,7 +347,7 @@ RSpec.describe Post, type: :model do
                allow(draft).to receive(:update_counts_for_descendents).and_call_original
               expect(draft).to receive(:update_counts_for_descendents)
 
-              draft.published_at = 3.weeks.from_now
+              draft.publish_on = 3.weeks.from_now
 
               expect(draft.schedule!).to eq(true)
             end
@@ -355,9 +358,9 @@ RSpec.describe Post, type: :model do
       describe "unschedule" do
         context "callbacks" do
           describe "before" do
-            it "calls #clear_published_at" do
-               allow(scheduled).to receive(:clear_published_at).and_call_original
-              expect(scheduled).to receive(:clear_published_at)
+            it "calls #clear_publish_on" do
+               allow(scheduled).to receive(:clear_publish_on).and_call_original
+              expect(scheduled).to receive(:clear_publish_on)
 
               expect(scheduled.unschedule!).to eq(true)
             end
@@ -446,7 +449,7 @@ RSpec.describe Post, type: :model do
           end
 
           specify "true if scheduled, saved, valid and has slug & body" do
-            subject.published_at = 3.weeks.from_now
+            subject.publish_on = 3.weeks.from_now
             subject.save
             subject.schedule!
 
@@ -493,7 +496,7 @@ RSpec.describe Post, type: :model do
         describe "#set_published_at" do
           subject { create(:standalone_post, :draft) }
 
-          it "sets published_at if not already set" do
+          it "sets published_at" do
             Timecop.freeze(2020, 3, 3) do
               subject.send(:set_published_at)
 
@@ -502,14 +505,14 @@ RSpec.describe Post, type: :model do
             end
           end
 
-          it "sets published_at if not already set" do
-            Timecop.freeze(2020, 3, 3) do
-              subject.published_at = 3.weeks.from_now
+          it "sets published_at even if already set" do
+            subject.update!(published_at: 3.weeks.ago)
 
+            Timecop.freeze(2020, 3, 3) do
               subject.send(:set_published_at)
 
               expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-              expect(subject.published_at).to eq(DateTime.parse("2020-03-24"))
+              expect(subject.published_at).to eq(DateTime.parse("2020-03-03"))
             end
           end
         end
@@ -521,6 +524,16 @@ RSpec.describe Post, type: :model do
             instance.send(:clear_published_at)
 
             expect(instance.published_at).to eq(nil)
+          end
+        end
+
+        describe "#clear_publish_on" do
+          it "removes publish_on" do
+            instance = create(:standalone_post, :published)
+
+            instance.send(:clear_publish_on)
+
+            expect(instance.publish_on).to eq(nil)
           end
         end
       end
@@ -911,9 +924,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.title       ).to eq(params["title"])
-            expect(subject.published?  ).to eq(true)
-            expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+            expect(subject.title).to eq(params["title"])
+
+            expect(subject).to be_published
           end
         end
 
@@ -930,9 +943,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.title       ).to_not eq(nil)
-            expect(subject.published?  ).to     eq(false)
-            expect(subject.published_at).to     eq(nil)
+            expect(subject.title).to_not eq(nil)
+
+            expect(subject).to_not be_published
           end
 
           it "manually adds errors on empty body" do
@@ -962,9 +975,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.work_id     ).to eq(params["work_id"])
-            expect(subject.published?  ).to eq(false)
-            expect(subject.published_at).to eq(nil)
+            expect(subject.work_id).to eq(params["work_id"])
+
+            expect(subject).to_not be_published
           end
         end
 
@@ -981,9 +994,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.work_id     ).to_not eq(nil)
-            expect(subject.published?  ).to     eq(false)
-            expect(subject.published_at).to     eq(nil)
+            expect(subject.work_id).to_not eq(nil)
+
+            expect(subject).to_not be_published
           end
         end
       end
@@ -997,7 +1010,7 @@ RSpec.describe Post, type: :model do
         end
 
         context "valid" do
-          let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
+          let(:params) { { "title" => "New title", "publish_on" => 3.weeks.from_now } }
 
           it "updates, schedules and returns true" do
             expect(subject).to receive(:update   )
@@ -1007,14 +1020,14 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.scheduled?  ).to eq(true)
-            expect(subject.title       ).to eq(params["title"])
-            expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+            expect(subject).to be_scheduled
+
+            expect(subject.title).to eq(params["title"])
           end
         end
 
         context "invalid" do
-          let(:params) { { "title" => "", "body" => "" } }
+          let(:params) { { "title" => "", "body" => "", "publish_on" => 3.weeks.from_now } }
 
           it "does not update, does not attempt schedule and returns false" do
             expect(subject).to     receive(:update   )
@@ -1022,13 +1035,15 @@ RSpec.describe Post, type: :model do
 
             expect(subject.update_and_schedule(params)).to eq(false)
 
-            expect(subject.title).to eq(nil)
+            expect(subject.title     ).to eq(nil)
+            expect(subject.body      ).to eq(nil)
+            expect(subject.publish_on).to be_a_kind_of(ActiveSupport::TimeWithZone)
 
             subject.reload
 
-            expect(subject.draft?      ).to     eq(true)
-            expect(subject.title       ).to_not eq(nil)
-            expect(subject.published_at).to     eq(nil)
+            expect(subject.title).to_not eq(nil)
+
+            expect(subject).to_not be_scheduled
           end
 
           it "manually adds errors on empty body" do
@@ -1058,9 +1073,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.work_id     ).to eq(params["work_id"])
-            expect(subject.scheduled?  ).to eq(false)
-            expect(subject.published_at).to eq(nil)
+            expect(subject.work_id).to eq(params["work_id"])
+
+            expect(subject).to_not be_scheduled
           end
         end
 
@@ -1077,9 +1092,9 @@ RSpec.describe Post, type: :model do
 
             subject.reload
 
-            expect(subject.work_id     ).to_not eq(nil)
-            expect(subject.scheduled?  ).to     eq(false)
-            expect(subject.published_at).to     eq(nil)
+            expect(subject.work_id).to_not eq(nil)
+
+            expect(subject).to_not be_scheduled
           end
         end
       end

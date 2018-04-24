@@ -90,20 +90,34 @@ RSpec.describe PostsHelper, type: :helper do
     let(:published) { create(:standalone_post, :published) }
 
     specify do
-      expect(helper.post_published_date(draft    )).to eq(nil)
-    end
-
-    specify do
-      expect(helper.post_published_date(scheduled)).to eq(nil)
-    end
-
-    specify do
       Timecop.freeze(2050, 3, 3) do
         expect(helper.post_published_date(published)).to eq(
           '<time datetime="2050-03-03T00:00:00Z">03/03/2050 at 12:00AM</time>'
         )
       end
     end
+
+    specify { expect(helper.post_published_date(draft    )).to eq(nil) }
+    specify { expect(helper.post_published_date(scheduled)).to eq(nil) }
+  end
+
+  describe "#post_scheduled_date" do
+    let(:draft    ) { create(:standalone_post, :draft    ) }
+    let(:scheduled) { create(:standalone_post, :scheduled) }
+    let(:published) { create(:standalone_post, :published) }
+
+    specify do
+      Timecop.freeze(2050, 3, 3) do
+        scheduled.update(publish_on: 3.weeks.from_now)
+
+        expect(helper.post_scheduled_date(scheduled)).to eq(
+          '<time datetime="2050-03-24T00:00:00Z">03/24/2050 at 12:00AM</time>'
+        )
+      end
+    end
+
+    specify { expect(helper.post_scheduled_date(draft    )).to eq(nil) }
+    specify { expect(helper.post_scheduled_date(published)).to eq(nil) }
   end
 
   describe "#post_type" do
