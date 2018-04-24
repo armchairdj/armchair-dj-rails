@@ -9,7 +9,8 @@
     "selectize-plugin-clear": "^0.0.3",
     "stimulus": "^1.0.1",
     "turbolinks": "^5.1.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.9.0",
+    "webpack-modernizr-loader": "^4.0.1"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"

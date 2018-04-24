@@ -1,16 +1,20 @@
-/* Underscore */
+/* Modernizr. */
+
+import modernizr from 'modernizr';
+
+/* Underscore. */
 
 import _ from "underscore";
 
 window._ = _;
 
-/* jQuery */
+/* jQuery. */
 
 import $ from "jquery";
 
 window.$ = window.jQuery = $;
 
-/* jQuery config */
+/* jQuery config. */
 
 $(document).on("turbolinks:load", function () {
   $.ajaxSetup({
@@ -19,7 +23,7 @@ $(document).on("turbolinks:load", function () {
   });
 })
 
-/* jQuery plugins */
+/* jQuery plugins. */
 
 require("monkey_patches/selectize");
 // require("selectize-plugin-clear");

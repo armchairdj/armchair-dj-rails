@@ -102,13 +102,13 @@ RSpec.describe PostsHelper, type: :helper do
   end
 
   describe "#post_scheduled_date" do
-    let(:draft    ) { create(:standalone_post, :draft    ) }
-    let(:scheduled) { create(:standalone_post, :scheduled) }
-    let(:published) { create(:standalone_post, :published) }
+    let!(:draft    ) { create(:standalone_post, :draft    ) }
+    let!(:scheduled) { create(:standalone_post, :scheduled) }
+    let!(:published) { create(:standalone_post, :published) }
 
     specify do
       Timecop.freeze(2050, 3, 3) do
-        scheduled.update(publish_on: 3.weeks.from_now)
+        scheduled.update_column(:publish_on, 3.weeks.from_now)
 
         expect(helper.post_scheduled_date(scheduled)).to eq(
           '<time datetime="2050-03-24T00:00:00Z">03/24/2050 at 12:00AM</time>'
