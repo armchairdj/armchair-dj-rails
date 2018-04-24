@@ -65,6 +65,11 @@
         <%= content_tag(:th, "Updated") %>
         <%= content_tag(:td, admin_date(@post.updated_at)) %>
       <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Published") %>
+        <%= content_tag(:td, admin_date(@post.published_at)) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

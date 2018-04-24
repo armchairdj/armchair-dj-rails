@@ -15,7 +15,7 @@ module AdminHelper
   def admin_date(date)
     return unless date
 
-    date.strftime("%m/%d/%Y %I:%M%p")
+    time_tag date, date.strftime("%m/%d/%Y %I:%M%p")
   end
 
   #############################################################################
