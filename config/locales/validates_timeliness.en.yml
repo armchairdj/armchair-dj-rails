@@ -1,0 +1,16 @@
+en:
+  errors:
+    messages:
+      invalid_date: "Please choose a valid date."
+      invalid_time: "Please choose a valid time."
+      invalid_datetime: "Please choose a valid date & time."
+      is_at: "Please choose a value at %{restriction}."
+      before: "Please choose a value before %{restriction}."
+      on_or_before: "Please choose a value on or before %{restriction}."
+      after: "Please choose a value after %{restriction}."
+      on_or_after: "Please choose a value on or after %{restriction}."
+  validates_timeliness:
+    error_value_formats:
+      date: '%Y-%m-%d'
+      time: '%H:%M:%S'
+      datetime: '%Y-%m-%d %H:%M:%S'

@@ -13,39 +13,39 @@
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Save Draft" %>
+    <%= f.button :submit, "Save" %>
 
-    <% if f.object.may_publish? %>
-      <%= f.button :button, "Save & Publish",
-        type:           :submit,
-        name:           "step",
-        value:          "publish",
-        class:          "danger",
-        "data-confirm": "Are you sure?"
-      %>
-    <% elsif f.object.may_unpublish? %>
-      <%= f.button :button, "Save & Unpublish",
+    <% if f.object.published? %>
+      <%= f.button :button, "Unpublish",
         type:           :submit,
         name:           "step",
         value:          "unpublish",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
-    <% end %>
-
-    <% if f.object.may_schedule? %>
-      <%= f.button :button, "Save & Schedule",
+    <% elsif f.object.persisted? %>
+      <%= f.button :button, "Publish",
         type:           :submit,
         name:           "step",
-        value:          "schedule",
+        value:          "publish",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
-    <% elsif f.object.may_unschedule? %>
-      <%= f.button :button, "Save & Unschedule",
+    <% end %>
+
+    <% if f.object.scheduled? %>
+      <%= f.button :button, "Unschedule",
         type:           :submit,
         name:           "step",
         value:          "unschedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% elsif f.object.persisted? %>
+      <%= f.button :button, "Schedule",
+        type:           :submit,
+        name:           "step",
+        value:          "schedule",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>

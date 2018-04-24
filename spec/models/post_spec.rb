@@ -175,6 +175,14 @@ RSpec.describe Post, type: :model do
         it { should     validate_presence_of(:slug        ) }
         it { should_not validate_presence_of(:published_at) }
         it { should     validate_presence_of(:publish_on  ) }
+
+        specify "publish_on is future" do
+          should be_valid
+
+          subject.publish_on = Date.today
+
+          should_not be_valid
+        end
       end
 
       context "published" do

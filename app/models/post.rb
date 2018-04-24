@@ -78,6 +78,8 @@ class Post < ApplicationRecord
   validates :published_at, presence: true, if: :published?
   validates :publish_on,   presence: true, if: :scheduled?
 
+  validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
+
   #############################################################################
   # HOOKS.
   #############################################################################
