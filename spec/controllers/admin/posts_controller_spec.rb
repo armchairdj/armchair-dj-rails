@@ -693,26 +693,6 @@ RSpec.describe Admin::PostsController, type: :controller do
             ) }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              # allow_any_instance_of(Post).to receive(:can_unpublish?).and_return(false)
-            end
-
-            it "renders edit with message" do
-              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
-
-              should successfully_render("admin/posts/edit").with_flash(
-                :error, "admin.flash.posts.error.unpublish"
-              )
-
-              should define_only_the_standalone_tab
-
-              should assign(post, :post).with_attributes(valid_params).and_be_invalid
-
-              expect(post.reload).to_not be_draft
-            end
-          end
-
           context "with invalid params" do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
@@ -752,29 +732,6 @@ RSpec.describe Admin::PostsController, type: :controller do
             ) }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              # allow_any_instance_of(Post).to receive(:can_unpublish?).and_return(false)
-            end
-
-            it "renders edit with message" do
-              put :update, params: { step: "unpublish", id: post.to_param, post: valid_params }
-
-              should successfully_render("admin/posts/edit").with_flash(
-                :error, "admin.flash.posts.error.unpublish"
-              )
-
-              should define_only_the_review_tabs.and_select("post-choose-work")
-
-              should assign(post, :post).with_attributes({
-                body:            valid_params["body"   ],
-                current_work_id: valid_params["work_id"]
-              }).and_be_invalid
-
-              expect(post.reload).to be_published
-            end
-          end
-
           context "with invalid params" do
             it "unpublishes and renders edit with errors" do
               put :update, params: { step: "unpublish", id: post.to_param, post: invalid_params }
@@ -791,6 +748,16 @@ RSpec.describe Admin::PostsController, type: :controller do
             end
           end
         end
+      end
+
+      context "scheduling" do
+        pending "standalone"
+        pending "review"
+      end
+
+      context "unscheduling" do
+        pending "standalone"
+        pending "review"
       end
     end
 

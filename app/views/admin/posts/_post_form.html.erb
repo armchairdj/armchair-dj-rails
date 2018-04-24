@@ -13,21 +13,39 @@
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Save" %>
+    <%= f.button :submit, "Save Draft" %>
 
-    <% if f.object.persisted? && f.object.non_live? %>
-      <%= f.button :button, "Save and Publish/Schedule",
+    <% if f.object.may_publish? %>
+      <%= f.button :button, "Save & Publish",
         type:           :submit,
         name:           "step",
         value:          "publish",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
-    <% elsif f.object.live? %>
-      <%= f.button :button, "Save and Unpublish",
+    <% elsif f.object.may_unpublish? %>
+      <%= f.button :button, "Save & Unpublish",
         type:           :submit,
         name:           "step",
         value:          "unpublish",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% end %>
+
+    <% if f.object.may_schedule? %>
+      <%= f.button :button, "Save & Schedule",
+        type:           :submit,
+        name:           "step",
+        value:          "schedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% elsif f.object.may_unschedule? %>
+      <%= f.button :button, "Save & Unschedule",
+        type:           :submit,
+        name:           "step",
+        value:          "unschedule",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>

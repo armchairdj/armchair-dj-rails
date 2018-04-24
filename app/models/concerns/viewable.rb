@@ -31,7 +31,7 @@ module Viewable
   end
 
   def non_viewable_posts
-    self.posts.non_published.reverse_cron
+    self.posts.not_published.reverse_cron
   end
 
   def viewable_works

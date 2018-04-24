@@ -891,280 +891,196 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    describe "#update_and_publish" do
-      before(:each) do
-        allow(subject).to receive(:update  ).and_call_original
-        allow(subject).to receive(:publish!).and_call_original
-      end
-
-      subject { create(:standalone_post) }
-
-      context "valid params and valid transition" do
-        let(:params) { { "title" => "New title" } }
-
-        it "updates, publishes and returns true" do
-          expect(subject).to receive(:update  )
-          expect(subject).to receive(:publish!)
-
-          expect(subject.update_and_publish(params)).to eq(true)
-
-          subject.reload
-
-          expect(subject.title       ).to eq(params["title"])
-          expect(subject.published?  ).to eq(true)
-          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-        end
-      end
-
-      context "valid params and invalid transition" do
-        let(:params) { { "title" => "New title" } }
+    context "update-transition methods" do
+      describe "#update_and_publish" do
+        subject { create(:standalone_post) }
 
         before(:each) do
-          allow(subject).to receive(:ready_to_publish?).and_return(false)
+          allow(subject).to receive(:update  ).and_call_original
+          allow(subject).to receive(:publish!).and_call_original
         end
 
-        it "updates, attempts publish and returns false" do
-          expect(subject).to receive(:update  )
-          expect(subject).to receive(:publish!)
+        context "valid" do
+          let(:params) { { "title" => "New title" } }
 
-          expect(subject.update_and_publish(params)).to eq(false)
+          it "updates, publishes and returns true" do
+            expect(subject).to receive(:update  )
+            expect(subject).to receive(:publish!)
 
-          subject.reload
+            expect(subject.update_and_publish(params)).to eq(true)
 
-          expect(subject.title       ).to eq(params["title"])
-          expect(subject.published?  ).to eq(false)
-          expect(subject.published_at).to eq(nil)
-        end
-      end
+            subject.reload
 
-      context "invalid params" do
-        let(:params) { { "title" => "", "body" => "" } }
-
-        it "does not update, does not attempt publish and returns false" do
-          expect(subject).to     receive(:update  )
-          expect(subject).to_not receive(:publish!)
-
-          expect(subject.update_and_publish(params)).to eq(false)
-
-          expect(subject.title).to eq(nil)
-
-          subject.reload
-
-          expect(subject.title       ).to_not eq(nil)
-          expect(subject.published?  ).to     eq(false)
-          expect(subject.published_at).to     eq(nil)
+            expect(subject.title       ).to eq(params["title"])
+            expect(subject.published?  ).to eq(true)
+            expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+          end
         end
 
-        it "manually adds errors on empty body" do
-          subject.update_and_publish(params)
+        context "invalid" do
+          let(:params) { { "title" => "", "body" => "" } }
 
-          expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
-        end
-      end
-    end
+          it "does not update, does not attempt publish and returns false" do
+            expect(subject).to     receive(:update  )
+            expect(subject).to_not receive(:publish!)
 
-    describe "#update_and_unpublish" do
-      before(:each) do
-        allow(subject).to receive(:update    ).and_call_original
-        allow(subject).to receive(:unpublish!).and_call_original
-      end
+            expect(subject.update_and_publish(params)).to eq(false)
 
-      subject { create(:song_review, :published) }
+            expect(subject.title).to eq(nil)
 
-      context "valid params and valid transition" do
-        let(:params) { { "work_id" => create(:song).id } }
+            subject.reload
 
-        it "unpublishes, updates, and returns true" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+            expect(subject.title       ).to_not eq(nil)
+            expect(subject.published?  ).to     eq(false)
+            expect(subject.published_at).to     eq(nil)
+          end
 
-          expect(subject.update_and_unpublish(params)).to eq(true)
+          it "manually adds errors on empty body" do
+            subject.update_and_publish(params)
 
-          subject.reload
-
-          expect(subject.work_id     ).to eq(params["work_id"])
-          expect(subject.published?  ).to eq(false)
-          expect(subject.published_at).to eq(nil)
+            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+          end
         end
       end
 
-      context "valid params and invalid transition" do
-        let(:params) { { "work_id" => create(:song).id } }
+      describe "#update_and_unpublish" do
+        subject { create(:song_review, :published) }
 
         before(:each) do
-          # TODO BJD This doesn't really test what I want it to,
-          # but may_unpublish? doesn't seem to be stubbable.
-          subject.unpublish!
+          allow(subject).to receive(:update    ).and_call_original
+          allow(subject).to receive(:unpublish!).and_call_original
         end
 
-        it "attempts unpublish, updates and returns false" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+        context "valid" do
+          let(:params) { { "work_id" => create(:song).id } }
 
-          expect(subject.update_and_unpublish(params)).to eq(false)
+          it "unpublishes, updates, and returns true" do
+            expect(subject).to receive(:update    )
+            expect(subject).to receive(:unpublish!)
 
-          subject.reload
+            expect(subject.update_and_unpublish(params)).to eq(true)
 
-          expect(subject.work_id     ).to eq(params["work_id"])
-          expect(subject.draft?      ).to eq(true)
-          expect(subject.published_at).to eq(nil)
+            subject.reload
+
+            expect(subject.work_id     ).to eq(params["work_id"])
+            expect(subject.published?  ).to eq(false)
+            expect(subject.published_at).to eq(nil)
+          end
         end
-      end
 
-      context "invalid params" do
-        let(:params) { { "work_id" => "", "body" => "" } }
+        context "invalid" do
+          let(:params) { { "work_id" => "", "body" => "" } }
 
-        it "unpublishes, does not update and returns false" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+          it "unpublishes, does not update and returns false" do
+            expect(subject).to receive(:update    )
+            expect(subject).to receive(:unpublish!)
 
-          expect(subject.update_and_unpublish(params)).to eq(false)
+            expect(subject.update_and_unpublish(params)).to eq(false)
 
-          expect(subject.work_id).to eq(nil)
+            expect(subject.work_id).to eq(nil)
 
-          subject.reload
+            subject.reload
 
-          expect(subject.work_id     ).to_not eq(nil)
-          expect(subject.published?  ).to     eq(false)
-          expect(subject.published_at).to     eq(nil)
-        end
-      end
-    end
-
-    describe "#update_and_schedule" do
-      before(:each) do
-        allow(subject).to receive(:update   ).and_call_original
-        allow(subject).to receive(:schedule!).and_call_original
-      end
-
-      subject { create(:standalone_post) }
-
-      context "valid params and valid transition" do
-        let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
-
-        it "updates, schedules and returns true" do
-          expect(subject).to receive(:update   )
-          expect(subject).to receive(:schedule!)
-
-          expect(subject.update_and_schedule(params)).to eq(true)
-
-          subject.reload
-
-          expect(subject.scheduled?  ).to eq(true)
-          expect(subject.title       ).to eq(params["title"])
-          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+            expect(subject.work_id     ).to_not eq(nil)
+            expect(subject.published?  ).to     eq(false)
+            expect(subject.published_at).to     eq(nil)
+          end
         end
       end
 
-      context "valid params and invalid transition" do
-        let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
+      describe "#update_and_schedule" do
+        subject { create(:standalone_post) }
 
         before(:each) do
-          allow(subject).to receive(:ready_to_publish?).and_return(false)
+          allow(subject).to receive(:update   ).and_call_original
+          allow(subject).to receive(:schedule!).and_call_original
         end
 
-        it "updates, attempts schedule and returns false" do
-          expect(subject).to receive(:update  )
-          expect(subject).to receive(:schedule!)
+        context "valid" do
+          let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
 
-          expect(subject.update_and_schedule(params)).to eq(false)
+          it "updates, schedules and returns true" do
+            expect(subject).to receive(:update   )
+            expect(subject).to receive(:schedule!)
 
-          subject.reload
+            expect(subject.update_and_schedule(params)).to eq(true)
 
-          expect(subject.draft?      ).to eq(true)
-          expect(subject.title       ).to eq(params["title"])
-          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-        end
-      end
+            subject.reload
 
-      context "invalid params" do
-        let(:params) { { "title" => "", "body" => "" } }
-
-        it "does not update, does not attempt schedule and returns false" do
-          expect(subject).to     receive(:update   )
-          expect(subject).to_not receive(:schedule!)
-
-          expect(subject.update_and_schedule(params)).to eq(false)
-
-          expect(subject.title).to eq(nil)
-
-          subject.reload
-
-          expect(subject.draft?      ).to     eq(true)
-          expect(subject.title       ).to_not eq(nil)
-          expect(subject.published_at).to     eq(nil)
+            expect(subject.scheduled?  ).to eq(true)
+            expect(subject.title       ).to eq(params["title"])
+            expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+          end
         end
 
-        it "manually adds errors on empty body" do
-          subject.update_and_schedule(params)
+        context "invalid" do
+          let(:params) { { "title" => "", "body" => "" } }
 
-          expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
-        end
-      end
-    end
+          it "does not update, does not attempt schedule and returns false" do
+            expect(subject).to     receive(:update   )
+            expect(subject).to_not receive(:schedule!)
 
-    describe "#update_and_unschedule" do
-      before(:each) do
-        allow(subject).to receive(:update     ).and_call_original
-        allow(subject).to receive(:unschedule!).and_call_original
-      end
+            expect(subject.update_and_schedule(params)).to eq(false)
 
-      subject { create(:song_review, :published) }
+            expect(subject.title).to eq(nil)
 
-      context "valid params and valid transition" do
-        let(:params) { { "work_id" => create(:song).id } }
+            subject.reload
 
-        it "unschedules, updates, and returns true" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+            expect(subject.draft?      ).to     eq(true)
+            expect(subject.title       ).to_not eq(nil)
+            expect(subject.published_at).to     eq(nil)
+          end
 
-          expect(subject.update_and_unpublish(params)).to eq(true)
+          it "manually adds errors on empty body" do
+            subject.update_and_schedule(params)
 
-          subject.reload
-
-          expect(subject.work_id     ).to eq(params["work_id"])
-          expect(subject.published?  ).to eq(false)
-          expect(subject.published_at).to eq(nil)
+            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+          end
         end
       end
 
-      context "valid params and invalid transition" do
-        let(:params) { { "work_id" => create(:song).id } }
+      describe "#update_and_unschedule" do
+        subject { create(:song_review, :scheduled) }
 
         before(:each) do
-          allow(subject).to receive(:can_unpublish?).and_return(false)
+          allow(subject).to receive(:update     ).and_call_original
+          allow(subject).to receive(:unschedule!).and_call_original
         end
 
-        it "attempts unpublish, updates and returns false" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+        context "valid" do
+          let(:params) { { "work_id" => create(:song).id } }
 
-          expect(subject.update_and_unpublish(params)).to eq(false)
+          it "unschedules, updates, and returns true" do
+            expect(subject).to receive(:update     )
+            expect(subject).to receive(:unschedule!)
 
-          subject.reload
+            expect(subject.update_and_unschedule(params)).to eq(true)
 
-          expect(subject.work_id     ).to eq(params["work_id"])
-          expect(subject.published?  ).to eq(true)
-          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+            subject.reload
+
+            expect(subject.work_id     ).to eq(params["work_id"])
+            expect(subject.scheduled?  ).to eq(false)
+            expect(subject.published_at).to eq(nil)
+          end
         end
-      end
 
-      context "invalid params" do
-        let(:params) { { "work_id" => "", "body" => "" } }
+        context "invalid" do
+          let(:params) { { "work_id" => "" } }
 
-        it "unpublishes, does not update and returns false" do
-          expect(subject).to receive(:update    )
-          expect(subject).to receive(:unpublish!)
+          it "unschedules, fails update and returns false" do
+            expect(subject).to receive(:update     )
+            expect(subject).to receive(:unschedule!)
 
-          expect(subject.update_and_unpublish(params)).to eq(false)
+            expect(subject.update_and_unschedule(params)).to eq(false)
 
-          expect(subject.work_id).to eq(nil)
+            expect(subject.work_id).to eq(nil)
 
-          subject.reload
+            subject.reload
 
-          expect(subject.work_id     ).to_not eq(nil)
-          expect(subject.published?  ).to     eq(false)
-          expect(subject.published_at).to     eq(nil)
+            expect(subject.work_id     ).to_not eq(nil)
+            expect(subject.scheduled?  ).to     eq(false)
+            expect(subject.published_at).to     eq(nil)
+          end
         end
       end
     end
