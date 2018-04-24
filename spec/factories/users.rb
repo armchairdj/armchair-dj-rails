@@ -7,6 +7,11 @@ FactoryBot.define do
   factory :user do
     factory :minimal_user, parent: :member do; end
 
+    factory :complete_user, parent: :minimal_user do
+      bio "This is a bio."
+      middle_name "J."
+    end
+
     trait :valid do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }

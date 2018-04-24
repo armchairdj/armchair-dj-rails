@@ -104,7 +104,9 @@ protected
       user.permit(
         :first_name,
         :last_name,
+        :middle_name,
         :email,
+        :username,
         :password
       )
     end
@@ -115,7 +117,10 @@ protected
       user.permit(
         :first_name,
         :last_name,
+        :middle_name,
         :email,
+        :username,
+        :bio,
         :current_password
       )
     end

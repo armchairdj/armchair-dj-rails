@@ -111,9 +111,12 @@ private
     params.fetch(:user, {}).permit(
       :first_name,
       :last_name,
+      :middle_name,
       :email,
+      :username,
       :password,
-      :role
+      :role,
+      :bio
     )
   end
 end

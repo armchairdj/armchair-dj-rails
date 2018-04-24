@@ -149,8 +149,8 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
 
     describe "POST #create" do
-      let(  :valid_params) { attributes_for(:minimal_user) }
-      let(:invalid_params) { attributes_for(:minimal_user).except(:first_name) }
+      let(  :valid_params) { attributes_for(:complete_user) }
+      let(:invalid_params) { attributes_for(:complete_user).except(:first_name) }
 
       context "with valid params" do
         it "creates a new User" do
