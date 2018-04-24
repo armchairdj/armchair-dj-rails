@@ -2,16 +2,16 @@
   @title = [post_type(@post), post_title(@post)]
 %>
 
-<%= content_for(:page_header) do %>
-  <%= content_tag(:header, class: "page-header") do %>
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "post-header") do %>
     <% if @post.standalone? %>
       <%= content_tag(:h1, @post.title) %>
     <% else %>
-      <%= content_tag(:h4, post_type(@post)) %>
+      <%= content_tag(:h3, post_type(@post)) %>
       <%= content_tag(:h1) do %>
         <%= content_tag(:span, @post.work.display_creator, class: "creators") %>
         <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
-        <%= content_tag(:span, @post.work.subtitle,        class: "title"   ) %>
+        <%= content_tag(:span, @post.work.subtitle,        class: "subtitle") %>
       <% end %>
     <% end %>
   <% end %>
@@ -20,5 +20,7 @@
 <%= formatted_post_body(@post) %>
 
 <%= content_tag(:div, class: "meta") do %>
-  Posted on <%= content_tag(:div, post_published_date(@post)) %>
+  Posted
+  by <%= @post.user.username %>
+  on <%= content_tag(:span, post_published_date(@post)) %>
 <% end %>

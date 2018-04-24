@@ -101,7 +101,7 @@ gem "nokogiri"
 # Pagination.
 gem "kaminari"
 
-# Don"t allow empty strings into the database.
+# Don't allow empty strings into the database.
 gem "nilify_blanks"
 
 # Ordinal ranking.

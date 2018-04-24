@@ -40,6 +40,10 @@ RSpec.describe StyleGuidesController, type: :routing do
         expect(get: "/style_guide/svg").to route_to("style_guides#show", template: "svg")
       end
 
+      it "routes to #tabgroup" do
+        expect(get: "/style_guide/tabgroup").to route_to("style_guides#show", template: "tabgroup")
+      end
+
       it "routes to #text" do
         expect(get: "/style_guide/text").to route_to("style_guides#show", template: "text")
       end

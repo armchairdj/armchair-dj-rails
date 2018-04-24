@@ -1,21 +1,35 @@
-header.page-header {
+header.standard-page-header {
+  @include bottom-margin-only();
+  @include clearfix();
+
+  h3 {
+
+  }
+
+  h1 {
+    span {
+      display: block;
+
+      &.creators {
+
+      }
+
+      &.title {
+
+      }
+
+      &.subtitle {
+
+      }
+    }
+  }
+}
+
+header.post-header {
   @include bottom-margin-only();
   @include clearfix();
 
   h1 {
     text-transform: uppercase;
-  }
-
-  &.auth {
-    a,
-    span {
-      display: inline-block;
-      @include right-margin(.6em);
-    }
-
-    a {
-      font-size: .7em;
-      text-transform: uppercase;
-    }
   }
 }

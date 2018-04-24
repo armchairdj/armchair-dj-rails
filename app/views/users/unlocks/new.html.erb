@@ -7,10 +7,10 @@
   <%= f.full_error :unlock_token %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= f.input :email, required: true %>
+    <%= f.input :email, required: true, placeholder: "name@domain.com" %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Resend unlock instructions" %>
+    <%= f.button :submit, "Resend" %>
   <% end %>
 <% end %>

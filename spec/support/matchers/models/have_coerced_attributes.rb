@@ -19,6 +19,6 @@ RSpec::Matchers.define :have_coerced_attributes do |attributes|
   end
 
   failure_message do |actual|
-    "expected #{actual} to have nillable attributes #{attributes.inspect} but didn't"
+    "expected #{actual} to have coerced attributes #{attributes.inspect} but didn't"
   end
 end

@@ -38,6 +38,25 @@ fieldset {
     }
   }
 
+  &.name {
+    @include clearfix();
+
+    .form-field {
+      float: left;
+      margin-bottom: 0;
+
+      &.user_first_name,
+      &.user_last_name {
+        width: 33%;
+      }
+
+      &.user_middle_name {
+        @include horizontal-padding(1rem);
+        width: 34%;
+      }
+    }
+  }
+
   &.contribution {
     @include border-bottom($padding: $spacing-s, $color: $armchair-blue-lightest, $style: solid);
     @include bottom-margin-only($spacing-s);
@@ -46,16 +65,16 @@ fieldset {
       @include clearfix();
       @include bottom-margin-only($spacing-s);
 
-      .form-field:first-child {
+
+      .form-field {
         float: left;
         width: 55%;
         margin-bottom: 0;
-      }
 
-      .form-field:last-child {
-        float: right;
-        width: 40%;
-        margin-bottom: 0;
+        &:last-child {
+          width: 45%;
+          padding-left: 1rem;
+        }
       }
     }
   }

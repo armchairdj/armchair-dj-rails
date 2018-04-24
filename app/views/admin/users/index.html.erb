@@ -19,6 +19,8 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Username") %>
+            <%= content_tag(:th, "Email") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
@@ -27,6 +29,8 @@
           <% @users.each do |user| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, user.display_name) %>
+              <%= content_tag(:td, user.username) %>
+              <%= content_tag(:td, user.email) %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_view_link(user) %>
                 <%= admin_update_link(user) %>

@@ -1,6 +1,6 @@
 require "ffaker"
 
-brian = FactoryBot.create(:admin, first_name: "Armchair", last_name: "DJ")
+brian = FactoryBot.create(:admin, username: "armchairdj", first_name: "Brian", middle_name: "J.", last_name: "Dillard", email: "armchairdj@gmail.com", password: "password1234")
 
 1.times do
   FactoryBot.create(                     :song_review, :draft,     user: brian, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))

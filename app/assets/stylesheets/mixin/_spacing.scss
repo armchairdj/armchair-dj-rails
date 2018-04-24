@@ -59,6 +59,11 @@
   @include left-margin($margin);
 }
 
+@mixin horizontal-margin($size) {
+  margin-left: $size;
+  margin-right: $size;
+}
+
 @mixin horizontal-padding($size) {
   padding-left: $size;
   padding-right: $size;

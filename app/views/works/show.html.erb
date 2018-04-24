@@ -2,6 +2,17 @@
   @title = [@work.display_creator, @work.title]
 %>
 
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "post-header") do %>
+    <%= content_tag(:h3, @work.human_medium) %>
+    <%= content_tag(:h1) do %>
+      <%= content_tag(:span, @work.display_creator, class: "creators") %>
+      <%= content_tag(:span, @work.title,           class: "title"   ) %>
+      <%= content_tag(:span, @work.subtitle,        class: "subtitle") %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Posts About") %>

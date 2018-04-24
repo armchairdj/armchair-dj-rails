@@ -93,17 +93,23 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
+        current_password: "Current Password"
+        current_sign_in_at: "Last Login At"
+        email: "Email Address"
+        first_name: "First Name"
+        last_name: "Last Name"
+        middle_name: "Middle Name or Initial"
+        password_confirmation: "Confirm Password"
         roles:
           guest:       "Guest"
           member:      "Member"
           contributor: "Contributor"
           admin:       "Admin"
+        username: "Handle"
       work:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
-        title:      "Title"
-        subtitle:   "Subtitle or Version"
         media:
           song:        "Song"
           album:       "Album"
@@ -120,6 +126,8 @@ en:
           software:    "Software"
           hardware:    "Hardware"
           product:     "Product"
+        subtitle:   "Subtitle or Version"
+        title:      "Title"
     errors:
       models:
         contribution:
