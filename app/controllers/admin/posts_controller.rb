@@ -76,19 +76,17 @@ class Admin::PostsController < AdminController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    return   publish_and_respond if params[:step] ==   "publish"
-    return unpublish_and_respond if params[:step] == "unpublish"
-
-    respond_to do |format|
-      if @post.update(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.update") }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        prepare_form
-
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    case params[:step]
+    when "publish"
+      respond_to_update :update_and_publish,    "admin.flash.posts.success.publish",    :published?, "admin.flash.posts.error.publish"
+    when "unpublish"
+      respond_to_update :update_and_unpublish,  "admin.flash.posts.success.unpublish",  :draft?,     "admin.flash.posts.error.unpublish"
+    when "schedule"
+      respond_to_update :update_and_schedule,   "admin.flash.posts.success.schedule",   :scheduled?, "admin.flash.posts.error.schedule"
+    when "unschedule"
+      respond_to_update :update_and_unschedule, "admin.flash.posts.success.unschedule", :draft?,     "admin.flash.posts.error.unschedule"
+    else
+      respond_to_update :update,                "admin.flash.posts.success.update"
     end
   end
 
@@ -228,38 +226,20 @@ private
     end
   end
 
-  def publish_and_respond
+  def respond_to_update(update_method, success, success_method = nil, failure = nil)
     respond_to do |format|
-      if @post.update_and_publish(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.publish") }
+      if @post.send(update_method, @sanitized_params)
+        format.html { redirect_to admin_post_path(@post), success: I18n.t(success) }
         format.json { render :show, status: :ok, location: @post }
       else
         prepare_form
 
-        if @post.published?
-          flash.now[:success] = I18n.t("admin.flash.posts.success.publish")
-        else
-          flash.now[:error]  = I18n.t("admin.flash.posts.error.publish")
-        end
-
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def unpublish_and_respond
-    respond_to do |format|
-      if @post.update_and_unpublish(@sanitized_params)
-        format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.unpublish") }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        prepare_form
-
-        if @post.draft?
-          flash.now[:success] = I18n.t("admin.flash.posts.success.unpublish")
-        else
-          flash.now[:error]  = I18n.t("admin.flash.posts.error.unpublish")
+        if success_method
+          if @post.send(success_method)
+            flash.now[:success] = I18n.t(success)
+          else
+            flash.now[:error  ] = I18n.t(failure)
+          end
         end
 
         format.html { render :edit }

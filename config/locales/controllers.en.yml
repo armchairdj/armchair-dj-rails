@@ -24,9 +24,13 @@ en:
           update:  "Post updated."
           publish: "Post published."
           unpublish: "Post unpublished."
+          schedule: "Post published."
+          unschedule: "Post unpublished."
         error:
           publish: "Post could not be published."
           unpublish: "Post could not be unpublished."
+          schedule: "Post could not be scheduled."
+          unschedule: "Post could not be unscheduled."
       sessions:
         success:
           missing: "Please log in to access that."

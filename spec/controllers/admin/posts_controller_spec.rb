@@ -543,7 +543,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "publishing" do
         context "standalone" do
-          let(:post) { create(:standalone_post) }
+          let(:post) { create(:standalone_post, :draft) }
 
           let(  :valid_params) { { "body" => "New body.", "title" => "New title." } }
           let(:invalid_params) { { "body" => ""         , "title" => ""           } }
@@ -576,11 +576,11 @@ RSpec.describe Admin::PostsController, type: :controller do
                 :error, "admin.flash.posts.error.publish"
               )
 
-              should assign(post, :post).with_attributes(valid_params).and_be_valid
-
               should define_only_the_standalone_tab
 
-              expect(post.reload).to be_draft
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(post.reload).to_not be_published
             end
           end
 
@@ -599,13 +599,13 @@ RSpec.describe Admin::PostsController, type: :controller do
                 title: :blank
               })
 
-              expect(assigns(:post)).to be_draft
+              expect(post.reload).to_not be_published
             end
           end
         end
 
         context "review" do
-          let(:post) { create(:song_review) }
+          let(:post) { create(:song_review, :draft) }
 
           let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id } }
           let(:invalid_params) { { "body" => ""         , "work_id" => ""               } }
@@ -631,7 +631,7 @@ RSpec.describe Admin::PostsController, type: :controller do
               allow_any_instance_of(Post).to receive(:ready_to_publish?).and_return(false)
             end
 
-            it "renders edit with message" do
+            it "updates post and renders edit with message" do
               put :update, params: { step: "publish", id: post.to_param, post: valid_params }
 
               should successfully_render("admin/posts/edit").with_flash(
@@ -645,12 +645,12 @@ RSpec.describe Admin::PostsController, type: :controller do
                 current_work_id: valid_params["work_id"]
               })
 
-              expect(post.reload).to be_draft
+              expect(post.reload).to_not be_published
             end
           end
 
           context "with invalid params" do
-            it "renders edit" do
+            it "fails to publish and renders edit with message and errors" do
               put :update, params: { step: "publish", id: post.to_param, post: invalid_params }
 
               should successfully_render("admin/posts/edit").with_flash(
@@ -664,7 +664,7 @@ RSpec.describe Admin::PostsController, type: :controller do
                 work_id: :blank
               })
 
-              expect(assigns(:post)).to be_draft
+              expect(post.reload).to_not be_published
             end
           end
         end
@@ -751,13 +751,212 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "scheduling" do
-        pending "standalone"
-        pending "review"
+        context "standalone" do
+          let(:post) { create(:standalone_post, :draft) }
+
+          let(  :valid_params) { { "body" => "New body.", "title" => "New title.", published_at: "01/01/2050" } }
+          let(:invalid_params) { { "body" => "",          "title" => ""                                       } }
+
+          context "with valid params" do
+            before(:each) do
+              put :update, params: { step: "schedule", id: post.to_param, post: valid_params }
+            end
+
+            it "updates and schedules the requested post" do
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(assigns(:post)).to be_scheduled
+            end
+
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.schedule"
+            ) }
+          end
+
+          context "with failed transition" do
+            before(:each) do
+              allow_any_instance_of(Post).to receive(:ready_to_publish?).and_return(false)
+            end
+
+            it "updates post and renders edit with message" do
+              put :update, params: { step: "schedule", id: post.to_param, post: valid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.schedule"
+              )
+
+              should define_only_the_standalone_tab
+
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(post.reload).to_not be_scheduled
+            end
+          end
+
+          context "with invalid params" do
+            it "fails to schedule and renders edit with message and errors" do
+              put :update, params: { step: "schedule", id: post.to_param, post: invalid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.schedule"
+              )
+
+              should define_only_the_standalone_tab
+
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
+                body:  :blank_during_publish,
+                title: :blank
+              })
+
+              expect(post.reload).to_not be_scheduled
+            end
+          end
+        end
+
+        context "review" do
+          let(:post) { create(:song_review) }
+
+          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id, published_at: "01/01/2050" } }
+          let(:invalid_params) { { "body" => ""         , "work_id" => ""                                           } }
+
+          context "with valid params" do
+            before(:each) do
+              put :update, params: { step: "schedule", id: post.to_param, post: valid_params }
+            end
+
+            it "updates and schedules the requested post" do
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(assigns(:post)).to be_scheduled
+            end
+
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.schedule"
+            ) }
+          end
+
+          context "with failed transition" do
+            before(:each) do
+              allow_any_instance_of(Post).to receive(:ready_to_publish?).and_return(false)
+            end
+
+            it "updates post and renders edit with message" do
+              put :update, params: { step: "schedule", id: post.to_param, post: valid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.schedule"
+              )
+
+              should define_only_the_review_tabs.and_select("post-choose-work")
+
+              should assign(post, :post).with_attributes({
+                body:            valid_params["body"   ],
+                current_work_id: valid_params["work_id"]
+              })
+
+              expect(post.reload).to_not be_scheduled
+            end
+          end
+
+          context "with invalid params" do
+            it "fails to schedule and renders edit with message and errors" do
+              put :update, params: { step: "schedule", id: post.to_param, post: invalid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(
+                :error, "admin.flash.posts.error.schedule"
+              )
+
+              should define_only_the_review_tabs.and_select("post-choose-work")
+
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
+                body:    :blank_during_publish,
+                work_id: :blank
+              })
+
+              expect(post.reload).to_not be_scheduled
+            end
+          end
+        end
       end
 
       context "unscheduling" do
-        pending "standalone"
-        pending "review"
+        context "standalone" do
+          let(:post) { create(:standalone_post, :scheduled) }
+
+          let(  :valid_params) { { "body" => "", "title" => "New title."} }
+          let(:invalid_params) { { "body" => "", "title" => ""          } }
+
+          context "with valid params" do
+            before(:each) do
+              put :update, params: { step: "unschedule", id: post.to_param, post: valid_params }
+            end
+
+            it "unschedules and updates the requested post" do
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(assigns(:post)).to be_draft
+            end
+
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.unschedule"
+            ) }
+          end
+
+          context "with invalid params" do
+            it "unschedules and renders edit with errors" do
+              put :update, params: { step: "unschedule", id: post.to_param, post: invalid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(:error, nil)
+
+              should define_only_the_standalone_tab
+
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
+                title: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
+            end
+          end
+        end
+
+        context "review" do
+          let(:post) { create(:song_review, :scheduled) }
+
+          let(  :valid_params) { { "body" => "", "work_id" => create(:song).id } }
+          let(:invalid_params) { { "body" => "", "work_id" => ""               } }
+
+          context "with valid params" do
+            before(:each) do
+              put :update, params: { step: "unschedule", id: post.to_param, post: valid_params }
+            end
+
+            it "unschedules and updates the requested post" do
+              should assign(post, :post).with_attributes(valid_params).and_be_valid
+
+              expect(assigns(:post)).to be_draft
+            end
+
+            it { should send_user_to(admin_post_path(post)).with_flash(
+              :success, "admin.flash.posts.success.unschedule"
+            ) }
+          end
+
+          context "with invalid params" do
+            it "unschedules and renders edit with errors" do
+              put :update, params: { step: "unschedule", id: post.to_param, post: invalid_params }
+
+              should successfully_render("admin/posts/edit").with_flash(:error, nil)
+
+              should define_only_the_review_tabs.and_select("post-choose-work")
+
+              should assign(post, :post).with_attributes(invalid_params).with_errors({
+                work_id: :blank
+              })
+
+              expect(assigns(:post)).to be_draft
+            end
+          end
+        end
       end
     end
 
