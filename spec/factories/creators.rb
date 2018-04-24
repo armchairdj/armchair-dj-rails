@@ -10,7 +10,21 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        create(:post, body: "body", work_attributes: {
+        create(:post, :draft, body: "body", work_attributes: {
+          "title"                    => "#{FFaker::Music.song}",
+          "medium"                   => "song",
+          "contributions_attributes" => {
+            "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          }
+        })
+
+        creator.reload
+      end
+    end
+
+    trait :with_scheduled_post do
+      after(:create) do |creator|
+        create(:post, :scheduled, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
           "contributions_attributes" => {
@@ -36,9 +50,13 @@ FactoryBot.define do
       end
     end
 
-    trait :with_published_post_and_draft_post do
+    trait :with_one_of_each_post_status do
       after(:create) do |creator|
         create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
+          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        }}))
+
+        create(:song_review, :scheduled, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
           "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
         }}))
 

@@ -16,6 +16,14 @@ FactoryBot.define do
       end
     end
 
+    trait :with_scheduled_post do
+      after(:create) do |work|
+        create(:song_review, :scheduled, work_id: work.id)
+
+        work.reload
+      end
+    end
+
     trait :with_published_post do
       after(:create) do |work|
         create(:song_review, :published, work_id: work.id)
@@ -24,9 +32,10 @@ FactoryBot.define do
       end
     end
 
-    trait :with_published_post_and_draft_post do
+    trait :with_one_of_each_post_status do
       after(:create) do |work|
         create(:song_review, :draft,     work_id: work.id)
+        create(:song_review, :scheduled, work_id: work.id)
         create(:song_review, :published, work_id: work.id)
 
         work.reload

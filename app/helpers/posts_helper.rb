@@ -29,7 +29,7 @@ module PostsHelper
   def post_status_icon(post)
     return post_draft_icon     if post.draft?
     return post_scheduled_icon if post.scheduled?
-    return post_live_icon      if post.live?
+    return post_published_icon if post.published?
   end
 
   def post_draft_icon
@@ -38,9 +38,9 @@ module PostsHelper
     )
   end
 
-  def post_live_icon
+  def post_published_icon
     svg_icon("open_iconic/lock-unlocked.svg",
-      title: "published", desc: "published icon", wrapper_class: "post-live"
+      title: "published", desc: "published icon", wrapper_class: "post-published"
     )
   end
 

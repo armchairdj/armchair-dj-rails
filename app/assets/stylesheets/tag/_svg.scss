@@ -3,7 +3,7 @@
     @include svg-path-fill($info-color);
   }
 
-  &.post-live {
+  &.post-published {
     @include svg() {
       @include svg-path-fill($success-color);
     }

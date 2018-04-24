@@ -31,7 +31,7 @@ module Viewable
   end
 
   def non_viewable_posts
-    self.posts.draft.reverse_cron
+    self.posts.non_published.reverse_cron
   end
 
   def viewable_works
@@ -49,15 +49,9 @@ module Viewable
 private
 
   def refresh_counts
-    draft     = posts.draft.count
-    published = posts.published.count
-    changed   = non_viewable_post_count != draft || viewable_post_count != published
+    self.non_viewable_post_count = posts.not_published.count
+    self.viewable_post_count     = posts.published.count
 
-    if changed
-      self.non_viewable_post_count = draft
-      self.viewable_post_count     = published
-    end
-
-    changed
+    non_viewable_post_count_changed? || viewable_post_count_changed?
   end
 end

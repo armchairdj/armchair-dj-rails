@@ -4,6 +4,8 @@ en:
       contribution:
         _destroy: "Remove this contribution"
         id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
         role_groupings:
           - "Creator"
           - "Music"
@@ -67,14 +69,22 @@ en:
           brand:                       "Brand"
       creator:
         id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
       post:
         id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
+        published_at: "Publish Date"
         work: "Work"
         statuses:
           draft:     "Draft"
+          scheduled: "Scheduled"
           published: "Published"
       user:
         id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
         roles:
           guest:       "Guest"
           member:      "Member"
@@ -82,6 +92,8 @@ en:
           admin:       "Admin"
       work:
         id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
         media:
           song:        "Song"
           album:       "Album"

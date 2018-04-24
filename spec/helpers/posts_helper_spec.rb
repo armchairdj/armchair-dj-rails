@@ -109,7 +109,7 @@ RSpec.describe PostsHelper, type: :helper do
   describe "icon methods" do
     pending "#post_status_icon"
     pending "#post_draft_icon"
-    pending "#post_live_icon"
+    pending "#post_published_icon"
     pending "#post_scheduled_icon"
   end
 end

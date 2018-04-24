@@ -10,14 +10,14 @@
     <% elsif action == :new %>
       <%= admin_list_link(@model_class) %>
     <% elsif action == :edit %>
-      <%= public_link unless public_link.nil? %>
       <%= admin_view_link(instance) %>
       <%= admin_destroy_link(instance) %>
+      <%= public_link unless public_link.nil? %>
       <%= admin_list_link(@model_class) %>
     <% elsif action == :show %>
-      <%= public_link unless public_link.nil? %>
       <%= admin_update_link(instance) %>
       <%= admin_destroy_link(instance) %>
+      <%= public_link unless public_link.nil? %>
       <%= admin_list_link(@model_class) %>
     <% end %>
   <% end %>

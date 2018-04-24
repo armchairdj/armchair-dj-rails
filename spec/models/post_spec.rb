@@ -33,16 +33,12 @@ RSpec.describe Post, type: :model do
   end
 
   context "scopes" do
-    let!(        :draft_review) { create(:song_review,     :draft    ) }
-    let!(    :scheduled_review) { create(:song_review,     :scheduled) }
-    let!(         :live_review) { create(:song_review,     :published) }
-    let!(    :draft_standalone) { create(:standalone_post, :draft    ) }
+    let!(:draft_standalone    ) { create(:standalone_post, :draft    ) }
+    let!(:draft_review        ) { create(:song_review,     :draft    ) }
     let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
-    let!(     :live_standalone) { create(:standalone_post, :published) }
-
-    before(:each) do
-      scheduled_standalone.update(published_at: 3.weeks.from_now)
-    end
+    let!(:scheduled_review    ) { create(:song_review,     :scheduled) }
+    let!(:published_standalone) { create(:standalone_post, :published) }
+    let!(:published_review    ) { create(:song_review,     :published) }
 
     context "for status" do
       describe "draft" do
@@ -52,24 +48,24 @@ RSpec.describe Post, type: :model do
         ]) }
       end
 
-      describe "published" do
-        specify { expect(described_class.published).to match_array([
-          live_review,
-          live_standalone,
-          scheduled_review,
-          scheduled_standalone
-        ]) }
-      end
-
-      describe "#live" do
-        specify { expect(described_class.live).to match_array([
-          live_review,
-          live_standalone
-        ]) }
-      end
-
       describe "#scheduled" do
         specify { expect(described_class.scheduled).to match_array([
+          scheduled_standalone,
+          scheduled_review
+        ]) }
+      end
+
+      describe "published" do
+        specify { expect(described_class.published).to match_array([
+          published_review,
+          published_standalone,
+        ]) }
+      end
+
+      describe "not_published" do
+        specify { expect(described_class.not_published).to match_array([
+          draft_review,
+          draft_standalone,
           scheduled_standalone,
           scheduled_review
         ]) }
@@ -80,7 +76,7 @@ RSpec.describe Post, type: :model do
       describe "standalone" do
         specify { expect(described_class.standalone).to match_array([
           draft_standalone,
-          live_standalone,
+          published_standalone,
           scheduled_standalone
         ]) }
       end
@@ -88,40 +84,40 @@ RSpec.describe Post, type: :model do
       describe "review" do
         specify { expect(described_class.review).to match_array([
           draft_review,
-          live_review,
+          published_review,
           scheduled_review
         ]) }
       end
     end
 
-    describe "reverse_cron" do
+    describe "reverse_cron" do # TODO BJD
       specify { expect(described_class.reverse_cron.to_a).to eq([
-        draft_review,
         draft_standalone,
+        draft_review,
         scheduled_standalone,
         scheduled_review,
-        live_standalone,
-        live_review,
+        published_review,
+        published_standalone,
       ]) }
     end
 
     pending "eager"
 
     describe "for_admin" do
-      specify { expect(described_class.for_admin).to match_array([
+      specify { expect(described_class.for_admin).to include(
         draft_review,
         draft_standalone,
-        live_standalone,
-        live_review,
-        scheduled_standalone,
-        scheduled_review
-      ]) }
+        published_review,
+        published_standalone,
+        scheduled_review,
+        scheduled_standalone
+      ) }
     end
 
     describe "for_site" do
       specify { expect(described_class.for_site).to match_array([
-        live_standalone,
-        live_review
+        published_standalone,
+        published_review
       ]) }
     end
   end
@@ -163,12 +159,28 @@ RSpec.describe Post, type: :model do
 
   context "validations" do
     context "conditional" do
-      subject { create(:minimal_post, :published) }
+      context "draft" do
+        subject { create(:minimal_post, :draft) }
+
+        it { should_not validate_presence_of(:body        ) }
+        it { should_not validate_presence_of(:slug        ) }
+        it { should_not validate_presence_of(:published_at) }
+      end
+
+      context "scheduled" do
+        subject { create(:minimal_post, :scheduled) }
+
+        it { should validate_presence_of(:body        ) }
+        it { should validate_presence_of(:slug        ) }
+        it { should validate_presence_of(:published_at) }
+      end
 
       context "published" do
-        it { should validate_presence_of(:body) }
+        subject { create(:minimal_post, :published) }
+
+        it { should validate_presence_of(:body        ) }
+        it { should validate_presence_of(:slug        ) }
         it { should validate_presence_of(:published_at) }
-        it { should validate_presence_of(:slug) }
       end
     end
 
@@ -206,92 +218,186 @@ RSpec.describe Post, type: :model do
   end
 
   context "aasm" do
-    let!(    :draft) { create(:standalone_post            ) }
+    let!(    :draft) { create(:standalone_post, :draft    ) }
+    let!(:scheduled) { create(:standalone_post, :scheduled) }
     let!(:published) { create(:standalone_post, :published) }
 
     describe "states" do
       specify { expect( Post.new).to have_state(:draft    ) }
       specify { expect(    draft).to have_state(:draft    ) }
+      specify { expect(scheduled).to have_state(:scheduled) }
       specify { expect(published).to have_state(:published) }
     end
 
     describe "booleans" do
-      describe "may_publish?" do
-        before(:each) do
-          allow(    draft).to receive(:can_publish?  ).and_return(true )
-          allow(published).to receive(:can_publish?  ).and_return(false)
+      before(:each) do
+        allow(    draft).to receive(:ready_to_publish?).and_return(true )
+        allow(scheduled).to receive(:ready_to_publish?).and_return(true )
+        allow(published).to receive(:ready_to_publish?).and_return(false)
+      end
+
+      describe "may_schedule?" do
+        specify "on draft" do
+          expect(draft).to receive(:ready_to_publish?)
+
+          expect(draft.may_schedule?).to eq(true)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled).to_not receive(:ready_to_publish?)
+
+          expect(scheduled.may_schedule?).to eq(false)
         end
 
         specify "on published" do
-          expect(published).to_not receive(:can_publish?)
+          expect(published).to_not receive(:ready_to_publish?)
 
-          expect(published.may_publish?).to eq(false)
+          expect(published.may_schedule?).to eq(false)
+        end
+      end
+
+      describe "may_unschedule?" do
+        specify "on draft" do
+          expect(draft.may_unschedule?).to eq(false)
         end
 
+        specify "on scheduled" do
+          expect(scheduled.may_unschedule?).to eq(true)
+        end
+
+        specify "on published" do
+          expect(published.may_unschedule?).to eq(false)
+        end
+      end
+
+      describe "may_publish?" do
         specify "on draft" do
-          expect(draft).to receive(:can_publish?)
+          expect(draft).to receive(:ready_to_publish?)
 
           expect(draft.may_publish?).to eq(true)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled).to receive(:ready_to_publish?)
+
+          expect(scheduled.may_publish?).to eq(true)
+        end
+
+        specify "on published" do
+          expect(published).to_not receive(:ready_to_publish?)
+
+          expect(published.may_publish?).to eq(false)
         end
       end
 
       describe "may_unpublish?" do
-        before(:each) do
-          allow(    draft).to receive(:can_unpublish?).and_return(false)
-          allow(published).to receive(:can_unpublish?).and_return(true )
-        end
-
         specify "on draft" do
-          expect(draft).to_not receive(:can_unpublish?)
-
           expect(draft.may_unpublish?).to eq(false)
         end
 
-        specify "on published" do
-          expect(published).to receive(:can_unpublish?)
+        specify "on scheduled" do
+          expect(scheduled.may_unpublish?).to eq(false)
+        end
 
+        specify "on published" do
           expect(published.may_unpublish?).to eq(true)
         end
       end
     end
 
     describe "transitions" do
-      describe "publish" do
-        specify { expect(    draft).to     allow_transition_to(:published) }
-        specify { expect(published).to_not allow_transition_to(:published) }
+      describe "to draft" do
+        specify { expect(    draft).to_not allow_transition_to(:draft) }
+        specify { expect(scheduled).to     allow_transition_to(:draft) }
+        specify { expect(published).to     allow_transition_to(:draft) }
       end
 
-      describe "unpublish" do
-        specify { expect(published).to     allow_transition_to(:draft) }
-        specify { expect(    draft).to_not allow_transition_to(:draft) }
+      describe "to scheduled" do
+        specify { expect(    draft).to     allow_transition_to(:scheduled) }
+        specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
+        specify { expect(published).to_not allow_transition_to(:scheduled) }
+      end
+
+      describe "to published" do
+        specify { expect(    draft).to     allow_transition_to(:published) }
+        specify { expect(scheduled).to     allow_transition_to(:published) }
+        specify { expect(published).to_not allow_transition_to(:published) }
       end
     end
 
     describe "events" do
+      describe "schedule" do
+        context "callbacks" do
+          describe "guards" do
+            specify "calls #ready_to_publish?" do
+               allow(draft).to receive(:ready_to_publish?).and_call_original
+              expect(draft).to receive(:ready_to_publish?)
+
+              draft.published_at = 3.weeks.from_now
+
+              expect(draft.schedule!).to eq(true)
+            end
+          end
+
+          describe "after" do
+            it "calls #update_counts_for_descendents" do
+               allow(draft).to receive(:update_counts_for_descendents).and_call_original
+              expect(draft).to receive(:update_counts_for_descendents)
+
+              draft.published_at = 3.weeks.from_now
+
+              expect(draft.schedule!).to eq(true)
+            end
+          end
+        end
+      end
+
+      describe "unschedule" do
+        context "callbacks" do
+          describe "before" do
+            it "calls #clear_published_at" do
+               allow(scheduled).to receive(:clear_published_at).and_call_original
+              expect(scheduled).to receive(:clear_published_at)
+
+              expect(scheduled.unschedule!).to eq(true)
+            end
+          end
+
+          describe "after" do
+            it "calls #update_counts_for_descendents" do
+               allow(scheduled).to receive(:update_counts_for_descendents).and_call_original
+              expect(scheduled).to receive(:update_counts_for_descendents)
+
+              expect(scheduled.unschedule!).to eq(true)
+            end
+          end
+        end
+      end
+
       describe "publish" do
         context "callbacks" do
           describe "before" do
-            it "calls #prepare_to_publish" do
-               allow(draft).to receive(:prepare_to_publish).and_call_original
-              expect(draft).to receive(:prepare_to_publish)
+            it "calls #set_published_at" do
+               allow(draft).to receive(:set_published_at).and_call_original
+              expect(draft).to receive(:set_published_at)
 
               expect(draft.publish!).to eq(true)
             end
           end
 
           describe "guards" do
-            specify "calls #can_publish?" do
-               allow(draft).to receive(:can_publish?).and_call_original
-              expect(draft).to receive(:can_publish?)
+            specify "calls #ready_to_publish?" do
+               allow(draft).to receive(:ready_to_publish?).and_call_original
+              expect(draft).to receive(:ready_to_publish?)
 
               expect(draft.publish!).to eq(true)
             end
           end
 
           describe "after" do
-            it "calls #update_viewable_counts" do
-               allow(draft).to receive(:update_viewable_counts).and_call_original
-              expect(draft).to receive(:update_viewable_counts)
+            it "calls #update_counts_for_descendents" do
+               allow(draft).to receive(:update_counts_for_descendents).and_call_original
+              expect(draft).to receive(:update_counts_for_descendents)
 
               expect(draft.publish!).to eq(true)
             end
@@ -302,27 +408,18 @@ RSpec.describe Post, type: :model do
       describe "unpublish" do
         context "callbacks" do
           describe "before" do
-            it "calls #prepare_to_unpublish" do
-               allow(published).to receive(:prepare_to_unpublish).and_call_original
-              expect(published).to receive(:prepare_to_unpublish)
-
-              expect(published.unpublish!).to eq(true)
-            end
-          end
-
-          describe "guards" do
-            specify "calls #can_unpublish?" do
-               allow(published).to receive(:can_unpublish?).and_call_original
-              expect(published).to receive(:can_unpublish?)
+            it "calls #clear_published_at" do
+               allow(published).to receive(:clear_published_at).and_call_original
+              expect(published).to receive(:clear_published_at)
 
               expect(published.unpublish!).to eq(true)
             end
           end
 
           describe "after" do
-            it "calls #update_viewable_counts" do
-               allow(published).to receive(:update_viewable_counts).and_call_original
-              expect(published).to receive(:update_viewable_counts)
+            it "calls #update_counts_for_descendents" do
+               allow(published).to receive(:update_counts_for_descendents).and_call_original
+              expect(published).to receive(:update_counts_for_descendents)
 
               expect(published.unpublish!).to eq(true)
             end
@@ -333,77 +430,95 @@ RSpec.describe Post, type: :model do
 
     describe "scopes" do
       specify { expect(described_class.draft    ).to be_a_kind_of(ActiveRecord::Relation) }
+      specify { expect(described_class.scheduled).to be_a_kind_of(ActiveRecord::Relation) }
       specify { expect(described_class.published).to be_a_kind_of(ActiveRecord::Relation) }
     end
 
     describe "private" do
       context "guards" do
-        describe "#can_publish?" do
+        describe "#ready_to_publish?" do
           subject { build(:standalone_post) }
 
           specify "true if saved, valid and has slug & body" do
             subject.save
 
-            expect(subject.send(:can_publish?)).to eq(true)
+            expect(subject.send(:ready_to_publish?)).to eq(true)
+          end
+
+          specify "true if scheduled, saved, valid and has slug & body" do
+            subject.published_at = 3.weeks.from_now
+            subject.save
+            subject.schedule!
+
+            expect(subject.send(:ready_to_publish?)).to eq(true)
           end
 
           specify "false unless saved" do
             subject.slug = "foo_bar_bat"
 
-            expect(subject.send(:can_publish?)).to eq(false)
+            expect(subject.send(:ready_to_publish?)).to eq(false)
           end
 
-          specify "false unless draft" do
+          specify "false if published" do
             subject.save
             subject.publish!
 
-            expect(subject.send(:can_publish?)).to eq(false)
+            expect(subject.send(:ready_to_publish?)).to eq(false)
           end
 
           specify "false unless valid" do
             subject.save
             subject.title = nil
 
-            expect(subject.send(:can_publish?)).to eq(false)
+            expect(subject.send(:ready_to_publish?)).to eq(false)
           end
 
           specify "false unless slug" do
             subject.save
             subject.slug = nil
 
-            expect(subject.send(:can_publish?)).to eq(false)
+            expect(subject.send(:ready_to_publish?)).to eq(false)
           end
 
           specify "false unless body" do
             subject.save
             subject.body = nil
 
-            expect(subject.send(:can_publish?)).to eq(false)
+            expect(subject.send(:ready_to_publish?)).to eq(false)
           end
-        end
-
-        describe "#can_unpublish?" do
-          specify { expect(create(:standalone_post, :published).send(:can_unpublish?)).to eq(true ) }
-          specify { expect(create(:standalone_post, :draft    ).send(:can_unpublish?)).to eq(false) }
         end
       end
 
       context "callbacks" do
-        describe "#prepare_to_publish" do
-          it "sets published_at" do
-            instance = create(:standalone_post, :draft)
+        describe "#set_published_at" do
+          subject { create(:standalone_post, :draft) }
 
-            instance.send(:prepare_to_publish)
+          it "sets published_at if not already set" do
+            Timecop.freeze(2020, 3, 3) do
+              subject.send(:set_published_at)
 
-            expect(instance.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(subject.published_at).to eq(DateTime.parse("2020-03-03"))
+            end
+          end
+
+          it "sets published_at if not already set" do
+            Timecop.freeze(2020, 3, 3) do
+              subject.published_at = 3.weeks.from_now
+
+              subject.send(:set_published_at)
+
+              expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+              expect(subject.published_at).to eq(DateTime.parse("2020-03-24"))
+            end
           end
         end
 
-        describe "#prepare_to_unpublish" do
+        describe "#clear_published_at" do
           it "removes published_at" do
             instance = create(:standalone_post, :published)
 
-            instance.send(:prepare_to_unpublish)
+            instance.send(:clear_published_at)
 
             expect(instance.published_at).to eq(nil)
           end
@@ -482,30 +597,30 @@ RSpec.describe Post, type: :model do
       context "for publication status" do
         let(    :draft) { create(:standalone_post, :draft    ) }
         let(:scheduled) { create(:standalone_post, :scheduled) }
-        let(     :live) { create(:standalone_post, :published) }
+        let(:published) { create(:standalone_post, :published) }
 
         describe "#draft?" do
           specify { expect(    draft.draft?).to eq(true ) }
           specify { expect(scheduled.draft?).to eq(false) }
-          specify { expect(     live.draft?).to eq(false) }
-        end
-
-        describe "#published?" do
-          specify { expect(    draft.published?).to eq(false) }
-          specify { expect(scheduled.published?).to eq(true ) }
-          specify { expect(     live.published?).to eq(true ) }
-        end
-
-        describe "#live?" do
-          specify { expect(    draft.live?).to eq(false) }
-          specify { expect(scheduled.live?).to eq(false) }
-          specify { expect(     live.live?).to eq(true ) }
+          specify { expect(published.draft?).to eq(false) }
         end
 
         describe "#scheduled?" do
           specify { expect(    draft.scheduled?).to eq(false) }
           specify { expect(scheduled.scheduled?).to eq(true ) }
-          specify { expect(     live.scheduled?).to eq(false) }
+          specify { expect(published.scheduled?).to eq(false) }
+        end
+
+        describe "#published?" do
+          specify { expect(    draft.published?).to eq(false) }
+          specify { expect(scheduled.published?).to eq(false ) }
+          specify { expect(published.published?).to eq(true ) }
+        end
+
+        describe "#not_published?" do
+          specify { expect(    draft.not_published?).to eq(true ) }
+          specify { expect(scheduled.not_published?).to eq(true ) }
+          specify { expect(published.not_published?).to eq(false) }
         end
       end
     end
@@ -805,7 +920,7 @@ RSpec.describe Post, type: :model do
         let(:params) { { "title" => "New title" } }
 
         before(:each) do
-          allow(subject).to receive(:can_publish?).and_return(false)
+          allow(subject).to receive(:ready_to_publish?).and_return(false)
         end
 
         it "updates, attempts publish and returns false" do
@@ -860,6 +975,146 @@ RSpec.describe Post, type: :model do
         let(:params) { { "work_id" => create(:song).id } }
 
         it "unpublishes, updates, and returns true" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(true)
+
+          subject.reload
+
+          expect(subject.work_id     ).to eq(params["work_id"])
+          expect(subject.published?  ).to eq(false)
+          expect(subject.published_at).to eq(nil)
+        end
+      end
+
+      context "valid params and invalid transition" do
+        let(:params) { { "work_id" => create(:song).id } }
+
+        before(:each) do
+          # TODO BJD This doesn't really test what I want it to,
+          # but may_unpublish? doesn't seem to be stubbable.
+          subject.unpublish!
+        end
+
+        it "attempts unpublish, updates and returns false" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(false)
+
+          subject.reload
+
+          expect(subject.work_id     ).to eq(params["work_id"])
+          expect(subject.draft?      ).to eq(true)
+          expect(subject.published_at).to eq(nil)
+        end
+      end
+
+      context "invalid params" do
+        let(:params) { { "work_id" => "", "body" => "" } }
+
+        it "unpublishes, does not update and returns false" do
+          expect(subject).to receive(:update    )
+          expect(subject).to receive(:unpublish!)
+
+          expect(subject.update_and_unpublish(params)).to eq(false)
+
+          expect(subject.work_id).to eq(nil)
+
+          subject.reload
+
+          expect(subject.work_id     ).to_not eq(nil)
+          expect(subject.published?  ).to     eq(false)
+          expect(subject.published_at).to     eq(nil)
+        end
+      end
+    end
+
+    describe "#update_and_schedule" do
+      before(:each) do
+        allow(subject).to receive(:update   ).and_call_original
+        allow(subject).to receive(:schedule!).and_call_original
+      end
+
+      subject { create(:standalone_post) }
+
+      context "valid params and valid transition" do
+        let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
+
+        it "updates, schedules and returns true" do
+          expect(subject).to receive(:update   )
+          expect(subject).to receive(:schedule!)
+
+          expect(subject.update_and_schedule(params)).to eq(true)
+
+          subject.reload
+
+          expect(subject.scheduled?  ).to eq(true)
+          expect(subject.title       ).to eq(params["title"])
+          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+        end
+      end
+
+      context "valid params and invalid transition" do
+        let(:params) { { "title" => "New title", "published_at" => 3.weeks.from_now } }
+
+        before(:each) do
+          allow(subject).to receive(:ready_to_publish?).and_return(false)
+        end
+
+        it "updates, attempts schedule and returns false" do
+          expect(subject).to receive(:update  )
+          expect(subject).to receive(:schedule!)
+
+          expect(subject.update_and_schedule(params)).to eq(false)
+
+          subject.reload
+
+          expect(subject.draft?      ).to eq(true)
+          expect(subject.title       ).to eq(params["title"])
+          expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+        end
+      end
+
+      context "invalid params" do
+        let(:params) { { "title" => "", "body" => "" } }
+
+        it "does not update, does not attempt schedule and returns false" do
+          expect(subject).to     receive(:update   )
+          expect(subject).to_not receive(:schedule!)
+
+          expect(subject.update_and_schedule(params)).to eq(false)
+
+          expect(subject.title).to eq(nil)
+
+          subject.reload
+
+          expect(subject.draft?      ).to     eq(true)
+          expect(subject.title       ).to_not eq(nil)
+          expect(subject.published_at).to     eq(nil)
+        end
+
+        it "manually adds errors on empty body" do
+          subject.update_and_schedule(params)
+
+          expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+        end
+      end
+    end
+
+    describe "#update_and_unschedule" do
+      before(:each) do
+        allow(subject).to receive(:update     ).and_call_original
+        allow(subject).to receive(:unschedule!).and_call_original
+      end
+
+      subject { create(:song_review, :published) }
+
+      context "valid params and valid transition" do
+        let(:params) { { "work_id" => create(:song).id } }
+
+        it "unschedules, updates, and returns true" do
           expect(subject).to receive(:update    )
           expect(subject).to receive(:unpublish!)
 
@@ -1123,7 +1378,7 @@ RSpec.describe Post, type: :model do
       end
 
       context "memoization" do
-        describe "#update_viewable_counts" do
+        describe "#update_counts_for_descendents" do
           let(    :review) { create(:unity_album_review  ) }
           let(:standalone) { create(:tiny_standalone_post) }
           let(      :work) { double }
@@ -1131,7 +1386,7 @@ RSpec.describe Post, type: :model do
 
           it "updates counts for creators and works" do
             allow(review).to receive(    :work).and_return(work)
-             allow( work).to receive(:creators).and_return(creators)
+            allow(  work).to receive(:creators).and_return(creators)
 
              allow(          work).to receive(:update_counts)
              allow(creators.first).to receive(:update_counts)
@@ -1141,7 +1396,7 @@ RSpec.describe Post, type: :model do
             expect(creators.first).to receive(:update_counts).once
             expect( creators.last).to receive(:update_counts).once
 
-            review.send(:update_viewable_counts)
+            review.send(:update_counts_for_descendents)
           end
 
           it "does nothing for standalone" do
@@ -1151,7 +1406,7 @@ RSpec.describe Post, type: :model do
             expect_any_instance_of(Creator).to_not receive(:update_counts)
             expect_any_instance_of(   Work).to_not receive(:update_counts)
 
-            standalone.send(:update_viewable_counts)
+            standalone.send(:update_counts_for_descendents)
           end
         end
       end

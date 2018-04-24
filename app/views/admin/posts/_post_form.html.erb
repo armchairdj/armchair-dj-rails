@@ -15,15 +15,15 @@
   <%= content_tag(:div, class: "button-group") do %>
     <%= f.button :submit, "Save" %>
 
-    <% if post.may_publish? %>
-      <%= f.button :button, "Save and Publish",
+    <% if f.object.persisted? && f.object.non_live? %>
+      <%= f.button :button, "Save and Publish/Schedule",
         type:           :submit,
         name:           "step",
         value:          "publish",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
-    <% elsif post.may_unpublish? %>
+    <% elsif f.object.live? %>
       <%= f.button :button, "Save and Unpublish",
         type:           :submit,
         name:           "step",

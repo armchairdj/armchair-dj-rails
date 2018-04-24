@@ -12,19 +12,19 @@ FactoryBot.define do
       # default status is :draft
     end
 
-    trait :published do
+    trait :scheduled do
+      published_at 3.weeks.from_now
+
       after(:create) do |post, evaluator|
-        raise AASM::InvalidTransition unless post.publish!
+        raise AASM::InvalidTransition unless post.schedule!
 
         post.reload
       end
     end
 
-    trait :scheduled do
+    trait :published do
       after(:create) do |post, evaluator|
         raise AASM::InvalidTransition unless post.publish!
-
-        post.update!(published_at: 3.weeks.from_now)
 
         post.reload
       end

@@ -19,7 +19,7 @@ class Post < ApplicationRecord
     {
       "Draft"     => :draft,
       "Scheduled" => :scheduled,
-      "Published" => :live,
+      "Published" => :published,
       "All"       => :all,
     }
   end
@@ -28,14 +28,17 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :live,         -> { published.where("published_at <= ?", DateTime.now) }
-  scope :scheduled,    -> { published.where("published_at > ?",  DateTime.now) }
-  scope :review,       -> { where.not(work_id: nil) }
-  scope :standalone,   -> { where(    work_id: nil) }
-  scope :reverse_cron, -> { order(published_at: :desc)                  }
-  scope :eager,        -> { includes(work: { contributions: :creator }) }
-  scope :for_admin,    -> { eager                                       }
-  scope :for_site,     -> { eager.live.reverse_cron                     }
+  scope :not_published, -> { where.not(status: :published) }
+
+  scope :review,        -> { where.not(work_id: nil) }
+  scope :standalone,    -> { where(    work_id: nil) }
+
+  scope :reverse_cron,  -> { order(published_at: :desc) }
+
+  scope :eager,         -> { includes(work: { contributions: :creator }) }
+
+  scope :for_admin,     -> { eager                   }
+  scope :for_site,      -> { eager.published.reverse_cron }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -53,6 +56,7 @@ class Post < ApplicationRecord
 
   enum status: {
     draft:      0,
+    scheduled:  5,
     published: 10
   }
 
@@ -68,9 +72,9 @@ class Post < ApplicationRecord
 
   validates :status, presence: true
 
-  validates :body,         presence: true, if: :published?
-  validates :published_at, presence: true, if: :published?
-  validates :slug,         presence: true, if: :published?
+  validates :body,         presence: true, unless: :draft?
+  validates :slug,         presence: true, unless: :draft?
+  validates :published_at, presence: true, unless: :draft?
 
   #############################################################################
   # HOOKS.
@@ -83,7 +87,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   aasm(
-    column:                  :status,
+    column:                   :status,
     create_scopes:            true,
     enum:                     true,
     no_direct_assignment:     true,
@@ -91,17 +95,35 @@ class Post < ApplicationRecord
     whiny_transitions:        false
   ) do
     state :draft, initial: true
+    state :scheduled
     state :published
 
+    event(:schedule,
+      after: :update_counts_for_descendents
+    ) do
+      transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
+    end
+
+    event(:unschedule,
+      before: :clear_published_at,
+      after:  :update_counts_for_descendents
+    ) do
+      transitions from: :scheduled, to: :draft
+    end
+
     event(:publish,
-      before: :prepare_to_publish,
-      after:  :update_viewable_counts
-    ) { transitions from: :draft, to: :published, guards: [:can_publish?] }
+      before: :set_published_at,
+      after:  :update_counts_for_descendents
+    ) do
+      transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
+    end
 
     event(:unpublish,
-      before: :prepare_to_unpublish,
-      after:  :update_viewable_counts
-    ) { transitions from: :published, to: :draft, guards: [:can_unpublish?] }
+      before: :clear_published_at,
+      after:  :update_counts_for_descendents
+    ) do
+      transitions from: :published, to: :draft
+    end
   end
 
   #############################################################################
@@ -112,12 +134,8 @@ class Post < ApplicationRecord
     "TODO"
   end
 
-  def scheduled?
-    published? && published_at > DateTime.now
-  end
-
-  def live?
-    published? && published_at <= DateTime.now
+  def not_published?
+    draft? || scheduled?
   end
 
   def standalone?
@@ -149,20 +167,28 @@ class Post < ApplicationRecord
     work.prepare_contributions
   end
 
-  def update_and_publish(params)
-    return true if self.update(params) && self.publish!
+  def update_and_publish(params, event: :publish!)
+    return true if self.update(params) && self.send(event)
 
     self.errors.add(:body, :blank_during_publish) unless body.present?
 
     return false
   end
 
-  def update_and_unpublish(params)
-    # Unpublish first so validation rules change.
-    unpublished = self.unpublish!
+  def update_and_unpublish(params, event: :unpublish!)
+    # Transition first to trigger validation rule change.
+    unpublished = self.send(event)
     updated     = self.reload.update(params)
 
     unpublished && updated
+  end
+
+  def update_and_schedule(params)
+    update_and_publish(params, event: :schedule!)
+  end
+
+  def update_and_unschedule(params)
+    update_and_unpublish(params, event: :unschedule!)
   end
 
 private
@@ -264,19 +290,15 @@ private
   # PUBLISHING.
   #############################################################################
 
-  def can_publish?
-    persisted? && draft? && valid? && body.present? && slug.present?
+  def ready_to_publish?
+    persisted? && not_published? && valid? && body.present? && slug.present?
   end
 
-  def can_unpublish?
-    published?
+  def set_published_at
+    self.published_at = DateTime.now unless self.published_at.present?
   end
 
-  def prepare_to_publish
-    self.published_at = DateTime.now
-  end
-
-  def prepare_to_unpublish
+  def clear_published_at
     self.published_at = nil
   end
 
@@ -284,7 +306,7 @@ private
   # MEMOIZATION.
   #############################################################################
 
-  def update_viewable_counts
+  def update_counts_for_descendents
     return unless work.present?
 
     work.update_counts

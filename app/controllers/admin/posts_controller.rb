@@ -116,6 +116,8 @@ private
   def sanitize_create_params
     fetched = instance_params
 
+    fetched.delete(:published_at)
+
     if fetched[:work_attributes].present? && fetched[:work_attributes][:title].present?
       fetched.delete(:title)
       fetched.delete(:work_id)
@@ -149,6 +151,7 @@ private
       :title,
       :slug,
       :work_id,
+      :published_at,
       :work_attributes => [
         :post_id,
         :id,
