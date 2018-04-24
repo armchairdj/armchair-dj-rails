@@ -84,9 +84,36 @@ RSpec.describe PostsHelper, type: :helper do
     end
   end
 
+  describe "#post_published_date" do
+    let(:draft    ) { create(:standalone_post, :draft    ) }
+    let(:scheduled) { create(:standalone_post, :scheduled) }
+    let(:published) { create(:standalone_post, :published) }
+
+    specify do
+      expect(helper.post_published_date(draft    )).to eq(nil)
+    end
+
+    specify do
+      expect(helper.post_published_date(scheduled)).to eq(nil)
+    end
+
+    specify do
+      Timecop.freeze(2050, 3, 3) do
+        expect(helper.post_published_date(published)).to eq(
+          '<time datetime="2050-03-03T00:00:00Z">03/03/2050 at 12:00AM</time>'
+        )
+      end
+    end
+  end
+
   describe "#post_type" do
     specify{ expect(helper.post_type(create(:standalone_post))).to eq("Standalone Post") }
     specify{ expect(helper.post_type(create(:album_review   ))).to eq("Album Review"   ) }
+  end
+
+  describe "#post_type_for_site" do
+    specify{ expect(helper.post_type_for_site(create(:standalone_post))).to eq(nil           ) }
+    specify{ expect(helper.post_type_for_site(create(:album_review   ))).to eq("Album Review") }
   end
 
   describe "#post_title" do

@@ -1,3 +1,34 @@
 <%
-  @headline = @title = "Work"
+  @title = [@work.display_creator, @work.title]
 %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Posts About") %>
+  <% end %>
+
+  <% @work.posts.each do |post| %>
+    <%= link_to_post(post) %><br>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Creators") %>
+  <% end %>
+
+  <% @work.creators.each do |creator| %>
+    <%= link_to_creator(creator) %><br>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Contributors") %>
+  <% end %>
+
+  <% @work.contributions.secondary.each do |contribution| %>
+    <%= link_to_creator(contribution.creator) %>:
+    <%= contribution.human_role %><br>
+  <% end %>
+<% end %>

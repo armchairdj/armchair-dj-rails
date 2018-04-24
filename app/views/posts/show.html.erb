@@ -1,5 +1,23 @@
 <%
-  @headline = @title = "Post"
+  @title = [post_type(@post), post_title(@post, full: true)]
 %>
 
+<%= content_for(:page_header) do %>
+  <%= content_tag(:header, class: "page-header") do %>
+    <% if @post.standalone? %>
+      <%= content_tag(:h1, @post.title) %>
+    <% else %>
+      <%= content_tag(:h4, post_type(@post)) %>
+      <%= content_tag(:h1) do %>
+        <%= content_tag(:span, @post.work.display_creator, class: "creators") %>
+        <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <%= formatted_post_body(@post) %>
+
+<%= content_tag(:div, class: "meta") do %>
+  Posted on <%= content_tag(:div, post_published_date(@post)) %>
+<% end %>
