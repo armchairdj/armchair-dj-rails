@@ -186,6 +186,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
           end
 
+          it "post belongs to current_user" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(user: controller.current_user)
+          end
+
           it "redirects to post" do
             post :create, params: { post: valid_params }
 
@@ -225,6 +231,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             post :create, params: { post: valid_params }
 
             should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
+          end
+
+          it "post belongs to current_user" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(user: controller.current_user)
           end
 
           it "redirects to post" do
@@ -301,6 +313,12 @@ RSpec.describe Admin::PostsController, type: :controller do
             post :create, params: { post: valid_params }
 
             should assign(Post.last, :post).with_attributes(valid_params).and_be_valid
+          end
+
+          it "post belongs to current_user" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(user: controller.current_user)
           end
 
           it "redirects to post" do

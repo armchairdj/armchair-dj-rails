@@ -36,19 +36,33 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
 
   context "validations" do
     # Nothing so far.
+
+    context "conditional" do
+      # Nothing so far.
+    end
+
+    context "custom" do
+      # Nothing so far.
+    end
+
+    context "custom validators" do
+      # Nothing so far.
+    end
   end
 
   context "hooks" do
     # Nothing so far.
+
+    context "callbacks" do
+      # Nothing so far.
+    end
   end
 
   context "instance" do
     # Nothing so far.
 
     describe "private" do
-      context "callbacks" do
-        # Nothing so far.
-      end
+      # Nothing so far.
     end
   end
 end

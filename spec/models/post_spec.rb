@@ -172,6 +172,7 @@ RSpec.describe Post, type: :model do
   end
 
   context "associations" do
+    it { should belong_to(:user) }
     it { should belong_to(:work) }
   end
 
@@ -245,11 +246,126 @@ RSpec.describe Post, type: :model do
     end
 
     context "custom" do
+      it "calls #validate_user" do
+         allow(subject).to receive(:validate_user).and_call_original
+        expect(subject).to receive(:validate_user)
+
+        subject.valid?
+      end
+
       it "calls #validate_work_and_title" do
          allow(subject).to receive(:validate_work_and_title).and_call_original
         expect(subject).to receive(:validate_work_and_title)
 
         subject.valid?
+      end
+    end
+
+    context "custom validators" do
+      describe "#validate_user" do
+        subject { build(:minimal_post) }
+
+        specify "admin" do
+          subject.user = create(:admin)
+
+          subject.send(:validate_user)
+
+          expect(subject).to be_valid
+        end
+
+        specify "contributor" do
+          subject.user = create(:contributor)
+
+          subject.send(:validate_user)
+
+          expect(subject).to be_valid
+        end
+
+        specify "member" do
+          subject.user = create(:member)
+
+          subject.send(:validate_user)
+
+          expect(subject).to have_errors(base: :invalid_user)
+        end
+
+        specify "nil" do
+          subject.user = nil
+
+          subject.send(:validate_user)
+
+          expect(subject).to have_errors(base: :no_user)
+        end
+      end
+
+      describe "#validate_work_and_title" do
+        describe "with just work" do
+          subject { build(:post, work_id: create(:minimal_work).id) }
+
+          specify "ok" do
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:base]).to eq([])
+          end
+        end
+
+        describe "with just title" do
+          subject { build(:post, title: "") }
+
+          specify "ok" do
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:base]).to eq([])
+          end
+        end
+
+        describe "with neither" do
+          subject { build(:post) }
+
+          specify "errors" do
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+          end
+        end
+
+        describe "with both" do
+          subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
+
+          specify "errors" do
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+          end
+        end
+
+        describe "saved review" do
+          subject { create(:song_review) }
+
+          it "ensures work and no title" do
+            subject.work_id = ""
+            subject.title   = "title"
+
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:work_id].first).to eq({ error: :blank   })
+            expect(subject.errors.details[:title  ].first).to eq({ error: :present })
+          end
+        end
+
+        describe "saved standalone" do
+          subject { create(:standalone_post) }
+
+          it "ensures title and no work" do
+            subject.title   = ""
+            subject.work_id = create(:song).id
+
+            subject.send(:validate_work_and_title)
+
+            expect(subject.errors.details[:title  ].first).to eq({ error: :blank   })
+            expect(subject.errors.details[:work_id].first).to eq({ error: :present })
+          end
+        end
       end
     end
   end
@@ -275,6 +391,141 @@ RSpec.describe Post, type: :model do
         end
       end
     end
+
+    context "callbacks" do
+      describe "#sluggable_parts" do
+        let(    :review) { create(:hounds_of_love_album_review               ) }
+        let(    :collab) { create(:unity_album_review                        ) }
+        let(:standalone) { create(:standalone_post, title: "Standalone Title") }
+
+        specify "for review" do
+          expect(review.send(:sluggable_parts)) .to eq(["Album", "Kate Bush", "Hounds of Love"])
+        end
+
+        specify "for review of collaborative work" do
+          expect(collab.send(:sluggable_parts)).to eq(["Album", "Carl Craig and Green Velvet", "Unity"])
+        end
+
+        specify "for standalone" do
+          expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
+        end
+      end
+
+      describe "#handle_slug" do
+        before(:each) do
+          allow(instance).to receive(:sluggable_parts).and_return(["Standalone Title"])
+
+          allow(instance).to receive(:slugify).and_call_original
+
+          allow(instance).to receive(:generate_slug).with(:slug, ["Standalone Title"]).and_return("latest_slug")
+          allow(instance).to receive(:generate_slug).with(:slug, "Newly Dirty"       ).and_return("newly_dirty")
+        end
+
+        context "unsaved draft" do
+          let(:instance) { build(:tiny_standalone_post) }
+
+          it "sets slug automatically" do
+            expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
+
+            instance.send(:handle_slug)
+
+            expect(instance.slug       ).to eq("latest_slug")
+            expect(instance.dirty_slug?).to eq(false)
+          end
+        end
+
+        context "saved draft" do
+          let(:instance) { create(:tiny_standalone_post, :draft) }
+
+          context "clean" do
+            it "resets slug" do
+              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
+
+              instance.send(:handle_slug)
+
+              expect(instance.slug       ).to eq("latest_slug")
+              expect(instance.dirty_slug?).to eq(false)
+            end
+          end
+
+          context "newly dirty" do
+            it "slugifies dirty value and sets dirty flag" do
+              expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
+
+              instance.slug = "Newly Dirty"
+
+              instance.send(:handle_slug)
+
+              expect(instance.slug       ).to eq("newly_dirty")
+              expect(instance.dirty_slug?).to eq(true)
+            end
+          end
+
+          context "already dirty" do
+            before(:each) do
+              instance.update_columns(slug: "already_dirty", dirty_slug: true)
+            end
+
+            it "does nothing if no change" do
+              instance.send(:handle_slug)
+
+              expect(instance.slug       ).to eq("already_dirty")
+              expect(instance.dirty_slug?).to eq(true)
+            end
+
+            it "slugifies new value if new value is dirty" do
+              expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
+
+              instance.slug = "Newly Dirty"
+
+              instance.send(:handle_slug)
+
+              expect(instance.slug       ).to eq("newly_dirty")
+              expect(instance.dirty_slug?).to eq(true)
+            end
+
+            it "resets slug and sets dirty to false if new value is blank" do
+              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
+
+              instance.slug = ""
+
+              instance.send(:handle_slug)
+
+              expect(instance.slug       ).to eq("latest_slug")
+              expect(instance.dirty_slug?).to eq(false)
+            end
+          end
+        end
+
+        context "saved published" do
+          let(:instance) { create(:tiny_standalone_post, :published) }
+
+          it "does nothing if value has not changed" do
+            expect(instance).to_not receive(:slugify)
+
+            previous = instance.slug
+
+            instance.send(:handle_slug)
+
+            expect(instance.slug       ).to eq(previous)
+            expect(instance.dirty_slug?).to eq(false)
+            expect(instance.errors.details[:slug].first).to eq(nil)
+          end
+
+          it "does nothing if value has not changed" do
+            expect(instance).to_not receive(:slugify)
+
+            instance.slug = "this is not allowed"
+
+            instance.send(:handle_slug)
+
+            expect(instance.slug       ).to eq("this is not allowed")
+            expect(instance.dirty_slug?).to eq(false)
+            expect(instance.errors.details[:slug].first).to eq({ error: :locked })
+          end
+        end
+      end
+    end
   end
 
   context "aasm" do
@@ -287,102 +538,6 @@ RSpec.describe Post, type: :model do
       specify { expect(    draft).to have_state(:draft    ) }
       specify { expect(scheduled).to have_state(:scheduled) }
       specify { expect(published).to have_state(:published) }
-    end
-
-    describe "booleans" do
-      before(:each) do
-        allow(    draft).to receive(:ready_to_publish?).and_return(true )
-        allow(scheduled).to receive(:ready_to_publish?).and_return(true )
-        allow(published).to receive(:ready_to_publish?).and_return(false)
-      end
-
-      describe "may_schedule?" do
-        specify "on draft" do
-          expect(draft).to receive(:ready_to_publish?)
-
-          expect(draft.may_schedule?).to eq(true)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled).to_not receive(:ready_to_publish?)
-
-          expect(scheduled.may_schedule?).to eq(false)
-        end
-
-        specify "on published" do
-          expect(published).to_not receive(:ready_to_publish?)
-
-          expect(published.may_schedule?).to eq(false)
-        end
-      end
-
-      describe "may_unschedule?" do
-        specify "on draft" do
-          expect(draft.may_unschedule?).to eq(false)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_unschedule?).to eq(true)
-        end
-
-        specify "on published" do
-          expect(published.may_unschedule?).to eq(false)
-        end
-      end
-
-      describe "may_publish?" do
-        specify "on draft" do
-          expect(draft).to receive(:ready_to_publish?)
-
-          expect(draft.may_publish?).to eq(true)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled).to receive(:ready_to_publish?)
-
-          expect(scheduled.may_publish?).to eq(true)
-        end
-
-        specify "on published" do
-          expect(published).to_not receive(:ready_to_publish?)
-
-          expect(published.may_publish?).to eq(false)
-        end
-      end
-
-      describe "may_unpublish?" do
-        specify "on draft" do
-          expect(draft.may_unpublish?).to eq(false)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_unpublish?).to eq(false)
-        end
-
-        specify "on published" do
-          expect(published.may_unpublish?).to eq(true)
-        end
-      end
-    end
-
-    describe "transitions" do
-      describe "to draft" do
-        specify { expect(    draft).to_not allow_transition_to(:draft) }
-        specify { expect(scheduled).to     allow_transition_to(:draft) }
-        specify { expect(published).to     allow_transition_to(:draft) }
-      end
-
-      describe "to scheduled" do
-        specify { expect(    draft).to     allow_transition_to(:scheduled) }
-        specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
-        specify { expect(published).to_not allow_transition_to(:scheduled) }
-      end
-
-      describe "to published" do
-        specify { expect(    draft).to     allow_transition_to(:published) }
-        specify { expect(scheduled).to     allow_transition_to(:published) }
-        specify { expect(published).to_not allow_transition_to(:published) }
-      end
     end
 
     describe "events" do
@@ -484,6 +639,82 @@ RSpec.describe Post, type: :model do
               expect(published.unpublish!).to eq(true)
             end
           end
+        end
+      end
+    end
+
+    describe "booleans" do
+      before(:each) do
+        allow(    draft).to receive(:ready_to_publish?).and_return(true )
+        allow(scheduled).to receive(:ready_to_publish?).and_return(true )
+        allow(published).to receive(:ready_to_publish?).and_return(false)
+      end
+
+      describe "may_schedule?" do
+        specify "on draft" do
+          expect(draft).to receive(:ready_to_publish?)
+
+          expect(draft.may_schedule?).to eq(true)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled).to_not receive(:ready_to_publish?)
+
+          expect(scheduled.may_schedule?).to eq(false)
+        end
+
+        specify "on published" do
+          expect(published).to_not receive(:ready_to_publish?)
+
+          expect(published.may_schedule?).to eq(false)
+        end
+      end
+
+      describe "may_unschedule?" do
+        specify "on draft" do
+          expect(draft.may_unschedule?).to eq(false)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled.may_unschedule?).to eq(true)
+        end
+
+        specify "on published" do
+          expect(published.may_unschedule?).to eq(false)
+        end
+      end
+
+      describe "may_publish?" do
+        specify "on draft" do
+          expect(draft).to receive(:ready_to_publish?)
+
+          expect(draft.may_publish?).to eq(true)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled).to receive(:ready_to_publish?)
+
+          expect(scheduled.may_publish?).to eq(true)
+        end
+
+        specify "on published" do
+          expect(published).to_not receive(:ready_to_publish?)
+
+          expect(published.may_publish?).to eq(false)
+        end
+      end
+
+      describe "may_unpublish?" do
+        specify "on draft" do
+          expect(draft.may_unpublish?).to eq(false)
+        end
+
+        specify "on scheduled" do
+          expect(scheduled.may_unpublish?).to eq(false)
+        end
+
+        specify "on published" do
+          expect(published.may_unpublish?).to eq(true)
         end
       end
     end
@@ -591,6 +822,254 @@ RSpec.describe Post, type: :model do
             instance.send(:clear_publish_on)
 
             expect(instance.publish_on).to eq(nil)
+          end
+        end
+
+        describe "#update_counts_for_descendents" do
+          let(    :review) { create(:unity_album_review  ) }
+          let(:standalone) { create(:tiny_standalone_post) }
+          let(      :work) { double }
+          let(  :creators) { [double, double] }
+
+          it "updates counts for creators and works" do
+            allow(review).to receive(    :work).and_return(work)
+            allow(  work).to receive(:creators).and_return(creators)
+
+             allow(          work).to receive(:update_counts)
+             allow(creators.first).to receive(:update_counts)
+             allow( creators.last).to receive(:update_counts)
+
+            expect(          work).to receive(:update_counts).once
+            expect(creators.first).to receive(:update_counts).once
+            expect( creators.last).to receive(:update_counts).once
+
+            review.send(:update_counts_for_descendents)
+          end
+
+          it "does nothing for standalone" do
+             allow_any_instance_of(Creator).to     receive(:update_counts)
+             allow_any_instance_of(   Work).to     receive(:update_counts)
+
+            expect_any_instance_of(Creator).to_not receive(:update_counts)
+            expect_any_instance_of(   Work).to_not receive(:update_counts)
+
+            standalone.send(:update_counts_for_descendents)
+          end
+        end
+      end
+    end
+
+    describe "transitions" do
+      describe "to draft" do
+        specify { expect(    draft).to_not allow_transition_to(:draft) }
+        specify { expect(scheduled).to     allow_transition_to(:draft) }
+        specify { expect(published).to     allow_transition_to(:draft) }
+      end
+
+      describe "to scheduled" do
+        specify { expect(    draft).to     allow_transition_to(:scheduled) }
+        specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
+        specify { expect(published).to_not allow_transition_to(:scheduled) }
+      end
+
+      describe "to published" do
+        specify { expect(    draft).to     allow_transition_to(:published) }
+        specify { expect(scheduled).to     allow_transition_to(:published) }
+        specify { expect(published).to_not allow_transition_to(:published) }
+      end
+    end
+
+    describe "update-transition methods" do
+      describe "#update_and_publish" do
+        subject { create(:standalone_post) }
+
+        before(:each) do
+          allow(subject).to receive(:update  ).and_call_original
+          allow(subject).to receive(:publish!).and_call_original
+        end
+
+        context "valid" do
+          let(:params) { { "title" => "New title" } }
+
+          it "updates, publishes and returns true" do
+            expect(subject).to receive(:update  )
+            expect(subject).to receive(:publish!)
+
+            expect(subject.update_and_publish(params)).to eq(true)
+
+            subject.reload
+
+            expect(subject.title).to eq(params["title"])
+
+            expect(subject).to be_published
+          end
+        end
+
+        context "invalid" do
+          let(:params) { { "title" => "", "body" => "" } }
+
+          it "does not update, does not attempt publish and returns false" do
+            expect(subject).to     receive(:update  )
+            expect(subject).to_not receive(:publish!)
+
+            expect(subject.update_and_publish(params)).to eq(false)
+
+            expect(subject.title).to eq(nil)
+
+            subject.reload
+
+            expect(subject.title).to_not eq(nil)
+
+            expect(subject).to_not be_published
+          end
+
+          it "manually adds errors on empty body" do
+            subject.update_and_publish(params)
+
+            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+          end
+        end
+      end
+
+      describe "#update_and_unpublish" do
+        subject { create(:song_review, :published) }
+
+        before(:each) do
+          allow(subject).to receive(:update    ).and_call_original
+          allow(subject).to receive(:unpublish!).and_call_original
+        end
+
+        context "valid" do
+          let(:params) { { "work_id" => create(:song).id } }
+
+          it "unpublishes, updates, and returns true" do
+            expect(subject).to receive(:update    )
+            expect(subject).to receive(:unpublish!)
+
+            expect(subject.update_and_unpublish(params)).to eq(true)
+
+            subject.reload
+
+            expect(subject.work_id).to eq(params["work_id"])
+
+            expect(subject).to_not be_published
+          end
+        end
+
+        context "invalid" do
+          let(:params) { { "work_id" => "", "body" => "" } }
+
+          it "unpublishes, does not update and returns false" do
+            expect(subject).to receive(:update    )
+            expect(subject).to receive(:unpublish!)
+
+            expect(subject.update_and_unpublish(params)).to eq(false)
+
+            expect(subject.work_id).to eq(nil)
+
+            subject.reload
+
+            expect(subject.work_id).to_not eq(nil)
+
+            expect(subject).to_not be_published
+          end
+        end
+      end
+
+      describe "#update_and_schedule" do
+        subject { create(:standalone_post) }
+
+        before(:each) do
+          allow(subject).to receive(:update   ).and_call_original
+          allow(subject).to receive(:schedule!).and_call_original
+        end
+
+        context "valid" do
+          let(:params) { { "title" => "New title", "publish_on" => 3.weeks.from_now } }
+
+          it "updates, schedules and returns true" do
+            expect(subject).to receive(:update   )
+            expect(subject).to receive(:schedule!)
+
+            expect(subject.update_and_schedule(params)).to eq(true)
+
+            subject.reload
+
+            expect(subject).to be_scheduled
+
+            expect(subject.title).to eq(params["title"])
+          end
+        end
+
+        context "invalid" do
+          let(:params) { { "title" => "", "body" => "", "publish_on" => 3.weeks.from_now } }
+
+          it "does not update, does not attempt schedule and returns false" do
+            expect(subject).to     receive(:update   )
+            expect(subject).to_not receive(:schedule!)
+
+            expect(subject.update_and_schedule(params)).to eq(false)
+
+            expect(subject.title     ).to eq(nil)
+            expect(subject.body      ).to eq(nil)
+            expect(subject.publish_on).to be_a_kind_of(ActiveSupport::TimeWithZone)
+
+            subject.reload
+
+            expect(subject.title).to_not eq(nil)
+
+            expect(subject).to_not be_scheduled
+          end
+
+          it "manually adds errors on empty body" do
+            subject.update_and_schedule(params)
+
+            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+          end
+        end
+      end
+
+      describe "#update_and_unschedule" do
+        subject { create(:song_review, :scheduled) }
+
+        before(:each) do
+          allow(subject).to receive(:update     ).and_call_original
+          allow(subject).to receive(:unschedule!).and_call_original
+        end
+
+        context "valid" do
+          let(:params) { { "work_id" => create(:song).id } }
+
+          it "unschedules, updates, and returns true" do
+            expect(subject).to receive(:update     )
+            expect(subject).to receive(:unschedule!)
+
+            expect(subject.update_and_unschedule(params)).to eq(true)
+
+            subject.reload
+
+            expect(subject.work_id).to eq(params["work_id"])
+
+            expect(subject).to_not be_scheduled
+          end
+        end
+
+        context "invalid" do
+          let(:params) { { "work_id" => "" } }
+
+          it "unschedules, fails update and returns false" do
+            expect(subject).to receive(:update     )
+            expect(subject).to receive(:unschedule!)
+
+            expect(subject.update_and_unschedule(params)).to eq(false)
+
+            expect(subject.work_id).to eq(nil)
+
+            subject.reload
+
+            expect(subject.work_id).to_not eq(nil)
+
+            expect(subject).to_not be_scheduled
           end
         end
       end
@@ -956,445 +1435,6 @@ RSpec.describe Post, type: :model do
             subject.prepare_work_for_editing
 
             expect(subject.work_id_changed?).to eq(false)
-          end
-        end
-      end
-    end
-
-    context "update-transition methods" do
-      describe "#update_and_publish" do
-        subject { create(:standalone_post) }
-
-        before(:each) do
-          allow(subject).to receive(:update  ).and_call_original
-          allow(subject).to receive(:publish!).and_call_original
-        end
-
-        context "valid" do
-          let(:params) { { "title" => "New title" } }
-
-          it "updates, publishes and returns true" do
-            expect(subject).to receive(:update  )
-            expect(subject).to receive(:publish!)
-
-            expect(subject.update_and_publish(params)).to eq(true)
-
-            subject.reload
-
-            expect(subject.title).to eq(params["title"])
-
-            expect(subject).to be_published
-          end
-        end
-
-        context "invalid" do
-          let(:params) { { "title" => "", "body" => "" } }
-
-          it "does not update, does not attempt publish and returns false" do
-            expect(subject).to     receive(:update  )
-            expect(subject).to_not receive(:publish!)
-
-            expect(subject.update_and_publish(params)).to eq(false)
-
-            expect(subject.title).to eq(nil)
-
-            subject.reload
-
-            expect(subject.title).to_not eq(nil)
-
-            expect(subject).to_not be_published
-          end
-
-          it "manually adds errors on empty body" do
-            subject.update_and_publish(params)
-
-            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
-          end
-        end
-      end
-
-      describe "#update_and_unpublish" do
-        subject { create(:song_review, :published) }
-
-        before(:each) do
-          allow(subject).to receive(:update    ).and_call_original
-          allow(subject).to receive(:unpublish!).and_call_original
-        end
-
-        context "valid" do
-          let(:params) { { "work_id" => create(:song).id } }
-
-          it "unpublishes, updates, and returns true" do
-            expect(subject).to receive(:update    )
-            expect(subject).to receive(:unpublish!)
-
-            expect(subject.update_and_unpublish(params)).to eq(true)
-
-            subject.reload
-
-            expect(subject.work_id).to eq(params["work_id"])
-
-            expect(subject).to_not be_published
-          end
-        end
-
-        context "invalid" do
-          let(:params) { { "work_id" => "", "body" => "" } }
-
-          it "unpublishes, does not update and returns false" do
-            expect(subject).to receive(:update    )
-            expect(subject).to receive(:unpublish!)
-
-            expect(subject.update_and_unpublish(params)).to eq(false)
-
-            expect(subject.work_id).to eq(nil)
-
-            subject.reload
-
-            expect(subject.work_id).to_not eq(nil)
-
-            expect(subject).to_not be_published
-          end
-        end
-      end
-
-      describe "#update_and_schedule" do
-        subject { create(:standalone_post) }
-
-        before(:each) do
-          allow(subject).to receive(:update   ).and_call_original
-          allow(subject).to receive(:schedule!).and_call_original
-        end
-
-        context "valid" do
-          let(:params) { { "title" => "New title", "publish_on" => 3.weeks.from_now } }
-
-          it "updates, schedules and returns true" do
-            expect(subject).to receive(:update   )
-            expect(subject).to receive(:schedule!)
-
-            expect(subject.update_and_schedule(params)).to eq(true)
-
-            subject.reload
-
-            expect(subject).to be_scheduled
-
-            expect(subject.title).to eq(params["title"])
-          end
-        end
-
-        context "invalid" do
-          let(:params) { { "title" => "", "body" => "", "publish_on" => 3.weeks.from_now } }
-
-          it "does not update, does not attempt schedule and returns false" do
-            expect(subject).to     receive(:update   )
-            expect(subject).to_not receive(:schedule!)
-
-            expect(subject.update_and_schedule(params)).to eq(false)
-
-            expect(subject.title     ).to eq(nil)
-            expect(subject.body      ).to eq(nil)
-            expect(subject.publish_on).to be_a_kind_of(ActiveSupport::TimeWithZone)
-
-            subject.reload
-
-            expect(subject.title).to_not eq(nil)
-
-            expect(subject).to_not be_scheduled
-          end
-
-          it "manually adds errors on empty body" do
-            subject.update_and_schedule(params)
-
-            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
-          end
-        end
-      end
-
-      describe "#update_and_unschedule" do
-        subject { create(:song_review, :scheduled) }
-
-        before(:each) do
-          allow(subject).to receive(:update     ).and_call_original
-          allow(subject).to receive(:unschedule!).and_call_original
-        end
-
-        context "valid" do
-          let(:params) { { "work_id" => create(:song).id } }
-
-          it "unschedules, updates, and returns true" do
-            expect(subject).to receive(:update     )
-            expect(subject).to receive(:unschedule!)
-
-            expect(subject.update_and_unschedule(params)).to eq(true)
-
-            subject.reload
-
-            expect(subject.work_id).to eq(params["work_id"])
-
-            expect(subject).to_not be_scheduled
-          end
-        end
-
-        context "invalid" do
-          let(:params) { { "work_id" => "" } }
-
-          it "unschedules, fails update and returns false" do
-            expect(subject).to receive(:update     )
-            expect(subject).to receive(:unschedule!)
-
-            expect(subject.update_and_unschedule(params)).to eq(false)
-
-            expect(subject.work_id).to eq(nil)
-
-            subject.reload
-
-            expect(subject.work_id).to_not eq(nil)
-
-            expect(subject).to_not be_scheduled
-          end
-        end
-      end
-    end
-
-    describe "private" do
-      context "callbacks" do
-        describe "#sluggable_parts" do
-          let(    :review) { create(:hounds_of_love_album_review               ) }
-          let(    :collab) { create(:unity_album_review                        ) }
-          let(:standalone) { create(:standalone_post, title: "Standalone Title") }
-
-          specify "for review" do
-            expect(review.send(:sluggable_parts)) .to eq(["Album", "Kate Bush", "Hounds of Love"])
-          end
-
-          specify "for review of collaborative work" do
-            expect(collab.send(:sluggable_parts)).to eq(["Album", "Carl Craig and Green Velvet", "Unity"])
-          end
-
-          specify "for standalone" do
-            expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
-          end
-        end
-
-        describe "#handle_slug" do
-          before(:each) do
-            allow(instance).to receive(:sluggable_parts).and_return(["Standalone Title"])
-
-            allow(instance).to receive(:slugify).and_call_original
-
-            allow(instance).to receive(:generate_slug).with(:slug, ["Standalone Title"]).and_return("latest_slug")
-            allow(instance).to receive(:generate_slug).with(:slug, "Newly Dirty"       ).and_return("newly_dirty")
-          end
-
-          context "unsaved draft" do
-            let(:instance) { build(:tiny_standalone_post) }
-
-            it "sets slug automatically" do
-              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("latest_slug")
-              expect(instance.dirty_slug?).to eq(false)
-            end
-          end
-
-          context "saved draft" do
-            let(:instance) { create(:tiny_standalone_post, :draft) }
-
-            context "clean" do
-              it "resets slug" do
-                expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-                instance.send(:handle_slug)
-
-                expect(instance.slug       ).to eq("latest_slug")
-                expect(instance.dirty_slug?).to eq(false)
-              end
-            end
-
-            context "newly dirty" do
-              it "slugifies dirty value and sets dirty flag" do
-                expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
-
-                instance.slug = "Newly Dirty"
-
-                instance.send(:handle_slug)
-
-                expect(instance.slug       ).to eq("newly_dirty")
-                expect(instance.dirty_slug?).to eq(true)
-              end
-            end
-
-            context "already dirty" do
-              before(:each) do
-                instance.update_columns(slug: "already_dirty", dirty_slug: true)
-              end
-
-              it "does nothing if no change" do
-                instance.send(:handle_slug)
-
-                expect(instance.slug       ).to eq("already_dirty")
-                expect(instance.dirty_slug?).to eq(true)
-              end
-
-              it "slugifies new value if new value is dirty" do
-                expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
-
-                instance.slug = "Newly Dirty"
-
-                instance.send(:handle_slug)
-
-                expect(instance.slug       ).to eq("newly_dirty")
-                expect(instance.dirty_slug?).to eq(true)
-              end
-
-              it "resets slug and sets dirty to false if new value is blank" do
-                expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-                instance.slug = ""
-
-                instance.send(:handle_slug)
-
-                expect(instance.slug       ).to eq("latest_slug")
-                expect(instance.dirty_slug?).to eq(false)
-              end
-            end
-          end
-
-          context "saved published" do
-            let(:instance) { create(:tiny_standalone_post, :published) }
-
-            it "does nothing if value has not changed" do
-              expect(instance).to_not receive(:slugify)
-
-              previous = instance.slug
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq(previous)
-              expect(instance.dirty_slug?).to eq(false)
-              expect(instance.errors.details[:slug].first).to eq(nil)
-            end
-
-            it "does nothing if value has not changed" do
-              expect(instance).to_not receive(:slugify)
-
-              instance.slug = "this is not allowed"
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("this is not allowed")
-              expect(instance.dirty_slug?).to eq(false)
-              expect(instance.errors.details[:slug].first).to eq({ error: :locked })
-            end
-          end
-        end
-      end
-
-      context "custom validators" do
-        describe "#validate_work_and_title" do
-          describe "with just work" do
-            subject { build(:post, work_id: create(:minimal_work).id) }
-
-            specify "ok" do
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:base]).to eq([])
-            end
-          end
-
-          describe "with just title" do
-            subject { build(:post, title: "") }
-
-            specify "ok" do
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:base]).to eq([])
-            end
-          end
-
-          describe "with neither" do
-            subject { build(:post) }
-
-            specify "errors" do
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
-            end
-          end
-
-          describe "with both" do
-            subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
-
-            specify "errors" do
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
-            end
-          end
-
-          describe "saved review" do
-            subject { create(:song_review) }
-
-            it "ensures work and no title" do
-              subject.work_id = ""
-              subject.title   = "title"
-
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:work_id].first).to eq({ error: :blank   })
-              expect(subject.errors.details[:title  ].first).to eq({ error: :present })
-            end
-          end
-
-          describe "saved standalone" do
-            subject { create(:standalone_post) }
-
-            it "ensures title and no work" do
-              subject.title   = ""
-              subject.work_id = create(:song).id
-
-              subject.send(:validate_work_and_title)
-
-              expect(subject.errors.details[:title  ].first).to eq({ error: :blank   })
-              expect(subject.errors.details[:work_id].first).to eq({ error: :present })
-            end
-          end
-        end
-      end
-
-      context "memoization" do
-        describe "#update_counts_for_descendents" do
-          let(    :review) { create(:unity_album_review  ) }
-          let(:standalone) { create(:tiny_standalone_post) }
-          let(      :work) { double }
-          let(  :creators) { [double, double] }
-
-          it "updates counts for creators and works" do
-            allow(review).to receive(    :work).and_return(work)
-            allow(  work).to receive(:creators).and_return(creators)
-
-             allow(          work).to receive(:update_counts)
-             allow(creators.first).to receive(:update_counts)
-             allow( creators.last).to receive(:update_counts)
-
-            expect(          work).to receive(:update_counts).once
-            expect(creators.first).to receive(:update_counts).once
-            expect( creators.last).to receive(:update_counts).once
-
-            review.send(:update_counts_for_descendents)
-          end
-
-          it "does nothing for standalone" do
-             allow_any_instance_of(Creator).to     receive(:update_counts)
-             allow_any_instance_of(   Work).to     receive(:update_counts)
-
-            expect_any_instance_of(Creator).to_not receive(:update_counts)
-            expect_any_instance_of(   Work).to_not receive(:update_counts)
-
-            standalone.send(:update_counts_for_descendents)
           end
         end
       end

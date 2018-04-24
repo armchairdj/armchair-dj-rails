@@ -170,6 +170,28 @@ RSpec.describe Work, type: :model do
           expect(instance.contributions.length).to eq(1)
         end
       end
+
+      describe "#prepare_contributions" do
+        it "prepares max for new" do
+          instance = described_class.new
+
+          expect(instance.contributions.length).to eq(0)
+
+          instance.prepare_contributions
+
+          expect(instance.contributions.length).to eq(10)
+        end
+
+        it "prepares up to max for saved" do
+          instance = create(:global_communications_76_14)
+
+          expect(instance.contributions.length).to eq(3)
+
+          instance.prepare_contributions
+
+          expect(instance.contributions.length).to eq(10)
+        end
+      end
     end
 
     context "enums" do
@@ -195,6 +217,18 @@ RSpec.describe Work, type: :model do
         subject.valid?
       end
     end
+
+    context "custom validators" do
+      describe "#validate_contributions" do
+        subject { build(:work_without_contributions) }
+
+        it "confirms at least one creator" do
+          subject.send(:validate_contributions)
+
+          expect(subject).to have_errors(contributions: :missing)
+        end
+      end
+    end
   end
 
   context "hooks" do
@@ -204,28 +238,6 @@ RSpec.describe Work, type: :model do
   context "instance" do
     context "meta methods" do
       pending "to_description"
-    end
-
-    describe "#prepare_contributions" do
-      it "prepares max for new" do
-        instance = described_class.new
-
-        expect(instance.contributions.length).to eq(0)
-
-        instance.prepare_contributions
-
-        expect(instance.contributions.length).to eq(10)
-      end
-
-      it "prepares up to max for saved" do
-        instance = create(:global_communications_76_14)
-
-        expect(instance.contributions.length).to eq(3)
-
-        instance.prepare_contributions
-
-        expect(instance.contributions.length).to eq(10)
-      end
     end
 
     describe "#title_with_creator" do
@@ -265,23 +277,7 @@ RSpec.describe Work, type: :model do
     end
 
     context "private" do
-      context "callbacks" do
-        # Nothing so far.
-      end
-
-      context "custom validators" do
-        describe "#validate_contributions" do
-          it "confirms at least one creator" do
-            instance = build(:work_without_contributions)
-
-            instance.send(:validate_contributions)
-
-            expect(instance.errors[:contributions][0]).to eq(
-              I18n.t("activerecord.errors.models.work.attributes.contributions.missing")
-            )
-          end
-        end
-      end
+      # Nothing so far.
     end
   end
 end

@@ -47,7 +47,7 @@ RSpec.describe Creator, type: :model do
     describe "associations" do
       it { should have_many(:contributions) }
 
-      it { should have_many(:works   ).through(:contributions) }
+      it { should have_many(:works            ).through(:contributions) }
       it { should have_many(:contributed_works).through(:contributions) }
 
       it { should have_many(:posts).through(:works) }
@@ -80,9 +80,7 @@ RSpec.describe Creator, type: :model do
     end
 
     describe "private" do
-      context "callbacks" do
-        # Nothing so far.
-      end
+       # Nothing so far.
     end
   end
 end

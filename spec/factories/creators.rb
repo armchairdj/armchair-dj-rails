@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        create(:post, :draft, body: "body", work_attributes: {
+        create(:post, :with_user, :draft, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
           "contributions_attributes" => {
@@ -24,7 +24,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |creator|
-        create(:post, :scheduled, body: "body", work_attributes: {
+        create(:post, :with_user, :scheduled, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
           "contributions_attributes" => {
@@ -38,7 +38,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        create(:post, :published, body: "body", work_attributes: {
+        create(:post, :with_user, :published, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
           "contributions_attributes" => {

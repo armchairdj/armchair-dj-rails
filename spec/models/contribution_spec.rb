@@ -66,9 +66,7 @@ RSpec.describe Contribution, type: :model do
 
   context "instance" do
     describe "private" do
-      context "callbacks" do
-        # Nothing so far.
-      end
+      # Nothing so far.
     end
   end
 end

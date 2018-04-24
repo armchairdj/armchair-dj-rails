@@ -68,6 +68,7 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
+  belongs_to :user, required: true
   belongs_to :work, required: false
 
   #############################################################################
@@ -92,12 +93,13 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validate { validate_user           }
   validate { validate_work_and_title }
 
   validates :status, presence: true
 
-  validates :body,         presence: true, unless: :draft?
-  validates :slug,         presence: true, unless: :draft?
+  validates :body, presence: true, unless: :draft?
+  validates :slug, presence: true, unless: :draft?
 
   validates :published_at, presence: true, if: :published?
   validates :publish_on,   presence: true, if: :scheduled?
@@ -232,11 +234,23 @@ class Post < ApplicationRecord
 private
 
   #############################################################################
-  # VALIDATION.
+  # NESTED ATTRIBUTES.
   #############################################################################
 
   def reject_blank_work(work_attributes)
     work_attributes["title"].blank?
+  end
+
+  #############################################################################
+  # VALIDATION.
+  #############################################################################
+
+  def validate_user
+    if user.nil?
+      self.errors.add(:base, :no_user)
+    elsif user.member?
+      self.errors.add(:base, :invalid_user)
+    end
   end
 
   def validate_work_and_title

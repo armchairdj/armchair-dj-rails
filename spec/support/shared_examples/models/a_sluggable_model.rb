@@ -224,6 +224,8 @@ RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
   end
 
   describe "included" do
+    subject { build_minimal_instance }
+
     it { should validate_uniqueness_of(:slug) }
   end
 
