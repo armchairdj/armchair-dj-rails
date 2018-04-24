@@ -325,7 +325,6 @@ private
     true
   end
 
-  # TODO include work version
   def sluggable_parts
     if title.present?
       [ title ]
@@ -333,8 +332,9 @@ private
       [
         work.human_medium,
         work.display_creator(connector: " and "),
-        work.title
-      ]
+        work.title,
+        work.subtitle
+      ].compact
     end
   end
 

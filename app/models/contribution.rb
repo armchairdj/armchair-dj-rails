@@ -67,8 +67,13 @@ class Contribution < ApplicationRecord
     music_engineer:               130,
 
     singer:                       140,
+    backing_vocalist:             141,
+
+    rapper:                       145,
 
     musician:                     150,
+
+    remixer:                      160,
 
     # Movies
 
@@ -86,6 +91,11 @@ class Contribution < ApplicationRecord
 
     radio_host:                   250,
     podcaster:                    260,
+
+    music_supervisor:             270,
+    score_composer:               271,
+    sound_editor:                 272,
+    sound_effects:                273,
 
     # Print
 

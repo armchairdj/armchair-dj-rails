@@ -133,17 +133,30 @@ RSpec.describe PostsHelper, type: :helper do
   describe "#post_title" do
     let(:standalone_post      ) { create(:standalone_post, title: "Standalone") }
     let(:hounds_of_love_review) { create(:hounds_of_love_album_review) }
+    let(:subtitled_review     ) { create(:junior_boys_remix_review) }
 
-    it "uses title for standalone" do
-      expect(helper.post_title(standalone_post)).to eq("Standalone")
+    context "default" do
+      it "uses title for standalone" do
+        expect(helper.post_title(standalone_post)).to eq("Standalone")
+      end
+
+      it "uses creator and title for review" do
+        expect(helper.post_title(hounds_of_love_review)).to eq("Kate Bush: Hounds of Love")
+      end
+
+      it "uses subtitle when available" do
+        expect(helper.post_title(subtitled_review)).to eq("Junior Boys: Like a Child: C2 Remix")
+      end
     end
 
-    it "by default uses creator and title for review" do
-      expect(helper.post_title(hounds_of_love_review)).to eq("Kate Bush: Hounds of Love")
-    end
+    context "full: false" do
+      it "skips creator" do
+        expect(helper.post_title(hounds_of_love_review, full: false)).to eq("Hounds of Love")
+      end
 
-    it "optionally skips creator for review" do
-      expect(helper.post_title(hounds_of_love_review, full: false)).to eq("Hounds of Love")
+      it "still includes subtitle" do
+        expect(helper.post_title(subtitled_review, full: false)).to eq("Like a Child: C2 Remix")
+      end
     end
   end
 

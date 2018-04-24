@@ -1,5 +1,5 @@
 <%
-  @title = [post_type(@post), post_title(@post, full: true)]
+  @title = [post_type(@post), post_title(@post)]
 %>
 
 <%= content_for(:page_header) do %>
@@ -11,6 +11,7 @@
       <%= content_tag(:h1) do %>
         <%= content_tag(:span, @post.work.display_creator, class: "creators") %>
         <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
+        <%= content_tag(:span, @post.work.subtitle,        class: "title"   ) %>
       <% end %>
     <% end %>
   <% end %>

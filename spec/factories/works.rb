@@ -8,6 +8,14 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
+    trait :with_subtitle do
+      subtitle "Subtitle"
+    end
+
+    trait :with_version do
+      subtitle "Version"
+    end
+
     trait :with_draft_post do
       after(:create) do |work|
         create(:song_review, :draft, work_id: work.id)
@@ -74,6 +82,17 @@ FactoryBot.define do
       } }
     end
 
+    factory :remix do
+      medium   :song
+      title    { FFaker::Music.song }
+      subtitle "C2 Remix"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
+        "1" => attributes_for(:contribution, role: :remixer, creator_id: create(:musician).id)
+      } }
+    end
+
     ###########################################################################
     # ALBUMS.
     ###########################################################################
@@ -97,6 +116,16 @@ FactoryBot.define do
       } }
     end
 
+    factory :special_edition_album do
+      medium   :album
+      title    { FFaker::Music.album }
+      subtitle "Special Edition"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      } }
+    end
+
     ###########################################################################
     # FILMS.
     ###########################################################################
@@ -117,6 +146,16 @@ FactoryBot.define do
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id),
         "1" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
+      } }
+    end
+
+    factory :directors_cut_movie do
+      medium   :movie
+      title    { FFaker::Movie.title }
+      subtitle "Director's Cut"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
       } }
     end
 
@@ -196,6 +235,16 @@ FactoryBot.define do
     factory :book do
       medium :book
       title  { FFaker::Book.title }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
+      } }
+    end
+
+    factory :memoir do
+      medium   :book
+      title    { FFaker::Book.title }
+      subtitle "A Memoir"
 
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
@@ -446,6 +495,17 @@ FactoryBot.define do
       contributions_attributes { {
         "0" => attributes_for(:contribution, role: :creator,        creator_id: create(:minimal_creator, name: "Madonna"      ).id),
         "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "William Orbit").id),
+      } }
+    end
+
+    factory :junior_boys_like_a_child_c2_remix do
+      medium :song
+      title "Like a Child"
+      subtitle "C2 Remix"
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Junior Boys").id),
+        "1" => attributes_for(:contribution, role: :remixer, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
       } }
     end
   end

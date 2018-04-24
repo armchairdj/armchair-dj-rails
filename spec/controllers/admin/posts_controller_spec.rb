@@ -268,6 +268,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           "work_attributes" => {
             "medium"                   => "song",
             "title"                    => "Hounds of Love",
+            "subtitle"                 => "New Vocal",
             "contributions_attributes" => {
               "0" => {
                 "role"       => "creator",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424192212) do
+ActiveRecord::Schema.define(version: 20180424203108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20180424192212) do
     t.integer "medium"
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
+    t.string "subtitle"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end

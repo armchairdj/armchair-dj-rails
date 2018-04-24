@@ -70,6 +70,12 @@ FactoryBot.define do
       association :work, factory: :collaborative_song
     end
 
+    factory :remix_review do
+      with_user
+      body        "This is a song review."
+      association :work, factory: :remix
+    end
+
     ###########################################################################
     # ALBUM REVIEWS.
     ###########################################################################
@@ -86,6 +92,12 @@ FactoryBot.define do
       association :work, factory: :collaborative_album
     end
 
+    factory :special_edition_album_review do
+      with_user
+      body        "This is an album review."
+      association :work, factory: :special_edition_album
+    end
+
     ###########################################################################
     # MOVIE REVIEWS.
     ###########################################################################
@@ -100,6 +112,12 @@ FactoryBot.define do
       with_user
       body        "This is a collaborative movie review."
       association :work, factory: :collaborative_movie
+    end
+
+    factory :directors_cut_movie_review do
+      with_user
+      body        "This is a movie review."
+      association :work, factory: :directors_cut_movie
     end
 
     ###########################################################################
@@ -164,6 +182,12 @@ FactoryBot.define do
       with_user
       body        "This is a collaborative book review."
       association :work, factory: :collaborative_book
+    end
+
+    factory :memoir_review do
+      with_user
+      body        "This is a book review."
+      association :work, factory: :memoir
     end
 
     ###########################################################################
@@ -306,6 +330,11 @@ FactoryBot.define do
     factory :unity_album_review, parent: :album_review do
       body        "All those little pills! You are my angel!"
       association :work, factory: :carl_craig_and_green_velvet_unity
+    end
+
+    factory :junior_boys_remix_review, parent: :song_review do
+      body        "You're back in town ..."
+      association :work, factory: :junior_boys_like_a_child_c2_remix
     end
 
     factory :tiny_standalone_post, parent: :standalone_post do

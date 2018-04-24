@@ -27,7 +27,10 @@ en:
           music_co_producer:            "Co-Producer"
           music_engineer:               "Engineer"
           singer:                       "Singer"
+          backing_vocalist:             "Backing Vocalist"
+          rapper:                       "Rapper"
           musician:                     "Musician"
+          remixer:                      "Remixer"
 
           director:                     "Director"
           producer:                     "Producer"
@@ -37,6 +40,10 @@ en:
           cinematographer:              "Cinematographer"
           screenwriter:                 "Screenwriter"
           film_editor:                  "Editor"
+          music_supervisor:             "Music Supervisor"
+          score_composer:               "Composer"
+          sound_editor:                 "Sound Editor"
+          sound_effects:                "Sound Effects Artist"
 
           radio_host:                   "Radio Host"
           podcaster:                    "Podcaster"
@@ -95,6 +102,8 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
+        title:      "Title"
+        subtitle:   "Subtitle or Version"
         media:
           song:        "Song"
           album:       "Album"

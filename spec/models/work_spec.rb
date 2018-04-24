@@ -240,21 +240,39 @@ RSpec.describe Work, type: :model do
       pending "to_description"
     end
 
-    describe "#title_with_creator" do
+    describe "#display_title" do
+      it "displays with just title" do
+        expect(create(:kate_bush_hounds_of_love).display_title).to eq(
+          "Hounds of Love"
+        )
+      end
+
+      it "displays with just subtitle" do
+        expect(create(:junior_boys_like_a_child_c2_remix).display_title).to eq(
+          "Like a Child: C2 Remix"
+        )
+      end
+
+      it "nils unless persisted" do
+        expect(build(:kate_bush_hounds_of_love).display_title).to eq(nil)
+      end
+    end
+
+    describe "#full_display_title" do
       it "displays with one creator" do
-        expect(create(:kate_bush_hounds_of_love).title_with_creator).to eq(
+        expect(create(:kate_bush_hounds_of_love).full_display_title).to eq(
           "Kate Bush: Hounds of Love"
         )
       end
 
       it "displays with multiple creators" do
-        expect(create(:carl_craig_and_green_velvet_unity).title_with_creator).to eq(
+        expect(create(:carl_craig_and_green_velvet_unity).full_display_title).to eq(
           "Carl Craig & Green Velvet: Unity"
         )
       end
 
       it "nils unless persisted" do
-        expect(build(:kate_bush_hounds_of_love).title_with_creator).to eq(nil)
+        expect(build(:kate_bush_hounds_of_love).full_display_title).to eq(nil)
       end
     end
 

@@ -16,44 +16,61 @@ RSpec.shared_examples "an enumable model" do |attributes|
 
     context "for #{single_attr}" do
       context "class" do
-        before(:each) do
-          allow(described_class).to receive(plural_attr).and_return({
-            "b" => 0,
-            "a" => 1,
-            "r" => 2
-          })
+        context "basic behavior" do
+          before(:each) do
+            allow(described_class).to receive(plural_attr).and_return({
+              "b" => 0,
+              "a" => 1,
+              "r" => 2
+            })
 
-          allow(I18n).to receive(:t).and_call_original
+            allow(I18n).to receive(:t).and_call_original
 
-          allow(I18n).to receive(:t).with("#{i18n_key}.b").and_return("Z.")
-          allow(I18n).to receive(:t).with("#{i18n_key}.a").and_return("Y.")
-          allow(I18n).to receive(:t).with("#{i18n_key}.r").and_return("X.")
-        end
+            allow(I18n).to receive(:t).with("#{i18n_key}.b").and_return("Z.")
+            allow(I18n).to receive(:t).with("#{i18n_key}.a").and_return("Y.")
+            allow(I18n).to receive(:t).with("#{i18n_key}.r").and_return("X.")
+          end
 
-        describe "self#human_#{plural_attr}" do
-          it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
-            expected = [["Z.", "b"], ["Y.", "a"], ["X.", "r"]]
-            actual   = described_class.send("human_#{plural_attr}")
+          describe "self#human_#{plural_attr}" do
+            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
+              expected = [["Z.", "b"], ["Y.", "a"], ["X.", "r"]]
+              actual   = described_class.send("human_#{plural_attr}")
 
-            expect(actual).to eq(expected)
+              expect(actual).to eq(expected)
+            end
+          end
+
+          describe "self#alphabetical_human_#{plural_attr}" do
+            it "gives alphabetical 2D array for use in dropdowns" do
+              expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
+              actual   = described_class.send("alphabetical_human_#{plural_attr}")
+
+              expect(actual).to eq(expected)
+            end
+          end
+
+          describe "self#human_#{plural_attr}_with_keys" do
+            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
+              expected = [["Z.", "b", 0], ["Y.", "a", 1], ["X.", "r", 2]]
+              actual   = described_class.send("human_#{plural_attr}_with_keys")
+
+              expect(actual).to eq(expected)
+            end
+          end
+
+          describe "self#human_#{single_attr}" do
+            specify { expect(described_class.send("human_#{single_attr}", "b")).to eq("Z.") }
+            specify { expect(described_class.send("human_#{single_attr}", "a")).to eq("Y.") }
+            specify { expect(described_class.send("human_#{single_attr}", "r")).to eq("X.") }
           end
         end
 
-        describe "self#alphabetical_human_#{plural_attr}" do
-          it "gives alphabetical 2D array for use in dropdowns" do
-            expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
-            actual   = described_class.send("alphabetical_human_#{plural_attr}")
-
-            expect(actual).to eq(expected)
+        context "translations" do
+          specify "are not missing" do
+            described_class.send("human_#{plural_attr}").each do |translation|
+              expect(translation.first).to_not match(/translation missing/)
+            end
           end
-        end
-
-        pending "self#human_#{plural_attr}_with_keys"
-
-        describe "self#human_#{single_attr}" do
-          specify { expect(described_class.send("human_#{single_attr}", "b")).to eq("Z.") }
-          specify { expect(described_class.send("human_#{single_attr}", "a")).to eq("Y.") }
-          specify { expect(described_class.send("human_#{single_attr}", "r")).to eq("X.") }
         end
       end
 

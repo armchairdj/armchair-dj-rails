@@ -19,7 +19,7 @@ class Work < ApplicationRecord
   end
 
   def self.alphabetical_by_creator
-    self.all.to_a.sort_by { |c| c.title_with_creator }
+    self.all.to_a.sort_by { |c| c.full_display_title }
   end
 
   def self.admin_filters
@@ -144,10 +144,16 @@ class Work < ApplicationRecord
     count_needed.times { self.contributions.build }
   end
 
-  def title_with_creator
+  def display_title
     return unless persisted?
 
-    [display_creator, title].join(": ")
+    [title, subtitle].compact.join(": ")
+  end
+
+  def full_display_title
+    return unless persisted?
+
+    [display_creator, title, subtitle].compact.join(": ")
   end
 
   def display_creator(connector: " & ")

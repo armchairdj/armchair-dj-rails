@@ -156,6 +156,7 @@ private
         :_destroy,
         :medium,
         :title,
+        :subtitle,
         :contributions_attributes => [
           :work_id,
           :id,

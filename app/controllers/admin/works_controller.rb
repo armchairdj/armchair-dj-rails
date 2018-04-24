@@ -127,6 +127,7 @@ private
     params.fetch(:work, {}).permit(
       :medium,
       :title,
+      :subtitle,
       :contributions_attributes => [
         :work_id,
         :id,

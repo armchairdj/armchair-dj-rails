@@ -128,8 +128,8 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "POST #create" do
-      let(  :valid_params) { attributes_for(:minimal_work) }
-      let(:invalid_params) { attributes_for(:minimal_work).except(:title) }
+      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix) }
+      let(:invalid_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
 
       context "with valid params" do
         it "creates a new Work" do

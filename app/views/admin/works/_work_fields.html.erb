@@ -9,6 +9,12 @@
 
   <%= f.input :title %>
 
+  <%= f.input :subtitle,
+    required:    false,
+    hint:        "Song remix, book subtitle, movie cut, etc.",
+    placeholder: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\"" 
+  %>
+
   <%= content_tag(:fieldset,
     class:  join_class_names("legendary", "fields_for", ("fieldset-with-errors" if f.object.errors[:contributions].any?)),
     "data-controller": "expandable-has-many"

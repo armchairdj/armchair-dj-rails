@@ -28,7 +28,7 @@ module PostsHelper
 
   def post_title(post, full: true)
     if post.review?
-      full ? post.work.title_with_creator : post.work.title
+      full ? post.work.full_display_title : post.work.display_title
     else
       post.title
     end
