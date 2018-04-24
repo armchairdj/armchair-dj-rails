@@ -28,7 +28,11 @@
         <%= content_tag(:th, "Status") %>
         <%= content_tag(:td) do %>
           <%= @post.human_status %>
-          <%= admin_date(@post.published_at) if @post.published? %>
+          <% if @post.published? %>
+            at <%= admin_date(@post.published_at) %>
+          <% elsif @post.scheduled? %>
+            for <%= admin_date(@post.published_at) %>
+          <% end %>
         <% end %>
       <% end %>
 
@@ -69,7 +73,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Published") %>
         <%= content_tag(:td, admin_date(@post.published_at)) %>
-      <% end %>
+      <% end if @published %>
     <% end %>
   <% end %>
 <% end %>
