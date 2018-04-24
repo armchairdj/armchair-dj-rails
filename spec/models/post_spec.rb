@@ -30,6 +30,55 @@ RSpec.describe Post, type: :model do
     describe "self#default_admin_scope" do
       specify { expect(described_class.default_admin_scope).to eq(:draft) }
     end
+
+    describe "self#publish_scheduled" do
+      let!(:current) { create(:standalone_post, :scheduled, publish_on: 1.day.from_now) }
+      let!( :future) { create(:standalone_post, :scheduled) }
+
+      context "scope :scheduled_ready" do
+        it "includes on scheduled posts that have come due" do
+          Timecop.freeze(Date.today + 2) do
+            expect(described_class.scheduled_ready).to match_array([
+              current
+            ])
+          end
+        end
+      end
+
+      it "publishes scheduled if publish_on is past" do
+        Timecop.freeze(Date.today + 2) do
+          expect(described_class.publish_scheduled).to eq({
+            total:   1,
+            success: [current],
+            failure: []
+          })
+
+          expect(current.reload).to be_published
+        end
+      end
+
+      it "unschedules on failed publish" do
+        Timecop.freeze(Date.today + 2) do
+          current.update_column(:body, nil)
+
+          expect(described_class.publish_scheduled).to eq({
+            total:   1,
+            success: [],
+            failure: [current]
+          })
+
+          expect(current.reload).to be_draft
+        end
+      end
+
+      it "does not pubish if publish_on is future" do
+        Timecop.freeze(Date.today + 2) do
+          described_class.publish_scheduled
+
+          expect(future.reload).to be_scheduled
+        end
+      end
+    end
   end
 
   context "scopes" do

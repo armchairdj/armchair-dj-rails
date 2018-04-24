@@ -24,21 +24,45 @@ class Post < ApplicationRecord
     }
   end
 
+  def self.publish_scheduled
+    ready = self.scheduled_ready
+
+    memo = {
+      total:   ready.length,
+      success: [],
+      failure: []
+    }
+
+    ready.each do |post|
+      post.unschedule!
+
+      if post.publish!
+        memo[:success] << post
+      else
+        memo[:failure] << post
+      end
+    end
+
+    memo
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :not_published, -> { where.not(status: :published) }
+  scope :not_published,   -> { where.not(status: :published) }
 
-  scope :review,        -> { where.not(work_id: nil) }
-  scope :standalone,    -> { where(    work_id: nil) }
+  scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
 
-  scope :reverse_cron,  -> { order(published_at: :desc) }
+  scope :review,          -> { where.not(work_id: nil) }
+  scope :standalone,      -> { where(    work_id: nil) }
 
-  scope :eager,         -> { includes(work: { contributions: :creator }) }
+  scope :reverse_cron,    -> { order(published_at: :desc) }
 
-  scope :for_admin,     -> { eager                   }
-  scope :for_site,      -> { eager.published.reverse_cron }
+  scope :eager,           -> { includes(work: { contributions: :creator }) }
+
+  scope :for_admin,       -> { eager                   }
+  scope :for_site,        -> { eager.published.reverse_cron }
 
   #############################################################################
   # ASSOCIATIONS.
