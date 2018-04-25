@@ -1,0 +1,40 @@
+header.post-header {
+  @include bottom-margin-only();
+  @include clearfix();
+
+  h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
+
+    span {
+      display: block;
+      font-size: 1.4rem;
+
+      &.creators {
+        font-size: 1.2rem;
+      }
+
+      &.title {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+      }
+
+      &.subtitle {
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
+
+footer.post-byline {
+  font-size: .9rem;
+
+  address {
+    display: inline;
+  }
+}

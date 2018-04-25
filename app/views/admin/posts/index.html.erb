@@ -28,7 +28,7 @@
         <%= content_tag(:tbody) do %>
           <% @posts.each do |post| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post_type(post)) %>
+              <%= content_tag(:td, post.type) %>
               <%= content_tag(:td, post_status_icon(post), class: "icon")%>
               <%= content_tag(:td, post_title(post)) %>
               <%= content_tag(:td, class: "actions") do %>

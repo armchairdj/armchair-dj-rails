@@ -10,7 +10,7 @@ RSpec.describe AdminHelper, type: :helper do
       it "formats dates consistently" do
         Timecop.freeze(2050, 3, 3) do
           expect(helper.admin_date DateTime.now).to eq(
-            '<time datetime="2050-03-02T16:00:00-08:00">03/02/2050 04:00PM</time>'
+            '<time datetime="2050-03-02T16:00:00-08:00">03/02/2050 at 04:00PM</time>'
           )
         end
       end

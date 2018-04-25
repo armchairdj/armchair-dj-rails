@@ -92,7 +92,7 @@ RSpec.describe PostsHelper, type: :helper do
     specify do
       Timecop.freeze(2050, 3, 3) do
         expect(helper.post_published_date(published)).to eq(
-          '<time datetime="2050-03-03T00:00:00Z">03/03/2050 at 12:00AM</time>'
+          '<time datetime="2050-03-03T00:00:00Z" pubdate="pubdate">03/03/2050 at 12:00AM</time>'
         )
       end
     end
@@ -118,16 +118,6 @@ RSpec.describe PostsHelper, type: :helper do
 
     specify { expect(helper.post_scheduled_date(draft    )).to eq(nil) }
     specify { expect(helper.post_scheduled_date(published)).to eq(nil) }
-  end
-
-  describe "#post_type" do
-    specify{ expect(helper.post_type(create(:standalone_post))).to eq("Standalone Post") }
-    specify{ expect(helper.post_type(create(:album_review   ))).to eq("Album Review"   ) }
-  end
-
-  describe "#post_type_for_site" do
-    specify{ expect(helper.post_type_for_site(create(:standalone_post))).to eq(nil           ) }
-    specify{ expect(helper.post_type_for_site(create(:album_review   ))).to eq("Album Review") }
   end
 
   describe "#post_title" do

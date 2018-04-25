@@ -1,5 +1,5 @@
 <%
-  @title = [post_type(@post), post_title(@post)]
+  @title = [@post.display_type, @post.display_type].compact
 %>
 
 <%= content_for(:header) do %>
@@ -7,7 +7,7 @@
     <% if @post.standalone? %>
       <%= content_tag(:h1, @post.title) %>
     <% else %>
-      <%= content_tag(:h3, post_type(@post)) %>
+      <%= content_tag(:h3, @post.display_type) %>
       <%= content_tag(:h1) do %>
         <%= content_tag(:span, @post.work.display_creator, class: "creators") %>
         <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
@@ -19,8 +19,10 @@
 
 <%= formatted_post_body(@post) %>
 
-<%= content_tag(:div, class: "meta") do %>
-  Posted
-  by <%= @post.user.username %>
-  on <%= content_tag(:span, post_published_date(@post)) %>
+<%= content_tag(:footer, class: "post-byline") do %>
+  Posted by
+  <%= content_tag :address, class: "author" do %>
+    <%= link_to(@post.user.username, "TODO", rel: "author") %>
+  <% end %>
+  on <%= post_published_date(@post) %>
 <% end %>

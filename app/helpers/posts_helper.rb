@@ -17,7 +17,7 @@ module PostsHelper
   def post_published_date(post)
     return unless post.published?
 
-    time_tag post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p")
+    time_tag(post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
   end
 
   def post_scheduled_date(post)
@@ -32,16 +32,6 @@ module PostsHelper
     else
       post.title
     end
-  end
-
-  def post_type(post)
-    post.work ? "#{post.work.human_medium} Review" : "Standalone Post"
-  end
-
-  def post_type_for_site(post)
-    return unless post.work
-
-    post_type(post)
   end
 
   def post_status_icon(post)

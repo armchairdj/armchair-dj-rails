@@ -399,11 +399,11 @@ RSpec.describe Post, type: :model do
         let(:standalone) { create(:standalone_post, title: "Standalone Title") }
 
         specify "for review" do
-          expect(review.send(:sluggable_parts)) .to eq(["Album", "Kate Bush", "Hounds of Love"])
+          expect(review.send(:sluggable_parts)) .to eq(["Album Reviews", "Kate Bush", "Hounds of Love"])
         end
 
         specify "for review of collaborative work" do
-          expect(collab.send(:sluggable_parts)).to eq(["Album", "Carl Craig and Green Velvet", "Unity"])
+          expect(collab.send(:sluggable_parts)).to eq(["Album Reviews", "Carl Craig and Green Velvet", "Unity"])
         end
 
         specify "for standalone" do
@@ -1077,6 +1077,25 @@ RSpec.describe Post, type: :model do
   end
 
   context "instance" do
+    context "decorators" do
+      let(:standalone) { create(:standalone_post) }
+      let(    :review) { create(:album_review   ) }
+
+      describe "#type" do
+        specify{ expect(standalone.type              ).to eq("Standalone Post") }
+        specify{ expect(standalone.type(plural: true)).to eq("Standalone Posts") }
+        specify{ expect(    review.type              ).to eq("Album Review"   ) }
+        specify{ expect(    review.type(plural: true)).to eq("Album Reviews"   ) }
+      end
+
+      describe "#display_type" do
+        specify{ expect(standalone.display_type              ).to eq(nil) }
+        specify{ expect(standalone.display_type(plural: true)).to eq(nil) }
+        specify{ expect(    review.display_type              ).to eq("Album Review" ) }
+        specify{ expect(    review.display_type(plural: true)).to eq("Album Reviews") }
+      end
+    end
+
     context "meta methods" do
       pending "to_description"
     end

@@ -156,9 +156,55 @@ class Post < ApplicationRecord
     end
   end
 
+  def update_and_publish(params)
+    return true if self.update(params) && self.publish!
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+
+    return false
+  end
+
+  def update_and_unpublish(params)
+    # Transition and reload to trigger validation changes before update.
+    unpublished = self.unpublish!
+    updated     = self.reload.update(params)
+
+    unpublished && updated
+  end
+
+  def update_and_schedule(params)
+    return true if self.update(params) && self.schedule!
+
+    clear_publish_on_from_database
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+
+    return false
+  end
+
+  def update_and_unschedule(params)
+    # Transition and reload to trigger validation changes before update.
+    unscheduled = self.unschedule!
+    updated     = self.reload.update(params)
+
+    unscheduled && updated
+  end
+
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def type(plural: false)
+    base = review? ? "#{work.human_medium} Review" : "Standalone Post"
+
+    plural ? base.pluralize : base
+  end
+
+  def display_type(plural: false)
+    return nil unless review?
+
+    type(plural: true)
+  end
 
   def to_description
     "TODO"
@@ -195,40 +241,6 @@ class Post < ApplicationRecord
     build_work unless self.work.present?
 
     work.prepare_contributions
-  end
-
-  def update_and_publish(params)
-    return true if self.update(params) && self.publish!
-
-    self.errors.add(:body, :blank_during_publish) unless body.present?
-
-    return false
-  end
-
-  def update_and_unpublish(params)
-    # Transition first to trigger validation rule change.
-    unpublished = self.unpublish!
-    updated     = self.reload.update(params)
-
-    unpublished && updated
-  end
-
-  def update_and_schedule(params)
-    return true if self.update(params) && self.schedule!
-
-    clear_publish_on_from_database
-
-    self.errors.add(:body, :blank_during_publish) unless body.present?
-
-    return false
-  end
-
-  def update_and_unschedule(params)
-    # Transition first to trigger validation rule change.
-    unscheduled = self.unschedule!
-    updated     = self.reload.update(params)
-
-    unscheduled && updated
   end
 
 private
@@ -330,7 +342,7 @@ private
       [ title ]
     elsif work.present?
       [
-        work.human_medium,
+        display_type(plural: true),
         work.display_creator(connector: " and "),
         work.title,
         work.subtitle

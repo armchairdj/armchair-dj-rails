@@ -12,10 +12,10 @@ module AdminHelper
   # FORMATTING.
   #############################################################################
 
-  def admin_date(date)
+  def admin_date(date, **opts)
     return unless date
 
-    time_tag date, date.strftime("%m/%d/%Y %I:%M%p")
+    time_tag(date, date.strftime("%m/%d/%Y at %I:%M%p"), **opts)
   end
 
   #############################################################################
