@@ -9,7 +9,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_user do
-      association :user, factory: :admin
+      association :user, factory: :contributor
     end
 
     trait :draft do
