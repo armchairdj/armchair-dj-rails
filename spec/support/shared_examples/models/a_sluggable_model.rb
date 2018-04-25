@@ -99,31 +99,55 @@ RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
     end
 
     describe "self#generate_slug_part" do
-      it "underscores and lowercases" do
-        actual = described_class.generate_slug_part("Ray of Light")
+      it "underscores" do
+        actual = described_class.generate_slug_part("iLoveMakonnen")
 
-        expect(actual).to eq("ray_of_light")
+        expect(actual).to eq("i_love_makonnen")
       end
 
-      it "replaces &" do
+      it "lowercases" do
+        actual = described_class.generate_slug_part("MGMT")
+
+        expect(actual).to eq("mgmt")
+      end
+
+      it "converts non-ASCII word characters" do
+        actual = described_class.generate_slug_part("Sigur Ros")
+
+        expect(actual).to eq("sigur_ros")
+      end
+
+      it "converts &" do
         actual = described_class.generate_slug_part("Key & Peele")
 
         expect(actual).to eq("key_and_peele")
       end
 
-      it "replaces & in the middle of a work" do
+      it "converts & in the middle of a work" do
         actual = described_class.generate_slug_part("Key&Peele")
 
         expect(actual).to eq("key_and_peele")
       end
 
-      it "replaces punctuation" do
+      it "removes quotation marks" do
+        actual = described_class.generate_slug_part('"Heroes"')
+
+        expect(actual).to eq("heroes")
+      end
+
+      it "removes apostrophes" do
+        actual = described_class.generate_slug_part("It's Like I Love You")
+
+        expect(actual).to eq("its_like_i_love_you")
+      end
+
+      it "converts punctuation" do
         actual = described_class.generate_slug_part("Damn. I love it! Yeah")
 
         expect(actual).to eq("damn_i_love_it_yeah")
       end
 
-      it "replaces and collapses whitespace" do
+      it "converts and collapses whitespace into underscores" do
         actual = described_class.generate_slug_part("what    is \n\n\t\t\t all this whitespace")
         expect(actual).to eq("what_is_all_this_whitespace")
       end
@@ -144,12 +168,6 @@ RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
         actual = described_class.generate_slug_part("_____Who? What?When? Where?__ why? How?____")
 
         expect(actual).to eq("who_what_when_where_why_how")
-      end
-
-      it "ASCII-fies non-ASCII word characters" do
-        actual = described_class.generate_slug_part("Sigur Ros")
-
-        expect(actual).to eq("sigur_ros")
       end
     end
 

@@ -17,6 +17,7 @@ module Sluggable
     def generate_slug_part(str)
       str = str.underscore.to_ascii.strip
       str = str.gsub("&", "_and_")
+      str = str.gsub(/['"]/, "")
       str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
       str = str.gsub(/[^[:word:]]/, "")
       str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
