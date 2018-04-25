@@ -161,9 +161,30 @@ RSpec.describe PostsHelper, type: :helper do
   end
 
   describe "icon methods" do
-    pending "#post_status_icon"
-    pending "#post_draft_icon"
-    pending "#post_published_icon"
-    pending "#post_scheduled_icon"
+    describe "#post_status_icon" do
+      before(:each) do
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-locked.svg",   anything).and_return("locked")
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-unlocked.svg", anything).and_return("unlocked")
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/clock.svg",         anything).and_return("clock")
+      end
+
+      specify "calls #post_draft_icon" do
+        expect(helper.post_status_icon(create(:minimal_post, :draft))).to eq(
+          '<span class="svg-icon post-draft">locked</span>'
+        )
+      end
+
+      specify "calls #post_scheduled_icon" do
+        expect(helper.post_status_icon(create(:minimal_post, :scheduled))).to eq(
+          '<span class="svg-icon post-scheduled">clock</span>'
+        )
+      end
+
+      specify "calls #post_published_icon" do
+        expect(helper.post_status_icon(create(:minimal_post, :published))).to eq(
+          '<span class="svg-icon post-published">unlocked</span>'
+        )
+      end
+    end
   end
 end
