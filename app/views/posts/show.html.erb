@@ -20,9 +20,5 @@
 <%= formatted_post_body(@post) %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
-  Posted by
-  <%= content_tag :address, class: "author" do %>
-    <%= link_to(@post.user.username, "TODO", rel: "author") %>
-  <% end %>
-  on <%= post_published_date(@post) %>
+  Posted by <%= post_byline_link(@post) %> on <%= post_published_date(@post) %>
 <% end %>

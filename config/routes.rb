@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get    "settings/password", to: "users/registrations#edit_password"
     match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
     delete "settings/cancel",   to: "users/registrations#destroy",         as: :destroy_user_registration
+    get    "profile/:username", to: "users/registrations#profile",         as: :user_profile
 
     get   "log_in",             to: "users/sessions#new",                  as: :new_user_session
     post  "log_in",             to: "users/sessions#create",               as: :user_session

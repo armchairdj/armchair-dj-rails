@@ -14,6 +14,8 @@ RSpec.describe User, type: :model do
   end
 
   context "class" do
+    pending "self#find_by_username!"
+
     describe "self#admin_scopes" do
       specify "keys are short tab names" do
         expect(described_class.admin_scopes.keys).to eq([
@@ -72,8 +74,11 @@ RSpec.describe User, type: :model do
 
     it { should validate_presence_of(:first_name) }
     it { should validate_presence_of(:last_name ) }
-    it { should validate_presence_of(:role      ) }
-    it { should validate_presence_of(:username  ) }
+
+    it { should validate_presence_of(:role) }
+
+    it { should validate_presence_of(  :username) }
+    it { should validate_uniqueness_of(:username) }
   end
 
   context "hooks" do

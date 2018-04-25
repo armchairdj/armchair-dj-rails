@@ -54,6 +54,13 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Author") %>
+        <%= content_tag(:td) do %>
+          <%= link_to(@post.user.username, admin_user_path(@post.user)) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Slug") %>
         <%= content_tag(:td) do %>
           <%= @post.slug %> <%= "(dirty)" if @post.dirty_slug? %>

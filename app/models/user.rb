@@ -32,6 +32,10 @@ class User < ApplicationRecord
     }
   end
 
+  def self.find_by_username!(username)
+    find_by!(username: username, role: [:contributor, :admin])
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
@@ -62,10 +66,13 @@ class User < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :first_name, presence: true
-  validates :last_name,  presence: true
-  validates :role,       presence: true
-  validates :username,   presence: true
+  validates :first_name, presence:   true
+  validates :last_name,  presence:   true
+
+  validates :role,       presence:   true
+
+  validates :username,   presence:   true
+  validates :username,   uniqueness: true
 
   #############################################################################
   # HOOKS.

@@ -23,7 +23,7 @@ private
   end
 
   def find_instance
-    @post = Post.where(slug: params[:slug]).first!
+    @post = Post.find_by!(slug: params[:slug])
   end
 
   def authorize_instance

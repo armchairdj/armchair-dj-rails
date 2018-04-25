@@ -14,6 +14,13 @@ module PostsHelper
     link_to(text, url_options)
   end
 
+  def post_byline_link(post)
+    url  = user_profile_path(username: post.user.username)
+    link = link_to(post.user.username, url, rel: "author")
+
+    content_tag(:address, link, class: "author")
+  end
+
   def post_published_date(post)
     return unless post.published?
 

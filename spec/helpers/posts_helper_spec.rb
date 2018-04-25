@@ -84,6 +84,8 @@ RSpec.describe PostsHelper, type: :helper do
     end
   end
 
+  pending "#post_byline_link"
+
   describe "#post_published_date" do
     let(:draft    ) { create(:standalone_post, :draft    ) }
     let(:scheduled) { create(:standalone_post, :scheduled) }
