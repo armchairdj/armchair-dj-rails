@@ -36,8 +36,8 @@ RSpec.describe Post, type: :model do
       let!( :future) { create(:standalone_post, :scheduled) }
 
       context "scope :scheduled_ready" do
-        it "includes on scheduled posts that have come due" do
-          Timecop.freeze(Date.today + 2) do
+        it "includes only scheduled posts that have come due" do
+          Timecop.freeze(Date.today + 3) do
             expect(described_class.scheduled_ready).to match_array([
               current
             ])
@@ -46,7 +46,7 @@ RSpec.describe Post, type: :model do
       end
 
       it "publishes scheduled if publish_on is past" do
-        Timecop.freeze(Date.today + 2) do
+        Timecop.freeze(Date.today + 3) do
           expect(described_class.publish_scheduled).to eq({
             total:   1,
             success: [current],
@@ -58,7 +58,7 @@ RSpec.describe Post, type: :model do
       end
 
       it "unschedules on failed publish" do
-        Timecop.freeze(Date.today + 2) do
+        Timecop.freeze(Date.today + 3) do
           current.update_column(:body, nil)
 
           expect(described_class.publish_scheduled).to eq({
@@ -72,7 +72,7 @@ RSpec.describe Post, type: :model do
       end
 
       it "does not pubish if publish_on is future" do
-        Timecop.freeze(Date.today + 2) do
+        Timecop.freeze(Date.today + 3) do
           described_class.publish_scheduled
 
           expect(future.reload).to be_scheduled

@@ -19,11 +19,17 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "link methods" do
     before(:each) do
-      allow(helper).to receive(   :semantic_svg_image).and_return("svg")
       allow(helper).to receive(     :polymorphic_path).and_return("path")
       allow(helper).to receive( :new_polymorphic_path).and_return("path")
       allow(helper).to receive(:edit_polymorphic_path).and_return("path")
       allow(helper).to receive(  :post_permalink_path).and_return("path")
+
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/plus.svg",        anything).and_return("create")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/trash.svg",       anything).and_return("destroy")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/list.svg",        anything).and_return("list")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/pencil.svg",      anything).and_return("edit")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/eye.svg",         anything).and_return("view")
     end
 
     let(   :model) { Creator }
@@ -34,7 +40,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:new_polymorphic_path).with([:admin, model])
 
         expect(helper.admin_create_link(model)).to eq(
-          '<a title="create creator" class="admin create" href="path">svg</a>'
+          '<a title="create creator" class="admin create" href="path">create</a>'
         )
       end
     end
@@ -44,7 +50,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with([:admin, instance])
 
         expect(helper.admin_destroy_link(instance)).to eq(
-          '<a title="destroy creator" class="admin destroy" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="path">svg</a>'
+          '<a title="destroy creator" class="admin destroy" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="path">destroy</a>'
         )
       end
     end
@@ -54,7 +60,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with([:admin, model])
 
         expect(helper.admin_list_link(model)).to eq(
-          '<a title="back to creators list" class="admin list" href="path">svg</a>'
+          '<a title="back to creators list" class="admin list" href="path">list</a>'
         )
       end
     end
@@ -67,7 +73,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with(instance)
 
         expect(helper.admin_public_creator_link(instance)).to eq(
-          '<a title="view creator on site" class="admin public-view" target="_blank" href="path">svg</a>'
+          '<a title="view creator on site" class="admin public-view" target="_blank" href="path">public</a>'
         )
       end
 
@@ -88,7 +94,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
 
         expect(helper.admin_public_post_link(instance)).to eq(
-          '<a title="view post on site" class="admin public-view" target="_blank" href="path">svg</a>'
+          '<a title="view post on site" class="admin public-view" target="_blank" href="path">public</a>'
         )
       end
 
@@ -109,7 +115,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with(instance)
 
         expect(helper.admin_public_work_link(instance)).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="path">svg</a>'
+          '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
         )
       end
 
@@ -131,7 +137,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with(instance)
 
         expect(helper.admin_public_link(instance)).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="path">svg</a>'
+          '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
         )
       end
 
@@ -142,7 +148,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to_not receive(:polymorphic_path)
 
         expect(helper.admin_public_link(instance, "/")).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="/">svg</a>'
+          '<a title="view work on site" class="admin public-view" target="_blank" href="/">public</a>'
         )
       end
     end
@@ -152,7 +158,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
 
         expect(helper.admin_update_link(instance)).to eq(
-          '<a title="update creator" class="admin edit" href="path">svg</a>'
+          '<a title="update creator" class="admin edit" href="path">update</a>'
         )
       end
     end
@@ -162,7 +168,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with([:admin, instance])
 
         expect(helper.admin_view_link(instance)).to eq(
-          '<a title="view creator" class="admin view" href="path">svg</a>'
+          '<a title="view creator" class="admin view" href="path">view</a>'
         )
       end
     end
