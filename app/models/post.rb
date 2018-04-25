@@ -203,7 +203,7 @@ class Post < ApplicationRecord
   def display_type(plural: false)
     return nil unless review?
 
-    type(plural: true)
+    type(plural: plural)
   end
 
   def to_description
