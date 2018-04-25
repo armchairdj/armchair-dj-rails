@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe WorksController, type: :controller do
+  context "concerns" do
+    it_behaves_like "a public controller"
+
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { works_path }
+    end
+  end
+
   describe "GET #index" do
     context "without records" do
       it "renders" do
@@ -44,12 +52,6 @@ RSpec.describe WorksController, type: :controller do
         should successfully_render("works/show")
 
         expect(assigns(:work)).to eq(work)
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an seo paginatable controller" do
-      let(:expected_redirect) { works_path }
     end
   end
 end

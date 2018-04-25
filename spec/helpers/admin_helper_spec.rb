@@ -28,7 +28,7 @@ RSpec.describe AdminHelper, type: :helper do
       allow(helper).to receive(   :semantic_svg_image).with("open_iconic/trash.svg",       anything).and_return("destroy")
       allow(helper).to receive(   :semantic_svg_image).with("open_iconic/list.svg",        anything).and_return("list")
       allow(helper).to receive(   :semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/pencil.svg",      anything).and_return("edit")
+      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/pencil.svg",      anything).and_return("update")
       allow(helper).to receive(   :semantic_svg_image).with("open_iconic/eye.svg",         anything).and_return("view")
     end
 

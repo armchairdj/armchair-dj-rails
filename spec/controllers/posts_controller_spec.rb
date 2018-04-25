@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe PostsController, type: :controller do
+  context "concerns" do
+    it_behaves_like "a public controller"
+
+    it_behaves_like "an seo paginatable controller" do
+      let(:expected_redirect) { posts_path }
+    end
+  end
+
   describe "GET #index" do
     context "without records" do
       it "renders" do
@@ -74,12 +82,6 @@ RSpec.describe PostsController, type: :controller do
       expect(response).to be_success
 
       expect(assigns(:posts).length).to eq(100)
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an seo paginatable controller" do
-      let(:expected_redirect) { posts_path }
     end
   end
 end
