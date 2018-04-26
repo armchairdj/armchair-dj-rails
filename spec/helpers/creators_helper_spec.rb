@@ -5,8 +5,6 @@ RSpec.describe CreatorsHelper, type: :helper do
   let(  :saved) { create(:creator, name: "Kate Bush") }
 
   describe "#link_to_creator" do
-    pending "admin"
-
     specify{ expect(helper.link_to_creator(unsaved)).to eq(nil) }
 
     it "links to site by default" do

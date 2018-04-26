@@ -6,7 +6,7 @@ module MarkupHelper
   end
 
   def combine_classes(*classes)
-    classes.flatten.compact.join(" ").squish
+    classes.flatten.compact.map(&:squish).compact.uniq.join(" ").squish
   end
 
   def content_for_unless_empty(key, wrapper: nil, **options)

@@ -20,5 +20,5 @@
 <%= formatted_post_body(@post) %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= post_byline_link(@post) %> on <%= post_published_date(@post) %>
+  Posted by <%= link_to_post_author(@post) %> on <%= post_published_date(@post) %>
 <% end %>
