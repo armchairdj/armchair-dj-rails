@@ -3,11 +3,11 @@ module LayoutHelper
     join_class_names (@admin ? "admin" : "public")
   end
 
-  def copyright_notice(no_html: false)
+  def copyright_notice(english: false)
     start       = "1996"
     now         = DateTime.now.strftime "%Y"
     daterange   = start == now ? start : "#{start}-#{now}"
-    declaration = no_html ? "Copyright" : "&copy;"
+    declaration = english ? "Copyright" : "&copy;"
 
     "#{declaration} #{daterange} #{t("site.owner")}".html_safe
   end

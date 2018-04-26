@@ -24,7 +24,7 @@ RSpec.describe LayoutHelper, type: :helper do
 
     it "can omit html entities" do
       Timecop.freeze(2050, 3, 3) do
-        expect(helper.copyright_notice(no_html: true)).to eq("Copyright 1996-2050 #{t("site.owner")}")
+        expect(helper.copyright_notice(english: true)).to eq("Copyright 1996-2050 #{t("site.owner")}")
       end
     end
   end
