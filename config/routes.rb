@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
   get "about",   to: "pages#about"
   get "credits", to: "pages#credits"
+  get "privacy", to: "pages#privacy"
+  get "terms",   to: "pages#terms"
 
   #############################################################################
   # Errors.

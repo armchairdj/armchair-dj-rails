@@ -1,15 +1,13 @@
 class PagesController < ApplicationController
-  before_action :authorize_page
-
   # GET /about
   def about; end
 
   # GET /credits
   def credits; end
 
-private
+  # GET /privacy
+  def privacy; end
 
-  def authorize_page
-    authorize :page, :show?
-  end
+  # GET /terms
+  def terms; end
 end

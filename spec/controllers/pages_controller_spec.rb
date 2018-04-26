@@ -16,4 +16,20 @@ RSpec.describe PagesController, type: :controller do
       should successfully_render("pages/credits")
     end
   end
+
+  describe "GET #privacy" do
+    it "renders" do
+      get :privacy
+
+      should successfully_render("pages/privacy")
+    end
+  end
+
+  describe "GET #terms" do
+    it "renders" do
+      get :terms
+
+      should successfully_render("pages/terms")
+    end
+  end
 end
