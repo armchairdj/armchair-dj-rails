@@ -18,7 +18,7 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order("LOWER(creators.name)") }
+  scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
   scope :eager,        -> { all }
   scope :for_admin,    -> { eager }
   scope :for_site,     -> { viewable.includes(:posts).alphabetical }

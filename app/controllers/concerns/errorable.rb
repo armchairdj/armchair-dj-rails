@@ -14,7 +14,7 @@ module Errorable
     # 404
     rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
     rescue_from ActionController::RoutingError,      with: :handle_404
-    rescue_from ActionController::UnknownController, with: :handle_404
+    # rescue_from ActionController::UnknownController, with: :handle_404
     rescue_from AbstractController::ActionNotFound,  with: :handle_404
 
     # 422

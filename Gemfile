@@ -11,10 +11,12 @@ end
 ###############################################################################
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "5.1.5"
+gem "rails", "5.2.0"
 
 # Use Postgres as the database for Active Record
 gem "pg"
+
+gem "bootsnap", require: false
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
@@ -120,7 +122,7 @@ gem "aasm"
 gem "validates_timeliness", '~> 4.0'
 
 # Use ActiveModel has_secure_password
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt"
 
 ###############################################################################
 # UTILITIES.
@@ -201,7 +203,7 @@ group :development, :test do
   gem "factory_bot_rails"
 
   # Adds support for Capybara system testing and selenium driver
-  # gem "capybara", "~> 2.13"
+  gem "capybara"
 
   # gem "selenium-webdriver"
 end

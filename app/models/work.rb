@@ -60,7 +60,7 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order("LOWER(works.title)") }
+  scope :alphabetical, -> { order(Arel.sql("LOWER(works.title)")) }
   scope :eager,        -> { includes(:creators).includes(contributions: :creator).where(contributions: { role: Contribution.roles["creator"] }) }
   scope :for_admin,    -> { eager }
   scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }

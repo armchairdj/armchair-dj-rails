@@ -205,17 +205,17 @@ RSpec.shared_examples "an errorable controller" do
           end
         end
 
-        describe "ActionController::UnknownController" do
-          controller do
-            def index
-              raise ActionController::UnknownController.new "error"
-            end
-          end
-
-          it "handles error" do
-            get :index
-          end
-        end
+        # describe "ActionController::UnknownController" do
+        #   controller do
+        #     def index
+        #       raise ActionController::UnknownController.new "error"
+        #     end
+        #   end
+        #
+        #   it "handles error" do
+        #     get :index
+        #   end
+        # end
 
         describe "AbstractController::ActionNotFound" do
           controller do
