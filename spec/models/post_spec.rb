@@ -6,11 +6,13 @@ RSpec.describe Post, type: :model do
   end
 
   context "concerns" do
-    it_behaves_like "an application record"
+    it_behaves_like "an_application_record"
 
-    it_behaves_like "a sluggable model", :slug
+    it_behaves_like "a_summarizable_model"
 
-    it_behaves_like "an atomically validatable model", { body: nil, slug: nil, published_at: nil } do
+    it_behaves_like "a_sluggable_model", :slug
+
+    it_behaves_like "an_atomically_validatable_model", { body: nil, slug: nil, published_at: nil } do
       subject { create(:standalone_post, :published) }
     end
   end
@@ -202,7 +204,7 @@ RSpec.describe Post, type: :model do
       describe "status" do
         it { should define_enum_for(:status) }
 
-        it_behaves_like "an enumable model", [:status]
+        it_behaves_like "an_enumable_model", [:status]
       end
     end
   end

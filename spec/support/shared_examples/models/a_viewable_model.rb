@@ -1,4 +1,4 @@
-RSpec.shared_examples "a viewable model" do
+RSpec.shared_examples "a_viewable_model" do
   context "included" do
     context "hooks" do
       describe "before_save" do

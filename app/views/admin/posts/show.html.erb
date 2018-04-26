@@ -61,6 +61,11 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@post.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Slug") %>
         <%= content_tag(:td) do %>
           <%= @post.slug %> <%= "(dirty)" if @post.dirty_slug? %>

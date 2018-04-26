@@ -9,11 +9,9 @@
 
   <%= f.input :title %>
 
-  <%= f.input :subtitle,
-    required:    false,
-    hint:        "Song remix, book subtitle, movie cut, etc.",
-    placeholder: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\"" 
-  %>
+  <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
+
+  <%= f.input :summary, required: false, hint: true %>
 
   <%= content_tag(:fieldset,
     class:  join_class_names("legendary", "fields_for", ("fieldset-with-errors" if f.object.errors[:contributions].any?)),
@@ -39,7 +37,7 @@
               as:            :select,
               collection:    creators,
               required:      false,
-              include_blank: true,
+              include_blank: :translate,
               error:         false,
               input_html:    {
                 "data-controller":              "selectize-create",
@@ -54,7 +52,7 @@
               required:           false,
               group_label_method: :first,
               group_method:       :last,
-              include_blank:      true,
+              include_blank:      :translate,
               input_html:         {
                 # "data-controller": "selectize",
                 "data-target":     "work-dropdowns.role"

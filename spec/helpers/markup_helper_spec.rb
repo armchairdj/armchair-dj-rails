@@ -41,4 +41,6 @@ RSpec.describe MarkupHelper, type: :helper do
   pending "#combine_attrs"
 
   pending "#combine_classes"
+
+  pending "#paragraphs"
 end

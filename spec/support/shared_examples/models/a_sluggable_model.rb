@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples "a sluggable model" do |sluggable_attribute|
+RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   describe "class" do
     describe "#generate_unique_slug" do
       subject { build_minimal_instance }

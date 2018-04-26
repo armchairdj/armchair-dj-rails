@@ -1,8 +1,6 @@
 module PostsHelper
   def formatted_post_body(post)
-    return if post.body.blank?
-
-    post.body.strip.split("\n\n").map { |p| content_tag(:p, p.squish) }.join("\n").html_safe
+    paragraphs(post.body)
   end
 
   def link_to_post(post, full: true, admin: false)

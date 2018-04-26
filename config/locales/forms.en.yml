@@ -1,31 +1,63 @@
 en:
   simple_form:
-    "yes": 'Yes'
-    "no": 'No'
+    "yes": "Yes"
+    "no": "No"
     required:
-      text: 'required'
-      mark: '*'
-      # You can uncomment the line below if you need to overwrite the whole required html.
-      # When using html, text and mark won't be used.
       html: '<abbr title="required">*</abbr>'
     error-notification:
-      default_message: "Please review the problems below:"
-    # Examples
-    # labels:
-    #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
-    # include_blanks:
-    #   defaults:
-    #     age: 'Rather not say'
-    # prompts:
-    #   defaults:
-    #     age: 'Select your age'
+      default_message: "Please fix the problems below:"
+    labels:
+      defaults:
+      contribution:
+      creator:
+      post:
+      user:
+        first_name: "First"
+        middle_name: "Middle"
+        last_name: "Last"
+        edit:
+          password: "New Password"
+        edit_password:
+          password: "New Password"
+      work:
+    hints:
+      defaults:
+        summary: "For use in the meta description tag and RSS."
+      contribution:
+      creator:
+      post:
+        publish_on: "Leave blank unless scheduling a post for future publication."
+        summary: "For use in the meta description tag."
+      user:
+        bio: "For display on your public author profile."
+        current_password: "We need your current password to confirm your changes"
+        password: "Please use 12-128 characters"
+      work:
+        subtitle: "Song remix, book subtitle, movie cut, etc."
+    placeholders:
+      defaults:
+        email: "name@domain.com"
+      contribution:
+      creator:
+      post:
+      user:
+      work:
+        subtitle: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\""
+    include_blanks:
+      defaults:
+      contribution:
+        creator_id: "Please choose"
+        role: "Please choose"
+      posts:
+        work_id: "Please choose"
+      creator:
+      post:
+      user:
+      work:
+    prompts:
+      defaults:
+      contribution:
+      creator:
+      post:
+      user:
+      work:

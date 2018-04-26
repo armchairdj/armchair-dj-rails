@@ -8,7 +8,6 @@ FactoryBot.define do
     factory :minimal_user, parent: :member do; end
 
     factory :complete_user, parent: :minimal_user do
-      bio "This is a bio."
       middle_name "J."
     end
 
@@ -35,6 +34,7 @@ FactoryBot.define do
 
     factory :contributor do
       role :contributor
+      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
       valid
     end
 
@@ -44,6 +44,7 @@ FactoryBot.define do
 
     factory :admin do
       role :admin
+      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
       valid
     end
 

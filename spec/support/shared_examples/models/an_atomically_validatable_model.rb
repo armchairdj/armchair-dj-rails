@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples "an atomically validatable model" do |invalid_params|
+RSpec.shared_examples "an_atomically_validatable_model" do |invalid_params|
   let(     :attributes) { invalid_params.keys }
   let(:first_attribute) { attributes.first }
 

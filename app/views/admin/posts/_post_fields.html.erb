@@ -30,6 +30,8 @@
 
 <%= f.input :body, input_html: { class: "large" } %>
 
+<%= f.input :summary, required: false, hint: true %>
+
 <% if f.object.published? %>
   <%= f.input(:slug, readonly: true) %>
 
@@ -37,7 +39,5 @@
 <% elsif f.object.persisted? %>
   <%= f.input(:slug) %>
 
-  <%= f.input :publish_on, as: :date, html5: true,
-    hint: "Leave blank unless scheduling a post for future publication"
-  %>
+  <%= f.input :publish_on, as: :date, html5: true, hint: true %>
 <% end %>

@@ -18,4 +18,10 @@ module MarkupHelper
 
     content_tag(wrapper.to_sym, content, options)
   end
+
+  def paragraphs(str)
+    return if str.blank?
+
+    str.strip.split("\n\n").map { |p| content_tag(:p, p.squish) }.join("\n").html_safe
+  end
 end

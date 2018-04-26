@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Admin::WorksController, type: :controller do
+  context "concerns" do
+    it_behaves_like "an_admin_controller" do
+      let(:expected_redirect_for_seo_paginatable) { admin_works_path }
+      let(:instance                             ) { create(:minimal_work) }
+    end
+  end
+
   context "as admin" do
     login_admin
 
@@ -228,13 +235,6 @@ RSpec.describe Admin::WorksController, type: :controller do
           admin_works_path
         ).with_flash(:success, "admin.flash.works.success.destroy")
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an admin controller" do
-      let(:expected_redirect_for_seo_paginatable) { admin_works_path }
-      let(:instance                             ) { create(:minimal_work) }
     end
   end
 end

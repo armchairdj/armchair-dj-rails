@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples "an admin policy" do
+RSpec.shared_examples "an_admin_policy" do
   subject { described_class.new(user, record) }
 
   context "as guest" do

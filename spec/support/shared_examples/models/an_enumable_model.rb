@@ -1,4 +1,4 @@
-RSpec.shared_examples "an enumable model" do |attributes|
+RSpec.shared_examples "an_enumable_model" do |attributes|
   let(:instance) { create_minimal_instance }
 
   attributes.each do |attribute|

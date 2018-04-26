@@ -1,4 +1,10 @@
-RSpec.shared_examples "an admin controller" do
+RSpec.shared_examples "an_admin_controller" do
+  context "concerns" do
+    it_behaves_like "an_seo_paginatable_controller" do
+      let(:expected_redirect) { expected_redirect_for_seo_paginatable }
+    end
+  end
+
   context "included" do
     context "callbacks" do
       context "before_action" do
@@ -35,12 +41,6 @@ RSpec.shared_examples "an admin controller" do
       end
 
       pending "#scoped_and_sorted_collection"
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an seo paginatable controller" do
-      let(:expected_redirect) { expected_redirect_for_seo_paginatable }
     end
   end
 end

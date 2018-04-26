@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe CreatorsController, type: :controller do
   context "concerns" do
-    it_behaves_like "a public controller"
+    it_behaves_like "a_public_controller"
 
-    it_behaves_like "an seo paginatable controller" do
+    it_behaves_like "an_seo_paginatable_controller" do
       let(:expected_redirect) { creators_path }
     end
   end

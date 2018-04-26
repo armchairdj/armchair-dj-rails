@@ -1,4 +1,4 @@
-RSpec.shared_examples "an errorable controller" do
+RSpec.shared_examples "an_errorable_controller" do
   context "protected" do
     before(:each) do
       allow(Rails.logger).to receive(:error)

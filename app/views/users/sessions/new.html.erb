@@ -8,8 +8,8 @@
   <%= content_tag(:div, class: "tab") do %>
     <%= simple_form_for(@user, url: session_path(resource_name)) do |f| %>
       <%= content_tag(:div, class: "form-inputs") do %>
-        <%= f.input :email,    required: true, placeholder: "name@domain.com" %>
-        <%= f.input :password, required: true %>
+        <%= f.input :email,    required: true, placeholder: true %>
+        <%= f.input :password, required: true, hint: false %>
 
         <%= render(partial: "shared/custom_checkbox", locals: {
           f:    f,

@@ -6,9 +6,9 @@ RSpec.describe User, type: :model do
   end
 
   context "concerns" do
-    it_behaves_like "an application record"
+    it_behaves_like "an_application_record"
 
-    it_behaves_like "an atomically validatable model", { first_name: nil, last_name: nil } do
+    it_behaves_like "an_atomically_validatable_model", { first_name: nil, last_name: nil } do
       subject { create(:minimal_user) }
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe User, type: :model do
       describe "role" do
         it { should define_enum_for(:role) }
 
-        it_behaves_like "an enumable model", [:role]
+        it_behaves_like "an_enumable_model", [:role]
       end
     end
   end
@@ -79,6 +79,26 @@ RSpec.describe User, type: :model do
 
     it { should validate_presence_of(  :username) }
     it { should validate_uniqueness_of(:username) }
+
+    context "conditional" do
+      context "as member" do
+        subject { create(:member) }
+
+        it { should validate_absence_of(:bio) }
+      end
+
+      context "as contributor" do
+        subject { create(:contributor) }
+
+        it { should_not validate_absence_of(:bio) }
+      end
+
+      context "as admin" do
+        subject { create(:admin) }
+
+        it { should_not validate_absence_of(:bio) }
+      end
+    end
   end
 
   context "hooks" do

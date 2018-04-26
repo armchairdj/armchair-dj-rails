@@ -27,6 +27,11 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@work.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Creators") %>
         <%= content_tag(:td, links_to_creators_for_work(@work, admin: true)) %>
       <% end %>

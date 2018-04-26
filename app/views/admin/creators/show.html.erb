@@ -22,6 +22,11 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@creator.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Works") %>
         <%= content_tag(:td) do %>
           <% @creator.works.each do |work| %>

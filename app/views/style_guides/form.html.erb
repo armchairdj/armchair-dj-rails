@@ -21,10 +21,7 @@
       } %>
 
       <%= f.input :select, as: :select do %>
-        <%= f.select :select,
-          [true, false],
-          include_blank: "Please choose"
-        %>
+        <%= f.select :select, [true, false], include_blank: :true %>
       <% end %>
 
       <%= render partial: "shared/custom_checkbox", locals: {
@@ -41,10 +38,7 @@
       <%= f.input :optional_string, as: :string, required: false %>
 
       <%= f.input :optional_select, required: false do %>
-        <%= f.select :optional_select,
-          [true, false],
-          include_blank: "Please choose"
-        %>
+        <%= f.select :optional_select, [true, false], include_blank: true %>
       <% end %>
 
       <%= f.input :optional_textarea, as: :text, required: false %>

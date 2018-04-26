@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180425231214) do
+ActiveRecord::Schema.define(version: 2018_04_26_131603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20180425231214) do
     t.datetime "updated_at", null: false
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
+    t.text "summary"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
   end
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180425231214) do
     t.boolean "dirty_slug", default: false, null: false
     t.datetime "publish_on"
     t.bigint "user_id"
+    t.text "summary"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -93,6 +95,7 @@ ActiveRecord::Schema.define(version: 20180425231214) do
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
+    t.text "summary"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end

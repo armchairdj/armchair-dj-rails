@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Admin::UsersController, type: :controller do
+  context "concerns" do
+    it_behaves_like "an_admin_controller" do
+      let(:expected_redirect_for_seo_paginatable) { admin_users_path }
+      let(:instance                             ) { create(:minimal_user) }
+    end
+  end
+
   context "as admin" do
     login_admin
 
@@ -246,13 +253,6 @@ RSpec.describe Admin::UsersController, type: :controller do
           admin_users_path
         ).with_flash(:success, "admin.flash.users.success.destroy")
       end
-    end
-  end
-
-  context "concerns" do
-    it_behaves_like "an admin controller" do
-      let(:expected_redirect_for_seo_paginatable) { admin_users_path }
-      let(:instance                             ) { create(:minimal_user) }
     end
   end
 end

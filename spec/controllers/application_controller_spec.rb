@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe ApplicationController, type: :controller do
+  context "concerns" do
+    it_behaves_like "an_errorable_controller"
+
+    pending "pundit"
+  end
+
   context "included" do
     pending "protect_from_forgery"
     pending "add_flash_types"
@@ -22,11 +28,5 @@ RSpec.describe ApplicationController, type: :controller do
     context "protected" do
       pending "#model_class"
     end
-  end
-
-  context "concerns" do
-    it_behaves_like "an errorable controller"
-
-    pending "pundit"
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples "an application record" do
+RSpec.shared_examples "an_application_record" do
   context "included" do
     describe "nilify_blanks" do
       it { should nilify_blanks(before: :validation) }

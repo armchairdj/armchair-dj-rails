@@ -7,15 +7,15 @@
 <%= content_tag(:fieldset, class: "name legendary") do %>
   <%= content_tag(:legend, "Name") %>
 
-  <%= f.input(:first_name,  label: "First") %>
-  <%= f.input(:middle_name, label: "Middle", required: false) %>
-  <%= f.input(:last_name,   label: "Last") %>
+  <%= f.input(:first_name) %>
+  <%= f.input(:middle_name, required: false) %>
+  <%= f.input(:last_name) %>
 <% end %>
 
 <%= content_tag(:fieldset) do %>
   <%= f.input(:username) %>
-  <%= f.input(:email,    required: true, placeholder: "name@domain.com") %>
-  <%= f.input(:password, required: true, hint: "#{@minimum_password_length} or more characters") if show_password %>
+  <%= f.input(:email,    required: true, placeholder: true) %>
+  <%= f.input(:password, required: true, hint: true) if show_password %>
 <% end %>
 
-<%= f.input(:bio) if show_bio %>
+<%= f.input(:bio, hint: true) if show_bio %>

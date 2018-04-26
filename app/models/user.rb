@@ -76,6 +76,8 @@ class User < ApplicationRecord
   validates :username,   presence:   true
   validates :username,   uniqueness: true
 
+  validates :bio, absence: true, unless: :can_contribute?
+
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -83,6 +85,10 @@ class User < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def can_contribute?
+    admin? || contributor?
+  end
 
   def display_name
     [first_name, middle_name, last_name].compact.join(" ")

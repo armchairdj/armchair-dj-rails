@@ -6,8 +6,9 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "concerns" do
-    it_behaves_like "an application record"
-    # it_behaves_like "an atomically validatable model", { work: nil, creator: nil } do
+    it_behaves_like "an_application_record"
+
+    # it_behaves_like "an_atomically_validatable_model", { work: nil, creator: nil } do
     #   subject { create(:minimal_contribution) }
     # end
   end
@@ -47,7 +48,7 @@ RSpec.describe Contribution, type: :model do
       describe "role" do
         it { should define_enum_for(:role) }
 
-        it_behaves_like "an enumable model", [:role]
+        it_behaves_like "an_enumable_model", [:role]
       end
     end
   end

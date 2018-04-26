@@ -36,10 +36,7 @@
         wrapper_html: { class: "with-error" },
         hint: "Hint for select."
       ) do %>
-        <%= f.select :select_with_error,
-          [true, false],
-          include_blank: "Please choose"
-        %>
+        <%= f.select :select_with_error, [true, false], include_blank: true %>
         <%= content_tag(:div, "Error message for select.", class: "error") %>
       <% end %>
 
