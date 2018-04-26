@@ -2,7 +2,7 @@ require "rspec/expectations"
 
 RSpec::Matchers.define :successfully_render do |template|
   match do
-    expect(response).to be_success
+    expect(response).to have_http_status(200)
     expect(response).to render_template(template)
   end
 

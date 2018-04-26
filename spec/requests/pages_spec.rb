@@ -5,7 +5,7 @@ RSpec.describe "Pages", type: :request do
     it "works" do
       get about_path
 
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -13,7 +13,7 @@ RSpec.describe "Pages", type: :request do
     it "works" do
       get credits_path
 
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 end

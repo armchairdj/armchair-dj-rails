@@ -208,6 +208,8 @@ RSpec.describe Post, type: :model do
   end
 
   context "validations" do
+    it { should validate_uniqueness_of(:slug) }
+
     context "conditional" do
       context "draft" do
         subject { create(:minimal_post, :draft) }

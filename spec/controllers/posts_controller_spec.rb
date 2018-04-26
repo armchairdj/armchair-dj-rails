@@ -79,7 +79,7 @@ RSpec.describe PostsController, type: :controller do
     it "renders last 100 published posts as rss" do
       get :feed, params: { format: :rss }
 
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
 
       expect(assigns(:posts).length).to eq(100)
     end

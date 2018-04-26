@@ -23,7 +23,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
       get :index, params: {}, session: valid_session
 <% end -%>
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
       get :show, params: {id: <%= file_name %>.to_param}, session: valid_session
 <% end -%>
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
       get :new, params: {}, session: valid_session
 <% end -%>
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -80,7 +80,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
         post :create, params: {<%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
     end
   end
@@ -93,7 +93,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
       get :edit, params: {id: <%= file_name %>.to_param}, session: valid_session
 <% end -%>
-      expect(response).to be_success
+      expect(response).to have_http_status(200)
     end
   end
 
@@ -133,7 +133,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
 <% else -%>
         put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_params}, session: valid_session
 <% end -%>
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
     end
   end

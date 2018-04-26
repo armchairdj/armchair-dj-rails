@@ -100,7 +100,9 @@ class Post < ApplicationRecord
   validates :status, presence: true
 
   validates :body, presence: true, unless: :draft?
+
   validates :slug, presence: true, unless: :draft?
+  validates :slug, uniqueness: true
 
   validates :published_at, presence: true, if: :published?
   validates :publish_on,   presence: true, if: :scheduled?
