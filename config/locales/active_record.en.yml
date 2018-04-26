@@ -140,8 +140,8 @@ en:
             base:
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
-              invalid_user: "Only contributors and admins can create posts."
-              no_user: "Please choose a user."
+              invalid_author: "Only contributors and admins can create posts."
+              no_author: "Please choose a user."
             body:
               blank_during_publish: "You cannot publish a post without a body."
             slug:

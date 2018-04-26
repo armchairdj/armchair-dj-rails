@@ -6,7 +6,7 @@ RSpec.describe PostsController, type: :routing do
       expect(get: "/").to route_to("posts#index")
     end
 
-    it "routes to #index pages" do
+    it "routes to #index pagination" do
       expect(get: "/page/2").to route_to("posts#index", page: "2")
     end
 

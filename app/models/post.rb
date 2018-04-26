@@ -68,7 +68,8 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :user, required: true
+  belongs_to :author, class_name: "User", foreign_key: :user_id, required: true
+
   belongs_to :work, required: false
 
   #############################################################################
@@ -258,10 +259,10 @@ private
   #############################################################################
 
   def validate_user
-    if user.nil?
-      self.errors.add(:base, :no_user)
-    elsif user.member?
-      self.errors.add(:base, :invalid_user)
+    if author.nil?
+      self.errors.add(:base, :no_author)
+    elsif !author.contributor? && !author.admin?
+      self.errors.add(:base, :invalid_author)
     end
   end
 

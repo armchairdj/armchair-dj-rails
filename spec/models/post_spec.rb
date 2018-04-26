@@ -172,8 +172,8 @@ RSpec.describe Post, type: :model do
   end
 
   context "associations" do
-    it { should belong_to(:user) }
-    it { should belong_to(:work) }
+    it { should belong_to(:author) }
+    it { should belong_to(:work  ) }
   end
 
   context "attributes" do
@@ -266,7 +266,7 @@ RSpec.describe Post, type: :model do
         subject { build(:minimal_post) }
 
         specify "admin" do
-          subject.user = create(:admin)
+          subject.author = create(:admin)
 
           subject.send(:validate_user)
 
@@ -274,7 +274,7 @@ RSpec.describe Post, type: :model do
         end
 
         specify "contributor" do
-          subject.user = create(:contributor)
+          subject.author = create(:contributor)
 
           subject.send(:validate_user)
 
@@ -282,19 +282,19 @@ RSpec.describe Post, type: :model do
         end
 
         specify "member" do
-          subject.user = create(:member)
+          subject.author = create(:member)
 
           subject.send(:validate_user)
 
-          expect(subject).to have_errors(base: :invalid_user)
+          expect(subject).to have_errors(base: :invalid_author)
         end
 
         specify "nil" do
-          subject.user = nil
+          subject.author = nil
 
           subject.send(:validate_user)
 
-          expect(subject).to have_errors(base: :no_user)
+          expect(subject).to have_errors(base: :no_author)
         end
       end
 

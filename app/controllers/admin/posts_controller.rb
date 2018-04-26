@@ -127,7 +127,7 @@ private
       fetched.delete(:work_attributes)
     end
 
-    @sanitized_params = fetched.merge(user: current_user)
+    @sanitized_params = fetched.merge(author: current_user)
   end
 
   def sanitize_update_params

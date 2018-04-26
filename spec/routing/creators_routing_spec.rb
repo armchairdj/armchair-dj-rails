@@ -6,7 +6,7 @@ RSpec.describe CreatorsController, type: :routing do
       expect(get: "/creators").to route_to("creators#index")
     end
 
-    it "routes to #index pages" do
+    it "routes to #index pagination" do
       expect(get: "/creators/page/2").to route_to("creators#index", page: "2")
     end
 

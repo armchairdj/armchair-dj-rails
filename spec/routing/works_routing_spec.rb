@@ -6,7 +6,7 @@ RSpec.describe WorksController, type: :routing do
       expect(get: "/works").to route_to("works#index")
     end
 
-    it "routes to #index pages" do
+    it "routes to #index pagination" do
       expect(get: "/works/page/2").to route_to("works#index", page: "2")
     end
 

@@ -189,7 +189,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "post belongs to current_user" do
             post :create, params: { post: valid_params }
 
-            should assign(Post.last, :post).with_attributes(user: controller.current_user)
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
           end
 
           it "redirects to post" do
@@ -236,7 +236,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "post belongs to current_user" do
             post :create, params: { post: valid_params }
 
-            should assign(Post.last, :post).with_attributes(user: controller.current_user)
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
           end
 
           it "redirects to post" do
@@ -319,7 +319,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "post belongs to current_user" do
             post :create, params: { post: valid_params }
 
-            should assign(Post.last, :post).with_attributes(user: controller.current_user)
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
           end
 
           it "redirects to post" do

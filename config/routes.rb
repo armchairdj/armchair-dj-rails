@@ -17,13 +17,12 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get    "register",          to: "users/registrations#new",             as: :new_user_registration
+    post   "register",          to: "users/registrations#create"
     get    "settings",          to: "users/registrations#edit",            as: :edit_user_registration
-    post   "settings",          to: "users/registrations#create"
     match  "settings",          to: "users/registrations#update",          via: [:patch, :put]
     delete "settings",          to: "users/registrations#destroy"
     get    "settings/password", to: "users/registrations#edit_password"
     match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
-    delete "settings/cancel",   to: "users/registrations#destroy",         as: :destroy_user_registration
     get    "profile/:username", to: "users/registrations#profile",         as: :user_profile
 
     get   "log_in",             to: "users/sessions#new",                  as: :new_user_session

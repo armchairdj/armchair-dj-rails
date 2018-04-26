@@ -2,12 +2,11 @@ require "rails_helper"
 
 RSpec.describe Admin::WorksController, type: :routing do
   describe "routing" do
-
     it "routes to #index" do
       expect(get: "/admin/works").to route_to("admin/works#index")
     end
 
-    it "routes to #index pages" do
+    it "routes to #index pagination" do
       expect(get: "/admin/works/page/2").to route_to("admin/works#index", page: "2")
     end
 

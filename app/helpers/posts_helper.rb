@@ -15,8 +15,8 @@ module PostsHelper
   end
 
   def post_byline_link(post)
-    url  = user_profile_path(username: post.user.username)
-    link = link_to(post.user.username, url, rel: "author")
+    url  = user_profile_path(username: post.author.username)
+    link = link_to(post.author.username, url, rel: "author")
 
     content_tag(:address, link, class: "author")
   end

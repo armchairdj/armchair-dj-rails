@@ -2,12 +2,11 @@ require "rails_helper"
 
 RSpec.describe Admin::CreatorsController, type: :routing do
   describe "routing" do
-
     it "routes to #index" do
       expect(get: "/admin/creators").to route_to("admin/creators#index")
     end
 
-    it "routes to #index pages" do
+    it "routes to #index pagination" do
       expect(get: "/admin/creators/page/2").to route_to("admin/creators#index", page: "2")
     end
 

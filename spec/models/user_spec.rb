@@ -52,7 +52,7 @@ RSpec.describe User, type: :model do
   end
 
   context "associations" do
-    # Nothing so far.
+   it { should have_many(:posts) }
   end
 
   context "attributes" do

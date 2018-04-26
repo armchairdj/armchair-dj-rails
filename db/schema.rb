@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424221942) do
+ActiveRecord::Schema.define(version: 20180425231214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20180424221942) do
     t.integer "status", default: 0, null: false
     t.boolean "dirty_slug", default: false, null: false
     t.datetime "publish_on"
-    t.integer "user_id", null: false
+    t.bigint "user_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -97,4 +97,5 @@ ActiveRecord::Schema.define(version: 20180424221942) do
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
+  add_foreign_key "posts", "users"
 end
