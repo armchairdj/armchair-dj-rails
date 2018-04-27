@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples "an_admin_controller" do
   context "concerns" do
     it_behaves_like "an_seo_paginatable_controller" do

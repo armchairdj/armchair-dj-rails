@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|

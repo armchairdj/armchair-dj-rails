@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StyleGuidePolicy < Struct.new(:user, :page)
   include PolicyMethods
 

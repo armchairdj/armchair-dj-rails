@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Contribution < ApplicationRecord
 
   #############################################################################
@@ -108,7 +110,7 @@ class Contribution < ApplicationRecord
 
     author:                       300,
     illustrator:                  301,
-    
+
     editor:                       310,
 
     imprint:                      320,

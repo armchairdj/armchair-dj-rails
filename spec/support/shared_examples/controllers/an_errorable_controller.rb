@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples "an_errorable_controller" do
   context "protected" do
     before(:each) do

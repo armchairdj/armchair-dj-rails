@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SimpleForm
   class ErrorNotification
     delegate :object, :object_name, :template, to: :@builder

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StyleGuidesController < ApplicationController
   before_action :authorize_page
   before_action :set_template,   only: [:show         ]

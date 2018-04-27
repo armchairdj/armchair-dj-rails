@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WorksHelper
   def link_to_work(work, full: true, admin: false)
     return unless work && work.persisted?

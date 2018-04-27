@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::PostsController < AdminController
   before_action :find_collection, only: [
     :index

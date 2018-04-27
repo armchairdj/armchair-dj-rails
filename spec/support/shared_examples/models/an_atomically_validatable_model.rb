@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.shared_examples "an_atomically_validatable_model" do |invalid_params|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CreatorsHelper
   def link_to_creator(creator, admin: false)
     return unless creator.persisted?

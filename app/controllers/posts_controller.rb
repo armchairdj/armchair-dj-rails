@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostsController < PublicController
   before_action :set_flag, only: [
     :index

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples "a_viewable_model" do
   context "included" do
     context "hooks" do

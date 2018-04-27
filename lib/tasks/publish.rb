@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # if memo.total == memo.success.length
 #   logger.info "Published all #{memo[:total]} scheduled posts."
 # else

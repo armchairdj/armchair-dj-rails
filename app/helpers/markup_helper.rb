@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MarkupHelper
   def combine_attrs(first, last)
     klasses = combine_classes(first.delete(:class), last.delete(:class))

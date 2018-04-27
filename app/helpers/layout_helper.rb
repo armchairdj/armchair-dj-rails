@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LayoutHelper
   def body_classes
     join_class_names (@admin ? "admin" : "public")

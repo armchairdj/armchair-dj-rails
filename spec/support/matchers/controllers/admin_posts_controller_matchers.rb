@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rspec/expectations"
 
 RSpec::Matchers.define :define_the_review_tabs do

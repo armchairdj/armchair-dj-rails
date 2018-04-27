@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_errors do |errors_hash|
   match do |actual|
     errors_hash.each do |key, val|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SvgHelper
   def non_semantic_svg_image(image_path, title: nil, desc: nil, **opts)
     attrs = combine_attrs({

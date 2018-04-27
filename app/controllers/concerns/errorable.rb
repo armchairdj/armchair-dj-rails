@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ################################################################################
 # Add user-friendly error pages and developer-friendly logging to common errors.
 # Used in conjunction with ErrorsController & config.exceptions_app & routes.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::PostPolicy < AdminPolicy
   class Scope < Scope
     def resolve

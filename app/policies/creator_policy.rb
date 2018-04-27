@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatorPolicy < PublicPolicy
   class Scope < Scope
     def resolve

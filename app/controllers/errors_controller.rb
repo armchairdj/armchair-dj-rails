@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorsController < ApplicationController
   def permission_denied
     render_error_response(403, :permission_denied)

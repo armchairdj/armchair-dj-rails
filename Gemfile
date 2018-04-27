@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 git_source(:github) do |repo_name|
@@ -176,6 +178,10 @@ group :development do
 
   # Query optimizer.
   gem "bullet"
+
+  gem "rubocop", require: false
+  gem "rubocop-rails"
+  gem "mry"
 end
 
 group :development, :test do

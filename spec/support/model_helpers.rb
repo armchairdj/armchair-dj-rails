@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModelHelpers
   def build_minimal_instance(*args)
     build(key_for_minimal_factory, *args)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples "an_enumable_model" do |attributes|
   let(:instance) { create_minimal_instance }
 
