@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 RSpec::Matchers.define :have_errors do |errors_hash|
+  def error_keys(actual, key)
+    actual.errors.details[key].map { |h| h[:error] }
+  end
+
   match do |actual|
-    errors_hash.each do |key, val|
-      expect(actual.errors.details[key]).to include({ error: val })
-    end
+    errors_hash.each { |k, v| expect(error_keys(actual, k)).to include(v) }
   end
 
   match_when_negated do |actual|
-    errors_hash.each do |key, val|
-      expect(actual.errors.details[key]).to_not include({ error: val })
-    end
+    errors_hash.each { |k, v| expect(error_keys(actual, k)).to_not include(v) }
   end
 
   failure_message do |actual|

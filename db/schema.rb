@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_26_131603) do
+ActiveRecord::Schema.define(version: 2018_04_27_165112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2018_04_26_131603) do
     t.text "summary"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
+  end
+
+  create_table "participations", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.bigint "participant_id"
+    t.integer "relationship", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_participations_on_creator_id"
+    t.index ["participant_id"], name: "index_participations_on_participant_id"
   end
 
   create_table "posts", force: :cascade do |t|

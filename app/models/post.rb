@@ -82,7 +82,7 @@ class Post < ApplicationRecord
 
   accepts_nested_attributes_for :work,
     allow_destroy: true,
-    reject_if:     :reject_blank_work
+    reject_if:     :blank_work?
 
   enum status: {
     draft:      0,
@@ -252,7 +252,7 @@ private
   # NESTED ATTRIBUTES.
   #############################################################################
 
-  def reject_blank_work(work_attributes)
+  def blank_work?(work_attributes)
     work_attributes["title"].blank?
   end
 

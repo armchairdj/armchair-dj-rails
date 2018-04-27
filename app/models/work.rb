@@ -91,7 +91,7 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :contributions,
     allow_destroy: true,
-    reject_if:     :reject_blank_contributions
+    reject_if:     :blank_contribution?
 
   enum medium: {
     song:        100,
@@ -182,7 +182,7 @@ class Work < ApplicationRecord
 
 private
 
-  def reject_blank_contributions(contribution_attributes)
+  def blank_contribution?(contribution_attributes)
     contribution_attributes["creator_id"].blank?
   end
 

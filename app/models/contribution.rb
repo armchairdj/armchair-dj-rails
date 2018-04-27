@@ -55,7 +55,7 @@ class Contribution < ApplicationRecord
 
   accepts_nested_attributes_for :creator,
     allow_destroy: true,
-    reject_if:     :reject_blank_creator
+    reject_if:     :blank_creator?
 
   enum role: {
     creator:                        0,
@@ -164,7 +164,7 @@ class Contribution < ApplicationRecord
 
 private
 
-  def reject_blank_creator(creator_attributes)
+  def blank_creator?(creator_attributes)
     creator_attributes["name"].blank?
   end
 end

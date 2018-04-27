@@ -41,9 +41,24 @@ class Creator < ApplicationRecord
 
   has_many :posts, through: :works
 
+  has_many :participations
+  has_many :participants, through: :participations
+
+  has_many :members, -> { where(participations: {
+    role: Participation.relationship["member_of"]
+  })}, through: :participations, source: :participant, class_name: "Creator"
+
+  has_many :names, -> { where(participations: {
+    role: Participation.relationship["known_as"]
+  })}, through: :participations, source: :participant, class_name: "Creator"
+
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
+
+  accepts_nested_attributes_for :participations,
+    allow_destroy: true,
+    reject_if:     :blank_participation?
 
   #############################################################################
   # VALIDATIONS.
@@ -58,6 +73,18 @@ class Creator < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def aliased
+    self.participants.alias
+  end
+
+  def memberships
+    self.participants.member_of
+  end
+
+  def alternate_identities
+  
+  end
 
   def media
     self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
@@ -96,5 +123,11 @@ class Creator < ApplicationRecord
 
       memo
     end
+  end
+
+private
+
+  def blank_participation?(participation_attributes)
+    participation_attributes["participant_id"].blank?
   end
 end
