@@ -94,7 +94,14 @@ table.admin {
   font-size: $admin-table-font-size;
 
   &.admin-view {
-//    table-layout: fixed;
+    th {
+      text-align: right;
+      width: $dt-width;
+    }
+
+    td {
+      width: $dd-width;
+    }
   }
 
   tbody {
@@ -118,8 +125,7 @@ table.admin {
       padding-right: 0;
     }
 
-    &.actions,
-    &.count {
+    &.actions {
       text-align: right;
     }
 
@@ -135,11 +141,5 @@ table.admin {
   th {
     text-transform: uppercase;
     color: $armchair-smoke;
-  }
-
-  td {
-    &.actions {
-
-    }
   }
 }

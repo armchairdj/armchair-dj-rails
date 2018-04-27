@@ -1,4 +1,4 @@
 <% full = true unless local_assigns[:full].present? %>
 
 <%= content_tag(:dt, post.type) %>
-<%= content_tag(:dd, link_to_post(post, full: full)) %>
+<%= content_tag(:dd, link_to_post(post, full: full, admin: true)) %>

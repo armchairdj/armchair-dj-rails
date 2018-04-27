@@ -1,45 +1,41 @@
 <%
-  @title = [@work.display_creator, @work.title]
+  @title = [@work.display_creators, @work.title]
+
+  @contributions = @work.contributions.for_site
+  @posts         = @work.posts.for_site
 %>
 
 <%= content_for(:header) do %>
   <%= content_tag(:header, class: "post-header") do %>
     <%= content_tag(:h3, @work.human_medium) %>
     <%= content_tag(:h1) do %>
-      <%= content_tag(:span, @work.display_creator, class: "creators") %>
-      <%= content_tag(:span, @work.title,           class: "title"   ) %>
-      <%= content_tag(:span, @work.subtitle,        class: "subtitle") %>
+      <%= content_tag(:span, @work.display_creators, class: "creators") %>
+      <%= content_tag(:span, @work.title,            class: "title"   ) %>
+      <%= content_tag(:span, @work.subtitle,         class: "subtitle") %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Posts About") %>
-  <% end %>
+<% if @contributions.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Contributions") %>
+    <% end %>
 
-  <% @work.posts.each do |post| %>
-    <%= link_to_post(post) %><br>
-  <% end %>
-<% end %>
-
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Creators") %>
-  <% end %>
-
-  <% @work.creators.each do |creator| %>
-    <%= link_to_creator(creator) %><br>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "works/contribution", collection: @contributions %>
+    <% end %>
   <% end %>
 <% end %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Contributors") %>
-  <% end %>
+<% if @posts.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts") %>
+    <% end %>
 
-  <% @work.contributions.secondary.each do |contribution| %>
-    <%= link_to_creator(contribution.creator) %>:
-    <%= contribution.human_role %><br>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "posts/post", collection: @posts %>
+    <% end %>
   <% end %>
 <% end %>

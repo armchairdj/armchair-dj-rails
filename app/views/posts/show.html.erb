@@ -1,5 +1,5 @@
 <%
-  @title = [@post.display_type, @post.display_type].compact
+  @title = [@post.type, post_title(@post)].compact
 %>
 
 <%= content_for(:header) do %>
@@ -7,9 +7,9 @@
     <% if @post.standalone? %>
       <%= content_tag(:h1, @post.title) %>
     <% else %>
-      <%= content_tag(:h3, @post.display_type) %>
+      <%= content_tag(:h3, @post.type) %>
       <%= content_tag(:h1) do %>
-        <%= content_tag(:span, @post.work.display_creator, class: "creators") %>
+        <%= content_tag(:span, @post.work.display_creators, class: "creators") %>
         <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
         <%= content_tag(:span, @post.work.subtitle,        class: "subtitle") %>
       <% end %>

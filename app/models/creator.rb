@@ -57,7 +57,42 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def to_description
-    "TODO"
+  def media
+    self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
+  end
+
+  def roles
+    self.contributions.viewable.map(&:human_role).uniq.sort
+  end
+
+  def contributions_array
+    self.contributions.viewable.map { |c| {
+      medium: c.work.pluralized_human_medium,
+      role:   c.human_role,
+      work:   c.work.full_display_title
+    } }
+  end
+
+  def contributions_by_role
+    self.contributions_array.group_by{ |r| r[  :role] }.sort_by(&:first).to_h
+  end
+
+  def contributions_by_medium
+    self.contributions_array.group_by{ |r| r[:medium] }.sort_by(&:first).to_h
+  end
+
+  def contributions_by_work
+    self.contributions_array.group_by{ |r| r[  :work] }.sort_by(&:first).to_h
+  end
+
+  def roles_by_medium
+    self.contributions_by_medium.reduce([]) do |memo, (key, val)|
+      memo << {
+        medium: key,
+        roles: val.map { |h| h[:role] }.uniq.sort
+      }
+
+      memo
+    end
   end
 end

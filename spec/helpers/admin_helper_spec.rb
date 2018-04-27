@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe AdminHelper, type: :helper do
-  describe "form methods" do
+  context "form methods" do
     pending "#admin_submit_button"
   end
 
-  describe "formatting methods" do
+  context "formatting methods" do
     describe "#admin_date" do
       it "formats dates consistently" do
         Timecop.freeze(2050, 3, 3) do
@@ -17,7 +17,7 @@ RSpec.describe AdminHelper, type: :helper do
     end
   end
 
-  describe "link methods" do
+  context "link methods" do
     before(:each) do
       allow(helper).to receive(     :polymorphic_path).and_return("path")
       allow(helper).to receive( :new_polymorphic_path).and_return("path")
@@ -172,5 +172,11 @@ RSpec.describe AdminHelper, type: :helper do
         )
       end
     end
+  end
+
+  context "column header methods" do
+    pending "#post_count_column_header"
+    pending "#work_count_column_header"
+    pending "#contribution_count_column_header"
   end
 end

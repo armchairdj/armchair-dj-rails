@@ -13,4 +13,8 @@ private
   def authorize_instance
     authorize @creator
   end
+
+  def set_meta_tags
+    @meta_description = @creator.summary
+  end
 end

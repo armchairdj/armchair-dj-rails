@@ -240,10 +240,6 @@ RSpec.describe Work, type: :model do
   end
 
   context "instance" do
-    context "meta methods" do
-      pending "to_description"
-    end
-
     describe "#display_title" do
       it "displays with just title" do
         expect(create(:kate_bush_hounds_of_love).display_title).to eq(
@@ -280,21 +276,21 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "#display_creator" do
+    describe "#display_creators" do
       it "displays mutiple creators alphabetically" do
-        expect(create(:carl_craig_and_green_velvet_unity).display_creator).to eq(
+        expect(create(:carl_craig_and_green_velvet_unity).display_creators).to eq(
           "Carl Craig & Green Velvet"
         )
       end
 
       it "displays single creator" do
-        expect(create(:kate_bush_hounds_of_love).display_creator).to eq(
+        expect(create(:kate_bush_hounds_of_love).display_creators).to eq(
           "Kate Bush"
         )
       end
 
       it "nils unless persisted" do
-        expect(build(:kate_bush_hounds_of_love).display_creator).to eq(nil)
+        expect(build(:kate_bush_hounds_of_love).display_creators).to eq(nil)
       end
     end
 

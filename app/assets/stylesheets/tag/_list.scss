@@ -23,6 +23,10 @@ ul {
     @include bulleted-list();
   }
 
+  &.square {
+    @include bulleted-list($list-style-type: square);
+  }
+
   &.piped {
     @include piped-list();
   }
@@ -40,9 +44,12 @@ ol {
 
 dl {
   @include bottom-margin();
+  line-height: $spacious;
+  font-size: $admin-table-font-size;
 
   dt {
-    @include bold();
+    text-transform: uppercase;
+    color: $armchair-smoke;
     @include bottom-margin($spacing-m * .25);
   }
 
@@ -58,16 +65,21 @@ dl {
       float: left;
     }
 
+    &.right {
+      dt {
+        text-align: right;
+      }
+    }
+
     dt {
-      @include bold();
+      width: $dt-width;
       clear: left;
-      width: 40%;
-      margin: 0 $spacing-s ($spacing-s * .75);
+      padding-right: .5rem;
     }
 
     dd {
-      width: 40%;
-      margin: 0 0 ($spacing-s * 1.5);
+      width: $dd-width;
+      padding-left: .5rem;
     }
   }
 }

@@ -5,10 +5,8 @@
 <% if @works.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <% @works.each do |work| %>
-      <%= content_tag(:li, link_to_work(work)) %>
-    <% end %>
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "works/work", collection: @works %>
   <% end %>
 
   <%= paginate @works %>

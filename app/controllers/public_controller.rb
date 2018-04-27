@@ -17,6 +17,10 @@ class PublicController < ApplicationController
     :show
   ]
 
+  before_action :set_meta_tags, only: [
+    :show
+  ]
+
   # GET /<plural_param_key>
   # GET /<plural_param_key>.json
   def index

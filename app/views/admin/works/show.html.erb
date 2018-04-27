@@ -1,5 +1,9 @@
 <%
-  @title = ["View #{@work.human_medium}", @work.display_creator, @work.title]
+  @title = ["View #{@work.human_medium}", @work.display_creators, @work.title]
+
+  @creators      = @work.creators.for_admin.alphabetical
+  @contributions = @work.contributions.for_admin.alphabetical
+  @posts         = @work.posts.for_admin.reverse_cron
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -22,28 +26,29 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Creators") %>
+        <%= content_tag(:td) do %>
+          <% if @creators.any? %>
+            <%= content_tag(:ul) do %>
+              <%= render partial: "admin/creators/creator", collection: @creators %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Title") %>
         <%= content_tag(:td, @work.title) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Subtitle") %>
+        <%= content_tag(:td, @work.subtitle) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Summary") %>
         <%= content_tag(:td, paragraphs(@work.summary)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Creators") %>
-        <%= content_tag(:td, links_to_creators_for_work(@work, admin: true)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Contributors") %>
-        <%= content_tag(:td) do %>
-          <% @work.contributions.secondary.each do |contribution| %>
-            <%= link_to_creator(contribution.creator, admin: true) %>:
-            <%= contribution.human_role %><br>
-          <% end %>
-        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -55,6 +60,30 @@
         <%= content_tag(:th, "Updated") %>
         <%= content_tag(:td, admin_date(@work.updated_at)) %>
       <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @contributions.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Contributions") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/works/contribution", collection: @contributions %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @posts.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/posts/post", collection: @posts %>
     <% end %>
   <% end %>
 <% end %>

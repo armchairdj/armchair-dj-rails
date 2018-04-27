@@ -53,6 +53,10 @@ RSpec.describe User, type: :model do
 
   context "associations" do
    it { should have_many(:posts) }
+
+   it { should have_many(:works).through(:posts) }
+
+   it { should have_many(:creators).through(:works) }
   end
 
   context "attributes" do
@@ -106,6 +110,8 @@ RSpec.describe User, type: :model do
   end
 
   context "instance" do
+    pending "can_contribute?"
+
     describe "#display_name" do
       describe "no middle name" do
         subject { create(:minimal_user, first_name: "Derrick", last_name: "May") }

@@ -7,11 +7,15 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
     i18n_key    = "activerecord.attributes.#{described_class.model_name.i18n_key}.#{plural_attr}"
 
     context "i18n for #{single_attr}" do
-      described_class.send(plural_attr).keys.each do |val|
-        it "has a localized string for #{val}" do
-          expect(described_class.send("human_#{single_attr}", val)).to_not match(/translation missing/i)
+      context "singular" do
+        described_class.send(plural_attr).keys.each do |val|
+          it "has a localized string for #{val}" do
+            expect(described_class.send("human_#{single_attr}", val)).to_not match(/translation missing/i)
+          end
         end
       end
+
+      pending "plural"
     end
 
     context "for #{single_attr}" do
@@ -30,6 +34,8 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             allow(I18n).to receive(:t).with("#{i18n_key}.a").and_return("Y.")
             allow(I18n).to receive(:t).with("#{i18n_key}.r").and_return("X.")
           end
+
+          pending "self#pluralized_human_#{plural_attr}"
 
           describe "self#human_#{plural_attr}" do
             it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
@@ -77,12 +83,14 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
       context "instance" do
         describe "#human_#{single_attr}" do
           it "calls class method" do
-            allow(described_class).to receive("human_#{single_attr}")
+             allow(described_class).to receive("human_#{single_attr}")
             expect(described_class).to receive("human_#{single_attr}").with(instance.send("#{single_attr}"))
 
             instance.send("human_#{single_attr}")
           end
         end
+
+        pending "#pluralized_human_#{single_attr}"
       end
     end
   end
@@ -98,6 +106,10 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
 
     describe "self#human_enum_value" do
       specify { expect(described_class).to respond_to(:human_enum_value) }
+    end
+
+    describe "self#pluralized_human_enum_value" do
+      specify { expect(described_class).to respond_to(:pluralized_human_enum_value) }
     end
 
     describe "self#enumable_attributes" do

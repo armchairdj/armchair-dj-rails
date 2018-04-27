@@ -49,12 +49,11 @@ en:
           podcaster:                    "Podcaster"
 
           author:                       "Author"
+          illustrator:                  "Illustrator"
           editor:                       "Editor"
 
-          book_imprint:                 "Book Imprint"
-          comics_imprint:               "Comics Imprint"
-          magazine_publisher:           "Magazine Publisher"
-          newspaper_publisher:          "Newspaper Publisher"
+          imprint:                      "Imprint"
+          publisher:                    "Publisher"
 
           cartoonist:                   "Cartoonist"
           penciller:                    "Penciller"
@@ -62,18 +61,18 @@ en:
           colorist:                     "Colorist"
           letterer:                     "Letterer"
 
-          artist:                      "Artist"
+          artist:                       "Artist"
 
-          game_platform:               "Platform"
-          game_studio:                 "Studio"
+          game_platform:                "Platform"
+          game_studio:                  "Studio"
 
-          software_platform:           "Platform"
-          software_comapny:            "Company"
-          programmer:                  "Programmer"
+          software_platform:            "Platform"
+          software_comapny:             "Company"
+          programmer:                   "Programmer"
 
-          hardware_company:            "Company"
+          hardware_company:             "Company"
 
-          brand:                       "Brand"
+          brand:                        "Brand"
       creator:
         id: "ID"
         created_at: "Created"
@@ -126,6 +125,22 @@ en:
           software:    "Software"
           hardware:    "Hardware"
           product:     "Product"
+        pluralized_media:
+          song:        "Songs"
+          album:       "Albums"
+          movie:       "Movies"
+          tv_show:     "TV Shows"
+          radio_show:  "Radio Shows"
+          podcast:     "Podcasts"
+          book:        "Books"
+          comic:       "Comic Books"
+          newspaper:   "Newspapers"
+          magazine:    "Magazines"
+          artwork:     "Artworks"
+          game:        "Games"
+          software:    "Software"
+          hardware:    "Hardware"
+          product:     "Products"
         subtitle:   "Subtitle or Version"
         title:      "Title"
     errors:

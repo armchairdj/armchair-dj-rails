@@ -3,6 +3,57 @@ require "ffaker"
 brian = User.create_with(role: :admin, username: "armchairdj", first_name: "Brian", middle_name: "J.", last_name: "Dillard", password: "password1234").find_or_create_by(email: "armchairdj@gmail.com")
 
 1.times do
+  bjork = FactoryBot.create(:musician, name: "Bjork")
+  plaid = FactoryBot.create(:musician, name: "Plaid")
+  lars  = FactoryBot.create(:director, name: "Lars von Trier")
+
+  FactoryBot.create(:post, :published, author: brian, body: FFaker::HipsterIpsum.paragraphs(1).first, work_attributes: {
+    "title"                    => "Not for Threes",
+    "medium"                   => "album",
+    "contributions_attributes" => {
+      "0" => FactoryBot.attributes_for(:contribution, role: :creator,                 creator_id: plaid.id),
+      "1" => FactoryBot.attributes_for(:contribution, role: :musical_featured_artist, creator_id: bjork.id),
+      "2" => FactoryBot.attributes_for(:contribution, role: :singer                 , creator_id: bjork.id)
+    }
+  })
+
+  FactoryBot.create(:post, :published, author: brian, body: FFaker::HipsterIpsum.paragraphs(1).first, work_attributes: {
+    "title"                    => "Lilith",
+    "medium"                   => "song",
+    "contributions_attributes" => {
+      "0" => FactoryBot.attributes_for(:contribution, role: :creator,                 creator_id: plaid.id),
+      "1" => FactoryBot.attributes_for(:contribution, role: :musical_featured_artist, creator_id: bjork.id),
+      "2" => FactoryBot.attributes_for(:contribution, role: :singer                 , creator_id: bjork.id)
+    }
+  })
+
+  FactoryBot.create(:post, :published, author: brian, body: FFaker::HipsterIpsum.paragraphs(1).first, work_attributes: {
+    "title"                    => "Post",
+    "medium"                   => "album",
+    "contributions_attributes" => {
+      "0" => FactoryBot.attributes_for(:contribution, role: :creator,        creator_id: bjork.id),
+      "1" => FactoryBot.attributes_for(:contribution, role: :music_producer, creator_id: plaid.id)
+    }
+  })
+
+  FactoryBot.create(:post, :published, author: brian, body: FFaker::HipsterIpsum.paragraphs(1).first, work_attributes: {
+    "title"                    => "Dancer in the Dark",
+    "medium"                   => "movie",
+    "contributions_attributes" => {
+      "0" => FactoryBot.attributes_for(:contribution, role: :creator,  creator_id: lars.id),
+      "1" => FactoryBot.attributes_for(:contribution, role: :producer, creator_id: bjork.id)
+    }
+  })
+
+  FactoryBot.create(:post, :published, author: brian, body: FFaker::HipsterIpsum.paragraphs(1).first, work_attributes: {
+    "title"                    => "Bjork",
+    "medium"                   => "book",
+    "contributions_attributes" => {
+      "0" => FactoryBot.attributes_for(:contribution, role: :creator,  creator_id: bjork.id),
+      "1" => FactoryBot.attributes_for(:contribution, role: :author,   creator_id: bjork.id)
+    }
+  })
+
   FactoryBot.create(                     :song_review, :draft,     author: brian, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))
   FactoryBot.create(                 :standalone_post, :draft,     author: brian, body: FFaker::HipsterIpsum.paragraphs( 5).join("\n\n"))
   FactoryBot.create(       :collaborative_book_review, :draft,     author: brian, body: FFaker::HipsterIpsum.paragraphs( 6).join("\n\n"))

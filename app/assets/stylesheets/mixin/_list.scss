@@ -1,10 +1,10 @@
-@mixin bulleted-list {
+@mixin bulleted-list($list-style-type: disc) {
   padding: 0 0 0 1em;
   margin: 0 0 0 1em;
   @include bottom-margin();
 
   li {
-    list-style-type: disc;
+    list-style-type: $list-style-type;
     padding-left: .5em;
     margin: 0 0 .5em;
     @include bottom-margin($spacing-s);

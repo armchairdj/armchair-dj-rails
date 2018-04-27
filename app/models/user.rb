@@ -50,6 +50,8 @@ class User < ApplicationRecord
   #############################################################################
 
   has_many :posts
+  has_many :works,    through: :posts
+  has_many :creators, through: :works
 
   #############################################################################
   # ATTRIBUTES.

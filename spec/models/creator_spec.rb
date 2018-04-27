@@ -79,8 +79,14 @@ RSpec.describe Creator, type: :model do
   end
 
   context "instance" do
-    context "meta methods" do
-      pending "to_description"
+    pending "#media"
+
+    pending "#roles"
+
+    describe "#contributions_array" do
+      pending "#contributions_by_role"
+      pending "#contributions_by_medium"
+      pending "#contributions_by_work"
     end
 
     describe "private" do

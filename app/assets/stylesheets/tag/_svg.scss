@@ -3,6 +3,12 @@
     @include svg-path-fill($info-color);
   }
 
+  &.admin-column-header {
+    @include svg() {
+      @include svg-path-fill($armchair-smoke);
+    }
+  }
+
   &.post-published {
     @include svg() {
       @include svg-path-fill($success-color);

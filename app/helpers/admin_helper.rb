@@ -88,4 +88,24 @@ module AdminHelper
 
     link_to(svg, path, title: title, class: "admin view")
   end
+
+  #############################################################################
+  # COLUMN HEADERS.
+  #############################################################################
+
+  def post_count_column_header
+    svg_abbreviation("open_iconic/lock-unlocked.svg", title: "Public Posts", wrapper_class: "admin-column-header")
+  end
+
+  def draft_count_column_header
+    svg_abbreviation("open_iconic/lock-locked.svg", title: "Draft Posts", wrapper_class: "admin-column-header")
+  end
+
+  def work_count_column_header
+    svg_abbreviation("open_iconic/person.svg", title: "Viewable Works", wrapper_class: "admin-column-header")
+  end
+
+  def contribution_count_column_header
+    svg_abbreviation("open_iconic/people.svg", title: "Viewable Contributed Works", wrapper_class: "admin-column-header")
+  end
 end

@@ -1,33 +1,59 @@
 <%
   @headline = @title = @creator.name
+
+  @posts         = @creator.posts.for_site
+  @works         = @creator.works.for_site
+  @contributions = @creator.contributions.for_site
+  @media         = @creator.roles_by_medium
 %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Posts About") %>
-  <% end %>
+<% if @media.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Media") %>
+    <% end %>
 
-  <% @creator.posts.each do |post| %>
-    <%= link_to_post(post) %><br>
-  <% end %>
-<% end %>
-
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Works By") %>
-  <% end %>
-
-  <% @creator.works.each do |work| %>
-    <%= link_to_work(work, full: false) %><br>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% @media.each do |grouping| %>
+        <%= content_tag(:dt, grouping[:medium]           ) %>
+        <%= content_tag(:dd, grouping[:roles ].join(", ")) %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Works Contributed To") %>
-  <% end %>
+<% if @posts.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts About") %>
+    <% end %>
 
-  <% @creator.contributed_works.each do |work| %>
-    <%= link_to_work(work) %><br>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "posts/post", collection: @posts %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @works.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Works By") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "works/work", collection: @works %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @contributions.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Works Contributed To") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "creators/contribution", collection: @contributions %>
+    <% end %>
   <% end %>
 <% end %>

@@ -7,12 +7,4 @@ module WorksHelper
 
     link_to(text, url_options)
   end
-
-  def links_to_creators_for_work(work, separator: " & ", admin: false)
-    return unless work && work.persisted?
-
-    work.creators.map {
-      |a| link_to a.name, (admin ? admin_creator_path(a) : a)
-    }.join(separator).html_safe
-  end
 end

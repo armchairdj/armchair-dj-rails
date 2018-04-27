@@ -131,6 +131,5 @@ FactoryBot.define do
     factory :kate_bush do
       name "Kate Bush"
     end
-
   end
 end

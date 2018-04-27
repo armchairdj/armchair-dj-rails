@@ -21,6 +21,8 @@
             <%= content_tag(:th, "Name") %>
             <%= content_tag(:th, "Username") %>
             <%= content_tag(:th, "Email") %>
+            <%= content_tag(:th, post_count_column_header, class: "icon") %>
+            <%= content_tag(:th, draft_count_column_header, class: "icon") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
@@ -31,6 +33,8 @@
               <%= content_tag(:td, user.display_name) %>
               <%= content_tag(:td, user.username) %>
               <%= content_tag(:td, user.email) %>
+              <%= content_tag(:td, user.posts.published.count, class: "icon") %>
+              <%= content_tag(:td, user.posts.draft.count, class: "icon") %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_view_link(user) %>
                 <%= admin_update_link(user) %>

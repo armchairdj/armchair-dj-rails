@@ -1,5 +1,10 @@
 <%
   @title = ["View User", @user.display_name ]
+
+  @posts    = @user.posts.for_admin.reverse_cron
+  @works    = @user.works.for_admin.alphabetical
+  @creators = @user.creators.for_admin.alphabetical
+  @bio      = @user.bio
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -27,13 +32,20 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Username") %>
+        <%= content_tag(:td, @user.username) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Email") %>
         <%= content_tag(:td, @user.email) %>
       <% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Unconfirmed Email") %>
-        <%= content_tag(:td, @user.unconfirmed_email) %>
+      <% if @user.can_contribute? %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Bio") %>
+          <%= content_tag(:td, paragraphs(@bio)) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -45,7 +57,17 @@
         <%= content_tag(:th, "Updated") %>
         <%= content_tag(:td, admin_date(@user.updated_at)) %>
       <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Account Status") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Confirmed") %>
         <%= content_tag(:td, admin_date(@user.confirmed_at)) %>
@@ -57,8 +79,38 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Password Reset Sent") %>
+        <%= content_tag(:td, admin_date(@user.reset_password_sent_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Locked") %>
+        <%= content_tag(:td, admin_date(@user.locked_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Unconfirmed Email") %>
+        <%= content_tag(:td, @user.unconfirmed_email) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Logins") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Logins") %>
         <%= content_tag(:td, @user.sign_in_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Failed Attempts") %>
+        <%= content_tag(:td, @user.failed_attempts) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -85,20 +137,43 @@
         <%= content_tag(:th, "Remember Me") %>
         <%= content_tag(:td, admin_date(@user.remember_created_at)) %>
       <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Password Reset") %>
-        <%= content_tag(:td, @user.reset_password_sent_at) %>
+<% if @user.can_contribute? %>
+  <% if @posts.any? %>
+    <%= content_tag(:section, class: "admin-section") do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Posts") %>
       <% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Locked") %>
-        <%= content_tag(:td, admin_date(@user.locked_at)) %>
+      <%= content_tag(:dl, class: "horizontal right") do %>
+        <%= render partial: "admin/posts/post", collection: @posts %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if @works.any? %>
+    <%= content_tag(:section, class: "admin-section") do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Works Written About") %>
       <% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Failed Attempts") %>
-        <%= content_tag(:td, @user.failed_attempts) %>
+      <%= content_tag(:dl, class: "horizontal right") do %>
+        <%= render partial: "admin/works/work", collection: @works %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if @creators.any? %>
+    <%= content_tag(:section, class: "admin-section") do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Creators Written About") %>
+      <% end %>
+
+      <%= content_tag(:ul, class: "square") do %>
+        <%= render partial: "admin/creators/creator", collection: @creators %>
       <% end %>
     <% end %>
   <% end %>

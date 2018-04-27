@@ -5,10 +5,8 @@
 <% if @posts.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= content_tag(:ul, class: "bulleted") do %>
-    <% @posts.each do |post| %>
-      <%= content_tag(:li, link_to_post(post)) %>
-    <% end %>
+  <%= content_tag(:dl) do %>
+    <%= render partial: "posts/post", collection: @posts %>
   <% end %>
 
   <%= paginate @posts %>

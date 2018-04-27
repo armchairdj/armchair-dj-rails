@@ -35,6 +35,20 @@
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Square List") %>
+
+    <%= content_tag(:ul, class: "square") do %>
+      <%= content_tag(:li, "One") %>
+      <%= content_tag(:li, "Two") %>
+      <%= content_tag(:li, "Three") %>
+      <%= content_tag(:li, "Four") %>
+      <%= content_tag(:li, "Five") %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
     <%= content_tag(:h3, "Piped List") %>
 
     <%= content_tag(:ul, class: "piped") do %>
@@ -103,6 +117,29 @@
     <%= content_tag(:h3, "Horizontal Definition List") %>
 
     <%= content_tag(:dl, class: "horizontal") do %>
+      <%= content_tag(:dt, "Key 1") %>
+      <%= content_tag(:dd, "Val 1") %>
+
+      <%= content_tag(:dt, "Key 2") %>
+      <%= content_tag(:dd, "Val 2") %>
+
+      <%= content_tag(:dt, "Key 3") %>
+      <%= content_tag(:dd, "Val 3") %>
+
+      <%= content_tag(:dt, "Key 4") %>
+      <%= content_tag(:dd, "Val 4") %>
+
+      <%= content_tag(:dt, "Key 5") %>
+      <%= content_tag(:dd, "Val 5") %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Right Horizontal Definition List") %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
       <%= content_tag(:dt, "Key 1") %>
       <%= content_tag(:dd, "Val 1") %>
 

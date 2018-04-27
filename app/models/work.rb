@@ -134,10 +134,6 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def to_description
-    "TODO"
-  end
-
   def prepare_contributions
     count_needed = self.class.max_contributions - self.contributions.length
 
@@ -153,10 +149,10 @@ class Work < ApplicationRecord
   def full_display_title
     return unless persisted?
 
-    [display_creator, title, subtitle].compact.join(": ")
+    [display_creators, title, subtitle].compact.join(": ")
   end
 
-  def display_creator(connector: " & ")
+  def display_creators(connector: " & ")
     return unless persisted?
 
     creators.alphabetical.to_a.map(&:name).join(connector)

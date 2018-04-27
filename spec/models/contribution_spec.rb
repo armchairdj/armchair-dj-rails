@@ -20,6 +20,10 @@ RSpec.describe Contribution, type: :model do
   context "scopes" do
     pending "primary"
     pending "secondary"
+    pending "for_admin"
+    pending "for_site"
+    pending "viewable"
+    pending "alphabetical"
   end
 
   context "associations" do

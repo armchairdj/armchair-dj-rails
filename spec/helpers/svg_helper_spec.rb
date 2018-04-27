@@ -98,6 +98,10 @@ RSpec.describe SvgHelper, type: :helper do
     end
   end
 
+  describe "#svg_abbreviation" do
+
+  end
+
   describe "#svg_icon" do
     before(:each) do
        allow(helper).to receive(:semantic_svg_image).and_call_original

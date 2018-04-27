@@ -72,6 +72,8 @@ class Post < ApplicationRecord
 
   belongs_to :work, required: false
 
+  has_many :creators, through: :work
+
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
@@ -198,19 +200,15 @@ class Post < ApplicationRecord
   #############################################################################
 
   def type(plural: false)
-    base = review? ? "#{work.human_medium} Review" : "Standalone Post"
+    base = review? ? "#{work.human_medium} Review" : "Post"
 
     plural ? base.pluralize : base
   end
 
-  def display_type(plural: false)
+  def sluggable_type
     return nil unless review?
 
-    type(plural: plural)
-  end
-
-  def to_description
-    "TODO"
+    type(plural: true)
   end
 
   def not_published?
@@ -345,8 +343,8 @@ private
       [ title ]
     elsif work.present?
       [
-        display_type(plural: true),
-        work.display_creator(connector: " and "),
+        sluggable_type,
+        work.display_creators(connector: " and "),
         work.title,
         work.subtitle
       ].compact

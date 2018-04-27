@@ -30,8 +30,15 @@ class Contribution < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope   :primary, -> { where(    role: roles["creator"]) }
-  scope :secondary, -> { where.not(role: roles["creator"]) }
+  scope      :primary, -> { where(    role: roles["creator"]) }
+  scope    :secondary, -> { where.not(role: roles["creator"]) }
+
+  scope :alphabetical, -> { }
+
+  scope :viewable,     -> { includes(:work).where.not(works: { viewable_post_count: 0 }) }
+
+  scope     :for_site, -> { secondary.viewable.order("works.title") }
+  scope    :for_admin, -> { secondary }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -100,12 +107,12 @@ class Contribution < ApplicationRecord
     # Print
 
     author:                       300,
+    illustrator:                  301,
+    
     editor:                       310,
 
-    book_imprint:                 320,
-    comics_imprint:               321,
-    magazine_publisher:           322,
-    newspaper_publisher:          323,
+    imprint:                      320,
+    publisher:                    321,
 
     cartoonist:                   330,
     penciller:                    331,

@@ -29,4 +29,8 @@ private
   def authorize_instance
     authorize @post
   end
+
+  def set_meta_tags
+    @meta_description = @post.summary
+  end
 end

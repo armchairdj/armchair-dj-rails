@@ -13,4 +13,8 @@ private
   def authorize_instance
     authorize @work
   end
+
+  def set_meta_tags
+    @meta_description = @work.summary
+  end
 end

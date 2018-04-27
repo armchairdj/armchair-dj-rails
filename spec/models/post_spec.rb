@@ -175,7 +175,10 @@ RSpec.describe Post, type: :model do
 
   context "associations" do
     it { should belong_to(:author) }
-    it { should belong_to(:work  ) }
+
+    it { should belong_to(:work) }
+
+    it { should have_many(:creators).through(:work) }
   end
 
   context "attributes" do
@@ -1086,22 +1089,16 @@ RSpec.describe Post, type: :model do
       let(    :review) { create(:album_review   ) }
 
       describe "#type" do
-        specify{ expect(standalone.type              ).to eq("Standalone Post") }
-        specify{ expect(standalone.type(plural: true)).to eq("Standalone Posts") }
-        specify{ expect(    review.type              ).to eq("Album Review"   ) }
-        specify{ expect(    review.type(plural: true)).to eq("Album Reviews"   ) }
+        specify{ expect(standalone.type              ).to eq("Post"         ) }
+        specify{ expect(standalone.type(plural: true)).to eq("Posts"        ) }
+        specify{ expect(    review.type              ).to eq("Album Review" ) }
+        specify{ expect(    review.type(plural: true)).to eq("Album Reviews") }
       end
 
-      describe "#display_type" do
-        specify{ expect(standalone.display_type              ).to eq(nil) }
-        specify{ expect(standalone.display_type(plural: true)).to eq(nil) }
-        specify{ expect(    review.display_type              ).to eq("Album Review" ) }
-        specify{ expect(    review.display_type(plural: true)).to eq("Album Reviews") }
+      describe "#sluggable_type" do
+        specify{ expect(standalone.sluggable_type).to eq(nil            ) }
+        specify{ expect(    review.sluggable_type).to eq("Album Reviews") }
       end
-    end
-
-    context "meta methods" do
-      pending "to_description"
     end
 
     context "booleans" do
