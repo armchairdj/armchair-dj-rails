@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_27_165112) do
+ActiveRecord::Schema.define(version: 2018_04_27_210132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,18 +32,30 @@ ActiveRecord::Schema.define(version: 2018_04_27_165112) do
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.text "summary"
+    t.boolean "primary", default: false, null: false
+    t.boolean "collective", default: false, null: false
+    t.index ["collective"], name: "index_creators_on_collective"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
+    t.index ["primary"], name: "index_creators_on_primary"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
   end
 
-  create_table "participations", force: :cascade do |t|
+  create_table "identities", force: :cascade do |t|
     t.bigint "creator_id"
-    t.bigint "participant_id"
-    t.integer "relationship", null: false
+    t.bigint "pseudonym_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_participations_on_creator_id"
-    t.index ["participant_id"], name: "index_participations_on_participant_id"
+    t.index ["creator_id"], name: "index_identities_on_creator_id"
+    t.index ["pseudonym_id"], name: "index_identities_on_pseudonym_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.bigint "member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_memberships_on_creator_id"
+    t.index ["member_id"], name: "index_memberships_on_member_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -57,11 +69,11 @@ ActiveRecord::Schema.define(version: 2018_04_27_165112) do
     t.integer "status", default: 0, null: false
     t.boolean "dirty_slug", default: false, null: false
     t.datetime "publish_on"
-    t.bigint "user_id"
+    t.bigint "author_id"
     t.text "summary"
+    t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
-    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -110,5 +122,9 @@ ActiveRecord::Schema.define(version: 2018_04_27_165112) do
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
-  add_foreign_key "posts", "users"
+  add_foreign_key "identities", "creators"
+  add_foreign_key "identities", "creators", column: "pseudonym_id"
+  add_foreign_key "memberships", "creators"
+  add_foreign_key "memberships", "creators", column: "member_id"
+  add_foreign_key "posts", "users", column: "author_id"
 end

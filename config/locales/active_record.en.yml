@@ -77,12 +77,16 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
-      participation:
-        relationships:
-          named: "is known as"
-          has_name: "has the name"
-          member_of: "is a member of"
-          has_member: "has the member"
+      identity:
+        id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
+        pseudonym: "Pseudonym"
+      membership:
+        id: "ID"
+        created_at: "Created"
+        updated_at: "Updated"
+        member: "Member"
       post:
         id: "ID"
         created_at: "Created"
@@ -155,7 +159,18 @@ en:
           attributes:
             creator_id:
               taken: "This creator cannot appear twice in the same role."
-        creator:
+        identity:
+          attributes:
+            creator_id:
+              not_primary: "Secondary creators cannot have pseudonyms."
+            pseudonym_id:
+              not_secondary: "Primary creators cannot be pseudonyms."
+        membership:
+          attributes:
+            creator_id:
+              not_collective: "Only collectives can have members."
+            member_id:
+              not_singular: "Collectives cannot be members of other collectives."
         post:
           attributes:
             base:

@@ -70,7 +70,7 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :author, class_name: "User", foreign_key: :user_id, required: true
+  belongs_to :author, class_name: "User", foreign_key: :author_id, required: true
 
   belongs_to :work, required: false
 

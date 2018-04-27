@@ -20,6 +20,9 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :primary,      -> { where(primary: true ) }
+  scope :secondary,    -> { where(primary: false) }
+
   scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
   scope :eager,        -> { all }
   scope :for_admin,    -> { eager }
@@ -46,22 +49,21 @@ class Creator < ApplicationRecord
   # Participations.
 
   has_many :participations
-  has_many :participants, through: :participations
-
-  has_many :members, -> { where(participations: {
-    role: Participation.relationships["has_member"]
-  })}, through: :participations, source: :participant, class_name: "Creator"
 
   has_many :memberships, -> { where(participations: {
-    role: Participation.relationships["member_of"]
+    relationship: Participation.relationships["member_of"]
   })}, through: :participations, source: :participant, class_name: "Creator"
 
-  has_many :names, -> { where(participations: {
-    role: Participation.relationships["has_name"]
+  has_many :members, -> { where(participations: {
+    relationship: Participation.relationships["has_member"]
   })}, through: :participations, source: :participant, class_name: "Creator"
 
   has_many :namings, -> { where(participations: {
-    role: Participation.relationships["named"]
+    relationship: Participation.relationships["named"]
+  })}, through: :participations, source: :participant, class_name: "Creator"
+
+  has_many :names, -> { where(participations: {
+    relationship: Participation.relationships["has_name"]
   })}, through: :participations, source: :participant, class_name: "Creator"
 
   #############################################################################
@@ -78,6 +80,8 @@ class Creator < ApplicationRecord
 
   validates :name, presence: true
 
+  validates :primary, inclusion: { in: [true, false] }
+
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -86,16 +90,25 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def aliased
-    self.participants.alias
+  def secondary?
+    !primary?
   end
 
-  def memberships
-    self.participants.member_of
+  def singular?
+    !collective?
   end
 
   def alternate_identities
-  
+    base   = [self.names.to_a, self.namings.to_a].flatten.uniq
+    extras = base.each { |e| [e.names, e.namings] }
+
+    [base, extras].flatten.uniq
+  end
+
+  def related_artists
+    base = Participation.where(creator_id: self.id).or(Participation.where(participant_id: self.id))
+
+    [base.map(&:creator), base.map(&:participant)].flatten.uniq
   end
 
   def media

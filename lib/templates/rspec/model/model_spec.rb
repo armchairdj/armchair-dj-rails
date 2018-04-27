@@ -44,10 +44,6 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     context "custom" do
       # Nothing so far.
     end
-
-    context "custom validators" do
-      # Nothing so far.
-    end
   end
 
   context "hooks" do

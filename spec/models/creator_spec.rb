@@ -73,6 +73,8 @@ RSpec.describe Creator, type: :model do
   context "validations" do
     describe "name" do
       it { should validate_presence_of(:name) }
+
+      it { should validate_inclusion_of(:primary).in_array([true, false]) }
     end
   end
 
@@ -81,14 +83,34 @@ RSpec.describe Creator, type: :model do
   end
 
   context "instance" do
-    pending "#media"
+    context "booleans" do
 
-    pending "#roles"
+    end
 
-    describe "#contributions_array" do
-      pending "#contributions_by_role"
-      pending "#contributions_by_medium"
-      pending "#contributions_by_work"
+    context "participations" do
+      it "works" do
+        richie     = create(:richie_hawtin)
+        plastikman = richie.namings.first
+        spawnn     = richie.memberships.first
+
+        robotman = create(:musician, name: "Robotman")
+
+        create(:has_name_participation, creator: richie, participant: robotman)
+
+        puts ">>", richie.related_artists.inspect
+      end
+    end
+
+    context "contributions" do
+      pending "#media"
+
+      pending "#roles"
+
+      describe "#contributions_array" do
+        pending "#contributions_by_role"
+        pending "#contributions_by_medium"
+        pending "#contributions_by_work"
+      end
     end
 
     describe "private" do

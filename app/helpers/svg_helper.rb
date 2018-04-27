@@ -29,7 +29,7 @@ module SvgHelper
     content_tag(:span, semantic_svg_image(image_path, opts), class: wrapper_class)
   end
 
-  def svg_abbreviation(image_path, title: title, **opts)
+  def svg_abbreviation(image_path, title:, **opts)
     wrapper_class = combine_classes("svg-icon", opts.delete(:wrapper_class))
     svg           = non_semantic_svg_image(image_path, opts)
 

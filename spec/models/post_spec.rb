@@ -255,29 +255,16 @@ RSpec.describe Post, type: :model do
     end
 
     context "custom" do
-      it "calls #validate_user" do
-         allow(subject).to receive(:validate_user).and_call_original
-        expect(subject).to receive(:validate_user)
-
-        subject.valid?
-      end
-
-      it "calls #validate_work_and_title" do
-         allow(subject).to receive(:validate_work_and_title).and_call_original
-        expect(subject).to receive(:validate_work_and_title)
-
-        subject.valid?
-      end
-    end
-
-    context "custom validators" do
       describe "#validate_user" do
         subject { build(:minimal_post) }
 
+        before(:each) do
+           allow(subject).to receive(:validate_user).and_call_original
+          expect(subject).to receive(:validate_user)
+        end
+
         specify "admin" do
           subject.author = create(:admin)
-
-          subject.send(:validate_user)
 
           expect(subject).to be_valid
         end
@@ -285,15 +272,13 @@ RSpec.describe Post, type: :model do
         specify "contributor" do
           subject.author = create(:contributor)
 
-          subject.send(:validate_user)
-
           expect(subject).to be_valid
         end
 
         specify "member" do
           subject.author = create(:member)
 
-          subject.send(:validate_user)
+          expect(subject).to_not be_valid
 
           expect(subject).to have_errors(base: :invalid_author)
         end
@@ -301,7 +286,7 @@ RSpec.describe Post, type: :model do
         specify "nil" do
           subject.author = nil
 
-          subject.send(:validate_user)
+          expect(subject).to_not be_valid
 
           expect(subject).to have_errors(base: :no_author)
         end

@@ -214,22 +214,22 @@ RSpec.describe Work, type: :model do
     it { should validate_presence_of(:title ) }
 
     context "custom" do
-      subject { build(:work) }
-
-      it "calls #validate_contributions" do
-         allow(subject).to receive(:validate_contributions)
-        expect(subject).to receive(:validate_contributions)
-
-        subject.valid?
-      end
-    end
-
-    context "custom validators" do
       describe "#validate_contributions" do
-        subject { build(:work_without_contributions) }
+        subject { build(:song) }
 
-        it "confirms at least one creator" do
-          subject.send(:validate_contributions)
+        before(:each) do
+           allow(subject).to receive(:validate_contributions).and_call_original
+          expect(subject).to receive(:validate_contributions)
+        end
+
+        specify "valid" do
+          expect(subject).to be_valid
+        end
+
+        specify "invalid" do
+          subject.contributions = []
+
+          expect(subject).to_not be_valid
 
           expect(subject).to have_errors(contributions: :missing)
         end

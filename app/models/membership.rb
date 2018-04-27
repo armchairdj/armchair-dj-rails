@@ -1,17 +1,10 @@
 # frozen_string_literal: true
 
-class Participation < ApplicationRecord
+class Membership < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
   #############################################################################
-
-  MIRRORS = {
-      named: :has_name,
-      has_name: :named,
-     member_of: :has_member,
-    has_member: :member_of
-  }.freeze
 
   #############################################################################
   # CONCERNS.
@@ -29,40 +22,40 @@ class Participation < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :creator,     required: true
-  belongs_to :participant, required: true, class_name: "Creator"
+  belongs_to :creator, required: true
+  belongs_to :member,  required: true, class_name: "Creator"
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
-
-  enum relationship: {
-    named:         10,
-    has_name:      11,
-
-    member_of:     20,
-    has_member:    21
-  }
-
-  enumable_attributes :relationship
-
+  
   #############################################################################
   # VALIDATIONS.
   #############################################################################
 
-  validates :creator,      presence: true
-  validates :participant,  presence: true
-  validates :relationship, presence: true
+  validates :creator, presence: true
+  validates :member,  presence: true
 
-  validates :creator_id, uniqueness: { scope: [:relationship, :participant_id] }
+  validates :creator_id, uniqueness: { scope: [:member_id] }
+
+  validate { creator_is_collective }
+  validate { member_is_singular }
+
+  def creator_is_collective
+    return if creator.try(:collective?)
+
+    self.errors.add :creator_id, :not_collective
+  end
+
+  def member_is_singular
+    return if member.try(:singular?)
+
+    self.errors.add :member_id, :not_singular
+  end
 
   #############################################################################
   # HOOKS.
   #############################################################################
-
-  after_create :create_mirror, unless: :do_not_mirror?
-
-  attr_accessor :do_not_mirror
 
   #############################################################################
   # INSTANCE.
@@ -70,23 +63,4 @@ class Participation < ApplicationRecord
 
 private
 
-  def do_not_mirror?
-    self.do_not_mirror == true
-  end
-
-  def create_mirror
-    return unless mirror = MIRRORS.public_send(:[], relationship.to_sym)
-
-    mirrored = self.class.find_or_initialize_by({
-      creator:       participant,
-      participant:   creator,
-      relationship:  mirror
-    })
-
-    return if mirrored.persisted?
-
-    mirrored.do_not_mirror = true
-
-    mirrored.save!
-  end
 end
