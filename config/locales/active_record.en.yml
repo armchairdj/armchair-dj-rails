@@ -79,7 +79,7 @@ en:
         updated_at: "Updated"
       participation:
         relationships:
-          known_as: "is known as"
+          named: "is known as"
           has_name: "has the name"
           member_of: "is a member of"
           has_member: "has the member"

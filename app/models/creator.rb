@@ -29,6 +29,8 @@ class Creator < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
+  # Contributions & Works.
+
   has_many :contributions, dependent: :destroy
 
   has_many :works, -> { where(contributions: {
@@ -41,15 +43,25 @@ class Creator < ApplicationRecord
 
   has_many :posts, through: :works
 
+  # Participations.
+
   has_many :participations
   has_many :participants, through: :participations
 
   has_many :members, -> { where(participations: {
-    role: Participation.relationship["member_of"]
+    role: Participation.relationships["has_member"]
+  })}, through: :participations, source: :participant, class_name: "Creator"
+
+  has_many :memberships, -> { where(participations: {
+    role: Participation.relationships["member_of"]
   })}, through: :participations, source: :participant, class_name: "Creator"
 
   has_many :names, -> { where(participations: {
-    role: Participation.relationship["known_as"]
+    role: Participation.relationships["has_name"]
+  })}, through: :participations, source: :participant, class_name: "Creator"
+
+  has_many :namings, -> { where(participations: {
+    role: Participation.relationships["named"]
   })}, through: :participations, source: :participant, class_name: "Creator"
 
   #############################################################################

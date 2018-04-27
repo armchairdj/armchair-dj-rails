@@ -2,14 +2,14 @@
 
 FactoryBot.define do
   factory :participation do
-    factory :minimal_participation, parent: :known_as
+    factory :minimal_participation, parent: :named
 
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
-    trait :known_as_relationship do
-      relationship :known_as
+    trait :named_relationship do
+      relationship :named
     end
 
     trait :has_name_relationship do
@@ -33,8 +33,8 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :known_as do
-      known_as_relationship
+    factory :named do
+      named_relationship
       with_associations
     end
 
@@ -52,10 +52,5 @@ FactoryBot.define do
       has_member_relationship
       with_associations
     end
-
-    ###########################################################################
-    # SPECIFIC FACTORIES.
-    ##########################################################################
-
   end
 end

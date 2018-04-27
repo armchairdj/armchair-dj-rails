@@ -133,5 +133,29 @@ FactoryBot.define do
     factory :kate_bush do
       name "Kate Bush"
     end
+
+    factory :richie_hawtin do
+      name "Richie Hawtin"
+    end
+
+    factory :dan_bell do
+      name "Richie Hawtin"
+    end
+
+    factory :fred_giannelli do
+      name "Richie Hawtin"
+    end
+
+    factory :plastikman do
+      name "Plastikman"
+    end
+
+    factory :spawn do
+      name "Spawn"
+    end
+
+    factory :fuse do
+      name "F.U.S.E."
+    end
   end
 end

@@ -53,10 +53,6 @@ class Contribution < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
-  accepts_nested_attributes_for :creator,
-    allow_destroy: true,
-    reject_if:     :blank_creator?
-
   enum role: {
     creator:                        0,
 
@@ -162,9 +158,4 @@ class Contribution < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-private
-
-  def blank_creator?(creator_attributes)
-    creator_attributes["name"].blank?
-  end
 end

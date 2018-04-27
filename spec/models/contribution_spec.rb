@@ -35,19 +35,7 @@ RSpec.describe Contribution, type: :model do
 
   context "attributes" do
     context "nested" do
-      it { should accept_nested_attributes_for(:creator) }
-
-      describe "reject_if" do
-        it "rejects with blank creator name" do
-          instance = build(:contribution_with_new_creator, creator_attributes: {
-            "0" => { "name" => "" }
-          })
-
-          expect { instance.save }.to_not change { Contribution.count }
-
-          expect(instance).to have_errors(creator: :blank)
-        end
-      end
+      # Nothing so far.
     end
 
     context "enums" do

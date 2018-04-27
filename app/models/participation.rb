@@ -7,8 +7,8 @@ class Participation < ApplicationRecord
   #############################################################################
 
   MIRRORS = {
-      known_as: :has_name,
-      has_name: :known_as,
+      named: :has_name,
+      has_name: :named,
      member_of: :has_member,
     has_member: :member_of
   }.freeze
@@ -37,7 +37,7 @@ class Participation < ApplicationRecord
   #############################################################################
 
   enum relationship: {
-    known_as:      10,
+    named:         10,
     has_name:      11,
 
     member_of:     20,
@@ -54,7 +54,7 @@ class Participation < ApplicationRecord
   validates :participant,  presence: true
   validates :relationship, presence: true
 
-  validates :relationship, uniqueness: { scope: [:creator_id, :participant_id] }
+  validates :creator_id, uniqueness: { scope: [:relationship, :participant_id] }
 
   #############################################################################
   # HOOKS.
