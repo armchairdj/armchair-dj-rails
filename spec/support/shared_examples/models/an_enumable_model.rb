@@ -3,6 +3,32 @@
 RSpec.shared_examples "an_enumable_model" do |attributes|
   let(:instance) { create_minimal_instance }
 
+  context "class" do
+    describe "self#human_enum_collection" do
+      specify { expect(described_class).to respond_to(:human_enum_collection) }
+    end
+
+    describe "self#human_enum_collection_with_keys" do
+      specify { expect(described_class).to respond_to(:human_enum_collection_with_keys) }
+    end
+
+    describe "self#human_enum_value" do
+      specify { expect(described_class).to respond_to(:human_enum_value) }
+    end
+
+    describe "self#pluralized_human_enum_value" do
+      specify { expect(described_class).to respond_to(:pluralized_human_enum_value) }
+    end
+
+    describe "self#enumable_attributes" do
+      specify { expect(described_class).to respond_to(:enumable_attributes) }
+    end
+
+    describe "self#retrieve_enumable_attributes" do
+      specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
+    end
+  end
+
   attributes.each do |attribute|
     single_attr = attribute.to_s
     plural_attr = single_attr.pluralize
@@ -94,32 +120,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
 
         pending "#pluralized_human_#{single_attr}"
       end
-    end
-  end
-
-  context "class" do
-    describe "self#human_enum_collection" do
-      specify { expect(described_class).to respond_to(:human_enum_collection) }
-    end
-
-    describe "self#human_enum_collection_with_keys" do
-      specify { expect(described_class).to respond_to(:human_enum_collection_with_keys) }
-    end
-
-    describe "self#human_enum_value" do
-      specify { expect(described_class).to respond_to(:human_enum_value) }
-    end
-
-    describe "self#pluralized_human_enum_value" do
-      specify { expect(described_class).to respond_to(:pluralized_human_enum_value) }
-    end
-
-    describe "self#enumable_attributes" do
-      specify { expect(described_class).to respond_to(:enumable_attributes) }
-    end
-
-    describe "self#retrieve_enumable_attributes" do
-      specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
     end
   end
 end

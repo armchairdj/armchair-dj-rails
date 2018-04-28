@@ -187,7 +187,7 @@ RSpec.describe PostsHelper, type: :helper do
     end
 
     describe "#link_to_post_author" do
-      subject { build(:standalone_post, author: create(:contributor, username: "armchairdj")) }
+      subject { build(:standalone_post, author: create(:writer, username: "armchairdj")) }
 
       specify { expect(link_to_post_author(subject)).to match(
         '<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>'

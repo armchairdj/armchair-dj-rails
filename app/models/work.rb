@@ -6,6 +6,9 @@ class Work < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
+  MAX_CREDITS       = 5
+  MAX_CONTRIBUTIONS = 20
+
   #############################################################################
   # CONCERNS.
   #############################################################################
@@ -16,12 +19,8 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.max_contributions
-    10
-  end
-
   def self.alphabetical_by_creator
-    self.all.to_a.sort_by { |c| c.full_display_title }
+    self.all.to_a.sort_by { |w| w.full_display_title }
   end
 
   def self.admin_filters
@@ -63,7 +62,7 @@ class Work < ApplicationRecord
   #############################################################################
 
   scope :alphabetical, -> { order(Arel.sql("LOWER(works.title)")) }
-  scope :eager,        -> { includes(:creators).includes(contributions: :creator).where(contributions: { role: Contribution.roles["creator"] }) }
+  scope :eager,        -> { includes(:creators, :contributors) }
   scope :for_admin,    -> { eager }
   scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }
 
@@ -71,17 +70,11 @@ class Work < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
+  has_many :credits
+  has_many :creators, through: :credits
+
   has_many :contributions
-
-  has_many :creators, -> {
-    where(contributions: { role: Contribution.roles["creator"] })
-  }, through: :contributions
-
-  has_many :contributors, -> {
-    where.not(contributions: { role: Contribution.roles["creator"] })
-  }, through: :contributions, source: :creator, class_name: "Creator"
-
-  has_many :personnel, through: :contributions, source: :creator, class_name: "Creator"
+  has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :posts, dependent: :destroy
 
@@ -89,9 +82,63 @@ class Work < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
+  # Credits.
+
+  accepts_nested_attributes_for :credits,
+    allow_destroy: true,
+    reject_if:     :blank_credit?
+
+  def prepare_credits
+    count_needed = MAX_CREDITS - self.credits.length
+
+    count_needed.times { self.credits.build }
+  end
+
+  def blank_credit?(credit_attributes)
+    credit_attributes["creator_id"].blank?
+  end
+
+  private :blank_credit?
+
+  # Contributions.
+
   accepts_nested_attributes_for :contributions,
     allow_destroy: true,
     reject_if:     :blank_contribution?
+
+  def prepare_contributions
+    count_needed = MAX_CONTRIBUTIONS - self.contributions.length
+
+    count_needed.times { self.contributions.build }
+  end
+
+  def blank_contribution?(contribution_attributes)
+    contribution_attributes["creator_id"].blank?
+  end
+
+  private :blank_contribution?
+
+  # def contributions_attributes=(attributes)
+  #   puts "contributions_attributes="
+  #
+  #   uniques = (attributes.values.map do |item_attributes|
+  #     attrs = item_attributes.stringify_keys
+  #
+  #     { "creator_id" => attrs["creator_id"].to_s, "role" => attrs["role"].to_s }
+  #   end).compact.map.uniq
+  #
+  #   puts ">>uniques", uniques
+  #
+  #   deduped = uniques.each.with_index(0).inject({}) do |memo, (item, index)|
+  #     memo[index.to_s] = item; memo
+  #   end
+  #
+  #   puts ">>deduped", deduped
+  #
+  #   super(deduped)
+  # end
+
+  # Medium.
 
   enum medium: {
     song:        100,
@@ -126,7 +173,15 @@ class Work < ApplicationRecord
 
   validates :title, presence: true
 
-  validate { validate_contributions }
+  validate { validate_credits }
+
+  def validate_credits
+    return if self.credits.reject(&:marked_for_destruction?).any?
+
+    self.errors.add(:credits, :missing)
+  end
+
+  private :validate_credits
 
   #############################################################################
   # HOOKS.
@@ -135,12 +190,6 @@ class Work < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def prepare_contributions
-    count_needed = self.class.max_contributions - self.contributions.length
-
-    count_needed.times { self.contributions.build }
-  end
 
   def display_title
     return unless persisted?
@@ -158,41 +207,5 @@ class Work < ApplicationRecord
     return unless persisted?
 
     creators.alphabetical.to_a.map(&:name).join(connector)
-  end
-
-  # def contributions_attributes=(attributes)
-  #   puts "contributions_attributes="
-  #
-  #   uniques = (attributes.values.map do |item_attributes|
-  #     attrs = item_attributes.stringify_keys
-  #
-  #     { "creator_id" => attrs["creator_id"].to_s, "role" => attrs["role"].to_s }
-  #   end).compact.map.uniq
-  #
-  #   puts ">>uniques", uniques
-  #
-  #   deduped = uniques.each.with_index(0).inject({}) do |memo, (item, index)|
-  #     memo[index.to_s] = item; memo
-  #   end
-  #
-  #   puts ">>deduped", deduped
-  #
-  #   super(deduped)
-  # end
-
-private
-
-  def blank_contribution?(contribution_attributes)
-    contribution_attributes["creator_id"].blank?
-  end
-
-  def validate_contributions
-    available = self.contributions.reject(&:marked_for_destruction?)
-
-    creators  = available.keep_if { |c| c.role == "creator" }
-
-    return if creators.any?
-
-    self.errors.add(:contributions, :missing)
   end
 end

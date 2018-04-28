@@ -3,11 +3,7 @@ en:
     attributes:
       contribution:
         _destroy: "Remove this contribution"
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
         role_groupings:
-          - "Creator"
           - "Music"
           - "Broadcasting"
           - "Print"
@@ -15,8 +11,6 @@ en:
           - "Tech"
           - "Product"
         roles:
-          creator:                      "Creator"
-
           musical_artist:               "Artist"
           musical_featured_artist:      "Featured Artist"
           songwriter:                   "Songwriter"
@@ -74,34 +68,18 @@ en:
 
           brand:                        "Brand"
       creator:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
+      credit:
+        _destroy: "Remove this credit"
       identity:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
-        pseudonym: "Pseudonym"
       membership:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
-        member: "Member"
       post:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
         published_at: "Publish Date"
         publish_on: "Publish On"
-        work: "Work"
         statuses:
           draft:     "Draft"
           scheduled: "Scheduled"
           published: "Published"
       user:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
         email: "Email Address"
@@ -110,15 +88,13 @@ en:
         middle_name: "Middle Name or Initial"
         password_confirmation: "Confirm Password"
         roles:
-          guest:       "Guest"
           member:      "Member"
-          contributor: "Contributor"
+          writer:      "Writer"
+          editor:      "Editor"
           admin:       "Admin"
+          super_admin: "Super Admin"
         username: "Handle"
       work:
-        id: "ID"
-        created_at: "Created"
-        updated_at: "Updated"
         media:
           song:        "Song"
           album:       "Album"
@@ -152,13 +128,17 @@ en:
           hardware:    "Hardware"
           product:     "Products"
         subtitle:   "Subtitle or Version"
-        title:      "Title"
     errors:
       models:
         contribution:
           attributes:
             creator_id:
               taken: "This creator cannot appear twice in the same role."
+        creator:
+        credit:
+          attributes:
+            creator_id:
+              taken: "This creator cannot appear twice."
         identity:
           attributes:
             creator_id:
@@ -176,7 +156,7 @@ en:
             base:
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
-              invalid_author: "Only contributors and admins can create posts."
+              invalid_author: "This user cannot post."
               no_author: "Please choose a user."
             body:
               blank_during_publish: "You cannot publish a post without a body."
@@ -186,6 +166,6 @@ en:
               blank: "Please choose a publication date to schedule this review."
         work:
           attributes:
-            contributions:
+            credits:
               missing: "Please choose at least one creator."
         user:

@@ -93,14 +93,26 @@ RSpec.describe User, type: :model do
         it { should validate_absence_of(:bio) }
       end
 
-      context "as contributor" do
-        subject { create(:contributor) }
+      context "as writer" do
+        subject { create(:writer) }
+
+        it { should_not validate_absence_of(:bio) }
+      end
+
+      context "as editor" do
+        subject { create(:editor) }
 
         it { should_not validate_absence_of(:bio) }
       end
 
       context "as admin" do
         subject { create(:admin) }
+
+        it { should_not validate_absence_of(:bio) }
+      end
+
+      context "as super_admin" do
+        subject { create(:super_admin) }
 
         it { should_not validate_absence_of(:bio) }
       end
@@ -112,7 +124,7 @@ RSpec.describe User, type: :model do
   end
 
   context "instance" do
-    pending "can_contribute?"
+    pending "can_post?"
 
     describe "#display_name" do
       describe "no middle name" do

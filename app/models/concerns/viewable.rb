@@ -3,13 +3,6 @@
 module Viewable
   extend ActiveSupport::Concern
 
-  included do
-    before_save :refresh_counts
-
-    scope     :viewable, -> { where.not(viewable_post_count: 0) }
-    scope :non_viewable, -> {     where(viewable_post_count: 0) }
-  end
-
   class_methods do
     def admin_scopes
       {
@@ -18,6 +11,13 @@ module Viewable
         "All"          => :all
       }
     end
+  end
+
+  included do
+    before_save :refresh_counts
+
+    scope     :viewable, -> { where.not(viewable_post_count: 0) }
+    scope :non_viewable, -> {     where(viewable_post_count: 0) }
   end
 
   def viewable?

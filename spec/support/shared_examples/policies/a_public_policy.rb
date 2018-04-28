@@ -39,8 +39,25 @@ RSpec.shared_examples "a_public_policy" do
     ]) }
   end
 
-  context "as contributor" do
-    let(:user) { create(:contributor) }
+  context "as writer" do
+    let(:user) { create(:writer) }
+
+    specify { is_expected.to permit_actions([
+      :index,
+      :show
+    ]) }
+
+    specify { is_expected.to forbid_actions([
+      :new,
+      :create,
+      :edit,
+      :update,
+      :destroy
+    ]) }
+  end
+
+  context "as editor" do
+    let(:user) { create(:editor) }
 
     specify { is_expected.to permit_actions([
       :index,
@@ -58,6 +75,23 @@ RSpec.shared_examples "a_public_policy" do
 
   context "as admin" do
     let(:user) { create(:admin) }
+
+    specify { is_expected.to permit_actions([
+      :index,
+      :show
+    ]) }
+
+    specify { is_expected.to forbid_actions([
+      :new,
+      :create,
+      :edit,
+      :update,
+      :destroy
+    ]) }
+  end
+
+  context "as admin" do
+    let(:user) { create(:super_admin) }
 
     specify { is_expected.to permit_actions([
       :index,

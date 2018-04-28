@@ -7,12 +7,6 @@ RSpec.shared_examples "an_application_record" do
     # Concerns are tested in the models that actually use them.
   end
 
-  context "included" do
-    describe "nilify_blanks" do
-      it { should nilify_blanks(before: :validation) }
-    end
-  end
-
   context "class" do
     describe "default_admin_scope" do
       subject { described_class.default_admin_scope }
@@ -42,6 +36,12 @@ RSpec.shared_examples "an_application_record" do
           expect(described_class).to respond_to(sym)
         end
       end
+    end
+  end
+
+  context "included" do
+    describe "nilify_blanks" do
+      it { should nilify_blanks(before: :validation) }
     end
   end
 end

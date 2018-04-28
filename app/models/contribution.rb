@@ -12,6 +12,8 @@ class Contribution < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Workable
+
   #############################################################################
   # CLASS.
   #############################################################################
@@ -32,30 +34,15 @@ class Contribution < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope      :primary, -> { where(    role: roles["creator"]) }
-  scope    :secondary, -> { where.not(role: roles["creator"]) }
-
-  scope :alphabetical, -> { }
-
-  scope :viewable,     -> { includes(:work).where.not(works: { viewable_post_count: 0 }) }
-
-  scope     :for_site, -> { secondary.viewable.order("works.title") }
-  scope    :for_admin, -> { secondary }
-
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
-
-  belongs_to :work,    required: true
-  belongs_to :creator, required: true
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
 
   enum role: {
-    creator:                        0,
-
     # Music
 
     musical_artist:               100,
@@ -144,9 +131,7 @@ class Contribution < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :role,    presence: true
-  validates :work,    presence: true
-  validates :creator, presence: true
+  validates :role, presence: true
 
   validates :creator_id, uniqueness: { scope: [:work_id, :role] }
 

@@ -3,6 +3,11 @@
 require "rails_helper"
 
 RSpec.describe Work, type: :model do
+  context "constants" do
+    specify { expect(described_class).to have_constant(:MAX_CREDITS) }
+    specify { expect(described_class).to have_constant(:MAX_CONTRIBUTIONS) }
+  end
+
   context "concerns" do
     it_behaves_like "an_application_record"
 
@@ -16,10 +21,6 @@ RSpec.describe Work, type: :model do
   end
 
   context "class" do
-    describe "self#max_contributions" do
-      specify { expect(described_class.max_contributions).to eq(10) }
-    end
-
     describe "self#alphabetical_by_creator" do
       let!(:madonna_ray_of_light             ) { create(:madonna_ray_of_light             ) }
       let!(:global_communications_76_14      ) { create(:global_communications_76_14      ) }
@@ -134,64 +135,100 @@ RSpec.describe Work, type: :model do
   end
 
   context "associations" do
+    it { should have_many(:credits) }
+    it { should have_many(:creators).through(:credits) }
+
     it { should have_many(:contributions) }
+    it { should have_many(:contributors).through(:contributions) }
 
     it { should have_many(:posts) }
-
-    it { should have_many(:creators    ).through(:contributions) }
-    it { should have_many(:contributors).through(:contributions) }
-    it { should have_many(:personnel   ).through(:contributions) }
-
-    describe "creators vs. contributors" do
-      subject { create(:global_communications_76_14) }
-
-      specify { expect(subject.contributions.length).to eq(3) }
-      specify { expect(subject.personnel.length    ).to eq(3) }
-      specify { expect(subject.creators.length     ).to eq(1) }
-      specify { expect(subject.contributors.length ).to eq(2) }
-    end
   end
 
   context "attributes" do
     context "nested" do
-      it { should accept_nested_attributes_for(:contributions) }
+      context "credits" do
+        it { should accept_nested_attributes_for(:credits) }
 
-      describe "reject_if" do
-        it "rejects contributions without a creator_id" do
-          instance = build(:song, contributions_attributes: {
-            "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
-            "1" => attributes_for(:contribution, role: :creator, creator_id: nil                 )
-          })
+        describe "reject_if" do
+          it "rejects credits without a creator_id" do
+            instance = build(:song, credits_attributes: {
+              "0" => attributes_for(:credit, creator_id: create(:musician).id),
+              "1" => attributes_for(:credit, creator_id: nil                 )
+            })
 
-          expect {
-            instance.save
-          }.to change {
-            Contribution.count
-          }.by(1)
+            expect {
+              instance.save
+            }.to change {
+              Credit.count
+            }.by(1)
 
-          expect(instance.contributions.length).to eq(1)
+            expect(instance.credits.length).to eq(1)
+          end
+        end
+
+        describe "#prepare_credits" do
+          it "prepares max for new" do
+            instance = described_class.new
+
+            expect(instance.credits.length).to eq(0)
+
+            instance.prepare_credits
+
+            expect(instance.credits.length).to eq(5)
+          end
+
+          it "prepares up to max for saved" do
+            instance = create(:carl_craig_and_green_velvet_unity)
+
+            expect(instance.credits.length).to eq(2)
+
+            instance.prepare_credits
+
+            expect(instance.credits.length).to eq(5)
+          end
         end
       end
 
-      describe "#prepare_contributions" do
-        it "prepares max for new" do
-          instance = described_class.new
+      context "contributions" do
+        it { should accept_nested_attributes_for(:contributions) }
 
-          expect(instance.contributions.length).to eq(0)
+        describe "reject_if" do
+          it "rejects contributions without a creator_id" do
+            instance = build(:song, contributions_attributes: {
+              "0" => attributes_for(:contribution, role: "producer", creator_id: create(:musician).id),
+              "1" => attributes_for(:contribution, role: "producer", creator_id: nil                 )
+            })
 
-          instance.prepare_contributions
+            expect {
+              instance.save
+            }.to change {
+              Contribution.count
+            }.by(1)
 
-          expect(instance.contributions.length).to eq(10)
+            expect(instance.contributions.length).to eq(1)
+          end
         end
 
-        it "prepares up to max for saved" do
-          instance = create(:global_communications_76_14)
+        describe "#prepare_contributions" do
+          it "prepares max for new" do
+            instance = described_class.new
 
-          expect(instance.contributions.length).to eq(3)
+            expect(instance.contributions.length).to eq(0)
 
-          instance.prepare_contributions
+            instance.prepare_contributions
 
-          expect(instance.contributions.length).to eq(10)
+            expect(instance.contributions.length).to eq(20)
+          end
+
+          it "prepares up to max for saved" do
+            instance = create(:global_communications_76_14)
+
+            expect(instance.contributions.length).to eq(2)
+
+            instance.prepare_contributions
+
+            expect(instance.contributions.length).to eq(20)
+          end
         end
       end
     end
@@ -210,12 +247,12 @@ RSpec.describe Work, type: :model do
     it { should validate_presence_of(:title ) }
 
     context "custom" do
-      describe "#validate_contributions" do
+      describe "#validate_credits" do
         subject { build(:song) }
 
         before(:each) do
-           allow(subject).to receive(:validate_contributions).and_call_original
-          expect(subject).to receive(:validate_contributions)
+           allow(subject).to receive(:validate_credits).and_call_original
+          expect(subject).to receive(:validate_credits)
         end
 
         specify "valid" do
@@ -223,11 +260,11 @@ RSpec.describe Work, type: :model do
         end
 
         specify "invalid" do
-          subject.contributions = []
+          subject.credits = []
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(contributions: :missing)
+          expect(subject).to have_errors(credits: :missing)
         end
       end
     end

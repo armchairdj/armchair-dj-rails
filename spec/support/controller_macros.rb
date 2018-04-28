@@ -11,9 +11,19 @@ module ControllerMacros
     end
   end
 
-  def login_contributor
+  def login_writer
     before(:each) do
-      user = FactoryBot.create(:contributor)
+      user = FactoryBot.create(:writer)
+
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+
+      sign_in user
+    end
+  end
+
+  def login_editor
+    before(:each) do
+      user = FactoryBot.create(:editor)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 
@@ -24,6 +34,16 @@ module ControllerMacros
   def login_admin
     before(:each) do
       user = FactoryBot.create(:admin)
+
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+
+      sign_in user
+    end
+  end
+
+  def login_super_admin
+    before(:each) do
+      user = FactoryBot.create(:super_admin)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 

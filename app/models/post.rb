@@ -61,7 +61,7 @@ class Post < ApplicationRecord
 
   scope :reverse_cron,    -> { order(published_at: :desc) }
 
-  scope :eager,           -> { includes(work: { contributions: :creator }) }
+  scope :eager,           -> { includes(work: { credits: :creator }) }
 
   scope :for_admin,       -> { eager                   }
   scope :for_site,        -> { eager.published.reverse_cron }
@@ -243,6 +243,7 @@ class Post < ApplicationRecord
 
     build_work unless self.work.present?
 
+    work.prepare_credits
     work.prepare_contributions
   end
 
@@ -263,7 +264,7 @@ private
   def validate_user
     if author.nil?
       self.errors.add(:base, :no_author)
-    elsif !author.contributor? && !author.admin?
+    elsif !author.writer? && !author.admin?
       self.errors.add(:base, :invalid_author)
     end
   end

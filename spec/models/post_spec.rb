@@ -263,14 +263,26 @@ RSpec.describe Post, type: :model do
           expect(subject).to receive(:validate_user)
         end
 
+        specify "super_admin" do
+          subject.author = create(super_admin)
+
+          expect(subject).to be_valid
+        end
+
         specify "admin" do
           subject.author = create(:admin)
 
           expect(subject).to be_valid
         end
 
-        specify "contributor" do
-          subject.author = create(:contributor)
+        specify "editor" do
+          subject.author = create(:editor)
+
+          expect(subject).to be_valid
+        end
+
+        specify "writer" do
+          subject.author = create(:editor)
 
           expect(subject).to be_valid
         end
@@ -1243,11 +1255,9 @@ RSpec.describe Post, type: :model do
 
           describe "dirty work_attributes" do
             let(:valid_attributes) { {
-              "medium"                   => "song",
-              "title"                    => "Hounds of Love",
-              "contributions_attributes" => {
-                "0" => { "role" => "creator", "creator_id" => create(:musician).id }
-              }
+              "medium"             => "song",
+              "title"              => "Hounds of Love",
+              "credits_attributes" => { "0" => { "creator_id" => create(:musician).id } }
             } }
 
             let(:invalid_attributes) {
@@ -1365,9 +1375,7 @@ RSpec.describe Post, type: :model do
             let(:valid_attributes) { {
               "medium"                   => "song",
               "title"                    => "Hounds of Love",
-              "contributions_attributes" => {
-                "0" => { "role" => "creator", "creator_id" => create(:musician).id }
-              }
+              "contributions_attributes" => { "0" => { "creator_id" => create(:musician).id } }
             } }
 
             let(:invalid_attributes) {

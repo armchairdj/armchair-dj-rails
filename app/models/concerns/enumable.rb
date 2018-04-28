@@ -3,12 +3,6 @@
 module Enumable
   extend ActiveSupport::Concern
 
-  included do
-    class_attribute :_enumable_attributes, instance_accessor: false
-
-    self._enumable_attributes = []
-  end
-
   class_methods do
     def human_enum_collection(attribute, alphabetical: false)
       collection = send(attribute.to_s.pluralize).keys.collect do |val|
@@ -78,5 +72,11 @@ module Enumable
     def retrieve_enumable_attributes
       self._enumable_attributes
     end
+  end
+
+  included do
+    class_attribute :_enumable_attributes, instance_accessor: false
+
+    self._enumable_attributes = []
   end
 end

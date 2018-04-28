@@ -35,19 +35,17 @@ class Creator < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  # Contributions & Works.
+  # Credits.
+
+  has_many :credits, dependent: :destroy
+  has_many :works, through: :credits
+  has_many :posts, through: :works
+
+  # Contributions.
 
   has_many :contributions, dependent: :destroy
-
-  has_many :works, -> { where(contributions: {
-    role: Contribution.roles["creator"] })
-  }, through: :contributions, source: :work, class_name: "Work"
-
-  has_many :contributed_works, -> { where.not(contributions: {
-    role: Contribution.roles["creator"] })
-  }, through: :contributions, source: :work, class_name: "Work"
-
-  has_many :posts, through: :works
+  has_many :contributed_works, through: :contributions, source: :work, class_name: "Work"
+  has_many :contributed_posts, through: :contributed_works
 
   # Related Creators.
 
@@ -61,6 +59,8 @@ class Creator < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
+  # Identities.
+
   accepts_nested_attributes_for :identities,
     allow_destroy: true,
     reject_if:     :blank_pseudonym?
@@ -71,6 +71,20 @@ class Creator < ApplicationRecord
 
   private :blank_pseudonym?
 
+  def secondary?
+    !primary?
+  end
+
+  def personae
+    return pseudonyms.to_a if primary
+
+    return [] unless parent = Identity.find_by(pseudonym_id: self.id).try(:creator)
+
+    [parent, parent.pseudonyms].flatten.reject { |p| p == self }.sort_by(&:name)
+  end
+
+  # Memberships.
+
   accepts_nested_attributes_for :memberships,
     allow_destroy: true,
     reject_if:     :blank_member?
@@ -80,6 +94,20 @@ class Creator < ApplicationRecord
   end
 
   private :blank_member?
+
+  def singular?
+    !collective?
+  end
+
+  def groups
+    return if collective?
+
+    Membership.where(member_id: self.id).map(&:creator).to_a.sort_by(&:name)
+  end
+
+  def colleagues
+    groups.map { |g| g.members }.flatten.uniq.reject { |m| m == self }.sort_by(&:name)
+  end
 
   #############################################################################
   # VALIDATIONS.
@@ -97,46 +125,6 @@ class Creator < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  # Identities.
-
-  def secondary?
-    !primary?
-  end
-
-  def personae
-    return pseudonyms.to_a if primary
-
-    return [] unless parent = Identity.find_by(pseudonym_id: self.id).try(:creator)
-
-    [parent, parent.pseudonyms].flatten.reject { |p| p == self }.sort_by(&:name)
-  end
-
-  # Memberships.
-
-  def singular?
-    !collective?
-  end
-
-  def groups
-    return if collective?
-
-    Membership.where(member_id: self.id).map(&:creator).to_a.sort_by(&:name)
-  end
-
-  def colleagues
-    groups.map { |g| g.members }.flatten.uniq.reject { |m| m == self }.sort_by(&:name)
-  end
-
-  # Works & Contributions.
-
-  def media
-    self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
-  end
-
-  def roles
-    self.contributions.viewable.map(&:human_role).uniq.sort
-  end
 
   def contributions_array
     self.contributions.viewable.map { |c| {
@@ -156,6 +144,14 @@ class Creator < ApplicationRecord
 
   def contributions_by_work
     self.contributions_array.group_by{ |r| r[  :work] }.sort_by(&:first).to_h
+  end
+
+  def media
+    self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
+  end
+
+  def roles
+    self.contributions.viewable.map(&:human_role).uniq.sort
   end
 
   def roles_by_medium

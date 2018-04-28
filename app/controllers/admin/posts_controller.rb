@@ -159,6 +159,13 @@ private
         :medium,
         :title,
         :subtitle,
+        :credits_attributes => [
+          :work_id,
+          :id,
+          :_destroy,
+          :role,
+          :creator_id
+        ],
         :contributions_attributes => [
           :work_id,
           :id,

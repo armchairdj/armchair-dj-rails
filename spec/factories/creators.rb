@@ -47,8 +47,8 @@ FactoryBot.define do
         create(:post, :with_author, :draft, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
-          "contributions_attributes" => {
-            "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          "credits_attributes" => {
+            "0" => attributes_for(:credit, creator_id: creator.id)
           }
         })
 
@@ -61,8 +61,8 @@ FactoryBot.define do
         create(:post, :with_author, :scheduled, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
-          "contributions_attributes" => {
-            "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          "credits_attributes" => {
+            "0" => attributes_for(:credit, creator_id: creator.id)
           }
         })
 
@@ -75,8 +75,8 @@ FactoryBot.define do
         create(:post, :with_author, :published, body: "body", work_attributes: {
           "title"                    => "#{FFaker::Music.song}",
           "medium"                   => "song",
-          "contributions_attributes" => {
-            "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+          "credits_attributes" => {
+            "0" => attributes_for(:credit, creator_id: creator.id)
           }
         })
 
@@ -86,16 +86,16 @@ FactoryBot.define do
 
     trait :with_one_of_each_post_status do
       after(:create) do |creator|
-        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
-          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         }}))
 
-        create(:song_review, :scheduled, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
-          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        create(:song_review, :scheduled, work_attributes: attributes_for(:song).merge({ credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         }}))
 
-        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ contributions_attributes: {
-          "0" => attributes_for(:contribution, role: :creator, creator_id: creator.id)
+        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         }}))
 
         creator.reload

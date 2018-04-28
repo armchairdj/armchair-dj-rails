@@ -9,6 +9,7 @@ RSpec.describe Contribution, type: :model do
 
   context "concerns" do
     it_behaves_like "an_application_record"
+    it_behaves_like "a_workable_model"
 
     # it_behaves_like "an_atomically_validatable_model", { work: nil, creator: nil } do
     #   subject { create(:minimal_contribution) }
@@ -20,17 +21,11 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "scopes" do
-    pending "primary"
-    pending "secondary"
-    pending "for_admin"
-    pending "for_site"
-    pending "viewable"
-    pending "alphabetical"
+    # Nothing so far.
   end
 
   context "associations" do
-    it { should belong_to(:creator) }
-    it { should belong_to(:work   ) }
+    # Nothing so far.
   end
 
   context "attributes" do
@@ -44,9 +39,9 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "validations" do
-    it { should validate_presence_of(:role   ) }
-    it { should validate_presence_of(:work   ) }
-    it { should validate_presence_of(:creator) }
+    subject { build_minimal_instance }
+
+    it { should validate_presence_of(:role) }
 
     it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role) }
   end

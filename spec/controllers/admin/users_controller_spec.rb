@@ -33,9 +33,18 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end
 
-        context ":contributor scope" do
+        context ":writer scope" do
           it "renders" do
-            get :index, params: { scope: "contributor" }
+            get :index, params: { scope: "writer" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context ":editor scope" do
+          it "renders" do
+            get :index, params: { scope: "editor" }
 
             should successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
@@ -50,14 +59,25 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
+
+        context ":super_admin scope" do
+          it "renders" do
+            get :index, params: { scope: "admin" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(0).of_total_records(0)
+          end
+        end
       end
 
       context "with records" do
         context ":all scope (default)" do
           before(:each) do
-             5.times { create(:admin) }
-             5.times { create(:contributor) }
-            10.times { create(:member) }
+             4.times { create(:member     ) }
+             4.times { create(:writer     ) }
+             4.times { create(:editor     ) }
+             4.times { create(:admin      ) }
+             4.times { create(:super_admin) }
           end
 
           it "renders" do
@@ -95,20 +115,40 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end
 
-        context ":contributor scope" do
+        context ":writer scope" do
           before(:each) do
-            21.times { create(:contributor) }
+            21.times { create(:writer) }
           end
 
           it "renders" do
-            get :index, params: { scope: "contributor" }
+            get :index, params: { scope: "writer" }
 
             should successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "contributor", page: "2" }
+            get :index, params: { scope: "writer", page: "2" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
+          end
+        end
+
+        context ":editor scope" do
+          before(:each) do
+            21.times { create(:editor) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "editor" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "editor", page: "2" }
 
             should successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
@@ -129,6 +169,26 @@ RSpec.describe Admin::UsersController, type: :controller do
 
           it "renders second page" do
             get :index, params: { scope: "admin", page: "2" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
+          end
+        end
+
+        context ":super_admin scope" do
+          before(:each) do
+            21.times { create(:super_admin) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "super_admin" }
+
+            should successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "super_admin", page: "2" }
 
             should successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)

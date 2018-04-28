@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_27_210132) do
+ActiveRecord::Schema.define(version: 2018_04_28_055820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2018_04_27_210132) do
   create_table "contributions", force: :cascade do |t|
     t.bigint "work_id"
     t.bigint "creator_id"
-    t.integer "role", default: 0, null: false
+    t.integer "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_contributions_on_creator_id"
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 2018_04_27_210132) do
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["primary"], name: "index_creators_on_primary"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
+  end
+
+  create_table "credits", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.bigint "work_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_credits_on_creator_id"
+    t.index ["work_id"], name: "index_credits_on_work_id"
   end
 
   create_table "identities", force: :cascade do |t|
@@ -122,6 +131,8 @@ ActiveRecord::Schema.define(version: 2018_04_27_210132) do
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
+  add_foreign_key "credits", "creators"
+  add_foreign_key "credits", "works"
   add_foreign_key "identities", "creators"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "memberships", "creators"

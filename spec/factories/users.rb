@@ -32,13 +32,23 @@ FactoryBot.define do
       confirmed
     end
 
-    factory :contributor do
-      role :contributor
+    factory :writer do
+      role :writer
       bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
       valid
     end
 
-    factory :confirmed_contributor, parent: :contributor do
+    factory :confirmed_writer, parent: :writer do
+      confirmed
+    end
+
+    factory :editor do
+      role :editor
+      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      valid
+    end
+
+    factory :confirmed_editor, parent: :editor do
       confirmed
     end
 
@@ -49,6 +59,16 @@ FactoryBot.define do
     end
 
     factory :confirmed_admin, parent: :admin do
+      confirmed
+    end
+
+    factory :super_admin do
+      role :super_admin
+      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      valid
+    end
+
+    factory :confirmed_super_admin, parent: :super_admin do
       confirmed
     end
   end

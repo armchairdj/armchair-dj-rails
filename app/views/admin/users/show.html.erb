@@ -41,7 +41,7 @@
         <%= content_tag(:td, @user.email) %>
       <% end %>
 
-      <% if @user.can_contribute? %>
+      <% if @user.can_post? %>
         <%= content_tag(:tr) do %>
           <%= content_tag(:th, "Bio") %>
           <%= content_tag(:td, paragraphs(@bio)) %>
@@ -141,7 +141,7 @@
   <% end %>
 <% end %>
 
-<% if @user.can_contribute? %>
+<% if @user.can_post? %>
   <% if @posts.any? %>
     <%= content_tag(:section, class: "admin-section") do %>
       <%= content_tag(:header) do %>

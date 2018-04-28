@@ -3,16 +3,12 @@
 require "ffaker"
 
 FactoryBot.define do
-  factory :contribution do
-    factory :minimal_contribution, parent: :contribution_with_existing_creator do; end
+  factory :credit do
+    factory :minimal_credit, parent: :credit_with_existing_creator do; end
 
     ###########################################################################
     # TRAITS.
     ###########################################################################
-
-    trait :with_role do
-      role :musical_artist
-    end
 
     trait :with_work do
       association :work, factory: :minimal_work
@@ -32,19 +28,16 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :contribution_without_creators do
-      with_role
+    factory :credit_without_creators do
       with_work
     end
 
-    factory :contribution_with_new_creator do
-      with_role
+    factory :credit_with_new_creator do
       with_work
       with_new_creator
     end
 
-    factory :contribution_with_existing_creator do
-      with_role
+    factory :credit_with_existing_creator do
       with_work
       with_existing_creator
     end

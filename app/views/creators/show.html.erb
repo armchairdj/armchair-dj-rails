@@ -7,6 +7,64 @@
   @media         = @creator.roles_by_medium
 %>
 
+<% if @creator.personae.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Aliases") %>
+    <% end %>
+
+    <%= content_tag(:ul, class: "square") do %>
+      <% @creator.personae.each do |persona| %>
+        <%= render partial: "creators/creator", locals: { creator: persona } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @creator.collective? %>
+  <% if @creator.members.any? %>
+    <%= content_tag(:section) do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Members") %>
+      <% end %>
+
+      <%= content_tag(:ul, class: "square") do %>
+        <% @creator.members.each do |member| %>
+          <%= render partial: "creators/creator", locals: { creator: member } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if @creator.groups.any? %>
+    <%= content_tag(:section) do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Groups") %>
+      <% end %>
+
+      <%= content_tag(:ul, class: "square") do %>
+        <% @creator.groups.each do |group| %>
+          <%= render partial: "creators/creator", locals: { creator: group } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if @creator.colleagues.any? %>
+    <%= content_tag(:section) do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Colleagues") %>
+      <% end %>
+
+      <%= content_tag(:ul, class: "square") do %>
+        <% @creator.colleagues.each do |colleague| %>
+          <%= render partial: "creators/creator", locals: { creator: colleague } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <% if @media.any? %>
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>

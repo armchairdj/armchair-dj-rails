@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_viewable_model" do
+  context "class" do
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "Viewable",
+          "Non-Viewable",
+          "All",
+        ])
+      end
+    end
+
+    describe "self#default_admin_scope" do
+      specify { expect(described_class.default_admin_scope).to eq(:viewable) }
+    end
+  end
+
   context "included" do
     context "hooks" do
       describe "before_save" do
@@ -32,22 +48,6 @@ RSpec.shared_examples "a_viewable_model" do
           scheduled_instance
         ]) }
       end
-    end
-  end
-
-  context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "Viewable",
-          "Non-Viewable",
-          "All",
-        ])
-      end
-    end
-
-    describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:viewable) }
     end
   end
 

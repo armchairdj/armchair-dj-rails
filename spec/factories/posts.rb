@@ -11,7 +11,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_author do
-      association :author, factory: :contributor
+      association :author, factory: :admin
     end
 
     trait :draft do
@@ -43,7 +43,7 @@ FactoryBot.define do
     factory :song_review_without_creators do
       with_author
       body        "This is a song review."
-      association :work, factory: :work_without_contributions
+      association :work, factory: :work_without_credits
     end
 
     ###########################################################################

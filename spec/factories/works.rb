@@ -56,7 +56,7 @@ FactoryBot.define do
     # STUBS FOR OTHER FACTORIES.
     ###########################################################################
 
-    factory :work_without_contributions do
+    factory :work_without_credits do
       medium :song
       title  { FFaker::Music.song }
     end
@@ -69,8 +69,8 @@ FactoryBot.define do
       medium :song
       title  { FFaker::Music.song }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id)
       } }
     end
 
@@ -78,9 +78,9 @@ FactoryBot.define do
       medium :song
       title  { FFaker::Music.song }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id),
+        "1" => attributes_for(:credit, creator_id: create(:musician).id)
       } }
     end
 
@@ -89,8 +89,8 @@ FactoryBot.define do
       title    { FFaker::Music.song }
       subtitle "C2 Remix"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id),
         "1" => attributes_for(:contribution, role: :remixer, creator_id: create(:musician).id)
       } }
     end
@@ -103,8 +103,8 @@ FactoryBot.define do
       medium :album
       title  { FFaker::Music.album }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id)
       } }
     end
 
@@ -112,9 +112,9 @@ FactoryBot.define do
       medium :album
       title  { FFaker::Music.album }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id),
+        "1" => attributes_for(:credit, creator_id: create(:musician).id)
       } }
     end
 
@@ -123,8 +123,8 @@ FactoryBot.define do
       title    { FFaker::Music.album }
       subtitle "Special Edition"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:musician).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:musician).id)
       } }
     end
 
@@ -136,8 +136,8 @@ FactoryBot.define do
       medium :movie
       title  { FFaker::Movie.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:director).id)
       } }
     end
 
@@ -145,9 +145,9 @@ FactoryBot.define do
       medium :movie
       title  { FFaker::Movie.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:director).id),
+        "1" => attributes_for(:credit, creator_id: create(:director).id)
       } }
     end
 
@@ -156,8 +156,8 @@ FactoryBot.define do
       title    { FFaker::Movie.title }
       subtitle "Director's Cut"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:director).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:director).id)
       } }
     end
 
@@ -169,8 +169,8 @@ FactoryBot.define do
       medium :tv_show
       title  { FFaker::Movie.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:showrunner).id)
       } }
     end
 
@@ -178,9 +178,9 @@ FactoryBot.define do
       medium :tv_show
       title  { FFaker::Movie.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:showrunner).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:showrunner).id),
+        "1" => attributes_for(:credit, creator_id: create(:showrunner).id)
       } }
     end
 
@@ -192,8 +192,8 @@ FactoryBot.define do
       medium :radio_show
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:radio_host).id)
       } }
     end
 
@@ -201,9 +201,9 @@ FactoryBot.define do
       medium :radio_show
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:radio_host).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:radio_host).id),
+        "1" => attributes_for(:credit, creator_id: create(:radio_host).id)
       } }
     end
 
@@ -215,8 +215,8 @@ FactoryBot.define do
       medium :podcast
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:podcaster).id)
       } }
     end
 
@@ -224,9 +224,9 @@ FactoryBot.define do
       medium :podcast
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:podcaster).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:podcaster).id),
+        "1" => attributes_for(:credit, creator_id: create(:podcaster).id)
       } }
     end
 
@@ -238,8 +238,8 @@ FactoryBot.define do
       medium :book
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:author).id)
       } }
     end
 
@@ -248,8 +248,8 @@ FactoryBot.define do
       title    { FFaker::Book.title }
       subtitle "A Memoir"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:author).id)
       } }
     end
 
@@ -257,9 +257,9 @@ FactoryBot.define do
       medium :book
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:author).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:author).id),
+        "1" => attributes_for(:credit, creator_id: create(:author).id)
       } }
     end
 
@@ -271,8 +271,8 @@ FactoryBot.define do
       medium :comic
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:cartoonist).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:cartoonist).id)
       } }
     end
 
@@ -280,9 +280,9 @@ FactoryBot.define do
       medium :comic
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:cartoonist).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:cartoonist).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:cartoonist).id),
+        "1" => attributes_for(:credit, creator_id: create(:cartoonist).id)
       } }
     end
 
@@ -294,8 +294,8 @@ FactoryBot.define do
       medium :newspaper
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:publisher).id)
       } }
     end
 
@@ -303,9 +303,9 @@ FactoryBot.define do
       medium :newspaper
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:publisher).id),
+        "1" => attributes_for(:credit, creator_id: create(:publisher).id)
       } }
     end
 
@@ -317,8 +317,8 @@ FactoryBot.define do
       medium :magazine
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:publisher).id)
       } }
     end
 
@@ -326,9 +326,9 @@ FactoryBot.define do
       medium :magazine
       title  { FFaker::Book.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:publisher).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:publisher).id),
+        "1" => attributes_for(:credit, creator_id: create(:publisher).id)
       } }
     end
 
@@ -340,8 +340,8 @@ FactoryBot.define do
       medium :artwork
       title  { FFaker::CheesyLingo.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:artist).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:artist).id)
       } }
     end
 
@@ -349,9 +349,9 @@ FactoryBot.define do
       medium :artwork
       title  { FFaker::CheesyLingo.title }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:artist).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:artist).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:artist).id),
+        "1" => attributes_for(:credit, creator_id: create(:artist).id)
       } }
     end
 
@@ -363,8 +363,8 @@ FactoryBot.define do
       medium :game
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:game_platform).id)
       } }
     end
 
@@ -372,9 +372,9 @@ FactoryBot.define do
       medium :game
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:game_platform).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:game_platform).id),
+        "1" => attributes_for(:credit, creator_id: create(:game_platform).id)
       } }
     end
 
@@ -386,8 +386,8 @@ FactoryBot.define do
       medium :software
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:software_platform).id)
       } }
     end
 
@@ -395,9 +395,9 @@ FactoryBot.define do
       medium :software
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:software_platform).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:software_platform).id),
+        "1" => attributes_for(:credit, creator_id: create(:software_platform).id)
       } }
     end
 
@@ -409,8 +409,8 @@ FactoryBot.define do
       medium :hardware
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:hardware_company).id)
       } }
     end
 
@@ -418,9 +418,9 @@ FactoryBot.define do
       medium :hardware
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:hardware_company).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:hardware_company).id),
+        "1" => attributes_for(:credit, creator_id: create(:hardware_company).id)
       } }
     end
 
@@ -432,8 +432,8 @@ FactoryBot.define do
       medium :product
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:brand).id)
       } }
     end
 
@@ -441,9 +441,9 @@ FactoryBot.define do
       medium :product
       title  { FFaker::Product.product_name }
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:brand).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:brand).id),
+        "1" => attributes_for(:credit, creator_id: create(:brand).id)
       } }
     end
 
@@ -455,10 +455,13 @@ FactoryBot.define do
       medium :album
       title  "76:14"
 
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Global Communication").id)
+      } }
+
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator,        creator_id: create(:minimal_creator, name: "Global Communication").id),
-        "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Tom Middleton"       ).id),
-        "2" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Mark Pritchard"      ).id)
+        "0" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Tom Middleton" ).id),
+        "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Mark Pritchard").id)
       } }
     end
 
@@ -466,9 +469,9 @@ FactoryBot.define do
       medium :album
       title  "Unity"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Green Velvet").id),
-        "1" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Carl Craig"  ).id)
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Green Velvet").id),
+        "1" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Carl Craig"  ).id)
       } }
     end
 
@@ -476,8 +479,8 @@ FactoryBot.define do
       medium :album
       title "Hounds of Love"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:kate_bush).id),
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:kate_bush).id),
       } }
     end
 
@@ -485,8 +488,8 @@ FactoryBot.define do
       medium :album
       title "Director's Cut"
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:kate_bush).id),
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:kate_bush).id),
       } }
     end
 
@@ -494,9 +497,12 @@ FactoryBot.define do
       medium :album
       title  "Ray of Light"
 
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Madonna").id)
+      } }
+
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator,        creator_id: create(:minimal_creator, name: "Madonna"      ).id),
-        "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "William Orbit").id),
+        "0" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "William Orbit").id),
       } }
     end
 
@@ -505,9 +511,12 @@ FactoryBot.define do
       title "Like a Child"
       subtitle "C2 Remix"
 
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Junior Boys").id)
+      } }
+
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :creator, creator_id: create(:minimal_creator, name: "Junior Boys").id),
-        "1" => attributes_for(:contribution, role: :remixer, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
+        "0" => attributes_for(:contribution, role: :remixer, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
       } }
     end
   end

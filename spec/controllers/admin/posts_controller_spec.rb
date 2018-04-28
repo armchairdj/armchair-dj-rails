@@ -278,11 +278,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             "medium"                   => "song",
             "title"                    => "Hounds of Love",
             "subtitle"                 => "New Vocal",
-            "contributions_attributes" => {
-              "0" => {
-                "role"       => "creator",
-                "creator_id" => create(:musician).id
-              }
+            "credits" => {
+              "0" => { "creator_id" => create(:musician).id }
             }
           }
         } }
@@ -291,11 +288,8 @@ RSpec.describe Admin::PostsController, type: :controller do
           "work_attributes" => {
             "medium"                   => "",
             "title"                    => "Hounds of Love",
-            "contributions_attributes" => {
-              "0" => {
-                "role"       => "creator",
-                "creator_id" => create(:musician).id
-              }
+            "credits_attributes" => {
+              "0" => { "creator_id" => create(:musician).id }
             }
           }
         } }
@@ -463,11 +457,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             "work_attributes" => {
               "medium"                   => "song",
               "title"                    => "Hounds of Love",
-              "contributions_attributes" => {
-                "0" => {
-                  "role"       => "creator",
-                  "creator_id" => kate_bush.id
-                }
+              "credits_attributes" => {
+                "0" => { "creator_id" => kate_bush.id }
               }
             }
           } }
@@ -477,11 +468,8 @@ RSpec.describe Admin::PostsController, type: :controller do
             "work_attributes" => {
               "medium"                   => "",
               "title"                    => "Hounds of Love",
-              "contributions_attributes" => {
-                "0" => {
-                  "role"       => "creator",
-                  "creator_id" => kate_bush.id
-                }
+              "credits_attributess_attributes" => {
+                "0" => { "creator_id" => kate_bush.id }
               }
             }
           } }
