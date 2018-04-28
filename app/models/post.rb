@@ -134,6 +134,7 @@ class Post < ApplicationRecord
       self.errors.add(:work_id, :present            ) if work.present?
     elsif review?
       self.errors.add(:title,   :present            ) if title.present?
+      self.errors.add(:work_id, :blank              ) if work.blank?
     end
   end
 

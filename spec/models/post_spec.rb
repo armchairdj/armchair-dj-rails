@@ -305,47 +305,49 @@ RSpec.describe Post, type: :model do
       end
 
       describe "#work_or_title_present" do
-        describe "with just work" do
-          subject { build(:post, work_id: create(:minimal_work).id) }
+        context "unsaved" do
+          describe "with just work" do
+            subject { build(:post, work_id: create(:minimal_work).id) }
 
-          specify "ok" do
-            subject.send(:work_or_title_present)
+            specify "ok" do
+              subject.send(:work_or_title_present)
 
-            expect(subject.errors.details[:base]).to eq([])
+              expect(subject.errors.details[:base]).to eq([])
+            end
+          end
+
+          describe "with just title" do
+            subject { build(:post, title: "") }
+
+            specify "ok" do
+              subject.send(:work_or_title_present)
+
+              expect(subject.errors.details[:base]).to eq([])
+            end
+          end
+
+          describe "with neither" do
+            subject { build(:post) }
+
+            specify "errors" do
+              subject.send(:work_or_title_present)
+
+              expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+            end
+          end
+
+          describe "with both" do
+            subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
+
+            specify "errors" do
+              subject.send(:work_or_title_present)
+
+              expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+            end
           end
         end
 
-        describe "with just title" do
-          subject { build(:post, title: "") }
-
-          specify "ok" do
-            subject.send(:work_or_title_present)
-
-            expect(subject.errors.details[:base]).to eq([])
-          end
-        end
-
-        describe "with neither" do
-          subject { build(:post) }
-
-          specify "errors" do
-            subject.send(:work_or_title_present)
-
-            expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
-          end
-        end
-
-        describe "with both" do
-          subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
-
-          specify "errors" do
-            subject.send(:work_or_title_present)
-
-            expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
-          end
-        end
-
-        describe "saved review" do
+        context "saved review" do
           subject { create(:song_review) }
 
           it "ensures work and no title" do
@@ -359,7 +361,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        describe "saved standalone" do
+        context "saved standalone" do
           subject { create(:standalone_post) }
 
           it "ensures title and no work" do
