@@ -124,6 +124,7 @@ RSpec.describe User, type: :model do
   end
 
   context "instance" do
+    pending "can_administer?"
     pending "can_post?"
 
     describe "#display_name" do

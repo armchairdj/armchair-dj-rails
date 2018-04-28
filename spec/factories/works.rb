@@ -90,8 +90,11 @@ FactoryBot.define do
       subtitle "C2 Remix"
 
       credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id),
-        "1" => attributes_for(:contribution, role: :remixer, creator_id: create(:musician).id)
+        "0" => attributes_for(:credit, creator_id: create(:musician).id)
+      } }
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role: :remixer, creator_id: create(:musician).id)
       } }
     end
 

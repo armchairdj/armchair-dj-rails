@@ -1,6 +1,6 @@
-<% show_bio      = false unless local_assigns[:show_bio     ].present? %>
-<% show_password = false unless local_assigns[:show_password].present? %>
-<% show_role     = false unless local_assigns[:show_role    ].present? %>
+<% show_bio      = false if local_assigns[:show_bio     ].nil? %>
+<% show_password = false if local_assigns[:show_password].nil? %>
+<% show_role     = false if local_assigns[:show_role    ].nil? %>
 
 <%= f.input(:role, as: :select, collection: User.human_roles) if show_role %>
 

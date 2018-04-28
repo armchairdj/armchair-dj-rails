@@ -1,17 +1,17 @@
-<% render partial: "tab_choose_work", locals: {
-  f:              f,
-  works:          works,
-} if available_tabs.include?("post-choose-work") %>
+<% render(partial: "tab_choose_work", locals: {
+  f:     f,
+  works: works,
+}) if available_tabs.include?("post-choose-work") %>
 
-<% render partial: "tab_new_work", locals: {
-  f:              f,
-  creators:       creators,
-  roles:          roles,
-} if available_tabs.include?("post-new-work") %>
+<% render(partial: "tab_new_work", locals: {
+  f:        f,
+  creators: creators,
+  roles:    roles,
+}) if available_tabs.include?("post-new-work") %>
 
-<% render partial: "tab_standalone", locals: {
+<% render(partial: "tab_standalone", locals: {
   f: f
-} if available_tabs.include?("post-standalone") %>
+})if available_tabs.include?("post-standalone") %>
 
 <%= content_tag(:div, class: "tabgroup same-page",
   "data-controller":            "tabgroup",
@@ -21,14 +21,12 @@
     Choose a work to review, create a new work, or write a standalone post.
   <% end %>
 
-  <%= content_tag(:ul, class: "tabs") do %>
-    <%= content_for(:tab_triggers) %>
-  <% end %>
+  <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
 
   <%= content_for(:tabs) %>
 <% end %>
 
-<%= f.input :body, input_html: { class: "large" } %>
+<%= f.input :body, input_html: { class: "x-large" } %>
 
 <%= f.input :summary, required: false, hint: true %>
 

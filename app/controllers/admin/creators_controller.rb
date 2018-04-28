@@ -110,6 +110,9 @@ private
   end
 
   def instance_params
-    params.fetch(:creator, {}).permit(:name)
+    params.fetch(:creator, {}).permit(
+      :name,
+      :summary
+    )
   end
 end

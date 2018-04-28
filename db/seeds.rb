@@ -1,6 +1,6 @@
 require "ffaker"
 
-brian = User.create_with(role: :admin, username: "armchairdj", first_name: "Brian", middle_name: "J.", last_name: "Dillard", password: "password1234").find_or_create_by(email: "armchairdj@gmail.com")
+brian = User.create_with(role: :super_admin, username: "armchairdj", first_name: "Brian", middle_name: "J.", last_name: "Dillard", password: "password1234").find_or_create_by(email: "armchairdj@gmail.com")
 
 1.times do
   FactoryBot.create(                     :song_review, :draft,     author: brian, body: FFaker::HipsterIpsum.paragraphs( 3).join("\n\n"))

@@ -57,7 +57,7 @@ fieldset {
     }
   }
 
-  &.contribution {
+  &.workable {
     @include border-bottom($padding: $spacing-s, $color: $armchair-blue-lightest, $style: solid);
     @include bottom-margin-only($spacing-s);
 

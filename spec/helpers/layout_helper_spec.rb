@@ -31,10 +31,10 @@ RSpec.describe LayoutHelper, type: :helper do
     end
   end
 
-  describe "#join_class_names" do
+  describe "#join_attr" do
     it "combines a nested array of strings into a single sorted, deduped html attribute" do
       expected = "1 dude is pretty snazzy"
-      actual   = helper.join_class_names([
+      actual   = helper.join_attr([
         "snazzy",
         [" pretty "],
         "",
@@ -50,7 +50,7 @@ RSpec.describe LayoutHelper, type: :helper do
     end
 
     it "returns nil" do
-      expect(helper.join_class_names("", " ", nil)).to eq(nil)
+      expect(helper.join_attr("", " ", nil)).to eq(nil)
     end
   end
 

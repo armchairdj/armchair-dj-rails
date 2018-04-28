@@ -1,0 +1,18 @@
+<%
+  errored = f.object.errors[:credits].any?
+  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if errored))
+  hint    = f.error(:credits) || "Select at least one."
+%>
+
+<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
+  <%= content_tag(:legend) do %>Creators <%= required_indicator %><% end %>
+
+  <%= content_tag(:div, hint, class: "hint") %>
+
+  <%= render partial: "admin/works/credit_field",
+    collection: f.object.credits, as: :credit, locals: {
+      f:        f,
+      creators: creators
+    }
+  %>
+<% end %>

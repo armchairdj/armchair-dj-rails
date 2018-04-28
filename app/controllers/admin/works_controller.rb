@@ -131,19 +131,19 @@ private
       :medium,
       :title,
       :subtitle,
+      :summary,
       :credits_attributes => [
-        :work_id,
         :id,
         :_destroy,
-        :role,
+        :work_id,
         :creator_id
       ],
       :contributions_attributes => [
-        :work_id,
         :id,
         :_destroy,
+        :work_id,
+        :creator_id,
         :role,
-        :creator_id
       ]
     )
   end

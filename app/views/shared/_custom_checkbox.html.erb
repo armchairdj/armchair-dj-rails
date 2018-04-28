@@ -1,4 +1,4 @@
-<% if local_assigns[:label ].nil? %>
+<% if local_assigns[:label].nil? %>
   <%= f.input name, as: :boolean, hint: "&nbsp;".html_safe %>
 <% else %>
   <%= f.input name, as: :boolean, label: label, hint: "&nbsp;".html_safe %>

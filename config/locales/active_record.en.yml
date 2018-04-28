@@ -2,7 +2,7 @@ en:
   activerecord:
     attributes:
       contribution:
-        _destroy: "Remove this contribution"
+        _destroy: "Remove this contributor"
         role_groupings:
           - "Music"
           - "Broadcasting"
@@ -69,7 +69,7 @@ en:
           brand:                        "Brand"
       creator:
       credit:
-        _destroy: "Remove this credit"
+        _destroy: "Remove this creator"
       identity:
       membership:
       post:

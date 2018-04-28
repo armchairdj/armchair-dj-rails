@@ -1,0 +1,24 @@
+<%= f.simple_fields_for :credits, credit do |ff| %>
+  <%= content_tag(:fieldset, class: "workable") do %>
+    <%= ff.input :creator_id,
+      as:            :select,
+      collection:    creators,
+      required:      false,
+      include_blank: :translate,
+      error:         false,
+      input_html:    {
+        "data-controller":              "selectize-create",
+        "data-selectize-create-action": admin_creators_path,
+        "data-selectize-create-method": "POST",
+        "data-selectize-create-param":  "creator[name]"
+      }
+    %>
+
+    <%= ff.error :creator_id %>
+
+    <%= render(partial: "shared/custom_checkbox", locals: {
+      f:    ff,
+      name: :_destroy
+    }) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

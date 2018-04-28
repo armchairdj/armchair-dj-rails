@@ -147,11 +147,12 @@ private
 
   def instance_params
     params.fetch(:post, {}).permit(
-      :body,
       :title,
+      :body,
+      :summary,
       :slug,
-      :work_id,
       :publish_on,
+      :work_id,
       :work_attributes => [
         :post_id,
         :id,
@@ -163,14 +164,6 @@ private
           :work_id,
           :id,
           :_destroy,
-          :role,
-          :creator_id
-        ],
-        :contributions_attributes => [
-          :work_id,
-          :id,
-          :_destroy,
-          :role,
           :creator_id
         ]
       ]

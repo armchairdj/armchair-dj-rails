@@ -1,0 +1,39 @@
+<%= f.simple_fields_for :contributions, contribution do |ff| %>
+  <%= content_tag(:fieldset, class: "workable") do %>
+    <%= content_tag(:div, class: "stacked") do %>
+      <%= ff.input :creator_id,
+        as:            :select,
+        collection:    creators,
+        required:      false,
+        include_blank: :translate,
+        error:         false,
+        input_html:    {
+          "data-controller":              "selectize-create",
+          "data-selectize-create-action": admin_creators_path,
+          "data-selectize-create-method": "POST",
+          "data-selectize-create-param":  "creator[name]"
+        }
+      %>
+
+      <%= ff.input :role, as: :grouped_select,
+        collection:         roles,
+        required:           false,
+        group_label_method: :first,
+        group_method:       :last,
+        include_blank:      :translate,
+        input_html:         {
+          # "data-controller": "selectize",
+          "data-target":     "work-dropdowns.role"
+        }
+      %>
+    <% end %>
+
+    <%= ff.error :creator_id %>
+    <%= ff.error :role %>
+
+    <%= render(partial: "shared/custom_checkbox", locals: {
+      f:    ff,
+      name: :_destroy
+    }) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

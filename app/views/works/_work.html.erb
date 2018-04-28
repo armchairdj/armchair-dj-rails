@@ -1,4 +1,4 @@
-<% full = true unless local_assigns[:full].present? %>
+<% full = true if local_assigns[:full].nil? %>
 
 <%= content_tag(:dt, work.human_medium) %>
 <%= content_tag(:dd, link_to_work(work, full: full)) %>

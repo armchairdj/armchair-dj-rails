@@ -5,8 +5,6 @@ class AddCountsToCreators < ActiveRecord::Migration[5.1]
 
     add_index :creators, :non_viewable_post_count
     add_index :creators, :viewable_post_count
-
-    Creator.all.each { |c| c.save }
   end
 
   def down

@@ -26,6 +26,8 @@ en:
         edit_password:
           password: "New Password"
       work:
+        contributions:
+          creator_id: "Contributor"
     hints:
       defaults:
         summary: "For use in the meta description tag and RSS."

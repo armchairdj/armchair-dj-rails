@@ -10,6 +10,7 @@ class Creator < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Summarizable
   include Viewable
 
   #############################################################################
@@ -45,7 +46,7 @@ class Creator < ApplicationRecord
 
   has_many :contributions, dependent: :destroy
   has_many :contributed_works, through: :contributions, source: :work, class_name: "Work"
-  has_many :contributed_posts, through: :contributed_works
+  has_many :contributed_posts, through: :contributed_works, source: :post, class_name: "Post"
 
   # Related Creators.
 

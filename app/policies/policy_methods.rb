@@ -4,12 +4,12 @@ module PolicyMethods
 
 protected
 
-  def admin?
-    user.admin?
+  def can_administer?
+    user.can_administer?
   end
 
   def owner_or_admin?
-    (user.admin? || user == record.user)
+    (user.can_administer? || user == record.user)
   end
 
   def logged_in?
@@ -19,7 +19,7 @@ protected
   end
 
   def logged_in_as_admin?
-    return true if user && admin?
+    return true if user && can_administer?
 
     raise Pundit::NotAuthorizedError, "must be admin"
   end

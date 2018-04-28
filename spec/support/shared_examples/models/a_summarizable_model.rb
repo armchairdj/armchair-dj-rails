@@ -7,7 +7,7 @@ RSpec.shared_examples "a_summarizable_model" do
 
   describe "included" do
     describe "validations" do
-      it { should validate_length_of :summary }
+      it { should validate_length_of(:summary).is_at_least(40).is_at_most(320) }
       it { should allow_value("", nil).for(:summary) }
     end
   end

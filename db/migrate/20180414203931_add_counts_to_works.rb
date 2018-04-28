@@ -5,8 +5,6 @@ class AddCountsToWorks < ActiveRecord::Migration[5.1]
 
     add_index :works, :non_viewable_post_count
     add_index :works, :viewable_post_count
-
-    Work.all.each { |w| w.save }
   end
 
   def down

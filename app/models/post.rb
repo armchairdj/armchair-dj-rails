@@ -12,6 +12,7 @@ class Post < ApplicationRecord
 
   include AASM
   include Sluggable
+  include Summarizable
 
   #############################################################################
   # CLASS.
@@ -81,7 +82,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   accepts_nested_attributes_for :work,
-    allow_destroy: true,
+    allow_destroy: false,
     reject_if:     :blank_work?
 
   enum status: {
@@ -264,7 +265,7 @@ private
   def validate_user
     if author.nil?
       self.errors.add(:base, :no_author)
-    elsif !author.writer? && !author.admin?
+    elsif !author.can_post?
       self.errors.add(:base, :invalid_author)
     end
   end

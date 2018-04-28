@@ -71,12 +71,13 @@ RSpec.describe Creator, type: :model do
 
   context "associations" do
     describe "associations" do
+      it { should have_many(:credits) }
+      it { should have_many(:works).through(:credits) }
+      it { should have_many(:posts).through(:works) }
+
       it { should have_many(:contributions) }
-
-      it { should have_many(:works            ).through(:contributions) }
       it { should have_many(:contributed_works).through(:contributions) }
-
-      it { should have_many(:posts).through(:works).with_foreign_key("author_id") }
+      it { should have_many(:contributed_posts).through(:contributed_works) }
 
       it { should have_many(:identities) }
       it { should have_many(:pseudonyms).through(:identities).order("creators.name") }

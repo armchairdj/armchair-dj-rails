@@ -9,7 +9,7 @@ module Workable
     # SCOPES.
     ###########################################################################
 
-    scope :alphabetical, -> { order("works.title, works.subtitle", creator.name) }
+    scope :alphabetical, -> { eager.order("works.title, works.subtitle") }
 
     scope     :viewable, -> { eager.where.not(works: { viewable_post_count: 0 }) }
 

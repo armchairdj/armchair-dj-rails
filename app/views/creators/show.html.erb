@@ -80,22 +80,10 @@
   <% end %>
 <% end %>
 
-<% if @posts.any? %>
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts About") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
-
 <% if @works.any? %>
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Works By") %>
+      <%= content_tag(:h4, "Works") %>
     <% end %>
 
     <%= content_tag(:dl, class: "horizontal right") do %>
@@ -107,11 +95,23 @@
 <% if @contributions.any? %>
   <%= content_tag(:section) do %>
     <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Works Contributed To") %>
+      <%= content_tag(:h4, "Contributions") %>
     <% end %>
 
     <%= content_tag(:dl, class: "horizontal right") do %>
       <%= render partial: "creators/contribution", collection: @contributions %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @posts.any? %>
+  <%= content_tag(:section) do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts About") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "posts/post", collection: @posts %>
     <% end %>
   <% end %>
 <% end %>

@@ -101,18 +101,6 @@
   <% end %>
 <% end %>
 
-<% if @posts.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts About") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
-
 <% if @works.any? %>
   <%= content_tag(:section, class: "admin-section") do %>
     <%= content_tag(:header) do %>
@@ -133,6 +121,18 @@
 
     <%= content_tag(:dl, class: "horizontal right") do %>
       <%= render partial: "admin/creators/contribution", collection: @contributions %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @posts.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts About") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/posts/post", collection: @posts %>
     <% end %>
   <% end %>
 <% end %>

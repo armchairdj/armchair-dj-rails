@@ -2,7 +2,7 @@
 
 module LayoutHelper
   def body_classes
-    join_class_names (@admin ? "admin" : "public")
+    join_attr(@admin ? "admin" : "public")
   end
 
   def copyright_notice(english: false)
@@ -14,14 +14,14 @@ module LayoutHelper
     "#{declaration} #{daterange} #{t("site.owner")}".html_safe
   end
 
-  def join_class_names(*args)
+  def join_attr(*args)
     attr = [args].flatten.compact.join(" ").gsub(/\s+/, " ").strip.split(" ").uniq.sort.join(" ")
 
     attr.blank? ? nil : attr
   end
 
   def page_container_classes
-    join_class_names @page_container_class
+    join_attr @page_container_class
   end
 
   def page_container_tag
@@ -41,6 +41,6 @@ module LayoutHelper
   end
 
   def wrapper_classes
-    join_class_names "wrapper", (@admin ? "admin" : "public")
+    join_attr "wrapper", (@admin ? "admin" : "public")
   end
 end

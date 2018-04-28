@@ -94,6 +94,10 @@ class User < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def can_administer?
+    admin? || super_admin?
+  end
+
   def can_post?
     writer? || editor? || admin? || super_admin?
   end
