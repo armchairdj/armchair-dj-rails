@@ -69,8 +69,8 @@ en:
           brand:                        "Brand"
       creator:
       creator/primary:
-        'true':  "This creator can have psedudonyms."
-        'false': "This creator is a pseudonym."
+        'true':  "This is a primary creator."
+        'false': "This is a pseudonym of a primary creator."
       creator/collective:
         'true':  "This is a collective creator, such as a band."
         'false': "This is a singular creator."
@@ -151,15 +151,13 @@ en:
               taken: "This creator cannot appear twice."
         identity:
           attributes:
-            creator_id:
-              not_primary: "Secondary creators cannot have pseudonyms."
             pseudonym_id:
+              creator_not_primary: "Only primary creators can have pseudonyms."
               not_secondary: "Primary creators cannot be pseudonyms."
         membership:
           attributes:
-            creator_id:
-              not_collective: "Only collectives can have members."
             member_id:
+              creator_not_collective: "Only collectives can have members."
               not_singular: "Collectives cannot be members of other collectives."
         post:
           attributes:

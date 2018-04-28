@@ -9,8 +9,8 @@ export default class extends SelectizeController {
 
   createItem(userInput, callback) {
     $.ajax({
-      method:   this.data.get("method"),
-      url:      this.data.get("action"),
+      method:   "POST",
+      url:      this.data.get("url"),
       data:     this.postParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
@@ -20,7 +20,7 @@ export default class extends SelectizeController {
   postParams(userInput) {
     var params = {};
 
-    params[this.data.get("param")] = userInput;
+    params["creator[name]"] = userInput;
 
     return params;
   }

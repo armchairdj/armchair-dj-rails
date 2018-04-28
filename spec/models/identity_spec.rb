@@ -64,7 +64,7 @@ RSpec.describe Identity, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(creator_id: :not_primary)
+          expect(subject).to have_errors(pseudonym_id: :creator_not_primary)
         end
       end
 

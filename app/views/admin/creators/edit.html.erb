@@ -9,14 +9,6 @@
   public_link: admin_public_creator_link(@creator)
 } %>
 
-<%= content_tag(:header, class: "admin") do %>
-  <%= content_tag(:h1, @title.first) %>
-
-  <%= content_tag(:div, class: "actions") do %>
-    <%= admin_destroy_link(@creator) %>
-  <% end %>
-<% end %>
-
 <%= render partial: "creator_form", locals: {
   creator:            @creator,
   secondary_creators: @secondary_creators,

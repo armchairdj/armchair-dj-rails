@@ -1,0 +1,19 @@
+<%= f.simple_fields_for :memberships, membership do |ff| %>
+  <%= content_tag(:fieldset, class: "accepts-nested") do %>
+    <%= ff.input :member_id,
+      as:            :select,
+      collection:    creators,
+      required:      false,
+      include_blank: :translate,
+      input_html:    {
+        "data-controller":        "create-member",
+        "data-create-member-url": admin_creators_path
+      }
+    %>
+
+    <%= render(partial: "shared/custom_checkbox", locals: {
+      f:    ff,
+      name: :_destroy
+    }) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

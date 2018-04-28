@@ -43,7 +43,7 @@ class Identity < ApplicationRecord
   def creator_is_primary
     return if creator.try(:primary?)
 
-    self.errors.add :creator_id, :not_primary
+    self.errors.add :pseudonym_id, :creator_not_primary
   end
 
   private :creator_is_primary

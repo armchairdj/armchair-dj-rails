@@ -1,20 +1,15 @@
 <%= f.simple_fields_for :identities, identity do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
-    <%= ff.input :creator_id,
+    <%= ff.input :pseudonym_id,
       as:            :select,
       collection:    creators,
       required:      false,
       include_blank: :translate,
-      error:         false,
       input_html:    {
-        "data-controller":              "selectize-create",
-        "data-selectize-create-action": admin_creators_path,
-        "data-selectize-create-method": "POST",
-        "data-selectize-create-param":  "creator[name]"
+        "data-controller":           "create-pseudonym",
+        "data-create-pseudonym-url": admin_creators_path,
       }
     %>
-
-    <%= ff.error :creator_id %>
 
     <%= render(partial: "shared/custom_checkbox", locals: {
       f:    ff,
