@@ -23,8 +23,10 @@ RSpec.describe User, type: :model do
         expect(described_class.admin_scopes.keys).to eq([
           "All",
           "Member",
-          "Contributor",
+          "Writer",
+          "Editor",
           "Admin",
+          "Super Admin",
         ])
       end
     end

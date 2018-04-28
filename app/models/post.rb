@@ -245,7 +245,6 @@ class Post < ApplicationRecord
     build_work unless self.work.present?
 
     work.prepare_credits
-    work.prepare_contributions
   end
 
 private
