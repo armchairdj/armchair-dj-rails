@@ -7,4 +7,8 @@
   headline: @title
 } %>
 
-<%= render partial: "creator_form", locals: { creator: @creator } %>
+<%= render partial: "creator_form", locals: {
+  creator:            @creator,
+  secondary_creators: @secondary_creators,
+  singular_creators:  @singular_creators
+} %>

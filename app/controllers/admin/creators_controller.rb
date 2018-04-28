@@ -30,6 +30,11 @@ class Admin::CreatorsController < AdminController
     :destroy
   ]
 
+  before_action :prepare_form, only: [
+    :new,
+    :edit
+  ]
+
   # GET /creators
   # GET /creators.json
   def index
@@ -60,6 +65,8 @@ class Admin::CreatorsController < AdminController
         format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.create") }
         format.json { render :show, status: :created, location: @creator }
       else
+        prepare_form
+
         format.html { render :new }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
@@ -74,6 +81,8 @@ class Admin::CreatorsController < AdminController
         format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.update") }
         format.json { render :show, status: :ok, location: @creator }
       else
+        prepare_form
+
         format.html { render :edit }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
@@ -112,7 +121,29 @@ private
   def instance_params
     params.fetch(:creator, {}).permit(
       :name,
-      :summary
+      :summary,
+      :primary,
+      :collective,
+      :identities_attributes => [
+        :creator_id,
+        :id,
+        :_destroy,
+        :pseudonym_id
+      ],
+      :memberships_attributes => [
+        :creator_id,
+        :id,
+        :_destroy,
+        :member_id
+      ]
     )
+  end
+
+  def prepare_form
+    @creator.prepare_identities
+    @creator.prepare_memberships
+
+    @singular_creators  = policy_scope(Creator).singular.alphabetical
+    @secondary_creators = policy_scope(Creator).secondary.alphabetical
   end
 end

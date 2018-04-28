@@ -13,6 +13,10 @@ fieldset {
   background-color: transparent;
   @include bottom-margin-only($spacing-l);
 
+  &.boxed {
+    @include module-box();
+  }
+
   &.chunk {
     > legend {
       @include bottom-margin-only($spacing-m * .75);
@@ -57,7 +61,7 @@ fieldset {
     }
   }
 
-  &.workable {
+  &.accepts-nested {
     @include border-bottom($padding: $spacing-s, $color: $armchair-blue-lightest, $style: solid);
     @include bottom-margin-only($spacing-s);
 

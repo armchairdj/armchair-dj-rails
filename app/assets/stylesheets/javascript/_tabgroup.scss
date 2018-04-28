@@ -46,9 +46,7 @@
   }
 
   .tab {
-    border-radius: $standard-border-radius;
-    border: 1px solid $armchair-smoke;
-    padding: $spacing-m;
+    @include module-box();
   }
 
   &.same-page {

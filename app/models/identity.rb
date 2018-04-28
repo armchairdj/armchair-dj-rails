@@ -22,8 +22,8 @@ class Identity < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :creator,   required: true
-  belongs_to :pseudonym, required: true, class_name: "Creator"
+  belongs_to :creator
+  belongs_to :pseudonym, class_name: "Creator"
 
   #############################################################################
   # ATTRIBUTES.
@@ -39,7 +39,6 @@ class Identity < ApplicationRecord
   validates :creator_id, uniqueness: { scope: [:pseudonym_id] }
 
   validate { creator_is_primary }
-  validate { pseudonym_is_secondary }
 
   def creator_is_primary
     return if creator.try(:primary?)
@@ -47,11 +46,17 @@ class Identity < ApplicationRecord
     self.errors.add :creator_id, :not_primary
   end
 
+  private :creator_is_primary
+
+  validate { pseudonym_is_secondary }
+
   def pseudonym_is_secondary
     return if pseudonym.try(:secondary?)
 
     self.errors.add :pseudonym_id, :not_secondary
   end
+
+  private :pseudonym_is_secondary
 
   #############################################################################
   # HOOKS.

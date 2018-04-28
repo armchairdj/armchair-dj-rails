@@ -30,7 +30,7 @@ class Admin::WorksController < AdminController
     :destroy
   ]
 
-  before_action :prepare_attributes_fields, only: [
+  before_action :prepare_form, only: [
     :new,
     :edit
   ]
@@ -60,7 +60,7 @@ class Admin::WorksController < AdminController
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.create") }
         format.json { render :show, status: :created, location: @work }
       else
-        prepare_attributes_fields
+        prepare_form
 
         format.html { render(:new) }
         format.json { render json: @work.errors, status: :unprocessable_entity }
@@ -81,7 +81,7 @@ class Admin::WorksController < AdminController
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.update") }
         format.json { render :show, status: :ok, location: @work }
       else
-        prepare_attributes_fields
+        prepare_form
 
         format.html { render :edit }
         format.json { render json: @work.errors, status: :unprocessable_entity }
@@ -118,7 +118,7 @@ private
     authorize @work
   end
 
-  def prepare_attributes_fields
+  def prepare_form
     @work.prepare_credits
     @work.prepare_contributions
 

@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
+require "wannabe_bool"
+
 class Creator < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
   #############################################################################
+
+  MAX_NEW_IDENTITIES  = 5.freeze
+  MAX_NEW_MEMBERSHIPS = 5.freeze
 
   #############################################################################
   # CONCERNS.
@@ -12,6 +17,9 @@ class Creator < ApplicationRecord
 
   include Summarizable
   include Viewable
+  include Booletania
+
+  booletania_columns :primary, :collective
 
   #############################################################################
   # CLASS.
@@ -28,9 +36,10 @@ class Creator < ApplicationRecord
   scope :singular,      -> { where(collective: false) }
 
   scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
-  scope :eager,        -> { all }
   scope :for_admin,    -> { eager }
   scope :for_site,     -> { viewable.includes(:posts).alphabetical }
+
+  scope :eager,        -> { includes(:pseudonyms, :members) }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -45,15 +54,15 @@ class Creator < ApplicationRecord
   # Contributions.
 
   has_many :contributions, dependent: :destroy
-  has_many :contributed_works, through: :contributions, source: :work, class_name: "Work"
+  has_many :contributed_works, through: :contributions,     source: :work, class_name: "Work"
   has_many :contributed_posts, through: :contributed_works, source: :post, class_name: "Post"
 
   # Related Creators.
 
-  has_many :identities
+  has_many :identities, dependent: :destroy
   has_many :pseudonyms, -> { order 'creators.name' }, through: :identities
 
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :members, -> { order 'creators.name' }, through: :memberships
 
   #############################################################################
@@ -64,13 +73,13 @@ class Creator < ApplicationRecord
 
   accepts_nested_attributes_for :identities,
     allow_destroy: true,
-    reject_if:     :blank_pseudonym?
+    reject_if:     proc { |attrs| attrs["pseudonym_id"].blank? }
 
-  def blank_pseudonym?(identities_attributes)
-    identities_attributes["pseudonym_id"].blank?
+  def prepare_identities
+    count_needed = MAX_NEW_IDENTITIES + self.identities.length
+
+    count_needed.times { self.identities.build }
   end
-
-  private :blank_pseudonym?
 
   def secondary?
     !primary?
@@ -88,13 +97,13 @@ class Creator < ApplicationRecord
 
   accepts_nested_attributes_for :memberships,
     allow_destroy: true,
-    reject_if:     :blank_member?
+    reject_if:     proc { |attrs| attrs["member_id"].blank? }
 
-  def blank_member?(membership_attributes)
-    membership_attributes["member_id"].blank?
+  def prepare_memberships
+    count_needed = MAX_NEW_MEMBERSHIPS + self.memberships.length
+
+    count_needed.times { self.memberships.build }
   end
-
-  private :blank_member?
 
   def singular?
     !collective?

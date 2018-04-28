@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::PostsController, type: :controller do
+  let(:summary) { "summary summary summary summary summary." }
+
   context "concerns" do
     it_behaves_like "an_admin_controller" do
       let(:expected_redirect_for_seo_paginatable) { admin_posts_path }
@@ -179,10 +181,39 @@ RSpec.describe Admin::PostsController, type: :controller do
 
     describe "POST #create" do
       context "standalone" do
+        let(    :max_params) { { "title" => "title", "body" => "body", "summary" => summary } }
         let(  :valid_params) { { "title" => "title" } }
-        let(:invalid_params) { { "body" => "only the body" } }
+        let(:invalid_params) { { "body"  => "only the body" } }
 
-        context "with valid params" do
+        context "with max valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: max_params }
+            }.to change(Post, :count).by(1)
+          end
+
+          it "creates the right attributes" do
+            post :create, params: { post: max_params }
+
+            should assign(Post.last, :post).with_attributes(max_params).and_be_valid
+          end
+
+          it "post belongs to current_user" do
+            post :create, params: { post: max_params }
+
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
+          end
+
+          it "redirects to post" do
+            post :create, params: { post: max_params }
+
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
+          end
+        end
+
+        context "with min valid params" do
           it "creates a new Post" do
             expect {
               post :create, params: { post: valid_params }
@@ -226,10 +257,39 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "existing work" do
+        let(    :max_params) { { "work_id" => create(:song).id, "body" => "body", "summary" => summary } }
         let(  :valid_params) { { "work_id" => create(:song).id } }
         let(:invalid_params) { { "body" => "only the body" } }
 
-        context "with valid params" do
+        context "with max valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: max_params }
+            }.to change(Post, :count).by(1)
+          end
+
+          it "creates the right attributes" do
+            post :create, params: { post: max_params }
+
+            should assign(Post.last, :post).with_attributes(max_params).and_be_valid
+          end
+
+          it "post belongs to current_user" do
+            post :create, params: { post: max_params }
+
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
+          end
+
+          it "redirects to post" do
+            post :create, params: { post: max_params }
+
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
+          end
+        end
+
+        context "with min valid params" do
           it "creates a new Post" do
             expect {
               post :create, params: { post: valid_params }
@@ -273,12 +333,29 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "new work" do
+        let(:max_params) { {
+          "body"            => "body",
+          "summary"         => summary,
+          "work_attributes" => {
+            "medium"             => "song",
+            "title"              => "Hounds of Love",
+            "subtitle"           => "New Vocal",
+            "credits_attributes" => {
+              "0" => { "creator_id" => create(:musician).id },
+              "1" => { "creator_id" => create(:musician).id },
+              "2" => { "creator_id" => create(:musician).id },
+              "3" => { "creator_id" => create(:musician).id },
+              "4" => { "creator_id" => create(:musician).id }
+            }
+          }
+        } }
+
         let(:valid_params) { {
           "work_attributes" => {
-            "medium"                   => "song",
-            "title"                    => "Hounds of Love",
-            "subtitle"                 => "New Vocal",
-            "credits" => {
+            "medium"             => "song",
+            "title"              => "Hounds of Love",
+            "subtitle"           => "New Vocal",
+            "credits_attributes" => {
               "0" => { "creator_id" => create(:musician).id }
             }
           }
@@ -294,7 +371,47 @@ RSpec.describe Admin::PostsController, type: :controller do
           }
         } }
 
-        context "with valid params" do
+        context "with max valid params" do
+          it "creates a new Post" do
+            expect {
+              post :create, params: { post: max_params }
+            }.to change(Post, :count).by(1)
+          end
+
+          it "creates a new Work" do
+            expect {
+              post :create, params: { post: max_params }
+            }.to change(Work, :count).by(1)
+          end
+
+          it "creates new Credits" do
+            expect {
+              post :create, params: { post: max_params }
+            }.to change(Credit, :count).by(5)
+          end
+
+          it "creates the right attributes" do
+            post :create, params: { post: max_params }
+
+            should assign(Post.last, :post).with_attributes(max_params).and_be_valid
+          end
+
+          it "post belongs to current_user" do
+            post :create, params: { post: valid_params }
+
+            should assign(Post.last, :post).with_attributes(author: controller.current_user)
+          end
+
+          it "redirects to post" do
+            post :create, params: { post: valid_params }
+
+            should send_user_to(
+              admin_post_path(assigns(:post))
+            ).with_flash(:success, "admin.flash.posts.success.create")
+          end
+        end
+
+        context "with min valid params" do
           it "creates a new Post" do
             expect {
               post :create, params: { post: valid_params }
@@ -307,10 +424,10 @@ RSpec.describe Admin::PostsController, type: :controller do
             }.to change(Work, :count).by(1)
           end
 
-          it "creates a new Contribution" do
+          it "creates new Credits" do
             expect {
               post :create, params: { post: valid_params }
-            }.to change(Contribution, :count).by(1)
+            }.to change(Credit, :count).by(1)
           end
 
           it "creates the right attributes" do

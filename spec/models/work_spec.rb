@@ -247,12 +247,12 @@ RSpec.describe Work, type: :model do
     it { should validate_presence_of(:title ) }
 
     context "custom" do
-      describe "#validate_credits" do
+      describe "#at_least_one_credit" do
         subject { build(:song) }
 
         before(:each) do
-           allow(subject).to receive(:validate_credits).and_call_original
-          expect(subject).to receive(:validate_credits)
+           allow(subject).to receive(:at_least_one_credit).and_call_original
+          expect(subject).to receive(:at_least_one_credit)
         end
 
         specify "valid" do

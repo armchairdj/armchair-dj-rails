@@ -255,12 +255,12 @@ RSpec.describe Post, type: :model do
     end
 
     context "custom" do
-      describe "#validate_user" do
+      describe "#author_present" do
         subject { build(:minimal_post) }
 
         before(:each) do
-           allow(subject).to receive(:validate_user).and_call_original
-          expect(subject).to receive(:validate_user)
+           allow(subject).to receive(:author_present).and_call_original
+          expect(subject).to receive(:author_present)
         end
 
         specify "super_admin" do
@@ -304,12 +304,12 @@ RSpec.describe Post, type: :model do
         end
       end
 
-      describe "#validate_work_and_title" do
+      describe "#work_or_title_present" do
         describe "with just work" do
           subject { build(:post, work_id: create(:minimal_work).id) }
 
           specify "ok" do
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:base]).to eq([])
           end
@@ -319,7 +319,7 @@ RSpec.describe Post, type: :model do
           subject { build(:post, title: "") }
 
           specify "ok" do
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:base]).to eq([])
           end
@@ -329,7 +329,7 @@ RSpec.describe Post, type: :model do
           subject { build(:post) }
 
           specify "errors" do
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
           end
@@ -339,7 +339,7 @@ RSpec.describe Post, type: :model do
           subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
 
           specify "errors" do
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
           end
@@ -352,7 +352,7 @@ RSpec.describe Post, type: :model do
             subject.work_id = ""
             subject.title   = "title"
 
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:work_id].first).to eq({ error: :blank   })
             expect(subject.errors.details[:title  ].first).to eq({ error: :present })
@@ -366,7 +366,7 @@ RSpec.describe Post, type: :model do
             subject.title   = ""
             subject.work_id = create(:song).id
 
-            subject.send(:validate_work_and_title)
+            subject.send(:work_or_title_present)
 
             expect(subject.errors.details[:title  ].first).to eq({ error: :blank   })
             expect(subject.errors.details[:work_id].first).to eq({ error: :present })

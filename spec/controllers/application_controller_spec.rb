@@ -19,16 +19,18 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "instance" do
+    context "protected" do
+      pending "#after_sign_in_path_for"
+      pending "#after_sign_out_path_for"
+      pending "#model_class"
+    end
+
     context "private" do
       describe "#determine_layout" do
         specify { expect(controller.send(:determine_layout)).to eq("public") }
       end
 
       pending "#authorize_collection"
-    end
-
-    context "protected" do
-      pending "#model_class"
     end
   end
 end

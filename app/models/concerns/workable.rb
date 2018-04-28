@@ -21,8 +21,8 @@ module Workable
     # ASSOCIATIONS.
     ###########################################################################
 
-    belongs_to :work,    required: true
-    belongs_to :creator, required: true
+    belongs_to :work
+    belongs_to :creator
 
     ###########################################################################
     # VALIDATIONS.

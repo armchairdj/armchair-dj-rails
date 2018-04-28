@@ -7,13 +7,12 @@ RSpec::Matchers.define :be_a_populated_new_post do
     expect(actual                          ).to be_a_new(Post)
     expect(actual.work                     ).to be_a_new(Work)
     expect(actual.work.credits.length      ).to eq(5)
-    expect(actual.work.contributions.length).to eq(20)
 
     expect(actual).to_not be_valid
   end
 
   failure_message do |actual|
-    "expected #{actual} not to be draft but was"
+    "expected #{actual} to be a populated new post, but was not"
   end
 end
 

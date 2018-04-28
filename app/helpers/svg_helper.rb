@@ -23,16 +23,11 @@ module SvgHelper
     non_semantic_svg_image(image_path, title: title, desc: desc, **opts)
   end
 
-  def svg_icon(image_path, **opts)
+  def svg_icon(icon, **opts)
     wrapper_class = combine_classes("svg-icon", opts.delete(:wrapper_class))
+    tag           = opts.delete(:tag) || :span
+    svg           = semantic_svg_image("open_iconic/#{icon}.svg", opts)
 
-    content_tag(:span, semantic_svg_image(image_path, opts), class: wrapper_class)
-  end
-
-  def svg_abbreviation(image_path, title:, **opts)
-    wrapper_class = combine_classes("svg-icon", opts.delete(:wrapper_class))
-    svg           = non_semantic_svg_image(image_path, opts)
-
-    content_tag(:abbr, svg, title: title, class: wrapper_class)
+    content_tag(tag, svg, class: wrapper_class)
   end
 end

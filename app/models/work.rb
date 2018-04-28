@@ -6,8 +6,8 @@ class Work < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
-  MAX_CREDITS       = 5
-  MAX_CONTRIBUTIONS = 20
+  MAX_CREDITS       =  5.freeze
+  MAX_CONTRIBUTIONS = 20.freeze
 
   #############################################################################
   # CONCERNS.
@@ -71,10 +71,10 @@ class Work < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :credits
+  has_many :credits, dependent: :destroy
   has_many :creators, through: :credits
 
-  has_many :contributions
+  has_many :contributions, dependent: :destroy
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :posts, dependent: :destroy
@@ -87,7 +87,7 @@ class Work < ApplicationRecord
 
   accepts_nested_attributes_for :credits,
     allow_destroy: true,
-    reject_if:     :blank_credit?
+    reject_if:     proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_credits
     count_needed = MAX_CREDITS - self.credits.length
@@ -95,29 +95,17 @@ class Work < ApplicationRecord
     count_needed.times { self.credits.build }
   end
 
-  def blank_credit?(credit_attributes)
-    credit_attributes["creator_id"].blank?
-  end
-
-  private :blank_credit?
-
   # Contributions.
 
   accepts_nested_attributes_for :contributions,
     allow_destroy: true,
-    reject_if:     :blank_contribution?
+    reject_if:     proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_contributions
     count_needed = MAX_CONTRIBUTIONS - self.contributions.length
 
     count_needed.times { self.contributions.build }
   end
-
-  def blank_contribution?(contribution_attributes)
-    contribution_attributes["creator_id"].blank?
-  end
-
-  private :blank_contribution?
 
   # def contributions_attributes=(attributes)
   #   puts "contributions_attributes="
@@ -174,15 +162,15 @@ class Work < ApplicationRecord
 
   validates :title, presence: true
 
-  validate { validate_credits }
+  validate { at_least_one_credit }
 
-  def validate_credits
+  def at_least_one_credit
     return if self.credits.reject(&:marked_for_destruction?).any?
 
     self.errors.add(:credits, :missing)
   end
 
-  private :validate_credits
+  private :at_least_one_credit
 
   #############################################################################
   # HOOKS.

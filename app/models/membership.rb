@@ -22,8 +22,8 @@ class Membership < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :creator, required: true
-  belongs_to :member,  required: true, class_name: "Creator"
+  belongs_to :creator
+  belongs_to :member, class_name: "Creator"
 
   #############################################################################
   # ATTRIBUTES.
@@ -39,7 +39,6 @@ class Membership < ApplicationRecord
   validates :creator_id, uniqueness: { scope: [:member_id] }
 
   validate { creator_is_collective }
-  validate { member_is_singular }
 
   def creator_is_collective
     return if creator.try(:collective?)
@@ -47,11 +46,17 @@ class Membership < ApplicationRecord
     self.errors.add :creator_id, :not_collective
   end
 
+  private :creator_is_collective
+
+  validate { member_is_singular }
+
   def member_is_singular
     return if member.try(:singular?)
 
     self.errors.add :member_id, :not_singular
   end
+
+  private :member_is_singular
 
   #############################################################################
   # HOOKS.

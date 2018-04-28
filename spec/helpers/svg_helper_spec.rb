@@ -100,26 +100,29 @@ RSpec.describe SvgHelper, type: :helper do
     end
   end
 
-  describe "#svg_abbreviation" do
-
-  end
-
   describe "#svg_icon" do
     before(:each) do
        allow(helper).to receive(:semantic_svg_image).and_call_original
-      expect(helper).to receive(:semantic_svg_image).with("path", title: "title", desc: "desc").and_call_original
+      expect(helper).to receive(:semantic_svg_image).with("open_iconic/icon.svg", title: "title", desc: "desc").and_call_original
     end
 
     it "wraps a semantic svg" do
       expected = '<span class="svg-icon">inlined_svg</span>'
-      actual   = helper.svg_icon("path", title: "title", desc: "desc")
+      actual   = helper.svg_icon("icon", title: "title", desc: "desc")
 
       expect(actual).to eq(expected)
     end
 
     it "allows html_opts for wrapper_class" do
       expected = '<span class="svg-icon post-published">inlined_svg</span>'
-      actual   = helper.svg_icon("path", title: "title", desc: "desc", wrapper_class: "post-published")
+      actual   = helper.svg_icon("icon", title: "title", desc: "desc", wrapper_class: "post-published")
+
+      expect(actual).to eq(expected)
+    end
+
+    it "allows wrapper tag to be overridden" do
+      expected = '<div class="svg-icon">inlined_svg</div>'
+      actual   = helper.svg_icon("icon", title: "title", desc: "desc", tag: :div)
 
       expect(actual).to eq(expected)
     end

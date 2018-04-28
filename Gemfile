@@ -15,7 +15,7 @@ end
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "5.2.0"
 
-# Use Postgres as the database for Active Record
+# Use Postgres as the database for ActiveRecord
 gem "pg"
 
 gem "bootsnap", require: false
@@ -111,10 +111,10 @@ gem "nilify_blanks"
 # Ordinal ranking.
 gem "acts_as_list"
 
-# Active Record tree structures.
+# ActiveRecord tree structures.
 gem "ancestry"
 
-# Soft deletes for Active Record.
+# Soft deletes for ActiveRecord.
 gem "discard"
 
 # Acts As State Machine.
@@ -123,8 +123,11 @@ gem "aasm"
 # Date validation.
 gem "validates_timeliness", '~> 4.0'
 
-# Use ActiveModel has_secure_password
+# Use ActiveModel has_secure_password.
 gem "bcrypt"
+
+# Boolean i18n translation.
+gem "booletania"
 
 ###############################################################################
 # UTILITIES.

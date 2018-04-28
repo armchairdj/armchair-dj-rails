@@ -71,9 +71,9 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :author, class_name: "User", foreign_key: :author_id, required: true
+  belongs_to :author, class_name: "User", foreign_key: :author_id
 
-  belongs_to :work, required: false
+  belongs_to :work, optional: true
 
   has_many :creators, through: :work
 
@@ -83,7 +83,7 @@ class Post < ApplicationRecord
 
   accepts_nested_attributes_for :work,
     allow_destroy: false,
-    reject_if:     :blank_work?
+    reject_if:     proc { |attrs| attrs["title"].blank? }
 
   enum status: {
     draft:      0,
@@ -99,9 +99,6 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validate { validate_user           }
-  validate { validate_work_and_title }
-
   validates :status, presence: true
 
   validates :body, presence: true, unless: :draft?
@@ -113,6 +110,34 @@ class Post < ApplicationRecord
   validates :publish_on,   presence: true, if: :scheduled?
 
   validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
+
+  validate { author_present }
+
+  def author_present
+    if author.nil?
+      self.errors.add(:base, :no_author)
+    elsif !author.can_post?
+      self.errors.add(:base, :invalid_author)
+    end
+  end
+
+  private :author_present
+
+  validate { work_or_title_present }
+
+  def work_or_title_present
+    if new_record?
+      self.errors.add(:base,    :has_work_and_title ) if  work &&  title
+      self.errors.add(:base,    :needs_work_or_title) if !work && !title
+    elsif standalone?
+      self.errors.add(:title,   :blank              ) if title.blank?
+      self.errors.add(:work_id, :present            ) if work.present?
+    elsif review?
+      self.errors.add(:title,   :present            ) if title.present?
+    end
+  end
+
+  private :work_or_title_present
 
   #############################################################################
   # HOOKS.
@@ -248,62 +273,6 @@ class Post < ApplicationRecord
   end
 
 private
-
-  #############################################################################
-  # NESTED ATTRIBUTES.
-  #############################################################################
-
-  def blank_work?(work_attributes)
-    work_attributes["title"].blank?
-  end
-
-  #############################################################################
-  # VALIDATION.
-  #############################################################################
-
-  def validate_user
-    if author.nil?
-      self.errors.add(:base, :no_author)
-    elsif !author.can_post?
-      self.errors.add(:base, :invalid_author)
-    end
-  end
-
-  def validate_work_and_title
-    ensure_work_or_title_for_new_record    ||
-    ensure_only_title_for_saved_standalone ||
-    ensure_only_work_for_saved_review
-  end
-
-  def ensure_work_or_title_for_new_record
-    return false unless new_record?
-
-    if work && title
-      self.errors.add(:base, :has_work_and_title)
-    elsif !work && !title
-      self.errors.add(:base, :needs_work_or_title)
-    end
-
-    true
-  end
-
-  def ensure_only_title_for_saved_standalone
-    return false unless persisted? && standalone?
-
-    self.errors.add(:title,   :blank  ) if title.blank?
-    self.errors.add(:work_id, :present) if work.present?
-
-    true
-  end
-
-  def ensure_only_work_for_saved_review
-    return false unless persisted? && review?
-
-    self.errors.add(:title,   :present) if title.present?
-    self.errors.add(:work_id, :blank  ) if work.blank?
-
-    true
-  end
 
   #############################################################################
   # SLUG.

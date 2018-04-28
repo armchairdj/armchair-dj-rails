@@ -92,11 +92,20 @@ RSpec.describe Creator, type: :model do
       context "identities" do
         pending "accepts"
         pending "rejects"
+        pending "#prepare_identities"
       end
 
       context "memberships" do
         pending "accepts"
         pending "rejects"
+        pending "#prepare_memberships"
+      end
+
+      context "booletania" do
+        pending "self#collective_options"
+        pending "self#singular_options"
+        pending "#collective_text"
+        pending "#singular_text"
       end
     end
   end

@@ -52,7 +52,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         context ":admin scope" do
-          it "renders with one record because there has to be at least one admin" do
+          it "renders with one record because we are logged in as admin" do
             get :index, params: { scope: "admin" }
 
             should successfully_render("admin/users/index")
@@ -62,7 +62,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         context ":super_admin scope" do
           it "renders" do
-            get :index, params: { scope: "admin" }
+            get :index, params: { scope: "super_admin" }
 
             should successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)

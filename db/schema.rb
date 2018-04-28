@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_28_055820) do
+ActiveRecord::Schema.define(version: 2018_04_28_212523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2018_04_28_055820) do
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.text "summary"
-    t.boolean "primary", default: false, null: false
+    t.boolean "primary", default: true, null: false
     t.boolean "collective", default: false, null: false
     t.index ["collective"], name: "index_creators_on_collective"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"

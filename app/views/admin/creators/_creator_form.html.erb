@@ -2,7 +2,11 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/creators/creator_fields", locals: { f: f } %>
+    <%= render partial: "admin/creators/creator_fields", locals: {
+      f:                  f,
+      secondary_creators: secondary_creators,
+      singular_creators:  singular_creators
+    } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

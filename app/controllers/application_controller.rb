@@ -20,6 +20,20 @@ protected
     @model_class = nil
   end
 
+  def after_sign_in_path_for(user)
+    if (requested_page = session.delete("user_return_to")).present?
+      requested_page
+    elsif user.can_administer?
+      admin_posts_path
+    else
+      posts_path
+    end
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    posts_path
+  end
+
 private
 
   def authorize_collection

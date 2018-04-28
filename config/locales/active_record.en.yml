@@ -68,10 +68,20 @@ en:
 
           brand:                        "Brand"
       creator:
+      creator/primary:
+        'true':  "This creator can have psedudonyms."
+        'false': "This creator is a pseudonym."
+      creator/collective:
+        'true':  "This is a collective creator, such as a band."
+        'false': "This is a singular creator."
       credit:
         _destroy: "Remove this creator"
       identity:
+        _destroy: "Remove this pseudonym"
+        pseudynym_id: "Pseudonym"
       membership:
+        _destroy: "Remove this member"
+        pseudynym_id: "Pseudonym"
       post:
         published_at: "Publish Date"
         publish_on: "Publish On"

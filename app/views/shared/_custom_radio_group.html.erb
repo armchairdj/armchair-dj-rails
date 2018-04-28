@@ -1,5 +1,12 @@
-<% hint  = nil if local_assigns[:hint ].nil? %>
-<% error = nil if local_assigns[:error].nil? %>
+<%
+  hint   = nil   if local_assigns[:hint  ].nil?
+  error  = nil   if local_assigns[:error ].nil?
+  legend = nil   if local_assigns[:legend].nil?
+  invert = false if local_assigns[:invert].nil?
+
+  value_method = invert ? :last  : :first
+  text_method  = invert ? :first : :last
+%>
 
 <%= f.input(name, as: :radio_buttons, label: false,
   wrapper_tag:   :fieldset,
@@ -7,11 +14,11 @@
 ) do |b| %>
   <%= content_tag(:legend, class: "label") do %>
     <%= legend %> <%= required_indicator %>
-  <% end %>
+  <% end if legend %>
 
   <%= content_tag(:div, hint, class: "hint") if hint.present? %>
 
-  <%= f.collection_radio_buttons(name, collection, :first, :last,
+  <%= f.collection_radio_buttons(name, collection, value_method, text_method,
     item_wrapper_tag:   :div,
     item_wrapper_class: "collection-item"
   ) do |b| %>
