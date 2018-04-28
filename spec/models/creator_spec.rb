@@ -47,6 +47,26 @@ RSpec.describe Creator, type: :model do
     pending "for_admin"
 
     pending "for_site"
+
+    context "identities" do
+      pending "primary"
+      pending "secondary"
+
+      context "booleans" do
+        pending "#primary?"
+        pending "#secondary?"
+      end
+    end
+
+    context "memberships" do
+      pending "collective"
+      pending "singular"
+
+      context "booleans" do
+        pending "#collective?"
+        pending "#singular?"
+      end
+    end
   end
 
   context "associations" do
@@ -56,17 +76,27 @@ RSpec.describe Creator, type: :model do
       it { should have_many(:works            ).through(:contributions) }
       it { should have_many(:contributed_works).through(:contributions) }
 
-      it { should have_many(:posts).through(:works) }
+      it { should have_many(:posts).through(:works).with_foreign_key("author_id") }
+
+      it { should have_many(:identities) }
+      it { should have_many(:pseudonyms).through(:identities).order("creators.name") }
+
+      it { should have_many(:memberships) }
+      it { should have_many(:members).through(:memberships).order("creators.name") }
     end
   end
 
   context "attributes" do
     context "nested" do
-      # Nothing so far.
-    end
+      context "identities" do
+        pending "accepts"
+        pending "rejects"
+      end
 
-    context "enums" do
-      # Nothing so far.
+      context "memberships" do
+        pending "accepts"
+        pending "rejects"
+      end
     end
   end
 
@@ -74,7 +104,9 @@ RSpec.describe Creator, type: :model do
     describe "name" do
       it { should validate_presence_of(:name) }
 
-      it { should validate_inclusion_of(:primary).in_array([true, false]) }
+      # it { should validate_inclusion_of(:primary).in_array([true, false]) }
+      #
+      # it { should validate_inclusion_of(:collective).in_array([true, false]) }
     end
   end
 
@@ -83,21 +115,113 @@ RSpec.describe Creator, type: :model do
   end
 
   context "instance" do
-    context "booleans" do
+    context "identities" do
+      describe "#personae" do
+        context "without identities" do
+          let!(:kate_bush) { create(:kate_bush) }
+          let!(      :gas) { create(:gas      ) }
 
+          context "without personae" do
+            specify "primary" do
+              expect(kate_bush.personae).to eq([])
+            end
+
+            specify "secondary" do
+              expect(gas.personae).to eq([])
+            end
+          end
+        end
+
+        context "with identities" do
+          let!(    :richie) { create(:richie_hawtin_with_pseudonyms) }
+          let!(:plastikman) { described_class.find_by(name: "Plastikman") }
+          let!(      :fuse) { described_class.find_by(name: "F.U.S.E."  ) }
+
+          specify "primary" do
+            expect(richie.personae).to eq([fuse, plastikman])
+          end
+
+          specify "secondary" do
+            expect(plastikman.personae).to eq([fuse, richie])
+          end
+        end
+      end
     end
 
-    context "participations" do
-      it "works" do
-        richie     = create(:richie_hawtin)
-        plastikman = richie.namings.first
-        spawnn     = richie.memberships.first
+    context "memberships" do
+      context "without members" do
+        let!(:band) { create(:spawn) }
 
-        robotman = create(:musician, name: "Robotman")
+        specify "#members" do
+          expect(band.members).to eq([])
+        end
+      end
 
-        create(:has_name_participation, creator: richie, participant: robotman)
+      context "with a single band" do
+        let!(  :band) { create(:spawn_with_members) }
+        let!(:richie) { described_class.find_by(name: "Richie Hawtin" ) }
+        let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
+        let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
 
-        puts ">>", richie.related_artists.inspect
+        specify "#members" do
+          expect(band.members).to eq([dan, fred, richie])
+        end
+
+        specify "#groups" do
+          expect(richie.groups).to eq([band])
+          expect(  fred.groups).to eq([band])
+          expect(   dan.groups).to eq([band])
+        end
+
+        specify "#colleagues" do
+          expect(richie.colleagues).to eq([dan, fred   ])
+          expect(  fred.colleagues).to eq([dan, richie ])
+          expect(   dan.colleagues).to eq([fred, richie])
+        end
+      end
+
+      context "with multiple bands" do
+        let!(     :band) { create(:fleetwood_mac_with_members) }
+        let!(   :stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
+        let!(  :lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
+        let!(:christine) { described_class.find_by(name: "Christine McVie"   ) }
+        let!(     :mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
+        let!(     :john) { described_class.find_by(name: "John McVie"        ) }
+
+        let!(:imaginary) { create(:musician, :primary, name: "Imaginary") }
+
+        let!(:other_band) do
+          other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
+
+          create(:membership, creator: other_band, member: lindsay  )
+          create(:membership, creator: other_band, member: stevie   )
+          create(:membership, creator: other_band, member: imaginary)
+
+          other_band
+        end
+
+        specify "#members" do
+          expect(      band.members).to eq([christine, john, lindsay, mick, stevie])
+          expect(other_band.members).to eq([imaginary, lindsay, stevie            ])
+        end
+
+        specify "#groups" do
+          expect(christine.groups).to eq([            band])
+          expect(imaginary.groups).to eq([other_band      ])
+          expect(     john.groups).to eq([            band])
+          expect(  lindsay.groups).to eq([other_band, band])
+          expect(     mick.groups).to eq([            band])
+          expect(   stevie.groups).to eq([other_band, band])
+        end
+
+        specify "#colleagues" do
+          expect(christine.colleagues).to eq([                      john, lindsay, mick, stevie])
+          expect(imaginary.colleagues).to eq([                            lindsay,       stevie])
+          expect(     john.colleagues).to eq([christine,                  lindsay, mick, stevie])
+          expect(  lindsay.colleagues).to eq([christine, imaginary, john,          mick, stevie])
+          expect(     mick.colleagues).to eq([christine,            john, lindsay,       stevie])
+          expect(   stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick        ])
+        end
       end
     end
 
@@ -111,10 +235,6 @@ RSpec.describe Creator, type: :model do
         pending "#contributions_by_medium"
         pending "#contributions_by_work"
       end
-    end
-
-    describe "private" do
-       # Nothing so far.
     end
   end
 end

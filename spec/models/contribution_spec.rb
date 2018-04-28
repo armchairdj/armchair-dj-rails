@@ -34,10 +34,6 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "attributes" do
-    context "nested" do
-      # Nothing so far.
-    end
-
     context "enums" do
       describe "role" do
         it { should define_enum_for(:role) }
@@ -53,15 +49,5 @@ RSpec.describe Contribution, type: :model do
     it { should validate_presence_of(:creator) }
 
     it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role) }
-  end
-
-  context "hooks" do
-    # Nothing so far.
-  end
-
-  context "instance" do
-    describe "private" do
-      # Nothing so far.
-    end
   end
 end

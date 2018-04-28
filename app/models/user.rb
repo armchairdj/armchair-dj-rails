@@ -51,7 +51,8 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :posts
+  has_many :posts, foreign_key: "author_id"
+
   has_many :works,    through: :posts
   has_many :creators, through: :works
 

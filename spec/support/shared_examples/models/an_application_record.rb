@@ -3,6 +3,10 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_application_record" do
+  context "concerns" do
+    # Concerns are tested in the models that actually use them.
+  end
+
   context "included" do
     describe "nilify_blanks" do
       it { should nilify_blanks(before: :validation) }
@@ -39,13 +43,5 @@ RSpec.shared_examples "an_application_record" do
         end
       end
     end
-  end
-
-  context "instance" do
-    # Nothing so far.
-  end
-
-  context "concerns" do
-    # Concerns are tested in the models that actually use them.
   end
 end

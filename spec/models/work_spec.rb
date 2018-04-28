@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Work, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
     it_behaves_like "an_application_record"
 
@@ -237,10 +233,6 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  context "hooks" do
-    # Nothing so far.
-  end
-
   context "instance" do
     describe "#display_title" do
       it "displays with just title" do
@@ -294,10 +286,6 @@ RSpec.describe Work, type: :model do
       it "nils unless persisted" do
         expect(build(:kate_bush_hounds_of_love).display_creators).to eq(nil)
       end
-    end
-
-    context "private" do
-      # Nothing so far.
     end
   end
 end

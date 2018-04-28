@@ -23,6 +23,9 @@ class Creator < ApplicationRecord
   scope :primary,      -> { where(primary: true ) }
   scope :secondary,    -> { where(primary: false) }
 
+  scope :collective,    -> { where(collective: true ) }
+  scope :singular,      -> { where(collective: false) }
+
   scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
   scope :eager,        -> { all }
   scope :for_admin,    -> { eager }
@@ -46,33 +49,37 @@ class Creator < ApplicationRecord
 
   has_many :posts, through: :works
 
-  # Participations.
+  # Related Creators.
 
-  has_many :participations
+  has_many :identities
+  has_many :pseudonyms, -> { order 'creators.name' }, through: :identities
 
-  has_many :memberships, -> { where(participations: {
-    relationship: Participation.relationships["member_of"]
-  })}, through: :participations, source: :participant, class_name: "Creator"
-
-  has_many :members, -> { where(participations: {
-    relationship: Participation.relationships["has_member"]
-  })}, through: :participations, source: :participant, class_name: "Creator"
-
-  has_many :namings, -> { where(participations: {
-    relationship: Participation.relationships["named"]
-  })}, through: :participations, source: :participant, class_name: "Creator"
-
-  has_many :names, -> { where(participations: {
-    relationship: Participation.relationships["has_name"]
-  })}, through: :participations, source: :participant, class_name: "Creator"
+  has_many :memberships
+  has_many :members, -> { order 'creators.name' }, through: :memberships
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
 
-  accepts_nested_attributes_for :participations,
+  accepts_nested_attributes_for :identities,
     allow_destroy: true,
-    reject_if:     :blank_participation?
+    reject_if:     :blank_pseudonym?
+
+  def blank_pseudonym?(identities_attributes)
+    identities_attributes["pseudonym_id"].blank?
+  end
+
+  private :blank_pseudonym?
+
+  accepts_nested_attributes_for :memberships,
+    allow_destroy: true,
+    reject_if:     :blank_member?
+
+  def blank_member?(membership_attributes)
+    membership_attributes["member_id"].blank?
+  end
+
+  private :blank_member?
 
   #############################################################################
   # VALIDATIONS.
@@ -80,7 +87,8 @@ class Creator < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :primary, inclusion: { in: [true, false] }
+  validates :primary,    inclusion: { in: [true, false] }
+  validates :collective, inclusion: { in: [true, false] }
 
   #############################################################################
   # HOOKS.
@@ -90,26 +98,37 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  # Identities.
+
   def secondary?
     !primary?
   end
+
+  def personae
+    return pseudonyms.to_a if primary
+
+    return [] unless parent = Identity.find_by(pseudonym_id: self.id).try(:creator)
+
+    [parent, parent.pseudonyms].flatten.reject { |p| p == self }.sort_by(&:name)
+  end
+
+  # Memberships.
 
   def singular?
     !collective?
   end
 
-  def alternate_identities
-    base   = [self.names.to_a, self.namings.to_a].flatten.uniq
-    extras = base.each { |e| [e.names, e.namings] }
+  def groups
+    return if collective?
 
-    [base, extras].flatten.uniq
+    Membership.where(member_id: self.id).map(&:creator).to_a.sort_by(&:name)
   end
 
-  def related_artists
-    base = Participation.where(creator_id: self.id).or(Participation.where(participant_id: self.id))
-
-    [base.map(&:creator), base.map(&:participant)].flatten.uniq
+  def colleagues
+    groups.map { |g| g.members }.flatten.uniq.reject { |m| m == self }.sort_by(&:name)
   end
+
+  # Works & Contributions.
 
   def media
     self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
@@ -148,11 +167,5 @@ class Creator < ApplicationRecord
 
       memo
     end
-  end
-
-private
-
-  def blank_participation?(participation_attributes)
-    participation_attributes["participant_id"].blank?
   end
 end

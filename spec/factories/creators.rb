@@ -102,58 +102,30 @@ FactoryBot.define do
       end
     end
 
-    trait :with_named do
+    trait :with_pseudonym do
       after(:create) do |creator|
-        create(:named_participation, creator: creator)
+        create(:identity, creator: creator)
       end
     end
 
-    trait :with_has_name do
-      after(:create) do |creator|
-        create(:has_name_participation, creator: creator)
-      end
-    end
-
-    trait :with_member_of do
-      after(:create) do |creator|
-        create(:member_of_participation, creator: creator)
-      end
-    end
-
-    trait :with_has_member do
-      after(:create) do |creator|
-        create(:has_member_participation, creator: creator)
-      end
-    end
-
-    trait :with_specific_named do
+    trait :with_specific_pseudonyms do
       after(:create) do |creator, evaluator|
-        [evaluator.named].flatten.each do |participant|
-          create(:named_participation, creator: creator, participant: participant)
+        [evaluator.pseudonyms].flatten.each do |pseudonym|
+          create(:identity, creator: creator, pseudonym: pseudonym)
         end
       end
     end
 
-    trait :with_specific_has_name do
-      after(:create) do |creator, evaluator|
-        [evaluator.has_name].flatten.each do |participant|
-          create(:has_name_participation, creator: creator, participant: participant)
-        end
+    trait :with_member do
+      after(:create) do |creator|
+        create(:membership, creator: creator)
       end
     end
 
-    trait :with_specific_member_of do
+    trait :with_specific_members do
       after(:create) do |creator, evaluator|
-        [evaluator.member_of].flatten.each do |participant|
-          create(:member_of_participation, creator: creator, participant: participant)
-        end
-      end
-    end
-
-    trait :with_specific_has_member do
-      after(:create) do |creator, evaluator|
-        [evaluator.has_member].flatten.each do |participant|
-          create(:has_member_participation, creator: creator, participant: participant)
+        [evaluator.members].flatten.each do |member|
+          create(:membership, creator: creator, member: member)
         end
       end
     end
@@ -219,63 +191,161 @@ FactoryBot.define do
     ###########################################################################
 
     factory :kate_bush do
+      primary
+      singular
       name "Kate Bush"
     end
 
-    factory :richie_hawtin do
-      name "Richie Hawtin"
+    factory :volfgang_voigt do
+      primary
+      singular
+      name "Wolfgang Voigt"
 
-      transient do
-        named     { [create(:plastikman), create(:fuse) ] }
-        member_of { create(:spawn) }
+      factory :volfgang_voigt_with_pseudonyms do
+        transient do
+          pseudonyms { [create(:gas) ] }
+        end
+
+        with_specific_pseudonyms
       end
-
-      with_specific_named
-      with_specific_member_of
     end
 
-    factory :dan_bell do
-      name "Dan Bell"
-
-      transient do
-        named     { create(:dbx) }
-        member_of { create(:spawn) }
-      end
-
-      with_specific_named
-      with_specific_member_of
+    factory :gas do
+      secondary
+      singular
+      name "Gas"
     end
 
     factory :dbx do
+      secondary
+      singular
       name "DBX"
     end
 
-    factory :fred_giannelli do
-      name "Fred Giannelli"
-
-      transient do
-        named     { create(:dbx) }
-        member_of { create(:spawn) }
-      end
-
-      with_specific_named
-      with_specific_member_of
-    end
-
     factory :the_kooky_scientist do
+      secondary
+      singular
       name "The Kooky Scientist"
     end
 
     factory :plastikman do
+      secondary
+      singular
       name "Plastikman"
     end
 
-    factory :spawn do
-      name "Spawn"
+    factory :fuse do
+      secondary
+      singular
+      name "F.U.S.E."
     end
 
-    factory :fuse do
-      name "F.U.S.E."
+    factory :richie_hawtin do
+      primary
+      singular
+      name "Richie Hawtin"
+
+      factory :richie_hawtin_with_pseudonyms do
+        transient do
+          pseudonyms { [create(:plastikman), create(:fuse) ] }
+        end
+
+        with_specific_pseudonyms
+      end
+    end
+
+    factory :dan_bell do
+      primary
+      singular
+      name "Dan Bell"
+
+      factory :dan_bell_with_pseudonyms do
+        transient do
+          pseudonyms { [create(:dbx) ] }
+        end
+
+        with_specific_pseudonyms
+      end
+    end
+
+    factory :fred_giannelli do
+      primary
+      singular
+      name "Fred Giannelli"
+
+      factory :fred_giannelli_with_pseudonyms do
+        transient do
+          pseudonyms { [create(:the_kooky_scientist) ] }
+        end
+
+        with_specific_pseudonyms
+      end
+    end
+
+    factory :spawn do
+      primary
+      collective
+      name "Spawn"
+
+      factory :spawn_with_members do
+        transient do
+          members { [create(:fred_giannelli), create(:richie_hawtin), create(:dan_bell) ] }
+        end
+
+        with_specific_members
+      end
+    end
+
+    factory :stevie_nicks do
+      primary
+      singular
+      name "Stevie Nicks"
+    end
+
+    factory :lindsay_buckingham do
+      primary
+      singular
+      name "Lindsay Buckingham"
+    end
+
+    factory :christine_mcvie do
+      primary
+      singular
+      name "Christine McVie"
+    end
+
+    factory :john_mcvie do
+      primary
+      singular
+      name "John McVie"
+    end
+
+    factory :mick_fleetwood do
+      primary
+      singular
+      name "Mick Fleetwood"
+    end
+
+    factory :fleetwood_mac do
+      primary
+      collective
+      name "Fleetwood Mac"
+
+      factory :fleetwood_mac_with_members do
+        transient do
+          members do
+            [
+              create(:mick_fleetwood),
+              create(:john_mcvie),
+              create(:christine_mcvie),
+              create(:stevie_nicks),
+              create(:lindsay_buckingham)
+            ]
+          end
+        end
+
+        with_specific_members
+      end
     end
   end
 end
