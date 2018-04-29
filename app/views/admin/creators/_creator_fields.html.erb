@@ -4,7 +4,7 @@
   <%= f.input :summary, required: false, hint: true %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed") do %>
+<%= content_tag(:fieldset, class: "boxed", "data-controller": "identity") do %>
   <%= content_tag(:legend, "Pseudonyms") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {
@@ -20,7 +20,7 @@
   } %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed") do %>
+<%= content_tag(:fieldset, class: "boxed", "data-controller": "membership") do %>
   <%= content_tag(:legend, "Members") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {

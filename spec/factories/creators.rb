@@ -102,30 +102,54 @@ FactoryBot.define do
       end
     end
 
+    trait :with_new_pseudonym do
+      primary
+
+      identities_attributes { {
+        "0" => { "pseudonym_id" => create(:musician, :secondary).id }
+      } }
+    end
+
     trait :with_pseudonym do
+      primary
+
       after(:create) do |creator|
-        create(:identity, creator: creator)
+        create(:minimal_identity, creator: creator)
       end
     end
 
     trait :with_specific_pseudonyms do
+      primary
+
       after(:create) do |creator, evaluator|
         [evaluator.pseudonyms].flatten.each do |pseudonym|
-          create(:identity, creator: creator, pseudonym: pseudonym)
+          create(:minimal_identity, creator: creator, pseudonym: pseudonym)
         end
       end
     end
 
+    trait :with_new_member do
+      collective
+
+      memberships_attributes { {
+        "0" => { "member_id" => create(:musician, :singular).id }
+      } }
+    end
+
     trait :with_member do
+      collective
+
       after(:create) do |creator|
-        create(:membership, creator: creator)
+        create(:minimal_membership, creator: creator)
       end
     end
 
     trait :with_specific_members do
+      collective
+
       after(:create) do |creator, evaluator|
         [evaluator.members].flatten.each do |member|
-          create(:membership, creator: creator, member: member)
+          create(:minimal_membership, creator: creator, member: member)
         end
       end
     end

@@ -1,13 +1,15 @@
 <%
-  errored = f.object.errors[:identities].any?
-  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if errored))
-  hint    = f.error(:identities)
+  error   = f.error(:identities)
+  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
 
-<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
+<%= content_tag(:fieldset, class: classes,
+  "data-controller": "expandable-has-many",
+  "data-target":     "identity.fieldset"
+) do %>
   <%= content_tag(:legend, "Pseudonyms") %>
 
-  <%= content_tag(:div, hint, class: "hint") if hint %>
+  <%= content_tag(:div, error, class: "hint") if error %>
 
   <%= render partial: "admin/creators/identity_field",
     collection: f.object.identities, as: :identity, locals: {
