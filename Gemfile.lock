@@ -407,9 +407,8 @@ DEPENDENCIES
   unidecoder
   validates_timeliness (~> 4.0)
   vcr
-  wannabe_bool
   web-console (>= 3.3.0)
   webpacker (~> 3.4)
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
