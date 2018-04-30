@@ -26,22 +26,6 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :primary do
-      primary true
-    end
-
-    trait :secondary do
-      primary false
-    end
-
-    trait :individual do
-      individual true
-    end
-
-    trait :collective do
-      individual false
-    end
-
     trait :with_draft_post do
       after(:create) do |creator|
         create(:post, :with_author, :draft, body: "body", work_attributes: {
@@ -102,6 +86,22 @@ FactoryBot.define do
       end
     end
 
+    trait :primary do
+      primary true
+    end
+
+    trait :secondary do
+      primary false
+    end
+
+    trait :individual do
+      individual true
+    end
+
+    trait :collective do
+      individual false
+    end
+
     trait :with_new_pseudonym do
       primary
 
@@ -132,6 +132,36 @@ FactoryBot.define do
       end
     end
 
+    trait :with_new_real_name do
+      secondary
+
+      real_name_identities_attributes { {
+        "0" => { "real_name_id" => create(:musician, :primary).id }
+      } }
+    end
+
+    trait :with_real_name do
+      secondary
+
+      after(:create) do |creator|
+        create(:minimal_identity, pseudonym: creator)
+
+        creator.reload
+      end
+    end
+
+    trait :with_specific_real_names do
+      secondary
+
+      after(:create) do |creator, evaluator|
+        [evaluator.real_names].flatten.each do |real_name|
+          create(:minimal_identity, pseudonym: creator, real_name: real_name)
+        end
+
+        creator.reload
+      end
+    end
+
     trait :with_new_member do
       collective
 
@@ -156,6 +186,36 @@ FactoryBot.define do
       after(:create) do |creator, evaluator|
         [evaluator.members].flatten.each do |member|
           create(:minimal_membership, group: creator, member: member)
+        end
+
+        creator.reload
+      end
+    end
+
+    trait :with_new_group do
+      individual
+
+      group_memberships_attributes { {
+        "0" => { "group_id" => create(:musician, :collective).id }
+      } }
+    end
+
+    trait :with_group do
+      individual
+
+      after(:create) do |creator|
+        create(:minimal_membership, member: creator)
+
+        creator.reload
+      end
+    end
+
+    trait :with_specific_group do
+      individual
+
+      after(:create) do |creator, evaluator|
+        [evaluator.groups].flatten.each do |group|
+          create(:minimal_membership, member: creator, group: group)
         end
 
         creator.reload

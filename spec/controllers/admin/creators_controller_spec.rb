@@ -129,10 +129,11 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
     describe "POST #create" do
       let(    :max_params) { attributes_for(:minimal_creator, :with_summary, :with_new_member, :with_new_pseudonym) }
+      let(:alt_max_params) { attributes_for(:minimal_creator, :with_summary, :with_new_group,  :with_new_real_name) }
       let(  :valid_params) { attributes_for(:minimal_creator) }
       let(:invalid_params) { attributes_for(:minimal_creator).except(:name) }
 
-      context "with max valid params" do
+      context "with max valid params including memeber and pseudonym" do
         it "creates a new Creator" do
           expect {
             post :create, params: { creator: max_params }
@@ -159,6 +160,40 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
         it "redirects to index" do
           post :create, params: { creator: max_params }
+
+          should send_user_to(
+            admin_creator_path(assigns(:creator))
+          ).with_flash(:success, "admin.flash.creators.success.create")
+        end
+      end
+
+      context "with max valid params including group and real_name" do
+        it "creates a new Creator" do
+          expect {
+            post :create, params: { creator: alt_max_params }
+          }.to change(Creator, :count).by(3)
+        end
+
+        it "creates a new Identity" do
+          expect {
+            post :create, params: { creator: alt_max_params }
+          }.to change(Identity, :count).by(1)
+        end
+
+        it "creates a new Membership" do
+          expect {
+            post :create, params: { creator: alt_max_params }
+          }.to change(Membership, :count).by(1)
+        end
+
+        it "creates the right attributes" do
+          post :create, params: { creator: alt_max_params }
+
+          should assign(Creator.last, :creator).with_attributes(alt_max_params).and_be_valid
+        end
+
+        it "redirects to index" do
+          post :create, params: { creator: alt_max_params }
 
           should send_user_to(
             admin_creator_path(assigns(:creator))
