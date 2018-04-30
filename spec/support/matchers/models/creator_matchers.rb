@@ -5,8 +5,8 @@ require "rspec/expectations"
 RSpec::Matchers.define :be_a_populated_new_creator do
   match do |actual|
     expect(actual                   ).to be_a_new(Creator)
-    expect(actual.identities.length ).to eq(5)
-    expect(actual.memberships.length).to eq(5)
+    expect(actual.identities).to have(5).items
+    expect(actual.memberships).to have(5).items
 
     expect(actual).to_not be_valid
   end

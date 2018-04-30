@@ -4,13 +4,13 @@
   <%= f.input :summary, required: false, hint: true %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed", "data-controller": "identity") do %>
+<%= content_tag(:fieldset, class: "boxed", "data-controller": "toggle") do %>
   <%= content_tag(:legend, "Primary") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {
     f:          f,
     name:       :primary,
-    collection: Creator.primary_options,
+    collection: Creator.primary_options.reverse,
     invert:     true
   } %>
 
@@ -18,20 +18,30 @@
     f:        f,
     creators: available_pseudonyms
   } %>
+
+  <%= render partial: "admin/creators/inverse_identities_fields", locals: {
+    f:        f,
+    creators: available_real_names
+  } %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed", "data-controller": "membership") do %>
+<%= content_tag(:fieldset, class: "boxed", "data-controller": "toggle") do %>
   <%= content_tag(:legend, "Collective") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {
     f:          f,
     name:       :collective,
-    collection: Creator.collective_options,
+    collection: Creator.collective_options.reverse,
     invert:     true
   } %>
 
   <%= render partial: "admin/creators/memberships_fields", locals: {
     f:        f,
     creators: available_members
+  } %>
+
+  <%= render partial: "admin/creators/inverse_memberships_fields", locals: {
+    f:        f,
+    creators: available_groups
   } %>
 <% end %>

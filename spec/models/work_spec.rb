@@ -162,7 +162,7 @@ RSpec.describe Work, type: :model do
               Credit.count
             }.by(1)
 
-            expect(instance.credits.length).to eq(1)
+            expect(instance.credits).to have(1).items
           end
         end
 
@@ -170,21 +170,21 @@ RSpec.describe Work, type: :model do
           it "prepares max for new" do
             instance = described_class.new
 
-            expect(instance.credits.length).to eq(0)
+            expect(instance.credits).to have(0).items
 
             instance.prepare_credits
 
-            expect(instance.credits.length).to eq(5)
+            expect(instance.credits).to have(5).items
           end
 
           it "prepares up to max for saved" do
             instance = create(:carl_craig_and_green_velvet_unity)
 
-            expect(instance.credits.length).to eq(2)
+            expect(instance.credits).to have(2).items
 
             instance.prepare_credits
 
-            expect(instance.credits.length).to eq(5)
+            expect(instance.credits).to have(5).items
           end
         end
       end
@@ -205,7 +205,7 @@ RSpec.describe Work, type: :model do
               Contribution.count
             }.by(1)
 
-            expect(instance.contributions.length).to eq(1)
+            expect(instance.contributions).to have(1).items
           end
         end
 
@@ -213,21 +213,21 @@ RSpec.describe Work, type: :model do
           it "prepares max for new" do
             instance = described_class.new
 
-            expect(instance.contributions.length).to eq(0)
+            expect(instance.contributions).to have(0).items
 
             instance.prepare_contributions
 
-            expect(instance.contributions.length).to eq(20)
+            expect(instance.contributions).to have(20).items
           end
 
           it "prepares up to max for saved" do
             instance = create(:global_communications_76_14)
 
-            expect(instance.contributions.length).to eq(2)
+            expect(instance.contributions).to have(2).items
 
             instance.prepare_contributions
 
-            expect(instance.contributions.length).to eq(20)
+            expect(instance.contributions).to have(20).items
           end
         end
       end

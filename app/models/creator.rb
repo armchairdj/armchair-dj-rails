@@ -41,10 +41,10 @@ class Creator < ApplicationRecord
 
   scope :orphaned, -> { left_outer_joins(:inverse_identities).where(identities: { id: nil } ) }
 
+  scope :available_groups,     -> { alphabetical.collective         }
   scope :available_members,    -> { alphabetical.singular           }
-  scope :available_groups,     -> { alphabetical.plural             }
-  scope :available_pseudonyms, -> { alphabetical.secondary.orphaned }
   scope :available_real_names, -> { alphabetical.primary            }
+  scope :available_pseudonyms, -> { alphabetical.secondary.orphaned }
 
   scope :eager, -> { includes(:pseudonyms, :real_names, :members, :groups, :credits, :works, :posts) }
 

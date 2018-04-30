@@ -130,7 +130,19 @@ private
         :_destroy,
         :pseudonym_id
       ],
+      :inverse_identities_attributes => [
+        :creator_id,
+        :id,
+        :_destroy,
+        :pseudonym_id
+      ],
       :memberships_attributes => [
+        :creator_id,
+        :id,
+        :_destroy,
+        :member_id
+      ],
+      :inverse_memberships_attributes => [
         :creator_id,
         :id,
         :_destroy,
@@ -141,10 +153,12 @@ private
 
   def prepare_form
     @creator.prepare_identities
+    @creator.prepare_inverse_identities
     @creator.prepare_memberships
+    @creator.prepare_inverse_memberships
 
     @available_pseudonyms = @creator.available_pseudonyms
-    @available_real_names = @creator.available_real_names
+    @available_real_names = Creator.available_real_names
 
     @available_members    = Creator.available_members
     @available_groups     = Creator.available_groups

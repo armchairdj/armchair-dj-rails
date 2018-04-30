@@ -3,9 +3,11 @@
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/creators/creator_fields", locals: {
-      f:                  f,
+      f:                    f,
       available_pseudonyms: available_pseudonyms,
-      available_members:  available_members
+      available_real_names: available_real_names,
+      available_members:    available_members,
+      available_groups:     available_groups
     } %>
   <% end %>
 

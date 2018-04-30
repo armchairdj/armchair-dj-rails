@@ -12,13 +12,13 @@ RSpec.shared_examples "an_atomically_validatable_model" do |invalid_params|
         it "validates one attribute" do
           expect(subject.valid_attributes?(first_attribute)).to eq(true)
 
-          expect(subject.errors.messages.keys.length).to eq(0)
+          expect(subject.errors.messages.keys).to have(0).items
         end
 
         it "validates multiple attributes" do
           expect(subject.valid_attributes?(attributes)).to eq(true)
 
-          expect(subject.errors.messages.keys.length).to eq(0)
+          expect(subject.errors.messages.keys).to have(0).items
         end
       end
 

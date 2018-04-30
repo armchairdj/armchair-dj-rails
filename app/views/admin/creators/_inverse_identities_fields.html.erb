@@ -1,0 +1,18 @@
+<%
+  records = f.object.inverse_identities
+  error   = f.error(:inverse_identities)
+  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+%>
+
+<%= content_tag(:fieldset, class: classes,
+  "data-target": "toggle.false_fieldset"
+) do %>
+  <%= content_tag(:legend, "Real Identity") %>
+
+  <%= content_tag(:div, error, class: "hint") if error %>
+
+  <%= render partial: "admin/creators/inverse_identity_field", collection: records, as: :identity, locals: {
+    f:        f,
+    creators: creators
+  } %>
+<% end %>

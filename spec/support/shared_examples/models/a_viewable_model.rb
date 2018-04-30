@@ -114,27 +114,27 @@ RSpec.shared_examples "a_viewable_model" do
 
       context "scoped associations" do
         describe "#viewable_posts" do
-          specify { expect(    draft_instance.viewable_posts.length).to eq(0) }
-          specify { expect(scheduled_instance.viewable_posts.length).to eq(0) }
-          specify { expect(published_instance.viewable_posts.length).to eq(1) }
+          specify { expect(    draft_instance.viewable_posts).to have(0).items }
+          specify { expect(scheduled_instance.viewable_posts).to have(0).items }
+          specify { expect(published_instance.viewable_posts).to have(1).items }
         end
 
         describe "#non_viewable_posts" do
-          specify { expect(    draft_instance.non_viewable_posts.length).to eq(1) }
-          specify { expect(scheduled_instance.non_viewable_posts.length).to eq(1) }
-          specify { expect(published_instance.non_viewable_posts.length).to eq(0) }
+          specify { expect(    draft_instance.non_viewable_posts).to have(1).items }
+          specify { expect(scheduled_instance.non_viewable_posts).to have(1).items }
+          specify { expect(published_instance.non_viewable_posts).to have(0).items }
         end
 
         describe "#viewable_works" do
-          specify { expect(    draft_instance.viewable_works.length).to eq(0) }
-          specify { expect(scheduled_instance.viewable_works.length).to eq(0) }
-          specify { expect(published_instance.viewable_works.length).to eq(1) }
+          specify { expect(    draft_instance.viewable_works).to have(0).items }
+          specify { expect(scheduled_instance.viewable_works).to have(0).items }
+          specify { expect(published_instance.viewable_works).to have(1).items }
         end
 
         describe "#non_viewable_works" do
-          specify { expect(    draft_instance.non_viewable_works.length).to eq(1) }
-          specify { expect(scheduled_instance.non_viewable_works.length).to eq(1) }
-          specify { expect(published_instance.non_viewable_works.length).to eq(0) }
+          specify { expect(    draft_instance.non_viewable_works).to have(1).items }
+          specify { expect(scheduled_instance.non_viewable_works).to have(1).items }
+          specify { expect(published_instance.non_viewable_works).to have(0).items }
         end
       end
     end

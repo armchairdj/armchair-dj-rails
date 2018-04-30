@@ -1211,7 +1211,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1223,7 +1223,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1237,7 +1237,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(other_song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1251,7 +1251,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(nil)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1277,7 +1277,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(song_id)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
                 expect(subject.work.title         ).to eq("Hounds of Love")
               end
             end
@@ -1293,7 +1293,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(other_song_id)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
               end
             end
 
@@ -1308,7 +1308,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(nil)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
                 expect(subject.work.title         ).to eq("Hounds of Love")
               end
             end
@@ -1329,7 +1329,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1341,7 +1341,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1355,7 +1355,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(other_song_id)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1369,7 +1369,7 @@ RSpec.describe Post, type: :model do
               expect(subject.current_work_id    ).to eq(nil)
               expect(subject.work_id            ).to eq(nil)
               expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits.length).to eq(5)
+              expect(subject.work.credits).to have(5).items
             end
           end
 
@@ -1395,7 +1395,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(song_id)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
                 expect(subject.work.title         ).to eq("Hounds of Love")
               end
             end
@@ -1411,7 +1411,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(other_song_id)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
               end
             end
 
@@ -1426,7 +1426,7 @@ RSpec.describe Post, type: :model do
                 expect(subject.current_work_id    ).to eq(nil)
                 expect(subject.work_id            ).to eq(nil)
                 expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits.length).to eq(5)
+                expect(subject.work.credits).to have(5).items
                 expect(subject.work.title         ).to eq("Hounds of Love")
               end
             end

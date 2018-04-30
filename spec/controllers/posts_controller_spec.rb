@@ -83,7 +83,7 @@ RSpec.describe PostsController, type: :controller do
 
       expect(response).to have_http_status(200)
 
-      expect(assigns(:posts).length).to eq(100)
+      expect(assigns(:posts)).to have(100).items
     end
   end
 end
