@@ -372,6 +372,176 @@ RSpec.describe Creator, type: :model do
         end
       end
 
+      context "member_memberships" do
+        subject { create(:collective_creator) }
+
+        let(  :valid) { create(:individual_creator) }
+        let(:invalid) { create(:collective_creator) }
+
+        let(  :valid_params) { { "0" => { member_id:   valid.id } } }
+        let(:invalid_params) { { "0" => { member_id: invalid.id } } }
+        let(  :empty_params) { { "0" => {                       } } }
+
+        describe "#prepare_member_memberships" do
+          it "builds 5 initially" do
+            subject.prepare_member_memberships
+
+            expect(subject.member_memberships).to have(5).items
+          end
+
+          it "builds 5 more" do
+            subject.update!(member_memberships_attributes: valid_params)
+
+            subject.prepare_member_memberships
+
+            expect(subject.member_memberships).to have(6).items
+          end
+        end
+
+        specify "accepts" do
+          subject.member_memberships_attributes = valid_params
+
+          expect(subject.member_memberships).to have(1).items
+          expect(subject.members           ).to eq(Creator.none) # TODO
+
+          subject.save!
+          subject.reload
+
+          expect(subject.member_memberships).to have(1).items
+          expect(subject.members           ).to eq([valid])
+        end
+
+        describe "rejects if #blank_or_collective?" do
+          specify "blank" do
+            subject.member_memberships_attributes = empty_params
+
+            expect(subject.member_memberships).to have(0).items
+          end
+
+          specify "collective" do
+            subject.member_memberships_attributes = invalid_params
+
+            expect(subject.member_memberships).to have(0).items
+          end
+        end
+
+        describe "after_save callbacks" do
+          specify "#enforce_primariness" do
+            subject.update!(member_memberships_attributes: valid_params)
+
+            expect(subject.member_memberships).to have(1).items
+
+            expect {
+              subject.update!(individual: true)
+            }.to change { Membership.count }.by(-1)
+
+            expect(subject.reload.member_memberships).to have(0).items
+          end
+        end
+
+        describe "allow_destroy" do
+          it "destroys the identity but not the member" do
+            subject.update!(member_memberships_attributes: valid_params)
+
+            expect(subject.members).to eq([valid])
+
+            subject.member_memberships.destroy_all
+
+            subject.reload
+
+            expect(subject.member_memberships).to eq([])
+            expect(subject.members           ).to eq([])
+
+            expect(valid.reload).to eq(valid)
+          end
+        end
+      end
+
+      context "group_memberships" do
+        subject { create(:individual_creator) }
+
+        let(  :valid) { create(:collective_creator) }
+        let(:invalid) { create(:individual_creator) }
+
+        let(  :valid_params) { { "0" => { group_id:   valid.id } } }
+        let(:invalid_params) { { "0" => { group_id: invalid.id } } }
+        let(  :empty_params) { { "0" => {                      } } }
+
+        describe "#prepare_group_memberships" do
+          it "builds 5 initially" do
+            subject.prepare_group_memberships
+
+            expect(subject.group_memberships).to have(5).items
+          end
+
+          it "builds 5 more" do
+            subject.update!(group_memberships_attributes: valid_params)
+
+            subject.prepare_group_memberships
+
+            expect(subject.group_memberships).to have(6).items
+          end
+        end
+
+        specify "accepts" do
+          subject.group_memberships_attributes = valid_params
+
+          expect(subject.group_memberships).to have(1).items
+          expect(subject.groups           ).to eq(Creator.none) # TODO
+
+          subject.save!
+          subject.reload
+
+          expect(subject.group_memberships).to have(1).items
+          expect(subject.groups           ).to eq([valid])
+        end
+
+        describe "rejects if #blank_or_individual?" do
+          specify "blank" do
+            subject.group_memberships_attributes = empty_params
+
+            expect(subject.group_memberships).to have(0).items
+          end
+
+          specify "individual" do
+            subject.group_memberships_attributes = invalid_params
+
+            expect(subject.group_memberships).to have(0).items
+          end
+        end
+
+        describe "after_save callbacks" do
+          specify "#enforce_primariness" do
+            subject.update!(group_memberships_attributes: valid_params)
+
+            expect(subject.group_memberships).to have(1).items
+
+            expect {
+              subject.update!(individual: false)
+            }.to change { Membership.count }.by(-1)
+
+            expect(subject.reload.group_memberships).to have(0).items
+          end
+        end
+
+        describe "allow_destroy" do
+          it "destroys the identity but not the group" do
+            subject.update!(group_memberships_attributes: valid_params)
+
+            expect(subject.groups).to eq([valid])
+
+            subject.group_memberships.destroy_all
+
+            subject.reload
+
+            expect(subject.group_memberships).to eq([])
+            expect(subject.groups           ).to eq([])
+
+            expect(valid.reload).to eq(valid)
+          end
+        end
+      end
+
       context "booletania" do
         pending "self#individual_options"
         pending "self#individual_options"

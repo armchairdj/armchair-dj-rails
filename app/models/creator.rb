@@ -66,24 +66,34 @@ class Creator < ApplicationRecord
   # Contributions.
 
   has_many :contributions, dependent: :destroy
-  has_many :contributed_works, through: :contributions,     class_name: "Work", source: :work
-  has_many :contributed_posts, through: :contributed_works, class_name: "Post", source: :post
+  has_many :contributed_works, through: :contributions,
+    class_name: "Work", source: :work
+  has_many :contributed_posts, through: :contributed_works,
+    class_name: "Post", source: :post
 
   # Identities.
 
-  has_many :pseudonym_identities, class_name: "Identity", dependent: :destroy, foreign_key: :real_name_id, inverse_of: :real_name
-  has_many :real_name_identities, class_name: "Identity", dependent: :destroy, foreign_key: :pseudonym_id, inverse_of: :pseudonym
+  has_many :pseudonym_identities, class_name: "Identity", dependent: :destroy,
+    foreign_key: :real_name_id, inverse_of: :real_name
+  has_many :real_name_identities, class_name: "Identity", dependent: :destroy,
+    foreign_key: :pseudonym_id, inverse_of: :pseudonym
 
-  has_many :pseudonyms, -> { order("creators.name") }, through: :pseudonym_identities, source: :pseudonym
-  has_many :real_names, -> { order("creators.name") }, through: :real_name_identities, source: :real_name
+  has_many :pseudonyms, -> { order("creators.name") },
+    through: :pseudonym_identities, source: :pseudonym
+  has_many :real_names, -> { order("creators.name") },
+    through: :real_name_identities, source: :real_name
 
   # Memberships.
 
-  has_many :member_memberships, class_name: "Membership", dependent: :destroy, foreign_key: :group_id,  inverse_of: :group
-  has_many :group_memberships,  class_name: "Membership", dependent: :destroy, foreign_key: :member_id, inverse_of: :member
+  has_many :member_memberships, class_name: "Membership", dependent: :destroy,
+    foreign_key: :group_id, inverse_of: :group
+  has_many :group_memberships,  class_name: "Membership", dependent: :destroy,
+  foreign_key: :member_id, inverse_of: :member
 
-  has_many :members, -> { order("creators.name") }, through: :member_memberships, source: :member
-  has_many  :groups, -> { order("creators.name") }, through: :group_memberships,  source: :group
+  has_many :members, -> { order("creators.name") },
+    through: :member_memberships, source: :member
+  has_many  :groups, -> { order("creators.name") },
+    through: :group_memberships,  source: :group
 
   #############################################################################
   # ATTRIBUTES: pseudonym_identities
@@ -234,7 +244,7 @@ class Creator < ApplicationRecord
   private :enforce_primariness
 
   def enforce_individuality
-    if self.individual?
+    if self.collective?
       self.group_memberships.destroy_all
     else
       self.member_memberships.destroy_all
