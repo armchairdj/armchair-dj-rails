@@ -1,6 +1,6 @@
 <%= f.simple_fields_for :group_memberships, group_membership do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
-    <%= ff.input :creator_id,
+    <%= ff.input :group_id,
       as:            :select,
       label:         false,
       collection:    creators,
