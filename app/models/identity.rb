@@ -42,8 +42,6 @@ class Identity < ApplicationRecord
   validate { creator_is_primary }
 
   def creator_is_primary
-    puts ">>creator_is_primary", creator.inspect
-
     return if creator.try(:primary?)
 
     self.errors.add :creator_id, :not_primary
@@ -54,8 +52,6 @@ class Identity < ApplicationRecord
   validate { pseudonym_is_secondary }
 
   def pseudonym_is_secondary
-    puts ">>pseudonym_is_secondary", pseudonym.inspect
-
     return if pseudonym.try(:secondary?)
 
     self.errors.add :pseudonym_id, :not_secondary
@@ -70,7 +66,5 @@ class Identity < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-private
 
 end

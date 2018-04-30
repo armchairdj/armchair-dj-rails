@@ -71,16 +71,16 @@ class Creator < ApplicationRecord
 
   # Identities.
 
-  has_many         :identities, foreign_key:   :creator_id, dependent: :destroy
-  has_many :inverse_identities, foreign_key: :pseudonym_id, dependent: :destroy, class_name: "Identity"
+  has_many         :identities, inverse_of: :creator, foreign_key:   :creator_id, dependent: :destroy
+  has_many :inverse_identities, inverse_of: :creator, foreign_key: :pseudonym_id, dependent: :destroy, class_name: "Identity"
 
   has_many      :pseudonyms, -> { order("creators.name") }, through:         :identities, class_name: "Creator", source: :pseudonym
   has_many :real_names, -> { order("creators.name") }, through: :inverse_identities, class_name: "Creator", source: :creator
 
   # Memberships.
 
-  has_many         :memberships, foreign_key: :creator_id, dependent: :destroy
-  has_many :inverse_memberships, foreign_key:  :member_id, dependent: :destroy, class_name: "Membership"
+  has_many         :memberships, inverse_of: :creator, foreign_key: :creator_id, dependent: :destroy
+  has_many :inverse_memberships, inverse_of: :creator, foreign_key:  :member_id, dependent: :destroy, class_name: "Membership"
 
   has_many :members, -> { order("creators.name") }, through:         :memberships, class_name: "Creator", source: :member
   has_many  :groups, -> { order("creators.name") }, through: :inverse_memberships, class_name: "Creator", source: :creator

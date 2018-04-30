@@ -66,6 +66,4 @@ class Membership < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-private
-
 end
