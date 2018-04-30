@@ -112,9 +112,7 @@ class Creator < ApplicationRecord
   private :blank_or_primary?
 
   def prepare_pseudonym_identities
-    count_needed = MAX_PSEUDONYMS_AT_ONCE
-
-    count_needed.times { self.pseudonym_identities.build }
+    MAX_PSEUDONYMS_AT_ONCE.times { self.pseudonym_identities.build }
   end
 
   def available_pseudonyms
@@ -179,9 +177,7 @@ class Creator < ApplicationRecord
   private :blank_or_collective?
 
   def prepare_member_memberships
-    count_needed = MAX_MEMBERS_AT_ONCE
-
-    count_needed.times { self.member_memberships.build }
+    MAX_MEMBERS_AT_ONCE.times { self.member_memberships.build }
   end
 
   #############################################################################
@@ -201,9 +197,7 @@ class Creator < ApplicationRecord
   private :blank_or_individual?
 
   def prepare_group_memberships
-    count_needed = MAX_GROUPS_AT_ONCE
-
-    count_needed.times { self.group_memberships.build }
+    MAX_GROUPS_AT_ONCE.times { self.group_memberships.build }
   end
 
   def collective?

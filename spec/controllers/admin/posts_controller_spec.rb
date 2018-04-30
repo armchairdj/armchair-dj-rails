@@ -343,9 +343,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             "credits_attributes" => {
               "0" => { "creator_id" => create(:musician).id },
               "1" => { "creator_id" => create(:musician).id },
-              "2" => { "creator_id" => create(:musician).id },
-              "3" => { "creator_id" => create(:musician).id },
-              "4" => { "creator_id" => create(:musician).id }
+              "2" => { "creator_id" => create(:musician).id }
             }
           }
         } }
@@ -387,7 +385,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           it "creates new Credits" do
             expect {
               post :create, params: { post: max_params }
-            }.to change(Credit, :count).by(5)
+            }.to change(Credit, :count).by(3)
           end
 
           it "creates the right attributes" do
@@ -572,22 +570,18 @@ RSpec.describe Admin::PostsController, type: :controller do
           let(:valid_params) { {
             "work_id"         => post.work.id,
             "work_attributes" => {
-              "medium"                   => "song",
-              "title"                    => "Hounds of Love",
-              "credits_attributes" => {
-                "0" => { "creator_id" => kate_bush.id }
-              }
+              "medium"             => "song",
+              "title"              => "Hounds of Love",
+              "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } }
             }
           } }
 
           let(:invalid_params) { {
             "work_id"         => post.work.id,
             "work_attributes" => {
-              "medium"                   => "",
-              "title"                    => "Hounds of Love",
-              "credits_attributess_attributes" => {
-                "0" => { "creator_id" => kate_bush.id }
-              }
+              "medium"             => "",
+              "title"              => "Hounds of Love",
+              "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } }
             }
           } }
 

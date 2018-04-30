@@ -1207,11 +1207,10 @@ RSpec.describe Post, type: :model do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1219,11 +1218,10 @@ RSpec.describe Post, type: :model do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing({ "work_id" => song_id })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1233,11 +1231,10 @@ RSpec.describe Post, type: :model do
 
               subject.prepare_work_for_editing({ "work_id" => other_song_id })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(other_song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(other_song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1247,11 +1244,10 @@ RSpec.describe Post, type: :model do
 
               subject.prepare_work_for_editing({ "work_id" => nil })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(nil)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(nil)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1273,12 +1269,11 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(song_id)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
-                expect(subject.work.title         ).to eq("Hounds of Love")
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(song_id)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
+                expect(subject.work.title     ).to eq("Hounds of Love")
               end
             end
 
@@ -1289,11 +1284,10 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(other_song_id)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(other_song_id)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
               end
             end
 
@@ -1304,12 +1298,11 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => nil }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(nil)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
-                expect(subject.work.title         ).to eq("Hounds of Love")
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(nil)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
+                expect(subject.work.title     ).to eq("Hounds of Love")
               end
             end
           end
@@ -1325,11 +1318,10 @@ RSpec.describe Post, type: :model do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing()
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1337,11 +1329,10 @@ RSpec.describe Post, type: :model do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing({ "work_id" => song_id })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1351,11 +1342,10 @@ RSpec.describe Post, type: :model do
 
               subject.prepare_work_for_editing({ "work_id" => other_song_id })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(other_song_id)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(other_song_id)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1365,11 +1355,10 @@ RSpec.describe Post, type: :model do
 
               subject.prepare_work_for_editing({ "work_id" => nil })
 
-              expect(subject.changed?           ).to eq(true)
-              expect(subject.current_work_id    ).to eq(nil)
-              expect(subject.work_id            ).to eq(nil)
-              expect(subject.work               ).to be_a_new(Work)
-              expect(subject.work.credits).to have(5).items
+              expect(subject.changed?       ).to eq(true)
+              expect(subject.current_work_id).to eq(nil)
+              expect(subject.work_id        ).to eq(nil)
+              expect(subject.work           ).to be_a_populated_new_work
             end
           end
 
@@ -1391,12 +1380,11 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(song_id)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
-                expect(subject.work.title         ).to eq("Hounds of Love")
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(song_id)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
+                expect(subject.work.title     ).to eq("Hounds of Love")
               end
             end
 
@@ -1407,11 +1395,10 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(other_song_id)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(other_song_id)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
               end
             end
 
@@ -1422,12 +1409,11 @@ RSpec.describe Post, type: :model do
 
                 subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => nil }))
 
-                expect(subject.changed?           ).to eq(true)
-                expect(subject.current_work_id    ).to eq(nil)
-                expect(subject.work_id            ).to eq(nil)
-                expect(subject.work               ).to be_a_new(Work)
-                expect(subject.work.credits).to have(5).items
-                expect(subject.work.title         ).to eq("Hounds of Love")
+                expect(subject.changed?       ).to eq(true)
+                expect(subject.current_work_id).to eq(nil)
+                expect(subject.work_id        ).to eq(nil)
+                expect(subject.work           ).to be_a_populated_new_work
+                expect(subject.work.title     ).to eq("Hounds of Love")
               end
             end
           end

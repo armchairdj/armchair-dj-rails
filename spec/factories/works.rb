@@ -18,6 +18,12 @@ FactoryBot.define do
       subtitle "Version"
     end
 
+    trait :with_contribution do
+      contributions_attributes { {
+        "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
+      } }
+    end
+
     trait :with_draft_post do
       after(:create) do |work|
         create(:song_review, :draft, work_id: work.id)

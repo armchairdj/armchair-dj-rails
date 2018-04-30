@@ -132,12 +132,12 @@ RSpec.describe Admin::WorksController, type: :controller do
         get :new
 
         should successfully_render("admin/works/new")
-        expect(assigns(:work)).to be_a_new(Work)
+        expect(assigns(:work)).to be_a_fully_populated_new_work
       end
     end
 
     describe "POST #create" do
-      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix) }
+      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, :with_summary) }
       let(:invalid_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
 
       context "with valid params" do
@@ -175,13 +175,29 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #edit" do
-      let(:work) { create(:minimal_work) }
+      context "plain jane" do
+        let(:work) { create(:minimal_work) }
 
-      it "renders" do
-        get :edit, params: { id: work.to_param }
+        it "renders" do
+          get :edit, params: { id: work.to_param }
 
-        should successfully_render("admin/works/edit")
-        should assign(work, :work)
+          should successfully_render("admin/works/edit")
+          should assign(work, :work)
+
+          expect(assigns(:work).credits).to have(4).items
+        end
+      end
+
+      context "with contribution" do
+        let(:work) { create(:minimal_work, :with_contribution) }
+
+        it "renders" do
+          get :edit, params: { id: work.to_param }
+
+          should successfully_render("admin/works/edit")
+          should assign(work, :work)
+          expect(assigns(:work).contributions).to have(11).items
+        end
       end
     end
 

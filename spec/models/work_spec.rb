@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe Work, type: :model do
   context "constants" do
-    specify { expect(described_class).to have_constant(:MAX_CREDITS) }
-    specify { expect(described_class).to have_constant(:MAX_CONTRIBUTIONS) }
+    specify { expect(described_class).to have_constant(:MAX_CREDITS_AT_ONCE) }
+    specify { expect(described_class).to have_constant(:MAX_CONTRIBUTIONS_AT_ONCE) }
   end
 
   context "concerns" do
@@ -174,10 +174,10 @@ RSpec.describe Work, type: :model do
 
             instance.prepare_credits
 
-            expect(instance.credits).to have(5).items
+            expect(instance.credits).to have(3).items
           end
 
-          it "prepares up to max for saved" do
+          it "prepares max for saved" do
             instance = create(:carl_craig_and_green_velvet_unity)
 
             expect(instance.credits).to have(2).items
@@ -217,7 +217,7 @@ RSpec.describe Work, type: :model do
 
             instance.prepare_contributions
 
-            expect(instance.contributions).to have(20).items
+            expect(instance.contributions).to have(10).items
           end
 
           it "prepares up to max for saved" do
@@ -227,7 +227,7 @@ RSpec.describe Work, type: :model do
 
             instance.prepare_contributions
 
-            expect(instance.contributions).to have(20).items
+            expect(instance.contributions).to have(12).items
           end
         end
       end

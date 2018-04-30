@@ -6,8 +6,8 @@ class Work < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
-  MAX_CREDITS       =  5.freeze
-  MAX_CONTRIBUTIONS = 20.freeze
+  MAX_CREDITS_AT_ONCE       =  3.freeze
+  MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
 
   #############################################################################
   # CONCERNS.
@@ -89,9 +89,7 @@ class Work < ApplicationRecord
     reject_if: proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_credits
-    count_needed = MAX_CREDITS - self.credits.length
-
-    count_needed.times { self.credits.build }
+    MAX_CREDITS_AT_ONCE.times { self.credits.build }
   end
 
   # Contributions.
@@ -100,9 +98,7 @@ class Work < ApplicationRecord
     reject_if: proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_contributions
-    count_needed = MAX_CONTRIBUTIONS - self.contributions.length
-
-    count_needed.times { self.contributions.build }
+    MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
   end
 
   # def contributions_attributes=(attributes)
