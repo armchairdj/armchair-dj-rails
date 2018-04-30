@@ -1,4 +1,5 @@
 <%
+  records = f.object.contributions
   error   = f.error(:contributions)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
@@ -8,11 +9,9 @@
 
   <%= content_tag(:div, error, class: "hint") if error %>
 
-  <%= render partial: "admin/works/contribution_field",
-    collection: f.object.contributions, as: :contribution, locals: {
-      f:        f,
-      roles:    roles,
-      creators: creators
-    }
-  %>
+  <%= render partial: "admin/works/contribution_field", collection: records, as: :contribution, locals: {
+    f:        f,
+    roles:    roles,
+    creators: creators
+  } %>
 <% end %>

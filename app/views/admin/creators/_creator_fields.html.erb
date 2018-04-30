@@ -5,7 +5,7 @@
 <% end %>
 
 <%= content_tag(:fieldset, class: "boxed", "data-controller": "identity") do %>
-  <%= content_tag(:legend, "Pseudonyms") %>
+  <%= content_tag(:legend, "Primary") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {
     f:          f,
@@ -16,12 +16,12 @@
 
   <%= render partial: "admin/creators/identities_fields", locals: {
     f:        f,
-    creators: secondary_creators
+    creators: available_pseudonyms
   } %>
 <% end %>
 
 <%= content_tag(:fieldset, class: "boxed", "data-controller": "membership") do %>
-  <%= content_tag(:legend, "Members") %>
+  <%= content_tag(:legend, "Collective") %>
 
   <%= render partial: "shared/custom_radio_group", locals: {
     f:          f,
@@ -32,6 +32,6 @@
 
   <%= render partial: "admin/creators/memberships_fields", locals: {
     f:        f,
-    creators: singular_creators
+    creators: available_members
   } %>
 <% end %>

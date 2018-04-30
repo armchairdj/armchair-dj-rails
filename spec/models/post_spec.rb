@@ -85,7 +85,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  context "scopes" do
+  context "scope-related" do
     let!(:draft_standalone    ) { create(:standalone_post, :draft    ) }
     let!(:draft_review        ) { create(:song_review,     :draft    ) }
     let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
@@ -94,28 +94,28 @@ RSpec.describe Post, type: :model do
     let!(:published_review    ) { create(:song_review,     :published) }
 
     context "for status" do
-      describe "draft" do
+      describe "self#draft" do
         specify { expect(described_class.draft).to match_array([
           draft_review,
           draft_standalone
         ]) }
       end
 
-      describe "#scheduled" do
+      describe "self#scheduled" do
         specify { expect(described_class.scheduled).to match_array([
           scheduled_standalone,
           scheduled_review
         ]) }
       end
 
-      describe "published" do
+      describe "self#published" do
         specify { expect(described_class.published).to match_array([
           published_review,
           published_standalone,
         ]) }
       end
 
-      describe "not_published" do
+      describe "self#not_published" do
         specify { expect(described_class.not_published).to match_array([
           draft_review,
           draft_standalone,
@@ -126,7 +126,7 @@ RSpec.describe Post, type: :model do
     end
 
     context "for type" do
-      describe "standalone" do
+      describe "self#standalone" do
         specify { expect(described_class.standalone).to match_array([
           draft_standalone,
           published_standalone,
@@ -134,7 +134,7 @@ RSpec.describe Post, type: :model do
         ]) }
       end
 
-      describe "review" do
+      describe "self#review" do
         specify { expect(described_class.review).to match_array([
           draft_review,
           published_review,
@@ -143,7 +143,7 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    describe "reverse_cron" do # TODO BJD
+    describe "self#reverse_cron" do # TODO BJD
       specify { expect(described_class.reverse_cron.to_a).to eq([
         draft_standalone,
         draft_review,
@@ -154,9 +154,9 @@ RSpec.describe Post, type: :model do
       ]) }
     end
 
-    pending "eager"
+    pending "self#eager"
 
-    describe "for_admin" do
+    describe "self#for_admin" do
       specify { expect(described_class.for_admin).to include(
         draft_review,
         draft_standalone,
@@ -167,7 +167,7 @@ RSpec.describe Post, type: :model do
       ) }
     end
 
-    describe "for_site" do
+    describe "self#for_site" do
       specify { expect(described_class.for_site).to match_array([
         published_standalone,
         published_review

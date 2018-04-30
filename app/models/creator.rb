@@ -25,21 +25,32 @@ class Creator < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.available_pseudonyms_for(creator)
+    available_pseudonyms.union_all(creator.pseudonyms)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :primary,      -> { where(primary: true ) }
-  scope :secondary,    -> { where(primary: false) }
+  scope :primary,   -> { where(primary: true ) }
+  scope :secondary, -> { where(primary: false) }
 
-  scope :collective,    -> { where(collective: true ) }
-  scope :singular,      -> { where(collective: false) }
+  scope :collective, -> { where(collective: true ) }
+  scope :singular,   -> { where(collective: false) }
+
+  scope :eager, -> { includes(:pseudonyms, :members) }
 
   scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
-  scope :for_admin,    -> { eager }
-  scope :for_site,     -> { viewable.includes(:posts).alphabetical }
 
-  scope :eager,        -> { includes(:pseudonyms, :members) }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { eager.viewable.includes(:posts).alphabetical }
+
+  scope :available_members,    -> { singular.alphabetical }
+
+  scope :available_pseudonyms, -> {
+    secondary.left_outer_joins(:reverse_identities).where(identities: { id: nil }).alphabetical
+  }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -54,16 +65,34 @@ class Creator < ApplicationRecord
   # Contributions.
 
   has_many :contributions, dependent: :destroy
-  has_many :contributed_works, through: :contributions,     source: :work, class_name: "Work"
-  has_many :contributed_posts, through: :contributed_works, source: :post, class_name: "Post"
+  has_many :contributed_works, through: :contributions,
+    class_name: "Work", source: :work
+  has_many :contributed_posts, through: :contributed_works,
+    class_name: "Post", source: :post
 
-  # Related Creators.
+  # Identities.
 
-  has_many :identities, dependent: :destroy
-  has_many :pseudonyms, -> { order 'creators.name' }, through: :identities
+  has_many :identities,         foreign_key:   :creator_id, dependent: :destroy
+  has_many :reverse_identities, foreign_key: :pseudonym_id, dependent: :destroy,
+    class_name: "Identity"
 
-  has_many :memberships, dependent: :destroy
-  has_many :members, -> { order 'creators.name' }, through: :memberships
+  has_many :pseudonyms, -> { order("creators.name") },
+    through: :identities,         class_name: "Creator", source: :pseudonym
+
+  has_many :real_identities, -> { order("creators.name") },
+    through: :reverse_identities, class_name: "Creator", source: :creator
+
+  # Memberships.
+
+  has_many :memberships,         foreign_key: :creator_id, dependent: :destroy
+  has_many :reverse_memberships, foreign_key:  :member_id, dependent: :destroy,
+    class_name: "Membership"
+
+  has_many :members, -> { order("creators.name") },
+    through: :memberships,         class_name: "Creator", source: :member
+
+  has_many :groups,  -> { order("creators.name") },
+    through: :reverse_memberships, class_name: "Creator", source: :creator
 
   #############################################################################
   # ATTRIBUTES.
@@ -86,11 +115,18 @@ class Creator < ApplicationRecord
   end
 
   def personae
-    return pseudonyms.to_a if primary
+    return pseudonyms if primary?
 
-    return [] unless parent = Identity.find_by(pseudonym_id: self.id).try(:creator)
+    return self.class.none unless real_identity
 
-    [parent, parent.pseudonyms].flatten.reject { |p| p == self }.sort_by(&:name)
+    aliases = real_identity.pseudonyms.where.not(id: self.id)
+    parent  = self.class.where(id: real_identity.id)
+
+    aliases.union_all(parent).alphabetical
+  end
+
+  def real_identity
+    real_identities.first
   end
 
   # Memberships.
@@ -109,14 +145,12 @@ class Creator < ApplicationRecord
     !collective?
   end
 
-  def groups
-    return if collective?
-
-    Membership.where(member_id: self.id).map(&:creator).to_a.sort_by(&:name)
-  end
-
   def colleagues
-    groups.map { |g| g.members }.flatten.uniq.reject { |m| m == self }.sort_by(&:name)
+    return self.class.none unless singular? && groups.any?
+
+    ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
+
+    Creator.where(id: ids).alphabetical
   end
 
   #############################################################################
@@ -131,6 +165,26 @@ class Creator < ApplicationRecord
   #############################################################################
   # HOOKS.
   #############################################################################
+
+  before_save :handle_identities
+
+  def handle_identities
+    return if self.primary?
+
+    self.identities.destroy_all
+  end
+
+  private :handle_identities
+
+  after_save :handle_memberships
+
+  def handle_memberships
+    return if self.collective?
+
+    self.memberships.destroy_all
+  end
+
+  private :handle_memberships
 
   #############################################################################
   # INSTANCE.

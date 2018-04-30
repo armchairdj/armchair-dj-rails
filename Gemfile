@@ -75,6 +75,9 @@ gem "inline_svg"
 # Form renderer.
 gem "simple_form"
 
+# Boolean i18n translation.
+gem "booletania"
+
 # Markdown parser.
 gem "redcarpet"
 
@@ -126,8 +129,8 @@ gem "validates_timeliness", '~> 4.0'
 # Use ActiveModel has_secure_password.
 gem "bcrypt"
 
-# Boolean i18n translation.
-gem "booletania"
+# Join scopes into one query.
+gem "active_record_union"
 
 ###############################################################################
 # UTILITIES.

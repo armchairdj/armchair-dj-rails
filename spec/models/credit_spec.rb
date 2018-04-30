@@ -18,7 +18,7 @@ RSpec.describe Credit, type: :model do
     # Nothing so far.
   end
 
-  context "scopes" do
+  context "scope-related" do
     # Nothing so far.
   end
 

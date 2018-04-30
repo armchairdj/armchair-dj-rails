@@ -264,6 +264,12 @@ FactoryBot.define do
       name "F.U.S.E."
     end
 
+    factory :robotman do
+      secondary
+      singular
+      name "Robotman"
+    end
+
     factory :richie_hawtin do
       primary
       singular

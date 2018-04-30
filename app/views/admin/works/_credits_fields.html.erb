@@ -1,5 +1,6 @@
 <%
-  errored = f.error(:credits)
+  records = f.object.credits
+  error   = f.error(:credits)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
 
@@ -8,10 +9,8 @@
 
   <%= content_tag(:div, error || "Select at least one.", class: "hint") %>
 
-  <%= render partial: "admin/works/credit_field",
-    collection: f.object.credits, as: :credit, locals: {
-      f:        f,
-      creators: creators
-    }
-  %>
+  <%= render partial: "admin/works/credit_field", collection: records, as: :credit, locals: {
+    f:        f,
+    creators: creators
+  } %>
 <% end %>

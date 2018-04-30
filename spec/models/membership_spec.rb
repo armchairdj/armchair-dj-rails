@@ -15,7 +15,7 @@ RSpec.describe Membership, type: :model do
     # Nothing so far.
   end
 
-  context "scopes" do
+  context "scope-related" do
     # Nothing so far.
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Membership, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(member_id: :creator_not_collective)
+          expect(subject).to have_errors(creator_id: :not_collective)
         end
       end
 

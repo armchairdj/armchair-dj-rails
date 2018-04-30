@@ -43,7 +43,7 @@ class Membership < ApplicationRecord
   def creator_is_collective
     return if creator.try(:collective?)
 
-    self.errors.add :member_id, :creator_not_collective
+    self.errors.add :creator_id, :not_collective
   end
 
   private :creator_is_collective

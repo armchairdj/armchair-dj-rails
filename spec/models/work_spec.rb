@@ -100,8 +100,8 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  context "scopes" do
-    describe "alphabetical" do
+  context "scope-related" do
+    describe "self#alphabetical" do
       let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
       let!(:lh   ) { create(:album, title: "lionheart"        ) }
       let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }

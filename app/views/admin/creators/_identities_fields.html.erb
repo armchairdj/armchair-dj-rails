@@ -1,4 +1,5 @@
 <%
+  records = f.object.identities
   error   = f.error(:identities)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
@@ -11,10 +12,8 @@
 
   <%= content_tag(:div, error, class: "hint") if error %>
 
-  <%= render partial: "admin/creators/identity_field",
-    collection: f.object.identities, as: :identity, locals: {
-      f:        f,
-      creators: creators
-    }
-  %>
+  <%= render partial: "admin/creators/identity_field", collection: records, as: :identity, locals: {
+    f:        f,
+    creators: creators
+  } %>
 <% end %>

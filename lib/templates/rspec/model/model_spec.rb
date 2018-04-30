@@ -16,7 +16,7 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
     # Nothing so far.
   end
 
-  context "scopes" do
+  context "scope-related" do
     # Nothing so far.
   end
 

@@ -20,7 +20,7 @@ RSpec.describe Contribution, type: :model do
     pending "self#grouped_role_options"
   end
 
-  context "scopes" do
+  context "scope-related" do
     # Nothing so far.
   end
 

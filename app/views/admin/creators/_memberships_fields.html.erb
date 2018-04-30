@@ -1,17 +1,19 @@
 <%
+  records = f.object.memberships
   error   = f.error(:memberships)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
 
-<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
+<%= content_tag(:fieldset, class: classes,
+  "data-controller": "expandable-has-many",
+  "data-target":     "membership.fieldset"
+) do %>
   <%= content_tag(:legend, "Members") %>
 
   <%= content_tag(:div, error, class: "hint") if error %>
 
-  <%= render partial: "admin/creators/membership_field",
-    collection: f.object.memberships, as: :membership, locals: {
-      f:        f,
-      creators: creators
-    }
-  %>
+  <%= render partial: "admin/creators/membership_field", collection: records, as: :membership, locals: {
+    f:        f,
+    creators: creators
+  } %>
 <% end %>

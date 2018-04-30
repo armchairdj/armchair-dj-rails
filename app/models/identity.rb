@@ -36,14 +36,15 @@ class Identity < ApplicationRecord
   validates :creator,    presence: true
   validates :pseudonym,  presence: true
 
-  validates :creator_id, uniqueness: { scope: [:pseudonym_id] }
+  validates :creator_id,   uniqueness: { scope: [:pseudonym_id] }
+  validates :pseudonym_id, uniqueness: true
 
   validate { creator_is_primary }
 
   def creator_is_primary
     return if creator.try(:primary?)
 
-    self.errors.add :pseudonym_id, :creator_not_primary
+    self.errors.add :creator_id, :not_primary
   end
 
   private :creator_is_primary

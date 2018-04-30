@@ -2,7 +2,7 @@
 
 RSpec.shared_examples "a_workable_model" do
   context "included" do
-    context "scopes" do
+    context "scope-related" do
       pending "alphabetical"
       pending "viewable"
       pending "eager"

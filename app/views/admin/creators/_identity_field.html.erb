@@ -2,6 +2,7 @@
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
     <%= ff.input :pseudonym_id,
       as:            :select,
+      label:         false,
       collection:    creators,
       required:      false,
       include_blank: :translate,
@@ -10,6 +11,8 @@
         "data-create-pseudonym-url": admin_creators_path,
       }
     %>
+
+    <%= ff.error :creator_id %>
 
     <%= render(partial: "shared/custom_checkbox", locals: {
       f:    ff,

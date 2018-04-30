@@ -151,13 +151,16 @@ en:
               taken: "This creator cannot appear twice."
         identity:
           attributes:
+            creator_id:
+              not_primary: "Only primary creators can have pseudonyms."
             pseudonym_id:
-              creator_not_primary: "Only primary creators can have pseudonyms."
               not_secondary: "Primary creators cannot be pseudonyms."
+              taken: "This pseudonym is already taken."
         membership:
           attributes:
+            creator_id:
+              not_collective: "Only collectives can have members."
             member_id:
-              creator_not_collective: "Only collectives can have members."
               not_singular: "Collectives cannot be members of other collectives."
         post:
           attributes:

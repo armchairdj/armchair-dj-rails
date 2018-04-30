@@ -65,6 +65,10 @@ fieldset {
     @include border-bottom($padding: $spacing-s, $color: $armchair-blue-lightest, $style: solid);
     @include bottom-margin-only($spacing-s);
 
+    .form-field {
+      @include bottom-margin-only($spacing-s);
+    }
+
     .stacked {
       @include clearfix();
       @include bottom-margin-only($spacing-s);

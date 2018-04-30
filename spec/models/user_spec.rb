@@ -36,8 +36,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "scopes" do
-    describe "alphabetical" do
+  context "scope-related" do
+    describe "self#alphabetical" do
       let!(:michelle_dillardo) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillardo") }
       let!(  :brian_j_dillard) { create(:minimal_user, first_name: "Brian",    middle_name: "J.", last_name: "Dillard" ) }
       let!(    :brian_dillard) { create(:minimal_user, first_name: "Brian",                       last_name: "Dillard" ) }

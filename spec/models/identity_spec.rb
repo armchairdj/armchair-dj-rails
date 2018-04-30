@@ -15,7 +15,7 @@ RSpec.describe Identity, type: :model do
     # Nothing so far.
   end
 
-  context "scopes" do
+  context "scope-related" do
     # Nothing so far.
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Identity, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(pseudonym_id: :creator_not_primary)
+          expect(subject).to have_errors(creator_id: :not_primary)
         end
       end
 

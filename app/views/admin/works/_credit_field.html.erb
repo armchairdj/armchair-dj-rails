@@ -2,6 +2,7 @@
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
     <%= ff.input :creator_id,
       as:            :select,
+      label:         false,
       collection:    creators,
       required:      false,
       include_blank: :translate,

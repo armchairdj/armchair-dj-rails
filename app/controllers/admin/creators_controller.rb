@@ -143,7 +143,7 @@ private
     @creator.prepare_identities
     @creator.prepare_memberships
 
-    @singular_creators  = policy_scope(Creator).singular.alphabetical
-    @secondary_creators = policy_scope(Creator).secondary.alphabetical
+    @available_members    = Creator.available_members
+    @available_pseudonyms = Creator.available_pseudonyms_for(@creator)
   end
 end

@@ -10,20 +10,20 @@ export default class extends Controller {
 
     this.$radio.on("change", _.bind(this.handleChange, this));
 
-
-    console.log("identities_controller");
-    console.log(this.$radio);
-    console.log(this.$fieldset);
-    console.log(this.$radio.val());
+    this.toggle();
   }
 
   handleChange(evt) {
-    
-    
+    this.toggle();
   }
 
   toggle() {
-    
-    
+    if (this.$radio.filter(":checked").val() === "true") {
+      if (this.$removed && this.$removed[0]) {
+        this.$node.append(this.$removed);
+      }
+    } else {
+      this.$removed = this.$fieldset.remove();
+    }
   }
 }
