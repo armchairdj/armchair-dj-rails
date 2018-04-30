@@ -20,7 +20,7 @@ RSpec.describe Identity, type: :model do
   end
 
   context "associations" do
-    it { should belong_to(:creator) }
+    it { should belong_to(:real_name).class_name("Creator") }
     it { should belong_to(:pseudonym).class_name("Creator") }
   end
 
@@ -37,10 +37,10 @@ RSpec.describe Identity, type: :model do
   context "validations" do
     subject { build(:minimal_identity) }
 
-    it { should validate_presence_of(:creator  ) }
+    it { should validate_presence_of(:real_name) }
     it { should validate_presence_of(:pseudonym) }
 
-    it { should validate_uniqueness_of(:creator_id).scoped_to(:pseudonym_id) }
+    it { should validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
     context "conditional" do
       # Nothing so far.
@@ -49,10 +49,10 @@ RSpec.describe Identity, type: :model do
     context "custom" do
       subject { create_minimal_instance }
 
-      describe "#creator_is_primary" do
+      describe "#real_name_is_primary" do
         before(:each) do
-           allow(subject).to receive(:creator_is_primary).and_call_original
-          expect(subject).to receive(:creator_is_primary)
+           allow(subject).to receive(:real_name_is_primary).and_call_original
+          expect(subject).to receive(:real_name_is_primary)
         end
 
         specify "valid" do
@@ -60,11 +60,11 @@ RSpec.describe Identity, type: :model do
         end
 
         specify "invalid" do
-          subject.creator = create(:secondary_creator)
+          subject.real_name = create(:secondary_creator)
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(creator_id: :not_primary)
+          expect(subject).to have_errors(real_name_id: :not_primary)
         end
       end
 

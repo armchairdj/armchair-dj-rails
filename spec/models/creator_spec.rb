@@ -5,7 +5,9 @@ require "rails_helper"
 RSpec.describe Creator, type: :model do
   context "constants" do
     specify { expect(described_class).to have_constant(:MAX_PSEUDONYMS_AT_ONCE ) }
-    specify { expect(described_class).to have_constant(:MAX_MEMBERS_AT_ONCE) }
+    specify { expect(described_class).to have_constant(:MAX_REAL_NAMES         ) }
+    specify { expect(described_class).to have_constant(:MAX_MEMBERS_AT_ONCE    ) }
+    specify { expect(described_class).to have_constant(:MAX_GROUPS_AT_ONCE     ) }
   end
 
   context "concerns" do
@@ -42,7 +44,7 @@ RSpec.describe Creator, type: :model do
         let!(:plastikman) { create(:plastikman   ) }
         let!(      :fuse) { create(:fuse         ) }
         let!(       :gas) { create(:gas          ) }
-        let!(  :identity) { create(:minimal_identity, creator: richie, pseudonym: fuse) }
+        let!(  :identity) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
 
         describe "self#available_pseudonyms" do
           specify "excludes used pseudonyms and alphabetizes" do
@@ -69,13 +71,13 @@ RSpec.describe Creator, type: :model do
 
     context "memberships" do
       context "scopes" do
+        pending "self#individual"
         pending "self#collective"
-        pending "self#singular"
       end
 
       context "booleans" do
+        pending "#individual?"
         pending "#collective?"
-        pending "#singular?"
       end
 
       context "collections" do
@@ -86,7 +88,7 @@ RSpec.describe Creator, type: :model do
           let!( :christine) { create(:christine_mcvie   ) }
           let!(      :mick) { create(:mick_fleetwood    ) }
           let!(      :john) { create(:john_mcvie        ) }
-          let!(:membership) { create(:minimal_membership, creator: band, member: christine) }
+          let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
           specify "includes even used members and alphabetizes" do
              expect(described_class.available_members.to_a).to eq([
@@ -132,7 +134,7 @@ RSpec.describe Creator, type: :model do
     it { should have_many(:posts).through(:works  ) }
 
     it { should have_many(:contributions) }
-    it { should have_many(:contributed_works).through(:contributions   ) }
+    it { should have_many(:contributed_works).through(:contributions    ) }
     it { should have_many(:contributed_posts).through(:contributed_works) }
 
     it { should have_many(        :identities) }
@@ -163,10 +165,10 @@ RSpec.describe Creator, type: :model do
       end
 
       context "booletania" do
-        pending "self#collective_options"
-        pending "self#singular_options"
+        pending "self#individual_options"
+        pending "self#individual_options"
         pending "#collective_text"
-        pending "#singular_text"
+        pending "#individual_text"
       end
     end
   end
@@ -183,7 +185,7 @@ RSpec.describe Creator, type: :model do
 
   context "hooks" do
     pending "#enforce_primariness"
-    pending "#enforce_collectiveness"
+    pending "#enforce_individuality"
   end
 
   context "instance" do
@@ -265,7 +267,7 @@ RSpec.describe Creator, type: :model do
             expect(band.colleagues         ).to eq(Creator.none)
           end
 
-          specify "singular" do
+          specify "individual" do
             expect(solo.memberships        ).to eq(Membership.none)
             expect(solo.members            ).to eq(Creator.none)
 
@@ -281,16 +283,16 @@ RSpec.describe Creator, type: :model do
           let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
           let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
 
-          specify "collective" do
-            expect(band.memberships        ).to have(3).items
-            expect(band.members.to_a       ).to eq([dan, fred, richie])
+          describe "collective" do
+            specify { expect(band.memberships        ).to have(3).items }
+            specify { expect(band.members.to_a       ).to eq([dan, fred, richie]) }
 
-            expect(band.inverse_memberships).to eq(Membership.none)
-            expect(band.groups             ).to eq(Creator.none)
-            expect(band.colleagues         ).to eq(Creator.none)
+            specify { expect(band.inverse_memberships).to eq(Membership.none) }
+            specify { expect(band.groups             ).to eq(Creator.none) }
+            specify { expect(band.colleagues         ).to eq(Creator.none) }
           end
 
-          specify "singular" do
+          specify "individual" do
             expect(richie.memberships        ).to eq(Membership.none)
             expect(richie.members            ).to eq(Creator.none)
             expect(richie.inverse_memberships).to have(1).items
@@ -324,9 +326,9 @@ RSpec.describe Creator, type: :model do
           let!(:other_band) do
             other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
 
-            create(:membership, creator: other_band, member: lindsay  )
-            create(:membership, creator: other_band, member: stevie   )
-            create(:membership, creator: other_band, member: imaginary)
+            create(:membership, group: other_band, member: lindsay  )
+            create(:membership, group: other_band, member: stevie   )
+            create(:membership, group: other_band, member: imaginary)
 
             other_band
           end

@@ -22,7 +22,7 @@ class Creator < ApplicationRecord
   include Viewable
   include Booletania
 
-  booletania_columns :primary, :collective
+  booletania_columns :primary, :individual
 
   #############################################################################
   # CLASS.
@@ -34,15 +34,15 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :primary,    -> { where(primary: true    ) }
-  scope :secondary,  -> { where(primary: false   ) }
-  scope :collective, -> { where(collective: true ) }
-  scope :singular,   -> { where(collective: false) }
+  scope :primary,    -> { where(primary:  true ) }
+  scope :secondary,  -> { where(primary:  false) }
+  scope :individual, -> { where(individual: true ) }
+  scope :collective, -> { where(individual: false) }
 
   scope :orphaned, -> { left_outer_joins(:inverse_identities).where(identities: { id: nil } ) }
 
   scope :available_groups,     -> { alphabetical.collective         }
-  scope :available_members,    -> { alphabetical.singular           }
+  scope :available_members,    -> { alphabetical.individual         }
   scope :available_real_names, -> { alphabetical.primary            }
   scope :available_pseudonyms, -> { alphabetical.secondary.orphaned }
 
@@ -71,19 +71,19 @@ class Creator < ApplicationRecord
 
   # Identities.
 
-  has_many         :identities, inverse_of: :creator, foreign_key:   :creator_id, dependent: :destroy
-  has_many :inverse_identities, inverse_of: :creator, foreign_key: :pseudonym_id, dependent: :destroy, class_name: "Identity"
+  has_many         :identities, dependent: :destroy, inverse_of: :real_name, foreign_key: :real_name_id
+  has_many :inverse_identities, dependent: :destroy, inverse_of: :pseudonym, foreign_key: :pseudonym_id, class_name: "Identity"
 
-  has_many      :pseudonyms, -> { order("creators.name") }, through:         :identities, class_name: "Creator", source: :pseudonym
-  has_many :real_names, -> { order("creators.name") }, through: :inverse_identities, class_name: "Creator", source: :creator
+  has_many :pseudonyms, -> { order("creators.name") }, through:         :identities, source: :pseudonym
+  has_many :real_names, -> { order("creators.name") }, through: :inverse_identities, source: :real_name
 
   # Memberships.
 
-  has_many         :memberships, inverse_of: :creator, foreign_key: :creator_id, dependent: :destroy
-  has_many :inverse_memberships, inverse_of: :creator, foreign_key:  :member_id, dependent: :destroy, class_name: "Membership"
+  has_many         :memberships, dependent: :destroy, inverse_of: :group,  foreign_key: :group_id
+  has_many :inverse_memberships, dependent: :destroy, inverse_of: :member, foreign_key: :member_id, class_name: "Membership"
 
-  has_many :members, -> { order("creators.name") }, through:         :memberships, class_name: "Creator", source: :member
-  has_many  :groups, -> { order("creators.name") }, through: :inverse_memberships, class_name: "Creator", source: :creator
+  has_many :members, -> { order("creators.name") }, through:         :memberships, source: :member
+  has_many  :groups, -> { order("creators.name") }, through: :inverse_memberships, source: :group
 
   #############################################################################
   # ATTRIBUTES.
@@ -104,7 +104,7 @@ class Creator < ApplicationRecord
     reject_if:  proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_inverse_identities
-    count_needed = MAX_REAL_NAMES - self.real_names.length
+    count_needed = MAX_REAL_NAMES - self.inverse_identities.length
 
     count_needed.times { self.inverse_identities.build }
   end
@@ -147,17 +147,17 @@ class Creator < ApplicationRecord
     reject_if: proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_inverse_memberships
-    count_needed = MAX_GROUPS_AT_ONCE + self.groups.length
+    count_needed = MAX_GROUPS_AT_ONCE + self.inverse_memberships.length
 
     count_needed.times { self.inverse_memberships.build }
   end
 
-  def singular?
-    !collective?
+  def collective?
+    !individual?
   end
 
   def colleagues
-    return self.class.none unless singular? && groups.any?
+    return self.class.none unless individual? && groups.any?
 
     ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
 
@@ -171,7 +171,7 @@ class Creator < ApplicationRecord
   validates :name, presence: true
 
   validates :primary,    inclusion: { in: [true, false] }
-  validates :collective, inclusion: { in: [true, false] }
+  validates :individual, inclusion: { in: [true, false] }
 
   #############################################################################
   # HOOKS.
@@ -181,7 +181,7 @@ class Creator < ApplicationRecord
 
   def enforce_primariness
     if self.primary?
-      self.real_names.destroy_all
+      self.inverse_identities.destroy_all
     else
       self.identities.destroy_all
     end
@@ -189,17 +189,17 @@ class Creator < ApplicationRecord
 
   private :enforce_primariness
 
-  before_validation :enforce_collectiveness
+  before_validation :enforce_individuality
 
-  def enforce_collectiveness
-    if self.collective?
-      self.groups.destroy_all
+  def enforce_individuality
+    if self.individual?
+      self.inverse_memberships.destroy_all
     else
       self.memberships.destroy_all
     end
   end
 
-  private :enforce_collectiveness
+  private :enforce_individuality
 
   #############################################################################
   # INSTANCE.

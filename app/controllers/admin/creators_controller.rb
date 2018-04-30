@@ -123,7 +123,7 @@ private
       :name,
       :summary,
       :primary,
-      :collective,
+      :individual,
       :identities_attributes => [
         :creator_id,
         :id,

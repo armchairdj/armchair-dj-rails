@@ -7,8 +7,8 @@ FactoryBot.define do
     end
 
     trait :with_associations do
-      association :creator, factory: :collective_creator
-      association :member,  factory: :singular_creator
+      association :group,  factory: :collective_creator
+      association :member, factory: :individual_creator
     end
   end
 end

@@ -21,21 +21,7 @@
   <% end %>
 <% end %>
 
-<% if @creator.collective? %>
-  <% if @creator.members.any? %>
-    <%= content_tag(:section) do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Members") %>
-      <% end %>
-
-      <%= content_tag(:ul, class: "square") do %>
-        <% @creator.members.each do |member| %>
-          <%= render partial: "creators/creator", locals: { creator: member } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% else %>
+<% if @creator.individual? %>
   <% if @creator.groups.any? %>
     <%= content_tag(:section) do %>
       <%= content_tag(:header) do %>
@@ -59,6 +45,20 @@
       <%= content_tag(:ul, class: "square") do %>
         <% @creator.colleagues.each do |colleague| %>
           <%= render partial: "creators/creator", locals: { creator: colleague } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if @creator.members.any? %>
+    <%= content_tag(:section) do %>
+      <%= content_tag(:header) do %>
+        <%= content_tag(:h4, "Members") %>
+      <% end %>
+
+      <%= content_tag(:ul, class: "square") do %>
+        <% @creator.members.each do |member| %>
+          <%= render partial: "creators/creator", locals: { creator: member } %>
         <% end %>
       <% end %>
     <% end %>

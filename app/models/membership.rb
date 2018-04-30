@@ -22,8 +22,8 @@ class Membership < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :creator
-  belongs_to :member, class_name: "Creator"
+  belongs_to :group,  class_name: "Creator", foreign_key: :group_id
+  belongs_to :member, class_name: "Creator", foreign_key: :member_id
 
   #############################################################################
   # ATTRIBUTES.
@@ -33,30 +33,30 @@ class Membership < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :creator, presence: true
+  validates :group,   presence: true
   validates :member,  presence: true
 
-  validates :creator_id, uniqueness: { scope: [:member_id] }
+  validates :group_id, uniqueness: { scope: [:member_id] }
 
-  validate { creator_is_collective }
+  validate { group_is_collective }
 
-  def creator_is_collective
-    return if creator.try(:collective?)
+  def group_is_collective
+    return if group.try(:collective?)
 
-    self.errors.add :creator_id, :not_collective
+    self.errors.add :group_id, :not_collective
   end
 
-  private :creator_is_collective
+  private :group_is_collective
 
-  validate { member_is_singular }
+  validate { member_is_individual }
 
-  def member_is_singular
-    return if member.try(:singular?)
+  def member_is_individual
+    return if member.try(:individual?)
 
-    self.errors.add :member_id, :not_singular
+    self.errors.add :member_id, :not_individual
   end
 
-  private :member_is_singular
+  private :member_is_individual
 
   #############################################################################
   # HOOKS.

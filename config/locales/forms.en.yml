@@ -15,7 +15,11 @@ en:
       creator:
       credit:
       identity:
+        real_name_id: "Real Name"
+        pseudonym_id: "Pseudonym"
       membership:
+        group_id: "Group"
+        member_id: "Member"
       post:
       user:
         first_name: "First"

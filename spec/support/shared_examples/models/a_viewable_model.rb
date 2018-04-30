@@ -5,15 +5,15 @@ RSpec.shared_examples "a_viewable_model" do
     describe "self#admin_scopes" do
       specify "keys are short tab names" do
         expect(described_class.admin_scopes.keys).to eq([
+          "All",
           "Viewable",
           "Non-Viewable",
-          "All",
         ])
       end
     end
 
     describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:viewable) }
+      specify { expect(described_class.default_admin_scope).to eq(:all) }
     end
   end
 

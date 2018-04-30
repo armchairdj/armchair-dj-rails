@@ -4,7 +4,7 @@ export default class extends CreateCreatorController {
   postParams(userInput) {
     var params = super.postParams(userInput);
 
-    params["creator[collective]"] = "false";
+    params["creator[individual]"] = "true";
 
     return params;
   }

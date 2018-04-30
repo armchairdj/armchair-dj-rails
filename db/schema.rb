@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.integer "viewable_post_count", default: 0, null: false
     t.text "summary"
     t.boolean "primary", default: true, null: false
-    t.boolean "collective", default: false, null: false
-    t.index ["collective"], name: "index_creators_on_collective"
+    t.boolean "individual", default: true, null: false
+    t.index ["individual"], name: "index_creators_on_individual"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["primary"], name: "index_creators_on_primary"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
@@ -50,20 +50,20 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
   end
 
   create_table "identities", force: :cascade do |t|
-    t.bigint "creator_id"
+    t.bigint "real_name_id"
     t.bigint "pseudonym_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_identities_on_creator_id"
     t.index ["pseudonym_id"], name: "index_identities_on_pseudonym_id"
+    t.index ["real_name_id"], name: "index_identities_on_real_name_id"
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "creator_id"
+    t.bigint "group_id"
     t.bigint "member_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["creator_id"], name: "index_memberships_on_creator_id"
+    t.index ["group_id"], name: "index_memberships_on_group_id"
     t.index ["member_id"], name: "index_memberships_on_member_id"
   end
 
@@ -133,9 +133,9 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
 
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
-  add_foreign_key "identities", "creators"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
-  add_foreign_key "memberships", "creators"
+  add_foreign_key "identities", "creators", column: "real_name_id"
+  add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "posts", "users", column: "author_id"
 end

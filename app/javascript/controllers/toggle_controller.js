@@ -3,12 +3,12 @@ import { Controller } from "stimulus";
 //TODO setup and teardown
 
 export default class extends Controller {
-  static targets = [ "true_fieldset", "false_fieldset", "radio" ];
+  static targets = [ "trueFieldset", "falseFieldset", "radio" ];
 
   connect() {
     this.$node          = $(this.element);
-    this.$trueFieldset  = $(this.true_fieldsetTargets)
-    this.$falseFieldset = $(this.false_fieldsetTargets)
+    this.$trueFieldset  = $(this.trueFieldsetTargets)
+    this.$falseFieldset = $(this.falseFieldsetTargets)
     this.$radio         = this.$node.find('input[type="radio"]');
 
     this.$radio.on("change", _.bind(this.handleChange, this));

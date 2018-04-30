@@ -22,8 +22,8 @@ class Identity < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :creator
-  belongs_to :pseudonym, class_name: "Creator"
+  belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
+  belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
 
   #############################################################################
   # ATTRIBUTES.
@@ -33,21 +33,21 @@ class Identity < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :creator,    presence: true
+  validates :real_name,  presence: true
   validates :pseudonym,  presence: true
 
-  validates :creator_id,   uniqueness: { scope: [:pseudonym_id] }
+  validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
   validates :pseudonym_id, uniqueness: true
 
-  validate { creator_is_primary }
+  validate { real_name_is_primary }
 
-  def creator_is_primary
-    return if creator.try(:primary?)
+  def real_name_is_primary
+    return if real_name.try(:primary?)
 
-    self.errors.add :creator_id, :not_primary
+    self.errors.add :real_name_id, :not_primary
   end
 
-  private :creator_is_primary
+  private :real_name_is_primary
 
   validate { pseudonym_is_secondary }
 

@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     trait :with_associations do
-      association :creator,   factory: :primary_creator
+      association :real_name, factory: :primary_creator
       association :pseudonym, factory: :secondary_creator
     end
   end

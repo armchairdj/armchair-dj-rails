@@ -14,12 +14,12 @@ FactoryBot.define do
       secondary
     end
 
-    factory :collective_creator, parent: :minimal_creator do
-      collective
+    factory :individual_creator, parent: :minimal_creator do
+      individual
     end
 
-    factory :singular_creator, parent: :minimal_creator do
-      singular
+    factory :collective_creator, parent: :minimal_creator do
+      collective
     end
 
     ###########################################################################
@@ -34,12 +34,12 @@ FactoryBot.define do
       primary false
     end
 
-    trait :collective do
-      collective true
+    trait :individual do
+      individual true
     end
 
-    trait :singular do
-      collective false
+    trait :collective do
+      individual false
     end
 
     trait :with_draft_post do
@@ -114,7 +114,9 @@ FactoryBot.define do
       primary
 
       after(:create) do |creator|
-        create(:minimal_identity, creator: creator)
+        create(:minimal_identity, real_name: creator)
+
+        creator.reload
       end
     end
 
@@ -123,8 +125,10 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [evaluator.pseudonyms].flatten.each do |pseudonym|
-          create(:minimal_identity, creator: creator, pseudonym: pseudonym)
+          create(:minimal_identity, real_name: creator, pseudonym: pseudonym)
         end
+
+        creator.reload
       end
     end
 
@@ -132,7 +136,7 @@ FactoryBot.define do
       collective
 
       memberships_attributes { {
-        "0" => { "member_id" => create(:musician, :singular).id }
+        "0" => { "member_id" => create(:musician, :individual).id }
       } }
     end
 
@@ -140,7 +144,9 @@ FactoryBot.define do
       collective
 
       after(:create) do |creator|
-        create(:minimal_membership, creator: creator)
+        create(:minimal_membership, group: creator)
+
+        creator.reload
       end
     end
 
@@ -149,8 +155,10 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [evaluator.members].flatten.each do |member|
-          create(:minimal_membership, creator: creator, member: member)
+          create(:minimal_membership, group: creator, member: member)
         end
+
+        creator.reload
       end
     end
 
@@ -216,13 +224,13 @@ FactoryBot.define do
 
     factory :kate_bush do
       primary
-      singular
+      individual
       name "Kate Bush"
     end
 
     factory :wolfgang_voigt do
       primary
-      singular
+      individual
       name "Wolfgang Voigt"
 
       factory :wolfgang_voigt_with_pseudonyms do
@@ -236,43 +244,43 @@ FactoryBot.define do
 
     factory :gas do
       secondary
-      singular
+      individual
       name "Gas"
     end
 
     factory :dbx do
       secondary
-      singular
+      individual
       name "DBX"
     end
 
     factory :the_kooky_scientist do
       secondary
-      singular
+      individual
       name "The Kooky Scientist"
     end
 
     factory :plastikman do
       secondary
-      singular
+      individual
       name "Plastikman"
     end
 
     factory :fuse do
       secondary
-      singular
+      individual
       name "F.U.S.E."
     end
 
     factory :robotman do
       secondary
-      singular
+      individual
       name "Robotman"
     end
 
     factory :richie_hawtin do
       primary
-      singular
+      individual
       name "Richie Hawtin"
 
       factory :richie_hawtin_with_pseudonyms do
@@ -286,7 +294,7 @@ FactoryBot.define do
 
     factory :dan_bell do
       primary
-      singular
+      individual
       name "Dan Bell"
 
       factory :dan_bell_with_pseudonyms do
@@ -300,7 +308,7 @@ FactoryBot.define do
 
     factory :fred_giannelli do
       primary
-      singular
+      individual
       name "Fred Giannelli"
 
       factory :fred_giannelli_with_pseudonyms do
@@ -328,31 +336,31 @@ FactoryBot.define do
 
     factory :stevie_nicks do
       primary
-      singular
+      individual
       name "Stevie Nicks"
     end
 
     factory :lindsay_buckingham do
       primary
-      singular
+      individual
       name "Lindsay Buckingham"
     end
 
     factory :christine_mcvie do
       primary
-      singular
+      individual
       name "Christine McVie"
     end
 
     factory :john_mcvie do
       primary
-      singular
+      individual
       name "John McVie"
     end
 
     factory :mick_fleetwood do
       primary
-      singular
+      individual
       name "Mick Fleetwood"
     end
 
