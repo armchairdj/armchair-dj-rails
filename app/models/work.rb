@@ -85,9 +85,8 @@ class Work < ApplicationRecord
 
   # Credits.
 
-  accepts_nested_attributes_for :credits,
-    allow_destroy: true,
-    reject_if:     proc { |attrs| attrs["creator_id"].blank? }
+  accepts_nested_attributes_for :credits, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_credits
     count_needed = MAX_CREDITS - self.credits.length
@@ -97,9 +96,8 @@ class Work < ApplicationRecord
 
   # Contributions.
 
-  accepts_nested_attributes_for :contributions,
-    allow_destroy: true,
-    reject_if:     proc { |attrs| attrs["creator_id"].blank? }
+  accepts_nested_attributes_for :contributions, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["creator_id"].blank? }
 
   def prepare_contributions
     count_needed = MAX_CONTRIBUTIONS - self.contributions.length

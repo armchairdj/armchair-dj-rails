@@ -8,8 +8,11 @@ class Creator < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
-  MAX_NEW_IDENTITIES  = 5.freeze
-  MAX_NEW_MEMBERSHIPS = 5.freeze
+  MAX_PSEUDONYMS_AT_ONCE  = 5.freeze
+  MAX_REAL_NAMES          = 1.freeze
+
+  MAX_MEMBERS_AT_ONCE     = 5.freeze
+  MAX_GROUPS_AT_ONCE      = 5.freeze
 
   #############################################################################
   # CONCERNS.
@@ -25,32 +28,30 @@ class Creator < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.available_pseudonyms_for(creator)
-    available_pseudonyms.union_all(creator.pseudonyms)
-  end
+  # Nothing so far.
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :primary,   -> { where(primary: true ) }
-  scope :secondary, -> { where(primary: false) }
-
+  scope :primary,    -> { where(primary: true    ) }
+  scope :secondary,  -> { where(primary: false   ) }
   scope :collective, -> { where(collective: true ) }
   scope :singular,   -> { where(collective: false) }
 
-  scope :eager, -> { includes(:pseudonyms, :members) }
+  scope :orphaned, -> { left_outer_joins(:inverse_identities).where(identities: { id: nil } ) }
+
+  scope :available_members,    -> { alphabetical.singular           }
+  scope :available_groups,     -> { alphabetical.plural             }
+  scope :available_pseudonyms, -> { alphabetical.secondary.orphaned }
+  scope :available_real_names, -> { alphabetical.primary            }
+
+  scope :eager, -> { includes(:pseudonyms, :real_names, :members, :groups, :credits, :works, :posts) }
 
   scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
 
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.includes(:posts).alphabetical }
-
-  scope :available_members,    -> { singular.alphabetical }
-
-  scope :available_pseudonyms, -> {
-    secondary.left_outer_joins(:reverse_identities).where(identities: { id: nil }).alphabetical
-  }
+  scope :for_site,  -> { eager.viewable.alphabetical }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -65,34 +66,24 @@ class Creator < ApplicationRecord
   # Contributions.
 
   has_many :contributions, dependent: :destroy
-  has_many :contributed_works, through: :contributions,
-    class_name: "Work", source: :work
-  has_many :contributed_posts, through: :contributed_works,
-    class_name: "Post", source: :post
+  has_many :contributed_works, through: :contributions,     class_name: "Work", source: :work
+  has_many :contributed_posts, through: :contributed_works, class_name: "Post", source: :post
 
   # Identities.
 
-  has_many :identities,         foreign_key:   :creator_id, dependent: :destroy
-  has_many :reverse_identities, foreign_key: :pseudonym_id, dependent: :destroy,
-    class_name: "Identity"
+  has_many         :identities, foreign_key:   :creator_id, dependent: :destroy
+  has_many :inverse_identities, foreign_key: :pseudonym_id, dependent: :destroy, class_name: "Identity"
 
-  has_many :pseudonyms, -> { order("creators.name") },
-    through: :identities,         class_name: "Creator", source: :pseudonym
-
-  has_many :real_identities, -> { order("creators.name") },
-    through: :reverse_identities, class_name: "Creator", source: :creator
+  has_many      :pseudonyms, -> { order("creators.name") }, through:         :identities, class_name: "Creator", source: :pseudonym
+  has_many :real_names, -> { order("creators.name") }, through: :inverse_identities, class_name: "Creator", source: :creator
 
   # Memberships.
 
-  has_many :memberships,         foreign_key: :creator_id, dependent: :destroy
-  has_many :reverse_memberships, foreign_key:  :member_id, dependent: :destroy,
-    class_name: "Membership"
+  has_many         :memberships, foreign_key: :creator_id, dependent: :destroy
+  has_many :inverse_memberships, foreign_key:  :member_id, dependent: :destroy, class_name: "Membership"
 
-  has_many :members, -> { order("creators.name") },
-    through: :memberships,         class_name: "Creator", source: :member
-
-  has_many :groups,  -> { order("creators.name") },
-    through: :reverse_memberships, class_name: "Creator", source: :creator
+  has_many :members, -> { order("creators.name") }, through:         :memberships, class_name: "Creator", source: :member
+  has_many  :groups, -> { order("creators.name") }, through: :inverse_memberships, class_name: "Creator", source: :creator
 
   #############################################################################
   # ATTRIBUTES.
@@ -100,45 +91,65 @@ class Creator < ApplicationRecord
 
   # Identities.
 
-  accepts_nested_attributes_for :identities,
-    allow_destroy: true,
-    reject_if:     proc { |attrs| attrs["pseudonym_id"].blank? }
+  accepts_nested_attributes_for :identities, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["pseudonym_id"].blank? }
 
   def prepare_identities
-    count_needed = MAX_NEW_IDENTITIES + self.identities.length
+    count_needed = MAX_PSEUDONYMS_AT_ONCE + self.identities.length
 
     count_needed.times { self.identities.build }
+  end
+
+  accepts_nested_attributes_for :inverse_identities, allow_destroy: true,
+    reject_if:  proc { |attrs| attrs["creator_id"].blank? }
+
+  def prepare_inverse_identities
+    count_needed = MAX_REAL_NAMES - self.real_names.length
+
+    count_needed.times { self.inverse_identities.build }
   end
 
   def secondary?
     !primary?
   end
 
+  def real_name
+    real_names.first
+  end
+
   def personae
     return pseudonyms if primary?
 
-    return self.class.none unless real_identity
+    return self.class.none unless real_name
 
-    aliases = real_identity.pseudonyms.where.not(id: self.id)
-    parent  = self.class.where(id: real_identity.id)
+    aliases = real_name.pseudonyms.where.not(id: self.id)
+    parent  = self.class.where(id: real_name.id)
 
     aliases.union_all(parent).alphabetical
   end
 
-  def real_identity
-    real_identities.first
+  def available_pseudonyms
+    self.class.available_pseudonyms.union_all(self.pseudonyms).alphabetical
   end
 
   # Memberships.
 
-  accepts_nested_attributes_for :memberships,
-    allow_destroy: true,
-    reject_if:     proc { |attrs| attrs["member_id"].blank? }
+  accepts_nested_attributes_for :memberships, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["member_id"].blank? }
 
   def prepare_memberships
-    count_needed = MAX_NEW_MEMBERSHIPS + self.memberships.length
+    count_needed = MAX_MEMBERS_AT_ONCE + self.memberships.length
 
     count_needed.times { self.memberships.build }
+  end
+
+  accepts_nested_attributes_for :inverse_memberships, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["creator_id"].blank? }
+
+  def prepare_inverse_memberships
+    count_needed = MAX_GROUPS_AT_ONCE + self.groups.length
+
+    count_needed.times { self.inverse_memberships.build }
   end
 
   def singular?
@@ -166,25 +177,29 @@ class Creator < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  before_save :handle_identities
+  before_validation :enforce_primariness
 
-  def handle_identities
-    return if self.primary?
-
-    self.identities.destroy_all
+  def enforce_primariness
+    if self.primary?
+      self.real_names.destroy_all
+    else
+      self.identities.destroy_all
+    end
   end
 
-  private :handle_identities
+  private :enforce_primariness
 
-  after_save :handle_memberships
+  before_validation :enforce_collectiveness
 
-  def handle_memberships
-    return if self.collective?
-
-    self.memberships.destroy_all
+  def enforce_collectiveness
+    if self.collective?
+      self.groups.destroy_all
+    else
+      self.memberships.destroy_all
+    end
   end
 
-  private :handle_memberships
+  private :enforce_collectiveness
 
   #############################################################################
   # INSTANCE.
@@ -220,10 +235,7 @@ class Creator < ApplicationRecord
 
   def roles_by_medium
     self.contributions_by_medium.reduce([]) do |memo, (key, val)|
-      memo << {
-        medium: key,
-        roles: val.map { |h| h[:role] }.uniq.sort
-      }
+      memo << { medium: key, roles: val.map { |h| h[:role] }.uniq.sort }
 
       memo
     end

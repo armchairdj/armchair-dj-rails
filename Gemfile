@@ -154,8 +154,7 @@ gem "devise"
 
 # Authorization framework.
 # gem "pundit", path: "/Users/armchairdj/Sites/personal/pundit"
-gem "pundit", git: "https://github.com/armchairdj/pundit",
-  ref: "a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d"
+gem "pundit", git: "https://github.com/armchairdj/pundit", ref: "a2b2cda8f0bfe073ae89f0e70780a3b8c3cdc45d"
 
 ###############################################################################
 # DEPLOYMENT.
@@ -205,6 +204,7 @@ group :development, :test do
 
   # RSpec + plugins
   gem "rspec-rails"
+  gem "rspec-collection_matchers"
   gem "rspec-html-matchers"
   gem "shoulda-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up

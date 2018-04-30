@@ -143,7 +143,10 @@ private
     @creator.prepare_identities
     @creator.prepare_memberships
 
+    @available_pseudonyms = @creator.available_pseudonyms
+    @available_real_names = @creator.available_real_names
+
     @available_members    = Creator.available_members
-    @available_pseudonyms = Creator.available_pseudonyms_for(@creator)
+    @available_groups     = Creator.available_groups
   end
 end

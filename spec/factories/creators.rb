@@ -220,12 +220,12 @@ FactoryBot.define do
       name "Kate Bush"
     end
 
-    factory :volfgang_voigt do
+    factory :wolfgang_voigt do
       primary
       singular
       name "Wolfgang Voigt"
 
-      factory :volfgang_voigt_with_pseudonyms do
+      factory :wolfgang_voigt_with_pseudonyms do
         transient do
           pseudonyms { [create(:gas) ] }
         end

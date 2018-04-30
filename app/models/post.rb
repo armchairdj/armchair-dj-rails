@@ -81,9 +81,8 @@ class Post < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
-  accepts_nested_attributes_for :work,
-    allow_destroy: false,
-    reject_if:     proc { |attrs| attrs["title"].blank? }
+  accepts_nested_attributes_for :work, allow_destroy: false,
+    reject_if: proc { |attrs| attrs["title"].blank? }
 
   enum status: {
     draft:      0,

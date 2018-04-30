@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe Creator, type: :model do
   context "constants" do
-    specify { expect(described_class).to have_constant(:MAX_NEW_IDENTITIES ) }
-    specify { expect(described_class).to have_constant(:MAX_NEW_MEMBERSHIPS) }
+    specify { expect(described_class).to have_constant(:MAX_PSEUDONYMS_AT_ONCE ) }
+    specify { expect(described_class).to have_constant(:MAX_MEMBERS_AT_ONCE) }
   end
 
   context "concerns" do
@@ -36,20 +36,33 @@ RSpec.describe Creator, type: :model do
         pending "#secondary?"
       end
 
-      describe "self#available_pseudonyms" do
+      context "collections" do
         let!(    :richie) { create(:richie_hawtin) }
         let!(  :robotman) { create(:robotman     ) }
         let!(:plastikman) { create(:plastikman   ) }
         let!(      :fuse) { create(:fuse         ) }
         let!(       :gas) { create(:gas          ) }
-        let!( :identity ) { create(:minimal_identity, creator: richie, pseudonym: fuse) }
+        let!(  :identity) { create(:minimal_identity, creator: richie, pseudonym: fuse) }
 
-        specify "excludes used pseudonyms and alphabetizes" do
-           expect(described_class.available_pseudonyms.to_a).to eq([
-             gas,
-             plastikman,
-             robotman
-           ])
+        describe "self#available_pseudonyms" do
+          specify "excludes used pseudonyms and alphabetizes" do
+             expect(described_class.available_pseudonyms.to_a).to eq([
+               gas,
+               plastikman,
+               robotman
+             ])
+          end
+        end
+
+        describe "#available_pseudonyms" do
+          specify "includes own pseudonyms" do
+             expect(richie.available_pseudonyms.to_a).to eq([
+               fuse,
+               gas,
+               plastikman,
+               robotman
+             ])
+          end
         end
       end
     end
@@ -65,23 +78,25 @@ RSpec.describe Creator, type: :model do
         pending "#singular?"
       end
 
-      describe "self#available_members" do
-        let!(      :band) { create(:fleetwood_mac     ) }
-        let!(    :stevie) { create(:stevie_nicks      ) }
-        let!(   :lindsay) { create(:lindsay_buckingham) }
-        let!( :christine) { create(:christine_mcvie   ) }
-        let!(      :mick) { create(:mick_fleetwood    ) }
-        let!(      :john) { create(:john_mcvie        ) }
-        let!(:membership) { create(:minimal_membership, creator: band, member: christine) }
+      context "collections" do
+        describe "self#available_members" do
+          let!(      :band) { create(:fleetwood_mac     ) }
+          let!(    :stevie) { create(:stevie_nicks      ) }
+          let!(   :lindsay) { create(:lindsay_buckingham) }
+          let!( :christine) { create(:christine_mcvie   ) }
+          let!(      :mick) { create(:mick_fleetwood    ) }
+          let!(      :john) { create(:john_mcvie        ) }
+          let!(:membership) { create(:minimal_membership, creator: band, member: christine) }
 
-        specify "includes even used members and alphabetizes" do
-           expect(described_class.available_members.to_a).to eq([
-             christine,
-             john,
-             lindsay,
-             mick,
-             stevie,
-           ])
+          specify "includes even used members and alphabetizes" do
+             expect(described_class.available_members.to_a).to eq([
+               christine,
+               john,
+               lindsay,
+               mick,
+               stevie,
+             ])
+          end
         end
       end
     end
@@ -121,16 +136,16 @@ RSpec.describe Creator, type: :model do
     it { should have_many(:contributed_posts).through(:contributed_works) }
 
     it { should have_many(        :identities) }
-    it { should have_many(:reverse_identities) }
+    it { should have_many(:inverse_identities) }
 
     it { should have_many(:pseudonyms).through(        :identities).order("creators.name") }
-    it { should have_many(:real_identities).through(:reverse_identities).order("creators.name") }
+    it { should have_many(:real_names).through(:inverse_identities).order("creators.name") }
 
     it { should have_many(        :memberships) }
-    it { should have_many(:reverse_memberships) }
+    it { should have_many(:inverse_memberships) }
 
     it { should have_many(:members).through(        :memberships).order("creators.name") }
-    it { should have_many( :groups).through(:reverse_memberships).order("creators.name") }
+    it { should have_many( :groups).through(:inverse_memberships).order("creators.name") }
   end
 
   context "attributes" do
@@ -167,33 +182,35 @@ RSpec.describe Creator, type: :model do
   end
 
   context "hooks" do
-    pending "#handle_identities"
-    pending "#handle_memberships"
+    pending "#enforce_primariness"
+    pending "#enforce_collectiveness"
   end
 
   context "instance" do
     context "identities" do
-      describe "#personae, #identities, #pseudonyms, #reverse_identities, #real_identities & #personae" do
+      describe "#identities, #pseudonyms, #inverse_identities, #real_names, #real_name & #personae" do
         context "without identities" do
           let!(:kate_bush) { create(:kate_bush) }
           let!(      :gas) { create(:gas      ) }
 
           specify "primary" do
-            expect(kate_bush.identities.length        ).to eq(0)
-            expect(kate_bush.pseudonyms.length        ).to eq(0)
-            expect(kate_bush.reverse_identities.length).to eq(0)
-            expect(kate_bush.real_identities.length   ).to eq(0)
-            expect(kate_bush.personae.length          ).to eq(0)
-            expect(kate_bush.personae                 ).to eq(Creator.none)
+            expect(kate_bush.identities        ).to eq(Identity.none)
+            expect(kate_bush.pseudonyms        ).to eq(Creator.none)
+            expect(kate_bush.personae          ).to eq(Creator.none)
+
+            expect(kate_bush.inverse_identities).to eq(Identity.none)
+            expect(kate_bush.real_names        ).to eq(Creator.none)
+            expect(kate_bush.real_name         ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(gas.identities.length        ).to eq(0)
-            expect(gas.pseudonyms.length        ).to eq(0)
-            expect(gas.reverse_identities.length).to eq(0)
-            expect(gas.real_identities.length   ).to eq(0)
-            expect(gas.personae.length          ).to eq(0)
-            expect(gas.personae                 ).to eq(Creator.none)
+            expect(gas.identities              ).to eq(Identity.none)
+            expect(gas.pseudonyms              ).to eq(Creator.none)
+            expect(gas.personae                ).to eq(Creator.none)
+
+            expect(gas.inverse_identities      ).to eq(Identity.none)
+            expect(gas.real_names              ).to eq(Creator.none)
+            expect(gas.real_name               ).to eq(nil)
           end
         end
 
@@ -203,106 +220,139 @@ RSpec.describe Creator, type: :model do
           let!(      :fuse) { described_class.find_by(name: "F.U.S.E."  ) }
 
           specify "primary" do
-            expect(richie.identities.length            ).to eq(2)
-            expect(richie.pseudonyms.length            ).to eq(2)
-            expect(richie.reverse_identities.length    ).to eq(0)
-            expect(richie.real_identities.length       ).to eq(0)
-            expect(richie.personae.length              ).to eq(2)
-            expect(richie.personae.to_a                ).to eq([fuse, plastikman])
+            expect(richie.identities            ).to have(2).items
+            expect(richie.pseudonyms.to_a       ).to eq([fuse, plastikman])
+            expect(richie.personae.to_a         ).to eq([fuse, plastikman])
+
+            expect(richie.inverse_identities    ).to eq(Identity.none)
+            expect(richie.real_names            ).to eq(Creator.none)
+            expect(richie.real_name             ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(plastikman.identities.length        ).to eq(0)
-            expect(plastikman.pseudonyms.length        ).to eq(0)
-            expect(plastikman.reverse_identities.length).to eq(1)
-            expect(plastikman.real_identities.length   ).to eq(1)
-            expect(plastikman.personae.length          ).to eq(2)
-            expect(plastikman.personae.to_a            ).to eq([fuse, richie])
+            expect(plastikman.identities        ).to eq(Identity.none)
+            expect(plastikman.pseudonyms.to_a   ).to eq([])
+            expect(plastikman.personae.to_a     ).to eq([fuse, richie])
 
-            expect(fuse.identities.length              ).to eq(0)
-            expect(fuse.pseudonyms.length              ).to eq(0)
-            expect(fuse.reverse_identities.length      ).to eq(1)
-            expect(fuse.real_identities.length         ).to eq(1)
-            expect(fuse.personae.length                ).to eq(2)
-            expect(fuse.personae.to_a                  ).to eq([plastikman, richie])
+            expect(plastikman.inverse_identities).to have(1).items
+            expect(plastikman.real_names.to_a   ).to eq([richie])
+            expect(plastikman.real_name         ).to eq(richie)
+
+            expect(fuse.identities              ).to eq(Identity.none)
+            expect(fuse.pseudonyms.to_a         ).to eq([])
+            expect(fuse.personae.to_a           ).to eq([plastikman, richie])
+
+            expect(fuse.inverse_identities      ).to have(1).items
+            expect(fuse.real_names.to_a         ).to eq([richie])
+            expect(fuse.real_name               ).to eq(richie)
           end
         end
       end
     end
 
     context "memberships" do
-      context "without members" do
-        let!(:band) { create(:spawn) }
+      describe "#memberships, #members, #inverse_memberships, #groups, #colleagues" do
+        context "without members" do
+          let!(:band) { create(:spawn         ) }
+          let!(:solo) { create(:wolfgang_voigt) }
 
-        specify "#members" do
-          expect(band.members).to eq([])
-        end
-      end
+          specify "collective" do
+            expect(band.memberships        ).to eq(Membership.none)
+            expect(band.members            ).to eq(Creator.none)
 
-      context "with a single band" do
-        let!(  :band) { create(:spawn_with_members) }
-        let!(:richie) { described_class.find_by(name: "Richie Hawtin" ) }
-        let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
-        let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
+            expect(band.inverse_memberships).to eq(Membership.none)
+            expect(band.groups             ).to eq(Creator.none)
+            expect(band.colleagues         ).to eq(Creator.none)
+          end
 
-        specify "#members" do
-          expect(band.members).to eq([dan, fred, richie])
-        end
+          specify "singular" do
+            expect(solo.memberships        ).to eq(Membership.none)
+            expect(solo.members            ).to eq(Creator.none)
 
-        specify "#groups" do
-          expect(richie.groups).to eq([band])
-          expect(  fred.groups).to eq([band])
-          expect(   dan.groups).to eq([band])
-        end
-
-        specify "#colleagues" do
-          expect(richie.colleagues.to_a).to eq([dan, fred   ])
-          expect(  fred.colleagues.to_a).to eq([dan, richie ])
-          expect(   dan.colleagues.to_a).to eq([fred, richie])
-        end
-      end
-
-      context "with multiple bands" do
-        let!(     :band) { create(:fleetwood_mac_with_members) }
-        let!(   :stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
-        let!(  :lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
-        let!(:christine) { described_class.find_by(name: "Christine McVie"   ) }
-        let!(     :mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
-        let!(     :john) { described_class.find_by(name: "John McVie"        ) }
-
-        let!(:imaginary) { create(:musician, :primary, name: "Imaginary") }
-
-        let!(:other_band) do
-          other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
-
-          create(:membership, creator: other_band, member: lindsay  )
-          create(:membership, creator: other_band, member: stevie   )
-          create(:membership, creator: other_band, member: imaginary)
-
-          other_band
+            expect(solo.inverse_memberships).to eq(Membership.none)
+            expect(solo.groups             ).to eq(Creator.none)
+            expect(solo.colleagues         ).to eq(Creator.none)
+          end
         end
 
-        specify "#members" do
-          expect(      band.members).to eq([christine, john, lindsay, mick, stevie])
-          expect(other_band.members).to eq([imaginary, lindsay, stevie            ])
+        context "with a single band" do
+          let!(  :band) { create(:spawn_with_members) }
+          let!(:richie) { described_class.find_by(name: "Richie Hawtin" ) }
+          let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
+          let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
+
+          specify "collective" do
+            expect(band.memberships        ).to have(3).items
+            expect(band.members.to_a       ).to eq([dan, fred, richie])
+
+            expect(band.inverse_memberships).to eq(Membership.none)
+            expect(band.groups             ).to eq(Creator.none)
+            expect(band.colleagues         ).to eq(Creator.none)
+          end
+
+          specify "singular" do
+            expect(richie.memberships        ).to eq(Membership.none)
+            expect(richie.members            ).to eq(Creator.none)
+            expect(richie.inverse_memberships).to have(1).items
+            expect(richie.groups             ).to eq([band])
+            expect(richie.colleagues.to_a    ).to eq([dan, fred])
+
+            expect(fred.memberships          ).to eq(Membership.none)
+            expect(fred.members              ).to eq(Creator.none)
+            expect(fred.inverse_memberships  ).to have(1).items
+            expect(fred.groups               ).to eq([band])
+            expect(fred.colleagues.to_a      ).to eq([dan, richie])
+
+            expect(dan.memberships           ).to eq(Membership.none)
+            expect(dan.members               ).to eq(Creator.none)
+            expect(dan.inverse_memberships   ).to have(1).items
+            expect(dan.groups                ).to eq([band])
+            expect(dan.colleagues.to_a       ).to eq([fred, richie])
+          end
         end
 
-        specify "#groups" do
-          expect(christine.groups).to eq([            band])
-          expect(imaginary.groups).to eq([other_band      ])
-          expect(     john.groups).to eq([            band])
-          expect(  lindsay.groups).to eq([other_band, band])
-          expect(     mick.groups).to eq([            band])
-          expect(   stevie.groups).to eq([other_band, band])
-        end
+        context "with multiple bands" do
+          let!(     :band) { create(:fleetwood_mac_with_members) }
+          let!(   :stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
+          let!(  :lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
+          let!(:christine) { described_class.find_by(name: "Christine McVie"   ) }
+          let!(     :mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
+          let!(     :john) { described_class.find_by(name: "John McVie"        ) }
 
-        specify "#colleagues" do
-          expect(christine.colleagues.to_a).to eq([                      john, lindsay, mick, stevie])
-          expect(imaginary.colleagues.to_a).to eq([                            lindsay,       stevie])
-          expect(     john.colleagues.to_a).to eq([christine,                  lindsay, mick, stevie])
-          expect(  lindsay.colleagues.to_a).to eq([christine, imaginary, john,          mick, stevie])
-          expect(     mick.colleagues.to_a).to eq([christine,            john, lindsay,       stevie])
-          expect(   stevie.colleagues.to_a).to eq([christine, imaginary, john, lindsay, mick        ])
+          let!(:imaginary) { create(:musician, :primary, name: "Imaginary") }
+
+          let!(:other_band) do
+            other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
+
+            create(:membership, creator: other_band, member: lindsay  )
+            create(:membership, creator: other_band, member: stevie   )
+            create(:membership, creator: other_band, member: imaginary)
+
+            other_band
+          end
+
+          specify "#members" do
+            expect(      band.members).to eq([christine, john, lindsay, mick, stevie])
+            expect(other_band.members).to eq([imaginary, lindsay, stevie            ])
+          end
+
+          specify "#groups" do
+            expect(christine.groups).to eq([            band])
+            expect(imaginary.groups).to eq([other_band      ])
+            expect(     john.groups).to eq([            band])
+            expect(  lindsay.groups).to eq([other_band, band])
+            expect(     mick.groups).to eq([            band])
+            expect(   stevie.groups).to eq([other_band, band])
+          end
+
+          specify "#colleagues" do
+            expect(christine.colleagues.to_a).to eq([                      john, lindsay, mick, stevie])
+            expect(imaginary.colleagues.to_a).to eq([                            lindsay,       stevie])
+            expect(     john.colleagues.to_a).to eq([christine,                  lindsay, mick, stevie])
+            expect(  lindsay.colleagues.to_a).to eq([christine, imaginary, john,          mick, stevie])
+            expect(     mick.colleagues.to_a).to eq([christine,            john, lindsay,       stevie])
+            expect(   stevie.colleagues.to_a).to eq([christine, imaginary, john, lindsay, mick        ])
+          end
         end
       end
     end
