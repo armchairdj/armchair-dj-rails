@@ -124,38 +124,38 @@ private
       :summary,
       :primary,
       :individual,
-      :identities_attributes => [
-        :creator_id,
+      :pseudonym_identities_attributes => [
         :id,
         :_destroy,
+        :real_name_id,
         :pseudonym_id
       ],
-      :inverse_identities_attributes => [
-        :creator_id,
+      :real_name_identities_attributes => [
         :id,
         :_destroy,
-        :pseudonym_id
+        :pseudonym_id,
+        :real_name_id
       ],
-      :memberships_attributes => [
-        :creator_id,
+      :member_memberships_attributes => [
         :id,
         :_destroy,
+        :group_id,
         :member_id
       ],
-      :inverse_memberships_attributes => [
-        :creator_id,
+      :group_memberships_attributes => [
         :id,
         :_destroy,
-        :member_id
+        :member_id,
+        :group_id
       ]
     )
   end
 
   def prepare_form
-    @creator.prepare_identities
-    @creator.prepare_inverse_identities
-    @creator.prepare_memberships
-    @creator.prepare_inverse_memberships
+    @creator.prepare_pseudonym_identities
+    @creator.prepare_real_name_identities
+    @creator.prepare_member_memberships
+    @creator.prepare_group_memberships
 
     @available_pseudonyms = @creator.available_pseudonyms
     @available_real_names = Creator.available_real_names

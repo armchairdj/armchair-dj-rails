@@ -39,25 +39,21 @@ class Identity < ApplicationRecord
   validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
   validates :pseudonym_id, uniqueness: true
 
-  validate { real_name_is_primary }
-
   def real_name_is_primary
-    return if real_name.try(:primary?)
-
-    self.errors.add :real_name_id, :not_primary
+    self.errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
   end
 
   private :real_name_is_primary
 
-  validate { pseudonym_is_secondary }
+  validate { real_name_is_primary }
 
   def pseudonym_is_secondary
-    return if pseudonym.try(:secondary?)
-
-    self.errors.add :pseudonym_id, :not_secondary
+    self.errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
   end
 
   private :pseudonym_is_secondary
+
+  validate { pseudonym_is_secondary }
 
   #############################################################################
   # HOOKS.

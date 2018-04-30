@@ -34,12 +34,12 @@ class Creator < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :primary,    -> { where(primary:  true ) }
-  scope :secondary,  -> { where(primary:  false) }
-  scope :individual, -> { where(individual: true ) }
+  scope :primary,    -> { where(primary:     true) }
+  scope :secondary,  -> { where(primary:    false) }
+  scope :individual, -> { where(individual:  true) }
   scope :collective, -> { where(individual: false) }
 
-  scope :orphaned, -> { left_outer_joins(:inverse_identities).where(identities: { id: nil } ) }
+  scope :orphaned, -> { left_outer_joins(:real_name_identities).where(identities: { id: nil } ) }
 
   scope :available_groups,     -> { alphabetical.collective         }
   scope :available_members,    -> { alphabetical.individual         }
@@ -71,42 +71,66 @@ class Creator < ApplicationRecord
 
   # Identities.
 
-  has_many         :identities, dependent: :destroy, inverse_of: :real_name, foreign_key: :real_name_id
-  has_many :inverse_identities, dependent: :destroy, inverse_of: :pseudonym, foreign_key: :pseudonym_id, class_name: "Identity"
+  has_many :pseudonym_identities, class_name: "Identity", dependent: :destroy, foreign_key: :real_name_id, inverse_of: :real_name
+  has_many :real_name_identities, class_name: "Identity", dependent: :destroy, foreign_key: :pseudonym_id, inverse_of: :pseudonym
 
-  has_many :pseudonyms, -> { order("creators.name") }, through:         :identities, source: :pseudonym
-  has_many :real_names, -> { order("creators.name") }, through: :inverse_identities, source: :real_name
+  has_many :pseudonyms, -> { order("creators.name") }, through: :pseudonym_identities, source: :pseudonym
+  has_many :real_names, -> { order("creators.name") }, through: :real_name_identities, source: :real_name
 
   # Memberships.
 
-  has_many         :memberships, dependent: :destroy, inverse_of: :group,  foreign_key: :group_id
-  has_many :inverse_memberships, dependent: :destroy, inverse_of: :member, foreign_key: :member_id, class_name: "Membership"
+  has_many :member_memberships, class_name: "Membership", dependent: :destroy, foreign_key: :group_id,  inverse_of: :group
+  has_many :group_memberships,  class_name: "Membership", dependent: :destroy, foreign_key: :member_id, inverse_of: :member
 
-  has_many :members, -> { order("creators.name") }, through:         :memberships, source: :member
-  has_many  :groups, -> { order("creators.name") }, through: :inverse_memberships, source: :group
+  has_many :members, -> { order("creators.name") }, through: :member_memberships, source: :member
+  has_many  :groups, -> { order("creators.name") }, through: :group_memberships,  source: :group
 
   #############################################################################
-  # ATTRIBUTES.
+  # ATTRIBUTES: pseudonym_identities
   #############################################################################
 
-  # Identities.
+  accepts_nested_attributes_for :pseudonym_identities, allow_destroy: true,
+    reject_if: :blank_or_primary?
 
-  accepts_nested_attributes_for :identities, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["pseudonym_id"].blank? }
+  def blank_or_primary?(attrs)
+    key = attrs["pseudonym_id"]
 
-  def prepare_identities
-    count_needed = MAX_PSEUDONYMS_AT_ONCE + self.identities.length
-
-    count_needed.times { self.identities.build }
+    return true if key.blank?
+    return true if self.class.find(key).primary?
   end
 
-  accepts_nested_attributes_for :inverse_identities, allow_destroy: true,
-    reject_if:  proc { |attrs| attrs["creator_id"].blank? }
+  private :blank_or_primary?
 
-  def prepare_inverse_identities
-    count_needed = MAX_REAL_NAMES - self.inverse_identities.length
+  def prepare_pseudonym_identities
+    count_needed = MAX_PSEUDONYMS_AT_ONCE
 
-    count_needed.times { self.inverse_identities.build }
+    count_needed.times { self.pseudonym_identities.build }
+  end
+
+  def available_pseudonyms
+    self.class.available_pseudonyms.union_all(self.pseudonyms).alphabetical
+  end
+
+  #############################################################################
+  # ATTRIBUTES: real_name_identities
+  #############################################################################
+
+  accepts_nested_attributes_for :real_name_identities, allow_destroy: true,
+    reject_if: :blank_or_secondary?
+
+  def blank_or_secondary?(attrs)
+    key = attrs["real_name_id"]
+
+    return true if key.blank?
+    return true if self.class.find(key).secondary?
+  end
+
+  private :blank_or_secondary?
+
+  def prepare_real_name_identities
+    count_needed = MAX_REAL_NAMES - self.real_name_identities.length
+
+    count_needed.times { self.real_name_identities.build }
   end
 
   def secondary?
@@ -128,28 +152,48 @@ class Creator < ApplicationRecord
     aliases.union_all(parent).alphabetical
   end
 
-  def available_pseudonyms
-    self.class.available_pseudonyms.union_all(self.pseudonyms).alphabetical
+  #############################################################################
+  # ATTRIBUTES: member_memberships
+  #############################################################################
+
+  accepts_nested_attributes_for :member_memberships, allow_destroy: true,
+    reject_if: :blank_or_collective?
+
+  def blank_or_collective?(attrs)
+    key = attrs["member_id"]
+
+    return true if key.blank?
+    return true if self.class.find(key).collective?
   end
 
-  # Memberships.
+  private :blank_or_collective?
 
-  accepts_nested_attributes_for :memberships, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["member_id"].blank? }
+  def prepare_member_memberships
+    count_needed = MAX_MEMBERS_AT_ONCE
 
-  def prepare_memberships
-    count_needed = MAX_MEMBERS_AT_ONCE + self.memberships.length
-
-    count_needed.times { self.memberships.build }
+    count_needed.times { self.member_memberships.build }
   end
 
-  accepts_nested_attributes_for :inverse_memberships, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["creator_id"].blank? }
+  #############################################################################
+  # ATTRIBUTES: group_memberships
+  #############################################################################
 
-  def prepare_inverse_memberships
-    count_needed = MAX_GROUPS_AT_ONCE + self.inverse_memberships.length
+  accepts_nested_attributes_for :group_memberships, allow_destroy: true,
+    reject_if: :blank_or_individual?
 
-    count_needed.times { self.inverse_memberships.build }
+  def blank_or_individual?(attrs)
+    key = attrs["group_id"]
+
+    return true if key.blank?
+    return true if self.class.find(key).individual?
+  end
+
+  private :blank_or_individual?
+
+  def prepare_group_memberships
+    count_needed = MAX_GROUPS_AT_ONCE
+
+    count_needed.times { self.group_memberships.build }
   end
 
   def collective?
@@ -177,27 +221,27 @@ class Creator < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  before_validation :enforce_primariness
-
   def enforce_primariness
     if self.primary?
-      self.inverse_identities.destroy_all
+      self.real_name_identities.destroy_all
     else
-      self.identities.destroy_all
+      self.pseudonym_identities.destroy_all
     end
   end
+
+  after_save :enforce_primariness
 
   private :enforce_primariness
 
-  before_validation :enforce_individuality
-
   def enforce_individuality
     if self.individual?
-      self.inverse_memberships.destroy_all
+      self.group_memberships.destroy_all
     else
-      self.memberships.destroy_all
+      self.member_memberships.destroy_all
     end
   end
+
+  after_save :enforce_individuality
 
   private :enforce_individuality
 

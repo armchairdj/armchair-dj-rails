@@ -27,15 +27,75 @@ RSpec.describe Creator, type: :model do
   end
 
   context "scope-related" do
-    context "identities" do
-      context "scopes" do
-        pending "self#primary"
-        pending "self#secondary"
+    context "basics" do
+      let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
+      let!(:amy_1  ) { create(:creator, name: "amy winehouse") }
+      let!(:kate   ) { create(:creator, name: "Kate Bush") }
+      let!(:amy_2  ) { create(:creator, name: "Amy Wino") }
+      let!(:anthony) { create(:creator, name: "Anthony Childs") }
+      let!(:zero   ) { create(:creator, name: "0773") }
+
+      before(:each) do
+        create(:review_without_work, :published, "work_attributes" => attributes_for(:work_without_credits).merge({
+          "credits_attributes" => { "0" => { "creator_id" => amy_1.id } }
+        }))
+
+        create(:review_without_work, :published, "work_attributes" => attributes_for(:work_without_credits).merge({
+          "credits_attributes" => { "0" => { "creator_id" => zero.id } }
+        }))
+
+        create(:review_without_work, :draft, "work_attributes" => attributes_for(:work_without_credits).merge({
+          "credits_attributes" => { "0" => { "creator_id" => kate.id } }
+        }))
       end
 
-      context "booleans" do
-        pending "#primary?"
-        pending "#secondary?"
+      describe "self#for_admin" do
+        specify "includes all creators, unsorted" do
+          expect(described_class.for_admin).to match_array([
+            amy_2, anthony, kate, zorro, zero, amy_1
+          ])
+        end
+      end
+
+      describe "self#for_site" do
+        specify "includes only creators with published posts, sorted alphabetically" do
+          expect(described_class.for_site).to eq([zero, amy_1])
+        end
+      end
+
+      describe "self#alphabetical" do
+        specify "sorts alphabetically" do
+          expect(described_class.alphabetical).to eq([
+            zero, amy_1, amy_2, anthony, kate, zorro
+          ])
+        end
+      end
+
+      pending "eager"
+    end
+
+    context "identities" do
+      context "scopes and booleans" do
+        let!(  :primary) { create(  :primary_creator) }
+        let!(:secondary) { create(:secondary_creator) }
+
+        specify "self#primary" do
+          expect(described_class.primary).to eq([primary])
+        end
+
+        specify "self#secondary" do
+          expect(described_class.secondary).to eq([secondary])
+        end
+
+        specify "#primary?" do
+          expect(  primary.primary?).to eq(true)
+          expect(secondary.primary?).to eq(false)
+        end
+
+        specify "#secondary?" do
+          expect(  primary.secondary?).to eq(false)
+          expect(secondary.secondary?).to eq(true)
+        end
       end
 
       context "collections" do
@@ -48,7 +108,7 @@ RSpec.describe Creator, type: :model do
 
         describe "self#available_pseudonyms" do
           specify "excludes used pseudonyms and alphabetizes" do
-             expect(described_class.available_pseudonyms.to_a).to eq([
+             expect(described_class.available_pseudonyms).to eq([
                gas,
                plastikman,
                robotman
@@ -58,7 +118,7 @@ RSpec.describe Creator, type: :model do
 
         describe "#available_pseudonyms" do
           specify "includes own pseudonyms" do
-             expect(richie.available_pseudonyms.to_a).to eq([
+             expect(richie.available_pseudonyms).to eq([
                fuse,
                gas,
                plastikman,
@@ -70,14 +130,27 @@ RSpec.describe Creator, type: :model do
     end
 
     context "memberships" do
-      context "scopes" do
-        pending "self#individual"
-        pending "self#collective"
-      end
+      context "scopes and booleans" do
+        let!(:individual) { create(:individual_creator) }
+        let!(:collective) { create(:collective_creator) }
 
-      context "booleans" do
-        pending "#individual?"
-        pending "#collective?"
+        specify "self#individual" do
+          expect(described_class.individual).to eq([individual])
+        end
+
+        specify "self#collective" do
+          expect(described_class.collective).to eq([collective])
+        end
+
+        specify "#individual?" do
+          expect(individual.individual?).to eq(true)
+          expect(collective.individual?).to eq(false)
+        end
+
+        specify "#collective?" do
+          expect(individual.collective?).to eq(false)
+          expect(collective.collective?).to eq(true)
+        end
       end
 
       context "collections" do
@@ -91,7 +164,7 @@ RSpec.describe Creator, type: :model do
           let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
           specify "includes even used members and alphabetizes" do
-             expect(described_class.available_members.to_a).to eq([
+             expect(described_class.available_members).to eq([
                christine,
                john,
                lindsay,
@@ -101,30 +174,6 @@ RSpec.describe Creator, type: :model do
           end
         end
       end
-    end
-
-    pending "eager"
-
-    pending "for_admin"
-
-    pending "for_site"
-
-    describe "self#alphabetical" do
-      let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
-      let!(:amy_1  ) { create(:creator, name: "amy winehouse") }
-      let!(:kate   ) { create(:creator, name: "Kate Bush") }
-      let!(:amy_2  ) { create(:creator, name: "Amy Wino") }
-      let!(:anthony) { create(:creator, name: "Anthony Childs") }
-      let!(:zero   ) { create(:creator, name: "0773") }
-
-      specify { expect(described_class.alphabetical.to_a).to eq([
-        zero,
-        amy_1,
-        amy_2,
-        anthony,
-        kate,
-        zorro
-      ]) }
     end
   end
 
@@ -137,31 +186,190 @@ RSpec.describe Creator, type: :model do
     it { should have_many(:contributed_works).through(:contributions    ) }
     it { should have_many(:contributed_posts).through(:contributed_works) }
 
-    it { should have_many(        :identities) }
-    it { should have_many(:inverse_identities) }
+    it { should have_many(:pseudonym_identities) }
+    it { should have_many(:real_name_identities) }
 
-    it { should have_many(:pseudonyms).through(        :identities).order("creators.name") }
-    it { should have_many(:real_names).through(:inverse_identities).order("creators.name") }
+    it { should have_many(:pseudonyms).through(:pseudonym_identities).order("creators.name") }
+    it { should have_many(:real_names).through(:real_name_identities).order("creators.name") }
 
-    it { should have_many(        :memberships) }
-    it { should have_many(:inverse_memberships) }
+    it { should have_many(:member_memberships) }
+    it { should have_many( :group_memberships) }
 
-    it { should have_many(:members).through(        :memberships).order("creators.name") }
-    it { should have_many( :groups).through(:inverse_memberships).order("creators.name") }
+    it { should have_many(:members).through(:member_memberships).order("creators.name") }
+    it { should have_many( :groups).through( :group_memberships).order("creators.name") }
   end
 
   context "attributes" do
     context "nested" do
-      context "identities" do
-        pending "accepts"
-        pending "rejects"
-        pending "#prepare_identities"
+      context "pseudonym_identities" do
+        subject { create(:primary_creator) }
+
+        let(  :valid) { create(:secondary_creator) }
+        let(:invalid) { create(:primary_creator  ) }
+
+        let(  :valid_params) { { "0" => { pseudonym_id:   valid.id } } }
+        let(:invalid_params) { { "0" => { pseudonym_id: invalid.id } } }
+        let(  :empty_params) { { "0" => {                          } } }
+
+        describe "#prepare_pseudonym_identities" do
+          it "builds 5 initially" do
+            subject.prepare_pseudonym_identities
+
+            expect(subject.pseudonym_identities).to have(5).items
+          end
+
+          it "builds 5 more" do
+            subject.update!(pseudonym_identities_attributes: valid_params)
+
+            subject.prepare_pseudonym_identities
+
+            expect(subject.pseudonym_identities).to have(6).items
+          end
+        end
+
+        specify "accepts" do
+          subject.pseudonym_identities_attributes = valid_params
+
+          puts ">>", valid_params, subject.id, subject.pseudonym_identities.inspect
+
+          expect(subject.pseudonym_identities).to have(1).items
+          expect(subject.pseudonyms          ).to eq(Creator.none) # TODO
+
+          subject.save!
+          subject.reload
+
+          expect(subject.pseudonym_identities).to have(1).items
+          expect(subject.pseudonyms          ).to eq([valid])
+        end
+
+        describe "rejects if #blank_or_primary?" do
+          specify "blank" do
+            subject.pseudonym_identities_attributes = empty_params
+
+            expect(subject.pseudonym_identities).to have(0).items
+          end
+
+          specify "primary" do
+            subject.pseudonym_identities_attributes = invalid_params
+
+            expect(subject.pseudonym_identities).to have(0).items
+          end
+        end
+
+        describe "after_save callbacks" do
+          specify "#enforce_primariness" do
+            subject.update!(pseudonym_identities_attributes: valid_params)
+
+            expect(subject.pseudonym_identities).to have(1).items
+
+            expect {
+              subject.update!(primary: false)
+            }.to change { Identity.count }.by(-1)
+
+            expect(subject.reload.pseudonym_identities).to have(0).items
+          end
+        end
+
+        describe "allow_destroy" do
+          it "destroys the identity but not the pseudonym" do
+            subject.update!(pseudonym_identities_attributes: valid_params)
+
+            expect(subject.pseudonyms).to eq([valid])
+
+            subject.pseudonym_identities.destroy_all
+
+            subject.reload
+
+            expect(subject.pseudonym_identities).to eq([])
+            expect(subject.pseudonyms).to eq([])
+
+            expect(valid.reload).to eq(valid)
+          end
+        end
       end
 
-      context "memberships" do
-        pending "accepts"
-        pending "rejects"
-        pending "#prepare_memberships"
+      context "real_name_identities" do
+        subject { create(:secondary_creator) }
+
+        let(  :valid) { create(:primary_creator  ) }
+        let(:invalid) { create(:secondary_creator) }
+
+        let(  :valid_params) { { "0" => { real_name_id:   valid.id } } }
+        let(:invalid_params) { { "0" => { real_name_id: invalid.id } } }
+        let(  :empty_params) { { "0" => {                          } } }
+
+        describe "#prepare_real_name_identities" do
+          it "builds 1 initially" do
+            subject.prepare_real_name_identities
+
+            expect(subject.real_name_identities).to have(1).items
+          end
+
+          it "never builds more than 1" do
+            subject.update!(real_name_identities_attributes: valid_params)
+            subject.prepare_real_name_identities
+
+            expect(subject.real_name_identities).to have(1).items
+          end
+        end
+
+        specify "accepts" do
+          subject.real_name_identities_attributes = valid_params
+
+          expect(subject.real_name_identities).to have(1).items
+          expect(subject.real_names          ).to eq(Creator.none) # TODO
+
+          subject.save!
+          subject.reload
+
+          expect(subject.real_name_identities).to have(1).items
+          expect(subject.real_names          ).to eq([valid])
+        end
+
+        describe "rejects if #blank_or_secondary?" do
+          specify "blank" do
+            subject.real_name_identities_attributes = empty_params
+
+            expect(subject.real_name_identities).to have(0).items
+          end
+
+          specify "secondary" do
+            subject.real_name_identities_attributes = invalid_params
+
+            expect(subject.real_name_identities).to have(0).items
+          end
+        end
+
+        describe "after_save callbacks" do
+          specify "#enforce_primariness" do
+            subject.update!(real_name_identities_attributes: valid_params)
+
+            expect(subject.real_name_identities).to have(1).items
+
+            expect {
+              subject.update!(primary: true)
+            }.to change { Identity.count }.by(-1)
+
+            expect(subject.reload.real_name_identities).to have(0).items
+          end
+        end
+
+        describe "allow_destroy" do
+          it "destroys the identity but not the real_name" do
+            subject.update!(real_name_identities_attributes: valid_params)
+
+            expect(subject.real_names).to eq([valid])
+
+            subject.real_name_identities.destroy_all
+
+            subject.reload
+
+            expect(subject.real_name_identities).to eq([])
+            expect(subject.real_names          ).to eq([])
+
+            expect(valid.reload).to eq(valid)
+          end
+        end
       end
 
       context "booletania" do
@@ -184,35 +392,34 @@ RSpec.describe Creator, type: :model do
   end
 
   context "hooks" do
-    pending "#enforce_primariness"
-    pending "#enforce_individuality"
+    # Nothing so far
   end
 
   context "instance" do
     context "identities" do
-      describe "#identities, #pseudonyms, #inverse_identities, #real_names, #real_name & #personae" do
+      describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do
         context "without identities" do
           let!(:kate_bush) { create(:kate_bush) }
           let!(      :gas) { create(:gas      ) }
 
           specify "primary" do
-            expect(kate_bush.identities        ).to eq(Identity.none)
-            expect(kate_bush.pseudonyms        ).to eq(Creator.none)
-            expect(kate_bush.personae          ).to eq(Creator.none)
+            expect(kate_bush.pseudonym_identities).to eq(Identity.none)
+            expect(kate_bush.pseudonyms          ).to eq(Creator.none)
+            expect(kate_bush.personae            ).to eq(Creator.none)
 
-            expect(kate_bush.inverse_identities).to eq(Identity.none)
-            expect(kate_bush.real_names        ).to eq(Creator.none)
-            expect(kate_bush.real_name         ).to eq(nil)
+            expect(kate_bush.real_name_identities).to eq(Identity.none)
+            expect(kate_bush.real_names          ).to eq(Creator.none)
+            expect(kate_bush.real_name           ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(gas.identities              ).to eq(Identity.none)
-            expect(gas.pseudonyms              ).to eq(Creator.none)
-            expect(gas.personae                ).to eq(Creator.none)
+            expect(gas.pseudonym_identities      ).to eq(Identity.none)
+            expect(gas.pseudonyms                ).to eq(Creator.none)
+            expect(gas.personae                  ).to eq(Creator.none)
 
-            expect(gas.inverse_identities      ).to eq(Identity.none)
-            expect(gas.real_names              ).to eq(Creator.none)
-            expect(gas.real_name               ).to eq(nil)
+            expect(gas.real_name_identities      ).to eq(Identity.none)
+            expect(gas.real_names                ).to eq(Creator.none)
+            expect(gas.real_name                 ).to eq(nil)
           end
         end
 
@@ -222,58 +429,58 @@ RSpec.describe Creator, type: :model do
           let!(      :fuse) { described_class.find_by(name: "F.U.S.E."  ) }
 
           specify "primary" do
-            expect(richie.identities            ).to have(2).items
-            expect(richie.pseudonyms.to_a       ).to eq([fuse, plastikman])
-            expect(richie.personae.to_a         ).to eq([fuse, plastikman])
+            expect(richie.pseudonym_identities    ).to have(2).items
+            expect(richie.pseudonyms              ).to eq([fuse, plastikman])
+            expect(richie.personae                ).to eq([fuse, plastikman])
 
-            expect(richie.inverse_identities    ).to eq(Identity.none)
-            expect(richie.real_names            ).to eq(Creator.none)
-            expect(richie.real_name             ).to eq(nil)
+            expect(richie.real_name_identities    ).to eq(Identity.none)
+            expect(richie.real_names              ).to eq(Creator.none)
+            expect(richie.real_name               ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(plastikman.identities        ).to eq(Identity.none)
-            expect(plastikman.pseudonyms.to_a   ).to eq([])
-            expect(plastikman.personae.to_a     ).to eq([fuse, richie])
+            expect(plastikman.pseudonym_identities).to eq(Identity.none)
+            expect(plastikman.pseudonyms          ).to eq([])
+            expect(plastikman.personae            ).to eq([fuse, richie])
 
-            expect(plastikman.inverse_identities).to have(1).items
-            expect(plastikman.real_names.to_a   ).to eq([richie])
-            expect(plastikman.real_name         ).to eq(richie)
+            expect(plastikman.real_name_identities).to have(1).items
+            expect(plastikman.real_names          ).to eq([richie])
+            expect(plastikman.real_name           ).to eq(richie)
 
-            expect(fuse.identities              ).to eq(Identity.none)
-            expect(fuse.pseudonyms.to_a         ).to eq([])
-            expect(fuse.personae.to_a           ).to eq([plastikman, richie])
+            expect(fuse.pseudonym_identities      ).to eq(Identity.none)
+            expect(fuse.pseudonyms                ).to eq([])
+            expect(fuse.personae                  ).to eq([plastikman, richie])
 
-            expect(fuse.inverse_identities      ).to have(1).items
-            expect(fuse.real_names.to_a         ).to eq([richie])
-            expect(fuse.real_name               ).to eq(richie)
+            expect(fuse.real_name_identities      ).to have(1).items
+            expect(fuse.real_names                ).to eq([richie])
+            expect(fuse.real_name                 ).to eq(richie)
           end
         end
       end
     end
 
     context "memberships" do
-      describe "#memberships, #members, #inverse_memberships, #groups, #colleagues" do
+      describe "#member_memberships, #members, #group_memberships, #groups, #colleagues" do
         context "without members" do
           let!(:band) { create(:spawn         ) }
           let!(:solo) { create(:wolfgang_voigt) }
 
           specify "collective" do
-            expect(band.memberships        ).to eq(Membership.none)
-            expect(band.members            ).to eq(Creator.none)
+            expect(band.member_memberships).to eq(Membership.none)
+            expect(band.members           ).to eq(Creator.none)
 
-            expect(band.inverse_memberships).to eq(Membership.none)
-            expect(band.groups             ).to eq(Creator.none)
-            expect(band.colleagues         ).to eq(Creator.none)
+            expect(band.group_memberships ).to eq(Membership.none)
+            expect(band.groups            ).to eq(Creator.none)
+            expect(band.colleagues        ).to eq(Creator.none)
           end
 
           specify "individual" do
-            expect(solo.memberships        ).to eq(Membership.none)
-            expect(solo.members            ).to eq(Creator.none)
+            expect(solo.member_memberships).to eq(Membership.none)
+            expect(solo.members           ).to eq(Creator.none)
 
-            expect(solo.inverse_memberships).to eq(Membership.none)
-            expect(solo.groups             ).to eq(Creator.none)
-            expect(solo.colleagues         ).to eq(Creator.none)
+            expect(solo.group_memberships ).to eq(Membership.none)
+            expect(solo.groups            ).to eq(Creator.none)
+            expect(solo.colleagues        ).to eq(Creator.none)
           end
         end
 
@@ -283,33 +490,36 @@ RSpec.describe Creator, type: :model do
           let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
           let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
 
-          describe "collective" do
-            specify { expect(band.memberships        ).to have(3).items }
-            specify { expect(band.members.to_a       ).to eq([dan, fred, richie]) }
+          specify "collective" do
+            expect(band.member_memberships   ).to have(3).items
+            expect(band.members              ).to eq([dan, fred, richie])
 
-            specify { expect(band.inverse_memberships).to eq(Membership.none) }
-            specify { expect(band.groups             ).to eq(Creator.none) }
-            specify { expect(band.colleagues         ).to eq(Creator.none) }
+            expect(band.group_memberships    ).to eq(Membership.none)
+            expect(band.groups               ).to eq(Creator.none)
+            expect(band.colleagues           ).to eq(Creator.none)
           end
 
           specify "individual" do
-            expect(richie.memberships        ).to eq(Membership.none)
+            expect(richie.member_memberships ).to eq(Membership.none)
             expect(richie.members            ).to eq(Creator.none)
-            expect(richie.inverse_memberships).to have(1).items
+
+            expect(richie.group_memberships  ).to have(1).items
             expect(richie.groups             ).to eq([band])
-            expect(richie.colleagues.to_a    ).to eq([dan, fred])
+            expect(richie.colleagues         ).to eq([dan, fred])
 
-            expect(fred.memberships          ).to eq(Membership.none)
+            expect(fred.member_memberships   ).to eq(Membership.none)
             expect(fred.members              ).to eq(Creator.none)
-            expect(fred.inverse_memberships  ).to have(1).items
-            expect(fred.groups               ).to eq([band])
-            expect(fred.colleagues.to_a      ).to eq([dan, richie])
 
-            expect(dan.memberships           ).to eq(Membership.none)
+            expect(fred.group_memberships    ).to have(1).items
+            expect(fred.groups               ).to eq([band])
+            expect(fred.colleagues           ).to eq([dan, richie])
+
+            expect(dan.member_memberships    ).to eq(Membership.none)
             expect(dan.members               ).to eq(Creator.none)
-            expect(dan.inverse_memberships   ).to have(1).items
+
+            expect(dan.group_memberships     ).to have(1).items
             expect(dan.groups                ).to eq([band])
-            expect(dan.colleagues.to_a       ).to eq([fred, richie])
+            expect(dan.colleagues            ).to eq([fred, richie])
           end
         end
 
@@ -348,12 +558,12 @@ RSpec.describe Creator, type: :model do
           end
 
           specify "#colleagues" do
-            expect(christine.colleagues.to_a).to eq([                      john, lindsay, mick, stevie])
-            expect(imaginary.colleagues.to_a).to eq([                            lindsay,       stevie])
-            expect(     john.colleagues.to_a).to eq([christine,                  lindsay, mick, stevie])
-            expect(  lindsay.colleagues.to_a).to eq([christine, imaginary, john,          mick, stevie])
-            expect(     mick.colleagues.to_a).to eq([christine,            john, lindsay,       stevie])
-            expect(   stevie.colleagues.to_a).to eq([christine, imaginary, john, lindsay, mick        ])
+            expect(christine.colleagues).to eq([                      john, lindsay, mick, stevie])
+            expect(imaginary.colleagues).to eq([                            lindsay,       stevie])
+            expect(     john.colleagues).to eq([christine,                  lindsay, mick, stevie])
+            expect(  lindsay.colleagues).to eq([christine, imaginary, john,          mick, stevie])
+            expect(     mick.colleagues).to eq([christine,            john, lindsay,       stevie])
+            expect(   stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick        ])
           end
         end
       end

@@ -45,8 +45,8 @@ FactoryBot.define do
     trait :with_draft_post do
       after(:create) do |creator|
         create(:post, :with_author, :draft, body: "body", work_attributes: {
-          "title"                    => "#{FFaker::Music.song}",
-          "medium"                   => "song",
+          "title"              => "#{FFaker::Music.song}",
+          "medium"             => "song",
           "credits_attributes" => {
             "0" => attributes_for(:credit, creator_id: creator.id)
           }
@@ -59,8 +59,8 @@ FactoryBot.define do
     trait :with_scheduled_post do
       after(:create) do |creator|
         create(:post, :with_author, :scheduled, body: "body", work_attributes: {
-          "title"                    => "#{FFaker::Music.song}",
-          "medium"                   => "song",
+          "title"              => "#{FFaker::Music.song}",
+          "medium"             => "song",
           "credits_attributes" => {
             "0" => attributes_for(:credit, creator_id: creator.id)
           }
@@ -73,8 +73,8 @@ FactoryBot.define do
     trait :with_published_post do
       after(:create) do |creator|
         create(:post, :with_author, :published, body: "body", work_attributes: {
-          "title"                    => "#{FFaker::Music.song}",
-          "medium"                   => "song",
+          "title"              => "#{FFaker::Music.song}",
+          "medium"             => "song",
           "credits_attributes" => {
             "0" => attributes_for(:credit, creator_id: creator.id)
           }
@@ -105,7 +105,7 @@ FactoryBot.define do
     trait :with_new_pseudonym do
       primary
 
-      identities_attributes { {
+      pseudonym_identities_attributes { {
         "0" => { "pseudonym_id" => create(:musician, :secondary).id }
       } }
     end
@@ -135,7 +135,7 @@ FactoryBot.define do
     trait :with_new_member do
       collective
 
-      memberships_attributes { {
+      member_memberships_attributes { {
         "0" => { "member_id" => create(:musician, :individual).id }
       } }
     end

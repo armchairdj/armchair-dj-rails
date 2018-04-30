@@ -1,4 +1,4 @@
-<%= f.simple_fields_for :inverse_identities, identity do |ff| %>
+<%= f.simple_fields_for :pseudonym_identities, identity do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
     <%= ff.input :creator_id,
       as:            :select,

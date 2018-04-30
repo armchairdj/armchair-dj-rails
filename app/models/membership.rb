@@ -38,25 +38,21 @@ class Membership < ApplicationRecord
 
   validates :group_id, uniqueness: { scope: [:member_id] }
 
-  validate { group_is_collective }
-
   def group_is_collective
-    return if group.try(:collective?)
-
-    self.errors.add :group_id, :not_collective
+    self.errors.add :group_id, :not_collective unless group.try(:collective?)
   end
 
   private :group_is_collective
 
-  validate { member_is_individual }
+  validate { group_is_collective }
 
   def member_is_individual
-    return if member.try(:individual?)
-
-    self.errors.add :member_id, :not_individual
+    self.errors.add :member_id, :not_individual unless member.try(:individual?)
   end
 
   private :member_is_individual
+
+  validate { member_is_individual }
 
   #############################################################################
   # HOOKS.

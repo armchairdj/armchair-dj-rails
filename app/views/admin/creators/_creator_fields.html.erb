@@ -19,7 +19,7 @@
     creators: available_pseudonyms
   } %>
 
-  <%= render partial: "admin/creators/inverse_identities_fields", locals: {
+  <%= render partial: "admin/creators/pseudonym_identities_fields", locals: {
     f:        f,
     creators: available_real_names
   } %>
@@ -40,7 +40,7 @@
     creators: available_members
   } %>
 
-  <%= render partial: "admin/creators/inverse_memberships_fields", locals: {
+  <%= render partial: "admin/creators/group_memberships_fields", locals: {
     f:        f,
     creators: available_groups
   } %>

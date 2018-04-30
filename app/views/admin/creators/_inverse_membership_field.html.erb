@@ -1,4 +1,4 @@
-<%= f.simple_fields_for :inverse_memberships, membership do |ff| %>
+<%= f.simple_fields_for :group_memberships, membership do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
     <%= ff.input :creator_id,
       as:            :select,
