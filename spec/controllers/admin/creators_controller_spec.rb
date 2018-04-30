@@ -236,29 +236,128 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
 
     describe "GET #edit" do
-      let(:creator) { create(:minimal_creator) }
+      context "plain jane" do
+        let!(:creator) { create(:minimal_creator) }
 
-      it "renders" do
-        get :edit, params: { id: creator.to_param }
+        it "renders" do
+          get :edit, params: { id: creator.to_param }
 
-        should successfully_render("admin/creators/edit")
-        should assign(creator, :creator)
+          should successfully_render("admin/creators/edit")
+          should assign(creator, :creator)
+        end
+      end
+
+      context "with group" do
+        let!(:creator) { create(:minimal_creator, :with_group) }
+
+        it "renders" do
+          get :edit, params: { id: creator.to_param }
+
+          expect(assigns(:creator).group_memberships).to have(6).items
+        end
+      end
+
+      context "with member" do
+        let!(:creator) { create(:minimal_creator, :with_member) }
+
+        it "renders" do
+          get :edit, params: { id: creator.to_param }
+
+          expect(assigns(:creator).member_memberships).to have(6).items
+        end
+      end
+
+      context "with pseudonym" do
+        let!(:creator) { create(:minimal_creator, :with_pseudonym) }
+
+        it "renders" do
+          get :edit, params: { id: creator.to_param }
+
+          expect(assigns(:creator).pseudonym_identities).to have(6).items
+        end
+      end
+
+      context "with real_name" do
+        let!(:creator) { create(:minimal_creator, :with_real_name) }
+
+        it "renders" do
+          get :edit, params: { id: creator.to_param }
+
+          expect(assigns(:creator).real_name_identities).to have(1).items
+        end
       end
     end
 
     describe "PUT #update" do
-      let(:creator) { create(:minimal_creator) }
+      let!(:creator) { create(:minimal_creator, :with_member, :with_pseudonym) }
+
+      let(    :max_params) { attributes_for(:creator, :with_summary, :with_new_member, :with_new_pseudonym) }
+      let(:ignored_params) { attributes_for(:creator, :with_summary, :with_new_group,  :with_new_real_name) }
 
       let(  :valid_params) { { name: "New Name" } }
       let(:invalid_params) { { name: ""         } }
 
-      context "with valid params" do
+      context "with max valid params" do
+        it "updates the requested creator" do
+          put :update, params: { id: creator.to_param, creator: max_params }
+
+          should assign(creator, :creator).with_attributes(max_params).and_be_valid
+        end
+
+        it "creates a new Identity" do
+          expect {
+            put :update, params: { id: creator.to_param, creator: max_params }
+          }.to change(Identity, :count).by(1)
+        end
+
+        it "creates a new Membership" do
+          expect {
+            put :update, params: { id: creator.to_param, creator: max_params }
+          }.to change(Membership, :count).by(1)
+        end
+
+        it "redirects to index" do
+          put :update, params: { id: creator.to_param, creator: max_params }
+
+          should send_user_to(
+            admin_creator_path(assigns(:creator))
+          ).with_flash(:success, "admin.flash.creators.success.update")
+        end
+      end
+
+      context "with ignored max params" do
+        it "updates the requested creator" do
+          put :update, params: { id: creator.to_param, creator: ignored_params }
+
+          should assign(creator, :creator).with_attributes(ignored_params.slice(:creator)).and_be_valid
+        end
+
+        it "silently ignores the requested real name since this is a primary creator" do
+          expect {
+            put :update, params: { id: creator.to_param, creator: ignored_params }
+          }.to_not change(Identity, :count)
+        end
+
+        it "silently ignores the reuqested new group since this is a collective creator" do
+          expect {
+            put :update, params: { id: creator.to_param, creator: ignored_params }
+          }.to_not change(Membership, :count)
+        end
+
+        it "redirects to index" do
+          put :update, params: { id: creator.to_param, creator: ignored_params }
+
+          should send_user_to(
+            admin_creator_path(assigns(:creator))
+          ).with_flash(:success, "admin.flash.creators.success.update")
+        end
+      end
+
+      context "with min valid params" do
         it "updates the requested creator" do
           put :update, params: { id: creator.to_param, creator: valid_params }
 
-          creator.reload
-
-          expect(creator.name).to eq(valid_params[:name])
+          should assign(creator, :creator).with_attributes(valid_params).and_be_valid
         end
 
         it "redirects to index" do
