@@ -230,8 +230,6 @@ RSpec.describe Creator, type: :model do
         specify "accepts" do
           subject.pseudonym_identities_attributes = valid_params
 
-          puts ">>", valid_params, subject.id, subject.pseudonym_identities.inspect
-
           expect(subject.pseudonym_identities).to have(1).items
           expect(subject.pseudonyms          ).to eq(Creator.none) # TODO
 

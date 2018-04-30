@@ -1,18 +1,18 @@
-<%= f.simple_fields_for :pseudonym_identities, identity do |ff| %>
+<%= f.simple_fields_for :member_memberships, member_membership do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
-    <%= ff.input :creator_id,
+    <%= ff.input :member_id,
       as:            :select,
       label:         false,
       collection:    creators,
       required:      false,
       include_blank: :translate,
       input_html:    {
-        "data-controller":           "create-real-name",
-        "data-create-real-name-url": admin_creators_path,
+        "data-controller":        "create-member",
+        "data-create-member-url": admin_creators_path
       }
     %>
 
-    <%= ff.error :pseudonym_id %>
+    <%= ff.error :group_id %>
 
     <%= render(partial: "shared/custom_checkbox", locals: {
       f:    ff,

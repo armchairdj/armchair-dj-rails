@@ -1,6 +1,6 @@
 <%
-  records = f.object.identities
-  error   = f.error(:identities)
+  records = f.object.member_memberships
+  error   = f.error(:member_memberships)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
 
@@ -8,11 +8,11 @@
   "data-controller": "expandable-has-many",
   "data-target":     "toggle.trueFieldset"
 ) do %>
-  <%= content_tag(:legend, "Pseudonyms") %>
+  <%= content_tag(:legend, "Members") %>
 
   <%= content_tag(:div, error, class: "hint") if error %>
 
-  <%= render partial: "admin/creators/identity_field", collection: records, as: :identity, locals: {
+  <%= render partial: "admin/creators/member_membership_field", collection: records, as: :member_membership, locals: {
     f:        f,
     creators: creators
   } %>

@@ -1,6 +1,6 @@
 <%
-  records = f.object.pseudonym_identities
-  error   = f.error(:pseudonym_identities)
+  records = f.object.real_name_identities
+  error   = f.error(:real_name_identities)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>
 
@@ -11,7 +11,7 @@
 
   <%= content_tag(:div, error, class: "hint") if error %>
 
-  <%= render partial: "admin/creators/inverse_identity_field", collection: records, as: :identity, locals: {
+  <%= render partial: "admin/creators/real_name_identity_field", collection: records, as: :real_name_identity, locals: {
     f:        f,
     creators: creators
   } %>

@@ -14,12 +14,12 @@
     invert:     true
   } %>
 
-  <%= render partial: "admin/creators/identities_fields", locals: {
+  <%= render partial: "admin/creators/pseudonym_identities_fields", locals: {
     f:        f,
     creators: available_pseudonyms
   } %>
 
-  <%= render partial: "admin/creators/pseudonym_identities_fields", locals: {
+  <%= render partial: "admin/creators/real_name_identities_fields", locals: {
     f:        f,
     creators: available_real_names
   } %>
@@ -35,7 +35,7 @@
     invert:     true
   } %>
 
-  <%= render partial: "admin/creators/memberships_fields", locals: {
+  <%= render partial: "admin/creators/member_memberships_fields", locals: {
     f:        f,
     creators: available_members
   } %>
