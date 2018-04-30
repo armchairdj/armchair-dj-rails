@@ -103,7 +103,7 @@ class Admin::WorksController < AdminController
 private
 
   def find_collection
-    @works = scoped_and_sorted_collection
+    @works = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def build_new_instance

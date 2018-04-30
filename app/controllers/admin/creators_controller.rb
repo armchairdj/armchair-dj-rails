@@ -103,7 +103,7 @@ class Admin::CreatorsController < AdminController
 private
 
   def find_collection
-    @creators = scoped_and_sorted_collection
+    @creators = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def build_new_instance

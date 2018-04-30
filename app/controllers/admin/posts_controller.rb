@@ -106,7 +106,7 @@ class Admin::PostsController < AdminController
 private
 
   def find_collection
-    @posts = scoped_and_sorted_collection
+    @posts = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def find_instance

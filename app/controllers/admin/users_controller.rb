@@ -94,7 +94,7 @@ class Admin::UsersController < AdminController
 private
 
   def find_collection
-    @users = scoped_and_sorted_collection
+    @users = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def build_new_instance

@@ -15,9 +15,19 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":viewable scope (default)" do
+        context ":all scope (default)" do
           it "renders" do
             get :index
+
+            should successfully_render("admin/works/index")
+
+            expect(assigns(:works)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context ":viewable scope" do
+          it "renders" do
+            get :index, params: { scope: "viewable" }
 
             should successfully_render("admin/works/index")
 
@@ -34,22 +44,13 @@ RSpec.describe Admin::WorksController, type: :controller do
             expect(assigns(:works)).to paginate(0).of_total_records(0)
           end
         end
-
-        context ":all scope" do
-          it "renders" do
-            get :index, params: { scope: "all" }
-
-            should successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(0).of_total_records(0)
-          end
-        end
       end
 
       context "with records" do
-        context ":viewable scope (default)" do
+        context ":all scope (default)" do
           before(:each) do
-            21.times { create(:song_review, :published) }
+            10.times { create(:song_review, :published) }
+            11.times { create(:minimal_work) }
           end
 
           it "renders" do
@@ -62,6 +63,28 @@ RSpec.describe Admin::WorksController, type: :controller do
 
           it "renders second page" do
             get :index, params: { page: "2" }
+
+            should successfully_render("admin/works/index")
+
+            expect(assigns(:works)).to paginate(1).of_total_records(21)
+          end
+        end
+
+        context ":viewable scope" do
+          before(:each) do
+            21.times { create(:song_review, :published) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "viewable" }
+
+            should successfully_render("admin/works/index")
+
+            expect(assigns(:works)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "viewable", page: "2" }
 
             should successfully_render("admin/works/index")
 
@@ -84,29 +107,6 @@ RSpec.describe Admin::WorksController, type: :controller do
 
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
-
-            should successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context ":all scope" do
-          before(:each) do
-            10.times { create(:song_review, :published) }
-            11.times { create(:minimal_work) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "all" }
-
-            should successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "all", page: "2" }
 
             should successfully_render("admin/works/index")
 

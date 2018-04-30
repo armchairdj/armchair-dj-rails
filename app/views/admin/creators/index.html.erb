@@ -19,6 +19,8 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Primary") %>
+            <%= content_tag(:th, "Group") %>
             <%= content_tag(:th, post_count_column_header, class: "icon") %>
             <%= content_tag(:th, work_count_column_header, class: "icon") %>
             <%= content_tag(:th, contribution_count_column_header, class: "icon") %>
@@ -30,6 +32,8 @@
           <% @creators.each do |creator| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, creator.name) %>
+              <%= content_tag(:td, creator.primary?) %>
+              <%= content_tag(:td, creator.collective?) %>
               <%= content_tag(:td, creator.viewable_post_count, class: "icon") %>
               <%= content_tag(:td, creator.works.viewable.count, class: "icon") %>
               <%= content_tag(:td, creator.contributed_works.viewable.count, class: "icon") %>
