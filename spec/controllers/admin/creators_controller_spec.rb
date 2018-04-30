@@ -26,7 +26,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
         context ":viewable scope" do
           it "renders" do
-            get :index: { scope: "viewable" }
+            get :index, params: { scope: "viewable" }
 
             should successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
