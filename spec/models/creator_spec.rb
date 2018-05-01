@@ -30,42 +30,60 @@ RSpec.describe Creator, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!(:zorro  ) { create(:creator, name: "Zorro the Gay Blade") }
-      let!(:amy_1  ) { create(:creator, name: "amy winehouse") }
-      let!(:kate   ) { create(:creator, name: "Kate Bush") }
-      let!(:amy_2  ) { create(:creator, name: "Amy Wino") }
-      let!(:anthony) { create(:creator, name: "Anthony Childs") }
-      let!(:zero   ) { create(:creator, name: "0773") }
+      let!( :richie) { create(:creator, name: "Richie Hawtin") }
+      let!(    :amy) { create(:creator, name: "Amy Winehouse") }
+      let!(   :kate) { create(:creator, name: "Kate Bush"    ) }
+      let!(   :carl) { create(:creator, name: "Carl Craig"   ) }
+      let!(  :feist) { create(:creator, name: "Feist"        ) }
+      let!(:derrick) { create(:creator, name: "Derrick May"  ) }
 
       before(:each) do
-        create(:review_without_work, :published, "work_attributes" => attributes_for(:work_without_credits).merge({
-          "credits_attributes" => { "0" => { "creator_id" => amy_1.id } }
-        }))
+        create(:review_without_work, :published,
+          "work_attributes" => attributes_for(:work_without_credits).merge({
+            "credits_attributes" => { "0" => { "creator_id" => richie.id } }
+          })
+        )
 
-        create(:review_without_work, :published, "work_attributes" => attributes_for(:work_without_credits).merge({
-          "credits_attributes" => { "0" => { "creator_id" => zero.id } }
-        }))
+        create(:review_without_work, :published,
+          "work_attributes" => attributes_for(:work_without_credits).merge({
+            "credits_attributes" => { "0" => { "creator_id" => carl.id } }
+          })
+        )
 
-        create(:review_without_work, :draft, "work_attributes" => attributes_for(:work_without_credits).merge({
-          "credits_attributes" => { "0" => { "creator_id" => kate.id } }
-        }))
+        create(:review_without_work, :draft,
+          "work_attributes" => attributes_for(:work_without_credits).merge({
+            "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
+          })
+        )
       end
 
       describe "self#for_admin" do
         specify "includes all creators, unsorted" do
           expect(described_class.for_admin).to match_array([
-            amy_2, anthony, kate, zorro, zero, amy_1
+            richie, amy, kate, carl, feist, derrick
           ])
         end
       end
 
       describe "self#for_site" do
         specify "includes only creators with published posts, sorted alphabetically" do
-          expect(described_class.for_site).to eq([zero, amy_1])
+          expect(described_class.for_site).to eq([carl, richie])
         end
       end
 
-      pending "eager"
+      describe "eager" do
+        subject { described_class.eager.where(id: richie.id).take }
+
+        it "eager-loads associations" do
+          expect(subject.association(:pseudonyms)).to be_loaded
+          expect(subject.association(:real_names)).to be_loaded
+          expect(subject.association(:members   )).to be_loaded
+          expect(subject.association(:groups    )).to be_loaded
+          expect(subject.association(:credits   )).to be_loaded
+          expect(subject.association(:works     )).to be_loaded
+          expect(subject.association(:posts     )).to be_loaded
+        end
+      end
     end
 
     context "identities" do
@@ -535,10 +553,61 @@ RSpec.describe Creator, type: :model do
       end
 
       context "booletania" do
-        pending "self#individual_options"
-        pending "self#individual_options"
-        pending "#collective_text"
-        pending "#individual_text"
+        context "class" do
+          specify "self#individual_options" do
+            expect(described_class.individual_options).to eq([
+              ["This is an individual creator. It can belong to a group.", true],
+              ["This is a group creator. It can have members.",           false]
+            ])
+          end
+
+          specify "self#collective_options" do
+            expect(described_class.primary_options).to eq([
+              ["This is a primary creator. It can have pseudonyms.",   true],
+              ["This is a secondary creator. It can be a pseudonym.", false]
+            ])
+          end
+        end
+
+        context "instance" do
+          subject { create_minimal_instance }
+
+          describe "#individual_text" do
+            specify "individual" do
+              subject.individual = true
+
+              expect(subject.individual_text).to eq(
+                "This is an individual creator. It can belong to a group."
+              )
+            end
+
+            specify "collective" do
+              subject.individual = false
+
+              expect(subject.individual_text).to eq(
+                "This is a group creator. It can have members."
+              )
+            end
+          end
+
+          describe "#primary_text" do
+            specify "primary" do
+              subject.primary = true
+
+              expect(subject.primary_text).to eq(
+                "This is a primary creator. It can have pseudonyms."
+              )
+            end
+
+            specify "secondary" do
+              subject.primary = false
+
+              expect(subject.primary_text).to eq(
+                "This is a secondary creator. It can be a pseudonym."
+              )
+            end
+          end
+        end
       end
     end
   end

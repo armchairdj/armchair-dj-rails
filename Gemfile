@@ -204,12 +204,13 @@ group :development, :test do
 
   # RSpec + plugins
   gem "rspec-rails"
+  gem "accept_values_for"
+  gem "db-query-matchers"
   gem "rspec-collection_matchers"
   gem "rspec-html-matchers"
   gem "shoulda-matchers"
-  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
   gem "pundit-matchers"
-  gem "accept_values_for"
+  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
 
   # Fixture generator.
   gem "factory_bot_rails"

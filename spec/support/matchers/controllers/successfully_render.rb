@@ -21,7 +21,7 @@ RSpec::Matchers.define :successfully_render do |template|
 
   failure_message do
     message  = "expected to successfully render template #{template}"
-    message += " with flash #{@type}=#{@message}"        if @type && @message
+    message += " with flash #{@type}=#{@message}" if @type && @message
     message += ", but did not"
   end
 end
