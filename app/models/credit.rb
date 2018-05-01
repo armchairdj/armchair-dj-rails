@@ -42,13 +42,7 @@ class Credit < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-private
-
-  #############################################################################
-  # ALPHABETIZABLE.
-  #############################################################################
-
   def alpha_parts
-    [work.send(:alpha_parts), creator.name]
+    [work.try(:alpha_parts), creator.try(:name)]
   end
 end

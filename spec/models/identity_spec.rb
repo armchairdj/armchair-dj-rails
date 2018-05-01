@@ -35,7 +35,7 @@ RSpec.describe Identity, type: :model do
   end
 
   context "validations" do
-    subject { build(:minimal_identity) }
+    subject { create_minimal_instance }
 
     it { should validate_presence_of(:real_name) }
     it { should validate_presence_of(:pseudonym) }

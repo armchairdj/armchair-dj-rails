@@ -3,5 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "style_guides/index", type: :view do
-  pending "view specs"
+  it "renders static page with no instance variables" do
+    render
+  end
 end

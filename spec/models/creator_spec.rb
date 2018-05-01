@@ -11,15 +11,17 @@ RSpec.describe Creator, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
-
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_viewable_model"
 
     it_behaves_like "an_atomically_validatable_model", { name: nil } do
       subject { create(:minimal_creator) }
     end
+
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -60,14 +62,6 @@ RSpec.describe Creator, type: :model do
       describe "self#for_site" do
         specify "includes only creators with published posts, sorted alphabetically" do
           expect(described_class.for_site).to eq([zero, amy_1])
-        end
-      end
-
-      describe "self#alpha" do
-        specify "sorts alphabetically" do
-          expect(described_class.alpha).to eq([
-            zero, amy_1, amy_2, anthony, kate, zorro
-          ])
         end
       end
 
@@ -550,6 +544,8 @@ RSpec.describe Creator, type: :model do
   end
 
   context "validations" do
+    subject { create_minimal_instance }
+
     describe "name" do
       it { should validate_presence_of(:name) }
 

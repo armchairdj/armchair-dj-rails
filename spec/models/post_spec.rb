@@ -8,15 +8,17 @@ RSpec.describe Post, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
-
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_sluggable_model", :slug
 
     it_behaves_like "an_atomically_validatable_model", { body: nil, slug: nil, published_at: nil } do
       subject { create(:standalone_post, :published) }
     end
+
+    it_behaves_like "a_sluggable_model", :slug
+
+    it_behaves_like "a_summarizable_model"
   end
 
   context "class" do
@@ -215,6 +217,8 @@ RSpec.describe Post, type: :model do
   end
 
   context "validations" do
+    subject { create_minimal_instance }
+
     it { should validate_uniqueness_of(:slug) }
 
     context "conditional" do

@@ -8,6 +8,8 @@ RSpec.describe User, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_atomically_validatable_model", { first_name: nil, last_name: nil } do
@@ -37,17 +39,6 @@ RSpec.describe User, type: :model do
   end
 
   context "scope-related" do
-    describe "self#alpha" do
-      let!(:michelle_dillardo) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillardo") }
-      let!(  :brian_j_dillard) { create(:minimal_user, first_name: "Brian",    middle_name: "J.", last_name: "Dillard" ) }
-      let!(    :brian_dillard) { create(:minimal_user, first_name: "Brian",                       last_name: "Dillard" ) }
-      let!( :michelle_dillard) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillard" ) }
-
-      specify { expect(described_class.alpha.to_a).to eq([
-        brian_j_dillard, brian_dillard, michelle_dillard, michelle_dillardo
-      ]) }
-    end
-
     pending "eager"
 
     pending "for_admin"
@@ -78,7 +69,7 @@ RSpec.describe User, type: :model do
   end
 
   context "validations" do
-    subject { create(:minimal_user) }
+    subject { create_minimal_instance }
 
     it { should validate_presence_of(:first_name) }
     it { should validate_presence_of(:last_name ) }

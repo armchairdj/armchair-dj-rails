@@ -7,6 +7,7 @@ RSpec.describe Credit, type: :model do
 
   context "concerns" do
     it_behaves_like "an_application_record"
+
     it_behaves_like "a_workable_model"
 
     # it_behaves_like "an_atomically_validatable_model", { work: nil, creator: nil } do
@@ -32,6 +33,7 @@ RSpec.describe Credit, type: :model do
 
   context "validations" do
     subject { create_minimal_instance }
+
     it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
   end
 

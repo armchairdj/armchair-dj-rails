@@ -6,9 +6,10 @@ RSpec.describe Admin::PostsController, type: :controller do
   let(:summary) { "summary summary summary summary summary." }
 
   context "concerns" do
-    it_behaves_like "an_admin_controller" do
-      let(:expected_redirect_for_seo_paginatable) { admin_posts_path }
-      let(:instance                             ) { create(:minimal_post) }
+    it_behaves_like "an_admin_controller"
+
+    it_behaves_like "an_seo_paginatable_controller" do
+      let(:expected_redirect) { admin_posts_path }
     end
   end
 

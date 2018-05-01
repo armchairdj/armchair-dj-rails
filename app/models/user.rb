@@ -107,12 +107,6 @@ class User < ApplicationRecord
     [first_name, middle_name, last_name].compact.join(" ")
   end
 
-private
-
-  #############################################################################
-  # ALPHABETIZABLE.
-  #############################################################################
-
   def alpha_parts
     [last_name, first_name, middle_name]
   end

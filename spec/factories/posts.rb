@@ -40,7 +40,7 @@ FactoryBot.define do
     # FOR OTHER FACTORIES.
     ###########################################################################
 
-    factory :song_review_without_creators do
+    factory :song_review_without_creator do
       with_author
       body        "This is a song review."
       association :work, factory: :work_without_credits

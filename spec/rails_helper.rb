@@ -47,7 +47,8 @@ RSpec.configure do |config|
   config.include InlineSvg::ActionView::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
-  config.include ModelHelpers
+  config.include ControllerHelpers, type: :controller
+  config.include ModelHelpers, type: :model
 
   config.extend ControllerMacros, type: :controller
 end

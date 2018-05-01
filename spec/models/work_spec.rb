@@ -9,34 +9,20 @@ RSpec.describe Work, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
-
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_viewable_model"
 
     it_behaves_like "an_atomically_validatable_model", { title: nil, medium: nil } do
       subject { create(:minimal_work) }
     end
+
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
-    describe "self#alpha" do
-      let!(:madonna_ray_of_light             ) { create(:madonna_ray_of_light             ) }
-      let!(:global_communications_76_14      ) { create(:global_communications_76_14      ) }
-      let!(:kate_bush_directors_cut          ) { create(:kate_bush_directors_cut          ) }
-      let!(:carl_craig_and_green_velvet_unity) { create(:carl_craig_and_green_velvet_unity) }
-      let!(:kate_bush_hounds_of_love         ) { create(:kate_bush_hounds_of_love         ) }
-
-      specify { expect(described_class.alpha.to_a).to eq([
-        carl_craig_and_green_velvet_unity,
-        global_communications_76_14,
-        kate_bush_directors_cut,
-        kate_bush_hounds_of_love,
-        madonna_ray_of_light
-      ]) }
-    end
-
     describe "self#grouped_options" do
       specify "first element of each sub-array is an optgroup heading" do
         expect(described_class.grouped_options.to_h.keys).to eq([
@@ -58,9 +44,9 @@ RSpec.describe Work, type: :model do
         ])
       end
 
-      specify "second element of each sub-array is a list of options" do
+      specify "second element of each sub-array is a relation of options" do
         described_class.grouped_options.to_h.values.each do |rel|
-          expect(rel).to be_a_kind_of(Array)
+          expect(rel).to be_a_kind_of(ActiveRecord::Relation)
         end
       end
 
@@ -243,6 +229,8 @@ RSpec.describe Work, type: :model do
   end
 
   context "validations" do
+    subject { create_minimal_instance }
+
     it { should validate_presence_of(:medium) }
     it { should validate_presence_of(:title ) }
 

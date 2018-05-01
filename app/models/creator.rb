@@ -45,7 +45,12 @@ class Creator < ApplicationRecord
   scope :available_real_names, -> { alpha.primary            }
   scope :available_pseudonyms, -> { alpha.secondary.orphaned }
 
-  scope :eager, -> { includes(:pseudonyms, :real_names, :members, :groups, :credits, :works, :posts) }
+  scope :eager, -> { includes(
+    :pseudonyms, :real_names,
+    :members, :groups,
+    :credits, :works, :posts,
+    # :contributions, :contributed_works, :contributed_posts
+  ) }
 
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.viewable.alpha }
@@ -287,12 +292,6 @@ class Creator < ApplicationRecord
       memo
     end
   end
-
-private
-
-  #############################################################################
-  # ALPHABETIZABLE.
-  #############################################################################
 
   def alpha_parts
     [name]

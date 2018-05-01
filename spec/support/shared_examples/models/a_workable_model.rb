@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_workable_model" do
+  context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+  end
+
   context "included" do
     context "scope-related" do
-      pending "alpha"
       pending "viewable"
       pending "eager"
       pending "for_admin"
@@ -16,8 +19,10 @@ RSpec.shared_examples "a_workable_model" do
     end
 
     context "validations" do
-      it { should validate_presence_of(:work   ) }
+      subject { create_minimal_instance }
+
       it { should validate_presence_of(:creator) }
+      it { should validate_presence_of(:work   ) }
     end
   end
 end

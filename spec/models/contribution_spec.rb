@@ -9,6 +9,7 @@ RSpec.describe Contribution, type: :model do
 
   context "concerns" do
     it_behaves_like "an_application_record"
+
     it_behaves_like "a_workable_model"
 
     # it_behaves_like "an_atomically_validatable_model", { work: nil, creator: nil } do
@@ -39,7 +40,7 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "validations" do
-    subject { build_minimal_instance }
+    subject { create_minimal_instance }
 
     it { should validate_presence_of(:role) }
 

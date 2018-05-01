@@ -250,7 +250,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   end
 
   context "included" do
-    subject { build_minimal_instance }
+    subject { create_minimal_instance }
 
     it { should validate_uniqueness_of(:slug) }
   end

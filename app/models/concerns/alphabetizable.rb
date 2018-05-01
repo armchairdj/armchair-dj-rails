@@ -6,9 +6,21 @@ module Alphabetizable
   ALPHA_CONNECTOR = " "
 
   included do
+    ###########################################################################
+    # SCOPES.
+    ###########################################################################
+
     scope :alpha, -> { order(:alpha) }
 
+    ###########################################################################
+    # HOOKS.
+    ###########################################################################
+
     before_validation :set_alpha
+
+    ###########################################################################
+    # VALIDATION.
+    ###########################################################################
 
     validate { ensure_alpha }
   end
@@ -19,11 +31,11 @@ private
     self.alpha = calculate_alpha_string
   end
 
-  def ensure_alpha
-    self.errors.add(:base, :missing_alpha) if alpha.blank?
+  def calculate_alpha_string
+    [alpha_parts].flatten.compact.join(ALPHA_CONNECTOR).downcase.squish
   end
 
-  def calculate_alpha_string
-    alpha_parts.flatten.compact.join(ALPHA_CONNECTOR).downcase
+  def ensure_alpha
+    self.errors.add(:base, :missing_alpha) if alpha.blank?
   end
 end

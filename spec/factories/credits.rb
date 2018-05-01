@@ -4,7 +4,7 @@ require "ffaker"
 
 FactoryBot.define do
   factory :credit do
-    factory :minimal_credit, parent: :credit_with_existing_creator do; end
+    factory :minimal_credit, parent: :credit_with_creator do; end
 
     ###########################################################################
     # TRAITS.
@@ -14,13 +14,7 @@ FactoryBot.define do
       association :work, factory: :minimal_work
     end
 
-    trait :with_new_creator do
-      creator_attributes { {
-        "0" => { "name" => FFaker::Music.artist }
-      } }
-    end
-
-    trait :with_existing_creator do
+    trait :with_creator do
       association :creator, factory: :minimal_creator
     end
 
@@ -28,18 +22,13 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :credit_without_creators do
+    factory :credit_without_creator do
       with_work
     end
 
-    factory :credit_with_new_creator do
+    factory :credit_with_creator do
       with_work
-      with_new_creator
-    end
-
-    factory :credit_with_existing_creator do
-      with_work
-      with_existing_creator
+      with_creator
     end
   end
 end

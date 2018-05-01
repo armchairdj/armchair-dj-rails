@@ -4,9 +4,10 @@ require "rails_helper"
 
 RSpec.describe Admin::UsersController, type: :controller do
   context "concerns" do
-    it_behaves_like "an_admin_controller" do
-      let(:expected_redirect_for_seo_paginatable) { admin_users_path }
-      let(:instance                             ) { create(:minimal_user) }
+    it_behaves_like "an_admin_controller"
+
+    it_behaves_like "an_seo_paginatable_controller" do
+      let(:expected_redirect) { admin_users_path }
     end
   end
 

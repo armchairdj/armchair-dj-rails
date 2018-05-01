@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "an_admin_controller" do
-  context "concerns" do
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { expected_redirect_for_seo_paginatable }
-    end
-  end
+  let(:model_instance) { create_minimal_instance }
 
   context "included" do
     context "callbacks" do
@@ -19,10 +15,10 @@ RSpec.shared_examples "an_admin_controller" do
           specify { get    :index  }
           specify { get    :new    }
           specify { post   :create }
-          specify { get    :show,    params: { id: instance.id} }
-          specify { get    :edit,    params: { id: instance.id} }
-          specify { patch  :update,  params: { id: instance.id} }
-          specify { delete :destroy, params: { id: instance.id} }
+          specify { get    :show,    params: { id: model_instance.id} }
+          specify { get    :edit,    params: { id: model_instance.id} }
+          specify { patch  :update,  params: { id: model_instance.id} }
+          specify { delete :destroy, params: { id: model_instance.id} }
         end
       end
     end

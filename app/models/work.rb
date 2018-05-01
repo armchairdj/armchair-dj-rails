@@ -188,12 +188,6 @@ class Work < ApplicationRecord
     creators.alpha.to_a.map(&:name).join(connector)
   end
 
-private
-
-  #############################################################################
-  # ALPHABETIZABLE.
-  #############################################################################
-
   def alpha_parts
     [display_creators, title, subtitle]
   end

@@ -35,7 +35,7 @@ RSpec.describe Membership, type: :model do
   end
 
   context "validations" do
-    subject { build_minimal_instance }
+    subject { create_minimal_instance }
 
     it { should validate_presence_of(:group ) }
     it { should validate_presence_of(:member) }

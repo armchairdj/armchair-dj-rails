@@ -60,6 +60,11 @@
         <%= content_tag(:th, "Updated") %>
         <%= content_tag(:td, admin_date(@work.updated_at)) %>
       <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @work.alpha) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

@@ -273,6 +273,10 @@ class Post < ApplicationRecord
     work.prepare_credits
   end
 
+  def alpha_parts
+    standalone? ? [title] : work.try(:alpha_parts)
+  end
+
 private
 
   #############################################################################
@@ -360,13 +364,5 @@ private
 
     work.update_counts
     work.creators.each { |c| c.update_counts }
-  end
-
-  #############################################################################
-  # ALPHABETIZABLE.
-  #############################################################################
-
-  def alpha_parts
-    standalone? ? [title] : work.send(:alpha_parts)
   end
 end
