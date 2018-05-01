@@ -13,16 +13,13 @@ class Work < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Alphabetizable
   include Summarizable
   include Viewable
 
   #############################################################################
   # CLASS.
   #############################################################################
-
-  def self.alphabetical_by_creator
-    self.all.to_a.sort_by { |w| w.full_display_title }
-  end
 
   def self.admin_filters
     {
@@ -46,7 +43,7 @@ class Work < ApplicationRecord
 
   def self.grouped_options
     self.admin_filters.to_a.map do |arr|
-      [arr.first, self.send(arr.last).eager.alphabetical_by_creator]
+      [arr.first, self.send(arr.last).eager.alpha]
     end
   end
 
@@ -62,10 +59,9 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(Arel.sql("LOWER(works.title)")) }
   scope :eager,        -> { includes(:creators, :contributors) }
   scope :for_admin,    -> { eager }
-  scope :for_site,     -> { eager.viewable.includes(:posts).alphabetical }
+  scope :for_site,     -> { eager.viewable.includes(:posts).alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -189,6 +185,16 @@ class Work < ApplicationRecord
   def display_creators(connector: " & ")
     return unless persisted?
 
-    creators.alphabetical.to_a.map(&:name).join(connector)
+    creators.alpha.to_a.map(&:name).join(connector)
+  end
+
+private
+
+  #############################################################################
+  # ALPHABETIZABLE.
+  #############################################################################
+
+  def alpha_parts
+    [display_creators, title, subtitle]
   end
 end

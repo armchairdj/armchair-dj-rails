@@ -1,8 +1,8 @@
 <%
   @title = ["View #{@work.human_medium}", @work.display_creators, @work.title]
 
-  @creators      = @work.creators.for_admin.alphabetical
-  @contributions = @work.contributions.for_admin.alphabetical
+  @creators      = @work.creators.for_admin.alpha
+  @contributions = @work.contributions.for_admin.alpha
   @posts         = @work.posts.for_admin.reverse_cron
 %>
 

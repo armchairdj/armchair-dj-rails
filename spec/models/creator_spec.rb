@@ -63,9 +63,9 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      describe "self#alphabetical" do
+      describe "self#alpha" do
         specify "sorts alphabetically" do
-          expect(described_class.alphabetical).to eq([
+          expect(described_class.alpha).to eq([
             zero, amy_1, amy_2, anthony, kate, zorro
           ])
         end

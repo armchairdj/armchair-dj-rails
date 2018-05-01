@@ -143,4 +143,13 @@ class Contribution < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+private
+
+  #############################################################################
+  # ALPHABETIZABLE.
+  #############################################################################
+
+  def alpha_parts
+    [work.send(:alpha_parts), human_role, creator.name]
+  end
 end

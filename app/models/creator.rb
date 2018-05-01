@@ -19,6 +19,7 @@ class Creator < ApplicationRecord
   #############################################################################
 
   include Summarizable
+  include Alphabetizable
   include Viewable
   include Booletania
 
@@ -27,8 +28,6 @@ class Creator < ApplicationRecord
   #############################################################################
   # CLASS.
   #############################################################################
-
-  # Nothing so far.
 
   #############################################################################
   # SCOPES.
@@ -41,17 +40,15 @@ class Creator < ApplicationRecord
 
   scope :orphaned, -> { left_outer_joins(:real_name_identities).where(identities: { id: nil } ) }
 
-  scope :available_groups,     -> { alphabetical.collective         }
-  scope :available_members,    -> { alphabetical.individual         }
-  scope :available_real_names, -> { alphabetical.primary            }
-  scope :available_pseudonyms, -> { alphabetical.secondary.orphaned }
+  scope :available_groups,     -> { alpha.collective         }
+  scope :available_members,    -> { alpha.individual         }
+  scope :available_real_names, -> { alpha.primary            }
+  scope :available_pseudonyms, -> { alpha.secondary.orphaned }
 
   scope :eager, -> { includes(:pseudonyms, :real_names, :members, :groups, :credits, :works, :posts) }
 
-  scope :alphabetical, -> { order(Arel.sql("LOWER(creators.name)")) }
-
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.alphabetical }
+  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -116,7 +113,7 @@ class Creator < ApplicationRecord
   end
 
   def available_pseudonyms
-    self.class.available_pseudonyms.union_all(self.pseudonyms).alphabetical
+    self.class.available_pseudonyms.union_all(self.pseudonyms).alpha
   end
 
   #############################################################################
@@ -157,7 +154,7 @@ class Creator < ApplicationRecord
     aliases = real_name.pseudonyms.where.not(id: self.id)
     parent  = self.class.where(id: real_name.id)
 
-    aliases.union_all(parent).alphabetical
+    aliases.union_all(parent).alpha
   end
 
   #############################################################################
@@ -209,7 +206,7 @@ class Creator < ApplicationRecord
 
     ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
 
-    Creator.where(id: ids).alphabetical
+    Creator.where(id: ids).alpha
   end
 
   #############################################################################
@@ -254,11 +251,13 @@ class Creator < ApplicationRecord
   #############################################################################
 
   def contributions_array
-    self.contributions.viewable.map { |c| {
-      medium: c.work.pluralized_human_medium,
-      role:   c.human_role,
-      work:   c.work.full_display_title
-    } }
+    self.contributions.viewable.map do |c|
+      {
+        medium: c.work.pluralized_human_medium,
+        role:   c.human_role,
+        work:   c.work.full_display_title
+      }
+    end
   end
 
   def contributions_by_role
@@ -287,5 +286,15 @@ class Creator < ApplicationRecord
 
       memo
     end
+  end
+
+private
+
+  #############################################################################
+  # ALPHABETIZABLE.
+  #############################################################################
+
+  def alpha_parts
+    [name]
   end
 end

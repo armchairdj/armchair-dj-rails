@@ -11,6 +11,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   include AASM
+  include Alphabetizable
   include Sluggable
   include Summarizable
 
@@ -311,16 +312,15 @@ private
   end
 
   def sluggable_parts
-    if title.present?
-      [ title ]
-    elsif work.present?
-      [
-        sluggable_type,
-        work.display_creators(connector: " and "),
-        work.title,
-        work.subtitle
-      ].compact
-    end
+    return [title] if standalone?
+
+    [
+      sluggable_type,
+      work.display_creators(connector: " and "),
+      work.title,
+      work.subtitle
+    ].compact
+    # TODO BJD should sluggable do the compacting?
   end
 
   #############################################################################
@@ -360,5 +360,13 @@ private
 
     work.update_counts
     work.creators.each { |c| c.update_counts }
+  end
+
+  #############################################################################
+  # ALPHABETIZABLE.
+  #############################################################################
+
+  def alpha_parts
+    standalone? ? [title] : work.send(:alpha_parts)
   end
 end

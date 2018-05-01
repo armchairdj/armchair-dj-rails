@@ -21,14 +21,14 @@ RSpec.describe Work, type: :model do
   end
 
   context "class" do
-    describe "self#alphabetical_by_creator" do
+    describe "self#alpha" do
       let!(:madonna_ray_of_light             ) { create(:madonna_ray_of_light             ) }
       let!(:global_communications_76_14      ) { create(:global_communications_76_14      ) }
       let!(:kate_bush_directors_cut          ) { create(:kate_bush_directors_cut          ) }
       let!(:carl_craig_and_green_velvet_unity) { create(:carl_craig_and_green_velvet_unity) }
       let!(:kate_bush_hounds_of_love         ) { create(:kate_bush_hounds_of_love         ) }
 
-      specify { expect(described_class.alphabetical_by_creator.to_a).to eq([
+      specify { expect(described_class.alpha.to_a).to eq([
         carl_craig_and_green_velvet_unity,
         global_communications_76_14,
         kate_bush_directors_cut,
@@ -101,7 +101,7 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    describe "self#alphabetical" do
+    describe "self#alpha" do
       let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
       let!(:lh   ) { create(:album, title: "lionheart"        ) }
       let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }
@@ -113,7 +113,7 @@ RSpec.describe Work, type: :model do
       let!(:d    ) { create(:album, title: "Director's Cut"   ) }
       let!(:fifty) { create(:album, title: "50 Words for Snow") }
 
-      specify { expect(described_class.alphabetical.to_a).to eq([
+      specify { expect(described_class.alpha.to_a).to eq([
         fifty,
         a,
         d,

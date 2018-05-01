@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_28_212523) do
+ActiveRecord::Schema.define(version: 2018_05_01_001349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.integer "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_contributions_on_alpha"
     t.index ["creator_id"], name: "index_contributions_on_creator_id"
     t.index ["work_id"], name: "index_contributions_on_work_id"
   end
@@ -34,6 +36,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.text "summary"
     t.boolean "primary", default: true, null: false
     t.boolean "individual", default: true, null: false
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["primary"], name: "index_creators_on_primary"
@@ -45,6 +49,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.bigint "work_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_credits_on_alpha"
     t.index ["creator_id"], name: "index_credits_on_creator_id"
     t.index ["work_id"], name: "index_credits_on_work_id"
   end
@@ -80,6 +86,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.datetime "publish_on"
     t.bigint "author_id"
     t.text "summary"
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_posts_on_alpha"
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
@@ -111,6 +119,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.string "last_name"
     t.string "username", null: false
     t.text "bio"
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -127,6 +137,8 @@ ActiveRecord::Schema.define(version: 2018_04_28_212523) do
     t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
     t.text "summary"
+    t.string "alpha", null: false
+    t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end

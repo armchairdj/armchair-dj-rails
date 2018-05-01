@@ -11,7 +11,7 @@ RSpec.describe "admin/works/index", type: :view do
     @model_class = assign(:model_name, Work)
     @scope       = assign(:scope, :all)
     @page        = assign(:page, 1)
-    @works       = assign(:works, Work.all.alphabetical.page(1))
+    @works       = assign(:works, Work.all.alpha.page(1))
   end
 
   it "renders a list of works" do

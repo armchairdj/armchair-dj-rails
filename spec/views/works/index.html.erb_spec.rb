@@ -8,7 +8,7 @@ RSpec.describe "works/index", type: :view do
       create(:minimal_work)
     end
 
-    @works = assign(:works, Work.all.alphabetical.page(1))
+    @works = assign(:works, Work.all.alpha.page(1))
   end
 
   it "renders a list of works" do

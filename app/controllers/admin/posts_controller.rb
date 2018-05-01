@@ -179,7 +179,7 @@ private
 
     @post.prepare_work_for_editing(@sanitized_params)
 
-    @creators = policy_scope(Creator).alphabetical
+    @creators = policy_scope(Creator).alpha
     @roles    = Contribution.grouped_role_options
     @works    = Work.grouped_options
   end

@@ -37,13 +37,13 @@ RSpec.describe User, type: :model do
   end
 
   context "scope-related" do
-    describe "self#alphabetical" do
+    describe "self#alpha" do
       let!(:michelle_dillardo) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillardo") }
       let!(  :brian_j_dillard) { create(:minimal_user, first_name: "Brian",    middle_name: "J.", last_name: "Dillard" ) }
       let!(    :brian_dillard) { create(:minimal_user, first_name: "Brian",                       last_name: "Dillard" ) }
       let!( :michelle_dillard) { create(:minimal_user, first_name: "Michelle",                    last_name: "Dillard" ) }
 
-      specify { expect(described_class.alphabetical.to_a).to eq([
+      specify { expect(described_class.alpha.to_a).to eq([
         brian_j_dillard, brian_dillard, michelle_dillard, michelle_dillardo
       ]) }
     end

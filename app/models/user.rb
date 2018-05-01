@@ -10,6 +10,8 @@ class User < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Alphabetizable
+
   devise(
     :confirmable,
     :database_authenticatable,
@@ -44,7 +46,6 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :alphabetical, -> { order(:first_name, :last_name) }
   scope :eager,        -> { all }
   scope :for_admin,    -> { eager }
   scope :for_site,     -> { eager }
@@ -104,5 +105,15 @@ class User < ApplicationRecord
 
   def display_name
     [first_name, middle_name, last_name].compact.join(" ")
+  end
+
+private
+
+  #############################################################################
+  # ALPHABETIZABLE.
+  #############################################################################
+
+  def alpha_parts
+    [last_name, first_name, middle_name]
   end
 end

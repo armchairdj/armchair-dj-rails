@@ -3,18 +3,18 @@
 module Workable
   extend ActiveSupport::Concern
 
+  include Alphabetizable
+
   included do
 
     ###########################################################################
     # SCOPES.
     ###########################################################################
 
-    scope :alphabetical, -> { eager.order("works.title, works.subtitle") }
-
     scope     :viewable, -> { eager.where.not(works: { viewable_post_count: 0 }) }
 
     scope        :eager, -> { includes(:work) }
-    scope     :for_site, -> { eager.viewable.alphabetical }
+    scope     :for_site, -> { eager.viewable.alpha }
     scope    :for_admin, -> { eager }
 
     ###########################################################################

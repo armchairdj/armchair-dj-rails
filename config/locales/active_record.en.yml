@@ -142,11 +142,18 @@ en:
       models:
         contribution:
           attributes:
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
             creator_id:
               taken: "This creator cannot appear twice in the same role."
         creator:
+          attributes:
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
         credit:
           attributes:
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
             creator_id:
               taken: "This creator cannot appear twice."
         identity:
@@ -165,6 +172,7 @@ en:
         post:
           attributes:
             base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
               invalid_author: "This user cannot post."
@@ -177,6 +185,11 @@ en:
               blank: "Please choose a publication date to schedule this review."
         work:
           attributes:
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
               missing: "Please choose at least one creator."
         user:
+          attributes:
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."

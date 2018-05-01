@@ -2,8 +2,8 @@
   @title = ["View Creator", @creator.name]
 
   @posts         = @creator.posts.for_admin.reverse_cron
-  @works         = @creator.works.for_admin.alphabetical
-  @contributions = @creator.contributions.for_admin.alphabetical
+  @works         = @creator.works.for_admin.alpha
+  @contributions = @creator.contributions.for_admin.alpha
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {

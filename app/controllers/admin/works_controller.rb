@@ -122,7 +122,7 @@ private
     @work.prepare_credits
     @work.prepare_contributions
 
-    @creators = policy_scope(Creator).alphabetical
+    @creators = policy_scope(Creator).alpha
     @roles    = Contribution.grouped_role_options
   end
 

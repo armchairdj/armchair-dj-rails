@@ -2,8 +2,8 @@
   @title = ["View User", @user.display_name ]
 
   @posts    = @user.posts.for_admin.reverse_cron
-  @works    = @user.works.for_admin.alphabetical
-  @creators = @user.creators.for_admin.alphabetical
+  @works    = @user.works.for_admin.alpha
+  @creators = @user.creators.for_admin.alpha
   @bio      = @user.bio
 %>
 

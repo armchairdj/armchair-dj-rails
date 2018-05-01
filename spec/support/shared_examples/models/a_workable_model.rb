@@ -3,7 +3,7 @@
 RSpec.shared_examples "a_workable_model" do
   context "included" do
     context "scope-related" do
-      pending "alphabetical"
+      pending "alpha"
       pending "viewable"
       pending "eager"
       pending "for_admin"
