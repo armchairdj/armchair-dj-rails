@@ -3,6 +3,7 @@ class CreateMedia < ActiveRecord::Migration[5.2]
     create_table :media do |t|
       t.string :name
       t.string :alpha, index: true
+      t.text :summary
 
       t.timestamps
     end

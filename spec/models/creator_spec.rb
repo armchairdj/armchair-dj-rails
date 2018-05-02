@@ -37,21 +37,23 @@ RSpec.describe Creator, type: :model do
       let!(  :feist) { create(:creator, name: "Feist"        ) }
       let!(:derrick) { create(:creator, name: "Derrick May"  ) }
 
+      let(:ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
+
       before(:each) do
-        create(:review_without_work, :published,
-          "work_attributes" => attributes_for(:work_without_credits).merge({
+        create(:review, :with_author, :with_body, :published,
+          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => richie.id } }
           })
         )
 
-        create(:review_without_work, :published,
-          "work_attributes" => attributes_for(:work_without_credits).merge({
+        create(:review, :with_author, :with_body, :published,
+          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => carl.id } }
           })
         )
 
-        create(:review_without_work, :draft,
-          "work_attributes" => attributes_for(:work_without_credits).merge({
+        create(:review, :with_author, :with_body, :draft,
+          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
           })
         )
@@ -69,7 +71,7 @@ RSpec.describe Creator, type: :model do
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin }
+        subject { described_class.for_admin.where(id: ids) }
 
         specify "includes all creators, unsorted" do
           should match_array([richie, amy, kate, carl, feist, derrick])
@@ -84,7 +86,7 @@ RSpec.describe Creator, type: :model do
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site }
+        subject { described_class.for_site.where(id: ids) }
 
         specify "includes only creators with published posts, sorted alphabetically" do
           should eq([carl, richie])
@@ -776,7 +778,7 @@ RSpec.describe Creator, type: :model do
           let!(     :mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
           let!(     :john) { described_class.find_by(name: "John McVie"        ) }
 
-          let!(:imaginary) { create(:musician, :primary, name: "Imaginary") }
+          let!(:imaginary) { create(:minimal_creator, :primary, name: "Imaginary") }
 
           let!(:other_band) do
             other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
@@ -825,5 +827,7 @@ RSpec.describe Creator, type: :model do
         pending "#contributions_by_work"
       end
     end
+
+    pending "#alpha_parts"
   end
 end

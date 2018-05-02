@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec::Matchers.define :eager_load do |**associations|
+RSpec::Matchers.define :eager_load do |*associations|
   def testable_instance(obj)
     if obj.respond_to? :first
       obj.first

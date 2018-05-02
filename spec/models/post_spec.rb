@@ -89,17 +89,17 @@ RSpec.describe Post, type: :model do
 
   context "scope-related" do
     let!(:draft_standalone    ) { create(:standalone_post, :draft    ) }
-    let!(:draft_review        ) { create(:song_review,     :draft    ) }
+    let!(:draft_review        ) { create(:review,     :draft    ) }
     let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
-    let!(:scheduled_review    ) { create(:song_review,     :scheduled) }
+    let!(:scheduled_review    ) { create(:review,     :scheduled) }
     let!(:published_standalone) { create(:standalone_post, :published) }
-    let!(:published_review    ) { create(:song_review,     :published) }
+    let!(:published_review    ) { create(:review,     :published) }
 
     context "basics" do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:work, :credits, :creator) }
+        it { should eager_load(:work, :creators, :author) }
       end
 
       describe "self#reverse_cron" do
@@ -116,7 +116,7 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { should_not eager_load(:work, :credits, :creator) }
+        it { should_not eager_load(:work, :creators, :author) }
       end
 
       describe "self#for_admin" do
@@ -133,7 +133,7 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { should eager_load(:work, :credits, :creator) }
+        it { should eager_load(:work, :creators, :author) }
       end
 
       describe "self#for_site" do
@@ -141,7 +141,7 @@ RSpec.describe Post, type: :model do
 
         it { should eq [ published_review, published_standalone ] }
 
-        it { should eager_load(:work, :credits, :creator) }
+        it { should eager_load(:work, :creators, :author) }
       end
     end
 
@@ -395,7 +395,7 @@ RSpec.describe Post, type: :model do
         end
 
         context "saved review" do
-          subject { create(:song_review) }
+          subject { create(:review) }
 
           it "ensures work and no title" do
             subject.work_id = ""
@@ -413,7 +413,7 @@ RSpec.describe Post, type: :model do
 
           it "ensures title and no work" do
             subject.title   = ""
-            subject.work_id = create(:song).id
+            subject.work_id = create(:minimal_work).id
 
             subject.send(:work_or_title_present)
 
@@ -883,18 +883,22 @@ RSpec.describe Post, type: :model do
         describe "#update_counts_for_descendents" do
           let(    :review) { create(:unity_album_review  ) }
           let(:standalone) { create(:tiny_standalone_post) }
+          let(    :medium) { double }
           let(      :work) { double }
           let(  :creators) { [double, double] }
 
           it "updates counts for creators and works" do
-            allow(review).to receive(    :work).and_return(work)
+            allow(review).to receive(    :work).and_return(work    )
+            allow(  work).to receive(  :medium).and_return(medium  )
             allow(  work).to receive(:creators).and_return(creators)
 
              allow(          work).to receive(:update_counts)
+             allow(        medium).to receive(:update_counts)
              allow(creators.first).to receive(:update_counts)
              allow( creators.last).to receive(:update_counts)
 
             expect(          work).to receive(:update_counts).once
+            expect(        medium).to receive(:update_counts).once
             expect(creators.first).to receive(:update_counts).once
             expect( creators.last).to receive(:update_counts).once
 
@@ -987,7 +991,7 @@ RSpec.describe Post, type: :model do
       end
 
       describe "#update_and_unpublish" do
-        subject { create(:song_review, :published) }
+        subject { create(:review, :published) }
 
         before(:each) do
           allow(subject).to receive(:update    ).and_call_original
@@ -995,7 +999,7 @@ RSpec.describe Post, type: :model do
         end
 
         context "valid" do
-          let(:params) { { "work_id" => create(:song).id } }
+          let(:params) { { "work_id" => create(:minimal_work).id } }
 
           it "unpublishes, updates, and returns true" do
             expect(subject).to receive(:update    )
@@ -1085,7 +1089,7 @@ RSpec.describe Post, type: :model do
       end
 
       describe "#update_and_unschedule" do
-        subject { create(:song_review, :scheduled) }
+        subject { create(:review, :scheduled) }
 
         before(:each) do
           allow(subject).to receive(:update     ).and_call_original
@@ -1093,7 +1097,7 @@ RSpec.describe Post, type: :model do
         end
 
         context "valid" do
-          let(:params) { { "work_id" => create(:song).id } }
+          let(:params) { { "work_id" => create(:minimal_work).id } }
 
           it "unschedules, updates, and returns true" do
             expect(subject).to receive(:update     )
@@ -1134,18 +1138,18 @@ RSpec.describe Post, type: :model do
   context "instance" do
     context "decorators" do
       let(:standalone) { create(:standalone_post) }
-      let(    :review) { create(:album_review   ) }
+      let(    :review) { create(:review         ) }
 
       describe "#type" do
         specify{ expect(standalone.type              ).to eq("Post"         ) }
         specify{ expect(standalone.type(plural: true)).to eq("Posts"        ) }
-        specify{ expect(    review.type              ).to eq("Album Review" ) }
-        specify{ expect(    review.type(plural: true)).to eq("Album Reviews") }
+        specify{ expect(    review.type              ).to eq("Song Review" ) }
+        specify{ expect(    review.type(plural: true)).to eq("Song Reviews") }
       end
 
       describe "#sluggable_type" do
         specify{ expect(standalone.sluggable_type).to eq(nil            ) }
-        specify{ expect(    review.sluggable_type).to eq("Album Reviews") }
+        specify{ expect(    review.sluggable_type).to eq("Song Reviews") }
       end
     end
 
@@ -1153,8 +1157,8 @@ RSpec.describe Post, type: :model do
       context "for type" do
         let(:unsaved_standalone) {  build(:standalone_post) }
         let(  :saved_standalone) { create(:standalone_post) }
-        let(    :unsaved_review) {  build(:song_review    ) }
-        let(      :saved_review) { create(:song_review    ) }
+        let(    :unsaved_review) {  build(:review    ) }
+        let(      :saved_review) { create(:review    ) }
 
         describe "#standalone?" do
           specify { expect(unsaved_standalone.standalone?).to eq(true ) }
@@ -1245,17 +1249,17 @@ RSpec.describe Post, type: :model do
     describe "#prepare_work_for_editing" do
       context "review" do
         context "saved" do
-          subject { create(:song_review) }
+          subject { create(:review) }
 
-          let!(      :song_id) { subject.work_id }
-          let!(:other_song_id) { create(:song).id }
+          let!(      :work_id) { subject.work_id }
+          let!(:other_work_id) { create(:minimal_work).id }
 
           describe "clean" do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1263,10 +1267,10 @@ RSpec.describe Post, type: :model do
 
           describe "current work_id" do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
-              subject.prepare_work_for_editing({ "work_id" => song_id })
+              subject.prepare_work_for_editing({ "work_id" => work_id })
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1274,12 +1278,12 @@ RSpec.describe Post, type: :model do
 
           describe "dirty work_id" do
             it "moves current_work_id to dirty work_id and sets up work_attributes" do
-              subject.work_id = other_song_id
+              subject.work_id = other_work_id
 
-              subject.prepare_work_for_editing({ "work_id" => other_song_id })
+              subject.prepare_work_for_editing({ "work_id" => other_work_id })
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(other_song_id)
+              expect(subject.current_work_id).to eq(other_work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1300,24 +1304,24 @@ RSpec.describe Post, type: :model do
 
           describe "dirty work_attributes" do
             let(:valid_attributes) { {
-              "medium"             => "song",
+              "medium_id"          => create(:minimal_medium).id,
               "title"              => "Hounds of Love",
-              "credits_attributes" => { "0" => { "creator_id" => create(:musician).id } }
+              "credits_attributes" => { "0" => { "creator_id" => create(:minimal_creator).id } }
             } }
 
             let(:invalid_attributes) {
-              valid_attributes.except(:medium)
+              valid_attributes.except(:medium_id)
             }
 
             context "and clean work_id" do
               it "sets current_work_id to current work_id and retains work_attributes" do
-                subject.work_id         = song_id
+                subject.work_id         = work_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => work_id }))
 
                 expect(subject.changed?       ).to eq(true)
-                expect(subject.current_work_id).to eq(song_id)
+                expect(subject.current_work_id).to eq(work_id)
                 expect(subject.work_id        ).to eq(nil)
                 expect(subject.work           ).to be_a_populated_new_work
                 expect(subject.work.title     ).to eq("Hounds of Love")
@@ -1326,13 +1330,13 @@ RSpec.describe Post, type: :model do
 
             context "and dirty work_id" do
               it "sets current_work_id to dirty work_id and retains work_attributes" do
-                subject.work_id         = other_song_id
+                subject.work_id         = other_work_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_work_id }))
 
                 expect(subject.changed?       ).to eq(true)
-                expect(subject.current_work_id).to eq(other_song_id)
+                expect(subject.current_work_id).to eq(other_work_id)
                 expect(subject.work_id        ).to eq(nil)
                 expect(subject.work           ).to be_a_populated_new_work
               end
@@ -1356,17 +1360,17 @@ RSpec.describe Post, type: :model do
         end
 
         context "unsaved" do
-          subject { build(:song_review) }
+          subject { build(:review) }
 
-          let!(      :song_id) { subject.work_id }
-          let!(:other_song_id) { create(:song).id }
+          let!(      :work_id) { subject.work_id }
+          let!(:other_work_id) { create(:minimal_work).id }
 
           describe "clean" do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
               subject.prepare_work_for_editing()
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1374,10 +1378,10 @@ RSpec.describe Post, type: :model do
 
           describe "current work_id" do
             it "moves current_work_id to saved work_id and sets up work_attributes" do
-              subject.prepare_work_for_editing({ "work_id" => song_id })
+              subject.prepare_work_for_editing({ "work_id" => work_id })
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(song_id)
+              expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1385,12 +1389,12 @@ RSpec.describe Post, type: :model do
 
           describe "dirty work_id" do
             it "moves current_work_id to dirty work_id and sets up work_attributes" do
-              subject.work_id = other_song_id
+              subject.work_id = other_work_id
 
-              subject.prepare_work_for_editing({ "work_id" => other_song_id })
+              subject.prepare_work_for_editing({ "work_id" => other_work_id })
 
               expect(subject.changed?       ).to eq(true)
-              expect(subject.current_work_id).to eq(other_song_id)
+              expect(subject.current_work_id).to eq(other_work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
             end
@@ -1411,24 +1415,24 @@ RSpec.describe Post, type: :model do
 
           describe "dirty work_attributes" do
             let(:valid_attributes) { {
-              "medium"                   => "song",
+              "medium_id"                => create(:minimal_medium).id,
               "title"                    => "Hounds of Love",
-              "contributions_attributes" => { "0" => { "creator_id" => create(:musician).id } }
+              "contributions_attributes" => { "0" => { "creator_id" => create(:minimal_creator).id } }
             } }
 
             let(:invalid_attributes) {
-              valid_attributes.except(:medium)
+              valid_attributes.except(:medium_id)
             }
 
             context "and clean work_id" do
               it "sets current_work_id to current work_id and retains work_attributes" do
-                subject.work_id         = song_id
+                subject.work_id         = work_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => song_id }))
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => work_id }))
 
                 expect(subject.changed?       ).to eq(true)
-                expect(subject.current_work_id).to eq(song_id)
+                expect(subject.current_work_id).to eq(work_id)
                 expect(subject.work_id        ).to eq(nil)
                 expect(subject.work           ).to be_a_populated_new_work
                 expect(subject.work.title     ).to eq("Hounds of Love")
@@ -1437,13 +1441,13 @@ RSpec.describe Post, type: :model do
 
             context "and dirty work_id" do
               it "sets current_work_id to dirty work_id and retains work_attributes" do
-                subject.work_id         = other_song_id
+                subject.work_id         = other_work_id
                 subject.work_attributes = valid_attributes
 
-                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_song_id }))
+                subject.prepare_work_for_editing(valid_attributes.merge({ "work_id" => other_work_id }))
 
                 expect(subject.changed?       ).to eq(true)
-                expect(subject.current_work_id).to eq(other_song_id)
+                expect(subject.current_work_id).to eq(other_work_id)
                 expect(subject.work_id        ).to eq(nil)
                 expect(subject.work           ).to be_a_populated_new_work
               end
@@ -1489,5 +1493,7 @@ RSpec.describe Post, type: :model do
         end
       end
     end
+
+    pending "#alpha_parts"
   end
 end

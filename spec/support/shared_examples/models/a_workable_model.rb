@@ -8,13 +8,12 @@ RSpec.shared_examples "a_workable_model" do
       let!(:with_draft    ) { create_minimal_instance }
       let!(:with_none     ) { create_minimal_instance }
 
-      let(:all) { [ with_published, with_scheduled, with_draft, with_none ] }
-      let(:ids) { all.map(&:id) }
+      let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
 
       before(:each) do
-        create(:song_review, :published, work: with_published.work)
-        create(:song_review, :scheduled, work: with_scheduled.work)
-        create(:song_review, :draft,     work:     with_draft.work)
+        create(:review, :published, work: with_published.work)
+        create(:review, :scheduled, work: with_scheduled.work)
+        create(:review, :draft,     work:     with_draft.work)
       end
 
       describe "self#eager" do
@@ -28,7 +27,7 @@ RSpec.shared_examples "a_workable_model" do
 
         it { should contain_exactly(with_published) }
 
-        it { should_not eager_load(:work, :creator) }
+        it { should eager_load(:work, :creator) }
       end
 
       describe "self#non_viewable" do
@@ -36,7 +35,7 @@ RSpec.shared_examples "a_workable_model" do
 
         it { should contain_exactly(with_scheduled, with_draft, with_none) }
 
-        it { should_not eager_load(:work, :creator) }
+        it { should eager_load(:work, :creator) }
       end
 
       describe "self#for_admin" do

@@ -145,7 +145,7 @@ RSpec.describe PostsHelper, type: :helper do
       end
 
       context "review" do
-        subject { build(:song_review, work_id: create(:kate_bush_hounds_of_love).id) }
+        subject { build(:review, work_id: create(:kate_bush_hounds_of_love).id) }
 
         it "nils without slug" do
           expect(helper.link_to_post(subject)).to eq(nil)

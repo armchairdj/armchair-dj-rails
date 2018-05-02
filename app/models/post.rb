@@ -64,7 +64,7 @@ class Post < ApplicationRecord
   # TODO BJD deal with unpublished
   scope :reverse_cron,    -> { order(published_at: :desc) }
 
-  scope :eager,           -> { includes(work: { credits: :creator }) }
+  scope :eager,           -> { includes(:work, :creators, :author) }
 
   scope :for_admin,       -> { eager                   }
   scope :for_site,        -> { eager.published.reverse_cron }
@@ -230,7 +230,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def type(plural: false)
-    base = review? ? "#{work.human_medium} Review" : "Post"
+    base = review? ? "#{work.medium.name} Review" : "Post"
 
     plural ? base.pluralize : base
   end
@@ -364,6 +364,8 @@ private
     return unless work.present?
 
     work.update_counts
+    work.medium.update_counts
     work.creators.each { |c| c.update_counts }
+    # work.genres.each { |g| g.update_counts }
   end
 end

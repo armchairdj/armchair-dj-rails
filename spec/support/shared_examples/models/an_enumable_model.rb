@@ -16,10 +16,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
       specify { expect(described_class).to respond_to(:human_enum_value) }
     end
 
-    describe "self#pluralized_human_enum_value" do
-      specify { expect(described_class).to respond_to(:pluralized_human_enum_value) }
-    end
-
     describe "self#enumable_attributes" do
       specify { expect(described_class).to respond_to(:enumable_attributes) }
     end
@@ -42,8 +38,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
         end
       end
-
-      pending "plural"
     end
 
     context "for #{single_attr}" do
@@ -62,8 +56,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             allow(I18n).to receive(:t).with("#{i18n_key}.a").and_return("Y.")
             allow(I18n).to receive(:t).with("#{i18n_key}.r").and_return("X.")
           end
-
-          pending "self#pluralized_human_#{plural_attr}"
 
           describe "self#human_#{plural_attr}" do
             it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
@@ -117,8 +109,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             instance.send("human_#{single_attr}")
           end
         end
-
-        pending "#pluralized_human_#{single_attr}"
       end
     end
   end

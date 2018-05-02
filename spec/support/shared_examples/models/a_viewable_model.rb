@@ -23,15 +23,17 @@ RSpec.shared_examples "a_viewable_model" do
       let!(:scheduled_instance) { create_minimal_instance(:with_scheduled_post) }
       let!(:published_instance) { create_minimal_instance(:with_published_post) }
 
+      let(:ids) { [draft_instance, scheduled_instance, published_instance].map(&:id) }
+
       context "scopes" do
         describe "self#viewable" do
-          subject { described_class.viewable }
+          subject { described_class.viewable.where(id: ids) }
 
           it { should contain_exactly(published_instance) }
         end
 
         describe "self#non_viewable" do
-          subject { described_class.non_viewable }
+          subject { described_class.non_viewable.where(id: ids) }
 
           it { should contain_exactly(draft_instance, scheduled_instance) }
         end

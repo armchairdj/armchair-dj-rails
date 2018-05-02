@@ -54,7 +54,7 @@ class Creator < ApplicationRecord
   ) }
 
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.alpha }
+  scope :for_site,  -> { viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -259,8 +259,8 @@ class Creator < ApplicationRecord
   def contributions_array
     self.contributions.viewable.map do |c|
       {
-        medium: c.work.pluralized_human_medium,
-        role:   c.human_role,
+        medium: c.work.medium.name,
+        role:   c.role.name,
         work:   c.work.full_display_title
       }
     end
@@ -279,7 +279,7 @@ class Creator < ApplicationRecord
   end
 
   def media
-    self.contributions.viewable.map(&:work).map(&:pluralized_human_medium).uniq.sort
+    self.contributions.viewable.map { |c| c.work.medium.name }.uniq.sort
   end
 
   def roles

@@ -32,7 +32,7 @@ class Role < ApplicationRecord
 
   belongs_to :medium
 
-  has_many :contributions
+  has_many :contributions, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.

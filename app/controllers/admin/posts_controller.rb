@@ -158,7 +158,7 @@ private
         :post_id,
         :id,
         :_destroy,
-        :medium,
+        :medium_id,
         :title,
         :subtitle,
         :credits_attributes => [

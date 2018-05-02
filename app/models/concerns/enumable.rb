@@ -24,10 +24,6 @@ module Enumable
       I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{attribute.to_s.pluralize}.#{val}")
     end
 
-    def pluralized_human_enum_value(attribute, val)
-      I18n.t("activerecord.attributes.#{model_name.i18n_key}.pluralized_#{attribute.to_s.pluralize}.#{val}")
-    end
-
     def enumable_attributes(*attributes)
       self._enumable_attributes = Set.new(attributes.map(&:to_sym))
 
@@ -50,20 +46,12 @@ module Enumable
           define_method :"human_#{attribute}" do |val|
             self.human_enum_value(attribute, val)
           end
-
-          define_method :"pluralized_human_#{attribute}" do |val|
-            self.pluralized_human_enum_value(attribute, val)
-          end
         end
 
         # Define instance methods
         self.class_eval do
           define_method :"human_#{attribute}" do
             self.class.send(:"human_#{attribute}", self.send(attribute))
-          end
-
-          define_method :"pluralized_human_#{attribute}" do
-            self.class.send(:"pluralized_human_#{attribute}", self.send(attribute))
           end
         end
       end

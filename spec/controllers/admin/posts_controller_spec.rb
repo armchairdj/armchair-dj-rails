@@ -58,7 +58,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       context "with records" do
         context ":draft scope (default)" do
           before(:each) do
-            10.times { create(:song_review,     :draft) }
+            10.times { create(:review,     :draft) }
             11.times { create(:standalone_post, :draft) }
           end
 
@@ -79,7 +79,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
         context ":scheduled scope" do
           before(:each) do
-            10.times { create(:song_review,     :scheduled) }
+            10.times { create(:review,     :scheduled) }
             11.times { create(:standalone_post, :scheduled) }
           end
 
@@ -100,7 +100,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
         context ":published scope" do
           before(:each) do
-            10.times { create(:song_review,     :published) }
+            10.times { create(:review,     :published) }
             11.times { create(:standalone_post, :published) }
           end
 
@@ -121,9 +121,9 @@ RSpec.describe Admin::PostsController, type: :controller do
 
         context ":all scope" do
           before(:each) do
-            5.times { create(:song_review,     :draft     ) }
+            5.times { create(:review,     :draft     ) }
             5.times { create(:standalone_post, :draft     ) }
-            5.times { create(:song_review,     :published ) }
+            5.times { create(:review,     :published ) }
             5.times { create(:standalone_post, :published ) }
             1.times { create(:standalone_post, :scheduled ) }
           end
@@ -158,7 +158,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "review" do
-        let(:post) { create(:song_review) }
+        let(:post) { create(:review) }
 
         it "renders" do
           get :show, params: { id: post.to_param }
@@ -258,8 +258,8 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "existing work" do
-        let(    :max_params) { { "work_id" => create(:song).id, "body" => "body", "summary" => summary } }
-        let(  :valid_params) { { "work_id" => create(:song).id } }
+        let(    :max_params) { { "work_id" => create(:minimal_work).id, "body" => "body", "summary" => summary } }
+        let(  :valid_params) { { "work_id" => create(:minimal_work).id } }
         let(:invalid_params) { { "body" => "only the body" } }
 
         context "with max valid params" do
@@ -342,9 +342,9 @@ RSpec.describe Admin::PostsController, type: :controller do
             "title"              => "Hounds of Love",
             "subtitle"           => "New Vocal",
             "credits_attributes" => {
-              "0" => { "creator_id" => create(:musician).id },
-              "1" => { "creator_id" => create(:musician).id },
-              "2" => { "creator_id" => create(:musician).id }
+              "0" => { "creator_id" => create(:minimal_creator).id },
+              "1" => { "creator_id" => create(:minimal_creator).id },
+              "2" => { "creator_id" => create(:minimal_creator).id }
             }
           }
         } }
@@ -355,7 +355,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             "title"              => "Hounds of Love",
             "subtitle"           => "New Vocal",
             "credits_attributes" => {
-              "0" => { "creator_id" => create(:musician).id }
+              "0" => { "creator_id" => create(:minimal_creator).id }
             }
           }
         } }
@@ -365,7 +365,7 @@ RSpec.describe Admin::PostsController, type: :controller do
             "medium"                   => "",
             "title"                    => "Hounds of Love",
             "credits_attributes" => {
-              "0" => { "creator_id" => create(:musician).id }
+              "0" => { "creator_id" => create(:minimal_creator).id }
             }
           }
         } }
@@ -481,7 +481,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "review" do
-        let(:post) { create(:song_review) }
+        let(:post) { create(:review) }
 
         it "renders" do
           get :edit, params: { id: post.to_param }
@@ -531,9 +531,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:song_review) }
+          let(:post) { create(:review) }
 
-          let(  :valid_params) { { "work_id" => create(:song).id } }
+          let(  :valid_params) { { "work_id" => create(:minimal_work).id } }
           let(:invalid_params) { { "work_id" => ""               } }
 
           context "with valid params" do
@@ -566,7 +566,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         describe "replacing work_id with work_attributes" do
           let!(:post) { create(:product_review) }
 
-          let(:kate_bush) { create(:musician, name: "Kate Bush") }
+          let(:kate_bush) { create(:minimal_creator, name: "Kate Bush") }
 
           let(:valid_params) { {
             "work_id"         => post.work.id,
@@ -733,9 +733,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:song_review, :draft) }
+          let(:post) { create(:review, :draft) }
 
-          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id } }
+          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id } }
           let(:invalid_params) { { "body" => ""         , "work_id" => ""               } }
 
           context "with valid params" do
@@ -839,9 +839,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:song_review, :published) }
+          let(:post) { create(:review, :published) }
 
-          let(  :valid_params) { { "body" => "", "work_id" => create(:song).id } }
+          let(  :valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
           let(:invalid_params) { { "body" => "", "work_id" => ""               } }
 
           context "with valid params" do
@@ -942,9 +942,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:song_review) }
+          let(:post) { create(:review) }
 
-          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:song).id, publish_on: "01/01/2050" } }
+          let(  :valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id, publish_on: "01/01/2050" } }
           let(:invalid_params) { { "body" => ""         , "work_id" => ""                                         } }
 
           context "with valid params" do
@@ -1048,9 +1048,9 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:song_review, :scheduled) }
+          let(:post) { create(:review, :scheduled) }
 
-          let(  :valid_params) { { "body" => "", "work_id" => create(:song).id } }
+          let(  :valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
           let(:invalid_params) { { "body" => "", "work_id" => ""               } }
 
           context "with valid params" do

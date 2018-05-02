@@ -1,14 +1,18 @@
 require "rails_helper"
 
 RSpec.describe Genre, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   context "constants" do
     # Nothing so far.
   end
 
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an_alphabetizable_model"
+
+    it_behaves_like "an_application_record"
+
+    it_behaves_like "a_summarizable_model"
+
+    # it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -16,7 +20,9 @@ RSpec.describe Genre, type: :model do
   end
 
   context "scope-related" do
-    # Nothing so far.
+    pending "self#eager"
+    pending "self#for_admin"
+    pending "self#for_site"
   end
 
   context "associations" do
@@ -54,7 +60,7 @@ RSpec.describe Genre, type: :model do
   end
 
   context "instance" do
-    # Nothing so far.
+    pending "#alpha_parts"
 
     describe "private" do
       # Nothing so far.

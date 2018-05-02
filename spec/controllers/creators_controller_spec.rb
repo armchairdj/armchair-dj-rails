@@ -23,7 +23,7 @@ RSpec.describe CreatorsController, type: :controller do
 
     context "with records" do
       before(:each) do
-        21.times { create(:song_review, :published) }
+        21.times { create(:review, :published) }
       end
 
       it "renders" do

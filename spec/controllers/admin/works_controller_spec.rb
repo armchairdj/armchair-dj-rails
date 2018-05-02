@@ -50,7 +50,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       context "with records" do
         context ":all scope (default)" do
           before(:each) do
-            10.times { create(:song_review, :published) }
+            10.times { create(:review, :published) }
             11.times { create(:minimal_work) }
           end
 
@@ -73,7 +73,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
         context ":viewable scope" do
           before(:each) do
-            21.times { create(:song_review, :published) }
+            21.times { create(:review, :published) }
           end
 
           it "renders" do
@@ -190,7 +190,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
 
       context "with contribution" do
-        let(:work) { create(:minimal_work, :with_contribution) }
+        let(:work) { create(:minimal_work, :with_one_contribution) }
 
         it "renders" do
           get :edit, params: { id: work.to_param }

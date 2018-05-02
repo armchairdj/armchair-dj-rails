@@ -24,7 +24,7 @@ RSpec.describe PostsController, type: :controller do
 
     context "with unpublished records" do
       before(:each) do
-        10.times { create(:song_review    ) }
+        10.times { create(:review    ) }
         11.times { create(:standalone_post) }
       end
 
@@ -39,7 +39,7 @@ RSpec.describe PostsController, type: :controller do
 
     context "with published records" do
       before(:each) do
-        10.times { create(:song_review,     :published) }
+        10.times { create(:review,     :published) }
         11.times { create(:standalone_post, :published) }
       end
 

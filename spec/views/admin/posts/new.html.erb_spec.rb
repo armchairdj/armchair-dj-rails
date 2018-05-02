@@ -77,7 +77,7 @@ RSpec.describe "admin/posts/new", type: :view do
 
       context "review of existing work" do
         before(:each) do
-          @post.work_id = create(:song).id
+          @post.work_id = create(:minimal_work).id
           @post.summary = "too short"
           @post.valid?
         end
@@ -100,7 +100,7 @@ RSpec.describe "admin/posts/new", type: :view do
 
       context "review of new work" do
         before(:each) do
-          @post.work_attributes = attributes_for(:work_without_credits)
+          @post.work_attributes = attributes_for(:work, :with_medium, :with_title)
           @post.valid?
         end
 

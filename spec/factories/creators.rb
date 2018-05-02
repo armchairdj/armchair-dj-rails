@@ -4,23 +4,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :creator do
-    factory :minimal_creator, parent: :musician do; end
-
-    factory :primary_creator, parent: :minimal_creator do
-      primary
-    end
-
-    factory :secondary_creator, parent: :minimal_creator do
-      secondary
-    end
-
-    factory :individual_creator, parent: :minimal_creator do
-      individual
-    end
-
-    factory :collective_creator, parent: :minimal_creator do
-      collective
-    end
 
     ###########################################################################
     # TRAITS.
@@ -28,13 +11,11 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        create(:post, :with_author, :draft, body: "body", work_attributes: {
-          "title"              => "#{FFaker::Music.song}",
-          "medium"             => "song",
-          "credits_attributes" => {
-            "0" => attributes_for(:credit, creator_id: creator.id)
-          }
+        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
+
+        create(:post, :with_author, :draft, body: "body", work_attributes: attrs)
 
         creator.reload
       end
@@ -42,13 +23,11 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |creator|
-        create(:post, :with_author, :scheduled, body: "body", work_attributes: {
-          "title"              => "#{FFaker::Music.song}",
-          "medium"             => "song",
-          "credits_attributes" => {
-            "0" => attributes_for(:credit, creator_id: creator.id)
-          }
+        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
+
+        create(:post, :with_author, :scheduled, body: "body", work_attributes: attrs)
 
         creator.reload
       end
@@ -56,34 +35,20 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        create(:post, :with_author, :published, body: "body", work_attributes: {
-          "title"              => "#{FFaker::Music.song}",
-          "medium"             => "song",
-          "credits_attributes" => {
-            "0" => attributes_for(:credit, creator_id: creator.id)
-          }
+        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
+
+        create(:post, :with_author, :published, body: "body", work_attributes: attrs)
 
         creator.reload
       end
     end
 
     trait :with_one_of_each_post_status do
-      after(:create) do |creator|
-        create(:song_review, :draft, work_attributes: attributes_for(:song).merge({ credits_attributes: {
-          "0" => attributes_for(:credit, creator_id: creator.id)
-        }}))
-
-        create(:song_review, :scheduled, work_attributes: attributes_for(:song).merge({ credits_attributes: {
-          "0" => attributes_for(:credit, creator_id: creator.id)
-        }}))
-
-        create(:song_review, :published, work_attributes: attributes_for(:song).merge({ credits_attributes: {
-          "0" => attributes_for(:credit, creator_id: creator.id)
-        }}))
-
-        creator.reload
-      end
+      with_draft_post
+      with_scheduled_post
+      with_published_post
     end
 
     trait :primary do
@@ -106,7 +71,7 @@ FactoryBot.define do
       primary
 
       pseudonym_identities_attributes { {
-        "0" => { "pseudonym_id" => create(:musician, :secondary).id }
+        "0" => { "pseudonym_id" => create(:minimal_creator, :secondary).id }
       } }
     end
 
@@ -136,7 +101,7 @@ FactoryBot.define do
       secondary
 
       real_name_identities_attributes { {
-        "0" => { "real_name_id" => create(:musician, :primary).id }
+        "0" => { "real_name_id" => create(:minimal_creator, :primary).id }
       } }
     end
 
@@ -166,7 +131,7 @@ FactoryBot.define do
       collective
 
       member_memberships_attributes { {
-        "0" => { "member_id" => create(:musician, :individual).id }
+        "0" => { "member_id" => create(:minimal_creator, :individual).id }
       } }
     end
 
@@ -196,7 +161,7 @@ FactoryBot.define do
       individual
 
       group_memberships_attributes { {
-        "0" => { "group_id" => create(:musician, :collective).id }
+        "0" => { "group_id" => create(:minimal_creator, :collective).id }
       } }
     end
 
@@ -226,56 +191,24 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :musician do
+    factory :primary_creator, parent: :minimal_creator do
+      primary
+    end
+
+    factory :secondary_creator, parent: :minimal_creator do
+      secondary
+    end
+
+    factory :individual_creator, parent: :minimal_creator do
+      individual
+    end
+
+    factory :collective_creator, parent: :minimal_creator do
+      collective
+    end
+
+    factory :minimal_creator do
       name { FFaker::Music.artist }
-    end
-
-    factory :director do
-      name { FFaker::Name.name }
-    end
-
-    factory :showrunner do
-      name { FFaker::Name.name }
-    end
-
-    factory :radio_host do
-      name { FFaker::Name.name }
-    end
-
-    factory :podcaster do
-      name { FFaker::Name.name }
-    end
-
-    factory :author do
-      name { FFaker::Name.name }
-    end
-
-    factory :cartoonist do
-      name { FFaker::Name.name }
-    end
-
-    factory :publisher do
-      name { FFaker::Name.name }
-    end
-
-    factory :artist do
-      name { FFaker::Name.name }
-    end
-
-    factory :game_platform do
-      name { FFaker::Product.brand }
-    end
-
-    factory :software_platform do
-      name { FFaker::Product.brand }
-    end
-
-    factory :hardware_company do
-      name { FFaker::Product.brand }
-    end
-
-    factory :brand do
-      name { FFaker::Product.brand }
     end
 
     ###########################################################################

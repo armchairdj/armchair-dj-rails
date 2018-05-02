@@ -69,7 +69,7 @@ RSpec.describe AdminHelper, type: :helper do
 
     describe "#admin_public_creator_link" do
       it "generates link" do
-        post     = create(:song_review, :published)
+        post     = create(:review, :published)
         instance = post.work.creators.first
 
         expect(helper).to receive(:polymorphic_path).with(instance)
@@ -80,7 +80,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       it "nils unless published posts" do
-        post     = create(:song_review)
+        post     = create(:review)
         instance = post.work.creators.first
 
         expect(helper).to_not receive(:polymorphic_path)
@@ -91,7 +91,7 @@ RSpec.describe AdminHelper, type: :helper do
 
     describe "#admin_public_post_link" do
       it "generates link" do
-        instance = create(:song_review, :published)
+        instance = create(:review, :published)
 
         expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
 
@@ -101,7 +101,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       it "nils unless published" do
-        instance = create(:song_review)
+        instance = create(:review)
 
         expect(helper).to_not receive(:post_permalink_path)
 
@@ -111,7 +111,7 @@ RSpec.describe AdminHelper, type: :helper do
 
     describe "#admin_public_work_link" do
       it "generates link" do
-        post     = create(:song_review, :published)
+        post     = create(:review, :published)
         instance = post.work
 
         expect(helper).to receive(:polymorphic_path).with(instance)
@@ -122,7 +122,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       it "nils unless published posts" do
-        post     = create(:song_review)
+        post     = create(:review)
         instance = post.work
 
         expect(helper).to_not receive(:polymorphic_path)
@@ -133,7 +133,7 @@ RSpec.describe AdminHelper, type: :helper do
 
     describe "#admin_public_link" do
       it "generates link" do
-        post     = create(:song_review, :published)
+        post     = create(:review, :published)
         instance = post.work
 
         expect(helper).to receive(:polymorphic_path).with(instance)
@@ -144,7 +144,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       it "overrides url" do
-        post     = create(:song_review, :published)
+        post     = create(:review, :published)
         instance = post.work
 
         expect(helper).to_not receive(:polymorphic_path)

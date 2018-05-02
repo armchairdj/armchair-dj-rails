@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Role, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   context "constants" do
-    # Nothing so far.
+    it_behaves_like "an_application_record"
   end
 
   context "concerns" do

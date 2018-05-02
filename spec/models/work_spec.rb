@@ -13,7 +13,7 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model", { title: nil, medium: nil } do
+    it_behaves_like "an_atomically_validatable_model", { title: nil } do
       subject { create(:minimal_work) }
     end
 
@@ -23,114 +23,34 @@ RSpec.describe Work, type: :model do
   end
 
   context "class" do
-    describe "self#media_options" do
-      subject { described_class.media_options }
-
-      it "gives a 2D array js-enhanced dropdowns" do
-        should eq([
-          ["Song",         "song",       { "data-work-grouping" => 1 } ],
-          ["Album",        "album",      { "data-work-grouping" => 1 } ],
-          ["Movie",        "movie",      { "data-work-grouping" => 2 } ],
-          ["TV Show",      "tv_show",    { "data-work-grouping" => 2 } ],
-          ["Radio Show",   "radio_show", { "data-work-grouping" => 2 } ],
-          ["Podcast",      "podcast",    { "data-work-grouping" => 2 } ],
-          ["Book",         "book",       { "data-work-grouping" => 3 } ],
-          ["Comic Book",   "comic",      { "data-work-grouping" => 3 } ],
-          ["Newspaper",    "newspaper",  { "data-work-grouping" => 3 } ],
-          ["Magazine",     "magazine",   { "data-work-grouping" => 3 } ],
-          ["Artwork",      "artwork",    { "data-work-grouping" => 4 } ],
-          ["Game",         "game",       { "data-work-grouping" => 5 } ],
-          ["Software",     "software",   { "data-work-grouping" => 5 } ],
-          ["Hardware",     "hardware",   { "data-work-grouping" => 5 } ],
-          ["Product",      "product",    { "data-work-grouping" => 6 } ]
-        ])
-      end
-    end
-
-    describe "self#admin_filters" do
-      subject { described_class.admin_filters }
-
-      specify "keys are short tab names" do
-        expect(subject.keys).to eq([
-          "Songs",
-          "Albums",
-          "Movies",
-          "TV Shows",
-          "Radio Shows",
-          "Podcasts",
-          "Books",
-          "Comics",
-          "Newspapers",
-          "Magazines",
-          "Artworks",
-          "Games",
-          "Software",
-          "Hardware",
-          "Products"
-        ])
-      end
-
-      specify "values are symbols of scopes" do
-        subject.values.each do |sym|
-          expect(sym).to be_a_kind_of(Symbol)
-
-          expect(described_class).to respond_to(sym)
-        end
-      end
-    end
+    # Nothing so far.
   end
 
   context "scope-related" do
-    let!(       :robyn_s) { create(:robyn_s_give_me_love  ) }
-    let!(  :culture_beat) { create(:culture_beat_mr_vain  ) }
-    let!(:ce_ce_peniston) { create(:ce_ce_peniston_finally) }
-    let!(     :la_bouche) { create(:la_bouche_be_my_lover ) }
-    let!(     :black_box) { create(:black_box_strike_it_up) }
+    let( :song_medium) { create(:medium, name: "Song" ) }
+    let(:album_medium) { create(:medium, name: "Album") }
+
+    let!(  :culture_beat) { create(:culture_beat_mr_vain,   medium: song_medium) }
+    let!(       :robyn_s) { create(:robyn_s_give_me_love,   medium: album_medium) }
+    let!(:ce_ce_peniston) { create(:ce_ce_peniston_finally, medium: song_medium) }
+    let!(     :la_bouche) { create(:la_bouche_be_my_lover,  medium: album_medium) }
+    let!(     :black_box) { create(:black_box_strike_it_up, medium: song_medium) }
 
     before(:each) do
-      create(:song_review, :published, work: robyn_s     )
-      create(:song_review, :published, work: la_bouche   )
-      create(:song_review, :draft,     work: culture_beat)
-      create(:song_review, :draft,     work: black_box   )
+      create(:review, :published, work: robyn_s     )
+      create(:review, :published, work: la_bouche   )
+      create(:review, :draft,     work: culture_beat)
+      create(:review, :draft,     work: black_box   )
     end
 
     describe "self#grouped_options" do
       subject { described_class.grouped_options }
 
-      specify "gives a grouped 2D array of works for dropdown" do
-        should be_a_kind_of(Array)
-      end
-
-      specify "arranges options into optgroups" do
-        expect(subject.map(&:first)).to eq([
-          "Songs",
-          "Albums",
-          "Movies",
-          "TV Shows",
-          "Radio Shows",
-          "Podcasts",
-          "Books",
-          "Comics",
-          "Newspapers",
-          "Magazines",
-          "Artworks",
-          "Games",
-          "Software",
-          "Hardware",
-          "Products"
+      specify "gives an array of optgroups and options" do
+        should eq([
+          ["Album", [la_bouche, robyn_s                     ]],
+          ["Song",  [black_box, ce_ce_peniston, culture_beat]]
         ])
-      end
-
-      specify "second element of each sub-array is a relation of options" do
-        subject.map(&:last).each do |rel|
-          expect(rel).to be_a_kind_of(ActiveRecord::Relation)
-        end
-      end
-
-      describe "sorts each set of options alphabetically" do
-        subject { described_class.grouped_options.to_h["Songs"] }
-
-        it { should eq([black_box, ce_ce_peniston, culture_beat, la_bouche, robyn_s]) }
       end
     end
 
@@ -178,8 +98,8 @@ RSpec.describe Work, type: :model do
 
         describe "reject_if" do
           it "rejects credits without a creator_id" do
-            instance = build(:song, credits_attributes: {
-              "0" => attributes_for(:credit, creator_id: create(:musician).id),
+            instance = build(:minimal_work, credits_attributes: {
+              "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
               "1" => attributes_for(:credit, creator_id: nil                 )
             })
 
@@ -221,9 +141,9 @@ RSpec.describe Work, type: :model do
 
         describe "reject_if" do
           it "rejects contributions without a creator_id" do
-            instance = build(:song, contributions_attributes: {
-              "0" => attributes_for(:contribution, role: "producer", creator_id: create(:musician).id),
-              "1" => attributes_for(:contribution, role: "producer", creator_id: nil                 )
+            instance = build(:minimal_work, contributions_attributes: {
+              "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator).id),
+              "1" => attributes_for(:contribution, :with_role, creator_id: nil                 )
             })
 
             expect {
@@ -259,14 +179,6 @@ RSpec.describe Work, type: :model do
         end
       end
     end
-
-    context "enums" do
-      describe "medium" do
-        it { should define_enum_for(:medium) }
-
-        it_behaves_like "an_enumable_model", [:medium]
-      end
-    end
   end
 
   context "validations" do
@@ -277,7 +189,7 @@ RSpec.describe Work, type: :model do
 
     context "custom" do
       describe "#at_least_one_credit" do
-        subject { build(:song) }
+        subject { build(:minimal_work) }
 
         before(:each) do
            allow(subject).to receive(:at_least_one_credit).and_call_original
@@ -337,7 +249,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#display_creators" do
-      let(:invalid) {  build(:work_without_credits             ) }
+      let(:invalid) {  build(:work, :with_medium, :with_title  ) }
       let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
       let(  :saved) { create(:kate_bush_hounds_of_love         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
@@ -364,5 +276,7 @@ RSpec.describe Work, type: :model do
         )
       end
     end
+
+    pending "#alpha_parts"
   end
 end

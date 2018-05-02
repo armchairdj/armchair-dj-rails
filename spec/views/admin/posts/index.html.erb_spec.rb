@@ -9,7 +9,7 @@ RSpec.describe "admin/posts/index", type: :view do
     end
 
     11.times do
-      create(:song_review)
+      create(:review)
     end
 
     @model_class = assign(:model_name, Post)

@@ -47,7 +47,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       context "with records" do
         context ":all scope (default)" do
           before(:each) do
-            10.times { create(:song_review, :published) }
+            10.times { create(:review, :published) }
             11.times { create(:minimal_creator) }
           end
 
@@ -68,7 +68,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
         context ":viewable scope" do
           before(:each) do
-            21.times { create(:song_review, :published) }
+            21.times { create(:review, :published) }
           end
 
           it "renders" do

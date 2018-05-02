@@ -11,7 +11,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_role do
-      role :musical_artist
+      role { create(:minimal_role) }
     end
 
     trait :with_work do

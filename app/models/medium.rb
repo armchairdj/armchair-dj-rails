@@ -20,17 +20,19 @@ class Medium < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { all }
-  scope :for_admin, -> { all }
-  scope :for_site,  -> { all }
+  scope :eager,     -> { includes(:genres, :roles, :works) }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :roles
+  has_many :genres, dependent: :destroy
+  has_many :roles,  dependent: :destroy
+  has_many :works,  dependent: :destroy
 
-  has_many :works
+  has_many :posts, through: :works
 
   #############################################################################
   # ATTRIBUTES.
@@ -50,4 +52,7 @@ class Medium < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [name]
+  end
 end

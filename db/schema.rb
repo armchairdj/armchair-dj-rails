@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2018_05_02_174701) do
     t.bigint "medium_id"
     t.string "name"
     t.string "alpha"
+    t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "non_viewable_post_count", default: 0, null: false
@@ -82,6 +83,7 @@ ActiveRecord::Schema.define(version: 2018_05_02_174701) do
   create_table "media", force: :cascade do |t|
     t.string "name"
     t.string "alpha"
+    t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "non_viewable_post_count", default: 0, null: false

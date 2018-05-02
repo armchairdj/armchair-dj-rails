@@ -128,7 +128,7 @@ private
 
   def instance_params
     params.fetch(:work, {}).permit(
-      :medium,
+      :medium_id,
       :title,
       :subtitle,
       :summary,

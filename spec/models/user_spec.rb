@@ -205,8 +205,6 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe "private" do
-      # Nothing so far.
-    end
+    pending "#alpha_parts"
   end
 end

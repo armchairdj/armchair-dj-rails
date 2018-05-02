@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.shared_examples "an_atomically_validatable_model" do |invalid_params|
   let(     :attributes) { invalid_params.keys }
-  let(:first_attribute) { attributes.first }
+  let(:first_attribute) { attributes.first    }
 
   describe "instance" do
     describe "valid_attributes?" do
@@ -16,6 +16,8 @@ RSpec.shared_examples "an_atomically_validatable_model" do |invalid_params|
         end
 
         it "validates multiple attributes" do
+          subject.valid?
+
           expect(subject.valid_attributes?(attributes)).to eq(true)
 
           expect(subject.errors.messages.keys).to have(0).items

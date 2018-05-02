@@ -10,7 +10,7 @@ class Genre < ApplicationRecord
 
   include Alphabetizable
   include Summarizable
-  include Viewable
+  # include Viewable
 
   #############################################################################
   # CLASS.
@@ -21,8 +21,8 @@ class Genre < ApplicationRecord
   #############################################################################
 
   scope :eager,     -> { all }
-  scope :for_admin, -> { all }
-  scope :for_site,  -> { all }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { alpha } # todo viewable
 
   #############################################################################
   # ASSOCIATIONS.
@@ -48,4 +48,7 @@ class Genre < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [medium.try(:alpha_parts), name]
+  end
 end

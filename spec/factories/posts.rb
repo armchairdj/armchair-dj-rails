@@ -4,7 +4,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :post do
-    factory :minimal_post, parent: :standalone_post do; end
 
     ###########################################################################
     # TRAITS.
@@ -12,6 +11,18 @@ FactoryBot.define do
 
     trait :with_author do
       association :author, factory: :admin
+    end
+
+    trait :with_title do
+      title { FFaker::HipsterIpsum.phrase.titleize }
+    end
+
+    trait :with_body do
+      body "This is a post body."
+    end
+
+    trait :with_work do
+      association :work, factory: :song
     end
 
     trait :draft do
@@ -37,313 +48,38 @@ FactoryBot.define do
     end
 
     ###########################################################################
-    # FOR OTHER FACTORIES.
+    # FACTORIES.
     ###########################################################################
 
-    factory :song_review_without_creator do
-      with_author
-      body        "This is a song review."
-      association :work, factory: :work_without_credits
-    end
-
-    ###########################################################################
-    # STANDALONE.
-    ###########################################################################
+    factory :minimal_post, parent: :standalone_post do; end
 
     factory :standalone_post do
+      with_title
       with_author
-      title { FFaker::HipsterIpsum.phrase.titleize }
-      body  "This is a standalone post about, like, deep thoughts."
+      with_body
     end
 
-    ###########################################################################
-    # REVIEW.
-    ###########################################################################
-
-    factory :review_without_work do
+    factory :review do
+      with_work
       with_author
-      body  "This is a generic review."
-    end
-
-    ###########################################################################
-    # SONG REVIEWS.
-    ###########################################################################
-
-    factory :song_review do
-      with_author
-      body        "This is a song review."
-      association :work, factory: :song
-    end
-
-    factory :collaborative_song_review do
-      with_author
-      body        "This is a collaborative song review."
-      association :work, factory: :collaborative_song
-    end
-
-    factory :remix_review do
-      with_author
-      body        "This is a song review."
-      association :work, factory: :remix
-    end
-
-    ###########################################################################
-    # ALBUM REVIEWS.
-    ###########################################################################
-
-    factory :album_review do
-      with_author
-      body        "This is an album review."
-      association :work, factory: :album
-    end
-
-    factory :collaborative_album_review do
-      with_author
-      body        "This is an album review."
-      association :work, factory: :collaborative_album
-    end
-
-    factory :special_edition_album_review do
-      with_author
-      body        "This is an album review."
-      association :work, factory: :special_edition_album
-    end
-
-    ###########################################################################
-    # MOVIE REVIEWS.
-    ###########################################################################
-
-    factory :movie_review do
-      with_author
-      body        "This is a movie review."
-      association :work, factory: :movie
-    end
-
-    factory :collaborative_movie_review do
-      with_author
-      body        "This is a collaborative movie review."
-      association :work, factory: :collaborative_movie
-    end
-
-    factory :directors_cut_movie_review do
-      with_author
-      body        "This is a movie review."
-      association :work, factory: :directors_cut_movie
-    end
-
-    ###########################################################################
-    # TV SHOW REVIEWS.
-    ###########################################################################
-
-    factory :tv_show_review do
-      with_author
-      body        "This is a tv_show review."
-      association :work, factory: :tv_show
-    end
-
-    factory :collaborative_tv_show_review do
-      with_author
-      body        "This is a collaborative tv_show review."
-      association :work, factory: :collaborative_tv_show
-    end
-
-    ###########################################################################
-    # RADIO SHOW REVIEWS.
-    ###########################################################################
-
-    factory :radio_show_review do
-      with_author
-      body        "This is a radio_show review."
-      association :work, factory: :radio_show
-    end
-
-    factory :collaborative_radio_show_review do
-      with_author
-      body        "This is a collaborative radio_show review."
-      association :work, factory: :collaborative_radio_show
-    end
-
-    ###########################################################################
-    # PODCAST REVIEWS.
-    ###########################################################################
-
-    factory :podcast_review do
-      with_author
-      body        "This is a podcast review."
-      association :work, factory: :podcast
-    end
-
-    factory :collaborative_podcast_review do
-      with_author
-      body        "This is a collaborative podcast review."
-      association :work, factory: :collaborative_podcast
-    end
-
-    ###########################################################################
-    # BOOK REVIEWS.
-    ###########################################################################
-
-    factory :book_review do
-      with_author
-      body        "This is a book review."
-      association :work, factory: :book
-    end
-
-    factory :collaborative_book_review do
-      with_author
-      body        "This is a collaborative book review."
-      association :work, factory: :collaborative_book
-    end
-
-    factory :memoir_review do
-      with_author
-      body        "This is a book review."
-      association :work, factory: :memoir
-    end
-
-    ###########################################################################
-    # COMIC REVIEWS.
-    ###########################################################################
-
-    factory :comic_review do
-      with_author
-      body        "This is a comic review."
-      association :work, factory: :comic
-    end
-
-    factory :collaborative_comic_review do
-      with_author
-      body        "This is a collaborative comic review."
-      association :work, factory: :collaborative_comic
-    end
-
-    ###########################################################################
-    # NEWSPAPER REVIEWS.
-    ###########################################################################
-
-    factory :newspaper_review do
-      with_author
-      body        "This is a newspaper review."
-      association :work, factory: :newspaper
-    end
-
-    factory :collaborative_newspaper_review do
-      with_author
-      body        "This is a collaborative newspaper review."
-      association :work, factory: :collaborative_newspaper
-    end
-
-    ###########################################################################
-    # MAGAZINE REVIEWS.
-    ###########################################################################
-
-    factory :magazine_review do
-      with_author
-      body        "This is a magazine review."
-      association :work, factory: :magazine
-    end
-
-    factory :collaborative_magazine_review do
-      with_author
-      body        "This is a collaborative magazine review."
-      association :work, factory: :collaborative_magazine
-    end
-
-    ###########################################################################
-    # ARTWORK REVIEWS.
-    ###########################################################################
-
-    factory :artwork_review do
-      with_author
-      body        "This is a artwork review."
-      association :work, factory: :artwork
-    end
-
-    factory :collaborative_artwork_review do
-      with_author
-      body        "This is a collaborative artwork review."
-      association :work, factory: :collaborative_artwork
-    end
-
-    ###########################################################################
-    # GAME REVIEWS.
-    ###########################################################################
-
-    factory :game_review do
-      with_author
-      body        "This is a game review."
-      association :work, factory: :game
-    end
-
-    factory :collaborative_game_review do
-      with_author
-      body        "This is a collaborative game review."
-      association :work, factory: :collaborative_game
-    end
-
-    ###########################################################################
-    # SOFTWARE REVIEWS.
-    ###########################################################################
-
-    factory :software_review do
-      with_author
-      body        "This is a software review."
-      association :work, factory: :software
-    end
-
-    factory :collaborative_software_review do
-      with_author
-      body        "This is a collaborative software review."
-      association :work, factory: :collaborative_software
-    end
-
-    ###########################################################################
-    # HARDWARE REVIEWS.
-    ###########################################################################
-
-    factory :hardware_review do
-      with_author
-      body        "This is a hardware review."
-      association :work, factory: :hardware
-    end
-
-    factory :collaborative_hardware_review do
-      with_author
-      body        "This is a collaborative hardware review."
-      association :work, factory: :collaborative_hardware
-    end
-
-    ###########################################################################
-    # PRODUCT REVIEWS.
-    ###########################################################################
-
-    factory :product_review do
-      with_author
-      body        "This is a product review."
-      association :work, factory: :product
-    end
-
-    factory :collaborative_product_review do
-      with_author
-      body        "This is a collaborative product review."
-      association :work, factory: :collaborative_product
+      with_body
     end
 
     ###########################################################################
     # SPECIFIC FACTORIES.
     ###########################################################################
 
-    factory :hounds_of_love_album_review, parent: :album_review do
+    factory :hounds_of_love_album_review, parent: :review do
       body        "It's in the trees! It's coming!"
       association :work, factory: :kate_bush_hounds_of_love
     end
 
-    factory :unity_album_review, parent: :album_review do
+    factory :unity_album_review, parent: :review do
       body        "All those little pills! You are my angel!"
       association :work, factory: :carl_craig_and_green_velvet_unity
     end
 
-    factory :junior_boys_remix_review, parent: :song_review do
+    factory :junior_boys_remix_review, parent: :review do
       body        "You're back in town ..."
       association :work, factory: :junior_boys_like_a_child_c2_remix
     end

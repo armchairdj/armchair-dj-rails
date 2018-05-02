@@ -44,6 +44,6 @@ RSpec.describe Credit, type: :model do
   end
 
   context "instance" do
-    # Nothing so far.
+    pending "#alpha_parts"
   end
 end

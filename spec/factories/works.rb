@@ -4,11 +4,17 @@ require "ffaker"
 
 FactoryBot.define do
   factory :work do
-    factory :minimal_work, parent: :song do; end
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
+
+    trait :with_medium do
+      medium { create(:minimal_medium) }
+    end
+
+    trait :with_title do
+      title { FFaker::Music.song }
+    end
 
     trait :with_subtitle do
       subtitle "Subtitle"
@@ -18,7 +24,13 @@ FactoryBot.define do
       subtitle "Version"
     end
 
-    trait :with_contribution do
+    trait :with_one_credit do
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id)
+      } }
+    end
+
+    trait :with_one_contribution do
       contributions_attributes { {
         "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
       } }
@@ -26,7 +38,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |work|
-        create(:song_review, :draft, work_id: work.id)
+        create(:review, :draft, work_id: work.id)
 
         work.reload
       end
@@ -34,7 +46,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |work|
-        create(:song_review, :scheduled, work_id: work.id)
+        create(:review, :scheduled, work_id: work.id)
 
         work.reload
       end
@@ -42,440 +54,56 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |work|
-        create(:song_review, :published, work_id: work.id)
+        create(:review, :published, work_id: work.id)
 
         work.reload
       end
     end
 
     trait :with_one_of_each_post_status do
-      after(:create) do |work|
-        create(:song_review, :draft,     work_id: work.id)
-        create(:song_review, :scheduled, work_id: work.id)
-        create(:song_review, :published, work_id: work.id)
-
-        work.reload
-      end
+      with_draft_post
+      with_scheduled_post
+      with_published_post
     end
 
     ###########################################################################
-    # STUBS FOR OTHER FACTORIES.
+    # FACTORIES.
     ###########################################################################
 
-    factory :work_without_credits do
-      medium :song
-      title  { FFaker::Music.song }
+    factory :song, parent: :minimal_work do
+      medium { create(:song_medium) }
     end
 
-    ###########################################################################
-    # SONGS.
-    ###########################################################################
-
-    factory :song do
-      medium :song
-      title  { FFaker::Music.song }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
+    factory :album, parent: :minimal_work do
+      medium { create(:album_medium) }
     end
 
-    factory :collaborative_song do
-      medium :song
-      title  { FFaker::Music.song }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id),
-        "1" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
+    factory :minimal_work do
+      with_medium
+      with_title
+      with_one_credit
     end
 
-    factory :remix do
-      medium   :song
-      title    { FFaker::Music.song }
-      subtitle "C2 Remix"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
-
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :remixer, creator_id: create(:musician).id)
-      } }
+    factory :complete_work, parent: :minimal_work do
+      with_subtitle
+      with_summary
+      with_one_contribution
     end
 
-    ###########################################################################
-    # ALBUMS.
-    ###########################################################################
-
-    factory :album do
-      medium :album
-      title  { FFaker::Music.album }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
-    end
-
-    factory :collaborative_album do
-      medium :album
-      title  { FFaker::Music.album }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id),
-        "1" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
-    end
-
-    factory :special_edition_album do
-      medium   :album
-      title    { FFaker::Music.album }
-      subtitle "Special Edition"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:musician).id)
-      } }
-    end
-
-    ###########################################################################
-    # FILMS.
-    ###########################################################################
-
-    factory :movie do
-      medium :movie
-      title  { FFaker::Movie.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:director).id)
-      } }
-    end
-
-    factory :collaborative_movie do
-      medium :movie
-      title  { FFaker::Movie.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:director).id),
-        "1" => attributes_for(:credit, creator_id: create(:director).id)
-      } }
-    end
-
-    factory :directors_cut_movie do
-      medium   :movie
-      title    { FFaker::Movie.title }
-      subtitle "Director's Cut"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:director).id)
-      } }
-    end
-
-    ###########################################################################
-    # TV SHOWS.
-    ###########################################################################
-
-    factory :tv_show do
-      medium :tv_show
-      title  { FFaker::Movie.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:showrunner).id)
-      } }
-    end
-
-    factory :collaborative_tv_show do
-      medium :tv_show
-      title  { FFaker::Movie.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:showrunner).id),
-        "1" => attributes_for(:credit, creator_id: create(:showrunner).id)
-      } }
-    end
-
-    ###########################################################################
-    # RADIO SHOWS.
-    ###########################################################################
-
-    factory :radio_show do
-      medium :radio_show
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:radio_host).id)
-      } }
-    end
-
-    factory :collaborative_radio_show do
-      medium :radio_show
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:radio_host).id),
-        "1" => attributes_for(:credit, creator_id: create(:radio_host).id)
-      } }
-    end
-
-    ###########################################################################
-    # PODCASTS.
-    ###########################################################################
-
-    factory :podcast do
-      medium :podcast
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:podcaster).id)
-      } }
-    end
-
-    factory :collaborative_podcast do
-      medium :podcast
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:podcaster).id),
-        "1" => attributes_for(:credit, creator_id: create(:podcaster).id)
-      } }
-    end
-
-    ###########################################################################
-    # BOOKS.
-    ###########################################################################
-
-    factory :book do
-      medium :book
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:author).id)
-      } }
-    end
-
-    factory :memoir do
-      medium   :book
-      title    { FFaker::Book.title }
-      subtitle "A Memoir"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:author).id)
-      } }
-    end
-
-    factory :collaborative_book do
-      medium :book
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:author).id),
-        "1" => attributes_for(:credit, creator_id: create(:author).id)
-      } }
-    end
-
-    ###########################################################################
-    # COMICS.
-    ###########################################################################
-
-    factory :comic do
-      medium :comic
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:cartoonist).id)
-      } }
-    end
-
-    factory :collaborative_comic do
-      medium :comic
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:cartoonist).id),
-        "1" => attributes_for(:credit, creator_id: create(:cartoonist).id)
-      } }
-    end
-
-    ###########################################################################
-    # NEWSPAPERS.
-    ###########################################################################
-
-    factory :newspaper do
-      medium :newspaper
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:publisher).id)
-      } }
-    end
-
-    factory :collaborative_newspaper do
-      medium :newspaper
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:publisher).id),
-        "1" => attributes_for(:credit, creator_id: create(:publisher).id)
-      } }
-    end
-
-    ###########################################################################
-    # MAGAZINES.
-    ###########################################################################
-
-    factory :magazine do
-      medium :magazine
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:publisher).id)
-      } }
-    end
-
-    factory :collaborative_magazine do
-      medium :magazine
-      title  { FFaker::Book.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:publisher).id),
-        "1" => attributes_for(:credit, creator_id: create(:publisher).id)
-      } }
-    end
-
-    ###########################################################################
-    # ARTWORKS.
-    ###########################################################################
-
-    factory :artwork do
-      medium :artwork
-      title  { FFaker::CheesyLingo.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:artist).id)
-      } }
-    end
-
-    factory :collaborative_artwork do
-      medium :artwork
-      title  { FFaker::CheesyLingo.title }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:artist).id),
-        "1" => attributes_for(:credit, creator_id: create(:artist).id)
-      } }
-    end
-
-    ###########################################################################
-    # GAMES.
-    ###########################################################################
-
-    factory :game do
-      medium :game
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:game_platform).id)
-      } }
-    end
-
-    factory :collaborative_game do
-      medium :game
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:game_platform).id),
-        "1" => attributes_for(:credit, creator_id: create(:game_platform).id)
-      } }
-    end
-
-    ###########################################################################
-    # SOFTWARE.
-    ###########################################################################
-
-    factory :software do
-      medium :software
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:software_platform).id)
-      } }
-    end
-
-    factory :collaborative_software do
-      medium :software
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:software_platform).id),
-        "1" => attributes_for(:credit, creator_id: create(:software_platform).id)
-      } }
-    end
-
-    ###########################################################################
-    # HARDWARE.
-    ###########################################################################
-
-    factory :hardware do
-      medium :hardware
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:hardware_company).id)
-      } }
-    end
-
-    factory :collaborative_hardware do
-      medium :hardware
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:hardware_company).id),
-        "1" => attributes_for(:credit, creator_id: create(:hardware_company).id)
-      } }
-    end
-
-    ###########################################################################
-    # PRODUCT.
-    ###########################################################################
-
-    factory :product do
-      medium :product
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:brand).id)
-      } }
-    end
-
-    factory :collaborative_product do
-      medium :product
-      title  { FFaker::Product.product_name }
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:brand).id),
-        "1" => attributes_for(:credit, creator_id: create(:brand).id)
-      } }
-    end
-
-    ###########################################################################
-    # SPECIFIC WORKS.
-    ###########################################################################
-
-    factory :global_communications_76_14 do
-      medium :album
-      title  "76:14"
+    factory :global_communications_76_14, parent: :album do
+      title "76:14"
 
       credits_attributes { {
         "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Global Communication").id)
       } }
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Tom Middleton" ).id),
-        "1" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "Mark Pritchard").id)
+        "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "Tom Middleton" ).id),
+        "1" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "Mark Pritchard").id)
       } }
     end
 
-    factory :carl_craig_and_green_velvet_unity do
-      medium :album
+    factory :carl_craig_and_green_velvet_unity, parent: :album do
       title  "Unity"
 
       credits_attributes { {
@@ -484,8 +112,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :kate_bush_hounds_of_love do
-      medium :album
+    factory :kate_bush_hounds_of_love, parent: :album do
       title "Hounds of Love"
 
       credits_attributes { {
@@ -493,8 +120,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :kate_bush_directors_cut do
-      medium :album
+    factory :kate_bush_directors_cut, parent: :album do
       title "Director's Cut"
 
       credits_attributes { {
@@ -502,8 +128,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :madonna_ray_of_light do
-      medium :album
+    factory :madonna_ray_of_light, parent: :album do
       title  "Ray of Light"
 
       credits_attributes { {
@@ -511,12 +136,11 @@ FactoryBot.define do
       } }
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :music_producer, creator_id: create(:minimal_creator, name: "William Orbit").id),
+        "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "William Orbit").id),
       } }
     end
 
-    factory :junior_boys_like_a_child_c2_remix do
-      medium :song
+    factory :junior_boys_like_a_child_c2_remix, parent: :song do
       title "Like a Child"
       subtitle "C2 Remix"
 
@@ -525,12 +149,11 @@ FactoryBot.define do
       } }
 
       contributions_attributes { {
-        "0" => attributes_for(:contribution, role: :remixer, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
+        "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
       } }
     end
 
-    factory :robyn_s_give_me_love do
-      medium :song
+    factory :robyn_s_give_me_love, parent: :song do
       title "Give Me Love"
 
       credits_attributes { {
@@ -538,8 +161,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :culture_beat_mr_vain do
-      medium :song
+    factory :culture_beat_mr_vain, parent: :song do
       title "Mr. Vain"
 
       credits_attributes { {
@@ -547,8 +169,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :ce_ce_peniston_finally do
-      medium :song
+    factory :ce_ce_peniston_finally, parent: :song do
       title "Finally"
 
       credits_attributes { {
@@ -556,8 +177,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :la_bouche_be_my_lover do
-      medium :song
+    factory :la_bouche_be_my_lover, parent: :song do
       title "Be My Lover"
 
       credits_attributes { {
@@ -565,8 +185,7 @@ FactoryBot.define do
       } }
     end
 
-    factory :black_box_strike_it_up do
-      medium :song
+    factory :black_box_strike_it_up, parent: :song do
       title "Strike It Up"
 
       credits_attributes { {

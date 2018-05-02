@@ -21,40 +21,18 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.admin_filters
-    {
-      "Songs"       => :song,
-      "Albums"      => :album,
-      "Movies"      => :movie,
-      "TV Shows"    => :tv_show,
-      "Radio Shows" => :radio_show,
-      "Podcasts"    => :podcast,
-      "Books"       => :book,
-      "Comics"      => :comic,
-      "Newspapers"  => :newspaper,
-      "Magazines"   => :magazine,
-      "Artworks"    => :artwork,
-      "Games"       => :game,
-      "Software"    => :software,
-      "Hardware"    => :hardware,
-      "Products"    => :product,
-    }
-  end
-
   def self.grouped_options
-    self.admin_filters.to_a.map do |arr|
-      [arr.first, self.send(arr.last).eager.alpha]
-    end
+    joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:credits, :creators, :contributions, :contributors, :posts) }
+  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :posts) }
 
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.includes(:posts).alpha }
+  scope :for_site,  -> { viewable.includes(:posts).alpha }
 
   #############################################################################
   # ASSOCIATIONS.

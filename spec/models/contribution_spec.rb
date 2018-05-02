@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Contribution, type: :model do
-  context "constants" do
-    specify { expect(described_class).to have_constant(:ROLE_GROUPINGS) }
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -32,13 +28,7 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "attributes" do
-    context "enums" do
-      describe "role" do
-        it { should define_enum_for(:role) }
-
-        it_behaves_like "an_enumable_model", [:role]
-      end
-    end
+    # Nothing so far.
   end
 
   context "validations" do
@@ -46,6 +36,10 @@ RSpec.describe Contribution, type: :model do
 
     it { should validate_presence_of(:role) }
 
-    it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role) }
+    it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
+  end
+
+  context "instance" do
+    pending "#alpha_parts"
   end
 end

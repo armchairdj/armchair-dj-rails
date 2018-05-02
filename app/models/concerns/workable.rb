@@ -13,8 +13,8 @@ module Workable
     scope      :viewable, -> { eager.where.not(works: { viewable_post_count: 0 }) }
     scope  :non_viewable, -> { eager.where(    works: { viewable_post_count: 0 }) }
 
-    scope      :for_site, -> { viewable.alpha }
     scope     :for_admin, -> { eager }
+    scope      :for_site, -> { viewable.alpha }
 
     ###########################################################################
     # ASSOCIATIONS.

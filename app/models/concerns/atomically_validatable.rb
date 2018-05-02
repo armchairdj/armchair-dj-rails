@@ -12,7 +12,7 @@ module AtomicallyValidatable
       end
     end
 
-    errors.messages.slice(*attributes).none?
+    errors.details.slice(*attributes).none?
   end
 
   def valid_attribute?(attribute)

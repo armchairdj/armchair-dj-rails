@@ -16,8 +16,8 @@ module Viewable
   included do
     before_save :refresh_counts
 
-    scope     :viewable, -> { where.not(viewable_post_count: 0) }
-    scope :non_viewable, -> {     where(viewable_post_count: 0) }
+    scope     :viewable, -> { eager.where.not(viewable_post_count: 0) }
+    scope :non_viewable, -> { eager.where(    viewable_post_count: 0) }
   end
 
   def viewable?
