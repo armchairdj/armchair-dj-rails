@@ -528,5 +528,50 @@ FactoryBot.define do
         "0" => attributes_for(:contribution, role: :remixer, creator_id: create(:minimal_creator, name: "Carl Craig" ).id),
       } }
     end
+
+    factory :robyn_s_give_me_love do
+      medium :song
+      title "Give Me Love"
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Robyn S").id)
+      } }
+    end
+
+    factory :culture_beat_mr_vain do
+      medium :song
+      title "Mr. Vain"
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Culture Beat").id)
+      } }
+    end
+
+    factory :ce_ce_peniston_finally do
+      medium :song
+      title "Finally"
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "CeCe Peniston").id)
+      } }
+    end
+
+    factory :la_bouche_be_my_lover do
+      medium :song
+      title "Be My Lover"
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "La Bouche").id)
+      } }
+    end
+
+    factory :black_box_strike_it_up do
+      medium :song
+      title "Strike It Up"
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Black Box").id)
+      } }
+    end
   end
 end

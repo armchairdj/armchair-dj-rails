@@ -12,6 +12,7 @@ class Contribution < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Alphabetizable
   include Workable
 
   #############################################################################

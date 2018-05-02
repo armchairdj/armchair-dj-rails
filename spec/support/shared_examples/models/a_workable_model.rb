@@ -1,28 +1,60 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_workable_model" do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-  end
-
   context "included" do
     context "scope-related" do
-      describe "self#eager" do
-        subject { described_class.eager }
+      let!(:with_published) { create_minimal_instance }
+      let!(:with_scheduled) { create_minimal_instance }
+      let!(:with_draft    ) { create_minimal_instance }
+      let!(:with_none     ) { create_minimal_instance }
 
-        specify { should eager_load(:work, :creator) }
+      let(:all) { [ with_published, with_scheduled, with_draft, with_none ] }
+      let(:ids) { all.map(&:id) }
+
+      before(:each) do
+        create(:song_review, :published, work: with_published.work)
+        create(:song_review, :scheduled, work: with_scheduled.work)
+        create(:song_review, :draft,     work:     with_draft.work)
+      end
+
+      describe "self#eager" do
+        subject { described_class.eager.where(id: ids) }
+
+        it { should eager_load(:work, :creator) }
       end
 
       describe "self#viewable" do
-        specify { should_not eager_load(:work, :creator) }
+        subject { described_class.viewable.where(id: ids) }
+
+        it { should contain_exactly(with_published) }
+
+        it { should_not eager_load(:work, :creator) }
+      end
+
+      describe "self#non_viewable" do
+        subject { described_class.non_viewable.where(id: ids) }
+
+        it { should contain_exactly(with_scheduled, with_draft, with_none) }
+
+        it { should_not eager_load(:work, :creator) }
       end
 
       describe "self#for_admin" do
-        specify { should eager_load(:work, :creator) }
+        subject { described_class.for_admin.where(id: ids) }
+
+        it { should contain_exactly(with_published, with_scheduled, with_draft, with_none) }
+
+        it { should eager_load(:work, :creator) }
       end
 
       describe "self#for_site" do
-        specify { should eager_load(:work, :creator) }
+        subject { described_class.for_site.where(id: ids) }
+
+        it { should contain_exactly(with_published) }
+
+        it { should eager_load(:work, :creator) }
+
+        pending "alpha"
       end
     end
 
@@ -36,6 +68,30 @@ RSpec.shared_examples "a_workable_model" do
 
       it { should validate_presence_of(:creator) }
       it { should validate_presence_of(:work   ) }
+    end
+  end
+
+  context "instance" do
+    describe "delegated methods" do
+      subject { create_minimal_instance }
+
+      describe "#viewable?" do
+        it "delegates to work" do
+           allow(subject.work).to receive(:viewable?).and_call_original
+          expect(subject.work).to receive(:viewable?)
+
+          subject.viewable?
+        end
+      end
+
+      describe "#non_viewable?" do
+        it "delegates to work" do
+           allow(subject.work).to receive(:non_viewable?).and_call_original
+          expect(subject.work).to receive(:non_viewable?)
+
+          subject.non_viewable?
+        end
+      end
     end
   end
 end

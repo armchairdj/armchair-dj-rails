@@ -18,6 +18,66 @@ RSpec.shared_examples "a_viewable_model" do
   end
 
   context "included" do
+    context "scope-related" do
+      let!(    :draft_instance) { create_minimal_instance(:with_draft_post    ) }
+      let!(:scheduled_instance) { create_minimal_instance(:with_scheduled_post) }
+      let!(:published_instance) { create_minimal_instance(:with_published_post) }
+
+      context "scopes" do
+        describe "self#viewable" do
+          subject { described_class.viewable }
+
+          it { should contain_exactly(published_instance) }
+        end
+
+        describe "self#non_viewable" do
+          subject { described_class.non_viewable }
+
+          it { should contain_exactly(draft_instance, scheduled_instance) }
+        end
+      end
+
+      context "booleans" do
+        describe "#viewable?" do
+          specify { expect(    draft_instance.viewable?).to eq(false) }
+          specify { expect(scheduled_instance.viewable?).to eq(false) }
+          specify { expect(published_instance.viewable?).to eq(true ) }
+        end
+
+        describe "#non_viewable?" do
+          specify { expect(    draft_instance.non_viewable?).to eq(true ) }
+          specify { expect(scheduled_instance.non_viewable?).to eq(true ) }
+          specify { expect(published_instance.non_viewable?).to eq(false) }
+        end
+      end
+
+      context "scoped associations" do
+        describe "#viewable_posts" do
+          specify { expect(    draft_instance.viewable_posts).to have(0).items }
+          specify { expect(scheduled_instance.viewable_posts).to have(0).items }
+          specify { expect(published_instance.viewable_posts).to have(1).items }
+        end
+
+        describe "#non_viewable_posts" do
+          specify { expect(    draft_instance.non_viewable_posts).to have(1).items }
+          specify { expect(scheduled_instance.non_viewable_posts).to have(1).items }
+          specify { expect(published_instance.non_viewable_posts).to have(0).items }
+        end
+
+        describe "#viewable_works" do
+          specify { expect(    draft_instance.viewable_works).to have(0).items }
+          specify { expect(scheduled_instance.viewable_works).to have(0).items }
+          specify { expect(published_instance.viewable_works).to have(1).items }
+        end
+
+        describe "#non_viewable_works" do
+          specify { expect(    draft_instance.non_viewable_works).to have(1).items }
+          specify { expect(scheduled_instance.non_viewable_works).to have(1).items }
+          specify { expect(published_instance.non_viewable_works).to have(0).items }
+        end
+      end
+    end
+
     context "hooks" do
       describe "before_save" do
         subject { build_minimal_instance }
@@ -74,67 +134,6 @@ RSpec.shared_examples "a_viewable_model" do
               end
             end
           end
-        end
-      end
-    end
-
-    context "scope-related" do
-      let!(    :draft_instance) { create_minimal_instance(:with_draft_post    ) }
-      let!(:scheduled_instance) { create_minimal_instance(:with_scheduled_post) }
-      let!(:published_instance) { create_minimal_instance(:with_published_post     ) }
-
-      context "scopes" do
-        describe "self#viewable" do
-          specify { expect(described_class.viewable.to_a).to eq([
-            published_instance
-          ]) }
-        end
-
-        describe "self#non_viewable" do
-          specify { expect(described_class.non_viewable.to_a).to eq([
-            draft_instance,
-            scheduled_instance
-          ]) }
-        end
-      end
-
-      context "booleans" do
-        describe "#viewable?" do
-          specify { expect(    draft_instance.viewable?).to eq(false) }
-          specify { expect(scheduled_instance.viewable?).to eq(false) }
-          specify { expect(published_instance.viewable?).to eq(true ) }
-        end
-
-        describe "#non_viewable?" do
-          specify { expect(    draft_instance.non_viewable?).to eq(true ) }
-          specify { expect(scheduled_instance.non_viewable?).to eq(true ) }
-          specify { expect(published_instance.non_viewable?).to eq(false) }
-        end
-      end
-
-      context "scoped associations" do
-        describe "#viewable_posts" do
-          specify { expect(    draft_instance.viewable_posts).to have(0).items }
-          specify { expect(scheduled_instance.viewable_posts).to have(0).items }
-          specify { expect(published_instance.viewable_posts).to have(1).items }
-        end
-
-        describe "#non_viewable_posts" do
-          specify { expect(    draft_instance.non_viewable_posts).to have(1).items }
-          specify { expect(scheduled_instance.non_viewable_posts).to have(1).items }
-          specify { expect(published_instance.non_viewable_posts).to have(0).items }
-        end
-
-        describe "#viewable_works" do
-          specify { expect(    draft_instance.viewable_works).to have(0).items }
-          specify { expect(scheduled_instance.viewable_works).to have(0).items }
-          specify { expect(published_instance.viewable_works).to have(1).items }
-        end
-
-        describe "#non_viewable_works" do
-          specify { expect(    draft_instance.non_viewable_works).to have(1).items }
-          specify { expect(scheduled_instance.non_viewable_works).to have(1).items }
-          specify { expect(published_instance.non_viewable_works).to have(0).items }
         end
       end
     end

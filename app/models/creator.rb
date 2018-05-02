@@ -61,13 +61,13 @@ class Creator < ApplicationRecord
 
   # Credits.
 
-  has_many :credits, dependent: :destroy
+  has_many :credits, inverse_of: :creator, dependent: :destroy
   has_many :works, through: :credits
   has_many :posts, through: :works
 
   # Contributions.
 
-  has_many :contributions, dependent: :destroy
+  has_many :contributions, inverse_of: :creator, dependent: :destroy
   has_many :contributed_works, through: :contributions,
     class_name: "Work", source: :work
   has_many :contributed_posts, through: :contributed_works,

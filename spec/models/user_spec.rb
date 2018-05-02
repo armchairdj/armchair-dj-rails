@@ -19,15 +19,17 @@ RSpec.describe User, type: :model do
 
   context "class" do
     describe "self#admin_scopes" do
+      subject { described_class.admin_scopes.keys }
+
       specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
+        should contain_exactly(
           "All",
           "Member",
           "Writer",
           "Editor",
           "Admin",
-          "Super Admin",
-        ])
+          "Super Admin"
+        )
       end
     end
 
@@ -49,66 +51,56 @@ RSpec.describe User, type: :model do
     end
 
     describe "self#published" do
+      subject { described_class.published }
+
       it "includes published writers, unsorted" do
-        expect(described_class.published).to eq([jenny, brian])
+        should contain_exactly(jenny, brian)
+      end
+    end
+
+    describe "self#published_author!" do
+      it "finds only published writers by username" do
+        expect(described_class.published_author!("jenny")).to eq(jenny)
+        expect(described_class.published_author!("brian")).to eq(brian)
       end
 
-      describe "self#published_author!" do
-        it "finds only published writers by username" do
-          expect(described_class.published_author!("jenny")).to eq(jenny)
-          expect(described_class.published_author!("brian")).to eq(brian)
-        end
+      it "raises if not published" do
+        expect {
+          described_class.published_author!("gruber")
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
 
-        it "raises if not published" do
-          expect {
-            described_class.published_author!("gruber")
-          }.to raise_exception(ActiveRecord::RecordNotFound)
-        end
-
-        it "raises if not found" do
-          expect {
-            described_class.published_author!("oops")
-          }.to raise_exception(ActiveRecord::RecordNotFound)
-        end
+      it "raises if not found" do
+        expect {
+          described_class.published_author!("oops")
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
     describe "self#eager" do
-      describe "eager-loads associations" do
-        subject { described_class.eager.where(id: brian.id).take }
+      subject { described_class.eager }
 
-        specify { expect(subject.association(:posts   )).to be_loaded }
-        specify { expect(subject.association(:works   )).to be_loaded }
-        specify { expect(subject.association(:creators)).to be_loaded }
-      end
+      it { should eager_load(:posts, :works, :creators) }
     end
 
     describe "self#for_admin" do
+      subject { described_class.for_admin }
+
       it "includes everyone, unsorted" do
-        expect(described_class.for_admin).to eq([jenny, charlie, brian, gruber])
+        should contain_exactly(jenny, charlie, brian, gruber)
       end
 
-      describe "eager-loads associations" do
-        subject { described_class.for_admin.where(id: brian.id).take }
-
-        specify { expect(subject.association(:posts   )).to be_loaded }
-        specify { expect(subject.association(:works   )).to be_loaded }
-        specify { expect(subject.association(:creators)).to be_loaded }
-      end
+      it { should eager_load(:posts, :works, :creators) }
     end
 
     describe "self#for_site" do
-      it "includes published writers, alphabetized" do
-        expect(described_class.for_site).to eq([brian, jenny])
+      subject { described_class.for_site }
+
+      it "includes only published writers, sorted" do
+        should eq([brian, jenny])
       end
 
-      describe "eager-loads associations" do
-        subject { described_class.for_site.where(id: brian.id).take }
-
-        specify { expect(subject.association(:posts   )).to be_loaded }
-        specify { expect(subject.association(:works   )).to be_loaded }
-        specify { expect(subject.association(:creators)).to be_loaded }
-      end
+      it { should eager_load(:posts, :works, :creators) }
     end
   end
 

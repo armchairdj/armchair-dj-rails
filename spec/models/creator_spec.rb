@@ -104,12 +104,16 @@ RSpec.describe Creator, type: :model do
         let!(  :primary) { create(  :primary_creator) }
         let!(:secondary) { create(:secondary_creator) }
 
-        specify "self#primary" do
-          expect(described_class.primary).to eq([primary])
+        describe "self#primary" do
+          subject { described_class.primary }
+
+          it { should contain_exactly(primary) }
         end
 
-        specify "self#secondary" do
-          expect(described_class.secondary).to eq([secondary])
+        describe "self#secondary" do
+          subject { described_class.secondary }
+
+          it { should contain_exactly(secondary) }
         end
 
         specify "#primary?" do
@@ -132,23 +136,18 @@ RSpec.describe Creator, type: :model do
         let!(  :identity) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
 
         describe "self#available_pseudonyms" do
-          specify "excludes used pseudonyms and alphabetizes" do
-             expect(described_class.available_pseudonyms).to eq([
-               gas,
-               plastikman,
-               robotman
-             ])
+          subject { described_class.available_pseudonyms }
+
+          it "excludes used pseudonyms and alphabetizes" do
+            should eq([gas, plastikman, robotman])
           end
         end
 
         describe "#available_pseudonyms" do
-          specify "includes own pseudonyms" do
-             expect(richie.available_pseudonyms).to eq([
-               fuse,
-               gas,
-               plastikman,
-               robotman
-             ])
+          subject { richie.available_pseudonyms }
+
+          it "includes own pseudonyms, alphabetically" do
+            should eq([fuse, gas, plastikman, robotman])
           end
         end
       end
@@ -159,12 +158,16 @@ RSpec.describe Creator, type: :model do
         let!(:individual) { create(:individual_creator) }
         let!(:collective) { create(:collective_creator) }
 
-        specify "self#individual" do
-          expect(described_class.individual).to eq([individual])
+        describe "self#individual" do
+          subject { described_class.individual }
+
+          it { should eq([individual]) }
         end
 
-        specify "self#collective" do
-          expect(described_class.collective).to eq([collective])
+        describe "self#collective" do
+          subject { described_class.collective }
+
+          it { should eq([collective]) }
         end
 
         specify "#individual?" do
@@ -180,6 +183,8 @@ RSpec.describe Creator, type: :model do
 
       context "collections" do
         describe "self#available_members" do
+          subject { described_class.available_members }
+
           let!(      :band) { create(:fleetwood_mac     ) }
           let!(    :stevie) { create(:stevie_nicks      ) }
           let!(   :lindsay) { create(:lindsay_buckingham) }
@@ -188,14 +193,8 @@ RSpec.describe Creator, type: :model do
           let!(      :john) { create(:john_mcvie        ) }
           let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
-          specify "includes even used members and alphabetizes" do
-             expect(described_class.available_members).to eq([
-               christine,
-               john,
-               lindsay,
-               mick,
-               stevie,
-             ])
+          it "includes even used members and alphabetizes" do
+            should contain_exactly(christine, john, lindsay, mick, stevie)
           end
         end
       end

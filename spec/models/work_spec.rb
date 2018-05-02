@@ -23,41 +23,35 @@ RSpec.describe Work, type: :model do
   end
 
   context "class" do
-    describe "self#grouped_options" do
-      specify "first element of each sub-array is an optgroup heading" do
-        expect(described_class.grouped_options.to_h.keys).to eq([
-          "Songs",
-          "Albums",
-          "Movies",
-          "TV Shows",
-          "Radio Shows",
-          "Podcasts",
-          "Books",
-          "Comics",
-          "Newspapers",
-          "Magazines",
-          "Artworks",
-          "Games",
-          "Software",
-          "Hardware",
-          "Products"
+    describe "self#media_options" do
+      subject { described_class.media_options }
+
+      it "gives a 2D array js-enhanced dropdowns" do
+        should eq([
+          ["Song",         "song",       { "data-work-grouping" => 1 } ],
+          ["Album",        "album",      { "data-work-grouping" => 1 } ],
+          ["Movie",        "movie",      { "data-work-grouping" => 2 } ],
+          ["TV Show",      "tv_show",    { "data-work-grouping" => 2 } ],
+          ["Radio Show",   "radio_show", { "data-work-grouping" => 2 } ],
+          ["Podcast",      "podcast",    { "data-work-grouping" => 2 } ],
+          ["Book",         "book",       { "data-work-grouping" => 3 } ],
+          ["Comic Book",   "comic",      { "data-work-grouping" => 3 } ],
+          ["Newspaper",    "newspaper",  { "data-work-grouping" => 3 } ],
+          ["Magazine",     "magazine",   { "data-work-grouping" => 3 } ],
+          ["Artwork",      "artwork",    { "data-work-grouping" => 4 } ],
+          ["Game",         "game",       { "data-work-grouping" => 5 } ],
+          ["Software",     "software",   { "data-work-grouping" => 5 } ],
+          ["Hardware",     "hardware",   { "data-work-grouping" => 5 } ],
+          ["Product",      "product",    { "data-work-grouping" => 6 } ]
         ])
       end
-
-      specify "second element of each sub-array is a relation of options" do
-        described_class.grouped_options.to_h.values.each do |rel|
-          expect(rel).to be_a_kind_of(ActiveRecord::Relation)
-        end
-      end
-
-      pending "alphabetical by creator"
     end
 
-    pending "self#media_options"
-
     describe "self#admin_filters" do
+      subject { described_class.admin_filters }
+
       specify "keys are short tab names" do
-        expect(described_class.admin_filters.keys).to eq([
+        expect(subject.keys).to eq([
           "Songs",
           "Albums",
           "Movies",
@@ -77,7 +71,7 @@ RSpec.describe Work, type: :model do
       end
 
       specify "values are symbols of scopes" do
-        described_class.admin_filters.values.each do |sym|
+        subject.values.each do |sym|
           expect(sym).to be_a_kind_of(Symbol)
 
           expect(described_class).to respond_to(sym)
@@ -87,11 +81,84 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    pending "self#eager"
+    let!(       :robyn_s) { create(:robyn_s_give_me_love  ) }
+    let!(  :culture_beat) { create(:culture_beat_mr_vain  ) }
+    let!(:ce_ce_peniston) { create(:ce_ce_peniston_finally) }
+    let!(     :la_bouche) { create(:la_bouche_be_my_lover ) }
+    let!(     :black_box) { create(:black_box_strike_it_up) }
 
-    pending "self#for_admin"
+    before(:each) do
+      create(:song_review, :published, work: robyn_s     )
+      create(:song_review, :published, work: la_bouche   )
+      create(:song_review, :draft,     work: culture_beat)
+      create(:song_review, :draft,     work: black_box   )
+    end
 
-    pending "self#for_site"
+    describe "self#grouped_options" do
+      subject { described_class.grouped_options }
+
+      specify "gives a grouped 2D array of works for dropdown" do
+        should be_a_kind_of(Array)
+      end
+
+      specify "arranges options into optgroups" do
+        expect(subject.map(&:first)).to eq([
+          "Songs",
+          "Albums",
+          "Movies",
+          "TV Shows",
+          "Radio Shows",
+          "Podcasts",
+          "Books",
+          "Comics",
+          "Newspapers",
+          "Magazines",
+          "Artworks",
+          "Games",
+          "Software",
+          "Hardware",
+          "Products"
+        ])
+      end
+
+      specify "second element of each sub-array is a relation of options" do
+        subject.map(&:last).each do |rel|
+          expect(rel).to be_a_kind_of(ActiveRecord::Relation)
+        end
+      end
+
+      describe "sorts each set of options alphabetically" do
+        subject { described_class.grouped_options.to_h["Songs"] }
+
+        it { should eq([black_box, ce_ce_peniston, culture_beat, la_bouche, robyn_s]) }
+      end
+    end
+
+    describe "self#eager" do
+      subject { described_class.eager }
+
+      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+    end
+
+    describe "self#for_admin" do
+      subject { described_class.for_admin }
+
+      it "contains everything, unsorted" do
+        should contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
+      end
+
+      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+    end
+
+    describe "self#for_site" do
+      subject { described_class.for_site }
+
+      it "contains only works with published posts, alphabetically" do
+        should eq([la_bouche, robyn_s])
+      end
+
+      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+    end
   end
 
   context "associations" do
@@ -270,20 +337,31 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#display_creators" do
-      it "displays mutiple creators alphabetically" do
-        expect(create(:carl_craig_and_green_velvet_unity).display_creators).to eq(
-          "Carl Craig & Green Velvet"
-        )
+      let(:invalid) {  build(:work_without_credits             ) }
+      let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
+      let(  :saved) { create(:kate_bush_hounds_of_love         ) }
+      let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
+
+      it "nils without error on missing creator" do
+        expect(invalid.display_creators).to eq(nil)
       end
 
-      it "displays single creator" do
-        expect(create(:kate_bush_hounds_of_love).display_creators).to eq(
-          "Kate Bush"
-        )
+      it "gives single creator on unsaved" do
+        expect(unsaved.display_creators).to eq("Kate Bush")
       end
 
-      it "nils unless persisted" do
-        expect(build(:kate_bush_hounds_of_love).display_creators).to eq(nil)
+      it "gives single creator on saved" do
+        expect(saved.display_creators).to eq("Kate Bush")
+      end
+
+      it "gives mutiple creators alphabetically" do
+        expect(multi.display_creators).to eq("Carl Craig & Green Velvet")
+      end
+
+      it "overrides connector" do
+        expect(multi.display_creators(connector: " x ")).to eq(
+          "Carl Craig x Green Velvet"
+        )
       end
     end
   end

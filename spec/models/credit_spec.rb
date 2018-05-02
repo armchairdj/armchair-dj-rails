@@ -6,6 +6,8 @@ RSpec.describe Credit, type: :model do
   end
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
 
     it_behaves_like "a_workable_model"

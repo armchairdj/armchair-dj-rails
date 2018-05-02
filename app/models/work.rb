@@ -59,7 +59,7 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:creators, :contributors) }
+  scope :eager,     -> { includes(:credits, :creators, :contributions, :contributors, :posts) }
 
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.viewable.includes(:posts).alpha }
@@ -68,10 +68,10 @@ class Work < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :credits, dependent: :destroy
-  has_many :creators, through: :credits
+  has_many :credits,       inverse_of: :work, dependent: :destroy
+  has_many :contributions, inverse_of: :work, dependent: :destroy
 
-  has_many :contributions, dependent: :destroy
+  has_many :creators,     through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :posts, dependent: :destroy
@@ -184,9 +184,14 @@ class Work < ApplicationRecord
   end
 
   def display_creators(connector: " & ")
-    return unless persisted?
+    return creators.alpha.to_a.map(&:name).join(connector) if persisted?
 
-    creators.alpha.to_a.map(&:name).join(connector)
+    # So we can correctly calculate memoized alpha post value during
+    # nested objectcreation.
+
+    unsaved = credits.map{ |c| c.creator.try(:name) }.compact
+
+    unsaved.any? ? unsaved.sort.join(connector) : nil
   end
 
   def alpha_parts
