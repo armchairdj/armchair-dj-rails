@@ -325,6 +325,18 @@ FactoryBot.define do
 
         with_specific_members
       end
+
+      factory :complete_spawn do
+        transient do
+          members { [
+            create(:fred_giannelli_with_pseudonyms),
+            create(:richie_hawtin_with_pseudonyms),
+            create(:dan_bell_with_pseudonyms)
+          ] }
+        end
+
+        with_specific_members
+      end
     end
 
     factory :stevie_nicks do
