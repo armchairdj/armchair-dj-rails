@@ -6,7 +6,7 @@ module Viewable
   class_methods do
     def admin_scopes
       {
-        "All"          => :all,
+        "All"          => :for_admin,
         "Viewable"     => :viewable,
         "Non-Viewable" => :non_viewable,
       }

@@ -8,13 +8,15 @@ class Role < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Alphabetizable
+
   #############################################################################
   # CLASS.
   #############################################################################
 
   def self.admin_scopes
     {
-      "All" => :all
+      "All" => :for_admin
     }
   end
 
@@ -22,9 +24,8 @@ class Role < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { all }
-  scope :for_admin, -> { all }
-  scope :for_site,  -> { all }
+  scope :eager,     -> { includes(:contributions) }
+  scope :for_admin, -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -43,6 +44,7 @@ class Role < ApplicationRecord
   #############################################################################
 
   validates :medium, presence: true
+  validates :name,   presence: true
 
   #############################################################################
   # HOOKS.
@@ -52,4 +54,7 @@ class Role < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [medium.try(:alpha_parts), name]
+  end
 end

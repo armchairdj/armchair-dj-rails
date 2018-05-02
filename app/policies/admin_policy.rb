@@ -20,4 +20,10 @@ class AdminPolicy < ApplicationPolicy
   def destroy?
     logged_in_as_admin?
   end
+
+  class Scope < Scope
+    def resolve
+      scope.all
+    end
+  end
 end

@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   def self.admin_scopes
     {
-      "All"         => :all,
+      "All"         => :for_admin,
       "Member"      => :member,
       "Writer"      => :writer,
       "Editor"      => :editor,

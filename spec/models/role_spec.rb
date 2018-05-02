@@ -1,61 +1,32 @@
 require "rails_helper"
 
 RSpec.describe Role, type: :model do
-  context "constants" do
+  context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_application_record"
   end
 
-  context "concerns" do
-    # Nothing so far.
-  end
-
-  context "class" do
-    # Nothing so far.
-  end
-
   context "scope-related" do
-    # Nothing so far.
+    pending "self#eager"
+    pending "self#for_admin"
   end
 
   context "associations" do
-    # Nothing so far.
-  end
+    it { should belong_to(:medium) }
 
-  context "attributes" do
-    context "nested" do
-      # Nothing so far.
-    end
-
-    context "enums" do
-      # Nothing so far.
-    end
+    it { should have_many(:contributions) }
   end
 
   context "validations" do
-    # Nothing so far.
+    subject { create_minimal_instance }
 
-    context "conditional" do
-      # Nothing so far.
-    end
+    it { should validate_presence_of(:medium) }
 
-    context "custom" do
-      # Nothing so far.
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
-
-    context "callbacks" do
-      # Nothing so far.
-    end
+    it { should validate_presence_of(:name) }
   end
 
   context "instance" do
-    # Nothing so far.
-
-    describe "private" do
-      # Nothing so far.
-    end
+    pending "#alpha_parts"
   end
 end

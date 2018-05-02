@@ -24,7 +24,7 @@ class Post < ApplicationRecord
       "Draft"     => :draft,
       "Scheduled" => :scheduled,
       "Published" => :published,
-      "All"       => :all,
+      "All"       => :for_admin,
     }
   end
 

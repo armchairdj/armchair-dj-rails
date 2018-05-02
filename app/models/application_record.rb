@@ -9,7 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
   include Enumable
 
   def self.admin_scopes
-    { "All" => :all }
+    { "All" => :for_admin }
   end
 
   def self.default_admin_scope
