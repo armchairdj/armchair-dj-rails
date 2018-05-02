@@ -49,12 +49,12 @@ class Admin::MediaController < AdminController
   # POST /admin/media.json
   def create
     respond_to do |format|
-      if @admin_medium.save
-        format.html { redirect_to @admin_medium, success: I18n.t("#{singular_table_name}.success.create") }
-        format.json { render :show, status: :created, location: @admin_medium }
+      if @medium.save
+        format.html { redirect_to @medium, success: I18n.t("#{singular_table_name}.success.create") }
+        format.json { render :show, status: :created, location: @medium }
       else
         format.html { render :new }
-        format.json { render json: @admin_medium.errors, status: :unprocessable_entity }
+        format.json { render json: @medium.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -68,12 +68,12 @@ class Admin::MediaController < AdminController
   # PATCH/PUT /admin/media/1.json
   def update
     respond_to do |format|
-      if @admin_medium.update(instance_params)
-        format.html { redirect_to @admin_medium, success: I18n.t("#{singular_table_name}.success.update") }
-        format.json { render :show, status: :ok, location: @admin_medium }
+      if @medium.update(instance_params)
+        format.html { redirect_to @medium, success: I18n.t("#{singular_table_name}.success.update") }
+        format.json { render :show, status: :ok, location: @medium }
       else
         format.html { render :edit }
-        format.json { render json: @admin_medium.errors, status: :unprocessable_entity }
+        format.json { render json: @medium.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -81,10 +81,10 @@ class Admin::MediaController < AdminController
   # DELETE /admin/media/1
   # DELETE /admin/media/1.json
   def destroy
-    @admin_medium.destroy
+    @medium.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_media_url, success: I18n.t("#{singular_table_name}.success.destroy") }
+      format.html { redirect_to media_url, success: I18n.t("#{singular_table_name}.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -92,22 +92,22 @@ class Admin::MediaController < AdminController
 private
 
   def find_collection
-    @admin_media = policy_scope(Admin::Medium)
+    @media = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def build_new_instance
-    @admin_medium = Admin::Medium.new(instance_params)
+    @medium = Medium.new(instance_params)
   end
 
   def find_instance
-    @admin_medium = Admin::Medium.find(params[:id])
+    @medium = Medium.find(params[:id])
   end
 
   def authorize_instance
-    authorize @admin_medium
+    authorize @medium
   end
 
   def instance_params
-    params.fetch(:admin_medium, {})
+    params.fetch(:medium, {})
   end
 end

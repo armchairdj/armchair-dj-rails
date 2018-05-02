@@ -49,12 +49,12 @@ class Admin::RolesController < AdminController
   # POST /admin/roles.json
   def create
     respond_to do |format|
-      if @admin_role.save
-        format.html { redirect_to @admin_role, success: I18n.t("#{singular_table_name}.success.create") }
-        format.json { render :show, status: :created, location: @admin_role }
+      if @role.save
+        format.html { redirect_to @role, success: I18n.t("#{singular_table_name}.success.create") }
+        format.json { render :show, status: :created, location: @role }
       else
         format.html { render :new }
-        format.json { render json: @admin_role.errors, status: :unprocessable_entity }
+        format.json { render json: @role.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -68,12 +68,12 @@ class Admin::RolesController < AdminController
   # PATCH/PUT /admin/roles/1.json
   def update
     respond_to do |format|
-      if @admin_role.update(instance_params)
-        format.html { redirect_to @admin_role, success: I18n.t("#{singular_table_name}.success.update") }
-        format.json { render :show, status: :ok, location: @admin_role }
+      if @role.update(instance_params)
+        format.html { redirect_to @role, success: I18n.t("#{singular_table_name}.success.update") }
+        format.json { render :show, status: :ok, location: @role }
       else
         format.html { render :edit }
-        format.json { render json: @admin_role.errors, status: :unprocessable_entity }
+        format.json { render json: @role.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -81,10 +81,10 @@ class Admin::RolesController < AdminController
   # DELETE /admin/roles/1
   # DELETE /admin/roles/1.json
   def destroy
-    @admin_role.destroy
+    @role.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_roles_url, success: I18n.t("#{singular_table_name}.success.destroy") }
+      format.html { redirect_to roles_url, success: I18n.t("#{singular_table_name}.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -92,22 +92,22 @@ class Admin::RolesController < AdminController
 private
 
   def find_collection
-    @admin_roles = policy_scope(Admin::Role)
+    @roles = scoped_and_sorted_collection.order(created_at: :desc)
   end
 
   def build_new_instance
-    @admin_role = Admin::Role.new(instance_params)
+    @role = Role.new(instance_params)
   end
 
   def find_instance
-    @admin_role = Admin::Role.find(params[:id])
+    @role = Role.find(params[:id])
   end
 
   def authorize_instance
-    authorize @admin_role
+    authorize @role
   end
 
   def instance_params
-    params.fetch(:admin_role, {})
+    params.fetch(:role, {})
   end
 end

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::Roles", type: :request do
-  describe "GET /admin_roles" do
+  describe "GET /roles" do
     it "works! (now write some real specs)" do
-      get admin_roles_path
+      get roles_path
       expect(response).to have_http_status(200)
     end
   end

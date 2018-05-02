@@ -1,25 +1,54 @@
 <%
-  @headline = @title = "Admin Media"
+  @title = "Creators"
 %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :index,
+  headline: @title,
+  prehead:  pluralize(@creators.total_count, "Total Record")
+} %>
 
-  <tbody>
-    <% @admin_media.each do |admin_medium| %>
-      <tr>
-        <td><%= link_to "Show", admin_medium %></td>
-        <td><%= link_to "Edit", edit_admin_medium_path(admin_medium) %></td>
-        <td><%= link_to "Destroy", admin_medium, method: :delete, data: { confirm: "Are you sure?" } %></td>
-      </tr>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Creator } %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @creators.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Primary") %>
+            <%= content_tag(:th, "Individual") %>
+            <%= content_tag(:th, post_count_column_header, class: "icon") %>
+            <%= content_tag(:th, work_count_column_header, class: "icon") %>
+            <%= content_tag(:th, contribution_count_column_header, class: "icon") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @creators.each do |creator| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, creator.name) %>
+              <%= content_tag(:td, creator.primary?) %>
+              <%= content_tag(:td, creator.individual?) %>
+              <%= content_tag(:td, creator.viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, creator.works.viewable.count, class: "icon") %>
+              <%= content_tag(:td, creator.contributed_works.viewable.count, class: "icon") %>
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_public_creator_link(creator) %>
+                <%= admin_view_link(creator) %>
+                <%= admin_update_link(creator) %>
+                <%= admin_destroy_link(creator) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @creators %>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to "New Admin Medium", new_admin_medium_path %>
+  <% end %>
+<% end %>

@@ -47,14 +47,6 @@ class Work < ApplicationRecord
     end
   end
 
-  def self.media_options
-    media = Work.human_media_with_keys.map do |medium|
-      medium[2] = { "data-work-grouping" => (medium[2] / 100).to_i }
-
-      medium
-    end
-  end
-
   #############################################################################
   # SCOPES.
   #############################################################################
@@ -75,6 +67,8 @@ class Work < ApplicationRecord
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :posts, dependent: :destroy
+
+  belongs_to :medium
 
   #############################################################################
   # ATTRIBUTES.
@@ -117,33 +111,6 @@ class Work < ApplicationRecord
   #
   #   super(deduped)
   # end
-
-  # Medium.
-
-  enum medium: {
-    song:        100,
-    album:       101,
-
-    movie:       200,
-    tv_show:     220,
-    radio_show:  240,
-    podcast:     260,
-
-    book:        300,
-    comic:       310,
-    newspaper:   350,
-    magazine:    370,
-
-    artwork:     400,
-
-    game:        500,
-    software:    501,
-    hardware:    502,
-
-    product:     600
-  }
-
-  enumable_attributes :medium
 
   #############################################################################
   # VALIDATIONS.

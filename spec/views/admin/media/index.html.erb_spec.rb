@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "admin/media/index", type: :view do
   before(:each) do
-    assign(:admin_media, [
+    assign(:media, [
       Admin::Medium.create!(),
       Admin::Medium.create!()
     ])

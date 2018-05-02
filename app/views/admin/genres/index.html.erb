@@ -1,25 +1,46 @@
 <%
-  @headline = @title = "Admin Genres"
+  @title = "Genres"
 %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :index,
+  headline: @title,
+  prehead:  pluralize(@genres.total_count, "Total Record")
+} %>
 
-  <tbody>
-    <% @admin_genres.each do |admin_genre| %>
-      <tr>
-        <td><%= link_to "Show", admin_genre %></td>
-        <td><%= link_to "Edit", edit_admin_genre_path(admin_genre) %></td>
-        <td><%= link_to "Destroy", admin_genre, method: :delete, data: { confirm: "Are you sure?" } %></td>
-      </tr>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Genre } %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @genres.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag(:th, "Medium") %>
+            <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @genres.each do |genre| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, genre.medium.name) %>
+              <%= content_tag(:td, genre.name) %>
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_public_genre_link(genre) %>
+                <%= admin_view_link(genre) %>
+                <%= admin_update_link(genre) %>
+                <%= admin_destroy_link(genre) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @genres %>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to "New Admin Genre", new_admin_genre_path %>
+  <% end %>
+<% end %>

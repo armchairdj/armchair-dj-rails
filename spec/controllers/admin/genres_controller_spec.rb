@@ -40,19 +40,19 @@ RSpec.describe Admin::GenresController, type: :controller do
     context "with valid params" do
       it "creates a new Admin::Genre" do
         expect {
-          post :create, params: {admin_genre: valid_params}, session: valid_session
+          post :create, params: {genre: valid_params}, session: valid_session
         }.to change(Admin::Genre, :count).by(1)
       end
 
-      it "redirects to the created admin_genre" do
-        post :create, params: {admin_genre: valid_params}, session: valid_session
+      it "redirects to the created genre" do
+        post :create, params: {genre: valid_params}, session: valid_session
         expect(response).to redirect_to(Admin::Genre.last)
       end
     end
 
     context "with invalid params" do
       it "renders (i.e. to display the "new" template)" do
-        post :create, params: {admin_genre: invalid_params}, session: valid_session
+        post :create, params: {genre: invalid_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
     end
@@ -72,16 +72,16 @@ RSpec.describe Admin::GenresController, type: :controller do
         skip("Add a hash of attributes valid for your model")
       }
 
-      it "updates the requested admin_genre" do
+      it "updates the requested genre" do
         genre = Admin::Genre.create! valid_params
-        put :update, params: {id: genre.to_param, admin_genre: new_attributes}, session: valid_session
+        put :update, params: {id: genre.to_param, genre: new_attributes}, session: valid_session
         genre.reload
         skip("Add assertions for updated state")
       end
 
-      it "redirects to the admin_genre" do
+      it "redirects to the genre" do
         genre = Admin::Genre.create! valid_params
-        put :update, params: {id: genre.to_param, admin_genre: valid_params}, session: valid_session
+        put :update, params: {id: genre.to_param, genre: valid_params}, session: valid_session
         expect(response).to redirect_to(genre)
       end
     end
@@ -89,24 +89,24 @@ RSpec.describe Admin::GenresController, type: :controller do
     context "with invalid params" do
       it "renders (i.e. to display the "edit" template)" do
         genre = Admin::Genre.create! valid_params
-        put :update, params: {id: genre.to_param, admin_genre: invalid_params}, session: valid_session
+        put :update, params: {id: genre.to_param, genre: invalid_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested admin_genre" do
+    it "destroys the requested genre" do
       genre = Admin::Genre.create! valid_params
       expect {
         delete :destroy, params: {id: genre.to_param}, session: valid_session
       }.to change(Admin::Genre, :count).by(-1)
     end
 
-    it "redirects to the admin_genres list" do
+    it "redirects to the genres list" do
       genre = Admin::Genre.create! valid_params
       delete :destroy, params: {id: genre.to_param}, session: valid_session
-      expect(response).to redirect_to(admin_genres_url)
+      expect(response).to redirect_to(genres_url)
     end
   end
 

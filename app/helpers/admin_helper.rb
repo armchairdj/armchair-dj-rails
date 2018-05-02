@@ -103,6 +103,18 @@ module AdminHelper
     admin_public_link(work)
   end
 
+  def admin_public_medium_link(medium)
+    return unless medium.viewable?
+
+    admin_public_link(medium)
+  end
+
+  def admin_public_genre_link(genre)
+    return unless genre.viewable?
+
+    admin_public_link(genre)
+  end
+
   #############################################################################
   # COLUMN HEADERS.
   #############################################################################

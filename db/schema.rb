@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_02_154842) do
+ActiveRecord::Schema.define(version: 2018_05_02_174701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,13 @@ ActiveRecord::Schema.define(version: 2018_05_02_154842) do
   create_table "contributions", force: :cascade do |t|
     t.bigint "work_id"
     t.bigint "creator_id"
-    t.integer "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "alpha"
+    t.bigint "role_id"
     t.index ["alpha"], name: "index_contributions_on_alpha"
     t.index ["creator_id"], name: "index_contributions_on_creator_id"
+    t.index ["role_id"], name: "index_contributions_on_role_id"
     t.index ["work_id"], name: "index_contributions_on_work_id"
   end
 
@@ -61,8 +62,12 @@ ActiveRecord::Schema.define(version: 2018_05_02_154842) do
     t.string "alpha"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "viewable_post_count", default: 0, null: false
     t.index ["alpha"], name: "index_genres_on_alpha"
     t.index ["medium_id"], name: "index_genres_on_medium_id"
+    t.index ["non_viewable_post_count"], name: "index_genres_on_non_viewable_post_count"
+    t.index ["viewable_post_count"], name: "index_genres_on_viewable_post_count"
   end
 
   create_table "identities", force: :cascade do |t|
@@ -79,7 +84,11 @@ ActiveRecord::Schema.define(version: 2018_05_02_154842) do
     t.string "alpha"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "viewable_post_count", default: 0, null: false
     t.index ["alpha"], name: "index_media_on_alpha"
+    t.index ["non_viewable_post_count"], name: "index_media_on_non_viewable_post_count"
+    t.index ["viewable_post_count"], name: "index_media_on_viewable_post_count"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -158,17 +167,19 @@ ActiveRecord::Schema.define(version: 2018_05_02_154842) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "medium"
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
     t.text "summary"
     t.string "alpha"
+    t.bigint "medium_id"
     t.index ["alpha"], name: "index_works_on_alpha"
+    t.index ["medium_id"], name: "index_works_on_medium_id"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
+  add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
   add_foreign_key "genres", "media"
@@ -178,4 +189,5 @@ ActiveRecord::Schema.define(version: 2018_05_02_154842) do
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "roles", "media"
+  add_foreign_key "works", "media"
 end
