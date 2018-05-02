@@ -18,9 +18,10 @@ class Creator < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Summarizable
   include Alphabetizable
+  include Summarizable
   include Viewable
+
   include Booletania
 
   booletania_columns :primary, :individual

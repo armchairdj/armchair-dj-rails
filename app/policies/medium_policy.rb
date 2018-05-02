@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class Admin::MediumPolicy < AdminPolicy
+class MediumPolicy < PublicPolicy
   class Scope < Scope
     def resolve
-      scope.for_admin
+      scope.for_site
     end
   end
 end

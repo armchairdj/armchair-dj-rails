@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_01_001349) do
+ActiveRecord::Schema.define(version: 2018_05_02_154842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,16 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.index ["work_id"], name: "index_credits_on_work_id"
   end
 
+  create_table "genres", force: :cascade do |t|
+    t.bigint "medium_id"
+    t.string "name"
+    t.string "alpha"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_genres_on_alpha"
+    t.index ["medium_id"], name: "index_genres_on_medium_id"
+  end
+
   create_table "identities", force: :cascade do |t|
     t.bigint "real_name_id"
     t.bigint "pseudonym_id"
@@ -62,6 +72,14 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.datetime "updated_at", null: false
     t.index ["pseudonym_id"], name: "index_identities_on_pseudonym_id"
     t.index ["real_name_id"], name: "index_identities_on_real_name_id"
+  end
+
+  create_table "media", force: :cascade do |t|
+    t.string "name"
+    t.string "alpha"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_media_on_alpha"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -91,6 +109,14 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.bigint "medium_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["medium_id"], name: "index_roles_on_medium_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -145,9 +171,11 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
 
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
+  add_foreign_key "genres", "media"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "posts", "users", column: "author_id"
+  add_foreign_key "roles", "media"
 end
