@@ -2,7 +2,7 @@
 
 RSpec.shared_examples "a_public_controller" do
   context "concerns" do
-    pending "seo paginatable"
+    # Tested in individual controllers.
   end
 
   context "included" do

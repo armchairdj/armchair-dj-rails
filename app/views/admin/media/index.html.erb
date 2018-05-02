@@ -1,0 +1,25 @@
+<%
+  @headline = @title = "Admin Media"
+%>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @admin_media.each do |admin_medium| %>
+      <tr>
+        <td><%= link_to "Show", admin_medium %></td>
+        <td><%= link_to "Edit", edit_admin_medium_path(admin_medium) %></td>
+        <td><%= link_to "Destroy", admin_medium, method: :delete, data: { confirm: "Are you sure?" } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "New Admin Medium", new_admin_medium_path %>
