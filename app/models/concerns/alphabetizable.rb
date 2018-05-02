@@ -17,7 +17,7 @@ module Alphabetizable
     # HOOKS.
     ###########################################################################
 
-    before_validation :set_alpha
+    before_save :set_alpha
 
     ###########################################################################
     # VALIDATION.
@@ -37,6 +37,8 @@ private
   end
 
   def ensure_alpha
+    return if new_record?
+
     self.errors.add(:base, :missing_alpha) if alpha.blank?
   end
 end

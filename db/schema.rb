@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.integer "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_contributions_on_alpha"
     t.index ["creator_id"], name: "index_contributions_on_creator_id"
     t.index ["work_id"], name: "index_contributions_on_work_id"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.text "summary"
     t.boolean "primary", default: true, null: false
     t.boolean "individual", default: true, null: false
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.bigint "work_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_credits_on_alpha"
     t.index ["creator_id"], name: "index_credits_on_creator_id"
     t.index ["work_id"], name: "index_credits_on_work_id"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.datetime "publish_on"
     t.bigint "author_id"
     t.text "summary"
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_posts_on_alpha"
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.string "last_name"
     t.string "username", null: false
     t.text "bio"
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2018_05_01_001349) do
     t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
     t.text "summary"
-    t.string "alpha", null: false
+    t.string "alpha"
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"

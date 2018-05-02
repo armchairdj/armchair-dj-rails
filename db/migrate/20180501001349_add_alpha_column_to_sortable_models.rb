@@ -1,11 +1,11 @@
 class AddAlphaColumnToSortableModels < ActiveRecord::Migration[5.2]
   def change
-    add_column :contributions, :alpha, :string, null: false
-    add_column :credits,       :alpha, :string, null: false
-    add_column :creators,      :alpha, :string, null: false
-    add_column :works,         :alpha, :string, null: false
-    add_column :users,         :alpha, :string, null: false
-    add_column :posts,         :alpha, :string, null: false
+    add_column :contributions, :alpha, :string
+    add_column :credits,       :alpha, :string
+    add_column :creators,      :alpha, :string
+    add_column :works,         :alpha, :string
+    add_column :users,         :alpha, :string
+    add_column :posts,         :alpha, :string
 
     add_index :contributions,  :alpha
     add_index :credits,        :alpha
