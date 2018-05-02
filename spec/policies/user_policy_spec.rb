@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe PostPolicy do
+RSpec.describe UserPolicy do
   it_behaves_like "a_public_policy" do
-    let(:record) { create(:minimal_post) }
+    let(:record) { create(:member) }
   end
 
   pending "scope"

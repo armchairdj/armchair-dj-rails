@@ -1,4 +1,4 @@
-class Admin::MediaController < ApplicationController
+class Admin::MediaController < AdminController
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -90,10 +90,6 @@ class Admin::MediaController < ApplicationController
   end
 
 private
-
-  def authorize_collection
-    authorize @admin_media
-  end
 
   def find_collection
     @admin_media = policy_scope(Admin::Medium)

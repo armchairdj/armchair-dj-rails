@@ -1,4 +1,4 @@
-class Admin::RolesController < ApplicationController
+class Admin::RolesController < AdminController
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -90,10 +90,6 @@ class Admin::RolesController < ApplicationController
   end
 
 private
-
-  def authorize_collection
-    authorize @admin_roles
-  end
 
   def find_collection
     @admin_roles = policy_scope(Admin::Role)

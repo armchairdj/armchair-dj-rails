@@ -1,4 +1,4 @@
-class Admin::GenresController < ApplicationController
+class Admin::GenresController < AdminController
   before_action :authorize_collection, only: [
     :index,
     :new,
@@ -90,10 +90,6 @@ class Admin::GenresController < ApplicationController
   end
 
 private
-
-  def authorize_collection
-    authorize @admin_genres
-  end
 
   def find_collection
     @admin_genres = policy_scope(Admin::Genre)

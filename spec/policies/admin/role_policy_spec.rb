@@ -2,9 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::CreatorPolicy do
+RSpec.describe Admin::RolePolicy do
   it_behaves_like "an_admin_policy" do
-    let(:record) { create(:minimal_creator) }
+    let(:record) { create(:minimal_role) }
   end
 
   pending "scope"

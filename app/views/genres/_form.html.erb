@@ -1,0 +1,10 @@
+<%= simple_form_for(genre) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

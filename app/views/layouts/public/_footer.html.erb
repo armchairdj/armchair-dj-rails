@@ -3,6 +3,8 @@
     <%= content_tag(:nav, class: "links") do %>
       <%= content_tag(:ul, class: "arrowed") do %>
         <%= content_tag(:li, link_to("Posts",    posts_path   )) %>
+        <%= content_tag(:li, link_to("Genres",   genres_path  )) %>
+        <%= content_tag(:li, link_to("Media",    media_path   )) %>
         <%= content_tag(:li, link_to("Creators", creators_path)) %>
         <%= content_tag(:li, link_to("Works",    works_path   )) %>
 

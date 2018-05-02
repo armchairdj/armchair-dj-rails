@@ -16,26 +16,29 @@ Rails.application.routes.draw do
   # Users.
   #############################################################################
 
-  devise_scope :user do
-    get    "register",          to: "users/registrations#new",             as: :new_user_registration
-    post   "register",          to: "users/registrations#create"
-    get    "settings",          to: "users/registrations#edit",            as: :edit_user_registration
-    match  "settings",          to: "users/registrations#update",          via: [:patch, :put]
-    delete "settings",          to: "users/registrations#destroy"
-    get    "settings/password", to: "users/registrations#edit_password"
-    match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
-    get    "profile/:username", to: "users/registrations#profile",         as: :user_profile
-
-    get   "log_in",             to: "users/sessions#new",                  as: :new_user_session
-    post  "log_in",             to: "users/sessions#create",               as: :user_session
-    match "log_out",            to: "users/sessions#destroy",              as: :destroy_user_session, via: Devise.sign_out_via
-  end
-
   devise_for :users, skip: [:sessions, :registrations], controllers: {
     confirmations: "users/confirmations",
     passwords:     "users/passwords",
     unlocks:       "users/unlocks"
   }
+
+  devise_scope :user do
+    get    "log_in",            to: "users/sessions#new",                  as: :new_user_session
+    post   "log_in",            to: "users/sessions#create",               as: :user_session
+    match  "log_out",           to: "users/sessions#destroy",              as: :destroy_user_session, via: Devise.sign_out_via
+
+    get    "register",          to: "users/registrations#new",             as: :new_user_registration
+    post   "register",          to: "users/registrations#create"
+
+    get    "settings",          to: "users/registrations#edit",            as: :edit_user_registration
+    match  "settings",          to: "users/registrations#update",          via: [:patch, :put]
+    delete "settings",          to: "users/registrations#destroy"
+
+    get    "settings/password", to: "users/registrations#edit_password"
+    match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
+
+    get    "profile/:username", to: "users/registrations#profile",         as: :user_profile
+  end
 
   #############################################################################
   # Pages.
@@ -60,10 +63,13 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
-    resources :users,    concerns: :paginatable
     resources :creators, concerns: :paginatable
-    resources :works,    concerns: :paginatable
+    resources :genres,   concerns: :paginatable
+    resources :media,    concerns: :paginatable
     resources :posts,    concerns: :paginatable
+    resources :roles,    concerns: :paginatable
+    resources :users,    concerns: :paginatable
+    resources :works,    concerns: :paginatable
   end
 
   #############################################################################
@@ -100,6 +106,11 @@ Rails.application.routes.draw do
   # TAXONOMY.
   #############################################################################
 
+  resources :media,    only: [:index, :show], concerns: :paginatable do
+    resources :genres, only: [:index, :show], concerns: :paginatable
+  end
+
   resources :creators, only: [:index, :show], concerns: :paginatable
+
   resources :works,    only: [:index, :show], concerns: :paginatable
 end
