@@ -75,13 +75,16 @@ RSpec.describe Creator, type: :model do
         subject { described_class.eager.where(id: richie.id).take }
 
         it "eager-loads associations" do
-          expect(subject.association(:pseudonyms)).to be_loaded
-          expect(subject.association(:real_names)).to be_loaded
-          expect(subject.association(:members   )).to be_loaded
-          expect(subject.association(:groups    )).to be_loaded
-          expect(subject.association(:credits   )).to be_loaded
-          expect(subject.association(:works     )).to be_loaded
-          expect(subject.association(:posts     )).to be_loaded
+          expect(subject.association(:pseudonyms       )).to be_loaded
+          expect(subject.association(:real_names       )).to be_loaded
+          expect(subject.association(:members          )).to be_loaded
+          expect(subject.association(:groups           )).to be_loaded
+          expect(subject.association(:credits          )).to be_loaded
+          expect(subject.association(:works            )).to be_loaded
+          expect(subject.association(:posts            )).to be_loaded
+          expect(subject.association(:contributions    )).to be_loaded
+          expect(subject.association(:contributed_works)).to be_loaded
+          expect(subject.association(:contributed_posts)).to be_loaded
         end
       end
     end

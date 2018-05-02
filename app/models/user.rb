@@ -38,17 +38,23 @@ class User < ApplicationRecord
     }
   end
 
-  def self.find_by_username!(username)
-    find_by!(username: username, role: [:writer, :editor, :admin, :super_admin])
+  def self.published_author!(username)
+    published.where(username: username).take!
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,        -> { all }
-  scope :for_admin,    -> { eager }
-  scope :for_site,     -> { eager }
+  scope :published, -> { left_outer_joins(:posts)
+    .where(    posts: { status: Post.statuses[:published] })
+    .where.not(posts: { id: nil })
+    .where(     role: [:writer, :editor, :admin, :super_admin])
+  }
+
+  scope     :eager, -> { includes(:posts, :works, :creators) }
+  scope :for_admin, -> { eager }
+  scope  :for_site, -> { eager.published.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

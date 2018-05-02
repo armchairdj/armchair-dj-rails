@@ -100,7 +100,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def profile
-    @user = User.find_by_username!(params[:username])
+    @user = User.published_author!(params[:username])
   end
 
 protected

@@ -49,7 +49,7 @@ class Creator < ApplicationRecord
     :pseudonyms, :real_names,
     :members, :groups,
     :credits, :works, :posts,
-    # :contributions, :contributed_works, :contributed_posts
+    :contributions, :contributed_works, :contributed_posts
   ) }
 
   scope :for_admin, -> { eager }
@@ -71,7 +71,7 @@ class Creator < ApplicationRecord
   has_many :contributed_works, through: :contributions,
     class_name: "Work", source: :work
   has_many :contributed_posts, through: :contributed_works,
-    class_name: "Post", source: :post
+    class_name: "Post", source: :posts
 
   # Identities.
 
