@@ -95,85 +95,128 @@ RSpec.describe Post, type: :model do
     let!(:published_standalone) { create(:standalone_post, :published) }
     let!(:published_review    ) { create(:song_review,     :published) }
 
+    context "basics" do
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        it { should eager_load(:work, :credits, :creator) }
+      end
+
+      describe "self#reverse_cron" do
+        subject { described_class.reverse_cron }
+
+        specify do
+          should contain_exactly(
+            draft_standalone,
+            draft_review,
+            scheduled_standalone,
+            scheduled_review,
+            published_review,
+            published_standalone
+          )
+        end
+
+        it { should_not eager_load(:work, :credits, :creator) }
+      end
+
+      describe "self#for_admin" do
+        subject { described_class.for_admin }
+
+        specify do
+          should contain_exactly(
+            draft_review,
+            draft_standalone,
+            published_review,
+            published_standalone,
+            scheduled_review,
+            scheduled_standalone
+          )
+        end
+
+        it { should eager_load(:work, :credits, :creator) }
+      end
+
+      describe "self#for_site" do
+        subject { described_class.for_site }
+
+        it { should eq [ published_review, published_standalone ] }
+
+        it { should eager_load(:work, :credits, :creator) }
+      end
+    end
+
     context "for status" do
       describe "self#draft" do
-        specify { expect(described_class.draft).to match_array([
-          draft_review,
-          draft_standalone
-        ]) }
+        subject { described_class.draft }
+
+        specify do
+          should contain_exactly(
+            draft_review,
+            draft_standalone
+          )
+        end
       end
 
       describe "self#scheduled" do
-        specify { expect(described_class.scheduled).to match_array([
-          scheduled_standalone,
-          scheduled_review
-        ]) }
+        subject { described_class.scheduled }
+
+        specify do
+          should contain_exactly(
+            scheduled_standalone,
+            scheduled_review
+          )
+        end
       end
 
       describe "self#published" do
-        specify { expect(described_class.published).to match_array([
-          published_review,
-          published_standalone,
-        ]) }
+        subject { described_class.published }
+
+        specify do
+          should contain_exactly(
+            published_review,
+            published_standalone
+          )
+        end
       end
 
       describe "self#not_published" do
-        specify { expect(described_class.not_published).to match_array([
-          draft_review,
-          draft_standalone,
-          scheduled_standalone,
-          scheduled_review
-        ]) }
+        subject { described_class.not_published }
+
+        specify do
+          should contain_exactly(
+            draft_review,
+            draft_standalone,
+            scheduled_standalone,
+            scheduled_review
+          )
+        end
       end
     end
 
     context "for type" do
       describe "self#standalone" do
-        specify { expect(described_class.standalone).to match_array([
-          draft_standalone,
-          published_standalone,
-          scheduled_standalone
-        ]) }
+        subject { described_class.standalone }
+
+        specify do
+          should contain_exactly(
+            draft_standalone,
+            published_standalone,
+            scheduled_standalone
+          )
+        end
       end
 
       describe "self#review" do
-        specify { expect(described_class.review).to match_array([
-          draft_review,
-          published_review,
-          scheduled_review
-        ]) }
+        subject { described_class.review }
+
+        specify do
+          should contain_exactly(
+            draft_review,
+            published_review,
+            scheduled_review
+          )
+        end
       end
-    end
-
-    describe "self#reverse_cron" do # TODO BJD
-      specify { expect(described_class.reverse_cron.to_a).to eq([
-        draft_standalone,
-        draft_review,
-        scheduled_standalone,
-        scheduled_review,
-        published_review,
-        published_standalone,
-      ]) }
-    end
-
-    pending "self#eager"
-
-    describe "self#for_admin" do
-      specify { expect(described_class.for_admin).to include(
-        draft_review,
-        draft_standalone,
-        published_review,
-        published_standalone,
-        scheduled_review,
-        scheduled_standalone
-      ) }
-    end
-
-    describe "self#for_site" do
-      specify { expect(described_class.for_site).to match_array([
-        published_standalone,
-        published_review
-      ]) }
     end
   end
 

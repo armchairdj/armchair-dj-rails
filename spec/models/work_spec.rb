@@ -87,37 +87,11 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    describe "self#alpha" do
-      let!(:tki  ) { create(:album, title: "The Kick Inside"  ) }
-      let!(:lh   ) { create(:album, title: "lionheart"        ) }
-      let!(:nfe  ) { create(:album, title: "Never for Ever"   ) }
-      let!(:td   ) { create(:album, title: "The Dreaming"     ) }
-      let!(:hol  ) { create(:album, title: "Hounds of Love"   ) }
-      let!(:tsw  ) { create(:album, title: "the sensual world") }
-      let!(:trs  ) { create(:album, title: "The Red Shoes"    ) }
-      let!(:a    ) { create(:album, title: "aerial"           ) }
-      let!(:d    ) { create(:album, title: "Director's Cut"   ) }
-      let!(:fifty) { create(:album, title: "50 Words for Snow") }
+    pending "self#eager"
 
-      specify { expect(described_class.alpha.to_a).to eq([
-        fifty,
-        a,
-        d,
-        hol,
-        lh,
-        nfe,
-        td,
-        tki,
-        trs,
-        tsw
-      ]) }
-    end
+    pending "self#for_admin"
 
-    pending "eager"
-
-    pending "for_admin"
-
-    pending "for_site"
+    pending "self#for_site"
   end
 
   context "associations" do

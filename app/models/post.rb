@@ -61,6 +61,7 @@ class Post < ApplicationRecord
   scope :review,          -> { where.not(work_id: nil) }
   scope :standalone,      -> { where(    work_id: nil) }
 
+  # TODO BJD deal with unpublished
   scope :reverse_cron,    -> { order(published_at: :desc) }
 
   scope :eager,           -> { includes(work: { credits: :creator }) }

@@ -11,10 +11,12 @@ module Workable
     # SCOPES.
     ###########################################################################
 
+    scope     :eager, -> { includes(:work, :creator) }
+
     scope  :viewable, -> { eager.where.not(works: { viewable_post_count: 0 }) }
 
-    scope     :eager, -> { includes(:work, :creator) }
-    scope  :for_site, -> { eager.viewable.alpha }
+    scope  :for_site, -> { viewable.alpha }
+
     scope :for_admin, -> { eager }
 
     ###########################################################################

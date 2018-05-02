@@ -57,34 +57,44 @@ RSpec.describe Creator, type: :model do
         )
       end
 
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        specify do
+          should eager_load(
+            :pseudonyms, :real_names, :members, :groups, :credits, :works,
+            :posts, :contributions, :contributed_works, :contributed_posts
+          )
+        end
+      end
+
       describe "self#for_admin" do
+        subject { described_class.for_admin }
+
         specify "includes all creators, unsorted" do
-          expect(described_class.for_admin).to match_array([
-            richie, amy, kate, carl, feist, derrick
-          ])
+          should match_array([richie, amy, kate, carl, feist, derrick])
+        end
+
+        specify do
+          should eager_load(
+            :pseudonyms, :real_names, :members, :groups, :credits, :works,
+            :posts, :contributions, :contributed_works, :contributed_posts
+          )
         end
       end
 
       describe "self#for_site" do
+        subject { described_class.for_site }
+
         specify "includes only creators with published posts, sorted alphabetically" do
-          expect(described_class.for_site).to eq([carl, richie])
+          should eq([carl, richie])
         end
-      end
 
-      describe "eager" do
-        subject { described_class.eager.where(id: richie.id).take }
-
-        it "eager-loads associations" do
-          expect(subject.association(:pseudonyms       )).to be_loaded
-          expect(subject.association(:real_names       )).to be_loaded
-          expect(subject.association(:members          )).to be_loaded
-          expect(subject.association(:groups           )).to be_loaded
-          expect(subject.association(:credits          )).to be_loaded
-          expect(subject.association(:works            )).to be_loaded
-          expect(subject.association(:posts            )).to be_loaded
-          expect(subject.association(:contributions    )).to be_loaded
-          expect(subject.association(:contributed_works)).to be_loaded
-          expect(subject.association(:contributed_posts)).to be_loaded
+        specify do
+          should eager_load(
+            :pseudonyms, :real_names, :members, :groups, :credits, :works,
+            :posts, :contributions, :contributed_works, :contributed_posts
+          )
         end
       end
     end

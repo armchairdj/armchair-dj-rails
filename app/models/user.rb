@@ -53,6 +53,7 @@ class User < ApplicationRecord
   }
 
   scope     :eager, -> { includes(:posts, :works, :creators) }
+
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.published.alpha }
 

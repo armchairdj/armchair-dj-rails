@@ -7,10 +7,23 @@ RSpec.shared_examples "a_workable_model" do
 
   context "included" do
     context "scope-related" do
-      pending "viewable"
-      pending "eager"
-      pending "for_admin"
-      pending "for_site"
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        specify { should eager_load(:work, :creator) }
+      end
+
+      describe "self#viewable" do
+        specify { should_not eager_load(:work, :creator) }
+      end
+
+      describe "self#for_admin" do
+        specify { should eager_load(:work, :creator) }
+      end
+
+      describe "self#for_site" do
+        specify { should eager_load(:work, :creator) }
+      end
     end
 
     context "associations" do

@@ -74,7 +74,7 @@ RSpec.describe User, type: :model do
     end
 
     describe "self#eager" do
-      describe "is eager" do
+      describe "eager-loads associations" do
         subject { described_class.eager.where(id: brian.id).take }
 
         specify { expect(subject.association(:posts   )).to be_loaded }
@@ -88,7 +88,7 @@ RSpec.describe User, type: :model do
         expect(described_class.for_admin).to eq([jenny, charlie, brian, gruber])
       end
 
-      describe "is eager" do
+      describe "eager-loads associations" do
         subject { described_class.for_admin.where(id: brian.id).take }
 
         specify { expect(subject.association(:posts   )).to be_loaded }
@@ -102,7 +102,7 @@ RSpec.describe User, type: :model do
         expect(described_class.for_site).to eq([brian, jenny])
       end
 
-      describe "is eager" do
+      describe "eager-loads associations" do
         subject { described_class.for_site.where(id: brian.id).take }
 
         specify { expect(subject.association(:posts   )).to be_loaded }

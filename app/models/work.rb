@@ -59,9 +59,10 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,        -> { includes(:creators, :contributors) }
-  scope :for_admin,    -> { eager }
-  scope :for_site,     -> { eager.viewable.includes(:posts).alpha }
+  scope :eager,     -> { includes(:creators, :contributors) }
+
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { eager.viewable.includes(:posts).alpha }
 
   #############################################################################
   # ASSOCIATIONS.
