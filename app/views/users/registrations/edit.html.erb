@@ -16,8 +16,8 @@
     <%= f.input :current_password, required: true, hint: true %>
   <% end %>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+  <% if @user.pending_reconfirmation? %>
+    <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
