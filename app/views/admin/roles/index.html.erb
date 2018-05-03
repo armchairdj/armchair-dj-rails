@@ -1,18 +1,18 @@
 <%
-  @title = "Genres"
+  @title = "Roles"
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
   action:   :index,
   headline: @title,
-  prehead:  pluralize(@genres.total_count, "Total Record")
+  prehead:  pluralize(@roles.total_count, "Total Record")
 } %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Genre } %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Role } %>
 
   <%= content_tag(:div, class: "tab") do %>
-    <% if @genres.empty? %>
+    <% if @roles.empty? %>
       <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
     <% else %>
       <%= content_tag(:table, class: "admin admin-index") do %>
@@ -25,22 +25,22 @@
         <% end %>
 
         <%= content_tag(:tbody) do %>
-          <% @genres.each do |genre| %>
+          <% @roles.each do |role| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, genre.medium.name) %>
-              <%= content_tag(:td, genre.name) %>
+              <%= content_tag(:td, role.medium.name) %>
+              <%= content_tag(:td, role.name) %>
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_genre_link(genre) %>
-                <%= admin_view_link(genre) %>
-                <%= admin_update_link(genre) %>
-                <%= admin_destroy_link(genre) %>
+                <%= admin_public_role_link(role) %>
+                <%= admin_view_link(role) %>
+                <%= admin_update_link(role) %>
+                <%= admin_destroy_link(role) %>
               <% end %>
             <% end %>
           <% end %>
         <% end %>
       <% end %>
 
-      <%= paginate @genres %>
+      <%= paginate @roles %>
     <% end %>
   <% end %>
 <% end %>

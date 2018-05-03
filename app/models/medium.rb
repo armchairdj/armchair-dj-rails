@@ -20,7 +20,7 @@ class Medium < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:genres, :roles, :works) }
+  scope :eager,     -> { includes(:roles, :works) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.alpha }
 
@@ -28,7 +28,6 @@ class Medium < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :genres, dependent: :destroy
   has_many :roles,  dependent: :destroy
   has_many :works,  dependent: :destroy
 

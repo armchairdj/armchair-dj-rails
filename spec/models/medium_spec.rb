@@ -44,7 +44,7 @@ RSpec.describe Medium, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:genres, :roles, :works) }
+        it { should eager_load(:roles, :works) }
       end
 
       describe "self#for_admin" do
@@ -54,7 +54,7 @@ RSpec.describe Medium, type: :model do
           should match_array([song_medium, album_medium, movie_medium])
         end
 
-        it { should eager_load(:genres, :roles, :works) }
+        it { should eager_load(:roles, :works) }
       end
 
       describe "self#for_site" do
@@ -64,13 +64,12 @@ RSpec.describe Medium, type: :model do
           should eq([album_medium, song_medium])
         end
 
-        it { should eager_load(:genres, :roles, :works) }
+        it { should eager_load(:roles, :works) }
       end
     end
   end
 
   context "associations" do
-    it { should have_many(:genres) }
     it { should have_many(:roles ) }
     it { should have_many(:works ) }
 

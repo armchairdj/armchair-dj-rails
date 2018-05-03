@@ -56,21 +56,6 @@ ActiveRecord::Schema.define(version: 2018_05_02_174701) do
     t.index ["work_id"], name: "index_credits_on_work_id"
   end
 
-  create_table "genres", force: :cascade do |t|
-    t.bigint "medium_id"
-    t.string "name"
-    t.string "alpha"
-    t.text "summary"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "non_viewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
-    t.index ["alpha"], name: "index_genres_on_alpha"
-    t.index ["medium_id"], name: "index_genres_on_medium_id"
-    t.index ["non_viewable_post_count"], name: "index_genres_on_non_viewable_post_count"
-    t.index ["viewable_post_count"], name: "index_genres_on_viewable_post_count"
-  end
-
   create_table "identities", force: :cascade do |t|
     t.bigint "real_name_id"
     t.bigint "pseudonym_id"
@@ -186,7 +171,6 @@ ActiveRecord::Schema.define(version: 2018_05_02_174701) do
   add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
-  add_foreign_key "genres", "media"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"

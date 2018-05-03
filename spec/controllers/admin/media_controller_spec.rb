@@ -51,7 +51,7 @@ RSpec.describe Admin::MediaController, type: :controller do
     end
 
     context "with invalid params" do
-      it "renders (i.e. to display the "new" template)" do
+      it "renders (i.e. to display the 'new' template)" do
         post :create, params: {medium: invalid_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
@@ -87,7 +87,7 @@ RSpec.describe Admin::MediaController, type: :controller do
     end
 
     context "with invalid params" do
-      it "renders (i.e. to display the "edit" template)" do
+      it "renders (i.e. to display the 'edit' template)" do
         medium = Admin::Medium.create! valid_params
         put :update, params: {id: medium.to_param, medium: invalid_params}, session: valid_session
         expect(response).to have_http_status(200)

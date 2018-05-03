@@ -64,7 +64,6 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :creators, concerns: :paginatable
-    resources :genres,   concerns: :paginatable
     resources :media,    concerns: :paginatable
     resources :posts,    concerns: :paginatable
     resources :roles,    concerns: :paginatable
@@ -107,8 +106,6 @@ Rails.application.routes.draw do
   #############################################################################
 
   resources :media,    only: [:index, :show], concerns: :paginatable
-
-  resources :genres,   only: [:index, :show], concerns: :paginatable
 
   resources :creators, only: [:index, :show], concerns: :paginatable
 

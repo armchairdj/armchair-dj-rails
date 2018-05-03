@@ -366,6 +366,5 @@ private
     work.update_counts
     work.medium.update_counts
     work.creators.each { |c| c.update_counts }
-    # work.genres.each { |g| g.update_counts }
   end
 end

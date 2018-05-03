@@ -37,41 +37,41 @@ podcast    = FactoryBot.create(:medium, name: "Podcast"   )
 
 ##### GENRES
 
-song_trip_hop   = FactoryBot.create(:genre, medium: song,     name: "Trip-Hop" )
-song_techno     = FactoryBot.create(:genre, medium: song,     name: "Techno"   )
-song_jungle     = FactoryBot.create(:genre, medium: song,     name: "Jungle"   )
-song_dream_pop  = FactoryBot.create(:genre, medium: song,     name: "Dream Pop")
-song_heavy      = FactoryBot.create(:genre, medium: song,     name: "Heavy"    )
-
-album_trip_hop  = FactoryBot.create(:genre, medium: album,   name: "Trip-Hop" )
-album_techno    = FactoryBot.create(:genre, medium: album,   name: "Techno"   )
-album_jungle    = FactoryBot.create(:genre, medium: album,   name: "Jungle"   )
-album_dream_pop = FactoryBot.create(:genre, medium: album,   name: "Dream Pop")
-album_heavy     = FactoryBot.create(:genre, medium: album,   name: "Heavy"    )
-
-movie_comedy    = FactoryBot.create(:genre, medium: movie,   name: "Comedy"   )
-movie_drama     = FactoryBot.create(:genre, medium: movie,   name: "Drama"    )
-movie_horror    = FactoryBot.create(:genre, medium: movie,   name: "Horror"   )
-movie_action    = FactoryBot.create(:genre, medium: movie,   name: "Action"   )
-movie_sci_fi    = FactoryBot.create(:genre, medium: movie,   name: "Sci-Fi"   )
-
-tv_show_comedy  = FactoryBot.create(:genre, medium: tv_show, name: "Comedy"   )
-tv_show_drama   = FactoryBot.create(:genre, medium: tv_show, name: "Drama"    )
-tv_show_horror  = FactoryBot.create(:genre, medium: tv_show, name: "Horror"   )
-tv_show_action  = FactoryBot.create(:genre, medium: tv_show, name: "Action"   )
-tv_show_sci_fi  = FactoryBot.create(:genre, medium: tv_show, name: "Sci-Fi"   )
-
-book_sci_fi     = FactoryBot.create(:genre, medium: book,    name: "Sci-Fi"   )
-book_fantasy    = FactoryBot.create(:genre, medium: book,    name: "Fantasy"  )
-book_memoir     = FactoryBot.create(:genre, medium: book,    name: "Memoir"   )
-
-comic_indie     = FactoryBot.create(:genre, medium: comic,   name: "Indie"    )
-comic_horror    = FactoryBot.create(:genre, medium: comic,   name: "Horror"   )
-comic_superhero = FactoryBot.create(:genre, medium: comic,   name: "Superhero")
-
-game_horror     = FactoryBot.create(:genre, medium: game,    name: "Horror"   )
-game_adventure  = FactoryBot.create(:genre, medium: game,    name: "Adventure")
-game_sports     = FactoryBot.create(:genre, medium: game,    name: "Sports"   )
+# song_trip_hop   = FactoryBot.create(:genre, medium: song,     name: "Trip-Hop" )
+# song_techno     = FactoryBot.create(:genre, medium: song,     name: "Techno"   )
+# song_jungle     = FactoryBot.create(:genre, medium: song,     name: "Jungle"   )
+# song_dream_pop  = FactoryBot.create(:genre, medium: song,     name: "Dream Pop")
+# song_heavy      = FactoryBot.create(:genre, medium: song,     name: "Heavy"    )
+#
+# album_trip_hop  = FactoryBot.create(:genre, medium: album,   name: "Trip-Hop" )
+# album_techno    = FactoryBot.create(:genre, medium: album,   name: "Techno"   )
+# album_jungle    = FactoryBot.create(:genre, medium: album,   name: "Jungle"   )
+# album_dream_pop = FactoryBot.create(:genre, medium: album,   name: "Dream Pop")
+# album_heavy     = FactoryBot.create(:genre, medium: album,   name: "Heavy"    )
+#
+# movie_comedy    = FactoryBot.create(:genre, medium: movie,   name: "Comedy"   )
+# movie_drama     = FactoryBot.create(:genre, medium: movie,   name: "Drama"    )
+# movie_horror    = FactoryBot.create(:genre, medium: movie,   name: "Horror"   )
+# movie_action    = FactoryBot.create(:genre, medium: movie,   name: "Action"   )
+# movie_sci_fi    = FactoryBot.create(:genre, medium: movie,   name: "Sci-Fi"   )
+#
+# tv_show_comedy  = FactoryBot.create(:genre, medium: tv_show, name: "Comedy"   )
+# tv_show_drama   = FactoryBot.create(:genre, medium: tv_show, name: "Drama"    )
+# tv_show_horror  = FactoryBot.create(:genre, medium: tv_show, name: "Horror"   )
+# tv_show_action  = FactoryBot.create(:genre, medium: tv_show, name: "Action"   )
+# tv_show_sci_fi  = FactoryBot.create(:genre, medium: tv_show, name: "Sci-Fi"   )
+#
+# book_sci_fi     = FactoryBot.create(:genre, medium: book,    name: "Sci-Fi"   )
+# book_fantasy    = FactoryBot.create(:genre, medium: book,    name: "Fantasy"  )
+# book_memoir     = FactoryBot.create(:genre, medium: book,    name: "Memoir"   )
+#
+# comic_indie     = FactoryBot.create(:genre, medium: comic,   name: "Indie"    )
+# comic_horror    = FactoryBot.create(:genre, medium: comic,   name: "Horror"   )
+# comic_superhero = FactoryBot.create(:genre, medium: comic,   name: "Superhero")
+#
+# game_horror     = FactoryBot.create(:genre, medium: game,    name: "Horror"   )
+# game_adventure  = FactoryBot.create(:genre, medium: game,    name: "Adventure")
+# game_sports     = FactoryBot.create(:genre, medium: game,    name: "Sports"   )
 
 ##### ROLES
 
