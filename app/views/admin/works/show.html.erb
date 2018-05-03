@@ -1,5 +1,5 @@
 <%
-  @title = ["View #{@work.human_medium}", @work.display_creators, @work.title]
+  @title = ["View #{@work.medium.name}", @work.display_creators, @work.title]
 
   @creators      = @work.creators.for_admin.alpha
   @contributions = @work.contributions.for_admin.alpha
@@ -22,7 +22,7 @@
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @work.human_medium) %>
+        <%= content_tag(:td, @work.medium.name) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

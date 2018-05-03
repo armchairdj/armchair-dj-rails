@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "admin/media/new", type: :view do
   before(:each) do
-    assign(:medium, Admin::Medium.new())
+    assign(:medium, Medium.new())
   end
 
   it "renders new medium form" do

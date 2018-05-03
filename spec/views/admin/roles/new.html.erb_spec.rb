@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "admin/roles/new", type: :view do
   before(:each) do
-    assign(:role, Admin::Role.new())
+    assign(:role, Role.new())
   end
 
   it "renders new role form" do

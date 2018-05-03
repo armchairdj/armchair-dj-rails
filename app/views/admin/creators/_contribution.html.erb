@@ -1,5 +1,5 @@
 <%= content_tag(:dt) do %>
-  <%= contribution.work.human_medium %>
+  <%= contribution.work.medium.name %>
   <%= contribution.human_role %>
 <% end %>
 <%= content_tag(:dd, link_to_work(contribution.work, admin: true)) %>

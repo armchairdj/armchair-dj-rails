@@ -20,6 +20,10 @@ class Role < ApplicationRecord
     }
   end
 
+  def self.grouped_options
+    joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################

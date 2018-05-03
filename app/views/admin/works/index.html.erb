@@ -29,7 +29,7 @@
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, work.human_medium) if @scope == :all %>
+              <%= content_tag(:td, work.medium.name) if @scope == :all %>
               <%= content_tag(:td, work.title) %>
               <%= content_tag(:td, work.display_creators) %>
               <%= content_tag(:td, work.viewable_post_count, class: "icon") %>

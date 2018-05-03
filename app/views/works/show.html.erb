@@ -7,7 +7,7 @@
 
 <%= content_for(:header) do %>
   <%= content_tag(:header, class: "post-header") do %>
-    <%= content_tag(:h3, @work.human_medium) %>
+    <%= content_tag(:h3, @work.medium.name) %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @work.display_creators, class: "creators") %>
       <%= content_tag(:span, @work.title,            class: "title"   ) %>

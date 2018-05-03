@@ -123,7 +123,7 @@ private
     @work.prepare_contributions
 
     @creators = policy_scope(Creator).alpha
-    @roles    = Contribution.grouped_role_options
+    @roles    = Role.grouped_options
   end
 
   def instance_params

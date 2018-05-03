@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Admin::MediaController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
-  # Admin::Medium. As you add validations to Admin::Medium, be sure to
+  # Medium. As you add validations to Medium, be sure to
   # adjust the attributes here as well.
   let(:valid_params) {
     skip("Add a hash of attributes valid for your model")
@@ -15,7 +15,7 @@ RSpec.describe Admin::MediaController, type: :controller do
 
   describe "GET #index" do
     it "renders" do
-      medium = Admin::Medium.create! valid_params
+      medium = Medium.create! valid_params
       get :index, params: {}, session: valid_session
       expect(response).to have_http_status(200)
     end
@@ -23,7 +23,7 @@ RSpec.describe Admin::MediaController, type: :controller do
 
   describe "GET #show" do
     it "renders" do
-      medium = Admin::Medium.create! valid_params
+      medium = Medium.create! valid_params
       get :show, params: {id: medium.to_param}, session: valid_session
       expect(response).to have_http_status(200)
     end
@@ -38,15 +38,15 @@ RSpec.describe Admin::MediaController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
-      it "creates a new Admin::Medium" do
+      it "creates a new Medium" do
         expect {
           post :create, params: {medium: valid_params}, session: valid_session
-        }.to change(Admin::Medium, :count).by(1)
+        }.to change(Medium, :count).by(1)
       end
 
       it "redirects to the created medium" do
         post :create, params: {medium: valid_params}, session: valid_session
-        expect(response).to redirect_to(Admin::Medium.last)
+        expect(response).to redirect_to(Medium.last)
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Admin::MediaController, type: :controller do
 
   describe "GET #edit" do
     it "renders" do
-      medium = Admin::Medium.create! valid_params
+      medium = Medium.create! valid_params
       get :edit, params: {id: medium.to_param}, session: valid_session
       expect(response).to have_http_status(200)
     end
@@ -73,14 +73,14 @@ RSpec.describe Admin::MediaController, type: :controller do
       }
 
       it "updates the requested medium" do
-        medium = Admin::Medium.create! valid_params
+        medium = Medium.create! valid_params
         put :update, params: {id: medium.to_param, medium: new_attributes}, session: valid_session
         medium.reload
         skip("Add assertions for updated state")
       end
 
       it "redirects to the medium" do
-        medium = Admin::Medium.create! valid_params
+        medium = Medium.create! valid_params
         put :update, params: {id: medium.to_param, medium: valid_params}, session: valid_session
         expect(response).to redirect_to(medium)
       end
@@ -88,7 +88,7 @@ RSpec.describe Admin::MediaController, type: :controller do
 
     context "with invalid params" do
       it "renders (i.e. to display the 'edit' template)" do
-        medium = Admin::Medium.create! valid_params
+        medium = Medium.create! valid_params
         put :update, params: {id: medium.to_param, medium: invalid_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
@@ -97,14 +97,14 @@ RSpec.describe Admin::MediaController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested medium" do
-      medium = Admin::Medium.create! valid_params
+      medium = Medium.create! valid_params
       expect {
         delete :destroy, params: {id: medium.to_param}, session: valid_session
-      }.to change(Admin::Medium, :count).by(-1)
+      }.to change(Medium, :count).by(-1)
     end
 
     it "redirects to the media list" do
-      medium = Admin::Medium.create! valid_params
+      medium = Medium.create! valid_params
       delete :destroy, params: {id: medium.to_param}, session: valid_session
       expect(response).to redirect_to(media_url)
     end

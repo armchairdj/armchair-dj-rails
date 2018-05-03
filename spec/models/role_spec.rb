@@ -7,6 +7,10 @@ RSpec.describe Role, type: :model do
     it_behaves_like "an_application_record"
   end
 
+  context "class" do
+    pending "grouped_options"
+  end
+
   context "scope-related" do
     pending "self#eager"
     pending "self#for_admin"
