@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe "admin/media/edit", type: :view do
   before(:each) do
-    @medium = assign(:medium, create(:minimal_medium))
+    @model_class = assign(:model_name, Medium)
+    @medium      = assign(:medium, create(:minimal_medium))
   end
 
   it "renders the edit medium form" do

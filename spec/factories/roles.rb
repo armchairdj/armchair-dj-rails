@@ -2,6 +2,9 @@ FactoryBot.define do
   sequence :role_name { |n| "Role #{n}" }
 
   factory :role do
+    medium_id nil
+    name      nil
+    initialize_with { Medium.find_or_initialize_by(medium_id: medium_id, name: name) }
 
     ###########################################################################
     # TRAITS.

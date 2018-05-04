@@ -1,113 +1,172 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Admin::MediaController, type: :controller do
+  context "concerns" do
+    it_behaves_like "an_admin_controller"
 
-  # This should return the minimal set of attributes required to create a valid
-  # Medium. As you add validations to Medium, be sure to
-  # adjust the attributes here as well.
-  let(:valid_params) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_params) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  describe "GET #index" do
-    it "renders" do
-      medium = Medium.create! valid_params
-      get :index, params: {}, session: valid_session
-      expect(response).to have_http_status(200)
+    it_behaves_like "an_seo_paginatable_controller" do
+      let(:expected_redirect) { admin_media_path }
     end
   end
 
-  describe "GET #show" do
-    it "renders" do
-      medium = Medium.create! valid_params
-      get :show, params: {id: medium.to_param}, session: valid_session
-      expect(response).to have_http_status(200)
-    end
-  end
+  context "as admin" do
+    login_admin
 
-  describe "GET #new" do
-    it "renders" do
-      get :new, params: {}, session: valid_session
-      expect(response).to have_http_status(200)
-    end
-  end
+    describe "GET #index" do
+      context "without records" do
+        context ":for_admin scope (default)" do
+          it "renders" do
+            get :index
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Medium" do
+            should successfully_render("admin/media/index")
+            expect(assigns(:media)).to paginate(0).of_total_records(0)
+          end
+        end
+      end
+
+      context "with records" do
+        context ":for_admin scope (default)" do
+          before(:each) do
+            21.times { create(:minimal_medium) }
+          end
+
+          it "renders" do
+            get :index
+
+            should successfully_render("admin/media/index")
+            expect(assigns(:media)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { page: "2" }
+
+            should successfully_render("admin/media/index")
+            expect(assigns(:media)).to paginate(1).of_total_records(21)
+          end
+        end
+      end
+    end
+
+    describe "GET #show" do
+      let(:medium) { create(:minimal_medium) }
+
+      it "renders" do
+        get :show, params: { id: medium.to_param }
+
+        should successfully_render("admin/media/show")
+        should assign(medium, :medium)
+      end
+    end
+
+    describe "GET #new" do
+      it "renders" do
+        get :new
+
+        should successfully_render("admin/media/new")
+        expect(assigns(:medium)).to be_a_new(Medium)
+      end
+    end
+
+    describe "POST #create" do
+      let(  :valid_params) { attributes_for(:minimal_medium) }
+      let(:invalid_params) { attributes_for(:minimal_medium).except(:name) }
+
+      context "with valid params" do
+        it "creates a new Medium" do
+          expect {
+            post :create, params: { medium: valid_params }
+          }.to change(Medium, :count).by(1)
+        end
+
+        it "creates the right attributes" do
+          post :create, params: { medium: valid_params }
+
+          should assign(Medium.last, :medium).with_attributes(valid_params).and_be_valid
+        end
+
+        it "redirects to index" do
+          post :create, params: { medium: valid_params }
+
+          should send_user_to(
+            admin_medium_path(assigns(:medium))
+          ).with_flash(:success, "admin.flash.media.success.create")
+        end
+      end
+
+      context "with invalid params" do
+        it "renders new" do
+          post :create, params: { medium: invalid_params }
+
+          should successfully_render("admin/media/new")
+
+          expect(assigns(:medium)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:medium)).to be_invalid
+        end
+      end
+    end
+
+    describe "GET #edit" do
+      let(:medium) { create(:minimal_medium) }
+
+      it "renders" do
+        get :edit, params: { id: medium.to_param }
+
+        should successfully_render("admin/media/edit")
+        should assign(medium, :medium)
+      end
+    end
+
+    describe "PUT #update" do
+      let(:medium) { create(:minimal_medium) }
+
+      let(  :valid_params) { { name: "New Name" } }
+      let(:invalid_params) { { name: ""         } }
+
+      context "with valid params" do
+        it "updates the requested medium" do
+          put :update, params: { id: medium.to_param, medium: valid_params }
+
+          should assign(medium, :medium).with_attributes(valid_params).and_be_valid
+        end
+
+        it "redirects to index" do
+          put :update, params: { id: medium.to_param, medium: valid_params }
+
+          should send_user_to(
+            admin_medium_path(assigns(:medium))
+          ).with_flash(:success, "admin.flash.media.success.update")
+        end
+      end
+
+      context "with invalid params" do
+        it "renders edit" do
+          put :update, params: { id: medium.to_param, medium: invalid_params }
+
+          should successfully_render("admin/media/edit")
+
+          should assign(medium, :medium).with_attributes(invalid_params).and_be_invalid
+        end
+      end
+    end
+
+    describe "DELETE #destroy" do
+      let!(:medium) { create(:minimal_medium) }
+
+      it "destroys the requested medium" do
         expect {
-          post :create, params: {medium: valid_params}, session: valid_session
-        }.to change(Medium, :count).by(1)
+          delete :destroy, params: { id: medium.to_param }
+        }.to change(Medium, :count).by(-1)
       end
 
-      it "redirects to the created medium" do
-        post :create, params: {medium: valid_params}, session: valid_session
-        expect(response).to redirect_to(Medium.last)
-      end
-    end
+      it "redirects to index" do
+        delete :destroy, params: { id: medium.to_param }
 
-    context "with invalid params" do
-      it "renders (i.e. to display the 'new' template)" do
-        post :create, params: {medium: invalid_params}, session: valid_session
-        expect(response).to have_http_status(200)
+        should send_user_to(
+          admin_media_path
+        ).with_flash(:success, "admin.flash.media.success.destroy")
       end
     end
   end
-
-  describe "GET #edit" do
-    it "renders" do
-      medium = Medium.create! valid_params
-      get :edit, params: {id: medium.to_param}, session: valid_session
-      expect(response).to have_http_status(200)
-    end
-  end
-
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested medium" do
-        medium = Medium.create! valid_params
-        put :update, params: {id: medium.to_param, medium: new_attributes}, session: valid_session
-        medium.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the medium" do
-        medium = Medium.create! valid_params
-        put :update, params: {id: medium.to_param, medium: valid_params}, session: valid_session
-        expect(response).to redirect_to(medium)
-      end
-    end
-
-    context "with invalid params" do
-      it "renders (i.e. to display the 'edit' template)" do
-        medium = Medium.create! valid_params
-        put :update, params: {id: medium.to_param, medium: invalid_params}, session: valid_session
-        expect(response).to have_http_status(200)
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested medium" do
-      medium = Medium.create! valid_params
-      expect {
-        delete :destroy, params: {id: medium.to_param}, session: valid_session
-      }.to change(Medium, :count).by(-1)
-    end
-
-    it "redirects to the media list" do
-      medium = Medium.create! valid_params
-      delete :destroy, params: {id: medium.to_param}, session: valid_session
-      expect(response).to redirect_to(media_url)
-    end
-  end
-
 end
