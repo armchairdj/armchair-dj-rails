@@ -21,7 +21,7 @@ class Admin::MediaController < AdminController
   def create
     respond_to do |format|
       if @medium.save
-        format.html { redirect_to @medium, success: I18n.t("#{singular_table_name}.success.create") }
+        format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.create") }
         format.json { render :show, status: :created, location: @medium }
       else
         format.html { render :new }
@@ -40,7 +40,7 @@ class Admin::MediaController < AdminController
   def update
     respond_to do |format|
       if @medium.update(instance_params)
-        format.html { redirect_to @medium, success: I18n.t("#{singular_table_name}.success.update") }
+        format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.update") }
         format.json { render :show, status: :ok, location: @medium }
       else
         format.html { render :edit }
@@ -55,7 +55,7 @@ class Admin::MediaController < AdminController
     @medium.destroy
 
     respond_to do |format|
-      format.html { redirect_to media_url, success: I18n.t("#{singular_table_name}.success.destroy") }
+      format.html { redirect_to admin_media_path, success: I18n.t("admin.flash.media.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -79,6 +79,8 @@ private
   end
 
   def instance_params
-    params.fetch(:medium, {})
+    params.fetch(:medium, {}).permit(
+      :name
+    )
   end
 end

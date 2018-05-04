@@ -2,6 +2,7 @@ FactoryBot.define do
   sequence :medium_name { |n| "Medium #{n}" }
 
   factory :medium do
+    initialize_with { Medium.find_or_create_by(name: name) }
 
     ###########################################################################
     # TRAITS.

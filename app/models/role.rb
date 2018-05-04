@@ -50,6 +50,8 @@ class Role < ApplicationRecord
   validates :medium, presence: true
   validates :name,   presence: true
 
+  validates :name, uniqueness: { scope: [:medium_id] }
+
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -60,5 +62,11 @@ class Role < ApplicationRecord
 
   def alpha_parts
     [medium.try(:alpha_parts), name]
+  end
+
+  def display_name(full: false)
+    return self.name unless full
+
+    [self.medium.name, self.name].join(": ")
   end
 end

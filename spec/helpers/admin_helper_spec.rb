@@ -17,6 +17,8 @@ RSpec.describe AdminHelper, type: :helper do
         end
       end
     end
+
+    pending "#total_count_for"
   end
 
   context "link methods" do

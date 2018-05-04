@@ -1141,15 +1141,15 @@ RSpec.describe Post, type: :model do
       let(    :review) { create(:review         ) }
 
       describe "#type" do
-        specify{ expect(standalone.type              ).to eq("Post"         ) }
-        specify{ expect(standalone.type(plural: true)).to eq("Posts"        ) }
-        specify{ expect(    review.type              ).to eq("Song Review" ) }
-        specify{ expect(    review.type(plural: true)).to eq("Song Reviews") }
+        specify { expect(standalone.type              ).to eq("Post"         ) }
+        specify { expect(standalone.type(plural: true)).to eq("Posts"        ) }
+        specify { expect(    review.type              ).to eq("Song Review" ) }
+        specify { expect(    review.type(plural: true)).to eq("Song Reviews") }
       end
 
       describe "#sluggable_type" do
-        specify{ expect(standalone.sluggable_type).to eq(nil            ) }
-        specify{ expect(    review.sluggable_type).to eq("Song Reviews") }
+        specify { expect(standalone.sluggable_type).to eq(nil            ) }
+        specify { expect(    review.sluggable_type).to eq("Song Reviews") }
       end
     end
 

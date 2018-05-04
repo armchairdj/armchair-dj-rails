@@ -8,7 +8,7 @@ RSpec.describe WorksHelper, type: :helper do
   let(:subtitled) { create(:junior_boys_like_a_child_c2_remix) }
 
   describe "#link_to_work" do
-    specify{ expect(helper.link_to_work(unsaved)).to eq(nil) }
+    specify { expect(helper.link_to_work(unsaved)).to eq(nil) }
 
     context "default" do
       it "by default uses creator and title" do

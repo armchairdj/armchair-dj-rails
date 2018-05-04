@@ -1,4 +1,95 @@
 <%
-  @headline = @title = "Admin Medium"
+  @title = ["View Medium", @medium.name]
+
+  @roles = @medium.roles.for_admin.alpha
+  @works = @medium.works.for_admin.alpha
+  @posts = @medium.posts.for_admin.reverse_cron
 %>
 
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :show,
+  headline:    @title.first,
+  instance:    @medium,
+  public_link: admin_public_medium_link(@medium)
+} %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @medium.name) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@medium.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Viewable Posts") %>
+        <%= content_tag(:td, @medium.viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Non-Viewable Posts") %>
+        <%= content_tag(:td, @medium.non_viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@medium.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@medium.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @medium.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @roles.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Roles") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/roles/role", collection: @roles %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @works.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Works") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/works/work", collection: @works %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @posts.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Posts") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <%= render partial: "admin/posts/post", collection: @posts %>
+    <% end %>
+  <% end %>
+<% end %>

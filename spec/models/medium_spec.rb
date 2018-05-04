@@ -91,6 +91,8 @@ RSpec.describe Medium, type: :model do
 
     it { should validate_presence_of(:name) }
 
+    it { should validate_uniqueness_of(:name) }
+
     context "conditional" do
       # Nothing so far.
     end

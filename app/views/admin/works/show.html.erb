@@ -52,6 +52,16 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Viewable Posts") %>
+        <%= content_tag(:td, @work.viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Non-Viewable Posts") %>
+        <%= content_tag(:td, @work.non_viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@work.created_at)) %>
       <% end %>

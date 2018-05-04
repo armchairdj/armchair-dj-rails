@@ -1,15 +1,30 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-# Specs in this file have access to a helper object that includes
-# the MediaHelper. For example:
-#
-# describe MediaHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
+require "rails_helper"
+
 RSpec.describe MediaHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:unsaved) { build(:minimal_medium) }
+  let(  :saved) { create(:medium, name: "Movie") }
+
+  describe "#link_to_medium" do
+    specify { expect(helper.link_to_medium(unsaved)).to eq(nil) }
+
+    it "links to site by default" do
+      actual = helper.link_to_medium(saved)
+
+      expect(actual).to have_tag('a[href^="/media/"]',
+        text:  "Movie",
+        count: 1
+      )
+    end
+
+    it "links to admin" do
+      actual = helper.link_to_medium(saved, admin: true)
+
+      expect(actual).to have_tag('a[href^="/admin/media/"]',
+        text:  "Movie",
+        count: 1
+      )
+    end
+  end
 end

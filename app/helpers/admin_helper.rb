@@ -20,6 +20,10 @@ module AdminHelper
     time_tag(date, date.strftime("%m/%d/%Y at %I:%M%p"), **opts)
   end
 
+  def total_count_for(association)
+    pluralize(association.total_count, "Total Record")
+  end
+
   #############################################################################
   # LINKS.
   #############################################################################

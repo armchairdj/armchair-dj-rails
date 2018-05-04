@@ -55,7 +55,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   def create
     respond_to do |format|
       if @<%= orm_instance.save %>
-        format.html { redirect_to @<%= singular_table_name %>, success: I18n.t("#{singular_table_name}.success.create") }
+        format.html { redirect_to @<%= singular_table_name %>, success: I18n.t("<%= singular_table_name %>.success.create") }
         format.json { render :show, status: :created, location: <%= "@#{singular_table_name}" %> }
       else
         format.html { render :new }
@@ -74,7 +74,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   def update
     respond_to do |format|
       if @<%= orm_instance.update("instance_params") %>
-        format.html { redirect_to @<%= singular_table_name %>, success: I18n.t("#{singular_table_name}.success.update") }
+        format.html { redirect_to @<%= singular_table_name %>, success: I18n.t("<%= singular_table_name %>.success.update") }
         format.json { render :show, status: :ok, location: <%= "@#{singular_table_name}" %> }
       else
         format.html { render :edit }
@@ -89,7 +89,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     @<%= orm_instance.destroy %>
 
     respond_to do |format|
-      format.html { redirect_to <%= index_helper %>_url, success: I18n.t("#{singular_table_name}.success.destroy") }
+      format.html { redirect_to <%= index_helper %>_url, success: I18n.t("<%= singular_table_name %>.success.destroy") }
       format.json { head :no_content }
     end
   end

@@ -1,5 +1,12 @@
 <%
-  @headline = @title = "Create Admin Media"
+  @title = "Create Medium"
 %>
 
-<%= render "form", medium: @medium %>
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :new,
+  headline: @title
+} %>
+
+<%= render partial: "medium_form", locals: {
+  medium: @medium
+} %>

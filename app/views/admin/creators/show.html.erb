@@ -1,9 +1,9 @@
 <%
   @title = ["View Creator", @creator.name]
 
-  @posts         = @creator.posts.for_admin.reverse_cron
   @works         = @creator.works.for_admin.alpha
   @contributions = @creator.contributions.for_admin.alpha
+  @posts         = @creator.posts.for_admin.reverse_cron
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -26,11 +26,6 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Summary") %>
-        <%= content_tag(:td, paragraphs(@creator.summary)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Primary?") %>
         <%= content_tag(:td, @creator.primary?) %>
       <% end %>
@@ -38,6 +33,21 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Individual?") %>
         <%= content_tag(:td, @creator.individual?) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@creator.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Viewable Posts") %>
+        <%= content_tag(:td, @creator.viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Non-Viewable Posts") %>
+        <%= content_tag(:td, @creator.non_viewable_post_count) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

@@ -28,9 +28,16 @@ RSpec.describe Role, type: :model do
     it { should validate_presence_of(:medium) }
 
     it { should validate_presence_of(:name) }
+
+    it { should validate_uniqueness_of(:name).scoped_to(:medium_id) }
   end
 
   context "instance" do
     pending "#alpha_parts"
+
+    describe "#display_name" do
+      pending "basic"
+      pending "full"
+    end
   end
 end

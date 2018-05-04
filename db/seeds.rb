@@ -134,11 +134,10 @@ game_studio                = FactoryBot.create(:role, medium: game, name: "Game 
 
 ##### CREATORS, IDENTITIES & MEMBERSHIPS
 
-fleetwood_mac  = FactoryBot.create(:fleetwood_mac_with_members)
-wolfgang_voigt = FactoryBot.create(:wolfgang_voigt_with_pseudonyms)
-kate_bush      = FactoryBot.create(:kate_bush)
-
-spawn_group    = FactoryBot.create(:complete_spawn)
+fleetwood_mac       = FactoryBot.create(:fleetwood_mac_with_members)
+wolfgang_voigt      = FactoryBot.create(:wolfgang_voigt_with_pseudonyms)
+kate_bush           = FactoryBot.create(:kate_bush)
+spawn_group         = FactoryBot.create(:complete_spawn)
 
 plastikman          = Creator.find_by(name: "Plastikman")
 fuse                = Creator.find_by(name: "F.U.S.E.")
@@ -181,11 +180,11 @@ fleetwood_mac_song_dreams             = FactoryBot.create(:work, medium: song, t
 fleetwood_mac_song_dont_stop          = FactoryBot.create(:work, medium: song, title: "Don't Stop",          "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 fleetwood_mac_song_gold_dust_woman    = FactoryBot.create(:work, medium: song, title: "Gold Dust Woman",     "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 
-spawn_song_hammerknock      = FactoryBot.create(:work, medium: album, title: "Hammerknock",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_tension          = FactoryBot.create(:work, medium: album, title: "Tension",          "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltrator      = FactoryBot.create(:work, medium: album, title: "Infiltrator",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltration     = FactoryBot.create(:work, medium: album, title: "Infiltration",     "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_the_thinking_man = FactoryBot.create(:work, medium: album, title: "The Thinking Man", "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_hammerknock      = FactoryBot.create(:work, medium: song, title: "Hammerknock",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_tension          = FactoryBot.create(:work, medium: song, title: "Tension",          "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_infiltrator      = FactoryBot.create(:work, medium: song, title: "Infiltrator",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_infiltration     = FactoryBot.create(:work, medium: song, title: "Infiltration",     "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_the_thinking_man = FactoryBot.create(:work, medium: song, title: "The Thinking Man", "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
 
 the_kooky_scientist_album_unpopular_science = FactoryBot.create(:work, medium: album, title: "Unpopular Science", "credits_attributes" => { "0" => { "creator_id" => the_kooky_scientist.id } })
 

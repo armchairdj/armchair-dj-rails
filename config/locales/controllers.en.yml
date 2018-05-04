@@ -17,6 +17,11 @@ en:
           create:  "Creator created."
           destroy: "Creator destroyed."
           update:  "Creator updated."
+      media:
+        success:
+          create:  "Medium created."
+          destroy: "Medium destroyed."
+          update:  "Medium updated."
       posts:
         success:
           create:  "Post created."
@@ -31,6 +36,11 @@ en:
           unpublish: "Post could not be unpublished."
           schedule: "Post could not be scheduled."
           unschedule: "Post could not be unscheduled."
+      roles:
+        success:
+          create:  "Role created."
+          destroy: "Role destroyed."
+          update:  "Role updated."
       sessions:
         success:
           missing: "Please log in to access that."

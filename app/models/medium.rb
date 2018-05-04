@@ -41,7 +41,8 @@ class Medium < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :name, presence: true
+  validates :name, presence:   true
+  validates :name, uniqueness: true
 
   #############################################################################
   # HOOKS.
