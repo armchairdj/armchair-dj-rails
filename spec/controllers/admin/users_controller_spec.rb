@@ -16,7 +16,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":all scope (default)" do
+        context ":for_admin scope (default)" do
           it "renders with one record because there has to be at least one admin" do
             get :index
 
@@ -72,7 +72,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       context "with records" do
-        context ":all scope (default)" do
+        context ":for_admin scope (default)" do
           before(:each) do
              4.times { create(:member     ) }
              4.times { create(:writer     ) }

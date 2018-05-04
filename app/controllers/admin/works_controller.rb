@@ -1,40 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::WorksController < AdminController
-  before_action :find_collection, only: [
-    :index
-  ]
-
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
   # GET /works
   # GET /works.json
   def index
@@ -103,7 +69,7 @@ class Admin::WorksController < AdminController
 private
 
   def find_collection
-    @works = scoped_and_sorted_collection.order(created_at: :desc)
+    @works = scoped_and_sorted_collection
   end
 
   def build_new_instance
@@ -123,7 +89,8 @@ private
     @work.prepare_contributions
 
     @creators = policy_scope(Creator).alpha
-    @roles    = Role.grouped_options
+    @roles    = policy_scope(Role).grouped_options
+    @media    = policy_scope(Media).alpha
   end
 
   def instance_params
@@ -143,7 +110,7 @@ private
         :_destroy,
         :work_id,
         :creator_id,
-        :role,
+        :role_id,
       ]
     )
   end

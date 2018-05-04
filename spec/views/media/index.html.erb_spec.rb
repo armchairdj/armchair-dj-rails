@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "media/index", type: :view do
   before(:each) do
     assign(:media, [
-      Medium.create!(),
-      Medium.create!()
+      create(:minimal_medium),
+      create(:minimal_medium)
     ])
   end
 

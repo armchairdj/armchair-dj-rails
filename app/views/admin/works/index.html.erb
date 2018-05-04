@@ -18,7 +18,7 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Medium") if @scope == :all %>
+            <%= content_tag(:th, "Medium") if @scope == :for_admin %>
             <%= content_tag(:th, "Title") %>
             <%= content_tag(:th, "Creators") %>
             <%= content_tag(:th, post_count_column_header, class: "icon") %>
@@ -29,7 +29,7 @@
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, work.medium.name) if @scope == :all %>
+              <%= content_tag(:td, work.medium.name) if @scope == :for_admin %>
               <%= content_tag(:td, work.title) %>
               <%= content_tag(:td, work.display_creators) %>
               <%= content_tag(:td, work.viewable_post_count, class: "icon") %>

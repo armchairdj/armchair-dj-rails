@@ -13,7 +13,7 @@
         }
       %>
 
-      <%= ff.input :role, as: :grouped_select,
+      <%= ff.input :role_id, as: :grouped_select,
         collection:         roles,
         required:           false,
         group_label_method: :first,
@@ -27,7 +27,7 @@
     <% end %>
 
     <%= ff.error :creator_id %>
-    <%= ff.error :role %>
+    <%= ff.error :role_id %>
 
     <%= render(partial: "shared/custom_checkbox", locals: {
       f:    ff,

@@ -13,9 +13,9 @@ RSpec::Matchers.define :define_the_review_tabs do
   end
 
   match_when_negated do
-    expect(assigns(:roles         )).to_not be_a_kind_of(Array)
-    expect(assigns(:creators      )).to_not be_a_kind_of(ActiveRecord::Relation)
-    expect(assigns(:works         )).to_not be_a_kind_of(Array)
+    expect(assigns(:roles         )).to eq(nil)
+    expect(assigns(:creators      )).to eq(nil)
+    expect(assigns(:works         )).to eq(nil)
 
     expect(assigns(:available_tabs)).to_not include("post-new-work")
     expect(assigns(:available_tabs)).to_not include("post-choose-work")

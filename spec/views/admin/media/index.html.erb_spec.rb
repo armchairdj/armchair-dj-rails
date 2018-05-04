@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.describe "admin/media/index", type: :view do
   before(:each) do
-    assign(:media, [
-      Medium.create!(),
-      Medium.create!()
-    ])
+    21.times do
+      create(:minimal_medium)
+    end
+
+    @model_class = assign(:model_name, Medium)
+    @media       = assign(:media, Medium.for_admin.page(1))
   end
 
   it "renders a list of admin/media" do

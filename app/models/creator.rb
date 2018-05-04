@@ -259,8 +259,8 @@ class Creator < ApplicationRecord
   def contributions_array
     self.contributions.viewable.map do |c|
       {
+        role:   c.name,
         medium: c.work.medium.name,
-        role:   c.role.name,
         work:   c.work.full_display_title
       }
     end
@@ -283,7 +283,7 @@ class Creator < ApplicationRecord
   end
 
   def roles
-    self.contributions.viewable.map(&:human_role).uniq.sort
+    self.contributions.viewable.map(&:name).uniq.sort
   end
 
   def roles_by_medium

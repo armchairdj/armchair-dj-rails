@@ -1,33 +1,4 @@
 class Admin::RolesController < AdminController
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
-  before_action :find_collection, only: [
-    :index
-  ]
-
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
   # GET /admin/roles
   # GET /admin/roles.json
   def index
@@ -92,7 +63,7 @@ class Admin::RolesController < AdminController
 private
 
   def find_collection
-    @roles = scoped_and_sorted_collection.order(created_at: :desc)
+    @roles = scoped_and_sorted_collection
   end
 
   def build_new_instance

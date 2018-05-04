@@ -76,7 +76,7 @@ class Work < ApplicationRecord
   #   uniques = (attributes.values.map do |item_attributes|
   #     attrs = item_attributes.stringify_keys
   #
-  #     { "creator_id" => attrs["creator_id"].to_s, "role" => attrs["role"].to_s }
+  #     { "creator_id" => attrs["creator_id"].to_s, "role_id" => attrs["role_id"].to_s }
   #   end).compact.map.uniq
   #
   #   puts ">>uniques", uniques

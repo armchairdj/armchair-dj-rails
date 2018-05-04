@@ -1,40 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::CreatorsController < AdminController
-  before_action :find_collection, only: [
-    :index
-  ]
-
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
   # GET /creators
   # GET /creators.json
   def index
@@ -103,7 +69,7 @@ class Admin::CreatorsController < AdminController
 private
 
   def find_collection
-    @creators = scoped_and_sorted_collection.order(created_at: :desc)
+    @creators = scoped_and_sorted_collection
   end
 
   def build_new_instance

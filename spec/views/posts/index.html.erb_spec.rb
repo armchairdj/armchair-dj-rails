@@ -8,7 +8,7 @@ RSpec.describe "posts/index", type: :view do
       create(:minimal_post, :published)
     end
 
-    @posts = assign(:posts, Post.all.reverse_cron.page(1))
+    @posts = assign(:posts, Post.for_admin.page(1))
   end
 
   it "renders a list of works" do

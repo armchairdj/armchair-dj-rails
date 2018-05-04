@@ -45,7 +45,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
         end
 
-        context ":all scope" do
+        context ":for_admin scope" do
           it "renders" do
             get :index, params: { scope: "all" }
 
@@ -119,7 +119,7 @@ RSpec.describe Admin::PostsController, type: :controller do
           end
         end
 
-        context ":all scope" do
+        context ":for_admin scope" do
           before(:each) do
             5.times { create(:review,     :draft     ) }
             5.times { create(:standalone_post, :draft     ) }

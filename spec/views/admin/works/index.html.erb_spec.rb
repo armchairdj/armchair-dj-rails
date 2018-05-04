@@ -9,7 +9,7 @@ RSpec.describe "admin/works/index", type: :view do
     end
 
     @model_class = assign(:model_name, Work)
-    @scope       = assign(:scope, :all)
+    @scope       = assign(:scope, :for_admin)
     @page        = assign(:page, 1)
     @works       = assign(:works, Work.all.alpha.page(1))
   end

@@ -16,7 +16,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":all scope (default)" do
+        context ":for_admin scope (default)" do
           it "renders" do
             get :index
 
@@ -48,7 +48,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
 
       context "with records" do
-        context ":all scope (default)" do
+        context ":for_admin scope (default)" do
           before(:each) do
             10.times { create(:review, :published) }
             11.times { create(:minimal_work) }

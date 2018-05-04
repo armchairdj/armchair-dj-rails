@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
     end
 
     describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:all) }
+      specify { expect(described_class.default_admin_scope).to eq(:for_admin) }
     end
   end
 
