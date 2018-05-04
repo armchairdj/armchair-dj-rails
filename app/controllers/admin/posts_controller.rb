@@ -1,6 +1,48 @@
 # frozen_string_literal: true
 
 class Admin::PostsController < AdminController
+  before_action :find_collection, only: [
+    :index
+  ]
+
+  before_action :build_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :sanitize_create_params, only: [
+    :create,
+  ]
+
+  before_action :sanitize_update_params, only: [
+    :update
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :authorize_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :prepare_form, only: [
+    :new,
+    :edit
+  ]
+
   # GET /posts
   # GET /posts.json
   def index
@@ -15,15 +57,13 @@ class Admin::PostsController < AdminController
 
   # GET /posts/new
   def new
-    @post = Post.new
-
     prepare_form
   end
 
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(@sanitized_params)
+    @post.attributes = @sanitized_params
 
     respond_to do |format|
       if @post.save
@@ -75,6 +115,10 @@ private
 
   def find_collection
     @posts = scoped_and_sorted_collection
+  end
+
+  def build_new_instance
+    @post = Post.new
   end
 
   def find_instance
@@ -147,8 +191,9 @@ private
 
     @post.prepare_work_for_editing(@sanitized_params)
 
-    @creators = policy_scope(Creator).alpha
+    @creators = Creator.all.alpha
     @roles    = Role.grouped_options
+    @media    = Medium.all.alpha
     @works    = Work.grouped_options
   end
 

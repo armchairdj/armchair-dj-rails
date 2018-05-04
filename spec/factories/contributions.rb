@@ -4,14 +4,12 @@ require "ffaker"
 
 FactoryBot.define do
   factory :contribution do
-    factory :minimal_contribution, parent: :contribution_with_creator do; end
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
     trait :with_role do
-      role { create(:minimal_role) }
+      role_id { create(:minimal_role).id }
     end
 
     trait :with_work do
@@ -26,12 +24,7 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :contribution_without_creator do
-      with_role
-      with_work
-    end
-
-    factory :contribution_with_creator do
+    factory :minimal_contribution do
       with_role
       with_work
       with_creator

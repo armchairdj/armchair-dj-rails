@@ -1,6 +1,40 @@
 # frozen_string_literal: true
 
 class Admin::WorksController < AdminController
+  before_action :find_collection, only: [
+    :index
+  ]
+
+  before_action :build_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :authorize_collection, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :authorize_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :prepare_form, only: [
+    :new,
+    :edit
+  ]
+
   # GET /works
   # GET /works.json
   def index
@@ -88,9 +122,9 @@ private
     @work.prepare_credits
     @work.prepare_contributions
 
-    @creators = policy_scope(Creator).alpha
-    @roles    = policy_scope(Role).grouped_options
-    @media    = policy_scope(Media).alpha
+    @creators = Creator.all.alpha
+    @roles    = Role.grouped_options
+    @media    = Medium.all.alpha
   end
 
   def instance_params

@@ -13,6 +13,10 @@ FactoryBot.define do
       association :author, factory: :admin
     end
 
+    trait :with_existing_author do
+      author_id { create(:admin).id }
+    end
+
     trait :with_title do
       title { FFaker::HipsterIpsum.phrase.titleize }
     end
@@ -21,8 +25,12 @@ FactoryBot.define do
       body "This is a post body."
     end
 
-    trait :with_work do
+    trait :with_song do
       association :work, factory: :song
+    end
+
+    trait :with_work do
+      work_id { create(:minimal_work).id }
     end
 
     trait :draft do
@@ -30,6 +38,7 @@ FactoryBot.define do
     end
 
     trait :scheduled do
+      with_body
       publish_on 3.weeks.from_now
 
       after(:create) do |post, evaluator|
@@ -40,6 +49,7 @@ FactoryBot.define do
     end
 
     trait :published do
+      with_body
       after(:create) do |post, evaluator|
         raise AASM::InvalidTransition unless post.publish!
 
@@ -54,15 +64,53 @@ FactoryBot.define do
     factory :minimal_post, parent: :standalone_post do; end
 
     factory :standalone_post do
+      with_existing_author
       with_title
-      with_author
+    end
+
+    factory :complete_standalone_post, parent: :standalone_post do
       with_body
+      with_summary
+    end
+
+    factory :invalid_standalone_post do
+      with_existing_author
+    end
+
+    factory :song_review do
+      with_existing_author
+      with_song
     end
 
     factory :review do
+      with_existing_author
       with_work
-      with_author
+    end
+
+    factory :complete_review, parent: :review do
       with_body
+      with_summary
+    end
+
+    factory :invalid_review do
+      with_existing_author
+    end
+
+    factory :review_with_new_work do
+      with_existing_author
+      work_attributes { attributes_for(:minimal_work) }
+    end
+
+    factory :complete_review_with_new_work do
+      with_existing_author
+      with_body
+      with_summary
+      work_attributes { attributes_for(:stuffed_work) }
+    end
+
+    factory :invalid_review_with_new_work do
+      with_existing_author
+      work_attributes { attributes_for(:invalid_work) }
     end
 
     ###########################################################################

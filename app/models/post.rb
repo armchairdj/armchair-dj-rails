@@ -66,7 +66,7 @@ class Post < ApplicationRecord
 
   scope :eager,           -> { includes(:work, :creators, :author) }
 
-  scope :for_admin,       -> { eager                   }
+  scope :for_admin,       -> { eager                        }
   scope :for_site,        -> { eager.published.reverse_cron }
 
   #############################################################################

@@ -584,9 +584,9 @@ RSpec.describe Post, type: :model do
   end
 
   context "aasm" do
-    let!(    :draft) { create(:standalone_post, :draft    ) }
-    let!(:scheduled) { create(:standalone_post, :scheduled) }
-    let!(:published) { create(:standalone_post, :published) }
+    let!(    :draft) { create(:standalone_post, :with_body, :draft    ) }
+    let!(:scheduled) { create(:standalone_post, :with_body, :scheduled) }
+    let!(:published) { create(:standalone_post, :with_body, :published) }
 
     describe "states" do
       specify { expect( Post.new).to have_state(:draft    ) }
@@ -783,7 +783,7 @@ RSpec.describe Post, type: :model do
     describe "private" do
       context "guards" do
         describe "#ready_to_publish?" do
-          subject { build(:standalone_post) }
+          subject { build(:standalone_post, :with_body) }
 
           specify "true if saved, valid and has slug & body" do
             subject.save
@@ -940,7 +940,7 @@ RSpec.describe Post, type: :model do
 
     describe "update-transition methods" do
       describe "#update_and_publish" do
-        subject { create(:standalone_post) }
+        subject { create(:standalone_post, :with_body) }
 
         before(:each) do
           allow(subject).to receive(:update  ).and_call_original
@@ -1036,7 +1036,7 @@ RSpec.describe Post, type: :model do
       end
 
       describe "#update_and_schedule" do
-        subject { create(:standalone_post) }
+        subject { create(:standalone_post, :with_body) }
 
         before(:each) do
           allow(subject).to receive(:update   ).and_call_original
@@ -1138,7 +1138,7 @@ RSpec.describe Post, type: :model do
   context "instance" do
     context "decorators" do
       let(:standalone) { create(:standalone_post) }
-      let(    :review) { create(:review         ) }
+      let(    :review) { create(:song_review    ) }
 
       describe "#type" do
         specify { expect(standalone.type              ).to eq("Post"         ) }

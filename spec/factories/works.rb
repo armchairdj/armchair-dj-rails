@@ -9,7 +9,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_medium do
-      medium { create(:minimal_medium) }
+      medium_id { create(:minimal_medium).id }
     end
 
     trait :with_title do
@@ -30,9 +30,25 @@ FactoryBot.define do
       } }
     end
 
+    trait :with_multiple_credits do
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
+        "1" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
+        "2" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
+      } }
+    end
+
     trait :with_one_contribution do
       contributions_attributes { {
         "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
+      } }
+    end
+
+    trait :with_multiple_contributions do
+      contributions_attributes { {
+        "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
+        "1" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
+        "2" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
       } }
     end
 
@@ -71,11 +87,16 @@ FactoryBot.define do
     ###########################################################################
 
     factory :song, parent: :minimal_work do
-      medium { create(:song_medium) }
+      medium_id { create(:song_medium).id }
     end
 
     factory :album, parent: :minimal_work do
-      medium { create(:album_medium) }
+      medium_id { create(:album_medium).id }
+    end
+
+    factory :invalid_work do
+      with_medium
+      with_title
     end
 
     factory :minimal_work do
@@ -85,9 +106,17 @@ FactoryBot.define do
     end
 
     factory :complete_work, parent: :minimal_work do
-      with_subtitle
-      with_summary
+      with_medium
+      with_title
+      with_one_credit
       with_one_contribution
+    end
+
+    factory :stuffed_work, parent: :minimal_work do
+      with_medium
+      with_title
+      with_multiple_credits
+      with_multiple_contributions
     end
 
     factory :global_communications_76_14, parent: :album do
