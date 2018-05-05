@@ -6,7 +6,9 @@
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <%= render partial: "creators/creator", collection: @creators %>
+    <%= render partial: "shared/creator", collection: @creators, locals: {
+      parent: :dl
+    } %>
   <% end %>
 
   <%= paginate @creators %>

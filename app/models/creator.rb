@@ -264,22 +264,16 @@ class Creator < ApplicationRecord
   #############################################################################
 
   def display_media
-    created     = self.media.to_a.map(&:name)
-    contributed = self.contributed_roles.group_by{ |r| r.medium.name }
-
-    return {} if created.empty? && contributed.empty?
-
-    final = contributed.each.inject({}) do |memo, (medium_name, roles)|
-      roles = roles.map(&:name)
-
-      roles << "Creator" if created.delete(medium_name)
-
-      memo[medium_name] = roles.sort
-
-      memo
+    created = media.each.inject({}) do |memo, (media)|
+      memo[media.name] = ["Creator"]; memo
     end
 
-    created.each { |medium_name| final[medium_name] = ["Creator"] }
+    contributed = contributed_roles.group_by{ |r| r.medium.name }
+    contributed.transform_values! { |v| v.map(&:name) }
+
+    final = created.merge(contributed) do |key, v1, v2|
+      [v1, v2].flatten.compact.sort
+    end
 
     final.sort.to_h
   end

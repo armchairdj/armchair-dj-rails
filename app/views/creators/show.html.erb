@@ -1,42 +1,40 @@
 <%
   @headline = @title = @creator.name
-
-  @media         = @creator.roles_by_medium
 %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "shared/creators", locals: {
   creators: @creator.groups,
   headline: "Groups"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "shared/creators", locals: {
   creators: @creator.members,
   headline: "Members"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "shared/creators", locals: {
   creators: @creator.colleagues,
   headline: "Colleagues"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "shared/creators", locals: {
   creators: @creator.personae,
   headline: "Personae"
 } %>
 
-<%= render partial: "admin/shared/media", locals: {
-  works: @creator.media.for_admin.alpha
+<%= render partial: "shared/media", locals: {
+  media: @creator.display_media
 } %>
 
-<%= render partial: "admin/shared/works", locals: {
+<%= render partial: "shared/works", locals: {
   works: @creator.works.for_site
 } %>
 
-<%= render partial: "admin/shared/contributions", locals: {
+<%= render partial: "shared/contributions", locals: {
   contributions: @creator.contributions.for_site,
   context:       :creator
 } %>
 
-<%= render partial: "admin/shared/posts", locals: {
+<%= render partial: "shared/posts", locals: {
   posts: @creator.posts.for_admin.reverse_cron
 } %>

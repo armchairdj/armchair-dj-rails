@@ -816,17 +816,7 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    context "contributions" do
-      pending "#media"
-
-      pending "#roles"
-
-      describe "#contributions_array" do
-        pending "#contributions_by_role"
-        pending "#contributions_by_medium"
-        pending "#contributions_by_work"
-      end
-    end
+    pending "#display_media"
 
     pending "#alpha_parts"
   end

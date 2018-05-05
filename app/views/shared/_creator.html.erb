@@ -1,1 +1,8 @@
-<%= content_tag(:li, link_to_creator(creator)) %>
+<% parent = :ul if local_assigns[:parent].nil? %>
+
+<% if parent == :ul %>
+  <%= content_tag(:li, link_to_creator(creator)) %>
+<% else %>
+  <%= content_tag(:dt, link_to_creator(creator)) %>
+  <%= content_tag(:dd, creator.display_media.keys.join(", ")) %>
+<% end %>

@@ -1,2 +1,14 @@
-<%= content_tag(:dt, medium[:medium]           ) %>
-<%= content_tag(:dd, medium[:roles ].join(", ")) %>
+<% return if media.empty? %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Media") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <% media.each do |medium_name, roles| %>
+      <%= content_tag(:dt, medium_name     ) %>
+      <%= content_tag(:dd, roles.join(", ")) %>
+    <% end %>
+  <% end %>
+<% end %>
