@@ -25,6 +25,14 @@ class Work < ApplicationRecord
     joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
+  def self.admin_scopes
+    {
+      "All"          => :for_admin,
+      "Viewable"     => :viewable,
+      "Non-Viewable" => :non_viewable,
+    }
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################

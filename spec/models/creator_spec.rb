@@ -25,7 +25,19 @@ RSpec.describe Creator, type: :model do
   end
 
   context "class" do
-    # Nothing so far.
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "All",
+          "Viewable",
+          "Non-Viewable",
+        ])
+      end
+    end
+
+    describe "self#default_admin_scope" do
+      specify { expect(described_class.default_admin_scope).to eq(:for_admin) }
+    end
   end
 
   context "scope-related" do

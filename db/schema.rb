@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_02_174701) do
+ActiveRecord::Schema.define(version: 2018_05_05_200949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,12 +144,16 @@ ActiveRecord::Schema.define(version: 2018_05_02_174701) do
     t.string "username", null: false
     t.text "bio"
     t.string "alpha"
+    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "viewable_post_count", default: 0, null: false
     t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["non_viewable_post_count"], name: "index_users_on_non_viewable_post_count"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["viewable_post_count"], name: "index_users_on_viewable_post_count"
   end
 
   create_table "works", force: :cascade do |t|

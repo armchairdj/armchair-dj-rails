@@ -5,11 +5,47 @@ FactoryBot.define do
   sequence :user_username { |n| "realcoolperson#{n}"   }
 
   factory :user do
-    factory :minimal_user, parent: :member do; end
 
-    factory :complete_user, parent: :minimal_user do
-      middle_name "J."
+    ###########################################################################
+    # TRAITS.
+    ###########################################################################
+
+    trait :with_draft_post do
+      role :writer
+
+      after(:create) do |user|
+        create(:standalone_post, :draft, body: "body", author: user)
+
+        user.reload
+      end
     end
+
+    trait :with_scheduled_post do
+      role :writer
+
+      after(:create) do |user|
+        create(:standalone_post, :scheduled, body: "body", author: user)
+
+        user.reload
+      end
+    end
+
+    trait :with_published_post do
+      role :writer
+
+      after(:create) do |user|
+        create(:standalone_post, :published, body: "body", author: user)
+
+        user.reload
+      end
+    end
+
+    trait :with_one_of_each_post_status do
+      with_draft_post
+      with_scheduled_post
+      with_published_post
+    end
+
 
     trait :valid do
       first_name { FFaker::Name.first_name }
@@ -21,6 +57,16 @@ FactoryBot.define do
 
     trait :confirmed do
       confirmed_at DateTime.now
+    end
+
+    ###########################################################################
+    # FACTORIES.
+    ###########################################################################
+
+    factory :minimal_user, parent: :member do; end
+
+    factory :complete_user, parent: :minimal_user do
+      middle_name "J."
     end
 
     factory :member do

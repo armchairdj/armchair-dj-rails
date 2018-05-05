@@ -11,6 +11,7 @@ class User < ApplicationRecord
   #############################################################################
 
   include Alphabetizable
+  include Viewable
 
   devise(
     :confirmable,
@@ -39,24 +40,16 @@ class User < ApplicationRecord
   end
 
   def self.published_author!(username)
-    published.where(username: username).take!
+    viewable.where(username: username).take!
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :published, -> {
-    left_outer_joins(:posts)
-      .where(    posts: { status: Post.statuses[:published] })
-      .where.not(posts: { id: nil })
-      .where(     role: [:writer, :editor, :admin, :super_admin])
-  }
-
-  scope :eager, -> { includes(:posts, :works, :creators) }
-
+  scope     :eager, -> { includes(:posts, :works, :creators) }
   scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.published.alpha }
+  scope  :for_site, -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

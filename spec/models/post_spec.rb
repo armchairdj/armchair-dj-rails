@@ -881,38 +881,46 @@ RSpec.describe Post, type: :model do
         end
 
         describe "#update_counts_for_descendents" do
-          let(    :review) { create(:unity_album_review  ) }
-          let(:standalone) { create(:tiny_standalone_post) }
-          let(    :medium) { double }
-          let(      :work) { double }
-          let(  :creators) { [double, double] }
+          context "review" do
+            let(    :post) { create(:unity_album_review  ) }
+            let(  :author) { double }
+            let(    :work) { double }
+            let(  :medium) { double }
+            let(:creators) { [double, double] }
 
-          it "updates counts for creators and works" do
-            allow(review).to receive(    :work).and_return(work    )
-            allow(  work).to receive(  :medium).and_return(medium  )
-            allow(  work).to receive(:creators).and_return(creators)
+            it "updates counts for author, work, medium & creators" do
+              allow(post).to receive(  :author).and_return(author  )
+              allow(post).to receive(    :work).and_return(work    )
+              allow(work).to receive(  :medium).and_return(medium  )
+              allow(work).to receive(:creators).and_return(creators)
 
-             allow(          work).to receive(:update_counts)
-             allow(        medium).to receive(:update_counts)
-             allow(creators.first).to receive(:update_counts)
-             allow( creators.last).to receive(:update_counts)
+               allow(        author).to receive(:update_counts)
+               allow(          work).to receive(:update_counts)
+               allow(        medium).to receive(:update_counts)
+               allow(creators.first).to receive(:update_counts)
+               allow( creators.last).to receive(:update_counts)
 
-            expect(          work).to receive(:update_counts).once
-            expect(        medium).to receive(:update_counts).once
-            expect(creators.first).to receive(:update_counts).once
-            expect( creators.last).to receive(:update_counts).once
+              expect(        author).to receive(:update_counts).once
+              expect(          work).to receive(:update_counts).once
+              expect(        medium).to receive(:update_counts).once
+              expect(creators.first).to receive(:update_counts).once
+              expect( creators.last).to receive(:update_counts).once
 
-            review.send(:update_counts_for_descendents)
+              post.send(:update_counts_for_descendents)
+            end
           end
 
-          it "does nothing for standalone" do
-             allow_any_instance_of(Creator).to     receive(:update_counts)
-             allow_any_instance_of(   Work).to     receive(:update_counts)
+          context "standalone" do
+            let(  :post) { create(:standalone_post) }
+            let(:author) { double }
 
-            expect_any_instance_of(Creator).to_not receive(:update_counts)
-            expect_any_instance_of(   Work).to_not receive(:update_counts)
+            it "updates counts for author" do
+              allow(   post).to receive(:author).and_return(author)
+              allow( author).to receive(:update_counts)
+              expect(author).to receive(:update_counts).once
 
-            standalone.send(:update_counts_for_descendents)
+              post.send(:update_counts_for_descendents)
+            end
           end
         end
       end

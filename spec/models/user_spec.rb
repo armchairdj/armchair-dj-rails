@@ -15,6 +15,8 @@ RSpec.describe User, type: :model do
     it_behaves_like "an_atomically_validatable_model", { first_name: nil, last_name: nil } do
       subject { create(:minimal_user) }
     end
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -48,14 +50,6 @@ RSpec.describe User, type: :model do
       create(:minimal_post, :published, author: jenny )
       create(:minimal_post, :published, author: brian )
       create(:minimal_post, :draft,     author: gruber)
-    end
-
-    describe "self#published" do
-      subject { described_class.published }
-
-      it "includes published writers, unsorted" do
-        should contain_exactly(jenny, brian)
-      end
     end
 
     describe "self#published_author!" do

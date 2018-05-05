@@ -361,6 +361,8 @@ private
   #############################################################################
 
   def update_counts_for_descendents
+    author.update_counts
+
     return unless work.present?
 
     work.update_counts

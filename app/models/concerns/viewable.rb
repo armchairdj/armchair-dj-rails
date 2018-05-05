@@ -3,16 +3,6 @@
 module Viewable
   extend ActiveSupport::Concern
 
-  class_methods do
-    def admin_scopes
-      {
-        "All"          => :for_admin,
-        "Viewable"     => :viewable,
-        "Non-Viewable" => :non_viewable,
-      }
-    end
-  end
-
   included do
     before_save :refresh_counts
 
