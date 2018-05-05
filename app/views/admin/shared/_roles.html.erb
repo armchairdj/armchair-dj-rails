@@ -5,7 +5,10 @@
     <%= content_tag(:h4, "Roles") %>
   <% end %>
 
-  <%= content_tag(:ul, class: "square") do %>
-    <%= render partial: "admin/shared/role", collection: roles %>
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <% roles.each do |medium_name, role_array| %>
+      <%= content_tag(:dt, medium_name     ) %>
+      <%= content_tag(:dd, role_array.join(", ")) %>
+    <% end %>
   <% end %>
 <% end %>

@@ -3,7 +3,7 @@ class MediaController < PublicController
 private
 
   def find_collection
-    @media = policy_scope(Medium)
+    @media = policy_scope(Medium).page(params[:page])
   end
 
   def find_instance

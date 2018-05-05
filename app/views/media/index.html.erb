@@ -1,3 +1,13 @@
 <%
   @headline = @title = "Media"
 %>
+
+<% if @media.empty? %>
+  <%= content_tag(:p, "Nothing so far.") %>
+<% else %>
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "shared/medium", collection: @media %>
+  <% end %>
+
+  <%= paginate @media %>
+<% end %>

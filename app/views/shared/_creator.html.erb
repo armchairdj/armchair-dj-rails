@@ -4,5 +4,5 @@
   <%= content_tag(:li, link_to_creator(creator)) %>
 <% else %>
   <%= content_tag(:dt, link_to_creator(creator)) %>
-  <%= content_tag(:dd, creator.display_media.keys.join(", ")) %>
+  <%= content_tag(:dd, creator.display_roles.keys.join(", ")) %>
 <% end %>

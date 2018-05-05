@@ -3,11 +3,22 @@
 require "rails_helper"
 
 RSpec.describe "posts/show", type: :view do
-  before(:each) do
-    @post = assign(:post, create(:minimal_post))
+  context "standalone" do
+    before(:each) do
+      @post = assign(:post, create(:complete_standalone_post))
+    end
+
+    it "renders" do
+      render
+    end
   end
 
-  it "renders" do
-    render
+  context "review" do
+    before(:each) do
+      @post = assign(:post, create(:complete_review))
+    end
+    it "renders" do
+      render
+    end
   end
 end

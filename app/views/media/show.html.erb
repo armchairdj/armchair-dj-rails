@@ -1,4 +1,21 @@
 <%
-  @headline = @title = "Medium"
+  @headline = @title = @medium.name
 %>
 
+<%= render partial: "shared/creators", locals: {
+  creators: @medium.creators.for_site,
+  headline: "Creators"
+} %>
+
+<%= render partial: "shared/creators", locals: {
+  creators: @medium.contributors.for_site,
+  headline: "Contributors"
+} %>
+
+<%= render partial: "shared/works", locals: {
+  works: @medium.works.for_site
+} %>
+
+<%= render partial: "shared/posts", locals: {
+  posts: @medium.posts.for_site
+} %>

@@ -22,8 +22,8 @@
   headline: "Personae"
 } %>
 
-<%= render partial: "shared/media", locals: {
-  media: @creator.display_media
+<%= render partial: "shared/roles", locals: {
+  roles: @creator.display_roles
 } %>
 
 <%= render partial: "shared/works", locals: {
@@ -36,5 +36,5 @@
 } %>
 
 <%= render partial: "shared/posts", locals: {
-  posts: @creator.posts.for_admin.reverse_cron
+  posts: @creator.posts.for_site
 } %>

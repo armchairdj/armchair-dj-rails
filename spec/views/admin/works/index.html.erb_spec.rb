@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/works/index", type: :view do
   before(:each) do
     21.times do
-      create(:minimal_work)
+      create(:stuffed_work, :with_published_post)
     end
 
     @model_class = assign(:model_name, Work)

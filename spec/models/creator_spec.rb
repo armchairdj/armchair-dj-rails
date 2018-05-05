@@ -828,7 +828,7 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    pending "#display_media"
+    pending "#display_roles"
 
     pending "#alpha_parts"
   end

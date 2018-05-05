@@ -271,7 +271,7 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def display_media
+  def display_roles
     created = media.each.inject({}) do |memo, (media)|
       memo[media.name] = ["Creator"]; memo
     end

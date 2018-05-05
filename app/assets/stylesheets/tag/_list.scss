@@ -62,7 +62,14 @@ dl {
 
     dt,
     dd {
+      @include bottom-margin($spacing-m * .25);
+    }
+
+    dt {
       float: left;
+      width: $dt-width;
+      clear: both;
+      padding-right: .5rem;
     }
 
     &.right {
@@ -71,13 +78,8 @@ dl {
       }
     }
 
-    dt {
-      width: $dt-width;
-      clear: left;
-      padding-right: .5rem;
-    }
-
     dd {
+      float: right;
       width: $dd-width;
       padding-left: .5rem;
     }
