@@ -1,9 +1,0 @@
-<% caption = nil if local_assigns[:caption].nil? %>
-
-<%= content_tag(:figure, class: "quote") do %>
-  <%= content_tag(:blockquote) do %>
-    <%= yield %>
-  <% end %>
-
-  <%= content_tag(:figcaption, caption) if caption.present? %>
-<% end %>

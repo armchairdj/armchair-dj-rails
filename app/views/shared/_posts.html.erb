@@ -1,0 +1,11 @@
+<% return if posts.empty? %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Posts") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "shared/post", collection: posts %>
+  <% end %>
+<% end %>

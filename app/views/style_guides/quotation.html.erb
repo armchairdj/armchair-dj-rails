@@ -7,25 +7,30 @@
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Block quote w/ simple caption") %>
+    <%= content_tag(:h3, "Blockquote w/ caption") %>
   <% end %>
 
-  <%= render layout: "shared/blockquote", locals: { caption: "Kate Bush" } do %>
-    Be kind to my mistakes.
+  <%= blockquote("Be kind to my mistakes.", author: "Kate Bush") %>
+<% end %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h3, "Blockquote w/ caption & cite") %>
+  <% end %>
+
+  <%= blockquote(author: "Pet Shop Boys", cite: "Being Boring") do %>
+    <div>When I went, I left from the station</div>
+    <div>With a haversack and some trepidation</div>
   <% end %>
 <% end %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h3, "Block quote w/ complex caption & cite") %>
+    <%= content_tag(:h3, "Blockquote w/ complex caption & cite") %>
   <% end %>
 
-  <%= render layout: "shared/blockquote", locals: { caption: capture { %>
-    <%= content_tag(:strong, "Pet Shop Boys") %>,
-    <%= content_tag(:cite, "Being Boring") %>
-  <% } } do %>
-    When I went, I left from the station<br>
-    With a haversack and some trepidation
+  <%= blockquote(author: link_to("Buffy Summers", "#"), cite: link_to("Buffy the Vampire Slayer", "#")) do %>
+    Oh my god, what are you, 12?
   <% end %>
 <% end %>
 

@@ -29,9 +29,6 @@
     <%= ff.error :creator_id %>
     <%= ff.error :role_id %>
 
-    <%= render(partial: "shared/custom_checkbox", locals: {
-      f:    ff,
-      name: :_destroy
-    }) unless ff.object.new_record? %>
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>
 <% end %>

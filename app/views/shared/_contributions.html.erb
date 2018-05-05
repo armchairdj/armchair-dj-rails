@@ -1,0 +1,14 @@
+<% return if contributions.empty? %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, context == :work ? "Contributors" : "Contributions") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "shared/contribution",
+      collection: contributions,
+      locals:     { link_to: (context == :work ? :creator : :work) }
+    %>
+  <% end %>
+<% end %>

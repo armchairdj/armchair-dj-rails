@@ -1,0 +1,4 @@
+<% full = true if local_assigns[:full].nil? %>
+
+<%= content_tag(:dt, work.medium.name) %>
+<%= content_tag(:dd, link_to_work(work, full: full)) %>

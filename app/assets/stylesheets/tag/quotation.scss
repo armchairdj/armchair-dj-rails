@@ -20,6 +20,11 @@ figure.quote {
 
   figcaption {
     font-size: .8rem;
+
+    strong,
+    cite {
+      display: block;
+    }
   }
 }
 

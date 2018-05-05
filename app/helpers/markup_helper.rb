@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
 module MarkupHelper
+  def blockquote(text = nil, author:, cite: nil, &block)
+    raise ArgumentError if text.nil? && !block_given?
+
+    quote = text || capture(&block)
+    html  = content_tag(:blockquote, quote) + caption(author, cite)
+
+    content_tag(:figure, html.html_safe, class: "quote")
+  end
+
+  def caption(author, cite = nil)
+    caption = [content_tag(:strong, author)]
+    caption << content_tag(:cite, cite) unless cite.nil?
+
+    content_tag(:figcaption, caption.join().html_safe)
+  end
+
   def combine_attrs(first, last)
     klasses = combine_classes(first.delete(:class), last.delete(:class))
 

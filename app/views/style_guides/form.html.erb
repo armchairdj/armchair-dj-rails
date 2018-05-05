@@ -24,10 +24,7 @@
         <%= f.select :select, [true, false], include_blank: :true %>
       <% end %>
 
-      <%= render partial: "shared/custom_checkbox", locals: {
-        f:    f,
-        name: :checkbox
-      } %>
+      <%= f.input(:_destroy, as: :boolean) %>
 
       <%= f.input :textarea, as: :text %>
     <% end %>

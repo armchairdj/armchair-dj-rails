@@ -34,6 +34,7 @@ en:
           creator_id: "Contributor"
     hints:
       defaults:
+        _destroy: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
       contribution:
       creator:
@@ -47,6 +48,7 @@ en:
         bio: "For display on your public author profile."
         current_password: "We need your current password to confirm your changes"
         password: "Please use 12-128 characters"
+        remember_me: "&nbsp;"
       work:
         subtitle: "Song remix, book subtitle, movie cut, etc."
     placeholders:

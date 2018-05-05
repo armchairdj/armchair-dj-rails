@@ -65,14 +65,21 @@ class Creator < ApplicationRecord
   has_many :credits, inverse_of: :creator, dependent: :destroy
   has_many :works, through: :credits
   has_many :posts, through: :works
+  has_many :media, -> { distinct }, through: :works, source: :medium
+
 
   # Contributions.
 
   has_many :contributions, inverse_of: :creator, dependent: :destroy
-  has_many :contributed_works, through: :contributions,
-    class_name: "Work", source: :work
-  has_many :contributed_posts, through: :contributed_works,
-    class_name: "Post", source: :posts
+  has_many :contributed_works,
+    through: :contributions, class_name: "Work", source: :work
+  has_many :contributed_posts,
+    through: :contributed_works, class_name: "Post", source: :posts
+  has_many :contributed_media,
+    through: :contributed_works, class_name: "Medium", source: :medium
+  has_many :contributed_roles, -> {
+    includes(contributions: { work: :medium })
+  }, through: :contributions, class_name: "Role", source: :role
 
   # Identities.
 
@@ -256,42 +263,25 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def contributions_array
-    self.contributions.viewable.map do |c|
-      {
-        role:   c.name,
-        medium: c.work.medium.name,
-        work:   c.work.full_display_title
-      }
-    end
-  end
+  def display_media
+    created     = self.media.to_a.map(&:name)
+    contributed = self.contributed_roles.group_by{ |r| r.medium.name }
 
-  def contributions_by_role
-    self.contributions_array.group_by{ |r| r[  :role] }.sort_by(&:first).to_h
-  end
+    return {} if created.empty? && contributed.empty?
 
-  def contributions_by_medium
-    self.contributions_array.group_by{ |r| r[:medium] }.sort_by(&:first).to_h
-  end
+    final = contributed.each.inject({}) do |memo, (medium_name, roles)|
+      roles = roles.map(&:name)
 
-  def contributions_by_work
-    self.contributions_array.group_by{ |r| r[  :work] }.sort_by(&:first).to_h
-  end
+      roles << "Creator" if created.delete(medium_name)
 
-  def media
-    self.contributions.viewable.map { |c| c.work.medium.name }.uniq.sort
-  end
-
-  def roles
-    self.contributions.viewable.map(&:name).uniq.sort
-  end
-
-  def roles_by_medium
-    self.contributions_by_medium.reduce([]) do |memo, (key, val)|
-      memo << { medium: key, roles: val.map { |h| h[:role] }.uniq.sort }
+      memo[medium_name] = roles.sort
 
       memo
     end
+
+    created.each { |medium_name| final[medium_name] = ["Creator"] }
+
+    final.sort.to_h
   end
 
   def alpha_parts

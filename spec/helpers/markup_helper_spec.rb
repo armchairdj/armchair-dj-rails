@@ -3,6 +3,30 @@
 require "rails_helper"
 
 RSpec.describe MarkupHelper, type: :helper do
+  describe "#blockquote" do
+    context "with block" do
+      pending "renders"
+    end
+
+    context "with text" do
+      pending "renders"
+    end
+
+    context "with neither block nor text" do
+      pending "raises ArgumentError"
+    end
+  end
+
+  describe "#caption" do
+    context "with author" do
+      pending "renders"
+    end
+
+    context "with author and cite" do
+      pending "renders"
+    end
+  end
+
   describe "#combine_attrs" do
     specify do
       first    = { "data-controller": "byline", class: "strong" }

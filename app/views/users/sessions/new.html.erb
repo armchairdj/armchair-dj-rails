@@ -3,7 +3,7 @@
 %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "shared/user_tabs", locals: { selected_tab: :login } %>
+  <%= render partial: "users/shared/auth_tabs", locals: { selected_tab: :login } %>
 
   <%= content_tag(:div, class: "tab") do %>
     <%= simple_form_for(@user, url: user_session_path) do |f| %>
@@ -11,10 +11,7 @@
         <%= f.input :email,    required: true, placeholder: true %>
         <%= f.input :password, required: true, hint: false %>
 
-        <%= render(partial: "shared/custom_checkbox", locals: {
-          f:    f,
-          name: :remember_me
-        }) %>
+        <%= f.input(:remember_me, as: :boolean) %>
       <% end %>
 
       <%= content_tag(:div, class: "button-group") do %>

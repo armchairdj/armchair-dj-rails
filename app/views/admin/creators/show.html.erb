@@ -91,6 +91,10 @@
   headline: "Personae"
 } %>
 
+<%= render partial: "admin/shared/media", locals: {
+  media: @creator.display_media
+} %>
+
 <%= render partial: "admin/shared/works", locals: {
   works: @creator.works.for_admin.alpha
 } %>

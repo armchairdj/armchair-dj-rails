@@ -1,8 +1,5 @@
 <%
   @title = [@work.display_creators, @work.title]
-
-  @contributions = @work.contributions.for_site
-  @posts         = @work.posts.for_site
 %>
 
 <%= content_for(:header) do %>
@@ -16,26 +13,11 @@
   <% end %>
 <% end %>
 
-<% if @contributions.any? %>
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Contributors") %>
-    <% end %>
+<%= render partial: "admin/shared/contributions", locals: {
+  contributions: @work.contributions.for_site,
+  context:       :work
+} %>
 
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "works/contribution", collection: @contributions %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @posts.any? %>
-  <%= content_tag(:section) do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/posts", locals: {
+  posts: @work.posts.for_site
+} %>

@@ -1,44 +1,24 @@
 <%
-  @title = [@user.username, "Profile"]
+  @title    = [@user.username, "Profile"]
   @headline = @user.username
-
-  @posts    = @user.posts.for_site
-  @works    = @user.works.for_site
-  @creators = @user.creators.for_site
-  @bio      = @user.bio
 %>
 
-<% if @bio.present? %>
+<%# @user.display_name %>
+
+<% if @user.bio.present? %>
   <%= content_tag(:section, class: "bio") do %>
     <%= paragraphs(@user.bio) %>
   <% end %>
 <% end %>
 
-<% if @posts.any? %>
-  <%= content_tag(:section, class: "posts") do %>
-    <%= content_tag(:ul) do %>
-      <%= render partial: "posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/posts", locals: {
+  posts: @user.posts.for_site
+} %>
 
-<% if @works.any? %>
-  <%= content_tag(:section, class: "works") do %>
-    <%= content_tag(:ul) do %>
-      <%= render partial: "works/work", collection: @works %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/works", locals: {
+  works: @user.works.for_site
+} %>
 
-<% if @creators.any? %>
-  <%= content_tag(:section, class: "creators") do %>
-    <%= content_tag(:ul) do %>
-      <%= render partial: "creators/creator", collection: @creators %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<%# @user.display_name %>
-<%#  %>
-<%# @user.works.for_site %>
-<%# @user.creators.for_site %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @user.creators.for_site
+} %>
