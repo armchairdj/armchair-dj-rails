@@ -31,6 +31,8 @@ class Medium < ApplicationRecord
   has_many :roles,  dependent: :destroy
   has_many :works,  dependent: :destroy
 
+  has_many :creators, -> { distinct }, through: :works
+
   has_many :posts, through: :works
 
   #############################################################################

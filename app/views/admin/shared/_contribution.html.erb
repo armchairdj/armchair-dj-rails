@@ -1,0 +1,6 @@
+<%= content_tag(:dt, contribution.name) %>
+<% if link_to == :work %>
+  <%= content_tag(:dd, link_to_work(contribution.work, admin: true)) %>
+<% else %>
+  <%= content_tag(:dd, link_to_creator(contribution.creator, admin: true)) %>
+<% end %>

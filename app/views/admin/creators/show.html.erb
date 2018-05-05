@@ -1,9 +1,5 @@
 <%
   @title = ["View Creator", @creator.name]
-
-  @works         = @creator.works.for_admin.alpha
-  @contributions = @creator.contributions.for_admin.alpha
-  @posts         = @creator.posts.for_admin.reverse_cron
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -26,13 +22,20 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Individual?") %>
+        <%= content_tag(:td, @creator.individual?) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Primary?") %>
         <%= content_tag(:td, @creator.primary?) %>
       <% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Individual?") %>
-        <%= content_tag(:td, @creator.individual?) %>
+      <% if @creator.secondary? %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Primary Identity") %>
+          <%= content_tag(:td, link_to_creator(@creator.real_name, admin: true)) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -68,96 +71,35 @@
   <% end %>
 <% end %>
 
-<% if @creator.personae.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Aliases") %>
-    <% end %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @creator.groups,
+  headline: "Groups"
+} %>
 
-    <%= content_tag(:ul, class: "square") do %>
-      <% @creator.personae.each do |persona| %>
-        <%= render partial: "admin/creators/creator", locals: { creator: persona } %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @creator.members,
+  headline: "Members"
+} %>
 
-<% if @creator.individual? %>
-  <% if @creator.groups.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Groups") %>
-      <% end %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @creator.colleagues,
+  headline: "Colleagues"
+} %>
 
-      <%= content_tag(:ul, class: "square") do %>
-        <% @creator.groups.each do |group| %>
-          <%= render partial: "admin/creators/creator", locals: { creator: group } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @creator.personae,
+  headline: "Personae"
+} %>
 
-  <% if @creator.colleagues.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Colleagues") %>
-      <% end %>
+<%= render partial: "admin/shared/works", locals: {
+  works: @creator.works.for_admin.alpha
+} %>
 
-      <%= content_tag(:ul, class: "square") do %>
-        <% @creator.colleagues.each do |colleague| %>
-          <%= render partial: "admin/creators/creator", locals: { creator: colleague } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% else %>
-  <% if @creator.members.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Members") %>
-      <% end %>
+<%= render partial: "admin/shared/contributions", locals: {
+  contributions: @creator.contributions.for_admin.alpha,
+  context:       :creator
+} %>
 
-      <%= content_tag(:ul, class: "square") do %>
-        <% @creator.members.each do |member| %>
-          <%= render partial: "admin/creators/creator", locals: { creator: member } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @works.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Works By") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/works/work", collection: @works %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @contributions.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Contributions") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/creators/contribution", collection: @contributions %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @posts.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts About") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/posts", locals: {
+  posts: @creator.posts.for_admin.reverse_cron
+} %>

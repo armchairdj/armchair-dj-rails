@@ -1,10 +1,5 @@
 <%
   @title = ["View User", @user.display_name ]
-
-  @posts    = @user.posts.for_admin.reverse_cron
-  @works    = @user.works.for_admin.alpha
-  @creators = @user.creators.for_admin.alpha
-  @bio      = @user.bio
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -44,7 +39,7 @@
       <% if @user.can_post? %>
         <%= content_tag(:tr) do %>
           <%= content_tag(:th, "Bio") %>
-          <%= content_tag(:td, paragraphs(@bio)) %>
+          <%= content_tag(:td, paragraphs(@user.bio)) %>
         <% end %>
       <% end %>
 
@@ -147,39 +142,15 @@
 <% end %>
 
 <% if @user.can_post? %>
-  <% if @posts.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Posts") %>
-      <% end %>
+  <%= render partial: "admin/shared/posts", locals: {
+    posts: @user.posts.for_admin.reverse_cron
+  } %>
 
-      <%= content_tag(:dl, class: "horizontal right") do %>
-        <%= render partial: "admin/posts/post", collection: @posts %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= render partial: "admin/shared/works", locals: {
+    works: @user.works.for_admin.alpha
+  } %>
 
-  <% if @works.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Works Written About") %>
-      <% end %>
-
-      <%= content_tag(:dl, class: "horizontal right") do %>
-        <%= render partial: "admin/works/work", collection: @works %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <% if @creators.any? %>
-    <%= content_tag(:section, class: "admin-section") do %>
-      <%= content_tag(:header) do %>
-        <%= content_tag(:h4, "Creators Written About") %>
-      <% end %>
-
-      <%= content_tag(:ul, class: "square") do %>
-        <%= render partial: "admin/creators/creator", collection: @creators %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= render partial: "admin/shared/creators", locals: {
+    creators: @user.creators.for_admin.alpha
+  } %>
 <% end %>

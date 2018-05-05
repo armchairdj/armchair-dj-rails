@@ -46,13 +46,14 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :published, -> { left_outer_joins(:posts)
-    .where(    posts: { status: Post.statuses[:published] })
-    .where.not(posts: { id: nil })
-    .where(     role: [:writer, :editor, :admin, :super_admin])
+  scope :published, -> {
+    left_outer_joins(:posts)
+      .where(    posts: { status: Post.statuses[:published] })
+      .where.not(posts: { id: nil })
+      .where(     role: [:writer, :editor, :admin, :super_admin])
   }
 
-  scope     :eager, -> { includes(:posts, :works, :creators) }
+  scope :eager, -> { includes(:posts, :works, :creators) }
 
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.published.alpha }
@@ -64,7 +65,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy, foreign_key: "author_id"
 
   has_many :works,    through: :posts
-  has_many :creators, through: :works
+  has_many :creators, -> { distinct }, through: :works
 
   #############################################################################
   # ATTRIBUTES.

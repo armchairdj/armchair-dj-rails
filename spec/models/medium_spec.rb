@@ -70,8 +70,11 @@ RSpec.describe Medium, type: :model do
   end
 
   context "associations" do
-    it { should have_many(:roles ) }
-    it { should have_many(:works ) }
+    it { should have_many(:roles) }
+
+    it { should have_many(:works) }
+
+    it { should have_many(:creators).through(:works) }
 
     it { should have_many(:posts).through(:works) }
   end

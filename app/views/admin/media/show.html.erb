@@ -1,9 +1,5 @@
 <%
   @title = ["View Medium", @medium.name]
-
-  @roles = @medium.roles.for_admin.alpha
-  @works = @medium.works.for_admin.alpha
-  @posts = @medium.posts.for_admin.reverse_cron
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -58,38 +54,18 @@
   <% end %>
 <% end %>
 
-<% if @roles.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Roles") %>
-    <% end %>
+<%= render partial: "admin/shared/roles", locals: {
+  roles: @medium.roles.alpha
+} %>
 
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/roles/role", collection: @roles %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/works", locals: {
+  works: @medium.works.for_admin.alpha
+} %>
 
-<% if @works.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Works") %>
-    <% end %>
+<%= render partial: "admin/shared/creators", locals: {
+  creators: @medium.creators.for_admin.alpha
+} %>
 
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/works/work", collection: @works %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @posts.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/posts", locals: {
+  posts: @medium.posts.for_admin.reverse_cron
+} %>

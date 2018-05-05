@@ -1,9 +1,5 @@
 <%
   @title = ["View #{@work.medium.name}", @work.display_creators, @work.title]
-
-  @creators      = @work.creators.for_admin.alpha
-  @contributions = @work.contributions.for_admin.alpha
-  @posts         = @work.posts.for_admin.reverse_cron
 %>
 
 <%= render partial: "admin/shared/admin_header", locals: {
@@ -28,10 +24,8 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Creators") %>
         <%= content_tag(:td) do %>
-          <% if @creators.any? %>
-            <%= content_tag(:ul) do %>
-              <%= render partial: "admin/creators/creator", collection: @creators %>
-            <% end %>
+          <%= content_tag(:ul) do %>
+            <%= render partial: "admin/shared/creator", collection: @work.creators %>
           <% end %>
         <% end %>
       <% end %>
@@ -79,26 +73,11 @@
   <% end %>
 <% end %>
 
-<% if @contributions.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Contributors") %>
-    <% end %>
+<%= render partial: "admin/shared/contributions", locals: {
+  contributions: @work.contributions.for_admin.alpha,
+  context:       :work
+} %>
 
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/works/contribution", collection: @contributions %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if @posts.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Posts") %>
-    <% end %>
-
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <%= render partial: "admin/posts/post", collection: @posts %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render partial: "admin/shared/posts", locals: {
+  posts: @work.posts.for_admin.reverse_cron
+} %>
