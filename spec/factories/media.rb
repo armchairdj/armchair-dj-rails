@@ -51,6 +51,10 @@ FactoryBot.define do
       with_name
     end
 
+    factory :complete_medium, parent: :minimal_medium do
+      with_summary
+    end
+
     factory :album_medium do
       name "Album"
     end

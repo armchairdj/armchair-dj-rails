@@ -70,24 +70,47 @@ RSpec.describe Admin::MediaController, type: :controller do
     end
 
     describe "POST #create" do
-      let(  :valid_params) { attributes_for(:minimal_medium) }
-      let(:invalid_params) { attributes_for(:minimal_medium).except(:name) }
+      let(:max_valid_params) { attributes_for(:complete_medium) }
+      let(:min_valid_params) { attributes_for(:minimal_medium) }
+      let(  :invalid_params) { attributes_for(:minimal_medium).except(:name) }
 
-      context "with valid params" do
+      context "with min valid params" do
         it "creates a new Medium" do
           expect {
-            post :create, params: { medium: valid_params }
+            post :create, params: { medium: min_valid_params }
           }.to change(Medium, :count).by(1)
         end
 
         it "creates the right attributes" do
-          post :create, params: { medium: valid_params }
+          post :create, params: { medium: min_valid_params }
 
-          should assign(Medium.last, :medium).with_attributes(valid_params).and_be_valid
+          should assign(Medium.last, :medium).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
-          post :create, params: { medium: valid_params }
+          post :create, params: { medium: min_valid_params }
+
+          should send_user_to(
+            admin_medium_path(assigns(:medium))
+          ).with_flash(:success, "admin.flash.media.success.create")
+        end
+      end
+
+      context "with max valid params" do
+        it "creates a new Medium" do
+          expect {
+            post :create, params: { medium: max_valid_params }
+          }.to change(Medium, :count).by(1)
+        end
+
+        it "creates the right attributes" do
+          post :create, params: { medium: max_valid_params }
+
+          should assign(Medium.last, :medium).with_attributes(max_valid_params).and_be_valid
+        end
+
+        it "redirects to index" do
+          post :create, params: { medium: max_valid_params }
 
           should send_user_to(
             admin_medium_path(assigns(:medium))
@@ -121,18 +144,18 @@ RSpec.describe Admin::MediaController, type: :controller do
     describe "PUT #update" do
       let(:medium) { create(:minimal_medium) }
 
-      let(  :valid_params) { { name: "New Name" } }
-      let(:invalid_params) { { name: ""         } }
+      let(:min_valid_params) { { name: "New Name" } }
+      let(  :invalid_params) { { name: ""         } }
 
       context "with valid params" do
         it "updates the requested medium" do
-          put :update, params: { id: medium.to_param, medium: valid_params }
+          put :update, params: { id: medium.to_param, medium: min_valid_params }
 
-          should assign(medium, :medium).with_attributes(valid_params).and_be_valid
+          should assign(medium, :medium).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
-          put :update, params: { id: medium.to_param, medium: valid_params }
+          put :update, params: { id: medium.to_param, medium: min_valid_params }
 
           should send_user_to(
             admin_medium_path(assigns(:medium))
@@ -163,9 +186,9 @@ RSpec.describe Admin::MediaController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: medium.to_param }
 
-        should send_user_to(
-          admin_media_path
-        ).with_flash(:success, "admin.flash.media.success.destroy")
+        should send_user_to(admin_media_path).with_flash(
+          :success, "admin.flash.media.success.destroy"
+        )
       end
     end
   end

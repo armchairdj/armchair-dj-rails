@@ -114,7 +114,8 @@ private
 
   def instance_params
     params.fetch(:medium, {}).permit(
-      :name
+      :name,
+      :summary
     )
   end
 end
