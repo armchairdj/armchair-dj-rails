@@ -7,8 +7,17 @@
   @include bottom-margin-only($spacing-xl);
 }
 
-div.boxed {
+.boxed {
+  @include clearfix();
   @include module-box();
+  @include bottom-margin();
+}
+
+.tab,
+.boxed {
+  .boxed {
+    background-color: $masthead-bg-color;
+  }
 }
 
 fieldset {
@@ -21,6 +30,10 @@ fieldset {
     margin-top: -$spacing-s;
     @include bottom-margin($spacing-m * .75);
     @include hint-text();
+  }
+
+  &.toggle {
+    margin: 0;
   }
 
   &.chunk {
@@ -51,8 +64,6 @@ fieldset {
   }
 
   &.name {
-    @include clearfix();
-
     .form-field {
       float: left;
       margin-bottom: 0;

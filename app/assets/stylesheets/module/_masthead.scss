@@ -1,6 +1,6 @@
 nav#masthead {
   @include clearfix();
-  background-color: $black;
+  background-color: $masthead-bg-color;
   padding: $spacing-s 0;
 
   header {

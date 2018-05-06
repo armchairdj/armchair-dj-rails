@@ -2,20 +2,30 @@
 <% show_password = false if local_assigns[:show_password].nil? %>
 <% show_role     = false if local_assigns[:show_role    ].nil? %>
 
-<%= f.input(:role, as: :select, collection: User.human_roles) if show_role %>
-
 <%= content_tag(:fieldset, class: "name legendary") do %>
-  <%= content_tag(:legend, "Name") %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Name") %>
 
-  <%= f.input(:first_name) %>
-  <%= f.input(:middle_name, required: false) %>
-  <%= f.input(:last_name) %>
+    <%= f.input(:first_name) %>
+    <%= f.input(:middle_name, required: false) %>
+    <%= f.input(:last_name) %>
+  <% end %>
 <% end %>
 
 <%= content_tag(:fieldset) do %>
-  <%= f.input(:username) %>
-  <%= f.input(:email,    required: true, placeholder: true) %>
-  <%= f.input(:password, required: true, hint: true) if show_password %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= f.input(:role, as: :select, collection: User.human_roles) if show_role %>
+
+    <%= f.input(:username) %>
+
+    <%= f.input(:email,    required: true, placeholder: true) %>
+
+    <%= f.input(:password, required: true, hint: true) if show_password %>
+  <% end %>
 <% end %>
 
-<%= f.input(:bio, hint: true) if show_bio %>
+<%= content_tag(:fieldset) do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= f.input(:bio, hint: true) if show_bio %>
+  <% end %>
+<% end %>

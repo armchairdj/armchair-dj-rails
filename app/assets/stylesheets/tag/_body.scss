@@ -3,7 +3,6 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: $flash-bg;
   font-size: 16px;
 
   @include breakpoint(small) {
@@ -30,11 +29,12 @@ html {
 }
 
 body {
+  background-color: $body-bg-color;
   min-height: inherit;
   position: relative;
   margin: 0;
   padding: 0;
   font-family: $raleway-font-stack;
-  color: $standard-color;
+  color: $standard-text-color;
   line-height: $spacious;
 }

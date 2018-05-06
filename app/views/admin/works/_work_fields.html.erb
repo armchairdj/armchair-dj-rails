@@ -7,19 +7,21 @@
     creators: creators
   }) %>
 
-  <%= f.input :medium_id, as: :select,
-    collection: @media,
-    input_html: {
-      # "data-controller": "selectize",
-      # "data-target":     "work-dropdowns.medium"
-    }
-  %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= f.input :medium_id, as: :select,
+      collection: @media,
+      input_html: {
+        # "data-controller": "selectize",
+        # "data-target":     "work-dropdowns.medium"
+      }
+    %>
 
-  <%= f.input :title %>
+    <%= f.input :title %>
 
-  <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
+    <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
 
-  <%= f.input(:summary, required: false, hint: true) if show_summary %>
+    <%= f.input(:summary, required: false, hint: true) if show_summary %>
+  <% end %>
 
   <%= render(partial: "admin/works/contributions_fields", locals: {
     f:        f,
