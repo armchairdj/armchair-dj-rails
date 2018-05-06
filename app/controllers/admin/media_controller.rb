@@ -124,4 +124,8 @@ private
       ]
     )
   end
+
+  def prepare_form
+    @medium.prepare_roles
+  end
 end

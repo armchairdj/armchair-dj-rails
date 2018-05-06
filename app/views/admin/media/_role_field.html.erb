@@ -1,0 +1,7 @@
+<%= f.simple_fields_for :roles, role do |ff| %>
+  <%= content_tag(:fieldset, class: "accepts-nested") do %>
+    <%= ff.input :name, label: false %>
+
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

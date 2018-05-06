@@ -3,6 +3,7 @@ import { Controller } from "stimulus";
 export default class extends Controller {
   connect() {
     this.$node   = $(this.element);
+    this.$inner  = this.$node.find("> .boxed");
     this.$items  = this.$node.find("fieldset");
     this.$hidden = this.$items.filter(this.shouldHide);
 
@@ -38,12 +39,14 @@ export default class extends Controller {
   }
 
   ensureLink() {
+    console.log(this.$inner);
+
     this.$link = this.$node.find("[data-expand-link]");
 
     if (!this.$link[0]) {
       this.$link = this.getLinkHtml();
 
-      this.$node.append(this.$link);
+      $(this.$inner[0] || this.$node).append(this.$link);
     }
   }
 

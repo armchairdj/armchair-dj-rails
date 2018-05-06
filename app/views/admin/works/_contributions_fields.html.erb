@@ -5,13 +5,15 @@
 %>
 
 <%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
-  <%= content_tag(:legend) do %>Contributors <%= required_indicator %><% end %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend) do %>Contributors <%= required_indicator %><% end %>
 
-  <%= content_tag(:div, error, class: "hint") if error %>
+    <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: "admin/works/contribution_field", collection: records, as: :contribution, locals: {
-    f:        f,
-    roles:    roles,
-    creators: creators
-  } %>
+    <%= render partial: "admin/works/contribution_field", collection: records, as: :contribution, locals: {
+      f:        f,
+      roles:    roles,
+      creators: creators
+    } %>
+  <% end %>
 <% end %>

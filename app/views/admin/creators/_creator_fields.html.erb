@@ -4,44 +4,48 @@
   <%= f.input :summary, required: false, hint: true %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed", "data-controller": "toggle") do %>
-  <%= content_tag(:legend, "Primary") %>
+<%= content_tag(:fieldset, class: "legendary", "data-controller": "toggle") do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Primary") %>
 
-  <%= render partial: "shared/custom_radio_group", locals: {
-    f:          f,
-    name:       :primary,
-    collection: Creator.primary_options,
-    invert:     true
-  } %>
+    <%= render partial: "shared/custom_radio_group", locals: {
+      f:          f,
+      name:       :primary,
+      collection: Creator.primary_options,
+      invert:     true
+    } %>
 
-  <%= render partial: "admin/creators/pseudonym_identities_fields", locals: {
-    f:        f,
-    creators: available_pseudonyms
-  } %>
+    <%= render partial: "admin/creators/pseudonym_identities_fields", locals: {
+      f:        f,
+      creators: available_pseudonyms
+    } %>
 
-  <%= render partial: "admin/creators/real_name_identities_fields", locals: {
-    f:        f,
-    creators: available_real_names
-  } %>
+    <%= render partial: "admin/creators/real_name_identities_fields", locals: {
+      f:        f,
+      creators: available_real_names
+    } %>
+  <% end %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "boxed", "data-controller": "toggle") do %>
-  <%= content_tag(:legend, "Collective") %>
+<%= content_tag(:fieldset, class: "legendary", "data-controller": "toggle") do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Collective") %>
 
-  <%= render partial: "shared/custom_radio_group", locals: {
-    f:          f,
-    name:       :individual,
-    collection: Creator.individual_options,
-    invert:     true
-  } %>
+    <%= render partial: "shared/custom_radio_group", locals: {
+      f:          f,
+      name:       :individual,
+      collection: Creator.individual_options,
+      invert:     true
+    } %>
 
-  <%= render partial: "admin/creators/member_memberships_fields", locals: {
-    f:        f,
-    creators: available_members
-  } %>
+    <%= render partial: "admin/creators/member_memberships_fields", locals: {
+      f:        f,
+      creators: available_members
+    } %>
 
-  <%= render partial: "admin/creators/group_memberships_fields", locals: {
-    f:        f,
-    creators: available_groups
-  } %>
+    <%= render partial: "admin/creators/group_memberships_fields", locals: {
+      f:        f,
+      creators: available_groups
+    } %>
+  <% end %>
 <% end %>

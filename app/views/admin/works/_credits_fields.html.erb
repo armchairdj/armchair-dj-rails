@@ -5,12 +5,14 @@
 %>
 
 <%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
-  <%= content_tag(:legend) do %>Creators <%= required_indicator %><% end %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend) do %>Creators <%= required_indicator %><% end %>
 
-  <%= content_tag(:div, error || "Select at least one.", class: "hint") %>
+    <%= content_tag(:div, error || "Select at least one.", class: "legend-hint") %>
 
-  <%= render partial: "admin/works/credit_field", collection: records, as: :credit, locals: {
-    f:        f,
-    creators: creators
-  } %>
+    <%= render partial: "admin/works/credit_field", collection: records, as: :credit, locals: {
+      f:        f,
+      creators: creators
+    } %>
+  <% end %>
 <% end %>

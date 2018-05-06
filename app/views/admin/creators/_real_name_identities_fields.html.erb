@@ -1,7 +1,7 @@
 <%
   records = f.object.real_name_identities
   error   = f.error(:real_name_identities)
-  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+  classes = join_attr("fields-for", ("fieldset-with-errors" if error))
 %>
 
 <%= content_tag(:fieldset, class: classes,
@@ -9,7 +9,7 @@
 ) do %>
   <%= content_tag(:legend, "Real Identity") %>
 
-  <%= content_tag(:div, error, class: "hint") if error %>
+  <%= content_tag(:div, error, class: "legend-hint") if error %>
 
   <%= render partial: "admin/creators/real_name_identity_field", collection: records, as: :real_name_identity, locals: {
     f:        f,
