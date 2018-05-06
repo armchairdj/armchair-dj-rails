@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   context "constants" do
-    specify { expect(described_class).to have_constant(:PART_SEPARATOR   ) }
-    specify { expect(described_class).to have_constant(:VERSION_SEPARATOR) }
-    specify { expect(described_class).to have_constant(:FIND_V2_OR_HIGHER) }
+    it { should have_constant(:PART_SEPARATOR   ) }
+    it { should have_constant(:VERSION_SEPARATOR) }
+    it { should have_constant(:FIND_V2_OR_HIGHER) }
   end
 
   context "class" do

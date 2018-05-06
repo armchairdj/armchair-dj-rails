@@ -13,6 +13,12 @@ FactoryBot.define do
       name { generate(:medium_name) }
     end
 
+    trait :with_role do
+      roles_attributes { {
+        "0" => attributes_for(:role, :with_name)
+      } }
+    end
+
     trait :with_draft_post do
       after(:create) do |medium|
         create(:review, :draft, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))

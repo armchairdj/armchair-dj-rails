@@ -167,15 +167,14 @@ private
       :publish_on,
       :work_id,
       :work_attributes => [
-        :post_id,
         :id,
-        :_destroy,
+        :post_id,
         :medium_id,
         :title,
         :subtitle,
         :credits_attributes => [
-          :work_id,
           :id,
+          :work_id,
           :_destroy,
           :creator_id
         ]

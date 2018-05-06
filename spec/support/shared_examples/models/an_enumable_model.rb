@@ -4,20 +4,22 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
   let(:instance) { create_minimal_instance }
 
   context "class" do
+    subject { described_class }
+
     describe "self#human_enum_collection" do
-      specify { expect(described_class).to respond_to(:human_enum_collection) }
+      it { should respond_to(:human_enum_collection) }
     end
 
     describe "self#human_enum_collection_with_keys" do
-      specify { expect(described_class).to respond_to(:human_enum_collection_with_keys) }
+      it { should respond_to(:human_enum_collection_with_keys) }
     end
 
     describe "self#human_enum_value" do
-      specify { expect(described_class).to respond_to(:human_enum_value) }
+      it { should respond_to(:human_enum_value) }
     end
 
     describe "self#enumable_attributes" do
-      specify { expect(described_class).to respond_to(:enumable_attributes) }
+      it { should respond_to(:enumable_attributes) }
     end
 
     describe "self#retrieve_enumable_attributes" do

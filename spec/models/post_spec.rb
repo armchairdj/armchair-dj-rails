@@ -230,6 +230,8 @@ RSpec.describe Post, type: :model do
 
   context "attributes" do
     context "virtual" do
+      subject { create_minimal_instance }
+
       describe "#current_work" do
         it { should respond_to(:current_work_id ) }
         it { should respond_to(:current_work_id=) }

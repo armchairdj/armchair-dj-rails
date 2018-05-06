@@ -115,7 +115,13 @@ private
   def instance_params
     params.fetch(:medium, {}).permit(
       :name,
-      :summary
+      :summary,
+      :roles_attributes => [
+        :id,
+        :_destroy,
+        :medium_id,
+        :name
+      ]
     )
   end
 end

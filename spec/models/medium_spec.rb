@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Medium, type: :model do
   context "constants" do
-    # Nothing so far.
+    it { should have_constant(:MAX_ROLES_AT_ONCE ) }
   end
 
   context "concerns" do
@@ -93,11 +93,41 @@ RSpec.describe Medium, type: :model do
 
   context "attributes" do
     context "nested" do
-      # Nothing so far.
-    end
+      context "for roles" do
+        it { should accept_nested_attributes_for(:roles) }
 
-    context "enums" do
-      # Nothing so far.
+        pending "accepts"
+
+        pending "rejects"
+
+        pending "allow_destroy"
+
+        describe "#prepare_roles" do
+          context "new instance" do
+            subject { described_class.new }
+
+            it "builds 10 roles" do
+              expect(subject.roles).to have(0).items
+
+              subject.prepare_roles
+
+              expect(subject.roles).to have(10).items
+            end
+          end
+
+          context "saved instance with saved roles" do
+            subject { create(:minimal_medium, :with_role) }
+
+            it "builds 10 more roles" do
+              expect(subject.roles).to have(1).items
+
+              subject.prepare_roles
+
+              expect(subject.roles).to have(11).items
+            end
+          end
+        end
+      end
     end
   end
 
@@ -107,29 +137,9 @@ RSpec.describe Medium, type: :model do
     it { should validate_presence_of(:name) }
 
     it { should validate_uniqueness_of(:name) }
-
-    context "conditional" do
-      # Nothing so far.
-    end
-
-    context "custom" do
-      # Nothing so far.
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
-
-    context "callbacks" do
-      # Nothing so far.
-    end
   end
 
   context "instance" do
     pending "#alpha_parts"
-
-    describe "private" do
-      # Nothing so far.
-    end
   end
 end

@@ -4,6 +4,8 @@ class Medium < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
+  MAX_ROLES_AT_ONCE  = 10.freeze
+
   #############################################################################
   # CONCERNS.
   #############################################################################
@@ -47,6 +49,13 @@ class Medium < ApplicationRecord
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
+
+  accepts_nested_attributes_for :roles, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["name"].blank? }
+
+  def prepare_roles
+    MAX_ROLES_AT_ONCE.times { self.roles.build }
+  end
 
   #############################################################################
   # VALIDATIONS.
