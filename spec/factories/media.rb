@@ -19,10 +19,30 @@ FactoryBot.define do
       } }
     end
 
-    trait :with_facet do
+    trait :with_category do
       facets_attributes { {
         "0" => attributes_for(:facet, :with_existing_category)
       } }
+    end
+
+    trait :with_categories do
+      facets_attributes { {
+        "0" => attributes_for(:facet, :with_existing_category),
+        "1" => attributes_for(:facet, :with_existing_category),
+        "2" => attributes_for(:facet, :with_existing_category),
+      } }
+    end
+
+    trait :with_tags do
+      with_category
+
+      after(:create) do |medium|
+        medium.categories.each do |category|
+          3.times { |i| create(:tag, category_id: category.id, name: "#{category.name} Tag #{i}") }
+        end
+
+        medium.reload
+      end
     end
 
     trait :with_draft_post do
@@ -65,7 +85,7 @@ FactoryBot.define do
 
     factory :complete_medium, parent: :minimal_medium do
       with_summary
-      with_facet
+      with_category
       with_role
     end
 

@@ -126,6 +126,8 @@ private
     @creators = Creator.all.alpha
     @media    = Medium.select_options
     @roles    = Role.grouped_options
+
+    @category_tags = @work.medium.tags_by_category if @work.persisted?
   end
 
   def instance_params

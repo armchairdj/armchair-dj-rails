@@ -93,6 +93,10 @@ class Medium < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def tags_by_category
+    tags.alpha.includes(:category).group_by{ |t| t.category }.to_a
+  end
+
   def alpha_parts
     [name]
   end

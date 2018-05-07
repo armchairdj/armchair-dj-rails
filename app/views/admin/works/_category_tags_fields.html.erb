@@ -1,0 +1,8 @@
+<% category_tags.each do |category, available_tags| %>
+  <%= render(partial: "admin/works/category_tag_field", locals: {
+    f:              f,
+    category:       category,
+    available_tags: available_tags,
+    tags:           f.object.tags.alpha.where(category: category)
+  }) %>
+<% end %>

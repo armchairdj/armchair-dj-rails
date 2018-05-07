@@ -9,7 +9,7 @@
 
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :medium_id, as: :select,
-      collection: @media,
+      collection: media,
       input_html: {
         # "data-controller": "selectize",
         "data-target":     "work-dropdowns.medium"
@@ -28,4 +28,9 @@
     creators: creators,
     roles:    roles
   }) if show_contributors %>
+
+  <%= render(partial: "admin/works/category_tags_fields", locals: {
+    f:          f,
+    category_tags: category_tags
+  }) if f.object.persisted? %>
 <% end %>

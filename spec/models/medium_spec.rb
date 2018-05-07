@@ -181,7 +181,7 @@ RSpec.describe Medium, type: :model do
           end
 
           context "saved instance with saved facets" do
-            subject { create(:minimal_medium, :with_facet) }
+            subject { create(:minimal_medium, :with_category) }
 
             it "builds 10 more facets" do
               expect(subject.facets).to have(1).items
@@ -205,6 +205,19 @@ RSpec.describe Medium, type: :model do
   end
 
   context "instance" do
+    describe "#tags_by_category" do
+      subject { medium.tags_by_category }
+
+      let(:medium) do
+        create(:minimal_medium, :with_tags, facets_attributes: {
+          "0" => attributes_for(:facet, category_id: create(:category, name: "Genre").id),
+          "1" => attributes_for(:facet, category_id: create(:category, name: "Mood" ).id)
+        })
+      end
+
+      pending "provides a hash of options for category-specific tag dropdowns"
+    end
+
     pending "#alpha_parts"
   end
 end

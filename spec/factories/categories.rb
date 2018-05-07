@@ -10,6 +10,14 @@ FactoryBot.define do
       name { generate(:category_name) }
     end
 
+    trait :with_tags do
+      after(:create) do |category|
+        3.times { create(:minimal_tag, category_id: category.id) }
+
+        category.reload
+      end
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

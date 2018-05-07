@@ -129,8 +129,8 @@ class Work < ApplicationRecord
 
   def define_tag_methods
     self.categories.each do |category|
-      getter_name = :"#{self.tag_param(category)}_tags"
-      setter_name = :"#{self.tag_param(category)}_tag_ids="
+      getter_name = :"#{tag_param(category)}_tags"
+      setter_name = :"#{tag_param(category)}_tag_ids="
 
       self.class.send :define_method, getter_name do
         self.tags.includes(:category).where(categories: { name: category.name })
