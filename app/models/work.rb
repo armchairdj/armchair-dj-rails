@@ -56,6 +56,11 @@ class Work < ApplicationRecord
 
   belongs_to :medium
 
+  has_many :facets,     through: :medium
+  has_many :categories, through: :facets
+
+  has_and_belongs_to_many :tags
+
   #############################################################################
   # ATTRIBUTES.
   #############################################################################

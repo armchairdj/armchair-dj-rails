@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_05_200949) do
+ActiveRecord::Schema.define(version: 2018_05_07_052055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "contributions", force: :cascade do |t|
     t.bigint "work_id"
@@ -54,6 +60,15 @@ ActiveRecord::Schema.define(version: 2018_05_05_200949) do
     t.index ["alpha"], name: "index_credits_on_alpha"
     t.index ["creator_id"], name: "index_credits_on_creator_id"
     t.index ["work_id"], name: "index_credits_on_work_id"
+  end
+
+  create_table "facets", force: :cascade do |t|
+    t.bigint "medium_id"
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_facets_on_category_id"
+    t.index ["medium_id"], name: "index_facets_on_medium_id"
   end
 
   create_table "identities", force: :cascade do |t|
@@ -107,6 +122,13 @@ ActiveRecord::Schema.define(version: 2018_05_05_200949) do
     t.index ["status"], name: "index_posts_on_status"
   end
 
+  create_table "posts_tags", id: false, force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["post_id", "tag_id"], name: "index_posts_tags_on_post_id_and_tag_id"
+    t.index ["tag_id", "post_id"], name: "index_posts_tags_on_tag_id_and_post_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.bigint "medium_id"
     t.string "name"
@@ -115,6 +137,21 @@ ActiveRecord::Schema.define(version: 2018_05_05_200949) do
     t.datetime "updated_at", null: false
     t.index ["alpha"], name: "index_roles_on_alpha"
     t.index ["medium_id"], name: "index_roles_on_medium_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.bigint "category_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_tags_on_category_id"
+  end
+
+  create_table "tags_works", id: false, force: :cascade do |t|
+    t.bigint "work_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["tag_id", "work_id"], name: "index_tags_works_on_tag_id_and_work_id"
+    t.index ["work_id", "tag_id"], name: "index_tags_works_on_work_id_and_tag_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -175,11 +212,14 @@ ActiveRecord::Schema.define(version: 2018_05_05_200949) do
   add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
+  add_foreign_key "facets", "categories"
+  add_foreign_key "facets", "media"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "roles", "media"
+  add_foreign_key "tags", "categories"
   add_foreign_key "works", "media"
 end

@@ -75,9 +75,12 @@ class Post < ApplicationRecord
 
   belongs_to :author, class_name: "User", foreign_key: :author_id
 
+  has_and_belongs_to_many :tags
+
   belongs_to :work, optional: true
 
   has_many :creators, through: :work
+  has_many :work_tags, through: :work, class_name: "Tag", source: :tags
 
   #############################################################################
   # ATTRIBUTES.

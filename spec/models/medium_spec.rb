@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Medium, type: :model do
   context "constants" do
     it { should have_constant(:MAX_ROLES_AT_ONCE ) }
+    it { should have_constant(:MAX_FACETS_AT_ONCE ) }
   end
 
   context "concerns" do
@@ -111,6 +112,12 @@ RSpec.describe Medium, type: :model do
     it { should have_many(:creators).through(:works) }
 
     it { should have_many(:posts).through(:works) }
+
+    it { should have_many(:facets) }
+
+    it { should have_many(:categories).through(:facets) }
+
+    it { should have_many(:tags).through(:categories) }
   end
 
   context "attributes" do
@@ -146,6 +153,42 @@ RSpec.describe Medium, type: :model do
               subject.prepare_roles
 
               expect(subject.roles).to have(11).items
+            end
+          end
+        end
+      end
+
+      context "for facets" do
+        it { should accept_nested_attributes_for(:facets) }
+
+        pending "accepts"
+
+        pending "rejects"
+
+        pending "allow_destroy"
+
+        describe "#prepare_facets" do
+          context "new instance" do
+            subject { described_class.new }
+
+            it "builds 10 facets" do
+              expect(subject.facets).to have(0).items
+
+              subject.prepare_facets
+
+              expect(subject.facets).to have(10).items
+            end
+          end
+
+          context "saved instance with saved facets" do
+            subject { create(:minimal_medium, :with_facet) }
+
+            it "builds 10 more facets" do
+              expect(subject.facets).to have(1).items
+
+              subject.prepare_facets
+
+              expect(subject.facets).to have(11).items
             end
           end
         end

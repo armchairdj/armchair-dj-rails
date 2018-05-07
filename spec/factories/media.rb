@@ -19,6 +19,12 @@ FactoryBot.define do
       } }
     end
 
+    trait :with_facet do
+      facets_attributes { {
+        "0" => attributes_for(:facet, :with_category)
+      } }
+    end
+
     trait :with_draft_post do
       after(:create) do |medium|
         create(:review, :draft, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
