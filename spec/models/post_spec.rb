@@ -432,13 +432,13 @@ RSpec.describe Post, type: :model do
         end
 
         context "on new" do
-          subject { build(:minimal_post) }
+          subject { build_minimal_instance }
 
           specify { subject.save }
         end
 
         context "on saved" do
-          subject { create(:minimal_post) }
+          subject { create_minimal_instance }
 
           specify { subject.save }
         end

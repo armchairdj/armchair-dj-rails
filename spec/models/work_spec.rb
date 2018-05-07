@@ -227,6 +227,160 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  context "hooks" do
+    context "before_save" do
+      context "calls #define_tag_methods" do
+        before(:each) do
+           allow_any_instance_of(described_class).to receive(:define_tag_methods)
+          expect_any_instance_of(described_class).to receive(:define_tag_methods)
+        end
+
+        specify { build_minimal_instance }
+      end
+    end
+
+    context "#define_tag_methods" do
+      let!( :genre) { create(:minimal_category, name: "Musical Genre") }
+      let!(  :mood) { create(:minimal_category, name: "Musical Mood" ) }
+      let!(:medium) do
+        create(:minimal_medium, facets_attributes: {
+          "0" => { category_id:  genre.id },
+          "1" => { category_id:  mood.id },
+        })
+      end
+
+      subject { create(:minimal_work, medium: medium).reload }
+
+      specify "#tag_params" do
+        expect(subject.tag_params).to eq([:musical_genre_tag_ids=, :musical_mood_tag_ids=])
+      end
+
+      describe "#tag_param" do
+        specify { expect(subject.tag_param(genre)).to eq("musical_genre") }
+        specify { expect(subject.tag_param(mood )).to eq("musical_mood" ) }
+      end
+
+      describe "defines" do
+        context "getters" do
+          it { should respond_to(:musical_genre_tags) }
+          it { should respond_to(:musical_mood_tags ) }
+        end
+
+        context "setters" do
+          it { should respond_to(:musical_genre_tag_ids=) }
+          it { should respond_to(:musical_mood_tag_ids= ) }
+        end
+      end
+
+      context "behavior" do
+        let!( :trip_hop) { create(:tag, category: genre, name: "Trip-Hop" ) }
+        let!(:downtempo) { create(:tag, category: genre, name: "Downtempo") }
+        let!( :sinister) { create(:tag, category: mood,  name: "Sinister" ) }
+        let!(:uplifting) { create(:tag, category: mood,  name: "Uplifting") }
+
+        subject do
+          create(:minimal_work, medium: medium, tag_ids: [trip_hop.id, sinister.id]).reload
+        end
+
+        context "getters" do
+          describe "retrieve scoped tags" do
+            specify { expect(subject.tags).to match_array([sinister, trip_hop]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([trip_hop]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+          end
+        end
+
+        context "setters" do
+          describe "blanks out tags" do
+            before(:each) do
+              subject.musical_genre_tag_ids = []
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([sinister]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+          end
+
+          describe "overwrites tags for one facet" do
+            before(:each) do
+              subject.musical_genre_tag_ids = [downtempo.id]
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([sinister, downtempo]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+          end
+
+          describe "overwrites tags for multiple facets without overwriting all" do
+            before(:each) do
+              subject.musical_genre_tag_ids = [downtempo.id]
+              subject.musical_mood_tag_ids  = [uplifting.id]
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([uplifting, downtempo]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([uplifting]) }
+          end
+
+          describe "adds tags without duplication" do
+            before(:each) do
+              subject.musical_genre_tag_ids = [trip_hop.id, downtempo.id]
+              subject.musical_mood_tag_ids  = [sinister.id, uplifting.id]
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([uplifting, sinister, downtempo, trip_hop]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([uplifting, sinister]) }
+          end
+
+          describe "works via update" do
+            before(:each) do
+              subject.update(
+                "musical_genre_tag_ids" => ["#{trip_hop.id}", "#{downtempo.id}"],
+                "musical_mood_tag_ids" =>  ["#{sinister.id}", "#{uplifting.id}"]
+              )
+
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([uplifting, sinister, downtempo, trip_hop]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([uplifting, sinister]) }
+          end
+
+          describe "gets all messed up if non-scoped setter is used" do
+            before(:each) do
+              subject.tag_ids = [uplifting.id]
+              subject.reload
+            end
+
+            specify { expect(subject.tags).to match_array([uplifting]) }
+
+            specify { expect(subject.musical_genre_tags).to match_array([]) }
+
+            specify { expect(subject.musical_mood_tags).to match_array([uplifting]) }
+          end
+        end
+      end
+    end
+  end
+
   context "instance" do
     describe "#display_title" do
       it "displays with just title" do

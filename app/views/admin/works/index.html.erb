@@ -21,7 +21,8 @@
             <%= content_tag(:th, "Medium") if @scope == :for_admin %>
             <%= content_tag(:th, "Title") %>
             <%= content_tag(:th, "Creators") %>
-            <%= content_tag(:th, post_count_column_header, class: "icon") %>
+            <%= content_tag(:th, post_count_column_header,  class: "icon") %>
+            <%= content_tag(:th, draft_count_column_header, class: "icon") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
@@ -32,7 +33,8 @@
               <%= content_tag(:td, work.medium.name) if @scope == :for_admin %>
               <%= content_tag(:td, work.title) %>
               <%= content_tag(:td, work.display_creators) %>
-              <%= content_tag(:td, work.viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, work.viewable_post_count,     class: "icon") %>
+              <%= content_tag(:td, work.non_viewable_post_count, class: "icon") %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_work_link(work) %>
                 <%= admin_view_link(work) %>

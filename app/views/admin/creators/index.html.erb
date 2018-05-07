@@ -21,8 +21,9 @@
             <%= content_tag(:th, "Name") %>
             <%= content_tag(:th, "Primary") %>
             <%= content_tag(:th, "Individual") %>
-            <%= content_tag(:th, post_count_column_header, class: "icon") %>
-            <%= content_tag(:th, work_count_column_header, class: "icon") %>
+            <%= content_tag(:th, post_count_column_header,         class: "icon") %>
+            <%= content_tag(:th, draft_count_column_header,        class: "icon") %>
+            <%= content_tag(:th, work_count_column_header,         class: "icon") %>
             <%= content_tag(:th, contribution_count_column_header, class: "icon") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
@@ -34,8 +35,9 @@
               <%= content_tag(:td, creator.name) %>
               <%= content_tag(:td, creator.primary?) %>
               <%= content_tag(:td, creator.individual?) %>
-              <%= content_tag(:td, creator.viewable_post_count, class: "icon") %>
-              <%= content_tag(:td, creator.works.viewable.count, class: "icon") %>
+              <%= content_tag(:td, creator.viewable_post_count,              class: "icon") %>
+              <%= content_tag(:td, creator.non_viewable_post_count,          class: "icon") %>
+              <%= content_tag(:td, creator.works.viewable.count,             class: "icon") %>
               <%= content_tag(:td, creator.contributed_works.viewable.count, class: "icon") %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_creator_link(creator) %>

@@ -125,10 +125,42 @@ class Work < ApplicationRecord
   # HOOKS.
   #############################################################################
 
+  after_initialize :define_tag_methods
+
+  def define_tag_methods
+    self.categories.each do |category|
+      getter_name = :"#{self.tag_param(category)}_tags"
+      setter_name = :"#{self.tag_param(category)}_tag_ids="
+
+      self.class.send :define_method, getter_name do
+        self.tags.includes(:category).where(categories: { name: category.name })
+      end
+
+      self.class.send :define_method, setter_name do |*ids|
+        to_remove = self.send(getter_name).map(&:id).delete_if { |id| ids.flatten.include? id }
+        to_keep   = [self.tag_ids, ids].flatten.compact.uniq - to_remove
+
+        self.tag_ids = to_keep.compact
+      end
+    end
+  end
+
+  private :define_tag_methods
+
   #############################################################################
   # INSTANCE.
   #############################################################################
 
+  def tag_params
+    categories.map { |c| :"#{self.tag_param(c)}_tag_ids=" }
+  end
+
+  def tag_param(category)
+    # TODO Deal with special characters
+    category.name.downcase.gsub(/\s+/, "_")
+  end
+
+  # TODO This should take a full option and full_display_title should just call this
   def display_title
     return unless persisted?
 
