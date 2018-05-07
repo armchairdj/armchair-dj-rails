@@ -19,59 +19,312 @@ brian = User.create_with(role: :super_admin, username: "armchairdj", first_name:
 
 ##### MEDIA
 
-song       = FactoryBot.create(:medium, name: "Song"      )
-album      = FactoryBot.create(:medium, name: "Album"     )
-movie      = FactoryBot.create(:medium, name: "Movie"     )
-tv_show    = FactoryBot.create(:medium, name: "TV Show"   )
-book       = FactoryBot.create(:medium, name: "Book"      )
-comic      = FactoryBot.create(:medium, name: "Comic Book")
-game       = FactoryBot.create(:medium, name: "Game"      )
-newspaper  = FactoryBot.create(:medium, name: "Newspaper" )
-magazine   = FactoryBot.create(:medium, name: "Magazine"  )
-artwork    = FactoryBot.create(:medium, name: "Artwork"   )
-software   = FactoryBot.create(:medium, name: "Software"  )
-hardware   = FactoryBot.create(:medium, name: "Hardware"  )
-product    = FactoryBot.create(:medium, name: "Product"   )
-radio_show = FactoryBot.create(:medium, name: "Radio Show")
-podcast    = FactoryBot.create(:medium, name: "Podcast"   )
+song        = FactoryBot.create(:medium, name: "Song"      )
+album       = FactoryBot.create(:medium, name: "Album"     )
+movie       = FactoryBot.create(:medium, name: "Movie"     )
+tv_show     = FactoryBot.create(:medium, name: "TV Show"   )
+book        = FactoryBot.create(:medium, name: "Book"      )
+comic       = FactoryBot.create(:medium, name: "Comic Book")
+game        = FactoryBot.create(:medium, name: "Game"      )
+publication = FactoryBot.create(:medium, name: "Publication" )
+artwork     = FactoryBot.create(:medium, name: "Artwork"   )
+software    = FactoryBot.create(:medium, name: "Software"  )
+hardware    = FactoryBot.create(:medium, name: "Hardware"  )
+product     = FactoryBot.create(:medium, name: "Product"   )
+radio_show  = FactoryBot.create(:medium, name: "Radio Show")
+podcast     = FactoryBot.create(:medium, name: "Podcast"   )
 
-##### GENRES
+##### CATEGORIES & TAGS
 
-# song_trip_hop   = FactoryBot.create(:genre, medium: song,     name: "Trip-Hop" )
-# song_techno     = FactoryBot.create(:genre, medium: song,     name: "Techno"   )
-# song_jungle     = FactoryBot.create(:genre, medium: song,     name: "Jungle"   )
-# song_dream_pop  = FactoryBot.create(:genre, medium: song,     name: "Dream Pop")
-# song_heavy      = FactoryBot.create(:genre, medium: song,     name: "Heavy"    )
-#
-# album_trip_hop  = FactoryBot.create(:genre, medium: album,   name: "Trip-Hop" )
-# album_techno    = FactoryBot.create(:genre, medium: album,   name: "Techno"   )
-# album_jungle    = FactoryBot.create(:genre, medium: album,   name: "Jungle"   )
-# album_dream_pop = FactoryBot.create(:genre, medium: album,   name: "Dream Pop")
-# album_heavy     = FactoryBot.create(:genre, medium: album,   name: "Heavy"    )
-#
-# movie_comedy    = FactoryBot.create(:genre, medium: movie,   name: "Comedy"   )
-# movie_drama     = FactoryBot.create(:genre, medium: movie,   name: "Drama"    )
-# movie_horror    = FactoryBot.create(:genre, medium: movie,   name: "Horror"   )
-# movie_action    = FactoryBot.create(:genre, medium: movie,   name: "Action"   )
-# movie_sci_fi    = FactoryBot.create(:genre, medium: movie,   name: "Sci-Fi"   )
-#
-# tv_show_comedy  = FactoryBot.create(:genre, medium: tv_show, name: "Comedy"   )
-# tv_show_drama   = FactoryBot.create(:genre, medium: tv_show, name: "Drama"    )
-# tv_show_horror  = FactoryBot.create(:genre, medium: tv_show, name: "Horror"   )
-# tv_show_action  = FactoryBot.create(:genre, medium: tv_show, name: "Action"   )
-# tv_show_sci_fi  = FactoryBot.create(:genre, medium: tv_show, name: "Sci-Fi"   )
-#
-# book_sci_fi     = FactoryBot.create(:genre, medium: book,    name: "Sci-Fi"   )
-# book_fantasy    = FactoryBot.create(:genre, medium: book,    name: "Fantasy"  )
-# book_memoir     = FactoryBot.create(:genre, medium: book,    name: "Memoir"   )
-#
-# comic_indie     = FactoryBot.create(:genre, medium: comic,   name: "Indie"    )
-# comic_horror    = FactoryBot.create(:genre, medium: comic,   name: "Horror"   )
-# comic_superhero = FactoryBot.create(:genre, medium: comic,   name: "Superhero")
-#
-# game_horror     = FactoryBot.create(:genre, medium: game,    name: "Horror"   )
-# game_adventure  = FactoryBot.create(:genre, medium: game,    name: "Adventure")
-# game_sports     = FactoryBot.create(:genre, medium: game,    name: "Sports"   )
+album_type         = FactoryBot.create(:category, name: "Song Type")
+album_types        = [
+                       FactoryBot.create(:tag, category: album_type, name: "LP"),
+                       FactoryBot.create(:tag, category: album_type, name: "EP"),
+                       FactoryBot.create(:tag, category: album_type, name: "Single"),
+                       FactoryBot.create(:tag, category: album_type, name: "Boxed Set"),
+                       FactoryBot.create(:tag, category: album_type, name: "Download"),
+                     ]
+
+art_medium         = FactoryBot.create(:category, name: "Artistic Medium")
+art_media          = [
+                       FactoryBot.create(:tag, category: art_medium, name: "Painting"),
+                       FactoryBot.create(:tag, category: art_medium, name: "Sculpture"),
+                       FactoryBot.create(:tag, category: art_medium, name: "Photographer"),
+                       FactoryBot.create(:tag, category: art_medium, name: "Mixed Media"),
+                     ]
+
+art_movement       = FactoryBot.create(:category, name: "Artistic Movement")
+art_movements      = [
+                       FactoryBot.create(:tag, category: art_movement, name: "Pop Art"),
+                       FactoryBot.create(:tag, category: art_movement, name: "Postmodernism"),
+                       FactoryBot.create(:tag, category: art_movement, name: "Modernism"),
+                     ]
+
+audio_show_format  = FactoryBot.create(:category, name: "Audio Show Format")
+audio_show_formats = [
+                       FactoryBot.create(:tag, category: audio_show_format, name: "Interview"),
+                       FactoryBot.create(:tag, category: audio_show_format, name: "Discussion"),
+                       FactoryBot.create(:tag, category: audio_show_format, name: "Narrative"),
+                       FactoryBot.create(:tag, category: audio_show_format, name: "Documentary"),
+                     ]
+
+device_type        = FactoryBot.create(:category, name: "Device Type")
+device_types       = [
+                       FactoryBot.create(:tag, category: device_type, name: "Phone"),
+                       FactoryBot.create(:tag, category: device_type, name: "Computer"),
+                       FactoryBot.create(:tag, category: device_type, name: "Accessory"),
+                       FactoryBot.create(:tag, category: device_type, name: "Router"),
+                     ]
+
+game_mechanic      = FactoryBot.create(:category, name: "Game Mechanic")
+game_mechanics     = [
+                       FactoryBot.create(:tag, category: game_mechanic, name: "First-Person Shooter"),
+                       FactoryBot.create(:tag, category: game_mechanic, name: "Couch Co-Op"),
+                       FactoryBot.create(:tag, category: game_mechanic, name: "MMORPG"),
+                     ]
+
+game_studio        = FactoryBot.create(:category, name: "Game Studio")
+game_studios       = [
+                       FactoryBot.create(:tag, category: game_studio, name: "Capcom"),
+                       FactoryBot.create(:tag, category: game_studio, name: "Blizzard"),
+                     ]
+
+hollywood_studio   = FactoryBot.create(:category, name: "Hollywood Studio")
+hollywood_studios  = [
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Netflix"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Amazon"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Hulu"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Disney"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Fox"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Sony"),
+                       FactoryBot.create(:tag, category: hollywood_studio, name: "Universal"),
+                     ]
+
+manufacturer       = FactoryBot.create(:category, name: "Manufacturer")
+manufacturers      = [
+                       FactoryBot.create(:tag, category: manufacturer, name: "Unilever"),
+                       FactoryBot.create(:tag, category: manufacturer, name: "Proctor & Gamble"),
+                       FactoryBot.create(:tag, category: manufacturer, name: "Amazon Basics"),
+                       FactoryBot.create(:tag, category: manufacturer, name: "Tom Bihn"),
+                       FactoryBot.create(:tag, category: manufacturer, name: "The North Face"),
+                     ]
+
+music_label        = FactoryBot.create(:category, name: "Music Label")
+music_labels       = [
+                       FactoryBot.create(:tag, category: music_label, name: "Warp"),
+                       FactoryBot.create(:tag, category: music_label, name: "Soul Jazz"),
+                       FactoryBot.create(:tag, category: music_label, name: "Plus 8"),
+                       FactoryBot.create(:tag, category: music_label, name: "Planet E"),
+                       FactoryBot.create(:tag, category: music_label, name: "Hyperdub"),
+                       FactoryBot.create(:tag, category: music_label, name: "Island"),
+                     ]
+
+musical_genre      = FactoryBot.create(:category, name: "Musical Genre")
+musical_genres     = [
+                       FactoryBot.create(:tag, category: musical_genre, name: "AOR"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Ambient"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Chamber Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Classic Rock"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Classical"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Dance-Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Disco"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Doom Metal"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Dream Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Drum-n-Bass"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Dub"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Easy Listening"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Electro"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Film & TV"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Hardcore"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Hip-Hop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "House"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "IDM"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Indie-Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Jazz"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Jungle"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Krautrock"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "MOR"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Musical"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Original Score"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Original Soundtrack"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "R&B"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Rap"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Reggae"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Rock"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Rock-'n'-Roll"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Soul"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Spoken Word"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Synth-Pop"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Synthwave"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Techno"),
+                       FactoryBot.create(:tag, category: musical_genre, name: "Vocals"),
+                     ]
+
+narrative_genre    = FactoryBot.create(:category, name: "Narrative Genre")
+narrative_genres   = [
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Action"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Adventure"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Horror"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Sci-Fi"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Fantasy"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Comedy"),
+                       FactoryBot.create(:tag, category: narrative_genre, name: "Drama"),
+                     ]
+
+podcast_network    = FactoryBot.create(:category, name: "Podcast Network")
+podcast_networks   = [
+                       FactoryBot.create(:tag, category: podcast_network, name: "Maximum Fun"),
+                       FactoryBot.create(:tag, category: podcast_network, name: "Planet Broadcasting"),
+                       FactoryBot.create(:tag, category: podcast_network, name: "Relay.fm"),
+                       FactoryBot.create(:tag, category: podcast_network, name: "5by5"),
+                     ]
+
+product_type       = FactoryBot.create(:category, name: "Product Type")
+product_types      = [
+                       FactoryBot.create(:tag, category: product_type, name: "Clothing"),
+                       FactoryBot.create(:tag, category: product_type, name: "Moisturizer"),
+                       FactoryBot.create(:tag, category: product_type, name: "Body Wash"),
+                     ]
+
+publication_type   = FactoryBot.create(:category, name: "Publication Type")
+publication_types  = [
+                       FactoryBot.create(:tag, category: publication_type, name: "Magazine"),
+                       FactoryBot.create(:tag, category: publication_type, name: "Newspaper"),
+                       FactoryBot.create(:tag, category: publication_type, name: "Website"),
+                     ]
+
+publisher          = FactoryBot.create(:category, name: "Publisher")
+publishers         = [
+                       FactoryBot.create(:tag, category: publisher, name: "Conde Nast"),
+                       FactoryBot.create(:tag, category: publisher, name: "Vox Media"),
+                       FactoryBot.create(:tag, category: publisher, name: "Marvel Comics"),
+                       FactoryBot.create(:tag, category: publisher, name: "DC Comics"),
+                       FactoryBot.create(:tag, category: publisher, name: "Vertigo"),
+                     ]
+
+radio_network      = FactoryBot.create(:category, name: "TV Network")
+radio_networks     = [
+                       FactoryBot.create(:tag, category: radio_network, name: "NPR"),
+                       FactoryBot.create(:tag, category: radio_network, name: "PRI"),
+                       FactoryBot.create(:tag, category: radio_network, name: "Sirius XM"),
+                     ]
+
+song_type          = FactoryBot.create(:category, name: "Song Type")
+song_types         = [
+                       FactoryBot.create(:tag, category: song_type, name: "Studio"),
+                       FactoryBot.create(:tag, category: song_type, name: "Remix"),
+                       FactoryBot.create(:tag, category: song_type, name: "Live"),
+                     ]
+
+tech_platform       = FactoryBot.create(:category, name: "Technology Platform")
+tech_platforms      = [
+                        FactoryBot.create(:tag, category: tech_platform, name: "iOS"),
+                        FactoryBot.create(:tag, category: tech_platform, name: "macOS"),
+                        FactoryBot.create(:tag, category: tech_platform, name: "PS4"),
+                        FactoryBot.create(:tag, category: tech_platform, name: "Web"),
+                      ]
+
+tv_network         = FactoryBot.create(:category, name: "TV Network")
+tv_networks        = [
+                       FactoryBot.create(:tag, category: tv_network, name: "Fox"),
+                       FactoryBot.create(:tag, category: tv_network, name: "ABC"),
+                       FactoryBot.create(:tag, category: tv_network, name: "NBC"),
+                       FactoryBot.create(:tag, category: tv_network, name: "CBS"),
+                       FactoryBot.create(:tag, category: tv_network, name: "AMC"),
+                       FactoryBot.create(:tag, category: tv_network, name: "Netflix"),
+                       FactoryBot.create(:tag, category: tv_network, name: "Hulu"),
+                       FactoryBot.create(:tag, category: tv_network, name: "Amazon"),
+                     ]
+
+tech_company       = FactoryBot.create(:category, name: "Tech Company")
+tech_companies     = [
+                       FactoryBot.create(:tag, category: tech_company, name: "Rogue Amoeba"),
+                       FactoryBot.create(:tag, category: tech_company, name: "Many Tricks"),
+                       FactoryBot.create(:tag, category: tech_company, name: "Apple"),
+                       FactoryBot.create(:tag, category: tech_company, name: "Google"),
+                       FactoryBot.create(:tag, category: tech_company, name: "Facebook"),
+                       FactoryBot.create(:tag, category: tech_company, name: "Amazon"),
+                     ]
+
+##### FACETS
+
+song_facets = [
+  FactoryBot.create(:facet, medium: song, category: musical_genre),
+  FactoryBot.create(:facet, medium: song, category: music_label),
+  FactoryBot.create(:facet, medium: song, category: song_type),
+]
+
+album_facets = [
+  FactoryBot.create(:facet, medium: album, category: musical_genre),
+  FactoryBot.create(:facet, medium: album, category: music_label),
+  FactoryBot.create(:facet, medium: album, category: album_type),
+]
+
+movie_facets = [
+  FactoryBot.create(:facet, medium: movie, category: narrative_genre),
+  FactoryBot.create(:facet, medium: movie, category: hollywood_studio),
+]
+
+tv_show_facets = [
+  FactoryBot.create(:facet, medium: tv_show, category: narrative_genre),
+  FactoryBot.create(:facet, medium: tv_show, category: hollywood_studio),
+  FactoryBot.create(:facet, medium: tv_show, category: tv_network),
+]
+
+radio_show_facets = [
+  FactoryBot.create(:facet, medium: radio_show, category: narrative_genre),
+  FactoryBot.create(:facet, medium: radio_show, category: audio_show_format),
+  FactoryBot.create(:facet, medium: radio_show, category: radio_network),
+]
+
+podcast_facets = [
+  FactoryBot.create(:facet, medium: podcast, category: narrative_genre),
+  FactoryBot.create(:facet, medium: podcast, category: audio_show_format),
+  FactoryBot.create(:facet, medium: podcast, category: podcast_network),
+]
+
+book_facets = [
+  FactoryBot.create(:facet, medium: book, category: narrative_genre),
+  FactoryBot.create(:facet, medium: book, category: publisher),
+]
+
+comic_facets = [
+  FactoryBot.create(:facet, medium: comic, category: narrative_genre),
+  FactoryBot.create(:facet, medium: comic, category: publisher),
+]
+
+game_facets = [
+  FactoryBot.create(:facet, medium: game, category: game_studio),
+  FactoryBot.create(:facet, medium: game, category: game_mechanic),
+  FactoryBot.create(:facet, medium: game, category: tech_platform),
+]
+
+publication_facets = [
+  FactoryBot.create(:facet, medium: publication, category: publisher),
+  FactoryBot.create(:facet, medium: publication, category: publication_type),
+]
+
+artwork_facets = [
+  FactoryBot.create(:facet, medium: artwork, category: art_medium),
+  FactoryBot.create(:facet, medium: artwork, category: art_movement),
+]
+
+hardware_facets = [
+  FactoryBot.create(:facet, medium: hardware, category: device_type),
+  FactoryBot.create(:facet, medium: hardware, category: tech_platform),
+  FactoryBot.create(:facet, medium: hardware, category: tech_company),
+]
+
+software_facets = [
+  FactoryBot.create(:facet, medium: software, category: tech_platform),
+  FactoryBot.create(:facet, medium: software, category: tech_company),
+]
+
+product_facets = [
+  FactoryBot.create(:facet, medium: product, category: manufacturer),
+  FactoryBot.create(:facet, medium: product, category: product_type),
+]
 
 ##### ROLES
 
@@ -117,7 +370,7 @@ tv_show_producer           = FactoryBot.create(:role, medium: tv_show, name: "Pr
 tv_show_executive_producer = FactoryBot.create(:role, medium: tv_show, name: "Executive Producer")
 tv_show_co_producer        = FactoryBot.create(:role, medium: tv_show, name: "Co-Producer")
 tv_show_cinematographer    = FactoryBot.create(:role, medium: tv_show, name: "Cinematographer")
-tv_show_showrunner         = FactoryBot.create(:role, medium: tv_show, name: "xxx")
+tv_show_showrunner         = FactoryBot.create(:role, medium: tv_show, name: "Showrunner")
 
 book_author                = FactoryBot.create(:role, medium: book, name: "Author")
 book_illustrator           = FactoryBot.create(:role, medium: book, name: "Illustrator")
@@ -128,9 +381,6 @@ comic_penciller            = FactoryBot.create(:role, medium: comic, name: "Penc
 comic_inker                = FactoryBot.create(:role, medium: comic, name: "Inker")
 comic_colorist             = FactoryBot.create(:role, medium: comic, name: "Colorist")
 comic_letterer             = FactoryBot.create(:role, medium: comic, name: "Letterer")
-
-game_platform              = FactoryBot.create(:role, medium: game, name: "Game Platform")
-game_studio                = FactoryBot.create(:role, medium: game, name: "Game Studio")
 
 ##### CREATORS, IDENTITIES & MEMBERSHIPS
 
