@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Post, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 

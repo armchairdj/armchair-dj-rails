@@ -658,10 +658,6 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  context "hooks" do
-    # Nothing so far
-  end
-
   context "instance" do
     context "identities" do
       describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do

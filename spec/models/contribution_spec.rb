@@ -15,22 +15,6 @@ RSpec.describe Contribution, type: :model do
     # end
   end
 
-  context "class" do
-    # Nothing so far.
-  end
-
-  context "scope-related" do
-    # Nothing so far.
-  end
-
-  context "associations" do
-    # Nothing so far.
-  end
-
-  context "attributes" do
-    # Nothing so far.
-  end
-
   context "validations" do
     subject { create_minimal_instance }
 

@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -107,10 +103,6 @@ RSpec.describe User, type: :model do
   end
 
   context "attributes" do
-    context "nested" do
-      # Nothing so far.
-    end
-
     context "enums" do
       describe "role" do
         it { should define_enum_for(:role) }
@@ -162,10 +154,6 @@ RSpec.describe User, type: :model do
         it { should_not validate_absence_of(:bio) }
       end
     end
-  end
-
-  context "hooks" do
-    # Nothing so far.
   end
 
   context "instance" do
