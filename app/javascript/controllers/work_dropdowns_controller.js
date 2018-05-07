@@ -30,23 +30,19 @@ export default class extends Controller {
     $hide.addClass("disabled");
 
     this.roleTargets.forEach(function (select, index) {
-      const $select  = $(select);
-      const $option  = $select.find(":selected")
-      const current  = $select.val();
-      const hidden   = $option.parents("optgroup.disabled")[0];
-      const $restore = $select.find("optgroup:not(.disabled) option[data-previous-val]")
-      const previous = $restore.attr("data-previous-val");
+      const $select   = $(select);
+      const $optgroup = $select.find(":selected").parent("optgroup");
+      const current   = $select.val();
+      const hidden    = $optgroup.hasClass("disabled");
+      const $restore  = $select.find("optgroup[data-previous-val]:not(.disabled)")
+      const previous  = $restore.attr("data-previous-val");
 
-      if (hidden) {
-        if (current) {
-          $select.val("");
-          $option.attr("data-previous-val", current);
-        }
-      } else {
-        if (previous) {
-          $select.val(previous);
-          $option.removeAttr("data-previous-val");
-        }
+      if (hidden && typeof current !== "undefined") {
+        $select.val("");
+        $optgroup.attr("data-previous-val", current);
+      } else if (!hidden && typeof previous !== "undefined") {
+        $select.val(previous);
+        $restore.removeAttr("data-previous-val");
       }
     });
   }

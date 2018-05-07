@@ -37,7 +37,7 @@ class Contribution < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :role, presence: true
+  validates :role_id, presence: true
 
   validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
 
