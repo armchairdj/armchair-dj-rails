@@ -251,8 +251,11 @@ RSpec.describe Work, type: :model do
 
       subject { create(:minimal_work, medium: medium).reload }
 
-      specify "#tag_params" do
-        expect(subject.tag_params).to eq([:musical_genre_tag_ids=, :musical_mood_tag_ids=])
+      specify "#permitted_tag_params" do
+        expect(subject.permitted_tag_params).to eq([
+          { :musical_genre_tag_ids => [] },
+          { :musical_mood_tag_ids  => [] }
+        ])
       end
 
       describe "#tag_param" do

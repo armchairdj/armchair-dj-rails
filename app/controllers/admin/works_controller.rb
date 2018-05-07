@@ -107,7 +107,8 @@ private
   end
 
   def build_new_instance
-    @work = Work.new(instance_params)
+    @work = Work.new
+    @work.attributes = instance_params
   end
 
   def find_instance
@@ -128,7 +129,7 @@ private
   end
 
   def instance_params
-    params.fetch(:work, {}).permit(
+    permitted = @work.permitted_tag_params + [
       :medium_id,
       :title,
       :subtitle,
@@ -146,6 +147,8 @@ private
         :creator_id,
         :role_id,
       ]
-    )
+    ]
+
+    params.fetch(:work, {}).permit(permitted)
   end
 end

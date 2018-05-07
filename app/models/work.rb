@@ -151,8 +151,8 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def tag_params
-    categories.map { |c| :"#{self.tag_param(c)}_tag_ids=" }
+  def permitted_tag_params
+    categories.map { |c| { :"#{self.tag_param(c)}_tag_ids" => [] } }
   end
 
   def tag_param(category)
