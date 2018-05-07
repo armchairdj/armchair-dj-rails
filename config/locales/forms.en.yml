@@ -11,6 +11,7 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
+        _destroy: "Remove this association"
       contribution:
       creator:
       credit:

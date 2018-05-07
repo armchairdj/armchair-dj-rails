@@ -58,6 +58,10 @@
   roles: @medium.roles.alpha
 } %>
 
+<%= render partial: "admin/shared/facets", locals: {
+  facets: @medium.facets
+} %>
+
 <%= render partial: "admin/shared/works", locals: {
   works: @medium.works.for_admin.alpha
 } %>

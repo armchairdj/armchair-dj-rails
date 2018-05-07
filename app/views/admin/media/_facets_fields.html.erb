@@ -1,0 +1,18 @@
+<%
+  records = f.object.facets
+  error   = f.error(:facets)
+  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+%>
+
+<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Facets") %>
+
+    <%= content_tag(:div, error, class: "legend-hint") if error %>
+
+    <%= render partial: "admin/media/facet_field", collection: records, as: :facet, locals: {
+      f:          f,
+      categories: categories
+    } %>
+  <% end %>
+<% end %>

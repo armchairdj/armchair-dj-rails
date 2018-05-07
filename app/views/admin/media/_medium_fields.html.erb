@@ -6,4 +6,11 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/media/roles_fields", locals: { f: f } %>
+<%= render partial: "admin/media/facets_fields", locals: {
+  f:          f,
+  categories: categories
+} %>
+
+<%= render partial: "admin/media/roles_fields", locals: {
+  f: f
+} %>

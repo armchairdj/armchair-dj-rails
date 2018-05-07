@@ -65,7 +65,8 @@ RSpec.describe Admin::MediaController, type: :controller do
         get :new
 
         should successfully_render("admin/media/new")
-        expect(assigns(:medium)).to be_a_new(Medium)
+
+        expect(assigns(:medium)).to be_a_populated_new_medium
       end
     end
 

@@ -65,6 +65,8 @@ FactoryBot.define do
 
     factory :complete_medium, parent: :minimal_medium do
       with_summary
+      with_facet
+      with_role
     end
 
     factory :album_medium do

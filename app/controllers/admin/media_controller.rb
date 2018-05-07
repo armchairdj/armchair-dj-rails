@@ -121,11 +121,20 @@ private
         :_destroy,
         :medium_id,
         :name
+      ],
+      :facets_attributes => [
+        :id,
+        :_destroy,
+        :medium_id,
+        :category_id
       ]
     )
   end
 
   def prepare_form
     @medium.prepare_roles
+    @medium.prepare_facets
+
+    @categories = Category.for_admin.alpha
   end
 end

@@ -2,7 +2,6 @@ en:
   activerecord:
     attributes:
       contribution:
-        _destroy: "Remove this contributor"
       creator:
       creator/primary:
         'true':  "This is a primary creator. It can have pseudonyms."
@@ -11,12 +10,9 @@ en:
         'true': "This is an individual creator. It can belong to a group."
         'false':  "This is a group creator. It can have members."
       credit:
-        _destroy: "Remove this creator"
       identity:
-        _destroy: "Remove this pseudonym"
         pseudynym_id: "Pseudonym"
       membership:
-        _destroy: "Remove this member"
         pseudynym_id: "Pseudonym"
       post:
         published_at: "Publish Date"

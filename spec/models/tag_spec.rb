@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Tag, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an_alphabetizable_model"
+
+    it_behaves_like "an_application_record"
+
+    it_behaves_like "an_atomically_validatable_model", { name: nil } do
+      subject { create(:minimal_tag) }
+    end
   end
 
   context "class" do
@@ -14,7 +16,11 @@ RSpec.describe Tag, type: :model do
   end
 
   context "scope-related" do
-    # Nothing so far.
+    context "basics" do
+      pending "self#eager"
+      pending "self#for_admin"
+      pending "self#for_site"
+    end
   end
 
   context "associations" do
@@ -25,45 +31,15 @@ RSpec.describe Tag, type: :model do
     it { should have_and_belong_to_many(:posts) }
   end
 
-  context "attributes" do
-    context "nested" do
-      # Nothing so far.
-    end
-
-    context "enums" do
-      # Nothing so far.
-    end
-  end
-
   context "validations" do
     subject { create_minimal_instance }
 
     it { should validate_presence_of(:name) }
 
     it { should_not validate_presence_of(:category_id) }
-
-    context "conditional" do
-      # Nothing so far.
-    end
-
-    context "custom" do
-      # Nothing so far.
-    end
-  end
-
-  context "hooks" do
-    # Nothing so far.
-
-    context "callbacks" do
-      # Nothing so far.
-    end
   end
 
   context "instance" do
-    # Nothing so far.
-
-    describe "private" do
-      # Nothing so far.
-    end
+    pending "#alpha_parts"
   end
 end

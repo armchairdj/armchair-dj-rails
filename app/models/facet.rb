@@ -16,6 +16,11 @@ class Facet < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :sorted,    -> { joins(:category, :medium).order("media.name, categories.name") }
+  scope :eager,     -> { includes(:medium, :category) }
+  scope :for_admin, -> { eager.sorted }
+  scope :for_site,  -> { eager.sorted }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################

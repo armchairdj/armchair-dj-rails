@@ -1,14 +1,14 @@
-<%= f.simple_fields_for :credits, credit do |ff| %>
+<%= f.simple_fields_for :facets, facet do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested") do %>
-    <%= ff.input :creator_id,
+    <%= ff.input :category_id,
       as:            :select,
       label:         false,
-      collection:    creators,
+      collection:    categories,
       required:      false,
       include_blank: :translate,
       input_html:    {
-        "data-controller":         "create-creator",
-        "data-create-creator-url": admin_creators_path
+      #   "data-controller":         "create-category",
+      #   "data-create-creator-url": admin_categories_path
       }
     %>
 
