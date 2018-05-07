@@ -123,8 +123,8 @@ private
     @work.prepare_contributions
 
     @creators = Creator.all.alpha
+    @media    = Medium.select_options
     @roles    = Role.grouped_options
-    @media    = Medium.all.alpha
   end
 
   def instance_params

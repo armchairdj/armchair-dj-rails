@@ -4,39 +4,50 @@ export default class extends Controller {
   static targets = [ "medium", "role" ];
 
   connect() {
-    this.setup();
-
-    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
-  }
-
-  setup() {
-    this.originalRoleMarkup = $(this.roleTargets)[0].outerHTML;
-
     $(this.mediumTargets).on("change", _.bind(this.handleMediumChange, this));
+
+    this.hideInvalid();
   }
 
   handleMediumChange(evt) {
-    this.rememberValues();
-
-    $(this.roleTargets).replaceWith(this.originalRoleMarkup);
-
-    const grouping   = $(this.mediumTargets).find(":selected").data().workGrouping;
-    const $options   = $(this.roleTargets).find("option[data-work-grouping]");
-    const $removable = $options.filter(`option:not([data-work-grouping="${grouping}"])`);
-    const $parents   = $removable.parent("optgroup");
-
-    $parents.remove();
-
-    this.restoreValues()
+    this.hideInvalid();
   }
 
-  rememberValues() {
-    this.vals = this.roleTargets.map(t => $(t).val());
-  }
+  hideInvalid() {
+    const grouping   = $(this.mediumTargets).find(":selected").data().grouping;
+    const $options   = $(this.roleTargets).find("option[data-grouping]");
+    const $optgroups = $options.parent("optgroup");
+    const $invalid   = $options.filter(`option:not([data-grouping="${grouping}"])`);
+    const $hide      = $invalid.parent("optgroup");
 
-  restoreValues() {
-    this.vals.forEach((v, i) => $(this.roleTargets[i]).val(v));
-  }
+    if (grouping === this.previousGrouping) {
+      return;
+    }
 
-  teardown(evt) {}
+    this.previousGrouping = grouping;
+
+    $optgroups.removeClass("disabled");
+    $hide.addClass("disabled");
+
+    this.roleTargets.forEach(function (select, index) {
+      const $select  = $(select);
+      const $option  = $select.find(":selected")
+      const current  = $select.val();
+      const hidden   = $option.parents("optgroup.disabled")[0];
+      const $restore = $select.find("optgroup:not(.disabled) option[data-previous-val]")
+      const previous = $restore.attr("data-previous-val");
+
+      if (hidden) {
+        if (current) {
+          $select.val("");
+          $option.attr("data-previous-val", current);
+        }
+      } else {
+        if (previous) {
+          $select.val(previous);
+          $option.removeAttr("data-previous-val");
+        }
+      }
+    });
+  }
 }

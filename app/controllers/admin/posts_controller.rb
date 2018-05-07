@@ -192,7 +192,7 @@ private
 
     @creators = Creator.all.alpha
     @roles    = Role.grouped_options
-    @media    = Medium.all.alpha
+    @media    = Medium.select_options
     @works    = Work.grouped_options
   end
 

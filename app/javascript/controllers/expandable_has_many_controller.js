@@ -39,8 +39,6 @@ export default class extends Controller {
   }
 
   ensureLink() {
-    console.log(this.$inner);
-
     this.$link = this.$node.find("[data-expand-link]");
 
     if (!this.$link[0]) {

@@ -8,7 +8,40 @@ RSpec.describe Role, type: :model do
   end
 
   context "class" do
-    pending "grouped_options"
+    describe "self#grouped_options" do
+      subject { described_class.grouped_options }
+
+      let!(:z_medium) { create(:minimal_medium, name: "Z") }
+      let!(:a_medium) { create(:minimal_medium, name: "A") }
+
+      let!(:z_roles) { [] }
+      let!(:a_roles) { [] }
+
+      before(:each) do
+        3.times do |i|
+          z_roles << create(:minimal_role, medium: z_medium, name: "Z Role #{3 - i}")
+          a_roles << create(:minimal_role, medium: a_medium, name: "A Role #{3 - i}")
+        end
+      end
+
+      it "prepares alpha options for view, adding data-attributes for JS" do
+        expected = [
+          [ "A", [
+            [ "A Role 1", a_roles[2].id, { :"data-grouping" => a_medium.id } ],
+            [ "A Role 2", a_roles[1].id, { :"data-grouping" => a_medium.id } ],
+            [ "A Role 3", a_roles[0].id, { :"data-grouping" => a_medium.id } ]
+          ]],
+
+          [ "Z", [
+            [ "Z Role 1", z_roles[2].id, { :"data-grouping" => z_medium.id } ],
+            [ "Z Role 2", z_roles[1].id, { :"data-grouping" => z_medium.id } ],
+            [ "Z Role 3", z_roles[0].id, { :"data-grouping" => z_medium.id } ]
+          ]],
+        ]
+
+        should eq expected
+      end
+    end
   end
 
   context "scope-related" do

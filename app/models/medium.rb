@@ -26,6 +26,14 @@ class Medium < ApplicationRecord
     }
   end
 
+  def self.select_options
+    self.all.alpha.to_a.each.inject([]) do |memo, (medium)|
+      memo << [medium.name, medium.id, { "data-grouping": medium.id }]
+
+      memo
+    end
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################

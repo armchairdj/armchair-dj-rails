@@ -4,6 +4,10 @@ select {
   cursor: pointer;
 }
 
+optgroup.disabled {
+  display: none;
+}
+
 /* Relatively modern browsers including IE 8+ */
 
 @media screen and (min-width: 0) {

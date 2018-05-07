@@ -14,14 +14,14 @@ class Role < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.admin_scopes
-    {
-      "All" => :for_admin
-    }
-  end
-
   def self.grouped_options
-    joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+    optgroups = joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+
+    optgroups.each.inject([]) do |memo, (og, opts)|
+      memo << [og, opts.map { |opt| [ opt.name, opt.id, { "data-grouping": opt.medium.id } ] }]
+
+      memo
+    end
   end
 
   #############################################################################
