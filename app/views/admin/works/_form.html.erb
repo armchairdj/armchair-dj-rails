@@ -2,11 +2,11 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/works/work_fields", locals: {
-      f:          f,
-      media:      media,
-      roles:      roles,
-      creators:   creators,
+    <%= render partial: "admin/works/form_fields", locals: {
+      f:             f,
+      media:         media,
+      roles:         roles,
+      creators:      creators,
       category_tags: category_tags
     } %>
   <% end %>

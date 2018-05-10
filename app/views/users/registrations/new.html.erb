@@ -10,7 +10,7 @@
       <%= f.error_notification %>
 
       <%= content_tag(:div, class: "form-inputs") do %>
-        <%= render partial: "users/registrations/user_fields", locals: {
+        <%= render partial: "admin/users/form_fields", locals: {
           f:             f,
           show_bio:      false,
           show_password: true,

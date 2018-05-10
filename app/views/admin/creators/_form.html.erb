@@ -2,7 +2,7 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/creators/creator_fields", locals: {
+    <%= render partial: "admin/creators/form_fields", locals: {
       f:                    f,
       available_pseudonyms: available_pseudonyms,
       available_real_names: available_real_names,

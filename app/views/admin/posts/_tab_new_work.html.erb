@@ -12,7 +12,7 @@
       <%= content_tag(:legend, "New Work", "data-target": "tabgroup.remove") %>
 
       <%= f.simple_fields_for :work do |ff| %>
-        <%= render partial: "admin/works/work_fields", locals: {
+        <%= render partial: "admin/works/form_fields", locals: {
           f:                 ff,
           show_contributors: false,
           show_summary:      false,

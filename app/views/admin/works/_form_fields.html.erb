@@ -30,7 +30,7 @@
   }) if show_contributors %>
 
   <%= render(partial: "admin/works/category_tags_fields", locals: {
-    f:          f,
+    f:             f,
     category_tags: category_tags
   }) if f.object.persisted? %>
 <% end %>

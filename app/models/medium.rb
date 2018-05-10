@@ -94,7 +94,11 @@ class Medium < ApplicationRecord
   #############################################################################
 
   def tags_by_category
-    tags.alpha.includes(:category).group_by{ |t| t.category }.to_a
+    available = tags.alpha.includes(:category)
+
+    return [] if available.empty?
+
+    available.group_by{ |t| t.category }.to_a
   end
 
   def alpha_parts

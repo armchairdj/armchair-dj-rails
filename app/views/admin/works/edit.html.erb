@@ -13,10 +13,10 @@
   public_link: admin_public_work_link(@work)
 } %>
 
-<%= render partial: "work_form", locals: {
-  work:       @work,
-  media:      @media,
-  roles:      @roles,
-  creators:   @creators,
+<%= render partial: "form", locals: {
+  work:          @work,
+  media:         @media,
+  roles:         @roles,
+  creators:      @creators,
   category_tags: @category_tags,
 } %>
