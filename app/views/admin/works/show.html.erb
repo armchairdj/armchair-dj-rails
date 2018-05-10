@@ -25,7 +25,7 @@
         <%= content_tag(:th, "Creators") %>
         <%= content_tag(:td) do %>
           <%= content_tag(:ul) do %>
-            <%= render partial: "admin/shared/creator", collection: @work.creators %>
+            <%= render partial: "admin/shared/playback/creator", collection: @work.creators %>
           <% end %>
         <% end %>
       <% end %>
@@ -73,11 +73,11 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/contributions", locals: {
+<%= render partial: "admin/shared/playback/contributions", locals: {
   contributions: @work.contributions.for_admin.alpha,
   context:       :work
 } %>
 
-<%= render partial: "admin/shared/posts", locals: {
+<%= render partial: "admin/shared/playback/posts", locals: {
   posts: @work.posts.for_admin.reverse_cron
 } %>

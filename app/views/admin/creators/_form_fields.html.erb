@@ -17,12 +17,12 @@
       invert:     true
     } %>
 
-    <%= render partial: "admin/creators/pseudonym_identity_fieldset", locals: {
+    <%= render partial: "admin/shared/forms/pseudonym_identity_fieldset", locals: {
       f:        f,
       creators: available_pseudonyms
     } %>
 
-    <%= render partial: "admin/creators/real_name_identity_fieldset", locals: {
+    <%= render partial: "admin/shared/forms/real_name_identity_fieldset", locals: {
       f:        f,
       creators: available_real_names
     } %>
@@ -40,12 +40,12 @@
       invert:     true
     } %>
 
-    <%= render partial: "admin/creators/member_membership_fieldset", locals: {
+    <%= render partial: "admin/shared/forms/member_membership_fieldset", locals: {
       f:        f,
       creators: available_members
     } %>
 
-    <%= render partial: "admin/creators/group_membership_fieldset", locals: {
+    <%= render partial: "admin/shared/forms/group_membership_fieldset", locals: {
       f:        f,
       creators: available_groups
     } %>

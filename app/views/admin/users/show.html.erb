@@ -142,15 +142,15 @@
 <% end %>
 
 <% if @user.can_post? %>
-  <%= render partial: "admin/shared/posts", locals: {
+  <%= render partial: "admin/shared/playback/posts", locals: {
     posts: @user.posts.for_admin.reverse_cron
   } %>
 
-  <%= render partial: "admin/shared/works", locals: {
+  <%= render partial: "admin/shared/playback/works", locals: {
     works: @user.works.for_admin.alpha
   } %>
 
-  <%= render partial: "admin/shared/creators", locals: {
+  <%= render partial: "admin/shared/playback/creators", locals: {
     creators: @user.creators.for_admin.alpha
   } %>
 <% end %>

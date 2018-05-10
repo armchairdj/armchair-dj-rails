@@ -12,7 +12,7 @@
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: "admin/creators/pseudonym_identity_field", collection: records, as: :pseudonym_identity, locals: {
+  <%= render partial: "admin/shared/forms/pseudonym_identity_field", collection: records, as: :pseudonym_identity, locals: {
     f:        f,
     creators: creators
   } %>

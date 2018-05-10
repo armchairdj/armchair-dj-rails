@@ -11,7 +11,7 @@
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: "admin/creators/real_name_identity_field", collection: records, as: :real_name_identity, locals: {
+  <%= render partial: "admin/shared/forms/real_name_identity_field", collection: records, as: :real_name_identity, locals: {
     f:        f,
     creators: creators
   } %>

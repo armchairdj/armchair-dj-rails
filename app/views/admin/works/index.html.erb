@@ -9,7 +9,7 @@
 } %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Work } %>
+  <%= render partial: "admin/shared/playback/index_tabs", locals: { model: Work } %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @works.empty? %>

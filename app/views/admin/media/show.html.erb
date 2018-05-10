@@ -54,22 +54,22 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/roles", locals: {
+<%= render partial: "admin/shared/playback/roles", locals: {
   roles: @medium.roles.alpha
 } %>
 
-<%= render partial: "admin/shared/facets", locals: {
+<%= render partial: "admin/shared/playback/facets", locals: {
   facets: @medium.facets
 } %>
 
-<%= render partial: "admin/shared/works", locals: {
+<%= render partial: "admin/shared/playback/works", locals: {
   works: @medium.works.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "admin/shared/playback/creators", locals: {
   creators: @medium.creators.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/posts", locals: {
+<%= render partial: "admin/shared/playback/posts", locals: {
   posts: @medium.posts.for_admin.reverse_cron
 } %>

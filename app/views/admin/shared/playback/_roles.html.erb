@@ -1,11 +1,11 @@
-<% return if facets.empty? %>
+<% return if roles.empty? %>
 
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Facets") %>
+    <%= content_tag(:h4, "Roles") %>
   <% end %>
 
   <%= content_tag(:ul, class: "square") do %>
-    <%= render partial: "admin/shared/facet", collection: facets %>
+    <%= render partial: "admin/shared/playback/role", collection: roles %>
   <% end %>
 <% end %>

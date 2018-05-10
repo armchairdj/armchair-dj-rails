@@ -71,39 +71,39 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "admin/shared/playback/creators", locals: {
   creators: @creator.groups,
   headline: "Groups"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "admin/shared/playback/creators", locals: {
   creators: @creator.members,
   headline: "Members"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "admin/shared/playback/creators", locals: {
   creators: @creator.colleagues,
   headline: "Colleagues"
 } %>
 
-<%= render partial: "admin/shared/creators", locals: {
+<%= render partial: "admin/shared/playback/creators", locals: {
   creators: @creator.personae,
   headline: "Personae"
 } %>
 
-<%= render partial: "admin/shared/creator_roles", locals: {
+<%= render partial: "admin/shared/playback/creator_roles", locals: {
   roles: @creator.display_roles
 } %>
 
-<%= render partial: "admin/shared/works", locals: {
+<%= render partial: "admin/shared/playback/works", locals: {
   works: @creator.works.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/contributions", locals: {
+<%= render partial: "admin/shared/playback/contributions", locals: {
   contributions: @creator.contributions.for_admin.alpha,
   context:       :creator
 } %>
 
-<%= render partial: "admin/shared/posts", locals: {
+<%= render partial: "admin/shared/playback/posts", locals: {
   posts: @creator.posts.for_admin.reverse_cron
 } %>

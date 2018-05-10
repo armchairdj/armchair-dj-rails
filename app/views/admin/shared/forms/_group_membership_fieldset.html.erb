@@ -12,7 +12,7 @@
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: "admin/creators/group_membership_field", collection: records, as: :group_membership, locals: {
+  <%= render partial: "admin/shared/forms/group_membership_field", collection: records, as: :group_membership, locals: {
     f:        f,
     creators: creators
   } %>

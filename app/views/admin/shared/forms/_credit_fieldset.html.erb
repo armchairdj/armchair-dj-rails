@@ -10,7 +10,7 @@
 
     <%= content_tag(:div, error || "Select at least one.", class: "legend-hint") %>
 
-    <%= render partial: "admin/works/credit_field", collection: records, as: :credit, locals: {
+    <%= render partial: "admin/shared/forms/credit_field", collection: records, as: :credit, locals: {
       f:        f,
       creators: creators
     } %>

@@ -3,6 +3,18 @@
 require "rails_helper"
 
 RSpec.describe "admin/posts/edit", type: :view do
+  before(:each) do
+    3.times do
+      create(:minimal_creator)
+      create(:minimal_medium)
+      create(:minimal_work)
+    end
+
+    @creators = assign(:creators, Creator.all.alpha    )
+    @media    = assign(:media,    Medium.select_options)
+    @works    = assign(:works,    Work.grouped_options )
+  end
+
   context "for standalone" do
     before(:each) do
       @model_class = assign(:model_name, Post)

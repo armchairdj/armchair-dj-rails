@@ -1,11 +1,11 @@
-<% return if posts.empty? %>
+<% return if works.empty? %>
 
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Posts") %>
+    <%= content_tag(:h4, "Works") %>
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <%= render partial: "admin/shared/post", collection: posts %>
+    <%= render partial: "admin/shared/playback/work", collection: works %>
   <% end %>
 <% end %>
