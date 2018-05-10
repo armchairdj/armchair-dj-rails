@@ -1,15 +1,43 @@
 <%= simple_form_for([:admin, post], html: { class: "admin"}) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/posts/form_fields", locals: {
-      f:              f,
-      selected_tab:   selected_tab,
-      available_tabs: available_tabs,
-      creators:       creators,
-      media:          media,
-      works:          works,
+  <% if available_tabs.include?("post-choose-work") %>
+    <% render partial: "tab_choose_work", locals: {
+      f:     f,
+      works: works,
     } %>
+  <% end %>
+
+  <% if available_tabs.include?("post-new-work") %>
+    <% render partial: "tab_new_work", locals: {
+      f:        f,
+      creators: creators,
+      media:    media,
+    } %>
+  <% end %>
+
+  <% if available_tabs.include?("post-standalone") %>
+    <% render partial: "tab_standalone", locals: {
+      f: f
+    } %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tabgroup same-page",
+    "data-controller":            "tabgroup",
+    "data-tabgroup-selected-tab": selected_tab
+  ) do %>
+    <%= content_tag(:p, "data-target": "tabgroup.remove") do %>
+      Choose a work to review, create a new work, or write a standalone post.
+    <% end %>
+
+    <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
+
+    <%= content_for(:tabs) %>
+  <% end %>
+
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/posts/form_fields", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

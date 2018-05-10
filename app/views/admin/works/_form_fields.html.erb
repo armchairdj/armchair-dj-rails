@@ -4,7 +4,7 @@
 <% show_tags         = false unless f.object.persisted? %>
 
 <%= content_tag(:fieldset, "data-controller": "work-dropdowns") do %>
-  <%= render(partial: "admin/works/credits_fields", locals: {
+  <%= render(partial: "admin/works/credit_fieldset", locals: {
     f:        f,
     creators: creators
   }) %>
@@ -25,13 +25,13 @@
     <%= f.input(:summary, required: false, hint: true) if show_summary %>
   <% end %>
 
-  <%= render(partial: "admin/works/contributions_fields", locals: {
+  <%= render(partial: "admin/works/contribution_fieldset", locals: {
     f:        f,
     creators: creators,
     roles:    roles
   }) if show_contributors %>
 
-  <%= render(partial: "admin/works/categories_fields", locals: {
+  <%= render(partial: "admin/works/category_fieldset", locals: {
     f:          f,
     categories: categories
   }) if show_tags %>

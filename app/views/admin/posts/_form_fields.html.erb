@@ -1,31 +1,3 @@
-<% render(partial: "tab_choose_work", locals: {
-  f:     f,
-  works: works,
-}) if available_tabs.include?("post-choose-work") %>
-
-<% render(partial: "tab_new_work", locals: {
-  f:        f,
-  creators: creators,
-  media:    media,
-}) if available_tabs.include?("post-new-work") %>
-
-<% render(partial: "tab_standalone", locals: {
-  f: f
-})if available_tabs.include?("post-standalone") %>
-
-<%= content_tag(:div, class: "tabgroup same-page",
-  "data-controller":            "tabgroup",
-  "data-tabgroup-selected-tab": selected_tab
-) do %>
-  <%= content_tag(:p, "data-target": "tabgroup.remove") do %>
-    Choose a work to review, create a new work, or write a standalone post.
-  <% end %>
-
-  <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
-
-  <%= content_for(:tabs) %>
-<% end %>
-
 <%= content_tag(:fieldset) do %>
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :body, input_html: { class: "x-large" } %>
