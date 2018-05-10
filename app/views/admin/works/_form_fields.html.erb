@@ -1,5 +1,7 @@
 <% show_contributors = true if local_assigns[:show_contributors].nil? %>
 <% show_summary      = true if local_assigns[:show_summary     ].nil? %>
+<% show_tags         = true if local_assigns[:show_tags        ].nil? %>
+<% show_tags         = false unless f.object.persisted? %>
 
 <%= content_tag(:fieldset, "data-controller": "work-dropdowns") do %>
   <%= render(partial: "admin/works/credits_fields", locals: {
@@ -32,5 +34,5 @@
   <%= render(partial: "admin/works/category_tags_fields", locals: {
     f:             f,
     category_tags: category_tags
-  }) if f.object.persisted? %>
+  }) if show_tags %>
 <% end %>

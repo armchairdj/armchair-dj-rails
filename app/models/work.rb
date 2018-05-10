@@ -21,6 +21,15 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.permitted_tag_param(category)
+    :"#{self.tag_param(category)}_tag_ids"
+  end
+
+  def self.tag_param(category)
+    # TODO Deal with special characters
+    category.name.downcase.gsub(/\s+/, "_")
+  end
+
   def self.grouped_options
     joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
@@ -129,15 +138,21 @@ class Work < ApplicationRecord
 
   def define_tag_methods
     self.categories.each do |category|
-      getter_name = :"#{tag_param(category)}_tags"
-      setter_name = :"#{tag_param(category)}_tag_ids="
+          param = self.class.tag_param(category)
+         getter = :"#{param}_tags"
+      id_getter = :"#{param}_tag_ids"
+      id_setter = :"#{param}_tag_ids="
 
-      self.class.send :define_method, getter_name do
+      self.class.send :define_method, getter do
         self.tags.includes(:category).where(categories: { name: category.name })
       end
 
-      self.class.send :define_method, setter_name do |*ids|
-        to_remove = self.send(getter_name).map(&:id).delete_if { |id| ids.flatten.include? id }
+      self.class.send :define_method, id_getter do
+        self.send(getter).map(&:id)
+      end
+
+      self.class.send :define_method, id_setter do |*ids|
+        to_remove = self.send(id_getter).delete_if { |id| ids.flatten.include? id }
         to_keep   = [self.tag_ids, ids].flatten.compact.uniq - to_remove
 
         self.tag_ids = to_keep.compact
@@ -151,13 +166,11 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def permitted_tag_params
-    categories.map { |c| { :"#{self.tag_param(c)}_tag_ids" => [] } }
+  def tag_param_label
   end
 
-  def tag_param(category)
-    # TODO Deal with special characters
-    category.name.downcase.gsub(/\s+/, "_")
+  def permitted_tag_params
+    categories.map { |c| { :"#{self.class.permitted_tag_param(c)}" => [] } }
   end
 
   # TODO This should take a full option and full_display_title should just call this

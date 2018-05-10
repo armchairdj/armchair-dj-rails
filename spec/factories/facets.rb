@@ -28,5 +28,9 @@ FactoryBot.define do
       with_category
       with_medium
     end
+
+    factory :complete_facet, parent: :minimal_facet do
+
+    end
   end
 end

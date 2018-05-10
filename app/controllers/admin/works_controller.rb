@@ -127,7 +127,7 @@ private
     @media    = Medium.select_options
     @roles    = Role.grouped_options
 
-    @category_tags = @work.medium.tags_by_category if @work.persisted?
+    @category_tags = @work.new_record? ? [] : @work.medium.tags_by_category
   end
 
   def instance_params

@@ -2,7 +2,7 @@
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :name %>
 
-    <%= f.input :summary, required: false, hint: true %>
+    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
   <% end %>
 <% end %>
 

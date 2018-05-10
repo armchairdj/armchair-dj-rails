@@ -191,7 +191,6 @@ private
     @post.prepare_work_for_editing(@sanitized_params)
 
     @creators = Creator.all.alpha
-    @roles    = Role.grouped_options
     @media    = Medium.select_options
     @works    = Work.grouped_options
   end

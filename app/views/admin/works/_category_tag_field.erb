@@ -1,18 +1,9 @@
-<%
-  records = f.object.credits
-  error   = f.error(:credits)
-  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+<%= f.input Work.permitted_tag_param(category),
+  as:         :select,
+  collection: available_tags,
+  label:      category.name.pluralize,
+  input_html: {
+    "data-controller": "selectize-multi",
+    multiple: true
+  }
 %>
-
-<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-has-many") do %>
-  <%= content_tag(:div, class: "boxed") do %>
-    <%= content_tag(:legend) do %>Creators <%= required_indicator %><% end %>
-
-    <%= content_tag(:div, error || "Select at least one.", class: "legend-hint") %>
-
-    <%= render partial: "admin/works/credit_field", collection: records, as: :credit, locals: {
-      f:        f,
-      creators: creators
-    } %>
-  <% end %>
-<% end %>

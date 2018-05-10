@@ -20,6 +20,8 @@ gem "pg"
 
 gem "bootsnap", require: false
 
+gem "facets", require: false
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 

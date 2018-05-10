@@ -6,7 +6,7 @@
 <% render(partial: "tab_new_work", locals: {
   f:        f,
   creators: creators,
-  roles:    roles,
+  media:    media,
 }) if available_tabs.include?("post-new-work") %>
 
 <% render(partial: "tab_standalone", locals: {
@@ -30,7 +30,7 @@
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :body, input_html: { class: "x-large" } %>
 
-    <%= f.input :summary, required: false, hint: true %>
+    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
   <% end %>
 <% end %>
 

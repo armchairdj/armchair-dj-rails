@@ -4,11 +4,11 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/posts/form_fields", locals: {
       f:              f,
-      works:          works,
-      creators:       creators,
-      roles:          roles,
       selected_tab:   selected_tab,
       available_tabs: available_tabs,
+      creators:       creators,
+      media:          media,
+      works:          works,
     } %>
   <% end %>
 

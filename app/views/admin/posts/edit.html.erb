@@ -10,10 +10,11 @@
 } %>
 
 <%= render partial: "form", locals: {
+  available_tabs: @available_tabs,
+  selected_tab:   @selected_tab,
+
+  creators:       @creators,
+  media:          @media,
   post:           @post,
   works:          @works,
-  roles:          @roles,
-  creators:       @creators,
-  selected_tab:   @selected_tab,
-  available_tabs: @available_tabs,
 } %>
