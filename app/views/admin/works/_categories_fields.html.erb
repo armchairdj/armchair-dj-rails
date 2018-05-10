@@ -1,7 +1,7 @@
 <%= content_tag(:fieldset) do %>
   <%= content_tag(:div, class: "boxed") do %>
-    <% category_tags.each do |category, available_tags| %>
-      <%= render(partial: "admin/works/category_tag_field", locals: {
+    <% categories.each do |category, available_tags| %>
+      <%= render(partial: "admin/works/category_field", locals: {
         f:              f,
         category:       category,
         available_tags: available_tags,

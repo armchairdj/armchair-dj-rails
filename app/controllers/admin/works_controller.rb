@@ -123,11 +123,10 @@ private
     @work.prepare_credits
     @work.prepare_contributions
 
-    @creators = Creator.all.alpha
-    @media    = Medium.select_options
-    @roles    = Role.grouped_options
-
-    @category_tags = @work.new_record? ? [] : @work.medium.tags_by_category
+    @creators   = Creator.all.alpha
+    @media      = Medium.select_options
+    @roles      = Role.grouped_options
+    @categories = @work.new_record? ? [] : @work.medium.tags_by_category
   end
 
   def instance_params

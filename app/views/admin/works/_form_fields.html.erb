@@ -31,8 +31,8 @@
     roles:    roles
   }) if show_contributors %>
 
-  <%= render(partial: "admin/works/category_tags_fields", locals: {
-    f:             f,
-    category_tags: category_tags
+  <%= render(partial: "admin/works/categories_fields", locals: {
+    f:          f,
+    categories: categories
   }) if show_tags %>
 <% end %>
