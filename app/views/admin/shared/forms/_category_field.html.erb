@@ -3,8 +3,9 @@
   collection: available_tags,
   label:      category.name.pluralize,
   input_html: {
-    "data-controller":     "create-tag",
-    "data-create-tag-url": admin_tags_path,
+    "data-controller":             "create-tag",
+    "data-create-tag-url":         admin_tags_path,
+    "data-create-tag-category-id": category.id,
     multiple: true
   }
 %>

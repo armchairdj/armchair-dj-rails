@@ -68,14 +68,24 @@ en:
       defaults:
       contribution:
         creator_id: "Please choose"
-        role: "Please choose"
+        role_id: "Please choose"
       creator:
       credit:
+        creator_id: "Please choose"
+      facet:
+        category_id: "Please choose"
       identity:
+        pseudonym_id: "Please choose"
+        real_name_id: "Please choose"
       membership:
+        group_id: "Please choose"
+        member_id: "Please choose"
       post:
         work_id: "Please choose"
+      tag:
+        category_id: "Please choose"
       user:
+        role: "Please choose"
       work:
     prompts:
       defaults:

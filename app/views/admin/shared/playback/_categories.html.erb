@@ -9,7 +9,7 @@
     <% categories.each do |category, tags| %>
       <%= content_tag(:dt, category.name.pluralize) %>
       <% tags.each do |tag| %>
-        <%= content_tag(:dd, tag.name) %>
+        <%= content_tag(:dd, link_to_tag(tag, admin: true)) %>
       <% end %>
     <% end %>
   <% end %>

@@ -1,6 +1,12 @@
 import SelectizeMultiController from "controllers/selectize_multi_controller";
 
 export default class extends SelectizeMultiController {
+  connect() {
+    super.connect();
+
+    this.categoryId = this.data.get("categoryId");
+  }
+
   constructOptions() {
     return Object.assign(super.constructOptions(), {
       create: _.bind(this.createItem, this)
@@ -21,6 +27,10 @@ export default class extends SelectizeMultiController {
     var params = {};
 
     params["tag[name]"] = userInput;
+
+    if (this.categoryId) {
+      params["tag[category_id]"] = this.categoryId;
+    }
 
     return params;
   }
