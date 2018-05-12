@@ -27,6 +27,21 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@tag.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Viewable Posts") %>
+        <%= content_tag(:td, @tag.viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Non-Viewable Posts") %>
+        <%= content_tag(:td, @tag.non_viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@tag.created_at)) %>
       <% end %>

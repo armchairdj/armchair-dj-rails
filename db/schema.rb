@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_07_152953) do
+ActiveRecord::Schema.define(version: 2018_05_12_184515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,8 +147,13 @@ ActiveRecord::Schema.define(version: 2018_05_07_152953) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "alpha"
+    t.text "summary"
+    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "viewable_post_count", default: 0, null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
     t.index ["category_id"], name: "index_tags_on_category_id"
+    t.index ["non_viewable_post_count"], name: "index_tags_on_non_viewable_post_count"
+    t.index ["viewable_post_count"], name: "index_tags_on_viewable_post_count"
   end
 
   create_table "tags_works", id: false, force: :cascade do |t|

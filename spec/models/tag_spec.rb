@@ -6,6 +6,10 @@ RSpec.describe Tag, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
+
     it_behaves_like "an_atomically_validatable_model", { name: nil } do
       subject { create(:minimal_tag) }
     end

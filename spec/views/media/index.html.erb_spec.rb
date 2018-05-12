@@ -7,7 +7,7 @@ RSpec.describe "media/index", type: :view do
     end
 
     @model_class = assign(:model_name, Medium)
-    @media       = assign(:media, Medium.for_admin.page(1))
+    @media       = assign(:media, Medium.for_site.page(1))
   end
 
   it "renders a list of media" do

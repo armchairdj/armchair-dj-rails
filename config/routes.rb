@@ -106,9 +106,8 @@ Rails.application.routes.draw do
   # TAXONOMY.
   #############################################################################
 
-  resources :media,    only: [:index, :show], concerns: :paginatable
-
   resources :creators, only: [:index, :show], concerns: :paginatable
-
+  resources :media,    only: [:index, :show], concerns: :paginatable
+  resources :tags,     only: [:index, :show], concerns: :paginatable
   resources :works,    only: [:index, :show], concerns: :paginatable
 end

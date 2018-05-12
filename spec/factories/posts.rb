@@ -57,6 +57,14 @@ FactoryBot.define do
       end
     end
 
+    trait :with_tag do
+      tag_ids: [create(:tag).id]
+    end
+
+    trait :with_tags do
+      tag_ids: [create(:tag).id, create(:tag).id, create(:tag).id]
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

@@ -9,6 +9,8 @@ class Tag < ApplicationRecord
   #############################################################################
 
   include Alphabetizable
+  include Summarizable
+  include Viewable
 
   #############################################################################
   # CLASS.

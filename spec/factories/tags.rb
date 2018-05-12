@@ -52,6 +52,7 @@ FactoryBot.define do
 
     factory :complete_tag do
       with_name
+      with_summary
       with_existing_category
     end
 

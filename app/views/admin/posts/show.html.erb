@@ -89,3 +89,7 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= render partial: "admin/shared/playback/tags", locals: {
+  tags: @post.tags
+} %>
