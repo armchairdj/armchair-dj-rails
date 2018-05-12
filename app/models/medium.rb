@@ -39,7 +39,7 @@ class Medium < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:roles, :works) }
+  scope :eager,     -> { includes(:roles, :works, :posts, :facets, :categories, :tags) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.alpha }
 
@@ -55,7 +55,7 @@ class Medium < ApplicationRecord
 
   has_many :posts, through: :works
 
-  has_many :facets, -> { joins(:category).order("categories.name") }, inverse_of: :medium, dependent: :destroy
+  has_many :facets, -> { includes(:category).order("categories.name") }, inverse_of: :medium, dependent: :destroy
 
   has_many :categories, through: :facets
   has_many :tags,       through: :categories

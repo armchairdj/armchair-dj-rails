@@ -18,6 +18,10 @@ class Tag < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope   :categorized, -> { joins(:category) }
+  scope :uncategorized, -> { where(category_id: nil) }
+  scope     :for_posts, -> { uncategorized.alpha }
+
   scope :eager,     -> { includes(:category, :works, :posts) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.alpha }
@@ -53,6 +57,20 @@ class Tag < ApplicationRecord
   #############################################################################
 
   def alpha_parts
+    return [name] unless categorized?
+
     [category.try(:name), name]
+  end
+
+  def categorized?
+    category.present?
+  end
+
+  def uncategorized?
+    !categorized?
+  end
+
+  def display_category
+    categorized? ? category.name : "Uncategorized"
   end
 end

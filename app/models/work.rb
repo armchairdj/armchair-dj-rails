@@ -166,7 +166,12 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def tag_param_label
+  def tags_by_category
+    collection = tags.alpha.includes(:category)
+
+    return [] if collection.empty?
+
+    collection.group_by{ |t| t.category }.to_a.sort_by(&:first)
   end
 
   def permitted_tag_params

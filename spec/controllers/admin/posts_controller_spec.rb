@@ -174,6 +174,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         get :new
 
         should successfully_render("admin/posts/new")
+
         should define_all_tabs.and_select("post-choose-work")
 
         expect(assigns(:post)).to be_a_populated_new_post

@@ -1,1 +1,1 @@
-json.partial! "media/medium", medium: @medium
+json.partial! "admin/media/medium", medium: @medium

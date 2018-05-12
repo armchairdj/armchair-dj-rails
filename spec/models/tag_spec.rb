@@ -21,6 +21,14 @@ RSpec.describe Tag, type: :model do
       pending "self#for_admin"
       pending "self#for_site"
     end
+
+    context "by category" do
+      pending "self#categorized"
+      pending "self#uncategorized"
+      pending "categorized?"
+      pending "uncategorized?"
+      pending "self#for_posts"
+    end
   end
 
   context "associations" do
@@ -41,5 +49,6 @@ RSpec.describe Tag, type: :model do
 
   context "instance" do
     pending "#alpha_parts"
+    pending "#display_category"
   end
 end

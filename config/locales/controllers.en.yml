@@ -44,6 +44,11 @@ en:
       sessions:
         success:
           missing: "Please log in to access that."
+      tags:
+        success:
+          create:  "Tag created."
+          destroy: "Tag destroyed."
+          update:  "Tag updated."
       users:
         success:
           create:  "User created."

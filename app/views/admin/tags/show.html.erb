@@ -1,0 +1,53 @@
+<%
+  @title = ["View Tag", @tag.name]
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :show,
+  headline:    @title.first,
+  instance:    @tag,
+  public_link: nil # admin_public_tag_link(@tag)
+} %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Category") %>
+        <%= content_tag(:td, @tag.display_category) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @tag.name) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@tag.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@tag.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @tag.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/works", locals: {
+  works: @tag.works.for_admin.alpha
+} %>
+
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts: @tag.posts.for_admin.reverse_cron
+} %>

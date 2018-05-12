@@ -11,7 +11,17 @@
     <%= content_tag(:fieldset, class: "chunk") do %>
       <%= content_tag(:legend, "Standalone", "data-target": "tabgroup.remove") %>
 
-      <%= f.input :title, required: false %>
+      <%= f.input :title, required: true %>
+
+      <%= f.input :tag_ids,
+        as:         :select,
+        collection: tags,
+        input_html: {
+          "data-controller":     "create-tag",
+          "data-create-tag-url": admin_tags_path,
+          multiple: true
+        }
+      %>
     <% end %>
   <% end %>
 <% end %>

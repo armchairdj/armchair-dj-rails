@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.partial! "posts/post", post: @post
+json.partial! "admin/posts/post", post: @post

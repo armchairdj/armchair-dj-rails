@@ -9,7 +9,7 @@
 } %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/playback/index_tabs", locals: { model: User } %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: User } %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @users.empty? %>

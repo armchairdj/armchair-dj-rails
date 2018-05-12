@@ -18,7 +18,8 @@
 
   <% if available_tabs.include?("post-standalone") %>
     <% render partial: "tab_standalone", locals: {
-      f: f
+      f:    f,
+      tags: tags
     } %>
   <% end %>
 

@@ -2,20 +2,40 @@
 
 require "rspec/expectations"
 
+RSpec::Matchers.define :prepare_the_review_tabs do
+  match do
+    expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
+    expect(assigns(:media   )).to be_a_kind_of(Array)
+    expect(assigns(:tags    )).to be_a_kind_of(ActiveRecord::Relation)
+    expect(assigns(:works   )).to be_a_kind_of(Array)
+  end
+
+  match_when_negated do
+    expect(assigns(:creators)).to eq(nil)
+    expect(assigns(:media   )).to eq(nil)
+    expect(assigns(:tags    )).to eq(nil)
+    expect(assigns(:works   )).to eq(nil)
+  end
+
+  failure_message do
+    "expected to prepare the review tabs, but did not"
+  end
+
+  failure_message_when_negated do
+    "expected not to prepare review tabs, but they did"
+  end
+end
+
 RSpec::Matchers.define :define_the_review_tabs do
   match do
-    expect(assigns(:roles         )).to be_a_kind_of(Array)
-    expect(assigns(:creators      )).to be_a_kind_of(ActiveRecord::Relation)
-    expect(assigns(:works         )).to be_a_kind_of(Array)
+    should prepare_the_review_tabs
 
     expect(assigns(:available_tabs)).to include("post-new-work")
     expect(assigns(:available_tabs)).to include("post-choose-work")
   end
 
   match_when_negated do
-    expect(assigns(:roles         )).to eq(nil)
-    expect(assigns(:creators      )).to eq(nil)
-    expect(assigns(:works         )).to eq(nil)
+    should_not prepare_the_review_tabs
 
     expect(assigns(:available_tabs)).to_not include("post-new-work")
     expect(assigns(:available_tabs)).to_not include("post-choose-work")
@@ -50,8 +70,9 @@ end
 
 RSpec::Matchers.define :define_only_the_review_tabs do
   match do
-    expect(assigns).to     define_the_review_tabs
-    expect(assigns).to_not define_the_standalone_tab
+    should     define_the_review_tabs
+    should_not define_the_standalone_tab
+
     expect(assigns(:selected_tab)).to eq(@selected) if @selected
   end
 
@@ -70,8 +91,9 @@ end
 
 RSpec::Matchers.define :define_only_the_standalone_tab do
   match do
-    expect(assigns).to     define_the_standalone_tab
-    expect(assigns).to_not define_the_review_tabs
+    should     define_the_standalone_tab
+    should_not define_the_review_tabs
+
     expect(assigns(:selected_tab)).to eq("post-standalone")
   end
 
@@ -82,8 +104,9 @@ end
 
 RSpec::Matchers.define :define_all_tabs do
   match do
-    expect(assigns).to define_the_review_tabs
-    expect(assigns).to define_the_standalone_tab
+    should define_the_review_tabs
+    should define_the_standalone_tab
+
     expect(assigns(:selected_tab)).to eq(@selected) if @selected
   end
 

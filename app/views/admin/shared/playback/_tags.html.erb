@@ -1,0 +1,11 @@
+<% return if tags.empty? %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Tags") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "square") do %>
+    <%= render partial: "admin/shared/playback/tag", collection: tags %>
+  <% end %>
+<% end %>

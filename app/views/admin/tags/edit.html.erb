@@ -1,0 +1,15 @@
+<%
+  @title = ["Update Tag", @tag.name]
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @tag,
+  public_link: nil # admin_public_tag_link(@tag)
+} %>
+
+<%= render partial: "form", locals: {
+  tag:        @tag,
+  categories: @categories
+} %>

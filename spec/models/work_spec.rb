@@ -251,16 +251,21 @@ RSpec.describe Work, type: :model do
 
       subject { create(:minimal_work, medium: medium).reload }
 
+      describe "self#permitted_tag_param" do
+        specify { expect(described_class.permitted_tag_param(genre)).to eq(:musical_genre_tag_ids) }
+        specify { expect(described_class.permitted_tag_param(mood )).to eq(:musical_mood_tag_ids ) }
+      end
+
+      describe "#self.tag_param" do
+        specify { expect(described_class.tag_param(genre)).to eq("musical_genre") }
+        specify { expect(described_class.tag_param(mood )).to eq("musical_mood" ) }
+      end
+
       specify "#permitted_tag_params" do
         expect(subject.permitted_tag_params).to eq([
           { :musical_genre_tag_ids => [] },
           { :musical_mood_tag_ids  => [] }
         ])
-      end
-
-      describe "#tag_param" do
-        specify { expect(subject.tag_param(genre)).to eq("musical_genre") }
-        specify { expect(subject.tag_param(mood )).to eq("musical_mood" ) }
       end
 
       describe "defines" do
@@ -272,6 +277,12 @@ RSpec.describe Work, type: :model do
         context "setters" do
           it { should respond_to(:musical_genre_tag_ids=) }
           it { should respond_to(:musical_mood_tag_ids= ) }
+        end
+      end
+
+      describe "#tags_by_category" do
+        it "groups into 2D array" do
+          expect(subject.tags_by_category).to eq([])
         end
       end
 
@@ -287,11 +298,21 @@ RSpec.describe Work, type: :model do
 
         context "getters" do
           describe "retrieve scoped tags" do
-            specify { expect(subject.tags).to match_array([sinister, trip_hop]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([sinister, trip_hop])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([trip_hop]) }
+            specify "scoped tags methods" do
+              expect(subject.musical_genre_tags).to match_array([trip_hop])
+              expect(subject.musical_mood_tags ).to match_array([sinister])
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [genre, [trip_hop]],
+                [mood,  [sinister]]
+              ])
+            end
           end
         end
 
@@ -302,11 +323,20 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([sinister]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([sinister])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([]) }
+              it { expect(subject.musical_mood_tags ).to match_array([sinister]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [mood, [sinister]]
+              ])
+            end
           end
 
           describe "overwrites tags for one facet" do
@@ -315,11 +345,21 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([sinister, downtempo]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([sinister, downtempo])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+              it { expect(subject.musical_mood_tags ).to match_array([sinister]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([sinister]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [genre, [downtempo]],
+                [mood,  [sinister]]
+              ])
+            end
           end
 
           describe "overwrites tags for multiple facets without overwriting all" do
@@ -329,11 +369,21 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([uplifting, downtempo]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([uplifting, downtempo])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([downtempo]) }
+              it { expect(subject.musical_mood_tags ).to match_array([uplifting]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([uplifting]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [genre, [downtempo]],
+                [mood,  [uplifting]]
+              ])
+            end
           end
 
           describe "adds tags without duplication" do
@@ -343,11 +393,21 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([uplifting, sinister, downtempo, trip_hop]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([sinister, uplifting, downtempo, trip_hop])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+              it { expect(subject.musical_mood_tags ).to match_array([sinister, uplifting]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([uplifting, sinister]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [genre, [downtempo, trip_hop]],
+                [mood,  [sinister, uplifting]]
+              ])
+            end
           end
 
           describe "works via update" do
@@ -360,11 +420,21 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([uplifting, sinister, downtempo, trip_hop]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([sinister, uplifting, downtempo, trip_hop])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
+              it { expect(subject.musical_mood_tags ).to match_array([sinister, uplifting]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([uplifting, sinister]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [genre, [downtempo, trip_hop]],
+                [mood,  [sinister, uplifting]]
+              ])
+            end
           end
 
           describe "gets all messed up if non-scoped setter is used" do
@@ -373,11 +443,20 @@ RSpec.describe Work, type: :model do
               subject.reload
             end
 
-            specify { expect(subject.tags).to match_array([uplifting]) }
+            specify "#tags" do
+              expect(subject.tags).to match_array([uplifting])
+            end
 
-            specify { expect(subject.musical_genre_tags).to match_array([]) }
+            context "scoped tag methods" do
+              it { expect(subject.musical_genre_tags).to match_array([]) }
+              it { expect(subject.musical_mood_tags ).to match_array([uplifting]) }
+            end
 
-            specify { expect(subject.musical_mood_tags).to match_array([uplifting]) }
+            specify "#tags_by_category" do
+              expect(subject.tags_by_category).to eq([
+                [mood,  [uplifting]]
+              ])
+            end
           end
         end
       end

@@ -36,7 +36,7 @@ podcast     = FactoryBot.create(:medium, name: "Podcast"   )
 
 ##### CATEGORIES & TAGS
 
-album_type         = FactoryBot.create(:category, name: "Song Type")
+album_type         = FactoryBot.create(:category, name: "Album Type")
 album_types        = [
                        FactoryBot.create(:tag, category: album_type, name: "LP"),
                        FactoryBot.create(:tag, category: album_type, name: "EP"),

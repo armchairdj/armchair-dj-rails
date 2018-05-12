@@ -165,6 +165,7 @@ private
       :summary,
       :slug,
       :publish_on,
+      :tag_ids,
       :work_id,
       :work_attributes => [
         :id,
@@ -192,6 +193,7 @@ private
 
     @creators = Creator.all.alpha
     @media    = Medium.select_options
+    @tags     = Tag.for_posts
     @works    = Work.grouped_options
   end
 

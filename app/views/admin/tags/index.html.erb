@@ -1,0 +1,46 @@
+<%
+  @title = "Tags"
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :index,
+  headline: @title,
+  prehead:  total_count_for(@tags)
+} %>
+
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Tag } %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @tags.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag(:th, "Category") %>
+            <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @tags.each do |tag| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, tag.display_category) %>
+              <%= content_tag(:td, tag.name) %>
+              <%= content_tag(:td, class: "actions") do %>
+                <%#= admin_public_tag_link(tag) %>
+                <%= admin_view_link(tag) %>
+                <%= admin_update_link(tag) %>
+                <%= admin_destroy_link(tag) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @tags %>
+    <% end %>
+  <% end %>
+<% end %>
