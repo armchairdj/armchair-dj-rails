@@ -1,0 +1,16 @@
+<% return if categories.empty? %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Tags") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <% categories.each do |category, tags| %>
+      <%= content_tag(:dt, category.name.pluralize) %>
+      <% tags.each do |tag| %>
+        <%= content_tag(:dd, link_to_tag(tag)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

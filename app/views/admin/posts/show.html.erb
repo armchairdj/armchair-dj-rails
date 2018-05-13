@@ -91,5 +91,5 @@
 <% end %>
 
 <%= render partial: "admin/shared/playback/tags", locals: {
-  tags: @post.tags
+  tags: @post.all_tags.alpha
 } %>

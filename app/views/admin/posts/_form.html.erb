@@ -18,8 +18,7 @@
 
   <% if available_tabs.include?("post-standalone") %>
     <% render partial: "tab_standalone", locals: {
-      f:    f,
-      tags: tags
+      f:    f
     } %>
   <% end %>
 
@@ -38,7 +37,10 @@
 
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/posts/form_fields", locals: { f: f } %>
+    <%= render partial: "admin/posts/form_fields", locals: {
+      f:    f,
+      tags: tags
+    } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
