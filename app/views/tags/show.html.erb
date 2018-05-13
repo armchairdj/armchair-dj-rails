@@ -1,4 +1,11 @@
 <%
-  @headline = @title = "Tag"
+  @headline = @title = @tag.display_name
 %>
 
+<%= render partial: "shared/works", locals: {
+  works: @tag.works.for_site
+} %>
+
+<%= render partial: "shared/posts", locals: {
+  posts: @tag.all_posts.for_site
+} %>

@@ -32,9 +32,15 @@ header.post-header {
 }
 
 footer.post-byline {
+  @include bottom-margin();
   font-size: .9rem;
 
   address {
     display: inline;
   }
+}
+
+aside.post-tags {
+  @include bottom-margin();
+  font-size: .9rem;
 }

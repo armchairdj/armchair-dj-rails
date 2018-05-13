@@ -1,25 +1,13 @@
 <%
-  @headline = @title = "Tags"
+  @headline = @title = "Tag"
 %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% if @tags.empty? %>
+  <%= content_tag(:p, "Nothing so far.") %>
+<% else %>
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "shared/tag", collection: @tags %>
+  <% end %>
 
-  <tbody>
-    <% @tags.each do |tag| %>
-      <tr>
-        <td><%= link_to "Show", tag %></td>
-        <td><%= link_to "Edit", edit_tag_path(tag) %></td>
-        <td><%= link_to "Destroy", tag, method: :delete, data: { confirm: "Are you sure?" } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to "New Tag", new_tag_path %>
+  <%= paginate @tags %>
+<% end %>

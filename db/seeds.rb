@@ -49,7 +49,7 @@ art_medium         = FactoryBot.create(:category, name: "Artistic Medium")
 art_media          = [
                        FactoryBot.create(:tag, category: art_medium, name: "Painting"),
                        FactoryBot.create(:tag, category: art_medium, name: "Sculpture"),
-                       FactoryBot.create(:tag, category: art_medium, name: "Photographer"),
+                       FactoryBot.create(:tag, category: art_medium, name: "Photography"),
                        FactoryBot.create(:tag, category: art_medium, name: "Mixed Media"),
                      ]
 

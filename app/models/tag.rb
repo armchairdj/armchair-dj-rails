@@ -36,9 +36,12 @@ class Tag < ApplicationRecord
 
   belongs_to :category, optional: true
 
+  has_and_belongs_to_many :posts
+
   has_and_belongs_to_many :works
 
-  has_and_belongs_to_many :posts
+  has_many :creators, through: :works
+  has_many :reviews, through: :works, class_name: "Post", source: :posts
 
   #############################################################################
   # ATTRIBUTES.
@@ -49,6 +52,7 @@ class Tag < ApplicationRecord
   #############################################################################
 
   validates :name, presence: true
+  validates :name, uniqueness: { scope: [:category_id] }
 
   #############################################################################
   # HOOKS.
@@ -72,7 +76,20 @@ class Tag < ApplicationRecord
     !categorized?
   end
 
-  def display_category
-    categorized? ? category.name : "Uncategorized"
+  def display_category(default = "Uncategorized")
+    categorized? ? category.name : default
+  end
+
+  def display_name
+    return self.name unless categorized?
+
+    [self.category.name, self.name].join(": ")
+  end
+
+  def all_posts
+    indirect_ids = Post.select("id").joins(work: :tags).where("tags_works.tag_id = ?", self.id)
+      direct_ids = Post.select("id").joins(      :tags).where("posts_tags.tag_id = ?", self.id)
+
+    Post.where(id: [indirect_ids, direct_ids].flatten.uniq)
   end
 end

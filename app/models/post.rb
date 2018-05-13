@@ -281,6 +281,10 @@ class Post < ApplicationRecord
     standalone? ? [title] : work.try(:alpha_parts)
   end
 
+  def all_tags
+    Tag.where(id: [self.work.tag_ids, self.tag_ids].flatten.uniq)
+  end
+
 private
 
   #############################################################################
@@ -366,10 +370,14 @@ private
   def update_counts_for_descendents
     author.update_counts
 
+    tags.each { |t| t.update_counts }
+
     return unless work.present?
 
     work.update_counts
     work.medium.update_counts
+
     work.creators.each { |c| c.update_counts }
+    work.tags.each     { |t| t.update_counts }
   end
 end

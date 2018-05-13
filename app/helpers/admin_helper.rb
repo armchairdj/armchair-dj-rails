@@ -113,6 +113,12 @@ module AdminHelper
     admin_public_link(medium)
   end
 
+  def admin_public_tag_link(tag)
+    return unless tag.viewable?
+
+    admin_public_link(tag)
+  end
+
   #############################################################################
   # COLUMN HEADERS.
   #############################################################################

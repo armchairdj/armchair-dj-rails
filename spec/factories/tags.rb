@@ -18,14 +18,6 @@ FactoryBot.define do
       category_id { create(:minimal_category).id }
     end
 
-    trait :with_published_post do
-      after(:create) do |tag|
-        create(:standalone_post, :published, body: "body", tag_ids: [tag.id])
-
-        tag.reload
-      end
-    end
-
     trait :with_viewable_work do
       with_existing_category
 
@@ -37,6 +29,30 @@ FactoryBot.define do
         work = create(:work, :with_title, :with_one_credit, medium_id: medium.id, tag_ids: [tag.id])
 
         post = create(:review, work_id: work.id)
+
+        tag.reload
+      end
+    end
+
+    trait :with_draft_post do
+      after(:create) do |tag|
+        create(:standalone_post, :draft, body: "body", tag_ids: [tag.id])
+
+        tag.reload
+      end
+    end
+
+    trait :with_scheduled_post do
+      after(:create) do |tag|
+        create(:standalone_post, :scheduled, body: "body", tag_ids: [tag.id])
+
+        tag.reload
+      end
+    end
+
+    trait :with_published_post do
+      after(:create) do |tag|
+        create(:standalone_post, :published, body: "body", tag_ids: [tag.id])
 
         tag.reload
       end

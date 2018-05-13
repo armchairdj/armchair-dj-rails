@@ -880,29 +880,41 @@ RSpec.describe Post, type: :model do
 
         describe "#update_counts_for_descendents" do
           context "review" do
-            let(    :post) { create(:unity_album_review  ) }
-            let(  :author) { double }
-            let(    :work) { double }
-            let(  :medium) { double }
-            let(:creators) { [double, double] }
+            let(     :post) { create(:unity_album_review) }
+            let(   :author) { double }
+            let(     :work) { double }
+            let(   :medium) { double }
+            let( :creators) { [double, double] }
+            let(     :tags) { [double, double] }
+            let(:work_tags) { [double, double] }
 
             it "updates counts for author, work, medium & creators" do
-              allow(post).to receive(  :author).and_return(author  )
-              allow(post).to receive(    :work).and_return(work    )
-              allow(work).to receive(  :medium).and_return(medium  )
-              allow(work).to receive(:creators).and_return(creators)
+              allow(post).to receive(  :author).and_return(author   )
+              allow(post).to receive(    :tags).and_return(tags     )
+              allow(post).to receive(    :work).and_return(work     )
+              allow(work).to receive(    :tags).and_return(work_tags)
+              allow(work).to receive(  :medium).and_return(medium   )
+              allow(work).to receive(:creators).and_return(creators )
 
-               allow(        author).to receive(:update_counts)
-               allow(          work).to receive(:update_counts)
-               allow(        medium).to receive(:update_counts)
-               allow(creators.first).to receive(:update_counts)
-               allow( creators.last).to receive(:update_counts)
+               allow(         author).to receive(:update_counts)
+               allow(           work).to receive(:update_counts)
+               allow(         medium).to receive(:update_counts)
+               allow( creators.first).to receive(:update_counts)
+               allow(  creators.last).to receive(:update_counts)
+               allow(     tags.first).to receive(:update_counts)
+               allow(      tags.last).to receive(:update_counts)
+               allow(work_tags.first).to receive(:update_counts)
+               allow( work_tags.last).to receive(:update_counts)
 
-              expect(        author).to receive(:update_counts).once
-              expect(          work).to receive(:update_counts).once
-              expect(        medium).to receive(:update_counts).once
-              expect(creators.first).to receive(:update_counts).once
-              expect( creators.last).to receive(:update_counts).once
+              expect(         author).to receive(:update_counts).once
+              expect(           work).to receive(:update_counts).once
+              expect(         medium).to receive(:update_counts).once
+              expect( creators.first).to receive(:update_counts).once
+              expect(  creators.last).to receive(:update_counts).once
+              expect(     tags.first).to receive(:update_counts).once
+              expect(      tags.last).to receive(:update_counts).once
+              expect(work_tags.first).to receive(:update_counts).once
+              expect( work_tags.last).to receive(:update_counts).once
 
               post.send(:update_counts_for_descendents)
             end
@@ -911,11 +923,19 @@ RSpec.describe Post, type: :model do
           context "standalone" do
             let(  :post) { create(:standalone_post) }
             let(:author) { double }
+            let(  :tags) { [double, double] }
 
             it "updates counts for author" do
-              allow(   post).to receive(:author).and_return(author)
-              allow( author).to receive(:update_counts)
-              expect(author).to receive(:update_counts).once
+              allow(      post).to receive(:author).and_return(author)
+              allow(      post).to receive(:tags  ).and_return(tags  )
+
+              allow(    author).to receive(:update_counts)
+              allow(tags.first).to receive(:update_counts)
+              allow( tags.last).to receive(:update_counts)
+
+              expect(    author).to receive(:update_counts).once
+              expect(tags.first).to receive(:update_counts).once
+              expect( tags.last).to receive(:update_counts).once
 
               post.send(:update_counts_for_descendents)
             end

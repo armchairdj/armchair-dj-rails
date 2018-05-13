@@ -69,67 +69,23 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
-    describe "#admin_public_creator_link" do
+    describe "#admin_update_link" do
       it "generates link" do
-        post     = create(:review, :published)
-        instance = post.work.creators.first
+        expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
 
-        expect(helper).to receive(:polymorphic_path).with(instance)
-
-        expect(helper.admin_public_creator_link(instance)).to eq(
-          '<a title="view creator on site" class="admin public-view" target="_blank" href="path">public</a>'
+        expect(helper.admin_update_link(instance)).to eq(
+          '<a title="update creator" class="admin edit" href="path">update</a>'
         )
-      end
-
-      it "nils unless published posts" do
-        post     = create(:review)
-        instance = post.work.creators.first
-
-        expect(helper).to_not receive(:polymorphic_path)
-
-        expect(helper.admin_public_creator_link(instance)).to eq(nil)
       end
     end
 
-    describe "#admin_public_post_link" do
+    describe "#admin_view_link" do
       it "generates link" do
-        instance = create(:review, :published)
+        expect(helper).to receive(:polymorphic_path).with([:admin, instance])
 
-        expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
-
-        expect(helper.admin_public_post_link(instance)).to eq(
-          '<a title="view post on site" class="admin public-view" target="_blank" href="path">public</a>'
+        expect(helper.admin_view_link(instance)).to eq(
+          '<a title="view creator" class="admin view" href="path">view</a>'
         )
-      end
-
-      it "nils unless published" do
-        instance = create(:review)
-
-        expect(helper).to_not receive(:post_permalink_path)
-
-        expect(helper.admin_public_post_link(instance)).to eq(nil)
-      end
-    end
-
-    describe "#admin_public_work_link" do
-      it "generates link" do
-        post     = create(:review, :published)
-        instance = post.work
-
-        expect(helper).to receive(:polymorphic_path).with(instance)
-
-        expect(helper.admin_public_work_link(instance)).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
-        )
-      end
-
-      it "nils unless published posts" do
-        post     = create(:review)
-        instance = post.work
-
-        expect(helper).to_not receive(:polymorphic_path)
-
-        expect(helper.admin_public_work_link(instance)).to eq(nil)
       end
     end
 
@@ -155,25 +111,74 @@ RSpec.describe AdminHelper, type: :helper do
           '<a title="view work on site" class="admin public-view" target="_blank" href="/">public</a>'
         )
       end
-    end
 
-    describe "#admin_update_link" do
-      it "generates link" do
-        expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
+      context "specific models" do
+        describe "#admin_public_creator_link" do
+          it "generates link" do
+            post     = create(:review, :published)
+            instance = post.work.creators.first
 
-        expect(helper.admin_update_link(instance)).to eq(
-          '<a title="update creator" class="admin edit" href="path">update</a>'
-        )
-      end
-    end
+            expect(helper).to receive(:polymorphic_path).with(instance)
 
-    describe "#admin_view_link" do
-      it "generates link" do
-        expect(helper).to receive(:polymorphic_path).with([:admin, instance])
+            expect(helper.admin_public_creator_link(instance)).to eq(
+              '<a title="view creator on site" class="admin public-view" target="_blank" href="path">public</a>'
+            )
+          end
 
-        expect(helper.admin_view_link(instance)).to eq(
-          '<a title="view creator" class="admin view" href="path">view</a>'
-        )
+          it "nils unless published posts" do
+            post     = create(:review)
+            instance = post.work.creators.first
+
+            expect(helper).to_not receive(:polymorphic_path)
+
+            expect(helper.admin_public_creator_link(instance)).to eq(nil)
+          end
+        end
+
+        describe "#admin_public_post_link" do
+          it "generates link" do
+            instance = create(:review, :published)
+
+            expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
+
+            expect(helper.admin_public_post_link(instance)).to eq(
+              '<a title="view post on site" class="admin public-view" target="_blank" href="path">public</a>'
+            )
+          end
+
+          it "nils unless published" do
+            instance = create(:review)
+
+            expect(helper).to_not receive(:post_permalink_path)
+
+            expect(helper.admin_public_post_link(instance)).to eq(nil)
+          end
+        end
+
+        describe "#admin_public_work_link" do
+          it "generates link" do
+            post     = create(:review, :published)
+            instance = post.work
+
+            expect(helper).to receive(:polymorphic_path).with(instance)
+
+            expect(helper.admin_public_work_link(instance)).to eq(
+              '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
+            )
+          end
+
+          it "nils unless published posts" do
+            post     = create(:review)
+            instance = post.work
+
+            expect(helper).to_not receive(:polymorphic_path)
+
+            expect(helper.admin_public_work_link(instance)).to eq(nil)
+          end
+        end
+
+        pending "#admin_public_tag_link"
+        pending "#admin_public_medium_link"
       end
     end
   end
