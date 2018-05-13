@@ -144,6 +144,16 @@ class Post < ApplicationRecord
 
   private :work_or_title_present
 
+  validate { only_uncategorized_tags }
+
+  def only_uncategorized_tags
+    return if tags.where.not(category_id: nil).empty?
+
+    self.errors.add(:tag_ids, :categorized_tags)
+  end
+
+  private :only_uncategorized_tags
+
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -282,7 +292,10 @@ class Post < ApplicationRecord
   end
 
   def all_tags
-    Tag.where(id: [self.work.tag_ids, self.tag_ids].flatten.uniq)
+    ids = [self.tag_ids]
+    ids << self.work.tag_ids if self.work.present?
+
+    Tag.where(id: ids.flatten.uniq)
   end
 
 private

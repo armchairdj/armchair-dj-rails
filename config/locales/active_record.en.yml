@@ -84,12 +84,16 @@ en:
               locked: "You cannot change the slug on a published post."
             publish_on:
               blank: "Please choose a publication date to schedule this review."
+            tag_ids:
+              uncategorized_tags: "Work tags cannot be categorized."
         work:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
               missing: "Please choose at least one creator."
+            tag_ids:
+              uncategorized_tags: "Work tags must be categorized."
         user:
           attributes:
             base:

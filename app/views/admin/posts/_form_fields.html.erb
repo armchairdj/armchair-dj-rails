@@ -2,21 +2,29 @@
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :body, input_html: { class: "x-large" } %>
 
-    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
+    <%= f.input :tag_ids,
+      as:         :select,
+      collection: tags,
+      input_html: {
+        "data-controller":     "create-tag",
+        "data-create-tag-url": admin_tags_path,
+        multiple: true
+      }
+    %>
   <% end %>
 <% end %>
 
-<% if f.object.published? %>
-  <%= content_tag(:fieldset) do %>
-    <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:fieldset, class: "legendary") do %>
+  <%= content_tag(:legend, "Publication Details") %>
+
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
+
+    <% if f.object.published? %>
       <%= f.input(:slug, readonly: true) %>
 
-      <%= f.input :publish_on, as: :date, html5: true, readonly: true %>
-    <% end %>
-  <% end %>
-<% elsif f.object.persisted? %>
-  <%= content_tag(:fieldset) do %>
-    <%= content_tag(:div, class: "boxed") do %>
+      <%= f.input :published_at, as: :date, html5: true, readonly: true %>
+    <% elsif f.object.persisted? %>
       <%= f.input(:slug) %>
 
       <%= f.input :publish_on, as: :date, html5: true, hint: true %>

@@ -58,11 +58,11 @@ FactoryBot.define do
     end
 
     trait :with_tag do
-      tag_ids { [create(:tag).id] }
+      tag_ids { [create(:minimal_tag).id] }
     end
 
     trait :with_tags do
-      tag_ids { [create(:tag).id, create(:tag).id, create(:tag).id] }
+      tag_ids { [create(:minimal_tag).id, create(:minimal_tag).id, create(:minimal_tag).id] }
     end
 
     ###########################################################################

@@ -130,6 +130,16 @@ class Work < ApplicationRecord
 
   private :at_least_one_credit
 
+  validate { only_categorized_tags }
+
+  def only_categorized_tags
+    return if tags.where(category_id: nil).empty?
+
+    self.errors.add(:tag_ids, :uncategorized_tags)
+  end
+
+  private :only_categorized_tags
+
   #############################################################################
   # HOOKS.
   #############################################################################

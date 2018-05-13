@@ -420,6 +420,29 @@ RSpec.describe Post, type: :model do
           end
         end
       end
+
+      describe "#only_uncategorized_tags" do
+        let(:tag_for_post) { create(:tag_for_post) }
+        let(:tag_for_work) { create(:tag_for_work) }
+
+        subject { create(:standalone_post) }
+
+        context "valid" do
+          it "allows uncategorized tags" do
+            subject.update(tag_ids: [tag_for_post.id])
+
+            expect(subject).to_not have_errors(tag_ids: :categorized_tags)
+          end
+        end
+
+        context "invalid" do
+          it "disallows categorized tags" do
+            subject.update(tag_ids: [tag_for_work.id])
+
+            expect(subject).to have_errors(tag_ids: :categorized_tags)
+          end
+        end
+      end
     end
   end
 
@@ -1521,5 +1544,7 @@ RSpec.describe Post, type: :model do
     end
 
     pending "#alpha_parts"
+
+    pending "#all_tags"
   end
 end

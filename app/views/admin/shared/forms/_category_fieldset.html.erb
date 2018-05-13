@@ -1,11 +1,19 @@
-<%= content_tag(:fieldset) do %>
+<%
+  error   = f.error(:tag_ids)
+  classes = join_attr("legendary", ("fieldset-with-errors" if error))
+%>
+
+<%= content_tag(:fieldset, class: classes) do %>
   <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Tags") %>
+
+    <%= content_tag(:div, error, class: "legend-hint") if error %>
+
     <% categories.each do |category, available_tags| %>
       <%= render(partial: "admin/shared/forms/category_field", locals: {
         f:              f,
         category:       category,
-        available_tags: available_tags,
-        tags:           f.object.tags.alpha.where(category: category)
+        available_tags: available_tags
       }) %>
     <% end %>
   <% end %>

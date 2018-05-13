@@ -40,6 +40,8 @@ module MarkupHelper
   def paragraphs(str)
     return if str.blank?
 
-    str.strip.split("\n\n").map { |p| content_tag(:p, p.squish) }.join("\n").html_safe
+    ps = str.split(/[\r\n]+ *[\r\n]+/).map { |p| p.squish }.delete_if(&:blank?)
+
+    ps.map { |p| content_tag(:p, p) }.join("\n").html_safe
   end
 end

@@ -224,6 +224,29 @@ RSpec.describe Work, type: :model do
           expect(subject).to have_errors(credits: :missing)
         end
       end
+
+      describe "#only_categorized_tags" do
+        let(:tag_for_post) { create(:tag_for_post) }
+        let(:tag_for_work) { create(:tag_for_work) }
+
+        subject { create(:minimal_work) }
+
+        context "valid" do
+          it "allows categorized tags" do
+            subject.update(tag_ids: [tag_for_work.id])
+
+            expect(subject).to_not have_errors(tag_ids: :uncategorized_tags)
+          end
+        end
+
+        context "invalid" do
+          it "disallows uncategorized tags" do
+            subject.update(tag_ids: [tag_for_post.id])
+
+            expect(subject).to have_errors(tag_ids: :uncategorized_tags)
+          end
+        end
+      end
     end
   end
 

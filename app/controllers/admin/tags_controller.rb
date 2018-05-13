@@ -116,6 +116,7 @@ private
     params.fetch(:tag, {}).permit(
       :name,
       :category_id,
+      :summary
     )
   end
 

@@ -86,7 +86,7 @@ RSpec.describe MarkupHelper, type: :helper do
 
   describe "#paragraphs" do
     specify do
-      str      = "\t\n\n   one\n\ntwo\t\t\n\nthree    things\n\n\n"
+      str      = "\t\n  \n   one\n\ntwo\t\t\n\nthree    things\n \n\n"
       expected = "<p>one</p>\n<p>two</p>\n<p>three things</p>"
       actual   = helper.paragraphs(str)
 
