@@ -53,7 +53,7 @@ export default class extends Controller {
   }
 
   getLinkHtml() {
-    return $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-has-many#expand">add another</a></div>');
+    return $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-fieldset#expand">add another</a></div>');
   }
 
   expand(evt) {
