@@ -64,6 +64,10 @@ en:
             pseudonym_id:
               not_secondary: "Primary creators cannot be pseudonyms."
               taken: "This pseudonym is already taken."
+        medium:
+          attributes:
+            roles:
+              missing: "Please create at least one role."
         membership:
           attributes:
             group_id:

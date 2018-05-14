@@ -19,6 +19,14 @@ FactoryBot.define do
       } }
     end
 
+    trait :with_roles do
+      roles_attributes { {
+        "0" => attributes_for(:role, :with_name),
+        "1" => attributes_for(:role, :with_name),
+        "2" => attributes_for(:role, :with_name),
+      } }
+    end
+
     trait :with_category do
       facets_attributes { {
         "0" => attributes_for(:facet, :with_existing_category)
@@ -81,19 +89,19 @@ FactoryBot.define do
 
     factory :minimal_medium do
       with_name
+      with_role
     end
 
     factory :complete_medium, parent: :minimal_medium do
       with_summary
       with_category
-      with_role
     end
 
-    factory :album_medium do
+    factory :album_medium, parent: :minimal_medium do
       name "Album"
     end
 
-    factory :song_medium do
+    factory :song_medium, parent: :minimal_medium do
       name "Song"
     end
   end

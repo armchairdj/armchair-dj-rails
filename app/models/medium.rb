@@ -85,6 +85,16 @@ class Medium < ApplicationRecord
   validates :name, presence:   true
   validates :name, uniqueness: true
 
+  validate { at_least_one_role }
+
+  def at_least_one_role
+    return if self.roles.reject(&:marked_for_destruction?).any?
+
+    self.errors.add(:roles, :missing)
+  end
+
+  private :at_least_one_role
+
   #############################################################################
   # HOOKS.
   #############################################################################

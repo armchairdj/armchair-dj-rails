@@ -19,20 +19,23 @@ brian = User.create_with(role: :super_admin, username: "armchairdj", first_name:
 
 ##### MEDIA
 
-song        = FactoryBot.create(:medium, name: "Song"      )
-album       = FactoryBot.create(:medium, name: "Album"     )
-movie       = FactoryBot.create(:medium, name: "Movie"     )
-tv_show     = FactoryBot.create(:medium, name: "TV Show"   )
-book        = FactoryBot.create(:medium, name: "Book"      )
-comic       = FactoryBot.create(:medium, name: "Comic Book")
-game        = FactoryBot.create(:medium, name: "Game"      )
-publication = FactoryBot.create(:medium, name: "Publication" )
-artwork     = FactoryBot.create(:medium, name: "Artwork"   )
-software    = FactoryBot.create(:medium, name: "Software"  )
-hardware    = FactoryBot.create(:medium, name: "Hardware"  )
-product     = FactoryBot.create(:medium, name: "Product"   )
-radio_show  = FactoryBot.create(:medium, name: "Radio Show")
-podcast     = FactoryBot.create(:medium, name: "Podcast"   )
+song          = FactoryBot.create(:medium, :skip_validate, name: "Song"         )
+album         = FactoryBot.create(:medium, :skip_validate, name: "Album"        )
+movie         = FactoryBot.create(:medium, :skip_validate, name: "Movie"        )
+tv_show       = FactoryBot.create(:medium, :skip_validate, name: "TV Show"      )
+tv_season     = FactoryBot.create(:medium, :skip_validate, name: "TV Season"    )
+tv_episode    = FactoryBot.create(:medium, :skip_validate, name: "TV Episode"   )
+book          = FactoryBot.create(:medium, :skip_validate, name: "Book"         )
+comic_book    = FactoryBot.create(:medium, :skip_validate, name: "Comic Book"   )
+graphic_novel = FactoryBot.create(:medium, :skip_validate, name: "Graphic Novel")
+video_game    = FactoryBot.create(:medium, :skip_validate, name: "Video Game"   )
+publication   = FactoryBot.create(:medium, :skip_validate, name: "Publication"  )
+artwork       = FactoryBot.create(:medium, :skip_validate, name: "Artwork"      )
+software      = FactoryBot.create(:medium, :skip_validate, name: "Software"     )
+hardware      = FactoryBot.create(:medium, :skip_validate, name: "Hardware"     )
+product       = FactoryBot.create(:medium, :skip_validate, name: "Product"      )
+radio_show    = FactoryBot.create(:medium, :skip_validate, name: "Radio Show"   )
+podcast       = FactoryBot.create(:medium, :skip_validate, name: "Podcast"      )
 
 ##### CATEGORIES & TAGS
 
@@ -247,81 +250,154 @@ tech_companies     = [
                        FactoryBot.create(:tag, category: tech_company, name: "Amazon"),
                      ]
 
+creation_year = FactoryBot.create(:category, name: "Creation Year")
+release_year  = FactoryBot.create(:category, name: "Release Year")
+reissue_year  = FactoryBot.create(:category, name: "Reissue Year")
+start_year    = FactoryBot.create(:category, name: "Start Year")
+end_year      = FactoryBot.create(:category, name: "End Year")
+
+(1950..2018).each do |year|
+  FactoryBot.create(:tag, category: creation_year, name: year.to_s)
+  FactoryBot.create(:tag, category: release_year,  name: year.to_s)
+  FactoryBot.create(:tag, category: reissue_year,  name: year.to_s)
+  FactoryBot.create(:tag, category: start_year,    name: year.to_s)
+  FactoryBot.create(:tag, category: end_year,      name: year.to_s)
+end
+
 ##### FACETS
 
 song_facets = [
+  FactoryBot.create(:facet, medium: song, category: creation_year),
+  FactoryBot.create(:facet, medium: song, category: release_year),
+  FactoryBot.create(:facet, medium: song, category: reissue_year),
   FactoryBot.create(:facet, medium: song, category: musical_genre),
   FactoryBot.create(:facet, medium: song, category: music_label),
   FactoryBot.create(:facet, medium: song, category: song_type),
 ]
 
 album_facets = [
+  FactoryBot.create(:facet, medium: album, category: creation_year),
+  FactoryBot.create(:facet, medium: album, category: release_year),
+  FactoryBot.create(:facet, medium: album, category: reissue_year),
   FactoryBot.create(:facet, medium: album, category: musical_genre),
   FactoryBot.create(:facet, medium: album, category: music_label),
   FactoryBot.create(:facet, medium: album, category: album_type),
 ]
 
 movie_facets = [
+  FactoryBot.create(:facet, medium: movie, category: creation_year),
+  FactoryBot.create(:facet, medium: movie, category: release_year),
+  FactoryBot.create(:facet, medium: movie, category: reissue_year),
   FactoryBot.create(:facet, medium: movie, category: narrative_genre),
   FactoryBot.create(:facet, medium: movie, category: hollywood_studio),
 ]
 
 tv_show_facets = [
+  FactoryBot.create(:facet, medium: tv_show, category: start_year),
+  FactoryBot.create(:facet, medium: tv_show, category: end_year),
   FactoryBot.create(:facet, medium: tv_show, category: narrative_genre),
   FactoryBot.create(:facet, medium: tv_show, category: hollywood_studio),
   FactoryBot.create(:facet, medium: tv_show, category: tv_network),
 ]
 
+tv_season_facets = [
+  FactoryBot.create(:facet, medium: tv_season, category: start_year),
+  FactoryBot.create(:facet, medium: tv_season, category: end_year),
+  FactoryBot.create(:facet, medium: tv_season, category: narrative_genre),
+  FactoryBot.create(:facet, medium: tv_season, category: hollywood_studio),
+  FactoryBot.create(:facet, medium: tv_season, category: tv_network),
+]
+
+tv_episode_facets = [
+  FactoryBot.create(:facet, medium: tv_episode, category: release_year),
+  FactoryBot.create(:facet, medium: tv_episode, category: narrative_genre),
+  FactoryBot.create(:facet, medium: tv_episode, category: hollywood_studio),
+  FactoryBot.create(:facet, medium: tv_episode, category: tv_network),
+]
+
 radio_show_facets = [
+  FactoryBot.create(:facet, medium: radio_show, category: start_year),
+  FactoryBot.create(:facet, medium: radio_show, category: end_year),
   FactoryBot.create(:facet, medium: radio_show, category: narrative_genre),
   FactoryBot.create(:facet, medium: radio_show, category: audio_show_format),
   FactoryBot.create(:facet, medium: radio_show, category: radio_network),
 ]
 
 podcast_facets = [
+  FactoryBot.create(:facet, medium: podcast, category: start_year),
+  FactoryBot.create(:facet, medium: podcast, category: end_year),
   FactoryBot.create(:facet, medium: podcast, category: narrative_genre),
   FactoryBot.create(:facet, medium: podcast, category: audio_show_format),
   FactoryBot.create(:facet, medium: podcast, category: podcast_network),
 ]
 
 book_facets = [
+  FactoryBot.create(:facet, medium: book, category: creation_year),
+  FactoryBot.create(:facet, medium: book, category: release_year),
+  FactoryBot.create(:facet, medium: book, category: reissue_year),
   FactoryBot.create(:facet, medium: book, category: narrative_genre),
   FactoryBot.create(:facet, medium: book, category: publisher),
 ]
 
-comic_facets = [
-  FactoryBot.create(:facet, medium: comic, category: narrative_genre),
-  FactoryBot.create(:facet, medium: comic, category: publisher),
+graphic_novel_facets = [
+  FactoryBot.create(:facet, medium: graphic_novel, category: creation_year),
+  FactoryBot.create(:facet, medium: graphic_novel, category: release_year),
+  FactoryBot.create(:facet, medium: graphic_novel, category: reissue_year),
+  FactoryBot.create(:facet, medium: graphic_novel, category: narrative_genre),
+  FactoryBot.create(:facet, medium: graphic_novel, category: publisher),
 ]
 
-game_facets = [
-  FactoryBot.create(:facet, medium: game, category: game_studio),
-  FactoryBot.create(:facet, medium: game, category: game_mechanic),
-  FactoryBot.create(:facet, medium: game, category: tech_platform),
+comic_book_facets = [
+  FactoryBot.create(:facet, medium: comic_book, category: start_year),
+  FactoryBot.create(:facet, medium: comic_book, category: end_year),
+  FactoryBot.create(:facet, medium: comic_book, category: narrative_genre),
+  FactoryBot.create(:facet, medium: comic_book, category: publisher),
+]
+
+video_game_facets = [
+  FactoryBot.create(:facet, medium: video_game, category: release_year),
+  FactoryBot.create(:facet, medium: video_game, category: game_studio),
+  FactoryBot.create(:facet, medium: video_game, category: game_mechanic),
+  FactoryBot.create(:facet, medium: video_game, category: tech_platform),
 ]
 
 publication_facets = [
+  FactoryBot.create(:facet, medium: publication, category: start_year),
+  FactoryBot.create(:facet, medium: publication, category: end_year),
   FactoryBot.create(:facet, medium: publication, category: publisher),
   FactoryBot.create(:facet, medium: publication, category: publication_type),
 ]
 
 artwork_facets = [
+  FactoryBot.create(:facet, medium: artwork, category: creation_year),
+  FactoryBot.create(:facet, medium: artwork, category: release_year),
+  FactoryBot.create(:facet, medium: artwork, category: start_year),
+  FactoryBot.create(:facet, medium: artwork, category: end_year),
   FactoryBot.create(:facet, medium: artwork, category: art_medium),
   FactoryBot.create(:facet, medium: artwork, category: art_movement),
 ]
 
 hardware_facets = [
+  FactoryBot.create(:facet, medium: hardware, category: release_year),
   FactoryBot.create(:facet, medium: hardware, category: device_type),
   FactoryBot.create(:facet, medium: hardware, category: tech_platform),
   FactoryBot.create(:facet, medium: hardware, category: tech_company),
 ]
 
 software_facets = [
+  FactoryBot.create(:facet, medium: software, category: creation_year),
+  FactoryBot.create(:facet, medium: software, category: release_year),
+  FactoryBot.create(:facet, medium: software, category: start_year),
+  FactoryBot.create(:facet, medium: software, category: end_year),
   FactoryBot.create(:facet, medium: software, category: tech_platform),
   FactoryBot.create(:facet, medium: software, category: tech_company),
 ]
 
 product_facets = [
+  FactoryBot.create(:facet, medium: product, category: creation_year),
+  FactoryBot.create(:facet, medium: product, category: release_year),
+  FactoryBot.create(:facet, medium: product, category: start_year),
+  FactoryBot.create(:facet, medium: product, category: end_year),
   FactoryBot.create(:facet, medium: product, category: manufacturer),
   FactoryBot.create(:facet, medium: product, category: product_type),
 ]
@@ -365,22 +441,59 @@ movie_composer             = FactoryBot.create(:role, medium: movie, name: "Comp
 movie_sound_editor         = FactoryBot.create(:role, medium: movie, name: "Sound Editor")
 movie_sound_effects        = FactoryBot.create(:role, medium: movie, name: "Sound Effects")
 
-tv_show_director           = FactoryBot.create(:role, medium: tv_show, name: "Director")
 tv_show_producer           = FactoryBot.create(:role, medium: tv_show, name: "Producer")
 tv_show_executive_producer = FactoryBot.create(:role, medium: tv_show, name: "Executive Producer")
 tv_show_co_producer        = FactoryBot.create(:role, medium: tv_show, name: "Co-Producer")
-tv_show_cinematographer    = FactoryBot.create(:role, medium: tv_show, name: "Cinematographer")
 tv_show_showrunner         = FactoryBot.create(:role, medium: tv_show, name: "Showrunner")
 
-book_author                = FactoryBot.create(:role, medium: book, name: "Author")
-book_illustrator           = FactoryBot.create(:role, medium: book, name: "Illustrator")
-book_editor                = FactoryBot.create(:role, medium: book, name: "Editor")
+tv_season_showrunner       = FactoryBot.create(:role, medium: tv_season, name: "Showrunner")
 
-comic_cartoonist           = FactoryBot.create(:role, medium: comic, name: "Cartoonist")
-comic_penciller            = FactoryBot.create(:role, medium: comic, name: "Penciller")
-comic_inker                = FactoryBot.create(:role, medium: comic, name: "Inker")
-comic_colorist             = FactoryBot.create(:role, medium: comic, name: "Colorist")
-comic_letterer             = FactoryBot.create(:role, medium: comic, name: "Letterer")
+tv_episode_director        = FactoryBot.create(:role, medium: tv_episode, name: "Director")
+tv_episode_writer          = FactoryBot.create(:role, medium: tv_episode, name: "Screenwriter")
+tv_episode_editor          = FactoryBot.create(:role, medium: tv_episode, name: "Film Editor")
+tv_episode_composer        = FactoryBot.create(:role, medium: tv_episode, name: "Composer")
+
+book_author                = FactoryBot.create(:role, medium: book, name: "Author")
+book_editor                = FactoryBot.create(:role, medium: book, name: "Editor")
+book_illustrator           = FactoryBot.create(:role, medium: book, name: "Illustrator")
+
+comic_book_cartoonist      = FactoryBot.create(:role, medium: comic_book, name: "Cartoonist")
+comic_book_writer          = FactoryBot.create(:role, medium: comic_book, name: "Writer")
+comic_book_penciller       = FactoryBot.create(:role, medium: comic_book, name: "Penciller")
+comic_book_inker           = FactoryBot.create(:role, medium: comic_book, name: "Inker")
+comic_book_colorist        = FactoryBot.create(:role, medium: comic_book, name: "Colorist")
+comic_book_letterer        = FactoryBot.create(:role, medium: comic_book, name: "Letterer")
+comic_book_cover_artist    = FactoryBot.create(:role, medium: comic_book, name: "Cover Artist")
+
+graphic_novel_cartoonist   = FactoryBot.create(:role, medium: graphic_novel, name: "Cartoonist")
+graphic_novel_writer       = FactoryBot.create(:role, medium: graphic_novel, name: "Writer")
+graphic_novel_penciller    = FactoryBot.create(:role, medium: graphic_novel, name: "Penciller")
+graphic_novel_inker        = FactoryBot.create(:role, medium: graphic_novel, name: "Inker")
+graphic_novel_colorist     = FactoryBot.create(:role, medium: graphic_novel, name: "Colorist")
+graphic_novel_letterer     = FactoryBot.create(:role, medium: graphic_novel, name: "Letterer")
+graphic_novel_cover_artist = FactoryBot.create(:role, medium: graphic_novel, name: "Cover Artist")
+
+video_game_designer        = FactoryBot.create(:role, medium: video_game, name: "Designer")
+video_game_developer       = FactoryBot.create(:role, medium: video_game, name: "Developer")
+
+publication_writer         = FactoryBot.create(:role, medium: publication, name: "Writer")
+publication_editor         = FactoryBot.create(:role, medium: publication, name: "Editor")
+publication_publisher      = FactoryBot.create(:role, medium: publication, name: "Publisher")
+
+artwork_artist             = FactoryBot.create(:role, medium: artwork, name: "Artist")
+
+software_programmer        = FactoryBot.create(:role, medium: software, name: "Programmer")
+software_designer          = FactoryBot.create(:role, medium: software, name: "Designer")
+
+hardware_designer          = FactoryBot.create(:role, medium: hardware, name: "Designer")
+
+product_designer           = FactoryBot.create(:role, medium: product, name: "Designer")
+
+radio_show_host            = FactoryBot.create(:role, medium: radio_show, name: "Host")
+radio_show_producer        = FactoryBot.create(:role, medium: radio_show, name: "Producer")
+
+podcast_host               = FactoryBot.create(:role, medium: podcast, name: "Host")
+podcast_producer           = FactoryBot.create(:role, medium: podcast, name: "Producer")
 
 ##### CREATORS, IDENTITIES & MEMBERSHIPS
 

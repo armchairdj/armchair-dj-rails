@@ -39,8 +39,8 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    let( :song_medium) { create(:medium, name: "Song" ) }
-    let(:album_medium) { create(:medium, name: "Album") }
+    let( :song_medium) { create(:minimal_medium, name: "Song" ) }
+    let(:album_medium) { create(:minimal_medium, name: "Album") }
 
     let!(  :culture_beat) { create(:culture_beat_mr_vain,   medium: song_medium) }
     let!(       :robyn_s) { create(:robyn_s_give_me_love,   medium: album_medium) }

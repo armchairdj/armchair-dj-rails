@@ -56,9 +56,9 @@ RSpec.describe Medium, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!( :song_medium) { create(:medium, name: "Song" ) }
-      let!(:album_medium) { create(:medium, name: "Album") }
-      let!(:movie_medium) { create(:medium, name: "Movie") }
+      let!( :song_medium) { create(:minimal_medium, name: "Song" ) }
+      let!(:album_medium) { create(:minimal_medium, name: "Album") }
+      let!(:movie_medium) { create(:minimal_medium, name: "Movie") }
 
       let(:ids) { [song_medium, album_medium, movie_medium].map(&:id) }
 
@@ -202,6 +202,29 @@ RSpec.describe Medium, type: :model do
     it { should validate_presence_of(:name) }
 
     it { should validate_uniqueness_of(:name) }
+
+    context "custom" do
+      describe "#at_least_one_role" do
+        subject { build(:minimal_medium) }
+
+        before(:each) do
+           allow(subject).to receive(:at_least_one_role).and_call_original
+          expect(subject).to receive(:at_least_one_role)
+        end
+
+        specify "valid" do
+          expect(subject).to be_valid
+        end
+
+        specify "invalid" do
+          subject.roles = []
+
+          expect(subject).to_not be_valid
+
+          expect(subject).to have_errors(roles: :missing)
+        end
+      end
+    end
   end
 
   context "instance" do
