@@ -11,8 +11,8 @@ RSpec.describe Role, type: :model do
     describe "self#grouped_options" do
       subject { described_class.grouped_options }
 
-      let!(:z_medium) { create(:minimal_medium, name: "Z") }
-      let!(:a_medium) { create(:minimal_medium, name: "A") }
+      let!(:z_medium) { create(:medium, :skip_validation, name: "Z") }
+      let!(:a_medium) { create(:medium, :skip_validation, name: "A") }
 
       let!(:z_roles) { [] }
       let!(:a_roles) { [] }

@@ -5,7 +5,7 @@ FactoryBot.define do
     summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
   end
 
-  trait :skip_validate do
+  trait :skip_validation do
     to_create { |instance| instance.save(validate: false) }
   end
 end
