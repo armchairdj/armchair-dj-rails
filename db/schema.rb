@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_12_184515) do
+ActiveRecord::Schema.define(version: 2018_05_14_182327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,10 @@ ActiveRecord::Schema.define(version: 2018_05_12_184515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "alpha"
+    t.integer "format", default: 0, null: false
+    t.boolean "allow_multiple", default: true, null: false
     t.index ["alpha"], name: "index_categories_on_alpha"
+    t.index ["format"], name: "index_categories_on_format"
   end
 
   create_table "contributions", force: :cascade do |t|

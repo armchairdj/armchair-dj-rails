@@ -250,11 +250,11 @@ tech_companies     = [
                        FactoryBot.create(:tag, category: tech_company, name: "Amazon"),
                      ]
 
-creation_year = FactoryBot.create(:category, name: "Creation Year")
-release_year  = FactoryBot.create(:category, name: "Release Year")
-reissue_year  = FactoryBot.create(:category, name: "Reissue Year")
-start_year    = FactoryBot.create(:category, name: "Start Year")
-end_year      = FactoryBot.create(:category, name: "End Year")
+creation_year = FactoryBot.create(:category, name: "Creation Year", format: :year, allow_multiple: false)
+release_year  = FactoryBot.create(:category, name: "Release Year",  format: :year, allow_multiple: false)
+reissue_year  = FactoryBot.create(:category, name: "Reissue Year",  format: :year, allow_multiple: false)
+start_year    = FactoryBot.create(:category, name: "Start Year",    format: :year, allow_multiple: false)
+end_year      = FactoryBot.create(:category, name: "End Year",      format: :year, allow_multiple: false)
 
 (1950..2018).each do |year|
   FactoryBot.create(:tag, category: creation_year, name: year.to_s)

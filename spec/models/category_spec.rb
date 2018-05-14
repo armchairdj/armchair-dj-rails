@@ -38,6 +38,8 @@ RSpec.describe Category, type: :model do
   end
 
   context "instance" do
+    pending "#display_name"
+
     pending "#alpha_parts"
   end
 end

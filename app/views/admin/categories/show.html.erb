@@ -1,0 +1,54 @@
+<%
+  @title = ["View Category", @category.name]
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :show,
+  headline:    @title.first,
+  instance:    @category,
+  public_link: nil
+} %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @category.name) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Format") %>
+        <%= content_tag(:td, @category.format) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Allow Multiple?") %>
+        <%= content_tag(:td, @category.allow_multiple?) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@category.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@category.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @category.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/tags", locals: {
+  tags: @category.tags.alpha
+} %>

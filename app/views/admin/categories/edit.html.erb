@@ -1,0 +1,14 @@
+<%
+  @title = ["Update Category", @category.name]
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @category,
+  public_link: nil
+} %>
+
+<%= render partial: "form", locals: {
+  category: @category
+} %>

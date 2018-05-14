@@ -113,6 +113,8 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       context "specific models" do
+        pending "#admin_public_catagory_link"
+
         describe "#admin_public_creator_link" do
           it "generates link" do
             post     = create(:review, :published)
@@ -135,6 +137,8 @@ RSpec.describe AdminHelper, type: :helper do
           end
         end
 
+        pending "#admin_public_medium_link"
+
         describe "#admin_public_post_link" do
           it "generates link" do
             instance = create(:review, :published)
@@ -154,6 +158,10 @@ RSpec.describe AdminHelper, type: :helper do
             expect(helper.admin_public_post_link(instance)).to eq(nil)
           end
         end
+
+        pending "#admin_public_tag_link"
+
+        pending "#admin_public_user_link"
 
         describe "#admin_public_work_link" do
           it "generates link" do
@@ -176,9 +184,6 @@ RSpec.describe AdminHelper, type: :helper do
             expect(helper.admin_public_work_link(instance)).to eq(nil)
           end
         end
-
-        pending "#admin_public_tag_link"
-        pending "#admin_public_medium_link"
       end
     end
   end

@@ -37,6 +37,8 @@ en:
       defaults:
         _destroy: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
+      category:
+        allow_multiple: "&nbsp;"
       contribution:
       creator:
       credit:

@@ -1,6 +1,6 @@
-import SelectizeMultiController from "controllers/selectize_multi_controller";
+import SelectizeController from "controllers/selectize_controller";
 
-export default class extends SelectizeMultiController {
+export default class extends SelectizeController {
   connect() {
     super.connect();
 

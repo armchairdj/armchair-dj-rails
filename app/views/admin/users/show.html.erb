@@ -6,7 +6,7 @@
   action:      :show,
   headline:    @title.first,
   instance:    @user,
-  public_link: nil
+  public_link: admin_public_user_link(@user)
 } %>
 
 <%= content_tag(:section, class: "admin-section") do %>

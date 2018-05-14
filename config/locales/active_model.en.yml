@@ -35,3 +35,5 @@ en:
       odd: "Please enter an odd value."
       even: "Please enter an even value."
       taken: "Please choose a unique value."
+      not_a_url: "Please enter a URL in the format http://www.example.com."
+      not_a_year: "Please enter a year between %{year_min} and %{year_max}."

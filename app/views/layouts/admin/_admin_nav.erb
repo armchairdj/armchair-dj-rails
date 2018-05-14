@@ -4,13 +4,14 @@
 
     <%= content_tag(:nav, class: "links") do %>
       <%= content_tag(:ul, class: "arrowed") do %>
-        <%= content_tag :li, link_to("Media",       admin_media_path   ) %>
-        <%= content_tag :li, link_to("Tags",        admin_tags_path    ) %>
-        <%= content_tag :li, link_to("Creators",    admin_creators_path) %>
-        <%= content_tag :li, link_to("Works",       admin_works_path   ) %>
-        <%= content_tag :li, link_to("Users",       admin_users_path   ) %>
-        <%= content_tag :li, link_to("Posts",       admin_posts_path   ) %>
-        <%= content_tag :li, link_to("Style Guide", style_guides_path  ) %>
+        <%= content_tag :li, link_to("Media",       admin_media_path     ) %>
+        <%= content_tag :li, link_to("Categories",  admin_categories_path) %>
+        <%= content_tag :li, link_to("Tags",        admin_tags_path      ) %>
+        <%= content_tag :li, link_to("Creators",    admin_creators_path  ) %>
+        <%= content_tag :li, link_to("Works",       admin_works_path     ) %>
+        <%= content_tag :li, link_to("Users",       admin_users_path     ) %>
+        <%= content_tag :li, link_to("Posts",       admin_posts_path     ) %>
+        <%= content_tag :li, link_to("Style Guide", style_guides_path    ) %>
       <% end %>
     <% end %>
   <% end %>

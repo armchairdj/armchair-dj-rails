@@ -1,0 +1,12 @@
+<%
+  @title = "Create Category"
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :new,
+  headline: @title
+} %>
+
+<%= render partial: "form", locals: {
+  category: @category,
+} %>

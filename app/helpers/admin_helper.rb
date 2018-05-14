@@ -89,10 +89,14 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin view")
   end
 
-  def admin_public_post_link(post)
-    return unless post.published?
+  #############################################################################
+  # PUBLIC LINKS.
+  #############################################################################
 
-    admin_public_link(post, post_permalink_path(slug: post.slug))
+  def admin_public_category_link(category)
+    return unless category.viewable?
+
+    admin_public_link(category)
   end
 
   def admin_public_creator_link(creator)
@@ -101,22 +105,34 @@ module AdminHelper
     admin_public_link(creator)
   end
 
-  def admin_public_work_link(work)
-    return unless work.viewable?
-
-    admin_public_link(work)
-  end
-
   def admin_public_medium_link(medium)
     return unless medium.viewable?
 
     admin_public_link(medium)
   end
 
+  def admin_public_post_link(post)
+    return unless post.published?
+
+    admin_public_link(post, post_permalink_path(slug: post.slug))
+  end
+
   def admin_public_tag_link(tag)
     return unless tag.viewable?
 
     admin_public_link(tag)
+  end
+
+  def admin_public_user_link(user)
+    return unless user.viewable?
+
+    admin_public_link(user, user_profile_path(username: user.username))
+  end
+
+  def admin_public_work_link(work)
+    return unless work.viewable?
+
+    admin_public_link(work)
   end
 
   #############################################################################

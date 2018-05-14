@@ -63,13 +63,14 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
-    resources :creators, concerns: :paginatable
-    resources :media,    concerns: :paginatable
-    resources :posts,    concerns: :paginatable
-    resources :roles,    concerns: :paginatable
-    resources :tags,     concerns: :paginatable
-    resources :users,    concerns: :paginatable
-    resources :works,    concerns: :paginatable
+    resources :categories, concerns: :paginatable
+    resources :creators,   concerns: :paginatable
+    resources :media,      concerns: :paginatable
+    resources :posts,      concerns: :paginatable
+    resources :roles,      concerns: :paginatable
+    resources :tags,       concerns: :paginatable
+    resources :users,      concerns: :paginatable
+    resources :works,      concerns: :paginatable
   end
 
   #############################################################################

@@ -4,6 +4,8 @@ export default class extends Controller {
   connect() {
     $(document).on("turbolinks:visit", _.bind(this.teardown, this));
 
+    this.multiple = $(this.element).is("[multiple]");
+
     $(this.element).selectize(this.constructOptions());
   }
 
@@ -16,12 +18,21 @@ export default class extends Controller {
   }
 
   constructOptions() {
-    return {
-      maxItems: 1,
-      mode:     "multi",
-      plugins:  [
-        "remove_button"
-      ]
-    };
+    if (this.multiple) {
+      return {
+        mode:     "multi",
+        plugins:  [
+          "remove_button"
+        ]
+      };
+    } else {
+      return {
+        maxItems: 1,
+        mode:     "multi",
+        plugins:  [
+          "remove_button"
+        ]
+      };
+    }
   }
 }

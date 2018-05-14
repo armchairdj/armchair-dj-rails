@@ -1,0 +1,13 @@
+<%= simple_form_for([:admin, category]) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= f.input :name, required: true %>
+    <%= f.input :format, required: true %>
+    <%= f.input :allow_multiple %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :submit %>
+  <% end %>
+<% end %>

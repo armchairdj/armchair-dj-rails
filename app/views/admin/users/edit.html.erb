@@ -6,7 +6,7 @@
   action:      :edit,
   headline:    @title.first,
   instance:    @user,
-  public_link: nil
+  public_link: admin_public_user_link(@user)
 } %>
 
 <%= render partial: "form", locals: { user: @user } %>

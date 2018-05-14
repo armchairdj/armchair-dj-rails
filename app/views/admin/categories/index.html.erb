@@ -1,0 +1,47 @@
+<%
+  @title = "Categories"
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :index,
+  headline: @title,
+  prehead:  total_count_for(@categories)
+} %>
+
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= render partial: "admin/shared/index_tabs", locals: { model: Category } %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @categories.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= content_tag(:th, "Name") %>
+            <%= content_tag(:th, "Format") %>
+            <%= content_tag(:th, "Multi?") %>
+            <%= content_tag(:th, "Actions", class: "actions") %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @categories.each do |category| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, category.name) %>
+              <%= content_tag(:td, category.format) %>
+              <%= content_tag(:td, category.allow_multiple?) %>
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_view_link(category) %>
+                <%= admin_update_link(category) %>
+                <%= admin_destroy_link(category) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @categories %>
+    <% end %>
+  <% end %>
+<% end %>
