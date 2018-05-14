@@ -8,8 +8,9 @@ export default class extends SelectableController {
   }
 
   gatherData() {
-    this.url   = this.data.get("url"),
-    this.param = this.data.get("param");
+    this.url         = this.data.get("url"),
+    this.param       = this.data.get("param");
+    this.extraParams = (this.data.get("extra-params") || "").split("&");
   }
 
   constructOptions() {
@@ -32,6 +33,14 @@ export default class extends SelectableController {
     var params = {};
 
     params[this.param] = userInput;
+
+    if (this.extraParams) {
+      _.each(this.extraParams, function (param) {
+        const parts = param.split("=");
+
+        params[parts[0]] = parts[1];
+      });
+    }
 
     return params;
   }
