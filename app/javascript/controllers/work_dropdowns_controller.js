@@ -14,11 +14,7 @@ export default class extends Controller {
   }
 
   hideInvalid() {
-    const grouping   = $(this.mediumTargets).find(":selected").data().grouping;
-    const $options   = $(this.roleTargets).find("option[data-grouping]");
-    const $optgroups = $options.parent("optgroup");
-    const $invalid   = $options.filter(`option:not([data-grouping="${grouping}"])`);
-    const $hide      = $invalid.parent("optgroup");
+    const grouping = $(this.mediumTargets).find(":selected").data().grouping;
 
     if (grouping === this.previousGrouping) {
       return;
@@ -26,24 +22,35 @@ export default class extends Controller {
 
     this.previousGrouping = grouping;
 
-    $optgroups.removeClass("disabled");
+    this.setDisabled(grouping);
+
+    this.roleTargets.forEach(_.bind(this.updateOptgroup, this));
+  }
+
+  setDisabled(grouping) {
+    const $options   = $(this.roleTargets).find("option[data-grouping]");
+    const $optgroups = $options.parent("optgroup");
+    const $hide      = $options.filter(`option:not([data-grouping="${grouping}"])`).parent("optgroup");
+
+    $optgroups.not($hide).removeClass("disabled");
     $hide.addClass("disabled");
+  }
 
-    this.roleTargets.forEach(function (select, index) {
-      const $select   = $(select);
-      const $optgroup = $select.find(":selected").parent("optgroup");
-      const current   = $select.val();
-      const hidden    = $optgroup.hasClass("disabled");
-      const $restore  = $select.find("optgroup[data-previous-val]:not(.disabled)")
-      const previous  = $restore.attr("data-previous-val");
+  updateOptgroup(select) {
+    const $select     = $(select);
+    const $optgroup   = $select.find(":selected").parent("optgroup");
+    const $restore    = $select.find("optgroup[data-previous-val]:not(.disabled)")
 
-      if (hidden && typeof current !== "undefined") {
-        $select.val("");
-        $optgroup.attr("data-previous-val", current);
-      } else if (!hidden && typeof previous !== "undefined") {
-        $select.val(previous);
-        $restore.removeAttr("data-previous-val");
-      }
-    });
+    const hidden      = $optgroup.hasClass("disabled");
+    const currentVal  = $select.val();
+    const previousVal = $restore.attr("data-previous-val");
+
+    if (hidden && typeof currentVal !== "undefined") {
+      $select.val("");
+      $optgroup.attr("data-previous-val", currentVal);
+    } else if (!hidden && typeof previousVal !== "undefined") {
+      $select.val(previousVal);
+      $restore.removeAttr("data-previous-val");
+    }
   }
 }
