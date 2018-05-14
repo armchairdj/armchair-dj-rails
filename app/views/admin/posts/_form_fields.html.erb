@@ -6,9 +6,10 @@
       as:         :select,
       collection: tags,
       input_html: {
-        "data-controller":     "create-tag",
-        "data-create-tag-url": admin_tags_path,
-        multiple:              true
+        multiple:                       true,
+        "data-controller":              "selectable-create",
+        "data-selectable-create-url":   admin_tags_path,
+        "data-selectable-create-param": "tag[name]",
       }
     %>
   <% end %>

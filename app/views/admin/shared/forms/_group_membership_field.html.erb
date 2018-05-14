@@ -7,8 +7,10 @@
       required:      false,
       include_blank: :translate,
       input_html:    {
-        "data-controller":       "create-group",
-        "data-create-group-url": admin_creators_path
+        "data-controller":                     "selectable-create",
+        "data-selectable-create-url":          admin_creators_path,
+        "data-selectable-create-param":        "creator[name]",
+        "data-selectable-create-extra-params": "creator[individual]=false"]
       }
     %>
 

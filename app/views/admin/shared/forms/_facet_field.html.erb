@@ -7,8 +7,9 @@
       required:      false,
       include_blank: :translate,
       input_html:    {
-      #   "data-controller":         "create-category",
-      #   "data-create-creator-url": admin_categories_path
+        "data-controller":              "selectable-create",
+        "data-selectable-create-url":   admin_categories_path,
+        "data-selectable-create-param": "category[name]",
       }
     %>
 

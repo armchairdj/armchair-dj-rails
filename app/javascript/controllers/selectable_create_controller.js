@@ -1,6 +1,17 @@
 import SelectableController from "controllers/selectable_controller";
 
 export default class extends SelectableController {
+  connect() {
+    super.connect();
+
+    this.gatherData();
+  }
+
+  gatherData() {
+    this.url   = this.data.get("url"),
+    this.param = this.data.get("param");
+  }
+
   constructOptions() {
     return Object.assign(super.constructOptions(), {
       create: _.bind(this.createItem, this)
@@ -10,7 +21,7 @@ export default class extends SelectableController {
   createItem(userInput, callback) {
     $.ajax({
       method:   "POST",
-      url:      this.data.get("url"),
+      url:      this.url,
       data:     this.postParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
@@ -20,7 +31,7 @@ export default class extends SelectableController {
   postParams(userInput) {
     var params = {};
 
-    params["creator[name]"] = userInput;
+    params[this.param] = userInput;
 
     return params;
   }

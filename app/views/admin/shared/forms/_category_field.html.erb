@@ -3,9 +3,10 @@
   collection: available_tags,
   label:      category.display_name,
   input_html: {
-    "data-controller":             "create-tag",
-    "data-create-tag-url":         admin_tags_path,
-    "data-create-tag-category-id": category.id,
-    multiple:                      category.allow_multiple?
+    multiple:                              category.allow_multiple?
+    "data-controller":                     "selectable-create",
+    "data-selectable-create-url":          admin_tags_path,
+    "data-selectable-create-param":        "tag[name]",
+    "data-selectable-create-extra-params": "tag[category_id]=#{category.id}",
   }
 %>
