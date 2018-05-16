@@ -1,4 +1,12 @@
-<%= simple_form_for([:admin, work], html: { class: "admin"}) do |f| %>
+<%
+  form_attrs = { class: "admin" }
+
+  if work.new_record?
+    form_attrs.merge!({ "data-controller": "auto-submittable" })
+  end
+%>
+
+<%= simple_form_for([:admin, work], html: form_attrs) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
@@ -15,7 +23,8 @@
     <%= admin_submit_button(f) %>
 
     <%= f.button(:button, "Update Medium", type: :submit,
-      name: "step", value: "select_medium", class: "secondary"
+      name: "step", value: "select_medium", class: "secondary",
+      "data-target": "auto-submittable.submit"
     ) if f.object.new_record? %>
   <% end %>
 <% end %>

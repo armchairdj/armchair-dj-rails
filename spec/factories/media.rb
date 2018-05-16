@@ -42,7 +42,7 @@ FactoryBot.define do
     end
 
     trait :with_tags do
-      with_category
+      with_categories
 
       after(:create) do |medium|
         medium.categories.each do |category|
@@ -97,9 +97,11 @@ FactoryBot.define do
       with_role
     end
 
-    factory :complete_medium, parent: :minimal_medium do
+    factory :complete_medium do
+      with_name
       with_summary
-      with_category
+      with_roles
+      with_tags
     end
 
     factory :album_medium, parent: :minimal_medium do

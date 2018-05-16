@@ -5,7 +5,7 @@ require "rspec/expectations"
 RSpec::Matchers.define :prepare_the_review_tabs do
   match do
     expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
-    expect(assigns(:media   )).to be_a_kind_of(Array)
+    expect(assigns(:media   )).to be_a_kind_of(ActiveRecord::Relation)
     expect(assigns(:tags    )).to be_a_kind_of(ActiveRecord::Relation)
     expect(assigns(:works   )).to be_a_kind_of(Array)
   end

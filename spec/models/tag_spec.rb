@@ -54,6 +54,10 @@ RSpec.describe Tag, type: :model do
     it { should validate_uniqueness_of(:name).scoped_to(:category_id) }
 
     it { should_not validate_presence_of(:category_id) }
+
+    context "custom" do
+      pending "#format_is_correct"
+    end
   end
 
   context "instance" do

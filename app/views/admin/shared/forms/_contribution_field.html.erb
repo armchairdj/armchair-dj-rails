@@ -13,11 +13,9 @@
         }
       %>
 
-      <%= ff.input :role_id, as: :grouped_select,
+      <%= ff.input :role_id, as: :select,
         collection:         roles,
         required:           false,
-        group_label_method: :first,
-        group_method:       :last,
         include_blank:      :translate,
         input_html:         {
           "data-controller":                    "selectable-create",

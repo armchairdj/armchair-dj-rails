@@ -7,9 +7,10 @@
     <% if f.object.persisted? %>
       <%= f.input :medium_id, as: :select, collection: media, disabled: true %>
     <% else %>
-      <%= f.input :medium_id, as: :select, collection: media,
-        input_html: { "data-controller": "selectable" }
-      %>
+      <%= f.input :medium_id, as: :select, collection: media, input_html: {
+        "data-controller": "selectable",
+        "data-target":     "auto-submittable.field"
+      } %>
     <% end %>
 
     <%= f.input :title %>

@@ -192,7 +192,7 @@ private
     @post.prepare_work_for_editing(@sanitized_params)
 
     @creators = Creator.all.alpha
-    @media    = Medium.select_options
+    @media    = Medium.all.alpha
     @tags     = Tag.for_posts
     @works    = Work.grouped_options
   end

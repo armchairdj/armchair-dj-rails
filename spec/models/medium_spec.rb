@@ -17,28 +17,6 @@ RSpec.describe Medium, type: :model do
   end
 
   context "class" do
-    describe "self#select_options" do
-      subject { described_class.select_options }
-
-      let!(:media) { [] }
-
-      before(:each) do
-        5.times { |i| media << create(:minimal_medium, name: "Test Medium #{5 - i}") }
-      end
-
-      it "prepares alpha options for view, adding data-attributes for JS" do
-        expected = [
-          [ "Test Medium 1", media[4].id, { :"data-grouping" => media[4].id } ],
-          [ "Test Medium 2", media[3].id, { :"data-grouping" => media[3].id } ],
-          [ "Test Medium 3", media[2].id, { :"data-grouping" => media[2].id } ],
-          [ "Test Medium 4", media[1].id, { :"data-grouping" => media[1].id } ],
-          [ "Test Medium 5", media[0].id, { :"data-grouping" => media[0].id } ]
-        ]
-
-        should eq expected
-      end
-    end
-
     describe "self#admin_scopes" do
       specify "keys are short tab names" do
         expect(described_class.admin_scopes.keys).to eq([

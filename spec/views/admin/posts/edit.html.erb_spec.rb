@@ -11,9 +11,9 @@ RSpec.describe "admin/posts/edit", type: :view do
       create(:tag_for_post)
     end
 
-    @creators = assign(:creators, Creator.all.alpha    )
-    @media    = assign(:media,    Medium.select_options)
-    @works    = assign(:works,    Work.grouped_options )
+    @creators = assign(:creators, Creator.all.alpha   )
+    @media    = assign(:media,    Medium.all.alpha    )
+    @works    = assign(:works,    Work.grouped_options)
   end
 
   context "for standalone" do

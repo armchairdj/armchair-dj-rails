@@ -125,14 +125,14 @@ private
   end
 
   def prepare_form
-    @media = Medium.select_options
+    @media = Medium.all.alpha
 
     if @work.medium.present?
       @work.prepare_credits
       @work.prepare_contributions
 
       @creators   = Creator.all.alpha
-      @roles      = Role.grouped_options
+      @roles      = Role.options_for(@work.medium)
       @categories = @work.medium.tags_by_category
     end
   end
