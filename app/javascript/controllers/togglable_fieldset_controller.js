@@ -7,8 +7,8 @@ export default class extends Controller {
 
   connect() {
     this.$node          = $(this.element);
-    this.$trueFieldset  = $(this.trueFieldsetTargets)
-    this.$falseFieldset = $(this.falseFieldsetTargets)
+    this.$trueFieldset  = $(this.trueFieldsetTarget)
+    this.$falseFieldset = $(this.falseFieldsetTarget)
     this.$radio         = this.$node.find('input[type="radio"]');
 
     this.$radio.on("change", _.bind(this.handleChange, this));

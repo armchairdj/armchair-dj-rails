@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = [ "medium", "role" ];
 
   connect() {
-    $(this.mediumTargets).on("change", _.bind(this.handleMediumChange, this));
+    $(this.mediumTarget).on("change", _.bind(this.handleMediumChange, this));
 
     this.hideInvalid();
   }
@@ -14,7 +14,7 @@ export default class extends Controller {
   }
 
   hideInvalid() {
-    const grouping = $(this.mediumTargets).find(":selected").data().grouping;
+    const grouping = $(this.mediumTarget).find(":selected").data().grouping;
 
     if (grouping === this.previousGrouping) {
       return;

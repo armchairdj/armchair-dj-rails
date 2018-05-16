@@ -30,7 +30,7 @@ export default class extends SelectableController {
   }
 
   postParams(userInput) {
-    var params = {};
+    const params = {};
 
     params[this.param] = userInput;
 

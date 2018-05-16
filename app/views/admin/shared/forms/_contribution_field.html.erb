@@ -20,12 +20,10 @@
         group_method:       :last,
         include_blank:      :translate,
         input_html:         {
-          # Needs admin roles_controller
-          # Need ability to assign correct medium to role
-          # "data-controller":              "selectable-create",
-          # "data-selectable-create-url":   admin_roles_path,
-          # "data-selectable-create-param": "role[name]"
-          "data-target": "work-dropdowns.role"
+          "data-controller":                   "selectable-create-role",
+          "data-selectable-create-role-url":   admin_roles_path,
+          "data-selectable-create-role-param": "role[name]",
+          "data-target":                       "work-dropdowns.role"
         }
       %>
     <% end %>
