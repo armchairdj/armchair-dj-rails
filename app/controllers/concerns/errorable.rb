@@ -37,7 +37,7 @@ module Errorable
       respond_to do |format|
         format.html {
           set_user_return_to
-          redirect_to(new_user_session_path, success: I18n.t("admin.flash.sessions.success.missing"))
+          redirect_to(new_user_session_path, success: I18n.t("public.flash.sessions.error.missing"))
         }
         format.json { render json: {}, status: 403 }
       end

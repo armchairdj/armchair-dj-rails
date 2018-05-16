@@ -124,7 +124,10 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         get :new
 
         should successfully_render("admin/creators/new")
+
         expect(assigns(:creator)).to be_a_populated_new_creator
+
+        should prepare_identity_and_membership_dropdowns
       end
     end
 
@@ -232,6 +235,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator)).to be_a_populated_new_creator
           expect(assigns(:creator)).to have_coerced_attributes(invalid_params)
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
     end
@@ -245,6 +250,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           should successfully_render("admin/creators/edit")
           should assign(creator, :creator)
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -255,6 +262,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           get :edit, params: { id: creator.to_param }
 
           expect(assigns(:creator).group_memberships).to have(6).items
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -265,6 +274,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           get :edit, params: { id: creator.to_param }
 
           expect(assigns(:creator).member_memberships).to have(6).items
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -275,6 +286,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           get :edit, params: { id: creator.to_param }
 
           expect(assigns(:creator).pseudonym_identities).to have(6).items
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -285,6 +298,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           get :edit, params: { id: creator.to_param }
 
           expect(assigns(:creator).real_name_identities).to have(1).items
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
     end
@@ -378,6 +393,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator)       ).to eq(creator)
           expect(assigns(:creator).valid?).to eq(false)
+
+          should prepare_identity_and_membership_dropdowns
         end
       end
     end

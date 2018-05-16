@@ -87,6 +87,11 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
+    factory :medium_without_role do
+      skip_validation
+      with_name
+    end
+
     factory :minimal_medium do
       with_name
       with_role

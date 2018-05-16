@@ -19,8 +19,8 @@ RSpec.describe Role, type: :model do
 
       before(:each) do
         3.times do |i|
-          z_roles << create(:minimal_role, medium: z_medium, name: "Z Role #{3 - i}")
-          a_roles << create(:minimal_role, medium: a_medium, name: "A Role #{3 - i}")
+          z_roles << create(:minimal_role, medium_id: z_medium.id, name: "Z Role #{3 - i}")
+          a_roles << create(:minimal_role, medium_id: a_medium.id, name: "A Role #{3 - i}")
         end
       end
 
@@ -53,6 +53,10 @@ RSpec.describe Role, type: :model do
     it { should belong_to(:medium) }
 
     it { should have_many(:contributions) }
+
+    it { should have_many(:works).through(:contributions) }
+
+    it { should have_many(:posts).through(:works) }
   end
 
   context "validations" do

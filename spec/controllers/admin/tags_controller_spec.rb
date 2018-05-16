@@ -71,6 +71,8 @@ RSpec.describe Admin::TagsController, type: :controller do
         should successfully_render("admin/tags/new")
 
         expect(assigns(:tag)).to be_a_new(Tag)
+
+        expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
       end
     end
 
@@ -131,6 +133,8 @@ RSpec.describe Admin::TagsController, type: :controller do
 
           expect(assigns(:tag)).to have_coerced_attributes(invalid_params)
           expect(assigns(:tag)).to be_invalid
+
+          expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
         end
       end
     end
@@ -143,6 +147,8 @@ RSpec.describe Admin::TagsController, type: :controller do
 
         should successfully_render("admin/tags/edit")
         should assign(tag, :tag)
+
+        expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
       end
     end
 
@@ -175,6 +181,8 @@ RSpec.describe Admin::TagsController, type: :controller do
           should successfully_render("admin/tags/edit")
 
           should assign(tag, :tag).with_attributes(invalid_params).and_be_invalid
+
+          expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
         end
       end
     end

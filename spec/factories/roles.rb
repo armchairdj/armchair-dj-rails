@@ -18,13 +18,19 @@ FactoryBot.define do
       association :medium, factory: :minimal_medium
     end
 
+    trait :with_existing_medium do
+      medium_id { create(:minimal_medium).id }
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################
 
     factory :minimal_role do
       with_name
-      with_medium
+      with_existing_medium
     end
+
+    factory :complete_role, parent: :minimal_role do; end
   end
 end

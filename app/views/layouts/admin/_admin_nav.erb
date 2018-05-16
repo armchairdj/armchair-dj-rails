@@ -5,6 +5,7 @@
     <%= content_tag(:nav, class: "links") do %>
       <%= content_tag(:ul, class: "arrowed") do %>
         <%= content_tag :li, link_to("Media",       admin_media_path     ) %>
+        <%= content_tag :li, link_to("Roles",       admin_roles_path     ) %>
         <%= content_tag :li, link_to("Categories",  admin_categories_path) %>
         <%= content_tag :li, link_to("Tags",        admin_tags_path      ) %>
         <%= content_tag :li, link_to("Creators",    admin_creators_path  ) %>

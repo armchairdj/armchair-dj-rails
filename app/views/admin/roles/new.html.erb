@@ -1,0 +1,13 @@
+<%
+  @title = "Create Role"
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:   :new,
+  headline: @title
+} %>
+
+<%= render partial: "form", locals: {
+  role:  @role,
+  media: @media,
+} %>

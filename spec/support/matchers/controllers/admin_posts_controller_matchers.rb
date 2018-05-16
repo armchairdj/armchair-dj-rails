@@ -22,7 +22,7 @@ RSpec::Matchers.define :prepare_the_review_tabs do
   end
 
   failure_message_when_negated do
-    "expected not to prepare review tabs, but they did"
+    "expected not to prepare review tabs, but did"
   end
 end
 
@@ -46,7 +46,7 @@ RSpec::Matchers.define :define_the_review_tabs do
   end
 
   failure_message_when_negated do
-    "expected not to set up review tabs, but they did"
+    "expected not to set up review tabs, but did"
   end
 end
 
@@ -64,7 +64,7 @@ RSpec::Matchers.define :define_the_standalone_tab do
   end
 
   failure_message_when_negated do
-    "expected not to set up standalone tab, but they did"
+    "expected not to set up standalone tab, but did"
   end
 end
 
@@ -82,9 +82,9 @@ RSpec::Matchers.define :define_only_the_review_tabs do
 
   failure_message do
     if @selected
-      "expected to set up only the review tabs and select #{@selected}, but did not"
+      "expected to set up only the review tabs and select #{@selected}, but did not; available tabs were #{assigns(:available_tabs)} and selected was #{assigns(:selected_tab)}"
     else
-      "expected to set up only the review tabs, but did not"
+      "expected to set up only the review tabs, but did not; available tabs were #{assigns(:available_tabs)}"
     end
   end
 end
@@ -98,7 +98,7 @@ RSpec::Matchers.define :define_only_the_standalone_tab do
   end
 
   failure_message do
-    "expected to set up only the standalone tab, but did not"
+    "expected to set up only the standalone tab, but did not; available tabs were #{assigns(:available_tabs)} and selected was #{assigns(:selected_tab)}"
   end
 end
 
@@ -116,9 +116,9 @@ RSpec::Matchers.define :define_all_tabs do
 
   failure_message do
     if @selected
-      "expected to set up all three tabs and select #{@selected}, but did not"
+      "expected to set up all three tabs and select #{@selected}, but did not; available tabs were #{assigns(:available_tabs)} and selected was #{assigns(:selected_tab)}"
     else
-      "expected to set up all three tabs, but did not"
+      "expected to set up all three tabs, but did not; available tabs were #{assigns(:available_tabs)}"
     end
   end
 end

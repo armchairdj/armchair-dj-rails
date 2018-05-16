@@ -58,6 +58,8 @@ class Admin::TagsController < AdminController
         format.html { redirect_to admin_tag_path(@tag), success: I18n.t("admin.flash.tags.success.create") }
         format.json { render :show, status: :created, location: @tag }
       else
+        prepare_form
+
         format.html { render :new }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
@@ -77,6 +79,8 @@ class Admin::TagsController < AdminController
         format.html { redirect_to admin_tag_path(@tag), success: I18n.t("admin.flash.tags.success.update") }
         format.json { render :show, status: :ok, location: @tag }
       else
+        prepare_form
+
         format.html { render :edit }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end

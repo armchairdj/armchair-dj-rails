@@ -57,7 +57,7 @@ class Admin::PostsController < AdminController
 
   # GET /posts/new
   def new
-    prepare_form
+
   end
 
   # POST /posts
@@ -80,7 +80,7 @@ class Admin::PostsController < AdminController
 
   # GET /posts/1/edit
   def edit
-    prepare_form
+
   end
 
   # PATCH/PUT /posts/1

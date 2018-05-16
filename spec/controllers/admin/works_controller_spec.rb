@@ -134,6 +134,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
         should successfully_render("admin/works/new")
         expect(assigns(:work)).to be_a_fully_populated_new_work
+
+        should prepare_the_work_dropdowns
       end
     end
 
@@ -171,6 +173,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
           expect(assigns(:work)).to have_coerced_attributes(invalid_params)
           expect(assigns(:work)).to be_invalid
+
+          should prepare_the_work_dropdowns
         end
       end
     end
@@ -186,6 +190,8 @@ RSpec.describe Admin::WorksController, type: :controller do
           should assign(work, :work)
 
           expect(assigns(:work).credits).to have(4).items
+
+          should prepare_the_work_dropdowns
         end
       end
 
@@ -234,6 +240,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
           expect(assigns(:work)       ).to eq(work)
           expect(assigns(:work).valid?).to eq(false)
+
+          should prepare_the_work_dropdowns
         end
       end
     end

@@ -1,0 +1,15 @@
+<%
+  @title = ["Update Role", @role.name]
+%>
+
+<%= render partial: "admin/shared/admin_header", locals: {
+  action:      :edit,
+  headline:    @title.first,
+  instance:    @role,
+  public_link: nil
+} %>
+
+<%= render partial: "form", locals: {
+  role:  @role,
+  media: @media,
+} %>

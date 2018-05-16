@@ -12,24 +12,22 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:fieldset) do %>
+<%= content_tag(:fieldset, class: "legendary") do %>
   <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Account") %>
+
+    <%= f.input(:email,    required: true, placeholder: true) %>
+
+    <%= f.input(:password, required: true, hint: true) if show_password %>
+
+    <%= f.input(:username) %>
+
     <%= f.input(:role,
       as:            :select,
       collection:    User.human_roles,
       include_blank: :translate
     ) if show_role %>
 
-    <%= f.input(:username) %>
-
-    <%= f.input(:email,    required: true, placeholder: true) %>
-
-    <%= f.input(:password, required: true, hint: true) if show_password %>
-  <% end %>
-<% end %>
-
-<%= content_tag(:fieldset) do %>
-  <%= content_tag(:div, class: "boxed") do %>
     <%= f.input(:bio, hint: true) if show_bio %>
   <% end %>
 <% end %>

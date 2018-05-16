@@ -15,7 +15,7 @@ class Role < ApplicationRecord
   #############################################################################
 
   def self.grouped_options
-    optgroups = joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+    optgroups = joins(:medium).alpha.group_by{ |r| r.medium.name }.to_a.sort_by(&:first)
 
     optgroups.each.inject([]) do |memo, (og, opts)|
       memo << [og, opts.map { |opt| [ opt.name, opt.id, { "data-grouping": opt.medium.id } ] }]
@@ -38,6 +38,10 @@ class Role < ApplicationRecord
   belongs_to :medium
 
   has_many :contributions, dependent: :destroy
+
+  has_many :works, through: :contributions
+
+  has_many :posts, through: :works
 
   #############################################################################
   # ATTRIBUTES.

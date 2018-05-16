@@ -12,6 +12,11 @@ en:
     content:
       no_records: "Nothing to see here, folks."
     flash:
+      categories:
+        success:
+          create:  "Category created."
+          destroy: "Category destroyed."
+          update:  "Category updated."
       creators:
         success:
           create:  "Creator created."
@@ -41,9 +46,6 @@ en:
           create:  "Role created."
           destroy: "Role destroyed."
           update:  "Role updated."
-      sessions:
-        success:
-          missing: "Please log in to access that."
       tags:
         success:
           create:  "Tag created."
@@ -59,3 +61,8 @@ en:
           create:  "Work created."
           destroy: "Work destroyed."
           update:  "Work updated."
+  public:
+    flash:
+      sessions:
+        error:
+          missing: "Please log in to access that."

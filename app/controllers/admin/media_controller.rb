@@ -58,6 +58,8 @@ class Admin::MediaController < AdminController
         format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.create") }
         format.json { render :show, status: :created, location: @medium }
       else
+        prepare_form
+
         format.html { render :new }
         format.json { render json: @medium.errors, status: :unprocessable_entity }
       end
@@ -77,6 +79,8 @@ class Admin::MediaController < AdminController
         format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.update") }
         format.json { render :show, status: :ok, location: @medium }
       else
+        prepare_form
+
         format.html { render :edit }
         format.json { render json: @medium.errors, status: :unprocessable_entity }
       end

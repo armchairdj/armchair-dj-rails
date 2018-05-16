@@ -13,6 +13,6 @@ RSpec::Matchers.define :paginate do |displayed|
   end
 
   failure_message do |actual|
-    "expected #{actual} to display #{displayed} records out of #{@total}, but it didn't"
+    "expected #{actual} to display #{displayed} records out of #{@total}, but it displayed #{actual.size} of #{actual.total_count}"
   end
 end
