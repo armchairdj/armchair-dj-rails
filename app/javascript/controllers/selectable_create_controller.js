@@ -1,18 +1,6 @@
 import SelectableController from "controllers/selectable_controller";
 
 export default class extends SelectableController {
-  connect() {
-    super.connect();
-
-    this.gatherData();
-  }
-
-  gatherData() {
-    this.url         = this.data.get("url"),
-    this.param       = this.data.get("param");
-    this.extraParams = (this.data.get("extra-params") || "").split("&");
-  }
-
   constructOptions() {
     return Object.assign(super.constructOptions(), {
       create: _.bind(this.createItem, this)
@@ -22,7 +10,7 @@ export default class extends SelectableController {
   createItem(userInput, callback) {
     $.ajax({
       method:   "POST",
-      url:      this.url,
+      url:      this.data.get("url"),
       data:     this.postParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
@@ -30,17 +18,53 @@ export default class extends SelectableController {
   }
 
   postParams(userInput) {
+    return Object.assign(
+      this.getParam(userInput),
+      this.getExtraParams,
+      this.getFormParams
+    );
+  }
+  
+  getParam(userInput) {
     const params = {};
 
-    params[this.param] = userInput;
+    params[this.data.get("param")] = userInput;
 
-    if (this.extraParams) {
-      _.each(this.extraParams, function (param) {
+    console.log("params", params);
+
+    return params;
+  }
+
+  getExtraParams() {
+    const params      = {};
+    const extraParams = this.data.get("extra-params");
+
+    if (extraParams) {
+      _.each(extraParams.split("&"), function (param) {
         const parts = param.split("=");
 
         params[parts[0]] = parts[1];
       });
     }
+
+    console.log("extraParams", params);
+
+    return params;
+  }
+
+  getFormParams() {
+    const params     = {};
+    const formParams = this.data.get("form-params");
+
+    if (formParams) {
+      _.each(formParams.split("&"), function (param) {
+        const parts = param.split("=");
+
+        params[parts[0]] = $(this.element).parents("form").find(parts[1]).val();
+      });
+    }
+
+    console.log("formParams", params);
 
     return params;
   }

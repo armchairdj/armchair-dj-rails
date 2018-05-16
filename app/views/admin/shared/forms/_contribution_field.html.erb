@@ -20,10 +20,10 @@
         group_method:       :last,
         include_blank:      :translate,
         input_html:         {
-          "data-controller":                   "selectable-create-role",
-          "data-selectable-create-role-url":   admin_roles_path,
-          "data-selectable-create-role-param": "role[name]",
-          "data-target":                       "work-dropdowns.role"
+          "data-controller":                    "selectable-create",
+          "data-selectable-create-url":         admin_roles_path,
+          "data-selectable-create-param":       "role[name]",
+          "data-selectable-create-form-params": "role[medium_id]=work[medium_id]"
         }
       %>
     <% end %>

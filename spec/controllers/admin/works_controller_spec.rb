@@ -129,19 +129,33 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #new" do
-      it "renders" do
+      it "renders only the media dropdown" do
         get :new
 
         should successfully_render("admin/works/new")
-        expect(assigns(:work)).to be_a_fully_populated_new_work
+        expect(assigns(:work)).to be_a_new(Work)
 
-        should prepare_the_work_dropdowns
+        should prepare_only_the_media_dropdown
       end
     end
 
     describe "POST #create" do
+      let(:initial_params) { attributes_for(:work, :with_existing_medium) }
       let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, :with_summary) }
       let(:invalid_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
+
+      context "with initial params" do
+        it "renders new with full form but no errors" do
+          post :create, params: { step: "select_medium", work: initial_params }
+
+          should successfully_render("admin/works/new")
+
+          expect(assigns(:work)       ).to have_coerced_attributes(initial_params)
+          expect(assigns(:work).errors).to match_array([])
+
+          should prepare_the_work_dropdowns
+        end
+      end
 
       context "with valid params" do
         it "creates a new Work" do

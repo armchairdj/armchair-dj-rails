@@ -55,6 +55,8 @@ class Admin::WorksController < AdminController
   # POST /works
   # POST /works.json
   def create
+    return handle_medium if params[:step] == "select_medium"
+
     respond_to do |format|
       if @work.save
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.create") }
@@ -76,8 +78,10 @@ class Admin::WorksController < AdminController
   # PATCH/PUT /works/1
   # PATCH/PUT /works/1.json
   def update
+    @work.attributes = instance_params.merge(permitted_tag_params)
+
     respond_to do |format|
-      if @work.update(instance_params)
+      if @work.save
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.update") }
         format.json { render :show, status: :ok, location: @work }
       else
@@ -107,8 +111,9 @@ private
   end
 
   def build_new_instance
-    @work = Work.new
-    @work.attributes = instance_params
+    @work = Work.new(instance_params)
+
+    @work.attributes = permitted_tag_params
   end
 
   def find_instance
@@ -120,17 +125,20 @@ private
   end
 
   def prepare_form
-    @work.prepare_credits
-    @work.prepare_contributions
+    @media = Medium.select_options
 
-    @creators   = Creator.all.alpha
-    @media      = Medium.select_options
-    @roles      = Role.grouped_options
-    @categories = @work.new_record? ? [] : @work.medium.tags_by_category
+    if @work.medium.present?
+      @work.prepare_credits
+      @work.prepare_contributions
+
+      @creators   = Creator.all.alpha
+      @roles      = Role.grouped_options
+      @categories = @work.medium.tags_by_category
+    end
   end
 
   def instance_params
-    permitted = @work.permitted_tag_params + [
+    params.fetch(:work, {}).permit([
       :medium_id,
       :title,
       :subtitle,
@@ -148,8 +156,21 @@ private
         :creator_id,
         :role_id,
       ]
-    ]
+    ])
+  end
 
-    params.fetch(:work, {}).permit(permitted)
+  def permitted_tag_params
+    params.fetch(:work, {}).permit([
+      @work.permitted_tag_params
+    ])
+  end
+
+  def handle_medium
+    respond_to do |format|
+      prepare_form
+
+      format.html { render :new }
+      format.json { render json: @work.errors, status: :unprocessable_entity }
+    end
   end
 end

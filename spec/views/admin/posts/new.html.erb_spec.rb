@@ -113,7 +113,7 @@ RSpec.describe "admin/posts/new", type: :view do
 
       context "review of new work" do
         before(:each) do
-          @post.work_attributes = attributes_for(:work, :with_medium, :with_title)
+          @post.work_attributes = attributes_for(:work, :with_existing_medium, :with_title)
           @post.valid?
         end
 

@@ -11,7 +11,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
           "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
 
@@ -23,7 +23,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
           "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
 
@@ -35,7 +35,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_medium).merge({
+        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
           "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
         })
 

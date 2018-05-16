@@ -10,18 +10,21 @@ RSpec::Matchers.define :prepare_the_work_dropdowns do
     expect(assigns(:roles     )).to be_a_kind_of(Array)
   end
 
-  match_when_negated do
+  failure_message do
+    "expected to prepare the work dropdowns, but did not"
+  end
+end
+
+RSpec::Matchers.define :prepare_only_the_media_dropdown do
+  match do
+    expect(assigns(:media     )).to be_a_kind_of(Array)
+
     expect(assigns(:categories)).to eq(nil)
     expect(assigns(:creators  )).to eq(nil)
-    expect(assigns(:media     )).to eq(nil)
     expect(assigns(:roles     )).to eq(nil)
   end
 
   failure_message do
-    "expected to prepare the work dropdowns, but did not"
-  end
-
-  failure_message_when_negated do
-    "expected not to prepare the work dropdowns, but did"
+    "expected to prepare only the media dropdown, but did not"
   end
 end

@@ -44,7 +44,7 @@
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :submit, "Save" %>
+    <%= f.button :button, "Save", type: :submit %>
 
     <% if f.object.published? %>
       <%= f.button :button, "Unpublish",

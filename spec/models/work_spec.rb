@@ -524,7 +524,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#display_creators" do
-      let(:invalid) {  build(:work, :with_medium, :with_title  ) }
+      let(:invalid) {  build(:work, :with_existing_medium, :with_title  ) }
       let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
       let(  :saved) { create(:kate_bush_hounds_of_love         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }

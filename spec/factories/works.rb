@@ -8,7 +8,7 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_medium do
+    trait :with_existing_medium do
       medium_id { create(:minimal_medium).id }
     end
 
@@ -95,25 +95,25 @@ FactoryBot.define do
     end
 
     factory :invalid_work do
-      with_medium
+      with_existing_medium
       with_title
     end
 
     factory :minimal_work do
-      with_medium
+      with_existing_medium
       with_title
       with_one_credit
     end
 
     factory :complete_work, parent: :minimal_work do
-      with_medium
+      with_existing_medium
       with_title
       with_one_credit
       with_one_contribution
     end
 
     factory :stuffed_work, parent: :minimal_work do
-      with_medium
+      with_existing_medium
       with_title
       with_multiple_credits
       with_multiple_contributions

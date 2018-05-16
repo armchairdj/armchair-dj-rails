@@ -1,0 +1,23 @@
+<%= simple_form_for([:admin, work], html: { class: "admin"}) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= content_tag(:fieldset) do %>
+      <%= content_tag(:div, class: "boxed") do %>
+        <%= f.input :medium_id, as: :select,
+          collection: media,
+          hint:       "First, choose a medium.",
+          input_html: {
+            "data-controller": "selectable"
+          }
+        %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button(:button, "Continue", type: :submit,
+      name: "step", value: "select_medium"
+    ) %>
+  <% end %>
+<% end %>

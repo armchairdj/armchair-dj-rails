@@ -2,15 +2,15 @@
 <% show_summary      = true if local_assigns[:show_summary     ].nil? %>
 <% show_tags         = true if local_assigns[:show_tags        ].nil? %>
 
-<%= content_tag(:fieldset, "data-controller": "work-dropdowns") do %>
+<%= content_tag(:fieldset) do %>
   <%= content_tag(:div, class: "boxed") do %>
-    <%= f.input :medium_id, as: :select,
-      collection: media,
-      input_html: {
-        # "data-controller": "selectable",
-        "data-target":     "work-dropdowns.medium"
-      }
-    %>
+    <% if f.object.persisted? %>
+      <%= f.input :medium_id, as: :select, collection: media, disabled: true %>
+    <% else %>
+      <%= f.input :medium_id, as: :select, collection: media,
+        input_html: { "data-controller": "selectable" }
+      %>
+    <% end %>
 
     <%= f.input :title %>
 
@@ -22,7 +22,7 @@
   <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
     f:          f,
     categories: categories
-  }) if f.object.persisted? && show_tags %>
+  }) if show_tags %>
 
   <%= render(partial: "admin/shared/forms/credit_fieldset", locals: {
     f:        f,

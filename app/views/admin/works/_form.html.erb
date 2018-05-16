@@ -13,5 +13,9 @@
 
   <%= content_tag(:div, class: "button-group") do %>
     <%= admin_submit_button(f) %>
+
+    <%= f.button(:button, "Update Medium", type: :submit,
+      name: "step", value: "select_medium", class: "secondary"
+    ) if f.object.new_record? %>
   <% end %>
 <% end %>

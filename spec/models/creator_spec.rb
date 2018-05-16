@@ -53,19 +53,19 @@ RSpec.describe Creator, type: :model do
 
       before(:each) do
         create(:review, :with_author, :with_body, :published,
-          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
+          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => richie.id } }
           })
         )
 
         create(:review, :with_author, :with_body, :published,
-          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
+          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => carl.id } }
           })
         )
 
         create(:review, :with_author, :with_body, :draft,
-          "work_attributes" => attributes_for(:work, :with_medium, :with_title).merge({
+          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
           })
         )

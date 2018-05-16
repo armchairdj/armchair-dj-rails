@@ -7,10 +7,18 @@
   headline: @title
 } %>
 
-<%= render partial: "form", locals: {
-  work:       @work,
-  media:      @media,
-  roles:      @roles,
-  creators:   @creators,
-  categories: @categories,
-} %>
+<% if @work.medium_id.blank? %>
+  <%= render partial: "form_medium_only", locals: {
+    work:       @work,
+    media:      @media,
+  } %>
+
+<% else %>
+  <%= render partial: "form", locals: {
+    work:       @work,
+    media:      @media,
+    roles:      @roles,
+    creators:   @creators,
+    categories: @categories,
+  } %>
+<% end %>
