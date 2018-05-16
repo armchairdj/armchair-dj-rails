@@ -10,7 +10,7 @@ export default class extends SelectableController {
   activateTab(userInput, callback) {
     this.setInputValues(userInput);
 
-    $(document).trigger("tabgroup:activate", {
+    $(document).trigger("tabbable:activate", {
       tabName: this.data.get("tab-name")
     });
 

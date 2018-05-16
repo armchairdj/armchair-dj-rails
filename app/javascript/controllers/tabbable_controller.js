@@ -14,14 +14,15 @@ export default class extends Controller {
 
     this.showTab(this.data.get("selected-tab"));
 
-    this.listener = $(document).on("tabgroup:activate", _.bind(this.activateFromAfar, this));
+    this.listener = $(document).on("tabbable:activate", _.bind(this.activateFromAfar, this));
 
     $(this.removeTargets).remove();
+
     $(this.element).addClass("initialized");
   }
 
   teardown(evt) {
-    $document.off("tabgroup:activate", this.listener);
+    $(document).off("tabbable:activate", this.listener);
 
     this.$managed.removeClass("tab-active tab-inactive");
   }

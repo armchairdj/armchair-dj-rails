@@ -80,7 +80,7 @@ Rails.application.routes.draw do
   get "style_guide", to: "style_guides#index", as: "style_guides"
 
   get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
-    template: /button|form|form_error|headline|list|post|quotation|tabgroup|svg|text/
+    template: /button|form|form_error|headline|list|post|quotation|tabs|svg|text/
   }
 
   get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash", constraints: {

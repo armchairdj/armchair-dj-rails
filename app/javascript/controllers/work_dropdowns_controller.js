@@ -6,6 +6,8 @@ export default class extends Controller {
   connect() {
     $(this.mediumTarget).on("change", _.bind(this.handleMediumChange, this));
 
+    console.log(this.roleTargets);
+
     this.hideInvalid();
   }
 
@@ -14,7 +16,9 @@ export default class extends Controller {
   }
 
   hideInvalid() {
-    const grouping = $(this.mediumTarget).find(":selected").data().grouping;
+    const grouping = $(this.mediumTarget).find(":selected").attr("data-grouping");
+
+    console.log("grouping", grouping);
 
     if (grouping === this.previousGrouping) {
       return;
@@ -31,6 +35,10 @@ export default class extends Controller {
     const $options   = $(this.roleTargets).find("option[data-grouping]");
     const $optgroups = $options.parent("optgroup");
     const $hide      = $options.filter(`option:not([data-grouping="${grouping}"])`).parent("optgroup");
+
+    console.log("setDisabled");
+    console.log($(this.roleTargets));
+    console.log($options);
 
     $optgroups.not($hide).removeClass("disabled");
     $hide.addClass("disabled");

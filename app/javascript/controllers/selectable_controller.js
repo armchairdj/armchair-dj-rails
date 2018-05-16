@@ -27,8 +27,8 @@ export default class extends Controller {
       };
     } else {
       return {
-        maxItems: 1,
-        mode:     "multi",
+        // maxItems: 1,
+        // mode:     "multi",
         plugins:  [
           "remove_button"
         ]

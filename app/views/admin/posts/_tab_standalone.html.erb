@@ -2,14 +2,14 @@
 
 <% content_for(:tab_triggers) do %>
   <%= content_tag(:li) do %>
-    <%= link_to("Standalone", "##{tab_name}", "data-target": "tabgroup.trigger", "data-action": "click->tabgroup#activate", "data-tab-name": tab_name) %>
+    <%= link_to("Standalone", "##{tab_name}", "data-target": "tabbable.trigger", "data-action": "click->tabbable#activate", "data-tab-name": tab_name) %>
   <% end %>
 <% end %>
 
 <% content_for(:tabs) do %>
-  <%= content_tag(:div, class: "tab", "data-target": "tabgroup.tab", "data-tab-name": tab_name, id: tab_name) do %>
+  <%= content_tag(:div, class: "tab", "data-target": "tabbable.tab", "data-tab-name": tab_name, id: tab_name) do %>
     <%= content_tag(:fieldset, class: "chunk") do %>
-      <%= content_tag(:legend, "Standalone", "data-target": "tabgroup.remove") %>
+      <%= content_tag(:legend, "Standalone", "data-target": "tabbable.remove") %>
 
       <%= f.input :title, required: true %>
     <% end %>

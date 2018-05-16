@@ -6,7 +6,6 @@
     "jquery": "^3.3.1",
     "rails-ujs": "^5.1.5",
     "selectize": "^0.12.4",
-    "selectize-plugin-clear": "^0.0.3",
     "stimulus": "^1.0.1",
     "turbolinks": "^5.1.1",
     "underscore": "^1.9.0",
