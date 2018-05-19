@@ -16,17 +16,30 @@ class Tag < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.admin_scopes
+    {
+      "All"       => :for_admin,
+      "For Posts" => :for_posts,
+      "For Works" => :for_works,
+    }
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
   scope   :categorized, -> { joins(:category) }
   scope :uncategorized, -> { where(category_id: nil) }
-  scope     :for_posts, -> { uncategorized.alpha }
 
-  scope :eager,     -> { includes(:category, :works, :posts) }
-  scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.alpha }
+  scope     :for_posts, -> { uncategorized.eager.alpha }
+  scope     :for_works, -> { categorized.eager.alpha }
+
+  scope        :string, -> { categorized.where(category: { format: Category.formats[:string] }) }
+  scope          :year, -> { categorized.where(category: { format: Category.formats[:year  ] }) }
+
+  scope        :eager, -> { includes(:category, :works, :posts) }
+  scope    :for_admin, -> { eager }
+  scope     :for_site, -> { eager.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

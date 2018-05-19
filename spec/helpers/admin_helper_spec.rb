@@ -190,7 +190,6 @@ RSpec.describe AdminHelper, type: :helper do
 
   context "column header methods" do
     pending "#post_count_column_header"
-    pending "#work_count_column_header"
-    pending "#contribution_count_column_header"
+    pending "#draft_count_column_header"
   end
 end

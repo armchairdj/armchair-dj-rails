@@ -8,9 +8,7 @@ RSpec.describe User, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model", { first_name: nil, last_name: nil } do
-      subject { create(:minimal_user) }
-    end
+    it_behaves_like "an_atomically_validatable_model"
 
     it_behaves_like "a_viewable_model"
   end

@@ -6,13 +6,21 @@ RSpec.describe Category, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model", { name: nil } do
-      subject { create(:minimal_category) }
-    end
+    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "class" do
-    # Nothing so far.
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "All",
+          "String",
+          "Year",
+          "Multi",
+          "Single",
+        ])
+      end
+    end
   end
 
   context "scope-related" do
@@ -20,6 +28,11 @@ RSpec.describe Category, type: :model do
       pending "self#eager"
       pending "self#for_admin"
       pending "self#for_site"
+    end
+
+    context "by multi" do
+      pending "self#multi"
+      pending "self#single"
     end
   end
 
@@ -29,6 +42,18 @@ RSpec.describe Category, type: :model do
     it { should have_many(:media).through(:facets) }
 
     it { should have_many(:tags) }
+  end
+
+  context "attributes" do
+    describe "format" do
+      it { should define_enum_for(:format) }
+
+      pending "self#year"
+      pending "self#string"
+
+      pending "year?"
+      pending "string?"
+    end
   end
 
   context "validations" do

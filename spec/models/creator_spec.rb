@@ -15,9 +15,7 @@ RSpec.describe Creator, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model", { name: nil } do
-      subject { create(:minimal_creator) }
-    end
+    it_behaves_like "an_atomically_validatable_model"
 
     it_behaves_like "a_summarizable_model"
 

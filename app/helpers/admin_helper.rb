@@ -152,12 +152,4 @@ module AdminHelper
   def draft_count_column_header
     admin_column_header("lock-locked", "Draft Posts", "locked icon")
   end
-
-  def work_count_column_header
-    admin_column_header("person", "Viewable Works", "person icon")
-  end
-
-  def contribution_count_column_header
-    admin_column_header("people", "Viewable Contributions", "people icon")
-  end
 end

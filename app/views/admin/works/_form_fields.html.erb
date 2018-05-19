@@ -16,14 +16,7 @@
     <%= f.input :title %>
 
     <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
-
-    <%= f.input(:summary, required: false, hint: true) if show_summary %>
   <% end %>
-
-  <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
-    f:          f,
-    categories: categories
-  }) if show_tags %>
 
   <%= render(partial: "admin/shared/forms/credit_fieldset", locals: {
     f:        f,
@@ -35,4 +28,15 @@
     creators: creators,
     roles:    roles
   }) if show_contributors %>
+
+  <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
+    f:          f,
+    categories: categories
+  }) if show_tags %>
+
+  <%= content_tag(:fieldset) do %>
+    <%= content_tag(:div, class: "boxed") do %>
+      <%= f.input(:summary, required: false, hint: true) if show_summary %>
+    <% end %>
+  <% end %>
 <% end %>

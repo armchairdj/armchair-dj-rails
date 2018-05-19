@@ -10,13 +10,19 @@ RSpec.describe Tag, type: :model do
 
     it_behaves_like "a_viewable_model"
 
-    it_behaves_like "an_atomically_validatable_model", { name: nil } do
-      subject { create(:minimal_tag) }
-    end
+    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "class" do
-    # Nothing so far.
+    describe "self#admin_scopes" do
+      specify "keys are short tab names" do
+        expect(described_class.admin_scopes.keys).to eq([
+          "All",
+          "For Posts",
+          "For Works",
+        ])
+      end
+    end
   end
 
   context "scope-related" do
@@ -29,9 +35,17 @@ RSpec.describe Tag, type: :model do
     context "by category" do
       pending "self#categorized"
       pending "self#uncategorized"
+      pending "self#for_posts"
+      pending "self#for_works"
       pending "categorized?"
       pending "uncategorized?"
-      pending "self#for_posts"
+    end
+
+    context "by format" do
+      pending "self#string"
+      pending "self#year"
+      pending "string?"
+      pending "year?"
     end
   end
 

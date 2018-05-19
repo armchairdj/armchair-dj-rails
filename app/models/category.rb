@@ -14,9 +14,22 @@ class Category < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.admin_scopes
+    {
+      "All"    => :for_admin,
+      "String" => :string,
+      "Year"   => :year,
+      "Multi"  => :multi,
+      "Single" => :single,
+    }
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
+
+  scope :multi,     -> { where(allow_multiple: true ) }
+  scope :single,    -> { where(allow_multiple: false) }
 
   scope :eager,     -> { includes(:facets, :media, :tags) }
   scope :for_admin, -> { eager }

@@ -8,9 +8,7 @@ RSpec.describe Post, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model", { body: nil, slug: nil, published_at: nil } do
-      subject { create(:standalone_post, :published) }
-    end
+    it_behaves_like "an_atomically_validatable_model"
 
     it_behaves_like "a_sluggable_model", :slug
 

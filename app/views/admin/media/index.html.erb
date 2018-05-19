@@ -21,9 +21,6 @@
             <%= content_tag(:th, "Name") %>
             <%= content_tag(:th, post_count_column_header,  class: "icon") %>
             <%= content_tag(:th, draft_count_column_header, class: "icon") %>
-            <%= content_tag(:th, work_count_column_header,  class: "icon") %>
-            <%= content_tag(:th, "Facets") %>
-            <%= content_tag(:th, "Roles") %>
             <%= content_tag(:th, "Actions", class: "actions") %>
           <% end %>
         <% end %>
@@ -34,9 +31,6 @@
               <%= content_tag(:td, medium.name) %>
               <%= content_tag(:td, medium.viewable_post_count,     class: "icon") %>
               <%= content_tag(:td, medium.non_viewable_post_count, class: "icon") %>
-              <%= content_tag(:td, medium.works.viewable.count,    class: "icon") %>
-              <%= content_tag(:td, medium.facets.count) %>
-              <%= content_tag(:td, medium.roles.count) %>
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_medium_link(medium) %>
                 <%= admin_view_link(medium) %>

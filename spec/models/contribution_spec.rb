@@ -10,9 +10,7 @@ RSpec.describe Contribution, type: :model do
 
     it_behaves_like "a_workable_model"
 
-    # it_behaves_like "an_atomically_validatable_model", { work: nil, creator: nil } do
-    #   subject { create(:minimal_contribution) }
-    # end
+    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "validations" do
