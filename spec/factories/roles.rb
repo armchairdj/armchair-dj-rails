@@ -14,10 +14,6 @@ FactoryBot.define do
       name { generate(:role_name) }
     end
 
-    trait :with_medium do
-      association :medium, factory: :minimal_medium
-    end
-
     trait :with_existing_medium do
       medium_id { create(:minimal_medium).id }
     end

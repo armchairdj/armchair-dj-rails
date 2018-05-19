@@ -104,7 +104,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
 
             expect(subject.valid?).to eq(false)
 
-            expect(subject).to have_errors(base: :missing_alpha)
+            expect(subject).to have_error(base: :missing_alpha)
           end
         end
       end

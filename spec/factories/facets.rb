@@ -4,16 +4,8 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_category do
-      association :category, factory: :minimal_category
-    end
-
     trait :with_existing_category do
       category_id { create(:minimal_category).id }
-    end
-
-    trait :with_medium do
-      association :medium, factory: :minimal_medium
     end
 
     trait :with_existing_medium do
@@ -25,8 +17,8 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_facet do
-      with_category
-      with_medium
+      with_existing_category
+      with_existing_medium
     end
 
     factory :complete_facet, parent: :minimal_facet do

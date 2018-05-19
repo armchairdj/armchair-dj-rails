@@ -34,7 +34,7 @@ RSpec.describe Membership, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(group_id: :not_collective)
+          expect(subject).to have_error(group_id: :not_collective)
         end
       end
 
@@ -53,7 +53,7 @@ RSpec.describe Membership, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(member_id: :not_individual)
+          expect(subject).to have_error(member_id: :not_individual)
         end
       end
     end

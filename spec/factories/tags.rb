@@ -1,5 +1,6 @@
 FactoryBot.define do
   sequence :tag_name { |n| "Tag #{n}" }
+  sequence :tag_name_year { |n| rand(1..2020) }
 
   factory :tag do
     ###########################################################################
@@ -10,12 +11,22 @@ FactoryBot.define do
       name { generate(:tag_name) }
     end
 
-    trait :with_category do
-      association :category, factory: :minimal_category
+    trait :with_year do
+      with_existing_year_category
+
+      name { generate(:tag_name_year) }
     end
 
     trait :with_existing_category do
+      with_existing_string_category
+    end
+
+    trait :with_existing_string_category do
       category_id { create(:minimal_category).id }
+    end
+
+    trait :with_existing_year_category do
+      association :category, factory: :year_category
     end
 
     trait :with_viewable_work do
@@ -67,6 +78,10 @@ FactoryBot.define do
     ###########################################################################
     # FACTORIES.
     ###########################################################################
+
+    factory :year_tag do
+      with_year
+    end
 
     factory :minimal_tag do
       with_name

@@ -33,7 +33,7 @@ describe UrlnessValidator do
       it "should have error message" do
         subject.valid?
 
-        should have_errors(url: :not_a_url)
+        should have_error(url: :not_a_url)
       end
     end
 
@@ -45,7 +45,7 @@ describe UrlnessValidator do
       it "should have error message" do
         subject.valid?
 
-        should have_errors(url: :not_a_url)
+        should have_error(url: :not_a_url)
       end
     end
   end

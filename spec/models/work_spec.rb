@@ -221,7 +221,7 @@ RSpec.describe Work, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(credits: :missing)
+          expect(subject).to have_error(credits: :missing)
         end
       end
 
@@ -235,7 +235,7 @@ RSpec.describe Work, type: :model do
           it "allows categorized tags" do
             subject.update(tag_ids: [tag_for_work.id])
 
-            expect(subject).to_not have_errors(tag_ids: :uncategorized_tags)
+            expect(subject).to_not have_error(tag_ids: :uncategorized_tags)
           end
         end
 
@@ -243,7 +243,7 @@ RSpec.describe Work, type: :model do
           it "disallows uncategorized tags" do
             subject.update(tag_ids: [tag_for_post.id])
 
-            expect(subject).to have_errors(tag_ids: :uncategorized_tags)
+            expect(subject).to have_error(tag_ids: :uncategorized_tags)
           end
         end
       end

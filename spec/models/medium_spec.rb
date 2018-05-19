@@ -159,7 +159,7 @@ RSpec.describe Medium, type: :model do
           end
 
           context "saved instance with saved facets" do
-            subject { create(:minimal_medium, :with_category) }
+            subject { create(:minimal_medium, :with_existing_category) }
 
             it "builds 10 more facets" do
               expect(subject.facets).to have(1).items
@@ -199,7 +199,7 @@ RSpec.describe Medium, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(roles: :missing)
+          expect(subject).to have_error(roles: :missing)
         end
       end
     end

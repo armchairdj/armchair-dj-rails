@@ -27,7 +27,7 @@ FactoryBot.define do
       } }
     end
 
-    trait :with_category do
+    trait :with_existing_category do
       facets_attributes { {
         "0" => attributes_for(:facet, :with_existing_category)
       } }

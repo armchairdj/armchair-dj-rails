@@ -34,7 +34,7 @@ RSpec.describe Identity, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(real_name_id: :not_primary)
+          expect(subject).to have_error(real_name_id: :not_primary)
         end
       end
 
@@ -53,7 +53,7 @@ RSpec.describe Identity, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(pseudonym_id: :not_secondary)
+          expect(subject).to have_error(pseudonym_id: :not_secondary)
         end
       end
     end

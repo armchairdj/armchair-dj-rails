@@ -52,15 +52,12 @@ class Tag < ApplicationRecord
   #############################################################################
 
   validates :name, presence: true
+
   validates :name, uniqueness: { scope: [:category_id] }
 
-  validate { format_is_correct }
-
-  def format_is_correct
-    puts "tag#implement format_is_correct"
-  end
-
-  private :format_is_correct
+  validates :name, yearness: true, if: Proc.new {
+    category.try(:format) == "year"
+  }
 
   #############################################################################
   # HOOKS.

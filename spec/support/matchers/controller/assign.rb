@@ -16,7 +16,7 @@ RSpec::Matchers.define :assign do |instance, sym|
   chain :with_errors do |errors|
     @errors = errors
 
-    expect(assigns(sym)).to have_errors(@errors)
+    expect(assigns(sym)).to have_error(@errors)
   end
 
   chain :and_be_valid do

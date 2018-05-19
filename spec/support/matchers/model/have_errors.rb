@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec::Matchers.define :have_errors do |errors_hash|
+RSpec::Matchers.define :have_error do |errors_hash|
   def error_keys(actual, key)
     actual.errors.details[key].map { |h| h[:error] }
   end

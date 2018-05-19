@@ -337,7 +337,7 @@ RSpec.describe Post, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(base: :invalid_author)
+          expect(subject).to have_error(base: :invalid_author)
         end
 
         specify "nil" do
@@ -345,7 +345,7 @@ RSpec.describe Post, type: :model do
 
           expect(subject).to_not be_valid
 
-          expect(subject).to have_errors(base: :no_author)
+          expect(subject).to have_error(base: :no_author)
         end
       end
 
@@ -431,7 +431,7 @@ RSpec.describe Post, type: :model do
           it "allows uncategorized tags" do
             subject.update(tag_ids: [tag_for_post.id])
 
-            expect(subject).to_not have_errors(tag_ids: :categorized_tags)
+            expect(subject).to_not have_error(tag_ids: :categorized_tags)
           end
         end
 
@@ -439,7 +439,7 @@ RSpec.describe Post, type: :model do
           it "disallows categorized tags" do
             subject.update(tag_ids: [tag_for_work.id])
 
-            expect(subject).to have_errors(tag_ids: :categorized_tags)
+            expect(subject).to have_error(tag_ids: :categorized_tags)
           end
         end
       end

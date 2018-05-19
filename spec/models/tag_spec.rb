@@ -55,8 +55,32 @@ RSpec.describe Tag, type: :model do
 
     it { should_not validate_presence_of(:category_id) }
 
-    context "custom" do
-      pending "#format_is_correct"
+    context "conditional" do
+      describe "yearness of name" do
+        context "tag with year category" do
+          subject { create(:year_tag) }
+
+          it "validates yearness" do
+            subject.name = "foo"
+
+            expect(subject).not_to be_valid
+
+            should have_error(name: :not_a_year)
+          end
+        end
+
+        context "tag with string category" do
+          subject { create(:complete_tag) }
+
+          it "does not validate yearness" do
+            subject.name = "foo"
+
+            expect(subject).to be_valid
+
+            should_not have_error(name: :not_a_year)
+          end
+        end
+      end
     end
   end
 

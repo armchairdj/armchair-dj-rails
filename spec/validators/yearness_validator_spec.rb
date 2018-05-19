@@ -57,7 +57,7 @@ describe YearnessValidator do
       it "should have error message" do
         subject.valid?
 
-        should have_errors(year: :not_a_year)
+        should have_error(year: :not_a_year)
       end
     end
 
@@ -69,7 +69,7 @@ describe YearnessValidator do
       it "should have error message" do
         subject.valid?
 
-        should have_errors(year: :not_a_year)
+        should have_error(year: :not_a_year)
       end
     end
   end
