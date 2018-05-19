@@ -13,8 +13,6 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_atomically_validatable_model"
-
     it_behaves_like "a_summarizable_model"
 
     it_behaves_like "a_viewable_model"
@@ -283,10 +281,10 @@ RSpec.describe Work, type: :model do
       end
 
       specify "#permitted_tag_params" do
-        expect(subject.permitted_tag_params).to eq([
-          { :musical_genre_tag_ids => [] },
-          { :musical_mood_tag_ids  => [] }
-        ])
+        expect(subject.permitted_tag_params).to eq({
+          musical_genre_tag_ids: [],
+          musical_mood_tag_ids:  []
+        })
       end
 
       describe "defines" do

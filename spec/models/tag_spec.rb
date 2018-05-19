@@ -9,8 +9,6 @@ RSpec.describe Tag, type: :model do
     it_behaves_like "a_summarizable_model"
 
     it_behaves_like "a_viewable_model"
-
-    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "class" do

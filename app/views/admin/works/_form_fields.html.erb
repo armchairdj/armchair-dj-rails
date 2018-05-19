@@ -23,20 +23,26 @@
     creators: creators
   }) %>
 
-  <%= render(partial: "admin/shared/forms/contribution_fieldset", locals: {
-    f:        f,
-    creators: creators,
-    roles:    roles
-  }) if show_contributors %>
+  <% if show_contributors %>
+    <%= render(partial: "admin/shared/forms/contribution_fieldset", locals: {
+      f:        f,
+      creators: creators,
+      roles:    roles
+    }) %>
+  <% end %>
 
-  <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
-    f:          f,
-    categories: categories
-  }) if show_tags %>
+  <% if show_tags %>
+    <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
+      f:          f,
+      categories: categories
+    }) %>
+  <% end %>
 
-  <%= content_tag(:fieldset) do %>
-    <%= content_tag(:div, class: "boxed") do %>
-      <%= f.input(:summary, required: false, hint: true) if show_summary %>
+  <% if show_summary %>
+    <%= content_tag(:fieldset) do %>
+      <%= content_tag(:div, class: "boxed") do %>
+        <%= f.input(:summary, required: false, hint: true) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

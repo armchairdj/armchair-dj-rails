@@ -78,7 +78,7 @@ class Admin::WorksController < AdminController
   # PATCH/PUT /works/1
   # PATCH/PUT /works/1.json
   def update
-    @work.attributes = instance_params.merge(permitted_tag_params)
+    @work.attributes = instance_params
 
     respond_to do |format|
       if @work.save
@@ -111,9 +111,9 @@ private
   end
 
   def build_new_instance
-    @work = Work.new(instance_params)
+    @work = Work.new(medium_id: params[:work].try(:[], :medium_id))
 
-    @work.attributes = permitted_tag_params
+    @work.attributes = instance_params
   end
 
   def find_instance
@@ -138,31 +138,29 @@ private
   end
 
   def instance_params
-    params.fetch(:work, {}).permit([
-      :medium_id,
+    permitted = [
       :title,
       :subtitle,
       :summary,
-      :credits_attributes => [
-        :id,
-        :_destroy,
-        :work_id,
-        :creator_id
-      ],
-      :contributions_attributes => [
-        :id,
-        :_destroy,
-        :work_id,
-        :creator_id,
-        :role_id,
-      ]
-    ])
-  end
+      :medium_id,
+      {
+        credits_attributes: [
+          :id,
+          :_destroy,
+          :work_id,
+          :creator_id
+        ],
+        contributions_attributes: [
+          :id,
+          :_destroy,
+          :work_id,
+          :creator_id,
+          :role_id,
+        ]
+      }.merge(@work.permitted_tag_params)
+    ]
 
-  def permitted_tag_params
-    params.fetch(:work, {}).permit([
-      @work.permitted_tag_params
-    ])
+    params.fetch(:work, {}).permit(permitted)
   end
 
   def handle_medium

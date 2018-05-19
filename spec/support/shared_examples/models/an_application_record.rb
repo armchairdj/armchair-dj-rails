@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.shared_examples "an_application_record" do
   context "concerns" do
-    # Concerns are tested in the models that actually use them.
+    # Most concerns are tested in the models that actually use them.
+
+    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "class" do

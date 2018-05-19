@@ -28,19 +28,21 @@ RSpec.describe "admin/works/new", type: :view do
   end
 
   context "with populated medium" do
-    pending
     before(:each) do
       @media       = assign(:media, Medium.all.alpha)
 
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work, medium_id: @media.first.id))
 
+      puts ">>", @work.permitted_tag_params.inspect
+
+
       @creators    = assign(:creators,   Creator.all.alpha             )
       @roles       = assign(:roles,      Role.options_for(@work.medium))
       @categories  = assign(:categories, @media.first.tags_by_category )
     end
 
-    it "renders fully populated form" do
+    xit "renders fully populated form" do
       render
 
       assert_select "form[action=?][method=?]", admin_works_path, "post" do

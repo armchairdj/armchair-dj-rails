@@ -7,11 +7,11 @@ RSpec.shared_examples "an_atomically_validatable_model" do
 
   describe "methods" do
     describe "valid_attributes?" do
-      it { should respond_t(:valid_attributes?) }
+      it { should respond_to(:valid_attributes?) }
     end
 
     describe "valid_attribute?" do
-      it { should respond_t(:valid_attribute?) }
+      it { should respond_to(:valid_attribute?) }
     end
   end
 end

@@ -191,6 +191,8 @@ RSpec.describe Admin::WorksController, type: :controller do
           should prepare_the_work_dropdowns
         end
       end
+
+      pending "with tags"
     end
 
     describe "GET #edit" do
@@ -220,6 +222,8 @@ RSpec.describe Admin::WorksController, type: :controller do
           expect(assigns(:work).contributions).to have(11).items
         end
       end
+
+      pending "with tags"
     end
 
     describe "PUT #update" do
@@ -258,6 +262,8 @@ RSpec.describe Admin::WorksController, type: :controller do
           should prepare_the_work_dropdowns
         end
       end
+
+      pending "with tags"
     end
 
     describe "DELETE #destroy" do

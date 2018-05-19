@@ -21,7 +21,8 @@ RSpec.configure do |config|
     config.default_formatter = "doc"
   end
 
-  config.profile_examples = 10
+  # Print slow tests at end of output.
+  # config.profile_examples = 10
 
   config.order = :random
 

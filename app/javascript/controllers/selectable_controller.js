@@ -18,8 +18,11 @@ export default class extends Controller {
   }
 
   constructOptions() {
+    const maxItems = parseInt(this.data.get("maxItems"));
+
     if (this.multiple) {
       return {
+        maxItems: isNaN(maxItems) ? null : maxItems,
         mode:     "multi",
         plugins:  [
           "remove_button"
@@ -27,8 +30,6 @@ export default class extends Controller {
       };
     } else {
       return {
-        // maxItems: 1,
-        // mode:     "multi",
         plugins:  [
           "remove_button"
         ]

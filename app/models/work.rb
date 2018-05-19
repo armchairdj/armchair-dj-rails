@@ -154,7 +154,7 @@ class Work < ApplicationRecord
       id_setter = :"#{param}_tag_ids="
 
       self.class.send :define_method, getter do
-        self.tags.includes(:category).where(categories: { name: category.name })
+        Tag.includes(:category).where(id: self.tag_ids).where(categories: { name: category.name })
       end
 
       self.class.send :define_method, id_getter do
@@ -185,7 +185,9 @@ class Work < ApplicationRecord
   end
 
   def permitted_tag_params
-    categories.map { |c| { :"#{self.class.permitted_tag_param(c)}" => [] } }
+    categories.inject({}) do |memo, (cat)|
+      memo[:"#{self.class.permitted_tag_param(cat)}"] = []; memo
+    end
   end
 
   # TODO This should take a full option and full_display_title should just call this

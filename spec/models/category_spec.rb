@@ -5,8 +5,6 @@ RSpec.describe Category, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_application_record"
-
-    it_behaves_like "an_atomically_validatable_model"
   end
 
   context "class" do

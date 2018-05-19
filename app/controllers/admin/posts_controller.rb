@@ -165,8 +165,8 @@ private
       :summary,
       :slug,
       :publish_on,
-      :tag_ids,
       :work_id,
+      :tag_ids => [],
       :work_attributes => [
         :id,
         :post_id,
