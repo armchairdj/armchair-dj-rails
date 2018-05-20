@@ -113,6 +113,10 @@ class Creator < ApplicationRecord
   has_many  :groups, -> { order("creators.name") },
     through: :group_memberships,  source: :group
 
+  # Links
+
+  has_many :links, as: :linkable, dependent: :destroy
+
   #############################################################################
   # ATTRIBUTES: pseudonym_identities
   #############################################################################

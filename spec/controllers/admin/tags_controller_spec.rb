@@ -85,7 +85,10 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "creates a new Tag" do
           expect {
             post :create, params: { tag: min_valid_params }
-          }.to change(Tag, :count).by(1)
+
+            ap assigns(:tag).errors
+
+          }.to change { Tag.count }.by(1)
         end
 
         it "creates the right attributes" do

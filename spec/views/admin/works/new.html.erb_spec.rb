@@ -34,9 +34,6 @@ RSpec.describe "admin/works/new", type: :view do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work, medium_id: @media.first.id))
 
-      puts ">>", @work.permitted_tag_params.inspect
-
-
       @creators    = assign(:creators,   Creator.all.alpha             )
       @roles       = assign(:roles,      Role.options_for(@work.medium))
       @categories  = assign(:categories, @media.first.tags_by_category )

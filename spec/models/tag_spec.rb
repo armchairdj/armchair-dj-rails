@@ -68,29 +68,17 @@ RSpec.describe Tag, type: :model do
     it { should_not validate_presence_of(:category_id) }
 
     context "conditional" do
-      describe "yearness of name" do
-        context "tag with year category" do
+      describe "yearness" do
+        context "for tag with year category" do
           subject { create(:year_tag) }
 
-          it "validates yearness" do
-            subject.name = "foo"
-
-            expect(subject).not_to be_valid
-
-            should have_error(name: :not_a_year)
-          end
+          it { should validate_yearness_of(:name) }
         end
 
-        context "tag with string category" do
-          subject { create(:complete_tag) }
+        context "for tag with string category" do
+          subject { build(:complete_tag, name: "not_a_year") }
 
-          it "does not validate yearness" do
-            subject.name = "foo"
-
-            expect(subject).to be_valid
-
-            should_not have_error(name: :not_a_year)
-          end
+          it { should_not have_error(:name, :not_a_url) }
         end
       end
     end

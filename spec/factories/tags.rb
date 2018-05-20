@@ -1,5 +1,5 @@
 FactoryBot.define do
-  sequence :tag_name { |n| "Tag #{n}" }
+  sequence :tag_name { |n| "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
   sequence :tag_name_year { |n| rand(1..2020) }
 
   factory :tag do

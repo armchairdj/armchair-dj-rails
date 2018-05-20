@@ -97,6 +97,10 @@ RSpec.describe Work, type: :model do
     it { should have_many(:contributors).through(:contributions) }
 
     it { should have_many(:posts) }
+
+    it { should have_and_belong_to_many(:tags) }
+
+    it { should have_many(:links) }
   end
 
   context "attributes" do

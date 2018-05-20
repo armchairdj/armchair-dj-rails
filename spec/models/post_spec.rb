@@ -215,9 +215,14 @@ RSpec.describe Post, type: :model do
   context "associations" do
     it { should belong_to(:author) }
 
+    it { should have_and_belong_to_many(:tags) }
+
+    it { should have_many(:links) }
+
     it { should belong_to(:work) }
 
-    it { should have_many(:creators).through(:work) }
+    it { should have_many(:creators ).through(:work) }
+    it { should have_many(:work_tags).through(:work) }
   end
 
   context "attributes" do

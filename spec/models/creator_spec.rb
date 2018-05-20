@@ -231,6 +231,8 @@ RSpec.describe Creator, type: :model do
 
     it { should have_many(:members).through(:member_memberships).order("creators.name") }
     it { should have_many( :groups).through( :group_memberships).order("creators.name") }
+
+    it { should have_many(:links) }
   end
 
   context "attributes" do

@@ -134,8 +134,8 @@ private
 
   def created_multiple_years?
     fetched  = instance_params
-    category = Category.find(fetched[:category_id])
-    array    = fetched.delete(:name).split("-")
+    category = Category.find_by(id: fetched[:category_id])
+    array    = (fetched.delete(:name) || "").split("-")
 
     return false unless category.try(:allow_multiple?)
     return false unless category.try(:year?)
