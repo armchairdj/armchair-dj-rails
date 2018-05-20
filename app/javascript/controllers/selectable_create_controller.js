@@ -40,6 +40,20 @@ export default class extends SelectableController {
       return callback();
     }
 
+    this.submitCreate(userInput, callback);
+  }
+
+  confirmCreate(userInput) {
+    const isDupe = !!_.findWhere(_.values(this.selectize.options), { text: userInput });
+
+    if (isDupe) {
+      return window.confirm("There's already an item like that. Are you sure you want to create a duplicate?");
+    } else {
+      return true;
+    }
+  }
+
+  submitCreate(userInput, callback) {
     $.ajax({
       method:   "POST",
       url:      this.data.get("url"),
@@ -49,18 +63,10 @@ export default class extends SelectableController {
     });
   }
 
-  confirmCreate(userInput) {
-    if (!_.findWhere(_.values(this.selectize.options), { text: userInput })) {
-      return true;
-    }
-
-    return window.confirm("There's already an item like that. Are you sure you want to create a duplicate?");
-  }
-
   createItemParams(userInput) {
     return Object.assign(
-      this.extraParams,
-      this.formParams,
+      this.extraParams(),
+      this.formParams(),
       this.userParam(userInput)
     );
   }
@@ -104,16 +110,39 @@ export default class extends SelectableController {
   }
 
   ajaxSuccess(callback, response, status, xhr) {
-    callback({
-      value: response.id,
-      text:  response.name
-    });
+    if ($.isArray(response)) {
+      return this.addMultiple(response, callback);
+    }
+
+    callback(this.optFromAjax(response));
   }
 
   ajaxError(callback, xhr, status, error) {
     alert("Something went wrong.");
 
     callback();
+  }
+
+  addMultiple(response, callback) {
+    _.each(response, _.bind(this.addOne, this));
+
+    callback(this.optFromAjax(response[0]));
+
+    this.selectize.refreshItems();
+  }
+
+  addOne(item, index, list) {
+    const opt = this.optFromAjax(item);
+
+    this.selectize.addOption(opt);
+
+    this.selectize.addItem(opt.value, true);
+  }
+
+  optFromAjax(fromAjax) {
+    fromAjax = fromAjax || {};
+
+    return { value: fromAjax.id, text: fromAjax.name };
   }
 
   handleOptionAdd(value, params) {
@@ -142,6 +171,5 @@ export default class extends SelectableController {
     }
 
     this.selectize.addOption({ value: params.value, text: params.text });
-    this.selectize.refreshOptions();
   }
 }

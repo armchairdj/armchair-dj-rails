@@ -137,6 +137,10 @@ RSpec.describe Admin::TagsController, type: :controller do
           expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
         end
       end
+
+      context "with multiple year tags" do
+        pending "creates a range of years"
+      end
     end
 
     describe "GET #edit" do

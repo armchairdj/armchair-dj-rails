@@ -1,6 +1,10 @@
 en:
   activerecord:
     attributes:
+      category:
+        formats:
+          string: "String"
+          year:   "Year"
       contribution:
       creator:
       creator/primary:

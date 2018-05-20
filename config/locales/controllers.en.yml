@@ -48,9 +48,10 @@ en:
           update:  "Role updated."
       tags:
         success:
-          create:  "Tag created."
-          destroy: "Tag destroyed."
-          update:  "Tag updated."
+          create:       "Tag created."
+          create_multi: "Tags created."
+          destroy:      "Tag destroyed."
+          update:       "Tag updated."
       users:
         success:
           create:  "User created."

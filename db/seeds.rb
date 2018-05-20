@@ -15,7 +15,14 @@ end
 
 ##### USERS
 
-brian = User.create_with(role: :super_admin, username: "armchairdj", first_name: "Brian", middle_name: "J.", last_name: "Dillard", password: "password1234").find_or_create_by(email: "armchairdj@gmail.com")
+brian = User.create_with(
+  role:        :super_admin,
+  username:    "armchairdj",
+  first_name:  "Brian",
+  middle_name: "J.",
+  last_name:   "Dillard",
+  password:    "password1234"
+).find_or_create_by(email: "armchairdj@gmail.com")
 
 ##### MEDIA
 
@@ -253,7 +260,7 @@ tech_companies     = [
 creation_year = FactoryBot.create(:category, name: "Creation Year", format: :year, allow_multiple: false)
 release_year  = FactoryBot.create(:category, name: "Release Year",  format: :year, allow_multiple: false)
 reissue_year  = FactoryBot.create(:category, name: "Reissue Year",  format: :year, allow_multiple: false)
-year          = FactoryBot.create(:category, name: "Years",         format: :year, allow_multiple: true )
+year          = FactoryBot.create(:category, name: "Year",          format: :year, allow_multiple: true )
 
 (1950..2018).each do |y|
   FactoryBot.create(:tag, category: release_year,  name: y.to_s)

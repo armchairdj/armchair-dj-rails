@@ -5,6 +5,8 @@ RSpec.describe Category, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_enumable_model", [:format]
   end
 
   context "class" do

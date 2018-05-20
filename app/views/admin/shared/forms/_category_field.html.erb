@@ -8,7 +8,11 @@
     "data-selectable-create-extra-params": "tag[category_id]=#{category.id}",
   }
 
-  unless category.allow_multiple?
+  if category.allow_multiple?
+    if category.year?
+      input_html["data-selectable-create-allow-range"] = "true";
+    end
+  else
     input_html["data-selectable-create-max-items"] = "1"
   end
 %>

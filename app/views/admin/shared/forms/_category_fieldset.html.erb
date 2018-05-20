@@ -9,11 +9,11 @@
 
     <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-    <% categories.each do |category, available_tags| %>
+    <% categories.each do |category| %>
       <%= render(partial: "admin/shared/forms/category_field", locals: {
         f:              f,
         category:       category,
-        available_tags: available_tags
+        available_tags: category.tags
       }) %>
     <% end %>
   <% end %>

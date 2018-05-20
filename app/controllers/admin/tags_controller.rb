@@ -53,6 +53,10 @@ class Admin::TagsController < AdminController
   # POST /admin/tags
   # POST /admin/tags.json
   def create
+    return if created_multiple_years?
+
+    @tag.attributes = instance_params
+
     respond_to do |format|
       if @tag.save
         format.html { redirect_to admin_tag_path(@tag), success: I18n.t("admin.flash.tags.success.create") }
@@ -105,7 +109,7 @@ private
   end
 
   def build_new_instance
-    @tag = Tag.new(instance_params)
+    @tag = Tag.new
   end
 
   def find_instance
@@ -126,5 +130,36 @@ private
 
   def prepare_form
     @categories = Category.for_admin.alpha
+  end
+
+  def created_multiple_years?
+    fetched  = instance_params
+    category = Category.find(fetched[:category_id])
+    array    = fetched.delete(:name).split("-")
+
+    return false unless category.try(:allow_multiple?)
+    return false unless category.try(:year?)
+    return false unless array.length == 2
+
+    first, last = array.map(&:to_i)
+
+    create_multiple_years(fetched, first, last)
+  end
+
+  def create_multiple_years(fetched, first, last)
+    return false if first == 0 || last == 0
+
+    @tags = (first..last).each.inject([]) do |memo, (year)|
+      memo << Tag.find_or_create_by( fetched.merge({ name: year.to_s }) ); memo
+    end
+
+    respond_to_multiple_years and return true
+  end
+
+  def respond_to_multiple_years
+    respond_to do |format|
+      format.html { redirect_to admin_tags_path, success: I18n.t("admin.flash.tags.success.create_multi") }
+      format.json { render :index }
+    end
   end
 end
