@@ -38,3 +38,7 @@
 <%= render partial: "shared/posts", locals: {
   posts: @creator.posts.for_site
 } %>
+
+<%= render partial: "shared/links", locals: {
+  links: @creator.links
+} %>

@@ -1,0 +1,11 @@
+<% return if links.empty? %>
+
+<%= content_tag(:section) do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Links") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "square") do %>
+    <%= render partial: "admin/shared/playback/link", collection: links %>
+  <% end %>
+<% end %>

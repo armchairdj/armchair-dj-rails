@@ -73,13 +73,17 @@
   <% end %>
 <% end %>
 
+<%= render partial: "admin/shared/playback/contributions", locals: {
+  contributions: @work.contributions.for_admin.alpha,
+  context:       :work
+} %>
+
 <%= render partial: "admin/shared/playback/categories", locals: {
   categories: @work.tags_by_category
 } %>
 
-<%= render partial: "admin/shared/playback/contributions", locals: {
-  contributions: @work.contributions.for_admin.alpha,
-  context:       :work
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @work.links
 } %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {

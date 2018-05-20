@@ -8,6 +8,8 @@ RSpec.describe Post, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "a_linkable_model"
+
     it_behaves_like "a_sluggable_model", :slug
 
     it_behaves_like "a_summarizable_model"
@@ -216,8 +218,6 @@ RSpec.describe Post, type: :model do
     it { should belong_to(:author) }
 
     it { should have_and_belong_to_many(:tags) }
-
-    it { should have_many(:links) }
 
     it { should belong_to(:work) }
 

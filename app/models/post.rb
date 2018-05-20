@@ -12,6 +12,7 @@ class Post < ApplicationRecord
 
   include AASM
   include Alphabetizable
+  include Linkable
   include Sluggable
   include Summarizable
 
@@ -81,8 +82,6 @@ class Post < ApplicationRecord
   has_many :work_tags, through: :work, class_name: "Tag", source: :tags
 
   has_and_belongs_to_many :tags
-
-  has_many :links, as: :linkable, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.

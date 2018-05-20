@@ -15,6 +15,8 @@ RSpec.describe Creator, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "a_linkable_model"
+
     it_behaves_like "a_summarizable_model"
 
     it_behaves_like "a_viewable_model"
@@ -231,8 +233,6 @@ RSpec.describe Creator, type: :model do
 
     it { should have_many(:members).through(:member_memberships).order("creators.name") }
     it { should have_many( :groups).through( :group_memberships).order("creators.name") }
-
-    it { should have_many(:links) }
   end
 
   context "attributes" do

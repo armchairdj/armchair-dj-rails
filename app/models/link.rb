@@ -32,6 +32,8 @@ class Link < ApplicationRecord
 
   validates :url, presence: true, urlness: true
 
+  validates :description, presence: true
+
   #############################################################################
   # HOOKS.
   #############################################################################

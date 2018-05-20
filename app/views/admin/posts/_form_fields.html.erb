@@ -16,6 +16,10 @@
   <% end %>
 <% end %>
 
+<%= render partial: "admin/shared/forms/link_fieldset", locals: {
+  f: f
+} %>
+
 <%= content_tag(:fieldset, class: "legendary") do %>
   <%= content_tag(:div, class: "boxed") do %>
     <%= content_tag(:legend, "Publication Details") %>

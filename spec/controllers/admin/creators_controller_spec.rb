@@ -6,6 +6,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
+    it_behaves_like "a_linkable_controller"
+
     it_behaves_like "an_seo_paginatable_controller" do
       let(:expected_redirect) { admin_creators_path }
     end

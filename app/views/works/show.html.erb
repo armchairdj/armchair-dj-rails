@@ -13,13 +13,17 @@
   <% end %>
 <% end %>
 
+<%= render partial: "shared/contributions", locals: {
+  contributions: @work.contributions.for_site,
+  context:       :work
+} %>
+
 <%= render partial: "shared/categories", locals: {
   categories: @work.tags_by_category
 } %>
 
-<%= render partial: "shared/contributions", locals: {
-  contributions: @work.contributions.for_site,
-  context:       :work
+<%= render partial: "shared/links", locals: {
+  links: @work.links
 } %>
 
 <%= render partial: "shared/posts", locals: {

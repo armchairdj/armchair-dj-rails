@@ -28,3 +28,7 @@
     tags: @post.all_tags.for_site
   } %>
 <% end %>
+
+<%= render partial: "shared/links", locals: {
+  links: @post.links
+} %>

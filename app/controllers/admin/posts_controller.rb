@@ -167,6 +167,12 @@ private
       :publish_on,
       :work_id,
       :tag_ids => [],
+      :links_attributes => [
+        :id,
+        :_destroy,
+        :url,
+        :description
+      ],
       :work_attributes => [
         :id,
         :post_id,
@@ -186,6 +192,8 @@ private
   def prepare_form
     @available_tabs = which_tabs
     @selected_tab   = which_tab
+
+    @post.prepare_links
 
     return if @post.persisted? && @post.standalone?
 

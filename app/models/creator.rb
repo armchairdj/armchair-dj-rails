@@ -19,6 +19,7 @@ class Creator < ApplicationRecord
   #############################################################################
 
   include Alphabetizable
+  include Linkable
   include Summarizable
   include Viewable
 
@@ -112,10 +113,6 @@ class Creator < ApplicationRecord
     through: :member_memberships, source: :member
   has_many  :groups, -> { order("creators.name") },
     through: :group_memberships,  source: :group
-
-  # Links
-
-  has_many :links, as: :linkable, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES: pseudonym_identities

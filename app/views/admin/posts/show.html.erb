@@ -93,3 +93,7 @@
 <%= render partial: "admin/shared/playback/tags", locals: {
   tags: @post.all_tags.alpha
 } %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @post.links
+} %>

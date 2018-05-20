@@ -127,6 +127,8 @@ private
   def prepare_form
     @media = Medium.all.alpha
 
+    @work.prepare_links
+
     if @work.medium.present?
       @work.prepare_credits
       @work.prepare_contributions
@@ -144,6 +146,12 @@ private
       :summary,
       :medium_id,
       {
+        links_attributes: [
+          :id,
+          :_destroy,
+          :url,
+          :description
+        ],
         credits_attributes: [
           :id,
           :_destroy,

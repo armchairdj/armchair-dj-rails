@@ -4,16 +4,17 @@ FactoryBot.define do
   end
 
   factory :link do
+
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
-    trait :with_description do
-      description "link description"
-    end
-
     trait :with_url do
       url { generate(:link_url) }
+    end
+
+    trait :with_description do
+      description "link description"
     end
 
     trait :with_creator do
@@ -32,13 +33,24 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_link do
+    factory :minimal_link, parent: :creator_link
+
+    factory :creator_link do
       with_url
+      with_description
       with_creator
     end
 
-    factory :complete_link, parent: :minimal_link do
+    factory :post_link do
+      with_url
       with_description
+      with_post
+    end
+
+    factory :work_link do
+      with_url
+      with_description
+      with_work
     end
   end
 end

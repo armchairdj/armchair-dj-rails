@@ -13,6 +13,8 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "a_linkable_model"
+
     it_behaves_like "a_summarizable_model"
 
     it_behaves_like "a_viewable_model"
@@ -99,8 +101,6 @@ RSpec.describe Work, type: :model do
     it { should have_many(:posts) }
 
     it { should have_and_belong_to_many(:tags) }
-
-    it { should have_many(:links) }
   end
 
   context "attributes" do

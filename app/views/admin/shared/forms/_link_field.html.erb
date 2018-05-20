@@ -1,6 +1,7 @@
-<%= f.simple_fields_for :roles, role do |ff| %>
+<%= f.simple_fields_for :links, link do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
-    <%= ff.input :name, label: false %>
+    <%= ff.input :url %>
+    <%= ff.input :description %>
 
     <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>

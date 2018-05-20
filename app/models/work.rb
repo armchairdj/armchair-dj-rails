@@ -14,6 +14,7 @@ class Work < ApplicationRecord
   #############################################################################
 
   include Alphabetizable
+  include Linkable
   include Summarizable
   include Viewable
 
@@ -69,8 +70,6 @@ class Work < ApplicationRecord
   has_many :categories, through: :facets
 
   has_and_belongs_to_many :tags
-
-  has_many :links, as: :linkable, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.
