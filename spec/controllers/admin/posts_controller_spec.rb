@@ -341,6 +341,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
         context "with max valid params" do
           it "creates a new Post" do
+            post :create, params: { post: max_valid_params }
+
             expect {
               post :create, params: { post: max_valid_params }
             }.to change(Post, :count).by(1)

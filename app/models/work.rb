@@ -92,26 +92,6 @@ class Work < ApplicationRecord
     MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
   end
 
-  # def contributions_attributes=(attributes)
-  #   puts "contributions_attributes="
-  #
-  #   uniques = (attributes.values.map do |item_attributes|
-  #     attrs = item_attributes.stringify_keys
-  #
-  #     { "creator_id" => attrs["creator_id"].to_s, "role_id" => attrs["role_id"].to_s }
-  #   end).compact.map.uniq
-  #
-  #   puts ">>uniques", uniques
-  #
-  #   deduped = uniques.each.with_index(0).inject({}) do |memo, (item, index)|
-  #     memo[index.to_s] = item; memo
-  #   end
-  #
-  #   puts ">>deduped", deduped
-  #
-  #   super(deduped)
-  # end
-
   #############################################################################
   # VALIDATIONS.
   #############################################################################
@@ -121,6 +101,9 @@ class Work < ApplicationRecord
   validates :title, presence: true
 
   validate { at_least_one_credit }
+
+  validate_nested_uniqueness_of :credits,       uniq_attr: :creator_id
+  validate_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
 
   def at_least_one_credit
     return if self.credits.reject(&:marked_for_destruction?).any?
@@ -207,7 +190,7 @@ class Work < ApplicationRecord
     return creators.alpha.to_a.map(&:name).join(connector) if persisted?
 
     # So we can correctly calculate memoized alpha post value during
-    # nested objectcreation.
+    # nested object creation.
 
     unsaved = credits.map{ |c| c.creator.try(:name) }.compact
 

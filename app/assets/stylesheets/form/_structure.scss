@@ -30,6 +30,10 @@ fieldset {
     margin-top: -$spacing-s;
     @include bottom-margin($spacing-m * .75);
     @include hint-text();
+
+    .error {
+      @include normal();
+    }
   }
 
   &.toggle {

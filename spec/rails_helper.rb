@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "simplecov"
+require "awesome_print"
 
 SimpleCov.start "rails" do
   add_group "Policies", "app/policies"

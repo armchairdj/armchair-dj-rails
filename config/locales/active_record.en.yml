@@ -46,7 +46,7 @@ en:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             creator_id:
-              taken: "This creator cannot appear twice in the same role."
+              taken: "This contributor cannot appear twice in the same role."
         creator:
           attributes:
             base:

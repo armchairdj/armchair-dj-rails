@@ -200,6 +200,11 @@ RSpec.describe Work, type: :model do
     it { should validate_presence_of(:title ) }
 
     context "custom" do
+      context "validate_nested_uniqueness_of" do
+        pending "credits"
+        pending "contributions"
+      end
+
       describe "#at_least_one_credit" do
         subject { build(:minimal_work) }
 
