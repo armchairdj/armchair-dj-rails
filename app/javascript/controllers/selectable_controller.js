@@ -21,7 +21,8 @@ export default class extends Controller {
 
   selectizeOpts() {
     const opts = {
-      plugins: [ "remove_button" ]
+      plugins:          [ "remove_button" ],
+      closeAfterSelect: true
     };
 
     if ($(this.element).is(":not([multiple])")) {
