@@ -3114,6 +3114,10 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
+jquery@^1.7.0:
+  version "1.12.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-1.12.4.tgz#01e1dfba290fe73deba77ceeacb0f9ba2fec9e0c"
+
 jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
@@ -5171,14 +5175,11 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
-selectize-plugin-clear@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/selectize-plugin-clear/-/selectize-plugin-clear-0.0.3.tgz#33c08c4a93c294740a64e8160527802a897a9b7b"
-
-selectize@^0.12.4:
+"selectize@git+ssh://git@github.com:armchairdj/selectize.js.git":
   version "0.12.4"
-  resolved "https://registry.yarnpkg.com/selectize/-/selectize-0.12.4.tgz#50c697526b609dea11da153cf7252b98948f4c0e"
+  resolved "git+ssh://git@github.com:armchairdj/selectize.js.git#de17395659707b295d83c411ec9693a7443814d6"
   dependencies:
+    jquery "^1.7.0"
     microplugin "0.0.3"
     sifter "^0.5.1"
 
