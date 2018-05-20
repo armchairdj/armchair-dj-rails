@@ -253,22 +253,20 @@ tech_companies     = [
 creation_year = FactoryBot.create(:category, name: "Creation Year", format: :year, allow_multiple: false)
 release_year  = FactoryBot.create(:category, name: "Release Year",  format: :year, allow_multiple: false)
 reissue_year  = FactoryBot.create(:category, name: "Reissue Year",  format: :year, allow_multiple: false)
-start_year    = FactoryBot.create(:category, name: "Start Year",    format: :year, allow_multiple: false)
-end_year      = FactoryBot.create(:category, name: "End Year",      format: :year, allow_multiple: false)
+year          = FactoryBot.create(:category, name: "Years",         format: :year, allow_multiple: true )
 
-(1950..2018).each do |year|
-  FactoryBot.create(:tag, category: creation_year, name: year.to_s)
-  FactoryBot.create(:tag, category: release_year,  name: year.to_s)
-  FactoryBot.create(:tag, category: reissue_year,  name: year.to_s)
-  FactoryBot.create(:tag, category: start_year,    name: year.to_s)
-  FactoryBot.create(:tag, category: end_year,      name: year.to_s)
+(1950..2018).each do |y|
+  FactoryBot.create(:tag, category: release_year,  name: y.to_s)
+  FactoryBot.create(:tag, category: reissue_year,  name: y.to_s)
+  FactoryBot.create(:tag, category: creation_year, name: y.to_s)
+  FactoryBot.create(:tag, category: year,          name: y.to_s)
 end
 
 ##### FACETS
 
 song_facets = [
-  FactoryBot.create(:facet, medium: song, category: creation_year),
   FactoryBot.create(:facet, medium: song, category: release_year),
+  FactoryBot.create(:facet, medium: song, category: creation_year),
   FactoryBot.create(:facet, medium: song, category: reissue_year),
   FactoryBot.create(:facet, medium: song, category: musical_genre),
   FactoryBot.create(:facet, medium: song, category: music_label),
@@ -276,33 +274,31 @@ song_facets = [
 ]
 
 album_facets = [
-  FactoryBot.create(:facet, medium: album, category: creation_year),
   FactoryBot.create(:facet, medium: album, category: release_year),
   FactoryBot.create(:facet, medium: album, category: reissue_year),
+  FactoryBot.create(:facet, medium: album, category: creation_year),
   FactoryBot.create(:facet, medium: album, category: musical_genre),
   FactoryBot.create(:facet, medium: album, category: music_label),
   FactoryBot.create(:facet, medium: album, category: album_type),
 ]
 
 movie_facets = [
-  FactoryBot.create(:facet, medium: movie, category: creation_year),
   FactoryBot.create(:facet, medium: movie, category: release_year),
   FactoryBot.create(:facet, medium: movie, category: reissue_year),
+  FactoryBot.create(:facet, medium: movie, category: creation_year),
   FactoryBot.create(:facet, medium: movie, category: narrative_genre),
   FactoryBot.create(:facet, medium: movie, category: hollywood_studio),
 ]
 
 tv_show_facets = [
-  FactoryBot.create(:facet, medium: tv_show, category: start_year),
-  FactoryBot.create(:facet, medium: tv_show, category: end_year),
+  FactoryBot.create(:facet, medium: tv_show, category: year),
   FactoryBot.create(:facet, medium: tv_show, category: narrative_genre),
   FactoryBot.create(:facet, medium: tv_show, category: hollywood_studio),
   FactoryBot.create(:facet, medium: tv_show, category: tv_network),
 ]
 
 tv_season_facets = [
-  FactoryBot.create(:facet, medium: tv_season, category: start_year),
-  FactoryBot.create(:facet, medium: tv_season, category: end_year),
+  FactoryBot.create(:facet, medium: tv_season, category: year),
   FactoryBot.create(:facet, medium: tv_season, category: narrative_genre),
   FactoryBot.create(:facet, medium: tv_season, category: hollywood_studio),
   FactoryBot.create(:facet, medium: tv_season, category: tv_network),
@@ -316,16 +312,14 @@ tv_episode_facets = [
 ]
 
 radio_show_facets = [
-  FactoryBot.create(:facet, medium: radio_show, category: start_year),
-  FactoryBot.create(:facet, medium: radio_show, category: end_year),
+  FactoryBot.create(:facet, medium: radio_show, category: year),
   FactoryBot.create(:facet, medium: radio_show, category: narrative_genre),
   FactoryBot.create(:facet, medium: radio_show, category: audio_show_format),
   FactoryBot.create(:facet, medium: radio_show, category: radio_network),
 ]
 
 podcast_facets = [
-  FactoryBot.create(:facet, medium: podcast, category: start_year),
-  FactoryBot.create(:facet, medium: podcast, category: end_year),
+  FactoryBot.create(:facet, medium: podcast, category: year),
   FactoryBot.create(:facet, medium: podcast, category: narrative_genre),
   FactoryBot.create(:facet, medium: podcast, category: audio_show_format),
   FactoryBot.create(:facet, medium: podcast, category: podcast_network),
@@ -348,8 +342,7 @@ graphic_novel_facets = [
 ]
 
 comic_book_facets = [
-  FactoryBot.create(:facet, medium: comic_book, category: start_year),
-  FactoryBot.create(:facet, medium: comic_book, category: end_year),
+  FactoryBot.create(:facet, medium: comic_book, category: year),
   FactoryBot.create(:facet, medium: comic_book, category: narrative_genre),
   FactoryBot.create(:facet, medium: comic_book, category: publisher),
 ]
@@ -362,8 +355,7 @@ video_game_facets = [
 ]
 
 publication_facets = [
-  FactoryBot.create(:facet, medium: publication, category: start_year),
-  FactoryBot.create(:facet, medium: publication, category: end_year),
+  FactoryBot.create(:facet, medium: publication, category: year),
   FactoryBot.create(:facet, medium: publication, category: publisher),
   FactoryBot.create(:facet, medium: publication, category: publication_type),
 ]
@@ -371,8 +363,6 @@ publication_facets = [
 artwork_facets = [
   FactoryBot.create(:facet, medium: artwork, category: creation_year),
   FactoryBot.create(:facet, medium: artwork, category: release_year),
-  FactoryBot.create(:facet, medium: artwork, category: start_year),
-  FactoryBot.create(:facet, medium: artwork, category: end_year),
   FactoryBot.create(:facet, medium: artwork, category: art_medium),
   FactoryBot.create(:facet, medium: artwork, category: art_movement),
 ]
@@ -385,25 +375,20 @@ hardware_facets = [
 ]
 
 software_facets = [
-  FactoryBot.create(:facet, medium: software, category: creation_year),
-  FactoryBot.create(:facet, medium: software, category: release_year),
-  FactoryBot.create(:facet, medium: software, category: start_year),
-  FactoryBot.create(:facet, medium: software, category: end_year),
+  FactoryBot.create(:facet, medium: software, category: year),
   FactoryBot.create(:facet, medium: software, category: tech_platform),
   FactoryBot.create(:facet, medium: software, category: tech_company),
 ]
 
 product_facets = [
-  FactoryBot.create(:facet, medium: product, category: creation_year),
-  FactoryBot.create(:facet, medium: product, category: release_year),
-  FactoryBot.create(:facet, medium: product, category: start_year),
-  FactoryBot.create(:facet, medium: product, category: end_year),
+  FactoryBot.create(:facet, medium: product, category: year),
   FactoryBot.create(:facet, medium: product, category: manufacturer),
   FactoryBot.create(:facet, medium: product, category: product_type),
 ]
 
 ##### ROLES
 
+song_artist                = FactoryBot.create(:role, medium: song, name: "Artist")
 song_featured_artist       = FactoryBot.create(:role, medium: song, name: "Featured Artist")
 song_songwriter            = FactoryBot.create(:role, medium: song, name: "Songwriter")
 song_lyricist              = FactoryBot.create(:role, medium: song, name: "Lyricist")
@@ -417,6 +402,7 @@ song_backing_vocalist      = FactoryBot.create(:role, medium: song, name: "Backi
 song_musician              = FactoryBot.create(:role, medium: song, name: "Musician")
 song_remixer               = FactoryBot.create(:role, medium: song, name: "Remixer")
 
+album_artist               = FactoryBot.create(:role, medium: album, name: "Artist")
 album_featured_artist      = FactoryBot.create(:role, medium: album, name: "Featured Artist")
 album_songwriter           = FactoryBot.create(:role, medium: album, name: "Songwriter")
 album_lyricist             = FactoryBot.create(:role, medium: album, name: "Lyricist")
@@ -441,6 +427,7 @@ movie_composer             = FactoryBot.create(:role, medium: movie, name: "Comp
 movie_sound_editor         = FactoryBot.create(:role, medium: movie, name: "Sound Editor")
 movie_sound_effects        = FactoryBot.create(:role, medium: movie, name: "Sound Effects")
 
+tv_show_creator            = FactoryBot.create(:role, medium: tv_show, name: "Creator")
 tv_show_producer           = FactoryBot.create(:role, medium: tv_show, name: "Producer")
 tv_show_executive_producer = FactoryBot.create(:role, medium: tv_show, name: "Executive Producer")
 tv_show_co_producer        = FactoryBot.create(:role, medium: tv_show, name: "Co-Producer")
@@ -448,8 +435,8 @@ tv_show_showrunner         = FactoryBot.create(:role, medium: tv_show, name: "Sh
 
 tv_season_showrunner       = FactoryBot.create(:role, medium: tv_season, name: "Showrunner")
 
+tv_episode_writer          = FactoryBot.create(:role, medium: tv_episode, name: "Writer")
 tv_episode_director        = FactoryBot.create(:role, medium: tv_episode, name: "Director")
-tv_episode_writer          = FactoryBot.create(:role, medium: tv_episode, name: "Screenwriter")
 tv_episode_editor          = FactoryBot.create(:role, medium: tv_episode, name: "Film Editor")
 tv_episode_composer        = FactoryBot.create(:role, medium: tv_episode, name: "Composer")
 
