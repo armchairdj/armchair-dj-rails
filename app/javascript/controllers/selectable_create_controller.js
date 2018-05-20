@@ -1,20 +1,30 @@
 import SelectableController from "controllers/selectable_controller";
 
 export default class extends SelectableController {
-  connect() {
-    super.connect();
+  static memos = [];
 
-    this.addOptionEventName = `selectable-create:option-add:${this.data.get("scope")}`;
-    this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
-
-    this.bindAddOptionListener();
+  static memoize(memo) {
+    this.memos.push(memo);
   }
 
-  bindAddOptionListener() {
+  static memoized(memo) {
+    return !!_.findWhere(this.memos, memo);
+  }
+
+  initialize() {
+    this.addOptionEventName = `selectable-create:option-add:${this.data.get("scope")}`;
+    this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
+  }
+
+  setup() {
+    super.setup();
+
     $(document).on(this.addOptionEventName, this.addOptionListener);
   }
 
-  unbindAddOptionListener() {
+  teardown(evt) {
+    super.teardown();
+
     $(document).off(this.addOptionEventName, this.addOptionListener);
   }
 
@@ -26,6 +36,10 @@ export default class extends SelectableController {
   }
 
   createItem(userInput, callback) {
+    if (!this.confirmCreate(userInput)) {
+      return callback();
+    }
+
     $.ajax({
       method:   "POST",
       url:      this.data.get("url"),
@@ -35,15 +49,23 @@ export default class extends SelectableController {
     });
   }
 
+  confirmCreate(userInput) {
+    if (!_.findWhere(_.values(this.selectize.options), { text: userInput })) {
+      return true;
+    }
+
+    return window.confirm("There's already an item like that. Are you sure you want to create a duplicate?");
+  }
+
   createItemParams(userInput) {
     return Object.assign(
-      this.getParam(userInput),
-      this.getExtraParams,
-      this.getFormParams
+      this.extraParams,
+      this.formParams,
+      this.userParam(userInput)
     );
   }
   
-  getParam(userInput) {
+  userParam(userInput) {
     const params = {};
 
     params[this.data.get("param")] = userInput;
@@ -51,7 +73,7 @@ export default class extends SelectableController {
     return params;
   }
 
-  getExtraParams() {
+  extraParams() {
     const params      = {};
     const extraParams = this.data.get("extra-params");
 
@@ -66,7 +88,7 @@ export default class extends SelectableController {
     return params;
   }
 
-  getFormParams() {
+  formParams() {
     const params     = {};
     const formParams = this.data.get("form-params");
 
@@ -94,30 +116,32 @@ export default class extends SelectableController {
     callback();
   }
 
-  handleOptionAdd(value, data) {
-    console.log("handleOptionAdd", data);
+  handleOptionAdd(value, params) {
+    const memo = {
+      scope:   this.data.get("scope"),
+      value:   params.value,
+      text:    params.text,
+    };
 
-    $(document).trigger(this.addOptionEventName, {
-      element: this.element,
-      value:   data.value,
-      text:    data.text,
-    });
+    if (!this.constructor.memoized(memo)) {
+      this.constructor.memoize(memo);
+
+      this.broadcastToSiblings(memo);
+    }
   }
 
-  handleRemoteOptionAdd(evt, data) {
-    console.log("handleRemoteOptionAdd");
+  broadcastToSiblings(memo) {
+    memo = Object.assign(memo, { element: this.element });
 
-    if ($(this.element) === $(data.element)) {
+    $(document).trigger(this.addOptionEventName, memo);
+  }
+
+  handleRemoteOptionAdd(evt, params) {
+    if ($(this.element) === $(params.element)) {
       return;
     }
 
-    console.log("match", this.scope);
-
-    this.unbindAddOptionListener();
-
-    this.selectize.addOption({ value: data.value, text: data.text });
+    this.selectize.addOption({ value: params.value, text: params.text });
     this.selectize.refreshOptions();
-
-    window.setTimeout(_.bind(this.bindAddOptionListener, this), 1000);
   }
 }

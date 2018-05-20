@@ -6,7 +6,7 @@ export default class extends Controller {
   connect() {
     this.setup();
 
-    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
+    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
   }
 
   setup() {

@@ -4,7 +4,7 @@ export default class extends Controller {
   connect() {
     this.setup();
 
-    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
+    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
   }
 
   setup() {
@@ -20,17 +20,18 @@ export default class extends Controller {
   }
 
   selectizeOpts() {
-    if ($(this.element).is("[multiple]")) {
-      return {
-        plugins:  [ "remove_button" ],
-        maxItems: this.maxItems(),
-        mode:     "multi"
-      };
-    } else {
-      return {
-        plugins: [ "remove_button" ]
-      };
+    const opts = {
+      plugins: [ "remove_button" ]
+    };
+
+    if ($(this.element).is(":not([multiple])")) {
+      return opts;
     }
+
+    return Object.assign(opts, {
+      mode:     "multi",
+      maxItems: this.maxItems()
+    });
   }
 
   maxItems() {
