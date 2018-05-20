@@ -7,6 +7,8 @@ export default class extends Controller {
     this.multiple = $(this.element).is("[multiple]");
 
     $(this.element).selectize(this.constructOptions());
+
+    this.selectize = this.element.selectize;
   }
 
   teardown(evt) {

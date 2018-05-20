@@ -1,9 +1,27 @@
 import SelectableController from "controllers/selectable_controller";
 
 export default class extends SelectableController {
+  connect() {
+    super.connect();
+
+    this.addOptionEventName = `selectable-create:option-add:${this.data.get("scope")}`;
+    this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
+
+    this.bindAddOptionListener();
+  }
+
+  bindAddOptionListener() {
+    $(document).on(this.addOptionEventName, this.addOptionListener);
+  }
+
+  unbindAddOptionListener() {
+    $(document).off(this.addOptionEventName, this.addOptionListener);
+  }
+
   constructOptions() {
     return Object.assign(super.constructOptions(), {
-      create: _.bind(this.createItem, this)
+      create:      _.bind(this.createItem,      this),
+      onOptionAdd: _.bind(this.handleOptionAdd, this)
     });
   }
 
@@ -30,8 +48,6 @@ export default class extends SelectableController {
 
     params[this.data.get("param")] = userInput;
 
-    console.log("params", params);
-
     return params;
   }
 
@@ -46,8 +62,6 @@ export default class extends SelectableController {
         params[parts[0]] = parts[1];
       });
     }
-
-    console.log("extraParams", params);
 
     return params;
   }
@@ -64,8 +78,6 @@ export default class extends SelectableController {
       });
     }
 
-    console.log("formParams", params);
-
     return params;
   }
 
@@ -80,5 +92,31 @@ export default class extends SelectableController {
     alert("Something went wrong.");
 
     callback();
+  }
+
+  handleOptionAdd(value, data) {
+    console.log("handleOptionAdd", data);
+
+    $(document).trigger(this.addOptionEventName, {
+      element: this.element,
+      value:   data.value,
+      text:    data.text,
+    });
+  }
+
+  handleRemoteOptionAdd(evt, data) {
+    console.log("handleRemoteOptionAdd")
+    if ($(this.element) === $(data.element)) {
+      return;
+    }
+
+    console.log("match", this.scope);
+
+    this.unbindAddOptionListener();
+
+    this.selectize.addOption({ value: data.value, text: data.text });
+    this.selectize.refreshOptions();
+
+    setTimeout(_.bind(this.bindAddOptionListener, this), 1000);
   }
 }

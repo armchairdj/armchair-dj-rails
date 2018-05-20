@@ -2,6 +2,7 @@
   input_html = {
     multiple:                              true,
     "data-controller":                     "selectable-create",
+    "data-selectable-create-scope":        "tag[category_id=#{category.id}]",
     "data-selectable-create-url":          admin_tags_path,
     "data-selectable-create-param":        "tag[name]",
     "data-selectable-create-extra-params": "tag[category_id]=#{category.id}",

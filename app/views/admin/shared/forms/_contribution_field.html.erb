@@ -8,6 +8,7 @@
         include_blank: :translate,
         input_html:    {
           "data-controller":              "selectable-create",
+          "data-selectable-create-scope": "creator",
           "data-selectable-create-url":   admin_creators_path,
           "data-selectable-create-param": "creator[name]"
         }
@@ -19,6 +20,7 @@
         include_blank:      :translate,
         input_html:         {
           "data-controller":                    "selectable-create",
+          "data-selectable-create-scope":       "role",
           "data-selectable-create-url":         admin_roles_path,
           "data-selectable-create-param":       "role[name]",
           "data-selectable-create-form-params": "role[medium_id]=work[medium_id]"
