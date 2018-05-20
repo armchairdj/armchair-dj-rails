@@ -2,40 +2,40 @@ import { Controller } from "stimulus";
 
 export default class extends Controller {
   connect() {
+    this.setup();
+
     $(document).on("turbolinks:visit", _.bind(this.teardown, this));
+  }
 
-    this.multiple = $(this.element).is("[multiple]");
-
-    $(this.element).selectize(this.constructOptions());
+  setup() {
+    $(this.element).selectize(this.selectizeOpts());
 
     this.selectize = this.element.selectize;
   }
 
   teardown(evt) {
-    const selectizeInstance = $(this.element)[0].selectize;
-
-    if (selectizeInstance) {
-      selectizeInstance.destroy();
+    if (this.selectize) {
+      this.selectize.destroy();
     }
   }
 
-  constructOptions() {
-    const maxItems = parseInt(this.data.get("maxItems"));
-
-    if (this.multiple) {
+  selectizeOpts() {
+    if ($(this.element).is("[multiple]")) {
       return {
-        maxItems: isNaN(maxItems) ? null : maxItems,
-        mode:     "multi",
-        plugins:  [
-          "remove_button"
-        ]
+        plugins:  [ "remove_button" ],
+        maxItems: this.maxItems(),
+        mode:     "multi"
       };
     } else {
       return {
-        plugins:  [
-          "remove_button"
-        ]
+        plugins: [ "remove_button" ]
       };
     }
+  }
+
+  maxItems() {
+    const maxItems = parseInt(this.data.get("maxItems"));
+
+    return isNaN(maxItems) ? null : maxItems;
   }
 }

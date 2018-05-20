@@ -1,70 +1,51 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
+  static targets = [ "field" ];
+
   connect() {
-    this.$node   = $(this.element);
-    this.$inner  = this.$node.find("> .boxed");
-    this.$items  = this.$node.find("fieldset");
-    this.$hidden = this.$items.filter(this.shouldHide);
+    this.setup();
 
-    this.deploy();
+    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
   }
 
-  deploy() {
-    if (this.hideItems()) {
-      this.ensureLink();
+  setup() {
+    this.hidden = this.fieldTargets.filter(field => !$(field).find("select").val());
+
+    if (this.hidden.length == this.fieldTargets.length) {
+      this.hidden.shift();
+    }
+
+    if (this.hidden.length > 0) {
+      $(this.hidden).hide();
+
+      this.addLink();
     }
   }
 
-  shouldHide() {
-    return !$(this).find(".form-field:first-child select").val()
+  teardown(evt) {
+    $(this.fieldTargets).show();
+
+    this.removeLink();
   }
 
-  hideItems() {
-    this.neverHideFirstItem();
+  addLink() {
+    this.$link = $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-fieldset#expand">add another</a></div>');
 
-    this.$hidden.hide();
-
-    return this.$hidden.length > 0;
-  }
-
-  neverHideFirstItem() {
-    if (this.$hidden.length == this.$items.length) {
-      this.grabNextItem();
-    }
-  }
-
-  grabNextItem() {
-    return $(this.$hidden.splice(0, 1));
-  }
-
-  ensureLink() {
-    this.$link = this.$node.find("[data-expand-link]");
-
-    if (!this.$link[0]) {
-      this.$link = this.getLinkHtml();
-
-      $(this.$inner[0] || this.$node).append(this.$link);
-    }
+    $( $(this.element).find("> .boxed")[0] || this.element ).append(this.$link);
   }
 
   removeLink() {
-    this.$link.remove();
-  }
-
-  getLinkHtml() {
-    return $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-fieldset#expand">add another</a></div>');
+    $(this.element).find("[data-expand-link]").remove();
   }
 
   expand(evt) {
     evt.preventDefault();
 
-    this.removeLink();
+    $(this.hidden.shift()).show();
 
-    this.grabNextItem().show();
-
-    if (this.$hidden.length > 0) {
-      this.ensureLink();
+    if (this.hidden.length === 0) {
+      this.removeLink();
     }
   }
 }

@@ -1,32 +1,39 @@
 import { Controller } from "stimulus";
 
-//TODO setup and teardown
-
 export default class extends Controller {
-  static targets = [ "trueFieldset", "falseFieldset", "radio" ];
+  static targets = [ "trueFieldset", "falseFieldset" ];
+
+  initialize() {
+    this.handler = _.bind(this.toggle, this);
+  }
 
   connect() {
-    this.$node          = $(this.element);
-    this.$trueFieldset  = $(this.trueFieldsetTarget)
-    this.$falseFieldset = $(this.falseFieldsetTarget)
-    this.$radio         = this.$node.find('input[type="radio"]');
+    this.setup();
 
-    this.$radio.on("change", _.bind(this.handleChange, this));
+    $(document).on("turbolinks:visit", _.bind(this.teardown, this));
+  }
+
+  setup() {
+    this.findRadio().on("change", this.handler);
 
     this.toggle();
   }
 
-  handleChange(evt) {
-    this.toggle();
+  teardown(evt) {
+    this.findRadio().off("change", this.handler);
   }
 
-  toggle() {
-    if (this.$radio.filter(":checked").val() === "true") {
-      this.$trueFieldset.show();
-      this.$falseFieldset.hide();
+  findRadio() {
+    return $(this.element).find('input[type="radio"]');
+  }
+
+  toggle(evt) {
+    if (this.findRadio().filter(":checked").val() === "true") {
+      $(this.trueFieldsetTarget).show();
+      $(this.falseFieldsetTarget).hide();
     } else {
-      this.$falseFieldset.show();
-      this.$trueFieldset.hide();
+      $(this.trueFieldsetTarget ).hide();
+      $(this.falseFieldsetTarget).show();
     }
   }
 }

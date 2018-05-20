@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :real_name_identities, real_name_identity do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested") do %>
+  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
     <%= ff.input :real_name_id,
       as:            :select,
       label:         false,

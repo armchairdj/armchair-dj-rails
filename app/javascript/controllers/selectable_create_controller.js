@@ -18,8 +18,8 @@ export default class extends SelectableController {
     $(document).off(this.addOptionEventName, this.addOptionListener);
   }
 
-  constructOptions() {
-    return Object.assign(super.constructOptions(), {
+  selectizeOpts() {
+    return Object.assign(super.selectizeOpts(), {
       create:      _.bind(this.createItem,      this),
       onOptionAdd: _.bind(this.handleOptionAdd, this)
     });
@@ -29,13 +29,13 @@ export default class extends SelectableController {
     $.ajax({
       method:   "POST",
       url:      this.data.get("url"),
-      data:     this.postParams(userInput),
+      data:     this.createItemParams(userInput),
       success:  _.bind(this.ajaxSuccess, this, callback),
       error:    _.bind(this.ajaxError,   this, callback)
     });
   }
 
-  postParams(userInput) {
+  createItemParams(userInput) {
     return Object.assign(
       this.getParam(userInput),
       this.getExtraParams,
@@ -105,7 +105,8 @@ export default class extends SelectableController {
   }
 
   handleRemoteOptionAdd(evt, data) {
-    console.log("handleRemoteOptionAdd")
+    console.log("handleRemoteOptionAdd");
+
     if ($(this.element) === $(data.element)) {
       return;
     }
@@ -117,6 +118,6 @@ export default class extends SelectableController {
     this.selectize.addOption({ value: data.value, text: data.text });
     this.selectize.refreshOptions();
 
-    setTimeout(_.bind(this.bindAddOptionListener, this), 1000);
+    window.setTimeout(_.bind(this.bindAddOptionListener, this), 1000);
   }
 }

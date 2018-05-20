@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :facets, facet do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested") do %>
+  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
     <%= ff.input :category_id,
       as:            :select,
       label:         false,

@@ -17,9 +17,9 @@
 <% end %>
 
 <%= content_tag(:fieldset, class: "legendary") do %>
-  <%= content_tag(:legend, "Publication Details") %>
-
   <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend, "Publication Details") %>
+
     <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
 
     <% if f.object.published? %>

@@ -1,8 +1,8 @@
 import SelectableController from "controllers/selectable_controller";
 
 export default class extends SelectableController {
-  constructOptions() {
-    return Object.assign(super.constructOptions(), {
+  selectizeOpts() {
+    return Object.assign(super.selectizeOpts(), {
       create: _.bind(this.activateTab, this)
     });
   }

@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :contributions, contribution do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested") do %>
+  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
     <%= content_tag(:div, class: "stacked") do %>
       <%= ff.input :creator_id,
         as:            :select,
