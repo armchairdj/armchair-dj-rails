@@ -39,5 +39,9 @@ RSpec.describe Admin::MediaController, type: :routing do
     it "routes to #destroy" do
       expect(delete: "/admin/media/1").to route_to("admin/media#destroy", id: "1")
     end
+
+    it "routes to #reorder_facets" do
+      expect(post: "/admin/media/1/reorder_facets").to route_to("admin/media#reorder_facets", id: "1")
+    end
   end
 end

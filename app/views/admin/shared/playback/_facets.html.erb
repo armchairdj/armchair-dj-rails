@@ -5,7 +5,10 @@
     <%= content_tag(:h4, "Facets") %>
   <% end %>
 
-  <%= content_tag(:ul, class: "square") do %>
+  <%= content_tag(:ul, class: "square sortable",
+    "data-controller":         "sortable-facet",
+    "data-sortable-facet-url": reorder_facets_admin_medium_path(@medium)
+  ) do %>
     <%= render partial: "admin/shared/playback/facet", collection: facets %>
   <% end %>
 <% end %>

@@ -1,5 +1,5 @@
 <%
-  records = f.object.facets
+  records = f.object.facets.for_admin
   error   = f.error(:facets)
   classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
 %>

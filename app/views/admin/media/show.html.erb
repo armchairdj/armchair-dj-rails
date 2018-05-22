@@ -59,7 +59,7 @@
 } %>
 
 <%= render partial: "admin/shared/playback/facets", locals: {
-  facets: @medium.facets
+  facets: @medium.facets.for_admin
 } %>
 
 <%= render partial: "admin/shared/playback/works", locals: {

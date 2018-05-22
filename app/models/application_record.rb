@@ -16,6 +16,20 @@ class ApplicationRecord < ActiveRecord::Base
     self.admin_scopes.values.first
   end
 
+  def self.find_by_sorted_ids(ids)
+    return self.none unless ids.any?
+
+    clause = ["CASE"]
+
+    ids.each.with_index(0) do |id, index|
+      clause << "WHEN id='#{id}' THEN #{index}"
+    end
+
+    clause << "END"
+
+    self.where(id: ids).order(clause.join(" "))
+  end
+
   def self.validate_nested_uniqueness_of(*nested_attrs)
     opts      = nested_attrs.extract_options!
     uniq_attr = opts[:uniq_attr]

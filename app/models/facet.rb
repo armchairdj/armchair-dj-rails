@@ -8,6 +8,8 @@ class Facet < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  acts_as_list scope: [:medium_id], top_of_list: 0
+
   #############################################################################
   # CLASS.
   #############################################################################
@@ -16,7 +18,7 @@ class Facet < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :sorted,    -> { joins(:category, :medium).order("media.name, categories.name") }
+  scope :sorted,    -> { joins(:category, :medium).order("media.name, facets.position") }
   scope :eager,     -> { includes(:medium, :category) }
   scope :for_admin, -> { eager.sorted }
   scope :for_site,  -> { eager.sorted }

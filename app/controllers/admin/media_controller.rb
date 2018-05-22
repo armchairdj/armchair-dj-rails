@@ -12,7 +12,8 @@ class Admin::MediaController < AdminController
     :show,
     :edit,
     :update,
-    :destroy
+    :destroy,
+    :reorder_facets
   ]
 
   before_action :authorize_collection, only: [
@@ -25,7 +26,8 @@ class Admin::MediaController < AdminController
     :show,
     :edit,
     :update,
-    :destroy
+    :destroy,
+    :reorder_facets
   ]
 
   before_action :prepare_form, only: [
@@ -96,6 +98,15 @@ class Admin::MediaController < AdminController
       format.html { redirect_to admin_media_path, success: I18n.t("admin.flash.media.success.destroy") }
       format.json { head :no_content }
     end
+  end
+
+  # POST /admin/media/1/reorder_facets
+  def reorder_facets
+    raise ActionController::UnknownFormat unless request.xhr?
+
+    @facets = Facet.find_by_sorted_ids(params[:facet_ids]).where(medium_id: @medium.id)
+
+    @facets.each { |facet| facet.move_to_bottom }
   end
 
 private

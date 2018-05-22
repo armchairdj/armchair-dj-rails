@@ -192,5 +192,10 @@ RSpec.describe Admin::MediaController, type: :controller do
         )
       end
     end
+
+    describe "POST #reorder_facets" do
+      pending "errors on non-xhr"
+      pending "reorders facets"
+    end
   end
 end

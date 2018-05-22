@@ -7,5 +7,7 @@ RSpec.describe Admin::MediumPolicy do
     let(:record) { create(:minimal_medium) }
   end
 
+  pending "reorder_facets?"
+
   pending "scope"
 end

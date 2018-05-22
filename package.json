@@ -6,6 +6,7 @@
     "jquery": "^3.3.1",
     "rails-ujs": "^5.1.5",
     "selectize": "git+ssh://git@github.com:armchairdj/selectize.js.git",
+    "sortablejs": "^1.7.0",
     "stimulus": "^1.0.1",
     "turbolinks": "^5.1.1",
     "underscore": "^1.9.0",

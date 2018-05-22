@@ -1,0 +1,13 @@
+ul.sortable {
+  li {
+  	cursor: move;
+  }
+}
+
+.sortable-drag {
+  cursor: grab;
+}
+
+.sortable-ghost {
+  opacity: .2;
+}

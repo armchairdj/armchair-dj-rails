@@ -10,7 +10,7 @@ RSpec.shared_examples "an_application_record" do
   end
 
   context "class" do
-    describe "default_admin_scope" do
+    describe "self#default_admin_scope" do
       subject { described_class.default_admin_scope }
 
       specify { expect(subject).to be_a_kind_of(Symbol) }
@@ -20,7 +20,7 @@ RSpec.shared_examples "an_application_record" do
       specify { expect(described_class).to respond_to(subject) }
     end
 
-    describe "admin_scopes" do
+    describe "self#admin_scopes" do
       subject { described_class.admin_scopes }
 
       specify { expect(subject).to be_a_kind_of(Hash) }
@@ -39,6 +39,10 @@ RSpec.shared_examples "an_application_record" do
         end
       end
     end
+
+    pending "self#find_by_sorted_ids"
+
+    pending "self.validate_nested_uniqueness_of"
   end
 
   context "included" do
