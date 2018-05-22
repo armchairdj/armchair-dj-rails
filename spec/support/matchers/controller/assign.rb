@@ -22,13 +22,13 @@ RSpec::Matchers.define :assign do |instance, sym|
   chain :and_be_valid do
     @valid = true
 
-    expect(assigns(sym)).to be_valid
+    expect(assigns(sym).errors).to be_empty
   end
 
   chain :and_be_invalid do
     @invalid = true
 
-    expect(assigns(sym)).to_not be_valid
+    expect(assigns(sym).errors).to_not be_empty
   end
 
   failure_message do

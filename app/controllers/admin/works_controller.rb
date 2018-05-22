@@ -133,18 +133,20 @@ private
       @work.prepare_credits
       @work.prepare_contributions
 
+      @categories = @work.medium.tags_by_category
       @creators   = Creator.all.alpha
       @roles      = Role.options_for(@work.medium)
-      @categories = @work.medium.tags_by_category
+      @works      = @work.grouped_parent_dropdown_options
     end
   end
 
   def instance_params
     permitted = [
+      :medium_id,
+      :parent_id,
       :title,
       :subtitle,
       :summary,
-      :medium_id,
       {
         links_attributes: [
           :id,

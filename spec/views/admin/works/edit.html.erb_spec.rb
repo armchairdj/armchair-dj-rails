@@ -13,10 +13,11 @@ RSpec.describe "admin/works/edit", type: :view do
     @model_class = assign(:model_name, Work)
     @work        = assign(:work, create(:minimal_work))
 
-    @creators    = assign(:creators,   Creator.all.alpha            )
-    @media       = assign(:media,      Medium.all.alpha             )
-    @roles       = assign(:roles,      Role.all.alpha               )
-    @categories  = assign(:categories, @work.medium.tags_by_category)
+    @creators    = assign(:creators,   Creator.all.alpha                    )
+    @media       = assign(:media,      Medium.all.alpha                     )
+    @roles       = assign(:roles,      Role.all.alpha                       )
+    @categories  = assign(:categories, @work.medium.tags_by_category        )
+    @works       = assign(:works,      @work.grouped_parent_dropdown_options)
   end
 
   it "renders the edit work form" do

@@ -5,7 +5,8 @@ window.Selectize = Selectize;
 _.extend(Selectize.prototype, {
   positionDropdown: function() {
     var $control = this.$control;
-    var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
+    var offset   = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
+
     offset.top += $control.outerHeight(false);
 
     this.$dropdown.css({

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_22_033625) do
+ActiveRecord::Schema.define(version: 2018_05_22_155557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,7 +226,10 @@ ActiveRecord::Schema.define(version: 2018_05_22_033625) do
     t.text "summary"
     t.string "alpha"
     t.bigint "medium_id"
+    t.string "ancestry"
+    t.integer "ancestry_depth", default: 0
     t.index ["alpha"], name: "index_works_on_alpha"
+    t.index ["ancestry"], name: "index_works_on_ancestry"
     t.index ["medium_id"], name: "index_works_on_medium_id"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"

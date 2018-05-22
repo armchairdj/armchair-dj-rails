@@ -34,9 +34,10 @@ RSpec.describe "admin/works/new", type: :view do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work, medium_id: @media.first.id))
 
-      @creators    = assign(:creators,   Creator.all.alpha             )
-      @roles       = assign(:roles,      Role.options_for(@work.medium))
-      @categories  = assign(:categories, @media.first.tags_by_category )
+      @categories  = assign(:categories, @media.first.tags_by_category        )
+      @creators    = assign(:creators,   Creator.all.alpha                    )
+      @roles       = assign(:roles,      Role.options_for(@work.medium)       )
+      @works       = assign(:works,      @work.grouped_parent_dropdown_options)
     end
 
     xit "renders fully populated form" do

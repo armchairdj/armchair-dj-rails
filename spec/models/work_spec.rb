@@ -15,6 +15,8 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "a_linkable_model"
 
+    it_behaves_like "a_parentable_model"
+
     it_behaves_like "a_summarizable_model"
 
     it_behaves_like "a_viewable_model"
@@ -558,5 +560,7 @@ RSpec.describe Work, type: :model do
     end
 
     pending "#alpha_parts"
+    pending "#name_for_parent_dropdown"
+    pending "#grouped_parent_dropdown_options"
   end
 end

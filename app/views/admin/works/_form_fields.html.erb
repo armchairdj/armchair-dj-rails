@@ -1,7 +1,8 @@
 <% show_contributors = true if local_assigns[:show_contributors].nil? %>
+<% show_links        = true if local_assigns[:show_links       ].nil? %>
+<% show_parent       = true if local_assigns[:show_parent      ].nil? %>
 <% show_summary      = true if local_assigns[:show_summary     ].nil? %>
 <% show_tags         = true if local_assigns[:show_tags        ].nil? %>
-<% show_links        = true if local_assigns[:show_links       ].nil? %>
 
 <%= content_tag(:fieldset) do %>
   <%= content_tag(:div, class: "boxed") do %>
@@ -17,6 +18,22 @@
     <%= f.input :title %>
 
     <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
+
+    <% if show_parent %>
+      <%= f.input :parent_id, as: :grouped_select,
+        collection:         works,
+        selected:           f.object.parent_id,
+        required:           false,
+        group_label_method: :first,
+        group_method:       :last,
+        label_method:       :name_for_parent_dropdown,
+        value_method:       :id,
+        include_blank:      :translate,
+        input_html:         {
+          "data-controller":  "selectable"
+        }
+      %>
+    <% end %>
   <% end %>
 
   <%= render(partial: "admin/shared/forms/credit_fieldset", locals: {

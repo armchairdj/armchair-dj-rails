@@ -12,10 +12,11 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/works/form_fields", locals: {
       f:          f,
+      categories: categories,
+      creators:   creators,
       media:      media,
       roles:      roles,
-      creators:   creators,
-      categories: categories
+      works:      works,
     } %>
   <% end %>
 
