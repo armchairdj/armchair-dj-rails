@@ -289,7 +289,7 @@ class Post < ApplicationRecord
   end
 
   def alpha_parts
-    standalone? ? [title] : work.try(:alpha_parts)
+    standalone? ? [title] : [work.try(:alpha_parts)]
   end
 
   def all_tags
