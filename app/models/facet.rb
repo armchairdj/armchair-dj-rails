@@ -18,7 +18,7 @@ class Facet < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :sorted,    -> { joins(:category, :medium).order("media.name, facets.position") }
+  scope :sorted,    -> { joins(:medium, :category).order("media.name, facets.position") }
   scope :eager,     -> { includes(:medium, :category) }
   scope :for_admin, -> { eager.sorted }
   scope :for_site,  -> { eager.sorted }

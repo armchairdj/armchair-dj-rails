@@ -4,7 +4,7 @@ class Medium < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
-  MAX_ROLES_AT_ONCE = 10.freeze
+  MAX_ROLES_AT_ONCE  = 10.freeze
   MAX_FACETS_AT_ONCE = 10.freeze
 
   #############################################################################
@@ -47,7 +47,7 @@ class Medium < ApplicationRecord
 
   has_many :posts, through: :works
 
-  has_many :facets, -> { includes(:category).order("categories.name") }, inverse_of: :medium, dependent: :destroy
+  has_many :facets, inverse_of: :medium, dependent: :destroy
 
   has_many :categories, through: :facets
   has_many :tags,       through: :categories
@@ -94,6 +94,20 @@ class Medium < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def reorder_facets!(sorted_facet_ids)
+    return unless sorted_facet_ids.any?
+
+    facets = Facet.find_by_sorted_ids(sorted_facet_ids).where(medium_id: self.id)
+
+    unless facets.length == sorted_facet_ids.length && self.facets.count == facets.length
+      raise ArgumentError.new("Bad facet reorder; ids don't match")
+    end
+
+    Facet.acts_as_list_no_update do
+      facets.each.with_index(0) { |facet, i| facet.update!(position: i) }
+    end
+  end
 
   def tags_by_category
     available = categories.includes(:tags)

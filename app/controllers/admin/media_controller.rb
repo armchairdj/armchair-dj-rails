@@ -104,9 +104,7 @@ class Admin::MediaController < AdminController
   def reorder_facets
     raise ActionController::UnknownFormat unless request.xhr?
 
-    @facets = Facet.find_by_sorted_ids(params[:facet_ids]).where(medium_id: @medium.id)
-
-    @facets.each { |facet| facet.move_to_bottom }
+    @medium.reorder_facets!(params[:facet_ids])
   end
 
 private

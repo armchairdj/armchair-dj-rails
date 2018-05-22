@@ -9,7 +9,7 @@
   public_link: admin_public_user_link(@user)
 } %>
 
-<%= content_tag(:section, class: "admin-section") do %>
+<%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Attributes") %>
   <% end %>
@@ -61,7 +61,7 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:section, class: "admin-section") do %>
+<%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Account Status") %>
   <% end %>
@@ -96,7 +96,7 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:section, class: "admin-section") do %>
+<%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Logins") %>
   <% end %>

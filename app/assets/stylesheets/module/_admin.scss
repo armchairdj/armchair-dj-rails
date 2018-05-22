@@ -1,5 +1,9 @@
 @mixin admin-rule-line() {
-  border-bottom: 1px solid $armchair-smoke;
+  @include border-bottom($padding: 0, $color: $armchair-smoke, $all: true)
+}
+
+@mixin admin-border() {
+  @include border-bottom($color: $armchair-smoke)
 }
 
 form.admin {
@@ -141,5 +145,13 @@ table.admin {
   th {
     text-transform: uppercase;
     color: $armchair-smoke;
+  }
+}
+
+.admin-section {
+  @include admin-border();
+
+  &.tabled {
+    @include no-border-bottom();
   }
 }

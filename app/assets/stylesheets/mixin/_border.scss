@@ -22,6 +22,11 @@
   }
 }
 
+@mixin no-border-bottom() {
+  padding-bottom: 0;
+  border-bottom: 0 none;
+}
+
 @mixin top-border-radius($radius: $standard-border-radius) {
   border-radius: $radius $radius 0 0;
 }

@@ -206,6 +206,8 @@ RSpec.describe Medium, type: :model do
   end
 
   context "instance" do
+    pending "#reorder_facets!"
+
     describe "#tags_by_category" do
       subject { medium.tags_by_category }
 
