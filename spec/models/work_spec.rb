@@ -559,7 +559,18 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create(:complete_work) }
+
+      it "uses creators, title and subtitle" do
+        expect(subject.alpha_parts).to eq([
+          subject.display_creators,
+          subject.title,
+          subject.subtitle
+        ])
+      end
+    end
+
     pending "#name_for_parent_dropdown"
     pending "#grouped_parent_dropdown_options"
   end

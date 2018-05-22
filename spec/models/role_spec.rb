@@ -37,7 +37,13 @@ RSpec.describe Role, type: :model do
   end
 
   context "instance" do
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      it "uses medium and name" do
+        expect(subject.alpha_parts).to eq([subject.medium.alpha_parts, subject.name])
+      end
+    end
 
     describe "#display_name" do
       pending "basic"

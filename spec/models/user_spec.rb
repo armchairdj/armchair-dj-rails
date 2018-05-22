@@ -183,6 +183,16 @@ RSpec.describe User, type: :model do
       end
     end
 
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      it "uses full name with middle at end so that Brian Dillard and Brian J. Dillard show up consecutively" do
+        expect(subject.alpha_parts).to eq([
+          subject.last_name,
+          subject.first_name,
+          subject.middle_name
+        ])
+      end
+    end
   end
 end

@@ -25,14 +25,91 @@ RSpec.describe Category, type: :model do
 
   context "scope-related" do
     context "basics" do
-      pending "self#eager"
-      pending "self#for_admin"
-      pending "self#for_site"
+      let!( :first) { create(:minimal_category, name: "First" ) }
+      let!(:middle) { create(:minimal_category, name: "Middle") }
+      let!(  :last) { create(:minimal_category, name: "Last"  ) }
+
+      let(:ids) { [first, middle, last].map(&:id) }
+
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        it { should eager_load(:facets, :media, :tags) }
+      end
+
+      describe "self#for_admin" do
+        subject { described_class.for_admin.where(id: ids) }
+
+        specify "includes all, unsorted" do
+          should match_array([first, middle, last])
+        end
+
+        it { should eager_load(:facets, :media, :tags) }
+      end
+
+      describe "self#for_site" do
+        subject { described_class.for_site.where(id: ids) }
+
+        specify "includes all, sorted alphabetically" do
+          should eq([first, last, middle])
+        end
+
+        it { should eager_load(:facets, :media, :tags) }
+      end
     end
 
     context "by multi" do
-      pending "self#multi"
-      pending "self#single"
+      let!( :multi) { create(:minimal_category,    :allowing_multiple) }
+      let!(:single) { create(:minimal_category, :disallowing_multiple) }
+
+      describe "self#multi" do
+        subject { described_class.multi }
+
+        it { should match_array([multi]) }
+      end
+
+      describe "self#single" do
+        subject { described_class.single }
+
+        it { should match_array([single]) }
+      end
+
+      describe "#multi?" do
+        specify { expect( multi.multi?).to eq(true ) }
+        specify { expect(single.multi?).to eq(false) }
+      end
+
+      describe "#single?" do
+        specify { expect( multi.single?).to eq(false) }
+        specify { expect(single.single?).to eq(true ) }
+      end
+    end
+
+    context "by format" do
+      let!(:string) { create(:minimal_category, :string_format) }
+      let!(  :year) { create(:minimal_category,   :year_format) }
+
+      describe "self#string" do
+        subject { described_class.string }
+
+        it { should match_array([string]) }
+      end
+
+      describe "self#year" do
+        subject { described_class.year }
+
+        it { should match_array([year]) }
+      end
+
+      describe "#string?" do
+        specify { expect(string.string?).to eq(true ) }
+        specify { expect(  year.string?).to eq(false) }
+      end
+
+      describe "#year?" do
+        specify { expect(string.year?).to eq(false) }
+        specify { expect(  year.year?).to eq(true ) }
+      end
     end
   end
 
@@ -47,12 +124,6 @@ RSpec.describe Category, type: :model do
   context "attributes" do
     describe "format" do
       it { should define_enum_for(:format) }
-
-      pending "self#year"
-      pending "self#string"
-
-      pending "year?"
-      pending "string?"
     end
   end
 
@@ -63,8 +134,25 @@ RSpec.describe Category, type: :model do
   end
 
   context "instance" do
-    pending "#display_name"
+    describe "#display_name" do
+      let!(:single) { create(:minimal_category, :disallowing_multiple, name: "Foo") }
+      let!( :multi) { create(:minimal_category,    :allowing_multiple, name: "Bar") }
 
-    pending "#alpha_parts"
+      it "does not pluralize single" do
+        expect(single.display_name).to eq("Foo")
+      end
+
+      it "pluralizes multi" do
+        expect(multi.display_name).to eq("Bars")
+      end
+    end
+
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      it "uses name" do
+        expect(subject.alpha_parts).to eq([subject.name])
+      end
+    end
   end
 end

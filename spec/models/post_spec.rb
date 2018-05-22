@@ -1544,7 +1544,25 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      context "standalone" do
+        subject { create(:standalone_post) }
+
+        it "uses title" do
+          expect(subject.alpha_parts).to eq([subject.title])
+        end
+      end
+
+      context "review" do
+        subject { create(:review) }
+
+        it "uses name" do
+          expect(subject.alpha_parts).to eq([subject.work.alpha_parts])
+        end
+      end
+    end
 
     pending "#all_tags"
   end

@@ -3,8 +3,6 @@
 module Parentable
   extend ActiveSupport::Concern
 
-  DEPTH_INDICATOR = ">".freeze
-
   included do
     has_ancestry cache_depth: true, orphan_strategy: :rootify
   end
@@ -25,8 +23,13 @@ module Parentable
     self.class.arrange_as_array({ order: order }, self.possible_parents)
   end
 
-  def text_for_parent_dropdown(name_method)
-    "#{DEPTH_INDICATOR * self.depth} #{self.send(name_method)}"
+  def text_for_parent_dropdown(name_method, separator = nil)
+    parts = []
+
+    parts << "#{separator * self.depth}" unless separator.nil?
+    parts << self.send(name_method)
+
+    parts.join(" ")
   end
 
   def possible_parents(order = :alpha)

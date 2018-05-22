@@ -10,11 +10,11 @@ FactoryBot.define do
       name { generate(:category_name) }
     end
 
-    trait :allow_multiple do
+    trait :allowing_multiple do
       allow_multiple true
     end
 
-    trait :disallow_multiple do
+    trait :disallowing_multiple do
       allow_multiple false
     end
 
@@ -44,12 +44,15 @@ FactoryBot.define do
 
     factory :complete_category, parent: :minimal_category do
       string_format
-      allow_multiple
+      allowing_multiple
     end
 
     factory :year_category, parent: :minimal_category do
       year_format
-      disallow_multiple
+    end
+
+    factory :string_category, parent: :minimal_category do
+      string_format
     end
   end
 end

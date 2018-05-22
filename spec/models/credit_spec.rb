@@ -16,6 +16,15 @@ RSpec.describe Credit, type: :model do
   end
 
   context "instance" do
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      it "uses work and creator" do
+        expect(subject.alpha_parts).to eq([
+          subject.work.alpha_parts,
+          subject.creator.name
+        ])
+      end
+    end
   end
 end

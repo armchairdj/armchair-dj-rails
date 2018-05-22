@@ -105,16 +105,18 @@ FactoryBot.define do
       with_one_credit
     end
 
-    factory :complete_work, parent: :minimal_work do
+    factory :complete_work do
       with_existing_medium
       with_title
+      with_subtitle
       with_one_credit
       with_one_contribution
     end
 
-    factory :stuffed_work, parent: :minimal_work do
+    factory :stuffed_work do
       with_existing_medium
       with_title
+      with_subtitle
       with_multiple_credits
       with_multiple_contributions
     end

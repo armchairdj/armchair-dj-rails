@@ -79,4 +79,12 @@ class Category < ApplicationRecord
   def alpha_parts
     [name]
   end
+
+  def multi?
+    allow_multiple?
+  end
+
+  def single?
+    !allow_multiple?
+  end
 end

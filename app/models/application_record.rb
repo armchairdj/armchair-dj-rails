@@ -20,14 +20,10 @@ class ApplicationRecord < ActiveRecord::Base
     return self.none unless ids.any?
 
     clause = ["CASE"]
-
-    ids.each.with_index(0) do |id, index|
-      clause << "WHEN id='#{id}' THEN #{index}"
-    end
-
+    ids.each.with_index(0) { |id, i| clause << "WHEN id='#{id}' THEN #{i}" }
     clause << "END"
 
-    self.where(id: ids).order(clause.join(" "))
+    self.where(id: ids).order(Arel.sql(clause.join(" ")))
   end
 
   def self.validate_nested_uniqueness_of(*nested_attrs)

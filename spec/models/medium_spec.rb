@@ -221,6 +221,12 @@ RSpec.describe Medium, type: :model do
       pending "provides a hash of options for category-specific tag dropdowns"
     end
 
-    pending "#alpha_parts"
+    describe "#alpha_parts" do
+      subject { create_minimal_instance }
+
+      it "uses name" do
+        expect(subject.alpha_parts).to eq([subject.name])
+      end
+    end
   end
 end
