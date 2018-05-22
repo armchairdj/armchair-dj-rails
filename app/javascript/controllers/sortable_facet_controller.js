@@ -22,23 +22,16 @@ export default class extends Controller {
   }
 
   handleUpdate() {
-    console.log("update", this.sortable.toArray());
-
     this.sendRequest();
   }
 
   sendRequest() {
     $.ajax({
-      method:   "POST",
-      url:      this.url,
-      data:     { facet_ids: this.sortable.toArray() },
-      success:  _.bind(this.ajaxSuccess, this),
-      error:    _.bind(this.ajaxError,   this)
+      method: "POST",
+      url:    this.url,
+      data:   { facet_ids: this.sortable.toArray() },
+      error:  _.bind(this.ajaxError,   this)
     });
-  }
-
-  ajaxSuccess(response, status, xhr) {
-    console.log("success");
   }
 
   ajaxError(xhr, status, error) {
