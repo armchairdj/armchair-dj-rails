@@ -8,7 +8,7 @@ class Facet < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  acts_as_list scope: [:medium_id], top_of_list: 0
+  acts_as_list scope: :medium, top_of_list: 0
 
   #############################################################################
   # CLASS.
@@ -29,8 +29,6 @@ class Facet < ApplicationRecord
 
   belongs_to :medium,   inverse_of: :facets
   belongs_to :category, inverse_of: :facets
-
-  # acts_as_list scope: [:medium_id]
 
   #############################################################################
   # ATTRIBUTES.

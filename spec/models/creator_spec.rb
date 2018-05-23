@@ -830,7 +830,35 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    pending "#display_roles"
+    describe "#display_roles" do
+      subject { create(:minimal_creator) }
+
+      let(:tv_show) { create(:minimal_medium, name: "TV Show") }
+      let(   :book) { create(:minimal_medium, name: "Book"   ) }
+
+      let(    :editor) { create(:minimal_role, medium: book,    name: "Editor"    ) }
+      let(    :author) { create(:minimal_role, medium: book,    name: "Author"    ) }
+      let(:showrunner) { create(:minimal_role, medium: tv_show, name: "Showrunner") }
+      let(  :director) { create(:minimal_role, medium: tv_show, name: "Director"  ) }
+
+      let(:tv_show_work) { create(:minimal_work, medium: tv_show) }
+      let(   :book_work) { create(:minimal_work, medium: book   ) }
+
+      let!( :credit_1) { subject.credits.create(      work: tv_show_work                  ) }
+      let!(:contrib_1) { subject.contributions.create(work: tv_show_work, role: showrunner) }
+      let!(:contrib_2) { subject.contributions.create(work: tv_show_work, role: director  ) }
+
+      let!( :credit_2) { subject.credits.create(      work: book_work              ) }
+      let!(:contrib_3) { subject.contributions.create(work: book_work, role: editor) }
+      let!(:contrib_4) { subject.contributions.create(work: book_work, role: author) }
+
+      it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
+        expect(subject.display_roles).to eq({
+          "Book"    => ["Author",  "Creator",  "Editor"    ],
+          "TV Show" => ["Creator", "Director", "Showrunner"]
+        })
+      end
+    end
 
     describe "#alpha_parts" do
       subject { create_minimal_instance }

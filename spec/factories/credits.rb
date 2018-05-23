@@ -4,7 +4,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :credit do
-    factory :minimal_credit, parent: :credit_with_creator do; end
 
     ###########################################################################
     # TRAITS.
@@ -21,6 +20,8 @@ FactoryBot.define do
     ###########################################################################
     # FACTORIES.
     ###########################################################################
+
+    factory :minimal_credit, parent: :credit_with_creator do; end
 
     factory :credit_without_creator do
       with_work
