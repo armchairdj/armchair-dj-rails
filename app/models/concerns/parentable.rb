@@ -19,8 +19,10 @@ module Parentable
     end
   end
 
-  def parent_dropdown_options(order = :alpha)
-    parents = self.class.arrange_as_array(order: order)
+  def parent_dropdown_options(order: :alpha, scope: nil)
+    scope ||= self.class.all
+
+    parents = scope.arrange_as_array({ order: order })
 
     new_record? ? parents : parents - subtree
   end

@@ -207,8 +207,66 @@ RSpec.describe Work, type: :model do
 
     context "custom" do
       context "validate_nested_uniqueness_of" do
-        pending "credits"
-        pending "contributions"
+        subject { build_minimal_instance }
+
+        describe "credits" do
+          let(      :creator) { create(:minimal_creator) }
+          let(:other_creator) { create(:minimal_creator) }
+
+          let(:good_attributes) { {
+            "0" => attributes_for(:minimal_credit, creator_id:       creator.id),
+            "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
+          }}
+
+          let(:bad_attributes) { {
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator.id)
+          }}
+
+          it "accepts non-dupes" do
+            subject.credits_attributes = good_attributes
+
+            is_expected.to be_valid
+          end
+
+          it "rejects dupes" do
+            subject.credits_attributes = bad_attributes
+
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:credits, :nested_taken)
+          end
+        end
+
+        describe "contributions" do
+          let(   :creator) { create(:minimal_creator) }
+          let( :dupe_role) { create(:minimal_role, medium_id: subject.medium.id) }
+          let(:other_role) { create(:minimal_role, medium_id: subject.medium.id) }
+
+          let(:good_attributes) { {
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id:  dupe_role.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: other_role.id)
+          }}
+
+          let(:bad_attributes) { {
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: dupe_role.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: dupe_role.id)
+          }}
+
+          it "accepts non-dupes" do
+            subject.contributions_attributes = good_attributes
+
+            is_expected.to be_valid
+          end
+
+          it "rejects dupes" do
+            subject.contributions_attributes = bad_attributes
+
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:contributions, :nested_taken)
+          end
+        end
       end
 
       describe "#at_least_one_credit" do
@@ -571,6 +629,48 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    pending "#grouped_parent_dropdown_options"
+    describe "#grouped_parent_dropdown_options" do
+      let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
+      let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
+      let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
+
+      let!(    :unsaved) {  build_minimal_instance(medium: grandparent_medium) }
+      let!(:grandparent) { create_minimal_instance(medium: grandparent_medium, title: "G") }
+      let!(      :uncle) { create_minimal_instance(medium:      parent_medium, title: "U", parent: grandparent) }
+      let!(     :parent) { create_minimal_instance(medium:      parent_medium, title: "P", parent: grandparent) }
+      let!(    :sibling) { create_minimal_instance(medium:       child_medium, title: "S", parent:      parent) }
+      let!(      :child) { create_minimal_instance(medium:       child_medium, title: "C", parent:      parent) }
+
+      specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
+
+      specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
+        [ "Dad",     [parent, uncle ] ],
+        [ "Grandpa", [grandparent   ] ],
+        [ "Son",     [child, sibling] ]
+      ]) }
+
+      specify { expect(uncle.grouped_parent_dropdown_options).to eq([
+        [ "Dad",      [parent        ] ],
+        [ "Grandpa",  [grandparent   ] ],
+        [ "Son",      [child, sibling] ]
+      ]) }
+
+      specify { expect(parent.grouped_parent_dropdown_options).to eq([
+        [ "Dad",     [uncle      ] ],
+        [ "Grandpa", [grandparent] ]
+      ]) }
+
+      specify { expect(sibling.grouped_parent_dropdown_options).to eq([
+        [ "Dad",     [parent, uncle] ],
+        [ "Grandpa", [grandparent  ] ],
+        [ "Son",     [child        ] ]
+      ]) }
+
+      specify { expect(child.grouped_parent_dropdown_options).to eq([
+        [ "Dad",     [parent, uncle] ],
+        [ "Grandpa", [grandparent  ] ],
+        [ "Son",     [sibling      ] ]
+      ]) }
+    end
   end
 end

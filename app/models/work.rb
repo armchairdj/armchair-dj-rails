@@ -33,7 +33,7 @@ class Work < ApplicationRecord
   end
 
   def self.grouped_options
-    joins(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+    includes(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
   def self.admin_scopes
@@ -204,6 +204,9 @@ class Work < ApplicationRecord
   end
 
   def grouped_parent_dropdown_options
-    parent_dropdown_options.group_by { |w| w.medium.name }
+    scope     = self.class.includes(:medium)
+    ungrouped = parent_dropdown_options(scope: scope, order: :title)
+
+    ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 end

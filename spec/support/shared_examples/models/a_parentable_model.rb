@@ -35,12 +35,12 @@ RSpec.shared_examples "a_parentable_model" do
 
     describe "#parent_dropdown_options" do
       describe "includes all saved instances except self and own descendants" do
-        specify { expect(grandparent.parent_dropdown_options(:created_at)).to eq([]) }
-        specify { expect(    unsaved.parent_dropdown_options(:created_at)).to eq([grandparent, uncle, parent, sibling, child]) }
-        specify { expect(      uncle.parent_dropdown_options(:created_at)).to eq([grandparent, parent, sibling, child]) }
-        specify { expect(     parent.parent_dropdown_options(:created_at)).to eq([grandparent, uncle]) }
-        specify { expect(    sibling.parent_dropdown_options(:created_at)).to eq([grandparent, uncle, parent, child]) }
-        specify { expect(      child.parent_dropdown_options(:created_at)).to eq([grandparent, uncle, parent, sibling]) }
+        specify { expect(grandparent.parent_dropdown_options(order: :created_at)).to eq([]) }
+        specify { expect(    unsaved.parent_dropdown_options(order: :created_at)).to eq([grandparent, uncle, parent, sibling, child]) }
+        specify { expect(      uncle.parent_dropdown_options(order: :created_at)).to eq([grandparent, parent, sibling, child]) }
+        specify { expect(     parent.parent_dropdown_options(order: :created_at)).to eq([grandparent, uncle]) }
+        specify { expect(    sibling.parent_dropdown_options(order: :created_at)).to eq([grandparent, uncle, parent, child]) }
+        specify { expect(      child.parent_dropdown_options(order: :created_at)).to eq([grandparent, uncle, parent, sibling]) }
       end
     end
   end
