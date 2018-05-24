@@ -7,12 +7,12 @@ RSpec.shared_examples "a_linkable_model" do
 
   describe "included" do
     describe "associations" do
-      it { should have_many(:links) }
+      it { is_expected.to have_many(:links) }
     end
 
     describe "attributes" do
       describe "links" do
-        it { should accept_nested_attributes_for(:links) }
+        it { is_expected.to accept_nested_attributes_for(:links) }
 
         describe "#prepare_links" do
           it "builds 5 initially" do

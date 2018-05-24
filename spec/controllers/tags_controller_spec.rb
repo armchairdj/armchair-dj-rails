@@ -16,7 +16,7 @@ RSpec.describe TagsController, type: :controller do
       it "renders" do
         get :index
 
-        should successfully_render("tags/index")
+        is_expected.to successfully_render("tags/index")
         expect(assigns(:tags)).to paginate(0).of_total_records(0)
       end
     end
@@ -29,14 +29,14 @@ RSpec.describe TagsController, type: :controller do
       it "renders" do
         get :index
 
-        should successfully_render("tags/index")
+        is_expected.to successfully_render("tags/index")
         expect(assigns(:tags)).to paginate(20).of_total_records(21)
       end
 
       it "renders second page" do
         get :index, params: { page: "2" }
 
-        should successfully_render("tags/index")
+        is_expected.to successfully_render("tags/index")
         expect(assigns(:tags)).to paginate(1).of_total_records(21)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe TagsController, type: :controller do
     it "renders" do
         get :show, params: { id: tag.id }
 
-        should successfully_render("tags/show")
+        is_expected.to successfully_render("tags/show")
 
         expect(assigns(:tag)).to eq(tag)
     end

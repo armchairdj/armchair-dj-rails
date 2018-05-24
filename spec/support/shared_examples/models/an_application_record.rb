@@ -53,9 +53,9 @@ RSpec.shared_examples "an_application_record" do
         subject { described_class.find_by_sorted_ids(ids) }
 
         it "gives relation ordered by array order" do
-          should be_a_kind_of(ActiveRecord::Relation)
+          is_expected.to be_a_kind_of(ActiveRecord::Relation)
 
-          should eq([
+          is_expected.to eq([
             instances[1],
             instances[0],
             instances[2]
@@ -69,7 +69,7 @@ RSpec.shared_examples "an_application_record" do
         subject { described_class.find_by_sorted_ids(ids) }
 
         it "gives empty relation" do
-          should eq(described_class.none)
+          is_expected.to eq(described_class.none)
         end
       end
     end
@@ -83,7 +83,7 @@ RSpec.shared_examples "an_application_record" do
 
   context "included" do
     describe "nilify_blanks" do
-      it { should nilify_blanks(before: :validation) }
+      it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 end

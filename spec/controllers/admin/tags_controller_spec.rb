@@ -20,7 +20,7 @@ RSpec.describe Admin::TagsController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/tags/index")
+            is_expected.to successfully_render("admin/tags/index")
 
             expect(assigns(:tags)).to paginate(0).of_total_records(0)
           end
@@ -36,7 +36,7 @@ RSpec.describe Admin::TagsController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/tags/index")
+            is_expected.to successfully_render("admin/tags/index")
 
             expect(assigns(:tags)).to paginate(20).of_total_records(21)
           end
@@ -44,7 +44,7 @@ RSpec.describe Admin::TagsController, type: :controller do
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            should successfully_render("admin/tags/index")
+            is_expected.to successfully_render("admin/tags/index")
 
             expect(assigns(:tags)).to paginate(1).of_total_records(21)
           end
@@ -58,9 +58,9 @@ RSpec.describe Admin::TagsController, type: :controller do
       it "renders" do
         get :show, params: { id: tag.to_param }
 
-        should successfully_render("admin/tags/show")
+        is_expected.to successfully_render("admin/tags/show")
 
-        should assign(tag, :tag)
+        is_expected.to assign(tag, :tag)
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Admin::TagsController, type: :controller do
       it "renders" do
         get :new
 
-        should successfully_render("admin/tags/new")
+        is_expected.to successfully_render("admin/tags/new")
 
         expect(assigns(:tag)).to be_a_new(Tag)
 
@@ -94,13 +94,13 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { tag: min_valid_params }
 
-          should assign(Tag.last, :tag).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(Tag.last, :tag).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { tag: min_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_tag_path(assigns(:tag))
           ).with_flash(:success, "admin.flash.tags.success.create")
         end
@@ -116,13 +116,13 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { tag: max_valid_params }
 
-          should assign(Tag.last, :tag).with_attributes(max_valid_params).and_be_valid
+          is_expected.to assign(Tag.last, :tag).with_attributes(max_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { tag: max_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_tag_path(assigns(:tag))
           ).with_flash(:success, "admin.flash.tags.success.create")
         end
@@ -132,7 +132,7 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "renders new" do
           post :create, params: { tag: invalid_params }
 
-          should successfully_render("admin/tags/new")
+          is_expected.to successfully_render("admin/tags/new")
 
           expect(assigns(:tag)).to have_coerced_attributes(invalid_params)
           expect(assigns(:tag)).to be_invalid
@@ -152,8 +152,8 @@ RSpec.describe Admin::TagsController, type: :controller do
       it "renders" do
         get :edit, params: { id: tag.to_param }
 
-        should successfully_render("admin/tags/edit")
-        should assign(tag, :tag)
+        is_expected.to successfully_render("admin/tags/edit")
+        is_expected.to assign(tag, :tag)
 
         expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
       end
@@ -169,13 +169,13 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "updates the requested tag" do
           put :update, params: { id: tag.to_param, tag: min_valid_params }
 
-          should assign(tag, :tag).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(tag, :tag).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           put :update, params: { id: tag.to_param, tag: min_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_tag_path(assigns(:tag))
           ).with_flash(:success, "admin.flash.tags.success.update")
         end
@@ -185,9 +185,9 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "renders edit" do
           put :update, params: { id: tag.to_param, tag: invalid_params }
 
-          should successfully_render("admin/tags/edit")
+          is_expected.to successfully_render("admin/tags/edit")
 
-          should assign(tag, :tag).with_attributes(invalid_params).and_be_invalid
+          is_expected.to assign(tag, :tag).with_attributes(invalid_params).and_be_invalid
 
           expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
         end
@@ -206,7 +206,7 @@ RSpec.describe Admin::TagsController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: tag.to_param }
 
-        should send_user_to(admin_tags_path).with_flash(
+        is_expected.to send_user_to(admin_tags_path).with_flash(
           :success, "admin.flash.tags.success.destroy"
         )
       end

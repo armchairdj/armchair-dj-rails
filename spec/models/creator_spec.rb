@@ -73,7 +73,7 @@ RSpec.describe Creator, type: :model do
         subject { described_class.eager }
 
         specify do
-          should eager_load(
+          is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
             :posts, :contributions, :contributed_works, :contributed_posts
           )
@@ -84,11 +84,11 @@ RSpec.describe Creator, type: :model do
         subject { described_class.for_admin.where(id: ids) }
 
         specify "includes all creators, unsorted" do
-          should match_array([richie, amy, kate, carl, feist, derrick])
+          is_expected.to match_array([richie, amy, kate, carl, feist, derrick])
         end
 
         specify do
-          should eager_load(
+          is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
             :posts, :contributions, :contributed_works, :contributed_posts
           )
@@ -99,11 +99,11 @@ RSpec.describe Creator, type: :model do
         subject { described_class.for_site.where(id: ids) }
 
         specify "includes only creators with published posts, sorted alphabetically" do
-          should eq([carl, richie])
+          is_expected.to eq([carl, richie])
         end
 
         specify do
-          should eager_load(
+          is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
             :posts, :contributions, :contributed_works, :contributed_posts
           )
@@ -151,7 +151,7 @@ RSpec.describe Creator, type: :model do
           subject { described_class.available_pseudonyms }
 
           it "excludes used pseudonyms and alphabetizes" do
-            should eq([gas, plastikman, robotman])
+            is_expected.to eq([gas, plastikman, robotman])
           end
         end
 
@@ -159,7 +159,7 @@ RSpec.describe Creator, type: :model do
           subject { richie.available_pseudonyms }
 
           it "includes own pseudonyms, alphabetically" do
-            should eq([fuse, gas, plastikman, robotman])
+            is_expected.to eq([fuse, gas, plastikman, robotman])
           end
         end
       end
@@ -206,7 +206,7 @@ RSpec.describe Creator, type: :model do
           let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
           it "includes even used members and alphabetizes" do
-            should contain_exactly(christine, john, lindsay, mick, stevie)
+            is_expected.to contain_exactly(christine, john, lindsay, mick, stevie)
           end
         end
       end

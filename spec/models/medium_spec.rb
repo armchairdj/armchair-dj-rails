@@ -64,7 +64,7 @@ RSpec.describe Medium, type: :model do
         subject { described_class.for_admin.where(id: ids) }
 
         specify "includes all media, unsorted" do
-          should match_array([song_medium, album_medium, movie_medium])
+          is_expected.to match_array([song_medium, album_medium, movie_medium])
         end
 
         it { is_expected.to eager_load(:roles, :works) }
@@ -74,7 +74,7 @@ RSpec.describe Medium, type: :model do
         subject { described_class.for_site.where(id: ids) }
 
         specify "includes only media with published posts, sorted alphabetically" do
-          should eq([album_medium, song_medium])
+          is_expected.to eq([album_medium, song_medium])
         end
 
         it { is_expected.to eager_load(:roles, :works) }

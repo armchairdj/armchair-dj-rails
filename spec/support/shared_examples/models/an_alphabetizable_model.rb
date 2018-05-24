@@ -114,6 +114,6 @@ RSpec.shared_examples "an_alphabetizable_model" do
   context "instance" do
     subject { build_minimal_instance }
 
-    it { should respond_to(:alpha_parts) }
+    it { is_expected.to respond_to(:alpha_parts) }
   end
 end

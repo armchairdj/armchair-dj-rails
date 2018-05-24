@@ -41,7 +41,7 @@ RSpec.describe Category, type: :model do
         subject { described_class.for_admin.where(id: ids) }
 
         specify "includes all, unsorted" do
-          should match_array([first, middle, last])
+          is_expected.to match_array([first, middle, last])
         end
 
         it { is_expected.to eager_load(:facets, :media, :tags) }
@@ -51,7 +51,7 @@ RSpec.describe Category, type: :model do
         subject { described_class.for_site.where(id: ids) }
 
         specify "includes all, sorted alphabetically" do
-          should eq([first, last, middle])
+          is_expected.to eq([first, last, middle])
         end
 
         it { is_expected.to eager_load(:facets, :media, :tags) }

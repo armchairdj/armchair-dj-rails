@@ -59,7 +59,7 @@ RSpec.describe Work, type: :model do
       subject { described_class.grouped_options }
 
       specify "gives an array of optgroups and options" do
-        should eq([
+        is_expected.to eq([
           ["Album", [la_bouche, robyn_s                     ]],
           ["Song",  [black_box, ce_ce_peniston, culture_beat]]
         ])
@@ -76,7 +76,7 @@ RSpec.describe Work, type: :model do
       subject { described_class.for_admin }
 
       it "contains everything, unsorted" do
-        should contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
+        is_expected.to contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
       end
 
       it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
@@ -86,7 +86,7 @@ RSpec.describe Work, type: :model do
       subject { described_class.for_site }
 
       it "contains only works with published posts, alphabetically" do
-        should eq([la_bouche, robyn_s])
+        is_expected.to eq([la_bouche, robyn_s])
       end
 
       it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }

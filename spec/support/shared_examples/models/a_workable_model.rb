@@ -19,54 +19,54 @@ RSpec.shared_examples "a_workable_model" do
       describe "self#eager" do
         subject { described_class.eager.where(id: ids) }
 
-        it { should eager_load(:work, :creator) }
+        it { is_expected.to eager_load(:work, :creator) }
       end
 
       describe "self#viewable" do
         subject { described_class.viewable.where(id: ids) }
 
-        it { should contain_exactly(with_published) }
+        it { is_expected.to contain_exactly(with_published) }
 
-        it { should eager_load(:work, :creator) }
+        it { is_expected.to eager_load(:work, :creator) }
       end
 
       describe "self#non_viewable" do
         subject { described_class.non_viewable.where(id: ids) }
 
-        it { should contain_exactly(with_scheduled, with_draft, with_none) }
+        it { is_expected.to contain_exactly(with_scheduled, with_draft, with_none) }
 
-        it { should eager_load(:work, :creator) }
+        it { is_expected.to eager_load(:work, :creator) }
       end
 
       describe "self#for_admin" do
         subject { described_class.for_admin.where(id: ids) }
 
-        it { should contain_exactly(with_published, with_scheduled, with_draft, with_none) }
+        it { is_expected.to contain_exactly(with_published, with_scheduled, with_draft, with_none) }
 
-        it { should eager_load(:work, :creator) }
+        it { is_expected.to eager_load(:work, :creator) }
       end
 
       describe "self#for_site" do
         subject { described_class.for_site.where(id: ids) }
 
-        it { should contain_exactly(with_published) }
+        it { is_expected.to contain_exactly(with_published) }
 
-        it { should eager_load(:work, :creator) }
+        it { is_expected.to eager_load(:work, :creator) }
 
         pending "alpha"
       end
     end
 
     context "associations" do
-      it { should belong_to(:creator) }
-      it { should belong_to(:work   ) }
+      it { is_expected.to belong_to(:creator) }
+      it { is_expected.to belong_to(:work   ) }
     end
 
     context "validations" do
       subject { create_minimal_instance }
 
-      it { should validate_presence_of(:creator) }
-      it { should validate_presence_of(:work   ) }
+      it { is_expected.to validate_presence_of(:creator) }
+      it { is_expected.to validate_presence_of(:work   ) }
     end
   end
 

@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   context "constants" do
-    it { should have_constant(:PART_SEPARATOR   ) }
-    it { should have_constant(:VERSION_SEPARATOR) }
-    it { should have_constant(:FIND_V2_OR_HIGHER) }
+    it { is_expected.to have_constant(:PART_SEPARATOR   ) }
+    it { is_expected.to have_constant(:VERSION_SEPARATOR) }
+    it { is_expected.to have_constant(:FIND_V2_OR_HIGHER) }
   end
 
   context "class" do
@@ -252,7 +252,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   context "included" do
     subject { create_minimal_instance }
 
-    it { should validate_uniqueness_of(:slug) }
+    it { is_expected.to validate_uniqueness_of(:slug) }
   end
 
   context "instance" do

@@ -7,19 +7,19 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
     subject { described_class }
 
     describe "self#human_enum_collection" do
-      it { should respond_to(:human_enum_collection) }
+      it { is_expected.to respond_to(:human_enum_collection) }
     end
 
     describe "self#human_enum_collection_with_keys" do
-      it { should respond_to(:human_enum_collection_with_keys) }
+      it { is_expected.to respond_to(:human_enum_collection_with_keys) }
     end
 
     describe "self#human_enum_value" do
-      it { should respond_to(:human_enum_value) }
+      it { is_expected.to respond_to(:human_enum_value) }
     end
 
     describe "self#enumable_attributes" do
-      it { should respond_to(:enumable_attributes) }
+      it { is_expected.to respond_to(:enumable_attributes) }
     end
 
     describe "self#retrieve_enumable_attributes" do

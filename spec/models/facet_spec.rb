@@ -32,10 +32,10 @@ RSpec.describe Facet, type: :model do
       describe "self#sorted" do
         subject { described_class.sorted.where(id: ids) }
 
-        it { should_not eager_load(:medium, :category) }
+        it { is_expected.to_not  eager_load(:medium, :category) }
 
         it "sorts by category and position" do
-          should eq([a_2, a_1, z_1, z_2])
+          is_expected.to eq([a_2, a_1, z_1, z_2])
         end
       end
 
@@ -43,7 +43,7 @@ RSpec.describe Facet, type: :model do
         subject { described_class.for_admin.where(id: ids) }
 
         specify "includes all, sorted" do
-          should eq([a_2, a_1, z_1, z_2])
+          is_expected.to eq([a_2, a_1, z_1, z_2])
         end
 
         it { is_expected.to eager_load(:medium, :category) }
@@ -53,7 +53,7 @@ RSpec.describe Facet, type: :model do
         subject { described_class.for_site.where(id: ids) }
 
         specify "includes all, sorted" do
-          should eq([a_2, a_1, z_1, z_2])
+          is_expected.to eq([a_2, a_1, z_1, z_2])
         end
 
         it { is_expected.to eager_load(:medium, :category) }

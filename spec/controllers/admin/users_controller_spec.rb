@@ -20,7 +20,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders with one record because there has to be at least one admin" do
             get :index
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
@@ -29,7 +29,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "member" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
@@ -38,7 +38,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "writer" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
@@ -47,7 +47,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "editor" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
@@ -56,7 +56,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders with one record because we are logged in as admin" do
             get :index, params: { scope: "admin" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
@@ -65,7 +65,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "super_admin" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
@@ -84,14 +84,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -104,14 +104,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "member" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "member", page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -124,14 +124,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "writer" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "writer", page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -144,14 +144,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "editor" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "editor", page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -164,14 +164,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "admin" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "admin", page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -184,14 +184,14 @@ RSpec.describe Admin::UsersController, type: :controller do
           it "renders" do
             get :index, params: { scope: "super_admin" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "super_admin", page: "2" }
 
-            should successfully_render("admin/users/index")
+            is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
@@ -204,8 +204,8 @@ RSpec.describe Admin::UsersController, type: :controller do
       it "renders" do
         get :show, params: { id: user.to_param }
 
-        should successfully_render("admin/users/show")
-        should assign(user, :user)
+        is_expected.to successfully_render("admin/users/show")
+        is_expected.to assign(user, :user)
       end
     end
 
@@ -213,7 +213,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       it "renders" do
         get :new
 
-        should successfully_render("admin/users/new")
+        is_expected.to successfully_render("admin/users/new")
         expect(assigns(:user)).to be_a_new(User)
       end
     end
@@ -232,13 +232,13 @@ RSpec.describe Admin::UsersController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { user: valid_params }
 
-          should assign(User.last, :user).with_attributes(valid_params).and_be_valid
+          is_expected.to assign(User.last, :user).with_attributes(valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { user: valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_user_path(assigns(:user))
           ).with_flash(:success, "admin.flash.users.success.create")
         end
@@ -248,7 +248,7 @@ RSpec.describe Admin::UsersController, type: :controller do
         it "renders new" do
           post :create, params: { user: invalid_params }
 
-          should successfully_render("admin/users/new")
+          is_expected.to successfully_render("admin/users/new")
 
           expect(assigns(:user)).to have_coerced_attributes(invalid_params)
           expect(assigns(:user)).to be_invalid
@@ -262,8 +262,8 @@ RSpec.describe Admin::UsersController, type: :controller do
       it "renders" do
         get :edit, params: { id: user.to_param }
 
-        should successfully_render("admin/users/edit")
-        should assign(user, :user)
+        is_expected.to successfully_render("admin/users/edit")
+        is_expected.to assign(user, :user)
       end
     end
 
@@ -277,13 +277,13 @@ RSpec.describe Admin::UsersController, type: :controller do
         it "updates the requested user" do
           put :update, params: { id: user.to_param, user: valid_params }
 
-          should assign(user, :user).with_attributes(valid_params).and_be_valid
+          is_expected.to assign(user, :user).with_attributes(valid_params).and_be_valid
         end
 
         it "redirects to index" do
           put :update, params: { id: user.to_param, user: valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_user_path(assigns(:user))
           ).with_flash(:success, "admin.flash.users.success.update")
         end
@@ -293,9 +293,9 @@ RSpec.describe Admin::UsersController, type: :controller do
         it "renders edit" do
           put :update, params: { id: user.to_param, user: invalid_params }
 
-          should successfully_render("admin/users/edit")
+          is_expected.to successfully_render("admin/users/edit")
 
-          should assign(user, :user).with_attributes(invalid_params).and_be_invalid
+          is_expected.to assign(user, :user).with_attributes(invalid_params).and_be_invalid
         end
       end
     end
@@ -312,7 +312,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: user.to_param }
 
-        should send_user_to(
+        is_expected.to send_user_to(
           admin_users_path
         ).with_flash(:success, "admin.flash.users.success.destroy")
       end

@@ -65,7 +65,7 @@ RSpec.describe Tag, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:category_id) }
 
-    it { should_not validate_presence_of(:category_id) }
+    it { is_expected.to_not  validate_presence_of(:category_id) }
 
     context "conditional" do
       describe "yearness" do
@@ -78,7 +78,7 @@ RSpec.describe Tag, type: :model do
         context "for tag with string category" do
           subject { build(:complete_tag, name: "not_a_year") }
 
-          it { should_not have_error(:name, :not_a_url) }
+          it { is_expected.to_not  have_error(:name, :not_a_url) }
         end
       end
     end

@@ -20,7 +20,7 @@ RSpec.describe Admin::RolesController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/roles/index")
+            is_expected.to successfully_render("admin/roles/index")
 
             expect(assigns(:roles)).to paginate(0).of_total_records(0)
           end
@@ -40,7 +40,7 @@ RSpec.describe Admin::RolesController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/roles/index")
+            is_expected.to successfully_render("admin/roles/index")
 
             expect(assigns(:roles)).to paginate(20).of_total_records(21)
           end
@@ -48,7 +48,7 @@ RSpec.describe Admin::RolesController, type: :controller do
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            should successfully_render("admin/roles/index")
+            is_expected.to successfully_render("admin/roles/index")
 
             expect(assigns(:roles)).to paginate(1).of_total_records(21)
           end
@@ -62,9 +62,9 @@ RSpec.describe Admin::RolesController, type: :controller do
       it "renders" do
         get :show, params: { id: role.to_param }
 
-        should successfully_render("admin/roles/show")
+        is_expected.to successfully_render("admin/roles/show")
 
-        should assign(role, :role)
+        is_expected.to assign(role, :role)
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe Admin::RolesController, type: :controller do
       it "renders" do
         get :new
 
-        should successfully_render("admin/roles/new")
+        is_expected.to successfully_render("admin/roles/new")
 
         expect(assigns(:role)).to be_a_new(Role)
 
@@ -107,13 +107,13 @@ RSpec.describe Admin::RolesController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { role: min_valid_params }
 
-          should assign(Role.last, :role).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(Role.last, :role).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { role: min_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_role_path(assigns(:role))
           ).with_flash(:success, "admin.flash.roles.success.create")
         end
@@ -129,13 +129,13 @@ RSpec.describe Admin::RolesController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { role: max_valid_params }
 
-          should assign(Role.last, :role).with_attributes(max_valid_params).and_be_valid
+          is_expected.to assign(Role.last, :role).with_attributes(max_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { role: max_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_role_path(assigns(:role))
           ).with_flash(:success, "admin.flash.roles.success.create")
         end
@@ -145,7 +145,7 @@ RSpec.describe Admin::RolesController, type: :controller do
         it "renders new" do
           post :create, params: { role: invalid_params }
 
-          should successfully_render("admin/roles/new")
+          is_expected.to successfully_render("admin/roles/new")
 
           expect(assigns(:role)).to have_coerced_attributes(invalid_params)
           expect(assigns(:role)).to be_invalid
@@ -167,9 +167,9 @@ RSpec.describe Admin::RolesController, type: :controller do
       it "renders" do
         get :edit, params: { id: role.to_param }
 
-        should successfully_render("admin/roles/edit")
+        is_expected.to successfully_render("admin/roles/edit")
 
-        should assign(role, :role)
+        is_expected.to assign(role, :role)
 
         expect(assigns(:media)).to match_array(media)
       end
@@ -191,13 +191,13 @@ RSpec.describe Admin::RolesController, type: :controller do
         it "updates the requested role" do
           put :update, params: { id: role.to_param, role: min_valid_params }
 
-          should assign(role, :role).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(role, :role).with_attributes(min_valid_params).and_be_valid
         end
 
         it "redirects to index" do
           put :update, params: { id: role.to_param, role: min_valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_role_path(assigns(:role))
           ).with_flash(:success, "admin.flash.roles.success.update")
         end
@@ -207,9 +207,9 @@ RSpec.describe Admin::RolesController, type: :controller do
         it "renders edit" do
           put :update, params: { id: role.to_param, role: invalid_params }
 
-          should successfully_render("admin/roles/edit")
+          is_expected.to successfully_render("admin/roles/edit")
 
-          should assign(role, :role).with_attributes(invalid_params).and_be_invalid
+          is_expected.to assign(role, :role).with_attributes(invalid_params).and_be_invalid
 
           expect(assigns(:media)).to match_array(media)
         end
@@ -228,7 +228,7 @@ RSpec.describe Admin::RolesController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: role.to_param }
 
-        should send_user_to(admin_roles_path).with_flash(
+        is_expected.to send_user_to(admin_roles_path).with_flash(
           :success, "admin.flash.roles.success.destroy"
         )
       end

@@ -7,7 +7,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :about
 
-      should successfully_render("pages/about")
+      is_expected.to successfully_render("pages/about")
     end
   end
 
@@ -15,7 +15,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :credits
 
-      should successfully_render("pages/credits")
+      is_expected.to successfully_render("pages/credits")
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :privacy
 
-      should successfully_render("pages/privacy")
+      is_expected.to successfully_render("pages/privacy")
     end
   end
 
@@ -31,7 +31,7 @@ RSpec.describe PagesController, type: :controller do
     it "renders" do
       get :terms
 
-      should successfully_render("pages/terms")
+      is_expected.to successfully_render("pages/terms")
     end
   end
 end

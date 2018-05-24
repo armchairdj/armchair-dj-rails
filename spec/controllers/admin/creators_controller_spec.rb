@@ -22,7 +22,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
         end
@@ -31,7 +31,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "viewable" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
         end
@@ -40,7 +40,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
         end
@@ -56,14 +56,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { page: "2" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
         end
@@ -76,14 +76,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "viewable" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "viewable", page: "2" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
         end
@@ -96,14 +96,14 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "non_viewable" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
             get :index, params: { scope: "non_viewable", page: "2" }
 
-            should successfully_render("admin/creators/index")
+            is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
         end
@@ -116,8 +116,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "renders" do
         get :show, params: { id: creator.to_param }
 
-        should successfully_render("admin/creators/show")
-        should assign(creator, :creator)
+        is_expected.to successfully_render("admin/creators/show")
+        is_expected.to assign(creator, :creator)
       end
     end
 
@@ -125,11 +125,11 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "renders" do
         get :new
 
-        should successfully_render("admin/creators/new")
+        is_expected.to successfully_render("admin/creators/new")
 
         expect(assigns(:creator)).to be_a_populated_new_creator
 
-        should prepare_identity_and_membership_dropdowns
+        is_expected.to prepare_identity_and_membership_dropdowns
       end
     end
 
@@ -161,13 +161,13 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { creator: max_params }
 
-          should assign(Creator.last, :creator).with_attributes(max_params).and_be_valid
+          is_expected.to assign(Creator.last, :creator).with_attributes(max_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { creator: max_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.create")
         end
@@ -195,13 +195,13 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { creator: alt_max_params }
 
-          should assign(Creator.last, :creator).with_attributes(alt_max_params).and_be_valid
+          is_expected.to assign(Creator.last, :creator).with_attributes(alt_max_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { creator: alt_max_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.create")
         end
@@ -217,13 +217,13 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { creator: valid_params }
 
-          should assign(Creator.last, :creator).with_attributes(valid_params).and_be_valid
+          is_expected.to assign(Creator.last, :creator).with_attributes(valid_params).and_be_valid
         end
 
         it "redirects to index" do
           post :create, params: { creator: valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.create")
         end
@@ -233,12 +233,12 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "renders new" do
           post :create, params: { creator: invalid_params }
 
-          should successfully_render("admin/creators/new")
+          is_expected.to successfully_render("admin/creators/new")
 
           expect(assigns(:creator)).to be_a_populated_new_creator
           expect(assigns(:creator)).to have_coerced_attributes(invalid_params)
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
     end
@@ -250,10 +250,10 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "renders" do
           get :edit, params: { id: creator.to_param }
 
-          should successfully_render("admin/creators/edit")
-          should assign(creator, :creator)
+          is_expected.to successfully_render("admin/creators/edit")
+          is_expected.to assign(creator, :creator)
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -265,7 +265,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator).group_memberships).to have(6).items
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -277,7 +277,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator).member_memberships).to have(6).items
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -289,7 +289,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator).pseudonym_identities).to have(6).items
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
 
@@ -301,7 +301,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
           expect(assigns(:creator).real_name_identities).to have(1).items
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
     end
@@ -319,7 +319,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "updates the requested creator" do
           put :update, params: { id: creator.to_param, creator: max_params }
 
-          should assign(creator, :creator).with_attributes(max_params).and_be_valid
+          is_expected.to assign(creator, :creator).with_attributes(max_params).and_be_valid
         end
 
         it "creates a new Identity" do
@@ -337,7 +337,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "redirects to index" do
           put :update, params: { id: creator.to_param, creator: max_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.update")
         end
@@ -347,7 +347,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "updates the requested creator" do
           put :update, params: { id: creator.to_param, creator: ignored_params }
 
-          should assign(creator, :creator).with_attributes(ignored_params.slice(:creator)).and_be_valid
+          is_expected.to assign(creator, :creator).with_attributes(ignored_params.slice(:creator)).and_be_valid
         end
 
         it "silently ignores the requested real name since this is a primary creator" do
@@ -365,7 +365,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "redirects to index" do
           put :update, params: { id: creator.to_param, creator: ignored_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.update")
         end
@@ -375,13 +375,13 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "updates the requested creator" do
           put :update, params: { id: creator.to_param, creator: valid_params }
 
-          should assign(creator, :creator).with_attributes(valid_params).and_be_valid
+          is_expected.to assign(creator, :creator).with_attributes(valid_params).and_be_valid
         end
 
         it "redirects to index" do
           put :update, params: { id: creator.to_param, creator: valid_params }
 
-          should send_user_to(
+          is_expected.to send_user_to(
             admin_creator_path(assigns(:creator))
           ).with_flash(:success, "admin.flash.creators.success.update")
         end
@@ -391,12 +391,12 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         it "renders edit" do
           put :update, params: { id: creator.to_param, creator: invalid_params }
 
-          should successfully_render("admin/creators/edit")
+          is_expected.to successfully_render("admin/creators/edit")
 
           expect(assigns(:creator)       ).to eq(creator)
           expect(assigns(:creator).valid?).to eq(false)
 
-          should prepare_identity_and_membership_dropdowns
+          is_expected.to prepare_identity_and_membership_dropdowns
         end
       end
     end
@@ -413,7 +413,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       it "redirects to index" do
         delete :destroy, params: { id: creator.to_param }
 
-        should send_user_to(
+        is_expected.to send_user_to(
           admin_creators_path
         ).with_flash(:success, "admin.flash.creators.success.destroy")
       end

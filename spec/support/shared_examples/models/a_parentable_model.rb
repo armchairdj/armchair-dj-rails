@@ -23,7 +23,7 @@ RSpec.shared_examples "a_parentable_model" do
       subject { described_class.where(id: ids).arrange_as_array(order: :created_at) }
 
       it "converts result of built-in arrange method into an array" do
-        should eq([grandparent, uncle, parent, sibling, child])
+        is_expected.to eq([grandparent, uncle, parent, sibling, child])
       end
     end
   end

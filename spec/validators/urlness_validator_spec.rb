@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UrlnessValidator do
+RSpec.describe UrlnessValidator do
   Object.const_set("ClassWithUrl", Class.new do
     include ActiveModel::Model
     include ActiveModel::Validations
@@ -14,13 +14,13 @@ describe UrlnessValidator do
     describe "with a valid http url" do
       subject { ClassWithUrl.new(url: "http://www.example.com") }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     describe "with a valid https url" do
       subject { ClassWithUrl.new(url: "https://www.example.com") }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
   end
 
@@ -28,24 +28,24 @@ describe UrlnessValidator do
     describe "with a non-URI" do
       subject { ClassWithUrl.new(url: "not a url") }
 
-      it { should_not be_valid }
+      it { is_expected.to_not  be_valid }
 
       it "should have error message" do
         subject.valid?
 
-        should have_error(url: :not_a_url)
+        is_expected.to have_error(url: :not_a_url)
       end
     end
 
     describe "with a non-URL URI" do
       subject { ClassWithUrl.new(url: "protocol://foo/bar/bat") }
 
-      it { should_not be_valid }
+      it { is_expected.to_not  be_valid }
 
       it "should have error message" do
         subject.valid?
 
-        should have_error(url: :not_a_url)
+        is_expected.to have_error(url: :not_a_url)
       end
     end
   end

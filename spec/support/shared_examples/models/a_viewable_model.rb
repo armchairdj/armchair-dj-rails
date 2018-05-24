@@ -13,13 +13,13 @@ RSpec.shared_examples "a_viewable_model" do
         describe "self#viewable" do
           subject { described_class.viewable.where(id: ids) }
 
-          it { should contain_exactly(published_instance) }
+          it { is_expected.to contain_exactly(published_instance) }
         end
 
         describe "self#non_viewable" do
           subject { described_class.non_viewable.where(id: ids) }
 
-          it { should contain_exactly(draft_instance, scheduled_instance) }
+          it { is_expected.to contain_exactly(draft_instance, scheduled_instance) }
         end
       end
 

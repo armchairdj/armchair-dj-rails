@@ -28,14 +28,14 @@ end
 
 RSpec::Matchers.define :define_the_review_tabs do
   match do
-    should prepare_the_review_tabs
+    is_expected.to prepare_the_review_tabs
 
     expect(assigns(:available_tabs)).to include("post-new-work")
     expect(assigns(:available_tabs)).to include("post-choose-work")
   end
 
   match_when_negated do
-    should_not prepare_the_review_tabs
+    is_expected.to_not prepare_the_review_tabs
 
     expect(assigns(:available_tabs)).to_not include("post-new-work")
     expect(assigns(:available_tabs)).to_not include("post-choose-work")
@@ -70,8 +70,8 @@ end
 
 RSpec::Matchers.define :define_only_the_review_tabs do
   match do
-    should     define_the_review_tabs
-    should_not define_the_standalone_tab
+    is_expected.to     define_the_review_tabs
+    is_expected.to_not define_the_standalone_tab
 
     expect(assigns(:selected_tab)).to eq(@selected) if @selected
   end
@@ -91,8 +91,8 @@ end
 
 RSpec::Matchers.define :define_only_the_standalone_tab do
   match do
-    should     define_the_standalone_tab
-    should_not define_the_review_tabs
+    is_expected.to     define_the_standalone_tab
+    is_expected.to_not define_the_review_tabs
 
     expect(assigns(:selected_tab)).to eq("post-standalone")
   end
@@ -104,8 +104,8 @@ end
 
 RSpec::Matchers.define :define_all_tabs do
   match do
-    should define_the_review_tabs
-    should define_the_standalone_tab
+    is_expected.to define_the_review_tabs
+    is_expected.to define_the_standalone_tab
 
     expect(assigns(:selected_tab)).to eq(@selected) if @selected
   end

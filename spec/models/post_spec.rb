@@ -100,7 +100,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.reverse_cron }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_standalone,
             draft_review,
             scheduled_standalone,
@@ -110,14 +110,14 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { should_not eager_load(:work, :creators, :author) }
+        it { is_expected.to_not  eager_load(:work, :creators, :author) }
       end
 
       describe "self#for_admin" do
         subject { described_class.for_admin }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_review,
             draft_standalone,
             published_review,
@@ -144,7 +144,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.draft }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_review,
             draft_standalone
           )
@@ -155,7 +155,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.scheduled }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             scheduled_standalone,
             scheduled_review
           )
@@ -166,7 +166,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.published }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             published_review,
             published_standalone
           )
@@ -177,7 +177,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.not_published }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_review,
             draft_standalone,
             scheduled_standalone,
@@ -192,7 +192,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.standalone }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_standalone,
             published_standalone,
             scheduled_standalone
@@ -204,7 +204,7 @@ RSpec.describe Post, type: :model do
         subject { described_class.review }
 
         specify do
-          should contain_exactly(
+          is_expected.to contain_exactly(
             draft_review,
             published_review,
             scheduled_review
@@ -267,10 +267,10 @@ RSpec.describe Post, type: :model do
       context "draft" do
         subject { create(:minimal_post, :draft) }
 
-        it { should_not validate_presence_of(:body        ) }
-        it { should_not validate_presence_of(:slug        ) }
-        it { should_not validate_presence_of(:published_at) }
-        it { should_not validate_presence_of(:publish_on  ) }
+        it { is_expected.to_not  validate_presence_of(:body        ) }
+        it { is_expected.to_not  validate_presence_of(:slug        ) }
+        it { is_expected.to_not  validate_presence_of(:published_at) }
+        it { is_expected.to_not  validate_presence_of(:publish_on  ) }
       end
 
       context "scheduled" do
@@ -278,15 +278,15 @@ RSpec.describe Post, type: :model do
 
         it { is_expected.to     validate_presence_of(:body        ) }
         it { is_expected.to     validate_presence_of(:slug        ) }
-        it { should_not validate_presence_of(:published_at) }
+        it { is_expected.to_not  validate_presence_of(:published_at) }
         it { is_expected.to     validate_presence_of(:publish_on  ) }
 
         specify "publish_on is future" do
-          should be_valid
+          is_expected.to be_valid
 
           subject.publish_on = Date.today
 
-          should_not be_valid
+          is_expected.to_not be_valid
         end
       end
 
@@ -296,7 +296,7 @@ RSpec.describe Post, type: :model do
         it { is_expected.to     validate_presence_of(:body        ) }
         it { is_expected.to     validate_presence_of(:slug        ) }
         it { is_expected.to     validate_presence_of(:published_at) }
-        it { should_not validate_presence_of(:publish_on  ) }
+        it { is_expected.to_not  validate_presence_of(:publish_on  ) }
       end
     end
 

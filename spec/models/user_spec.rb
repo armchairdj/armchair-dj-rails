@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
       subject { described_class.admin_scopes.keys }
 
       specify "keys are short tab names" do
-        should contain_exactly(
+        is_expected.to contain_exactly(
           "All",
           "Member",
           "Writer",
@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
       subject { described_class.for_admin }
 
       it "includes everyone, unsorted" do
-        should contain_exactly(jenny, charlie, brian, gruber)
+        is_expected.to contain_exactly(jenny, charlie, brian, gruber)
       end
 
       it { is_expected.to eager_load(:posts, :works, :creators) }
@@ -83,7 +83,7 @@ RSpec.describe User, type: :model do
       subject { described_class.for_site }
 
       it "includes only published writers, sorted" do
-        should eq([brian, jenny])
+        is_expected.to eq([brian, jenny])
       end
 
       it { is_expected.to eager_load(:posts, :works, :creators) }
@@ -129,25 +129,25 @@ RSpec.describe User, type: :model do
       context "as writer" do
         subject { create(:writer) }
 
-        it { should_not validate_absence_of(:bio) }
+        it { is_expected.to_not  validate_absence_of(:bio) }
       end
 
       context "as editor" do
         subject { create(:editor) }
 
-        it { should_not validate_absence_of(:bio) }
+        it { is_expected.to_not  validate_absence_of(:bio) }
       end
 
       context "as admin" do
         subject { create(:admin) }
 
-        it { should_not validate_absence_of(:bio) }
+        it { is_expected.to_not  validate_absence_of(:bio) }
       end
 
       context "as super_admin" do
         subject { create(:super_admin) }
 
-        it { should_not validate_absence_of(:bio) }
+        it { is_expected.to_not  validate_absence_of(:bio) }
       end
     end
   end
