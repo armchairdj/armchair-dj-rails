@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe Creator, type: :model do
   context "constants" do
-    it { should have_constant(:MAX_PSEUDONYMS_AT_ONCE ) }
-    it { should have_constant(:MAX_REAL_NAMES         ) }
-    it { should have_constant(:MAX_MEMBERS_AT_ONCE    ) }
-    it { should have_constant(:MAX_GROUPS_AT_ONCE     ) }
+    it { is_expected.to have_constant(:MAX_PSEUDONYMS_AT_ONCE ) }
+    it { is_expected.to have_constant(:MAX_REAL_NAMES         ) }
+    it { is_expected.to have_constant(:MAX_MEMBERS_AT_ONCE    ) }
+    it { is_expected.to have_constant(:MAX_GROUPS_AT_ONCE     ) }
   end
 
   context "concerns" do
@@ -119,13 +119,13 @@ RSpec.describe Creator, type: :model do
         describe "self#primary" do
           subject { described_class.primary }
 
-          it { should contain_exactly(primary) }
+          it { is_expected.to contain_exactly(primary) }
         end
 
         describe "self#secondary" do
           subject { described_class.secondary }
 
-          it { should contain_exactly(secondary) }
+          it { is_expected.to contain_exactly(secondary) }
         end
 
         specify "#primary?" do
@@ -173,13 +173,13 @@ RSpec.describe Creator, type: :model do
         describe "self#individual" do
           subject { described_class.individual }
 
-          it { should eq([individual]) }
+          it { is_expected.to eq([individual]) }
         end
 
         describe "self#collective" do
           subject { described_class.collective }
 
-          it { should eq([collective]) }
+          it { is_expected.to eq([collective]) }
         end
 
         specify "#individual?" do
@@ -214,25 +214,25 @@ RSpec.describe Creator, type: :model do
   end
 
   context "associations" do
-    it { should have_many(:credits) }
-    it { should have_many(:works).through(:credits) }
-    it { should have_many(:posts).through(:works  ) }
+    it { is_expected.to have_many(:credits) }
+    it { is_expected.to have_many(:works).through(:credits) }
+    it { is_expected.to have_many(:posts).through(:works  ) }
 
-    it { should have_many(:contributions) }
-    it { should have_many(:contributed_works).through(:contributions    ) }
-    it { should have_many(:contributed_posts).through(:contributed_works) }
+    it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:contributed_works).through(:contributions    ) }
+    it { is_expected.to have_many(:contributed_posts).through(:contributed_works) }
 
-    it { should have_many(:pseudonym_identities) }
-    it { should have_many(:real_name_identities) }
+    it { is_expected.to have_many(:pseudonym_identities) }
+    it { is_expected.to have_many(:real_name_identities) }
 
-    it { should have_many(:pseudonyms).through(:pseudonym_identities).order("creators.name") }
-    it { should have_many(:real_names).through(:real_name_identities).order("creators.name") }
+    it { is_expected.to have_many(:pseudonyms).through(:pseudonym_identities).order("creators.name") }
+    it { is_expected.to have_many(:real_names).through(:real_name_identities).order("creators.name") }
 
-    it { should have_many(:member_memberships) }
-    it { should have_many( :group_memberships) }
+    it { is_expected.to have_many(:member_memberships) }
+    it { is_expected.to have_many( :group_memberships) }
 
-    it { should have_many(:members).through(:member_memberships).order("creators.name") }
-    it { should have_many( :groups).through( :group_memberships).order("creators.name") }
+    it { is_expected.to have_many(:members).through(:member_memberships).order("creators.name") }
+    it { is_expected.to have_many( :groups).through( :group_memberships).order("creators.name") }
   end
 
   context "attributes" do
@@ -247,7 +247,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { pseudonym_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
-        it { should accept_nested_attributes_for(:pseudonym_identities) }
+        it { is_expected.to accept_nested_attributes_for(:pseudonym_identities) }
 
         describe "#prepare_pseudonym_identities" do
           it "builds 5 initially" do
@@ -334,7 +334,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { real_name_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
-        it { should accept_nested_attributes_for(:real_name_identities) }
+        it { is_expected.to accept_nested_attributes_for(:real_name_identities) }
 
         describe "#prepare_real_name_identities" do
           it "builds 1 initially" do
@@ -420,7 +420,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { member_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                       } } }
 
-        it { should accept_nested_attributes_for(:member_memberships) }
+        it { is_expected.to accept_nested_attributes_for(:member_memberships) }
 
         describe "#prepare_member_memberships" do
           it "builds 5 initially" do
@@ -507,7 +507,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { group_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                      } } }
 
-        it { should accept_nested_attributes_for(:group_memberships) }
+        it { is_expected.to accept_nested_attributes_for(:group_memberships) }
 
         describe "#prepare_group_memberships" do
           it "builds 5 initially" do
@@ -648,11 +648,11 @@ RSpec.describe Creator, type: :model do
     subject { create_minimal_instance }
 
     describe "name" do
-      it { should validate_presence_of(:name) }
+      it { is_expected.to validate_presence_of(:name) }
 
-      # it { should validate_inclusion_of(:primary).in_array([true, false]) }
+      # it { is_expected.to validate_inclusion_of(:primary).in_array([true, false]) }
       #
-      # it { should validate_inclusion_of(:collective).in_array([true, false]) }
+      # it { is_expected.to validate_inclusion_of(:collective).in_array([true, false]) }
     end
   end
 

@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe Work, type: :model do
   context "constants" do
-    it { should have_constant(:MAX_CREDITS_AT_ONCE) }
-    it { should have_constant(:MAX_CONTRIBUTIONS_AT_ONCE) }
+    it { is_expected.to have_constant(:MAX_CREDITS_AT_ONCE) }
+    it { is_expected.to have_constant(:MAX_CONTRIBUTIONS_AT_ONCE) }
   end
 
   context "concerns" do
@@ -69,7 +69,7 @@ RSpec.describe Work, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
     end
 
     describe "self#for_admin" do
@@ -79,7 +79,7 @@ RSpec.describe Work, type: :model do
         should contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
       end
 
-      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
     end
 
     describe "self#for_site" do
@@ -89,26 +89,26 @@ RSpec.describe Work, type: :model do
         should eq([la_bouche, robyn_s])
       end
 
-      it { should eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
     end
   end
 
   context "associations" do
-    it { should have_many(:credits) }
-    it { should have_many(:creators).through(:credits) }
+    it { is_expected.to have_many(:credits) }
+    it { is_expected.to have_many(:creators).through(:credits) }
 
-    it { should have_many(:contributions) }
-    it { should have_many(:contributors).through(:contributions) }
+    it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:contributors).through(:contributions) }
 
-    it { should have_many(:posts) }
+    it { is_expected.to have_many(:posts) }
 
-    it { should have_and_belong_to_many(:tags) }
+    it { is_expected.to have_and_belong_to_many(:tags) }
   end
 
   context "attributes" do
     context "nested" do
       context "credits" do
-        it { should accept_nested_attributes_for(:credits) }
+        it { is_expected.to accept_nested_attributes_for(:credits) }
 
         describe "reject_if" do
           it "rejects credits without a creator_id" do
@@ -155,7 +155,7 @@ RSpec.describe Work, type: :model do
       end
 
       context "contributions" do
-        it { should accept_nested_attributes_for(:contributions) }
+        it { is_expected.to accept_nested_attributes_for(:contributions) }
 
         describe "reject_if" do
           it "rejects contributions without a creator_id" do
@@ -202,8 +202,8 @@ RSpec.describe Work, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:medium) }
-    it { should validate_presence_of(:title ) }
+    it { is_expected.to validate_presence_of(:medium) }
+    it { is_expected.to validate_presence_of(:title ) }
 
     context "custom" do
       context "validate_nested_uniqueness_of" do
@@ -300,13 +300,13 @@ RSpec.describe Work, type: :model do
 
       describe "defines" do
         context "getters" do
-          it { should respond_to(:musical_genre_tags) }
-          it { should respond_to(:musical_mood_tags ) }
+          it { is_expected.to respond_to(:musical_genre_tags) }
+          it { is_expected.to respond_to(:musical_mood_tags ) }
         end
 
         context "setters" do
-          it { should respond_to(:musical_genre_tag_ids=) }
-          it { should respond_to(:musical_mood_tag_ids= ) }
+          it { is_expected.to respond_to(:musical_genre_tag_ids=) }
+          it { is_expected.to respond_to(:musical_mood_tag_ids= ) }
         end
       end
 

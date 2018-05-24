@@ -93,7 +93,7 @@ RSpec.describe Post, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:work, :creators, :author) }
       end
 
       describe "self#reverse_cron" do
@@ -127,15 +127,15 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { should eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:work, :creators, :author) }
       end
 
       describe "self#for_site" do
         subject { described_class.for_site }
 
-        it { should eq [ published_review, published_standalone ] }
+        it { is_expected.to eq [ published_review, published_standalone ] }
 
-        it { should eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:work, :creators, :author) }
       end
     end
 
@@ -215,14 +215,14 @@ RSpec.describe Post, type: :model do
   end
 
   context "associations" do
-    it { should belong_to(:author) }
+    it { is_expected.to belong_to(:author) }
 
-    it { should have_and_belong_to_many(:tags) }
+    it { is_expected.to have_and_belong_to_many(:tags) }
 
-    it { should belong_to(:work) }
+    it { is_expected.to belong_to(:work) }
 
-    it { should have_many(:creators ).through(:work) }
-    it { should have_many(:work_tags).through(:work) }
+    it { is_expected.to have_many(:creators ).through(:work) }
+    it { is_expected.to have_many(:work_tags).through(:work) }
   end
 
   context "attributes" do
@@ -230,13 +230,13 @@ RSpec.describe Post, type: :model do
       subject { create_minimal_instance }
 
       describe "#current_work" do
-        it { should respond_to(:current_work_id ) }
-        it { should respond_to(:current_work_id=) }
+        it { is_expected.to respond_to(:current_work_id ) }
+        it { is_expected.to respond_to(:current_work_id=) }
       end
     end
 
     context "nested" do
-      it { should accept_nested_attributes_for(:work) }
+      it { is_expected.to accept_nested_attributes_for(:work) }
 
       describe "reject_if" do
         subject { build(:post, body: "body", work_attributes: { "0" => { "title" => "" } }) }
@@ -251,7 +251,7 @@ RSpec.describe Post, type: :model do
 
     context "enums" do
       describe "status" do
-        it { should define_enum_for(:status) }
+        it { is_expected.to define_enum_for(:status) }
 
         it_behaves_like "an_enumable_model", [:status]
       end
@@ -261,7 +261,7 @@ RSpec.describe Post, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_uniqueness_of(:slug) }
+    it { is_expected.to validate_uniqueness_of(:slug) }
 
     context "conditional" do
       context "draft" do
@@ -276,10 +276,10 @@ RSpec.describe Post, type: :model do
       context "scheduled" do
         subject { create(:minimal_post, :scheduled) }
 
-        it { should     validate_presence_of(:body        ) }
-        it { should     validate_presence_of(:slug        ) }
+        it { is_expected.to     validate_presence_of(:body        ) }
+        it { is_expected.to     validate_presence_of(:slug        ) }
         it { should_not validate_presence_of(:published_at) }
-        it { should     validate_presence_of(:publish_on  ) }
+        it { is_expected.to     validate_presence_of(:publish_on  ) }
 
         specify "publish_on is future" do
           should be_valid
@@ -293,9 +293,9 @@ RSpec.describe Post, type: :model do
       context "published" do
         subject { create(:minimal_post, :published) }
 
-        it { should     validate_presence_of(:body        ) }
-        it { should     validate_presence_of(:slug        ) }
-        it { should     validate_presence_of(:published_at) }
+        it { is_expected.to     validate_presence_of(:body        ) }
+        it { is_expected.to     validate_presence_of(:slug        ) }
+        it { is_expected.to     validate_presence_of(:published_at) }
         it { should_not validate_presence_of(:publish_on  ) }
       end
     end
@@ -1565,9 +1565,11 @@ RSpec.describe Post, type: :model do
     end
 
     describe "#all_tags" do
+      let(:instance) { create_minimal_instance }
+
       subject { instance.all_tags }
 
-      it { should be_a_kind_of(ActiveRecord::Relation) }
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
     end
   end
 end

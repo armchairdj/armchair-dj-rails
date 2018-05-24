@@ -11,14 +11,14 @@ RSpec.shared_examples "a_parentable_model" do
   let(    :unsaved) { build_minimal_instance }
 
   context "concerns" do
-    it_behaves_like "an_ancestry_module"
+    it_behaves_like "an_ancestry_model"
   end
 
   context "class" do
     subject { described_class }
 
     describe "self#arrange_as_array" do
-      let!(:ids) { [parent, uncle, grandparent, child, sibling].map(&:id) }
+      let!(:ids) { [grandparent, uncle, parent, sibling, child].map(&:id) }
 
       subject { described_class.where(id: ids).arrange_as_array(order: :created_at) }
 
@@ -31,7 +31,7 @@ RSpec.shared_examples "a_parentable_model" do
   context "instance" do
     subject { create_minimal_instance }
 
-    let!(:ids) { [parent, uncle, grandparent, child, sibling].map(&:id) }
+    let!(:ids) { [grandparent, uncle, parent, sibling, child].map(&:id) }
 
     describe "#parent_dropdown_options" do
       describe "includes all saved instances except self and own descendants" do

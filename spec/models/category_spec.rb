@@ -34,7 +34,7 @@ RSpec.describe Category, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :tags) }
       end
 
       describe "self#for_admin" do
@@ -44,7 +44,7 @@ RSpec.describe Category, type: :model do
           should match_array([first, middle, last])
         end
 
-        it { should eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :tags) }
       end
 
       describe "self#for_site" do
@@ -54,7 +54,7 @@ RSpec.describe Category, type: :model do
           should eq([first, last, middle])
         end
 
-        it { should eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :tags) }
       end
     end
 
@@ -65,13 +65,13 @@ RSpec.describe Category, type: :model do
       describe "self#multi" do
         subject { described_class.multi }
 
-        it { should match_array([multi]) }
+        it { is_expected.to match_array([multi]) }
       end
 
       describe "self#single" do
         subject { described_class.single }
 
-        it { should match_array([single]) }
+        it { is_expected.to match_array([single]) }
       end
 
       describe "#multi?" do
@@ -92,13 +92,13 @@ RSpec.describe Category, type: :model do
       describe "self#string" do
         subject { described_class.string }
 
-        it { should match_array([string]) }
+        it { is_expected.to match_array([string]) }
       end
 
       describe "self#year" do
         subject { described_class.year }
 
-        it { should match_array([year]) }
+        it { is_expected.to match_array([year]) }
       end
 
       describe "#string?" do
@@ -114,23 +114,23 @@ RSpec.describe Category, type: :model do
   end
 
   context "associations" do
-    it { should have_many(:facets) }
+    it { is_expected.to have_many(:facets) }
 
-    it { should have_many(:media).through(:facets) }
+    it { is_expected.to have_many(:media).through(:facets) }
 
-    it { should have_many(:tags) }
+    it { is_expected.to have_many(:tags) }
   end
 
   context "attributes" do
     describe "format" do
-      it { should define_enum_for(:format) }
+      it { is_expected.to define_enum_for(:format) }
     end
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
   end
 
   context "instance" do

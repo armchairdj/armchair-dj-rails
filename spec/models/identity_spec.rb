@@ -4,17 +4,17 @@ require "rails_helper"
 
 RSpec.describe Identity, type: :model do
   context "associations" do
-    it { should belong_to(:real_name).class_name("Creator") }
-    it { should belong_to(:pseudonym).class_name("Creator") }
+    it { is_expected.to belong_to(:real_name).class_name("Creator") }
+    it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:real_name) }
-    it { should validate_presence_of(:pseudonym) }
+    it { is_expected.to validate_presence_of(:real_name) }
+    it { is_expected.to validate_presence_of(:pseudonym) }
 
-    it { should validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
+    it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
     context "custom" do
       subject { create_minimal_instance }

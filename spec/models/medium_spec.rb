@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Medium, type: :model do
   context "constants" do
-    it { should have_constant(:MAX_ROLES_AT_ONCE ) }
-    it { should have_constant(:MAX_FACETS_AT_ONCE ) }
+    it { is_expected.to have_constant(:MAX_ROLES_AT_ONCE ) }
+    it { is_expected.to have_constant(:MAX_FACETS_AT_ONCE ) }
   end
 
   context "concerns" do
@@ -57,7 +57,7 @@ RSpec.describe Medium, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:roles, :works) }
+        it { is_expected.to eager_load(:roles, :works) }
       end
 
       describe "self#for_admin" do
@@ -67,7 +67,7 @@ RSpec.describe Medium, type: :model do
           should match_array([song_medium, album_medium, movie_medium])
         end
 
-        it { should eager_load(:roles, :works) }
+        it { is_expected.to eager_load(:roles, :works) }
       end
 
       describe "self#for_site" do
@@ -77,31 +77,31 @@ RSpec.describe Medium, type: :model do
           should eq([album_medium, song_medium])
         end
 
-        it { should eager_load(:roles, :works) }
+        it { is_expected.to eager_load(:roles, :works) }
       end
     end
   end
 
   context "associations" do
-    it { should have_many(:roles) }
+    it { is_expected.to have_many(:roles) }
 
-    it { should have_many(:works) }
+    it { is_expected.to have_many(:works) }
 
-    it { should have_many(:creators).through(:works) }
+    it { is_expected.to have_many(:creators).through(:works) }
 
-    it { should have_many(:posts).through(:works) }
+    it { is_expected.to have_many(:posts).through(:works) }
 
-    it { should have_many(:facets) }
+    it { is_expected.to have_many(:facets) }
 
-    it { should have_many(:categories).through(:facets) }
+    it { is_expected.to have_many(:categories).through(:facets) }
 
-    it { should have_many(:tags).through(:categories) }
+    it { is_expected.to have_many(:tags).through(:categories) }
   end
 
   context "attributes" do
     context "nested" do
       context "for roles" do
-        it { should accept_nested_attributes_for(:roles) }
+        it { is_expected.to accept_nested_attributes_for(:roles) }
 
         pending "accepts"
 
@@ -137,7 +137,7 @@ RSpec.describe Medium, type: :model do
       end
 
       context "for facets" do
-        it { should accept_nested_attributes_for(:facets) }
+        it { is_expected.to accept_nested_attributes_for(:facets) }
 
         pending "accepts"
 
@@ -177,9 +177,9 @@ RSpec.describe Medium, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
-    it { should validate_uniqueness_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:name) }
 
     context "custom" do
       describe "#at_least_one_role" do

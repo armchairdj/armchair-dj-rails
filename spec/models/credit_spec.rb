@@ -12,7 +12,7 @@ RSpec.describe Credit, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
+    it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
   end
 
   context "instance" do

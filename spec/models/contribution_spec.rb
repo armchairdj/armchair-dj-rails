@@ -14,9 +14,9 @@ RSpec.describe Contribution, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:role_id) }
+    it { is_expected.to validate_presence_of(:role_id) }
 
-    it { should validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
+    it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
   end
 
   context "instance" do

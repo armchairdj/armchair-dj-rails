@@ -4,17 +4,17 @@ require "rails_helper"
 
 RSpec.describe Membership, type: :model do
   context "associations" do
-    it { should belong_to(:group ).class_name("Creator") }
-    it { should belong_to(:member).class_name("Creator") }
+    it { is_expected.to belong_to(:group ).class_name("Creator") }
+    it { is_expected.to belong_to(:member).class_name("Creator") }
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:group ) }
-    it { should validate_presence_of(:member) }
+    it { is_expected.to validate_presence_of(:group ) }
+    it { is_expected.to validate_presence_of(:member) }
 
-    it { should validate_uniqueness_of(:group_id).scoped_to(:member_id) }
+    it { is_expected.to validate_uniqueness_of(:group_id).scoped_to(:member_id) }
 
     context "custom" do
       subject { create_minimal_instance }

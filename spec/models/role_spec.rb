@@ -17,23 +17,23 @@ RSpec.describe Role, type: :model do
   end
 
   context "associations" do
-    it { should belong_to(:medium) }
+    it { is_expected.to belong_to(:medium) }
 
-    it { should have_many(:contributions) }
+    it { is_expected.to have_many(:contributions) }
 
-    it { should have_many(:works).through(:contributions) }
+    it { is_expected.to have_many(:works).through(:contributions) }
 
-    it { should have_many(:posts).through(:works) }
+    it { is_expected.to have_many(:posts).through(:works) }
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:medium) }
+    it { is_expected.to validate_presence_of(:medium) }
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
-    it { should validate_uniqueness_of(:name).scoped_to(:medium_id) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:medium_id) }
   end
 
   context "instance" do

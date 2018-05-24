@@ -66,7 +66,7 @@ RSpec.describe User, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { should eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :works, :creators) }
     end
 
     describe "self#for_admin" do
@@ -76,7 +76,7 @@ RSpec.describe User, type: :model do
         should contain_exactly(jenny, charlie, brian, gruber)
       end
 
-      it { should eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :works, :creators) }
     end
 
     describe "self#for_site" do
@@ -86,22 +86,22 @@ RSpec.describe User, type: :model do
         should eq([brian, jenny])
       end
 
-      it { should eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :works, :creators) }
     end
   end
 
   context "associations" do
-   it { should have_many(:posts) }
+   it { is_expected.to have_many(:posts) }
 
-   it { should have_many(:works).through(:posts) }
+   it { is_expected.to have_many(:works).through(:posts) }
 
-   it { should have_many(:creators).through(:works) }
+   it { is_expected.to have_many(:creators).through(:works) }
   end
 
   context "attributes" do
     context "enums" do
       describe "role" do
-        it { should define_enum_for(:role) }
+        it { is_expected.to define_enum_for(:role) }
 
         it_behaves_like "an_enumable_model", [:role]
       end
@@ -111,19 +111,19 @@ RSpec.describe User, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:first_name) }
-    it { should validate_presence_of(:last_name ) }
+    it { is_expected.to validate_presence_of(:first_name) }
+    it { is_expected.to validate_presence_of(:last_name ) }
 
-    it { should validate_presence_of(:role) }
+    it { is_expected.to validate_presence_of(:role) }
 
-    it { should validate_presence_of(  :username) }
-    it { should validate_uniqueness_of(:username) }
+    it { is_expected.to validate_presence_of(  :username) }
+    it { is_expected.to validate_uniqueness_of(:username) }
 
     context "conditional" do
       context "as member" do
         subject { create(:member) }
 
-        it { should validate_absence_of(:bio) }
+        it { is_expected.to validate_absence_of(:bio) }
       end
 
       context "as writer" do

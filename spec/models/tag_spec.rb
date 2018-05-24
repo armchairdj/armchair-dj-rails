@@ -48,22 +48,22 @@ RSpec.describe Tag, type: :model do
   end
 
   context "associations" do
-    it { should belong_to(:category) }
+    it { is_expected.to belong_to(:category) }
 
-    it { should have_and_belong_to_many(:posts) }
+    it { is_expected.to have_and_belong_to_many(:posts) }
 
-    it { should have_and_belong_to_many(:works) }
+    it { is_expected.to have_and_belong_to_many(:works) }
 
-    it { should have_many(:creators).through(:works) }
-    it { should have_many(:reviews ).through(:works) }
+    it { is_expected.to have_many(:creators).through(:works) }
+    it { is_expected.to have_many(:reviews ).through(:works) }
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
-    it { should validate_uniqueness_of(:name).scoped_to(:category_id) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:category_id) }
 
     it { should_not validate_presence_of(:category_id) }
 
@@ -72,7 +72,7 @@ RSpec.describe Tag, type: :model do
         context "for tag with year category" do
           subject { create(:year_tag) }
 
-          it { should validate_yearness_of(:name) }
+          it { is_expected.to validate_yearness_of(:name) }
         end
 
         context "for tag with string category" do

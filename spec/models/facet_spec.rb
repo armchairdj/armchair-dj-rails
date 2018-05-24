@@ -26,7 +26,7 @@ RSpec.describe Facet, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { should eager_load(:medium, :category) }
+        it { is_expected.to eager_load(:medium, :category) }
       end
 
       describe "self#sorted" do
@@ -46,7 +46,7 @@ RSpec.describe Facet, type: :model do
           should eq([a_2, a_1, z_1, z_2])
         end
 
-        it { should eager_load(:medium, :category) }
+        it { is_expected.to eager_load(:medium, :category) }
       end
 
       describe "self#for_site" do
@@ -56,22 +56,22 @@ RSpec.describe Facet, type: :model do
           should eq([a_2, a_1, z_1, z_2])
         end
 
-        it { should eager_load(:medium, :category) }
+        it { is_expected.to eager_load(:medium, :category) }
       end
     end
   end
 
   context "associations" do
-    it { should belong_to(:medium) }
+    it { is_expected.to belong_to(:medium) }
 
-    it { should belong_to(:category) }
+    it { is_expected.to belong_to(:category) }
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { should validate_presence_of(:medium) }
+    it { is_expected.to validate_presence_of(:medium) }
 
-    it { should validate_presence_of(:category) }
+    it { is_expected.to validate_presence_of(:category) }
   end
 end
