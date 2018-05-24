@@ -203,10 +203,6 @@ class Work < ApplicationRecord
     [display_creators, title, subtitle]
   end
 
-  def name_for_parent_dropdown
-    text_for_parent_dropdown(:display_title)
-  end
-
   def grouped_parent_dropdown_options
     parent_dropdown_options.group_by { |w| w.medium.name }
   end

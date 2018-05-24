@@ -82,6 +82,32 @@ FactoryBot.define do
       with_published_post
     end
 
+    trait :with_child do
+      after(:create) do |work|
+        create(:minimal_work, parent: work)
+
+        work.reload
+      end
+    end
+
+    trait :with_children do
+      after(:create) do |work|
+        3.times { create(:minimal_work, parent: work) }
+
+        work.reload
+      end
+    end
+
+    trait :with_specific_children do
+      after(:create) do |work, evaluator|
+        [evaluator.children].flatten.each do |child|
+          child.update!(parent: work)
+        end
+
+        work.reload
+      end
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

@@ -571,7 +571,6 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    pending "#name_for_parent_dropdown"
     pending "#grouped_parent_dropdown_options"
   end
 end
