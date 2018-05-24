@@ -2,11 +2,8 @@ require "rails_helper"
 
 RSpec.describe Facet, type: :model do
   context "concerns" do
+    it_behaves_like "an_acts_as_list_model"
     it_behaves_like "an_application_record"
-  end
-
-  context "acts_as_list" do
-    pending "works"
   end
 
   context "scope-related" do

@@ -293,10 +293,7 @@ class Post < ApplicationRecord
   end
 
   def all_tags
-    ids = [self.tag_ids]
-    ids << self.work.tag_ids if self.work.present?
-
-    Tag.where(id: ids.flatten.uniq)
+    Tag.where(id: [self.tag_ids, self.work.try(:tag_ids)].flatten.uniq)
   end
 
 private

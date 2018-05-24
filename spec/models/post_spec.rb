@@ -1564,6 +1564,10 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    pending "#all_tags"
+    describe "#all_tags" do
+      subject { instance.all_tags }
+
+      it { should be_a_kind_of(ActiveRecord::Relation) }
+    end
   end
 end
