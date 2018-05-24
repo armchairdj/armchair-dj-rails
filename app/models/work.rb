@@ -205,7 +205,7 @@ class Work < ApplicationRecord
 
   def grouped_parent_dropdown_options
     scope     = self.class.includes(:medium)
-    ungrouped = parent_dropdown_options(scope: scope, order: :title)
+    ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end

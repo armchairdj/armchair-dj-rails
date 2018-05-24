@@ -630,16 +630,18 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#grouped_parent_dropdown_options" do
+      let(:creator) { create(:minimal_creator) }
+
       let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
       let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
       let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
 
-      let!(    :unsaved) {  build_minimal_instance(medium: grandparent_medium) }
-      let!(:grandparent) { create_minimal_instance(medium: grandparent_medium, title: "G") }
-      let!(      :uncle) { create_minimal_instance(medium:      parent_medium, title: "U", parent: grandparent) }
-      let!(     :parent) { create_minimal_instance(medium:      parent_medium, title: "P", parent: grandparent) }
-      let!(    :sibling) { create_minimal_instance(medium:       child_medium, title: "S", parent:      parent) }
-      let!(      :child) { create_minimal_instance(medium:       child_medium, title: "C", parent:      parent) }
+      let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
+      let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
+      let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
+      let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
+      let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
+      let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
 
       specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
 
