@@ -21,7 +21,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.admin_sorts
-    { "Default" => "updated_at DESC" }
+    { "Default" => "#{model_name.plural}.updated_at DESC" }
   end
 
   def self.default_admin_sort
@@ -32,6 +32,7 @@ class ApplicationRecord < ActiveRecord::Base
     admin_sorts.values.map { |s| base_sort_clause(s) }.include? base_sort_clause(sort)
   end
 
+  # TODO get dry
   def self.base_sort_clause(sort)
     sort.gsub(/ (ASC|DESC)/, "")
   end

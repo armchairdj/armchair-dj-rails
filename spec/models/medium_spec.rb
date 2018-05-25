@@ -21,8 +21,8 @@ RSpec.describe Medium, type: :model do
       specify "keys are short tab names" do
         expect(described_class.admin_scopes.keys).to eq([
           "All",
-          "Viewable",
-          "Non-Viewable",
+          "Published",
+          "Draft",
         ])
       end
     end

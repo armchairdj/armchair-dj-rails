@@ -18,11 +18,13 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Name") %>
-            <%= content_tag(:th, "Primary") %>
-            <%= content_tag(:th, "Individual") %>
-            <%= content_tag(:th, viewable_post_count_icon,  class: "icon") %>
-            <%= content_tag(:th, non_viewable_post_count_icon, class: "icon") %>
+            <%= sortable_th Creator, "Name"       %>
+            <%= sortable_th Creator, "Primary"    %>
+            <%= sortable_th Creator, "Individual" %>
+
+            <%= vpc_th  Creator, "VPC"  %>
+            <%= nvpc_th Creator, "NVPC" %>
+
             <%= actions_th %>
           <% end %>
         <% end %>
@@ -30,16 +32,18 @@
         <%= content_tag(:tbody) do %>
           <% @creators.each do |creator| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, creator.name) %>
-              <%= content_tag(:td, creator.primary?) %>
+              <%= content_tag(:td, creator.name       ) %>
+              <%= content_tag(:td, creator.primary?   ) %>
               <%= content_tag(:td, creator.individual?) %>
-              <%= content_tag(:td, creator.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, creator.non_viewable_post_count, class: "icon") %>
+
+              <%= vpc_cell( creator) %>
+              <%= nvpc_cell(creator) %>
+
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_creator_link(creator) %>
-                <%= admin_view_link(creator) %>
-                <%= admin_update_link(creator) %>
-                <%= admin_destroy_link(creator) %>
+                <%= admin_view_link(          creator) %>
+                <%= admin_update_link(        creator) %>
+                <%= admin_destroy_link(       creator) %>
               <% end %>
             <% end %>
           <% end %>

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StyleGuidesController < ApplicationController
-  before_action :is_admin
   before_action :authorize_page
   before_action :set_template,   only: [:show         ]
   before_action :set_flash_type, only: [:flash_message]
@@ -25,10 +24,6 @@ private
 
   def determine_layout
     "admin"
-  end
-
-  def is_admin
-    @admin = true
   end
 
   def authorize_page

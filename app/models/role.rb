@@ -18,11 +18,20 @@ class Role < ApplicationRecord
     self.alpha.where(medium_id: medium.id)
   end
 
+  def self.admin_sorts
+    always = "roles.name ASC"
+
+    super.merge({
+      "Name"   => "#{always}, media.name ASC",
+      "Medium" => "media.name ASC, #{always}",
+    })
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:contributions) }
+  scope :eager,     -> { joins(:medium).includes(:medium, :contributions, :works, :posts) }
   scope :for_admin, -> { eager }
 
   #############################################################################

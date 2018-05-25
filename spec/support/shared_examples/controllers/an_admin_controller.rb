@@ -5,37 +5,16 @@ RSpec.shared_examples "an_admin_controller" do
 
   context "included" do
     context "callbacks" do
-      context "before_action" do
-        describe "#is_admin" do
-          before(:each) do
-            allow(controller).to receive(:is_admin)
-            expect(controller).to receive(:is_admin)
-          end
-
-          specify { get    :index  }
-          specify { get    :new    }
-          specify { post   :create }
-          specify { get    :show,    params: { id: model_instance.id} }
-          specify { get    :edit,    params: { id: model_instance.id} }
-          specify { patch  :update,  params: { id: model_instance.id} }
-          specify { delete :destroy, params: { id: model_instance.id} }
-        end
-      end
+      pending "verify_authorized"
     end
   end
 
   context "instance" do
     context "private" do
       describe "#determine_layout" do
-        specify { expect(controller.send(:determine_layout)).to eq("admin") }
-      end
+        subject { controller.send(:determine_layout) }
 
-      describe "#is_admin" do
-        it "sets instance var for use in view" do
-          controller.send(:is_admin)
-
-          expect(assigns(:admin)).to eq(true)
-        end
+        it { is_expected.to eq("admin") }
       end
 
       pending "#scoped_and_sorted_collection"

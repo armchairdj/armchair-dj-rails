@@ -83,21 +83,23 @@ RSpec.describe Post, type: :model do
 
   context "scope-related" do
     let!(:draft_standalone    ) { create(:standalone_post, :draft    ) }
-    let!(:draft_review        ) { create(:review,     :draft    ) }
+    let!(:draft_review        ) { create(:review,          :draft    ) }
     let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
-    let!(:scheduled_review    ) { create(:review,     :scheduled) }
+    let!(:scheduled_review    ) { create(:review,          :scheduled) }
     let!(:published_standalone) { create(:standalone_post, :published) }
-    let!(:published_review    ) { create(:review,     :published) }
+    let!(:published_review    ) { create(:review,          :published) }
 
     context "basics" do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { is_expected.to eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
       end
 
       describe "self#reverse_cron" do
         subject { described_class.reverse_cron }
+
+        pending "publish_on, updated_at"
 
         specify do
           is_expected.to contain_exactly(
@@ -110,7 +112,7 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { is_expected.to_not  eager_load(:work, :creators, :author) }
+        it { is_expected.to_not eager_load(:medium, :work, :creators, :author) }
       end
 
       describe "self#for_admin" do
@@ -127,7 +129,7 @@ RSpec.describe Post, type: :model do
           )
         end
 
-        it { is_expected.to eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
       end
 
       describe "self#for_site" do
@@ -135,7 +137,7 @@ RSpec.describe Post, type: :model do
 
         it { is_expected.to eq [ published_review, published_standalone ] }
 
-        it { is_expected.to eager_load(:work, :creators, :author) }
+        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
       end
     end
 
@@ -221,6 +223,7 @@ RSpec.describe Post, type: :model do
 
     it { is_expected.to belong_to(:work) }
 
+    it { is_expected.to have_one(:medium    ).through(:work) }
     it { is_expected.to have_many(:creators ).through(:work) }
     it { is_expected.to have_many(:work_tags).through(:work) }
   end

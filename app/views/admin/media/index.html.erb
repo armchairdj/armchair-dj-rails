@@ -18,9 +18,11 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Name") %>
-            <%= content_tag(:th, viewable_post_count_icon,  class: "icon") %>
-            <%= content_tag(:th, non_viewable_post_count_icon, class: "icon") %>
+            <%= sortable_th Medium, "Name" %>
+
+            <%= vpc_th  Medium, "VPC"  %>
+            <%= nvpc_th Medium, "NVPC" %>
+
             <%= actions_th %>
           <% end %>
         <% end %>
@@ -29,13 +31,15 @@
           <% @media.each do |medium| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, medium.name) %>
-              <%= content_tag(:td, medium.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, medium.non_viewable_post_count, class: "icon") %>
+
+              <%= vpc_cell( medium) %>
+              <%= nvpc_cell(medium) %>
+
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_medium_link(medium) %>
-                <%= admin_view_link(medium) %>
-                <%= admin_update_link(medium) %>
-                <%= admin_destroy_link(medium) %>
+                <%= admin_view_link(         medium) %>
+                <%= admin_update_link(       medium) %>
+                <%= admin_destroy_link(      medium) %>
               <% end %>
             <% end %>
           <% end %>

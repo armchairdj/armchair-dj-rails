@@ -39,6 +39,17 @@ class User < ApplicationRecord
     }
   end
 
+  def self.admin_sorts
+    always = "users.alpha ASC"
+
+    super.merge(viewable_admin_sorts(always)).merge({
+      "Name"     => always,
+      "Username" => "users.username ASC, #{always}",
+      "Email"    => "users.email ASC, #{always}",
+      "Role"     => "users.role ASC, #{always}",
+    })
+  end
+
   def self.published_author!(username)
     viewable.where(username: username).take!
   end

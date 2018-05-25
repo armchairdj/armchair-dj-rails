@@ -10,34 +10,44 @@ RSpec.shared_examples "an_application_record" do
   end
 
   context "class" do
-    describe "self#default_admin_scope" do
-      subject { described_class.default_admin_scope }
+    context "admin methods" do
+      describe "self#admin_scopes" do
+        subject { described_class.admin_scopes }
 
-      specify { expect(subject).to be_a_kind_of(Symbol) }
+        specify { expect(subject).to be_a_kind_of(Hash) }
 
-      specify { expect(subject).to eq(described_class.admin_scopes.values.first) }
+        specify "keys are strings" do
+          subject.keys.each do |sym|
+            expect(sym).to be_a_kind_of(String)
+          end
+        end
 
-      specify { expect(described_class).to respond_to(subject) }
-    end
+        specify "values are symbols of scopes" do
+          described_class.admin_scopes.values.each do |sym|
+            expect(sym).to be_a_kind_of(Symbol)
 
-    describe "self#admin_scopes" do
-      subject { described_class.admin_scopes }
-
-      specify { expect(subject).to be_a_kind_of(Hash) }
-
-      specify "keys are strings" do
-        subject.keys.each do |sym|
-          expect(sym).to be_a_kind_of(String)
+            expect(described_class).to respond_to(sym)
+          end
         end
       end
 
-      specify "values are symbols of scopes" do
-        described_class.admin_scopes.values.each do |sym|
-          expect(sym).to be_a_kind_of(Symbol)
+      describe "self#default_admin_scope" do
+        subject { described_class.default_admin_scope }
 
-          expect(described_class).to respond_to(sym)
-        end
+        specify { expect(subject).to be_a_kind_of(Symbol) }
+
+        specify { expect(subject).to eq(described_class.admin_scopes.values.first) }
+
+        specify { expect(described_class).to respond_to(subject) }
       end
+
+      pending "self#allowed_admin_scope?"
+
+      pending "self#admin_sorts"
+
+      pending "self#default_admin_sort"
+
+      pending "self#allowed_admin_sort?"
     end
 
     describe "self#find_by_sorted_ids" do

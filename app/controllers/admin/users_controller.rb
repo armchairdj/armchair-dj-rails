@@ -30,11 +30,6 @@ class Admin::UsersController < AdminController
     :destroy
   ]
 
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
   # GET /users
   # GET /users.json
   def index
@@ -65,8 +60,6 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.create") }
         format.json { render :show, status: :created, location: @user }
       else
-        prepare_form
-
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -81,8 +74,6 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.update") }
         format.json { render :show, status: :ok, location: @user }
       else
-        prepare_form
-
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

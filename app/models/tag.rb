@@ -21,7 +21,18 @@ class Tag < ApplicationRecord
       "All"       => :for_admin,
       "For Posts" => :for_posts,
       "For Works" => :for_works,
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
     }
+  end
+
+  def self.admin_sorts
+    always = "tags.name ASC"
+
+    super.merge(viewable_admin_sorts(always)).merge({
+      "Name"     => "#{always}, categories.name ASC",
+      "Category" => "categories.name ASC, #{always}"
+    })
   end
 
   #############################################################################

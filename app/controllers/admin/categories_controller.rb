@@ -28,11 +28,6 @@ class Admin::CategoriesController < AdminController
     :destroy
   ]
 
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
   # GET /admin/categories
   # GET /admin/categories.json
   def index
@@ -58,8 +53,6 @@ class Admin::CategoriesController < AdminController
         format.html { redirect_to admin_category_path(@category), success: I18n.t("admin.flash.categories.success.create") }
         format.json { render :show, status: :created, location: admin_category_url(@category) }
       else
-        prepare_form
-
         format.html { render :new }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end
@@ -79,8 +72,6 @@ class Admin::CategoriesController < AdminController
         format.html { redirect_to admin_category_path(@category), success: I18n.t("admin.flash.categories.success.update") }
         format.json { render :show, status: :ok, location: admin_category_url(@category) }
       else
-        prepare_form
-
         format.html { render :edit }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end

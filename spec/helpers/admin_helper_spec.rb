@@ -189,7 +189,10 @@ RSpec.describe AdminHelper, type: :helper do
   end
 
   context "column header methods" do
-    pending "#viewable_post_count_icon"
-    pending "#non_viewable_post_count_icon"
+    pending "test all"
+  end
+
+  context "column cell methods" do
+    pending "test all"
   end
 end

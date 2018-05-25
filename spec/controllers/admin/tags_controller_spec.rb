@@ -25,6 +25,46 @@ RSpec.describe Admin::TagsController, type: :controller do
             expect(assigns(:tags)).to paginate(0).of_total_records(0)
           end
         end
+
+        context ":for_posts scope" do
+          it "renders" do
+            get :index, params: { scope: "for_posts" }
+
+            is_expected.to successfully_render("admin/tags/index")
+
+            expect(assigns(:tags)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context ":for_works scope" do
+          it "renders" do
+            get :index, params: { scope: "for_works" }
+
+            is_expected.to successfully_render("admin/tags/index")
+
+            expect(assigns(:tags)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context ":viewable scope" do
+          it "renders" do
+            get :index, params: { scope: "viewable" }
+
+            is_expected.to successfully_render("admin/tags/index")
+
+            expect(assigns(:tags)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context ":non_viewable scope" do
+          it "renders" do
+            get :index, params: { scope: "non_viewable" }
+
+            is_expected.to successfully_render("admin/tags/index")
+
+            expect(assigns(:tags)).to paginate(0).of_total_records(0)
+          end
+        end
       end
 
       context "with records" do
@@ -49,6 +89,11 @@ RSpec.describe Admin::TagsController, type: :controller do
             expect(assigns(:tags)).to paginate(1).of_total_records(21)
           end
         end
+
+        pending ":for_posts scope"
+        pending ":for_works scope"
+        pending ":viewable scope"
+        pending ":non_viewable scope"
       end
     end
 
@@ -85,9 +130,6 @@ RSpec.describe Admin::TagsController, type: :controller do
         it "creates a new Tag" do
           expect {
             post :create, params: { tag: min_valid_params }
-
-            ap assigns(:tag).errors
-
           }.to change { Tag.count }.by(1)
         end
 

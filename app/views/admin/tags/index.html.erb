@@ -18,8 +18,12 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Category") %>
-            <%= content_tag(:th, "Name") %>
+            <%= sortable_th Tag, "Name"     %>
+            <%= sortable_th Tag, "Category" %>
+
+            <%= vpc_th  Tag, "VPC"  %>
+            <%= nvpc_th Tag, "NVPC" %>
+
             <%= actions_th %>
           <% end %>
         <% end %>
@@ -27,13 +31,17 @@
         <%= content_tag(:tbody) do %>
           <% @tags.each do |tag| %>
             <%= content_tag(:tr) do %>
+              <%= content_tag(:td, tag.name            ) %>
               <%= content_tag(:td, tag.display_category) %>
-              <%= content_tag(:td, tag.name) %>
+
+              <%= vpc_cell( tag) %>
+              <%= nvpc_cell(tag) %>
+
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_tag_link(tag) %>
-                <%= admin_view_link(tag) %>
-                <%= admin_update_link(tag) %>
-                <%= admin_destroy_link(tag) %>
+                <%= admin_view_link(      tag) %>
+                <%= admin_update_link(    tag) %>
+                <%= admin_destroy_link(   tag) %>
               <% end %>
             <% end %>
           <% end %>

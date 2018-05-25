@@ -33,10 +33,20 @@ class Creator < ApplicationRecord
 
   def self.admin_scopes
     {
-      "All"          => :for_admin,
-      "Viewable"     => :viewable,
-      "Non-Viewable" => :non_viewable,
+      "All"       => :for_admin,
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
     }
+  end
+
+  def self.admin_sorts
+    always = "creators.name ASC"
+
+    super.merge(viewable_admin_sorts(always)).merge({
+      "Name"       => always,
+      "Primary"    => "creators.primary ASC, #{always}",
+      "Individual" => "creators.individual ASC, #{always}"
+    })
   end
 
   #############################################################################

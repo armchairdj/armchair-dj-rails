@@ -18,9 +18,10 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Type") %>
-            <%= content_tag(:th, "Status", class: "icon") %>
-            <%= content_tag(:th, "Title") %>
+            <%= sortable_th Post, "Title" %>
+            <%= post_status_th %>
+            <%= sortable_th Post, "Type", class: "actions" %>
+
             <%= actions_th %>
           <% end %>
         <% end %>
@@ -28,14 +29,15 @@
         <%= content_tag(:tbody) do %>
           <% @posts.each do |post| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post.type) %>
-              <%= content_tag(:td, post_status_icon(post), class: "icon")%>
               <%= content_tag(:td, post_title(post)) %>
+              <%= post_status_cell(post) %>
+              <%= content_tag(:td, post.type, class: "actions") %>
+
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_post_link(post) %>
-                <%= admin_view_link(post) %>
-                <%= admin_update_link(post) %>
-                <%= admin_destroy_link(post) %>
+                <%= admin_view_link(       post) %>
+                <%= admin_update_link(     post) %>
+                <%= admin_destroy_link(    post) %>
               <% end %>
             <% end %>
           <% end %>

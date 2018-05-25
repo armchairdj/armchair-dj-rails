@@ -38,18 +38,20 @@ class Work < ApplicationRecord
 
   def self.admin_scopes
     {
-      "All"          => :for_admin,
-      "Viewable"     => :viewable,
-      "Non-Viewable" => :non_viewable,
+      "All"       => :for_admin,
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
     }
   end
 
   def self.admin_sorts
-    {
-      "Medium"   => "media.name ASC, works.title ASC",
-      "Title"    => "works.title ASC",
-      "Creators" => "creators.name ASC, works.title ASC"
-    }.merge(viewable_admin_sorts).merge(super)
+    always = "works.title ASC"
+
+    super.merge(viewable_admin_sorts(always)).merge({
+      "Title"    => always,
+      "Creators" => "creators.name ASC, #{always}",
+      "Medium"   => "media.name ASC, #{always}",
+    })
   end
 
   #############################################################################

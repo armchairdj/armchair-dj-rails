@@ -18,9 +18,10 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= content_tag(:th, "Name") %>
-            <%= content_tag(:th, "Format") %>
-            <%= content_tag(:th, "Multi?") %>
+            <%= sortable_th Category, "Name"   %>
+            <%= sortable_th Category, "Format" %>
+            <%= sortable_th Category, "Multi?" %>
+
             <%= actions_th %>
           <% end %>
         <% end %>
@@ -28,12 +29,13 @@
         <%= content_tag(:tbody) do %>
           <% @categories.each do |category| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, category.name) %>
-              <%= content_tag(:td, category.format) %>
+              <%= content_tag(:td, category.name           ) %>
+              <%= content_tag(:td, category.human_format   ) %>
               <%= content_tag(:td, category.allow_multiple?) %>
+
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_view_link(category) %>
-                <%= admin_update_link(category) %>
+                <%= admin_view_link(   category) %>
+                <%= admin_update_link( category) %>
                 <%= admin_destroy_link(category) %>
               <% end %>
             <% end %>

@@ -119,7 +119,7 @@ table.admin {
   th,
   td {
     line-height: $spacious;
-    padding: $spacing-xs;
+    padding: $spacing-xs $spacing-s;
 
     &:first-child {
       padding-left: 0;
@@ -131,10 +131,13 @@ table.admin {
 
     &.actions {
       text-align: right;
+      white-space: nowrap;
+      padding-left: $spacing-m;
     }
 
     &.icon {
       text-align: center;
+      white-space: nowrap;
     }
 
     &.actions {

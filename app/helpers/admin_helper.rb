@@ -155,6 +155,12 @@ module AdminHelper
     sortable_th(model, key, class: "icon", text: icon)
   end
 
+  def post_status_th
+    icon = admin_column_icon("eye", "Post Status", "eye icon")
+
+    sortable_th(Post, "Status", class: "icon", text: icon)
+  end
+
   def nvpc_th(model, key)
     icon = admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
 
@@ -179,8 +185,9 @@ module AdminHelper
     base_sort_clause(first) == base_sort_clause(last)
   end
 
-  def base_sort_clause(sort_clause)
-    sort_clause.gsub(/ (ASC|DESC)/, "")
+  # TODO get dry
+  def base_sort_clause(sort)
+    sort.gsub(/ (ASC|DESC)/, "")
   end
 
   def descending_sort_clause?(sort_clause)
@@ -209,7 +216,7 @@ module AdminHelper
   end
 
   #############################################################################
-  # COLUMN CELLS.
+  # ICON CELLS.
   #############################################################################
 
   def vpc_cell(instance)
@@ -218,5 +225,9 @@ module AdminHelper
 
   def nvpc_cell(instance)
     content_tag(:td, instance.non_viewable_post_count, class: "icon")
+  end
+
+  def post_status_cell(post)
+    content_tag(:td, post_status_icon(post), class: "icon")
   end
 end

@@ -18,6 +18,8 @@ RSpec.describe Tag, type: :model do
           "All",
           "For Posts",
           "For Works",
+          "Published",
+          "Draft",
         ])
       end
     end
