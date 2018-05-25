@@ -48,7 +48,7 @@ class Tag < ApplicationRecord
   scope        :string, -> { categorized.where(category: { format: Category.formats[:string] }) }
   scope          :year, -> { categorized.where(category: { format: Category.formats[:year  ] }) }
 
-  scope        :eager, -> { includes(:category, :works, :posts) }
+  scope        :eager, -> { left_outer_joins(:category).includes(:category, :works, :posts) }
   scope    :for_admin, -> { eager }
   scope     :for_site, -> { eager.alpha }
 
