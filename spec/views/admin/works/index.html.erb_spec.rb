@@ -10,6 +10,7 @@ RSpec.describe "admin/works/index", type: :view do
 
     @model_class = assign(:model_name, Work)
     @scope       = assign(:scope, :for_admin)
+    @sort        = assign(:sort, @model_class.default_admin_sort)
     @page        = assign(:page, 1)
     @works       = assign(:works, Work.all.alpha.page(1))
   end

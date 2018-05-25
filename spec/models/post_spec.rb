@@ -22,6 +22,8 @@ RSpec.describe Post, type: :model do
           "Draft",
           "Scheduled",
           "Published",
+          "Review",
+          "Post",
           "All",
         ])
       end

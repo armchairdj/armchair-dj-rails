@@ -7,6 +7,8 @@ RSpec.describe "admin/users/index", type: :view do
     end
 
     @model_class = assign(:model_name, User)
+    @scope       = assign(:scope, :for_admin)
+    @sort        = assign(:sort, @model_class.default_admin_sort)
     @users       = assign(:users, User.for_admin.page(1))
   end
 

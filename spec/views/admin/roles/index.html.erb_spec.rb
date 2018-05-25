@@ -11,6 +11,8 @@ RSpec.describe "admin/roles/index", type: :view do
     end
 
     @model_class = assign(:model_name, Role)
+    @scope       = assign(:scope, :for_admin)
+    @sort        = assign(:sort, @model_class.default_admin_sort)
     @roles       = assign(:roles, Role.for_admin.page(1))
   end
 

@@ -11,6 +11,8 @@ RSpec.describe "admin/tags/index", type: :view do
     end
 
     @model_class = assign(:model_name, Tag)
+    @scope       = assign(:scope, :for_admin)
+    @sort        = assign(:sort, @model_class.default_admin_sort)
     @tags        = assign(:tags, Tag.for_admin.page(1))
   end
 

@@ -7,6 +7,8 @@ RSpec.describe "admin/media/index", type: :view do
     end
 
     @model_class = assign(:model_name, Medium)
+    @scope       = assign(:scope, :for_admin)
+    @sort        = assign(:sort, @model_class.default_admin_sort)
     @media       = assign(:media, Medium.for_admin.page(1))
   end
 
