@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class AdminPolicy < ApplicationPolicy
+  class Scope < Scope
+    def resolve
+      scope.for_admin
+    end
+  end
+
   def index?
     logged_in_as_admin?
   end
@@ -19,11 +25,5 @@ class AdminPolicy < ApplicationPolicy
 
   def destroy?
     logged_in_as_admin?
-  end
-
-  class Scope < Scope
-    def resolve
-      scope.all
-    end
   end
 end

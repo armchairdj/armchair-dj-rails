@@ -3,6 +3,15 @@
 module Viewable
   extend ActiveSupport::Concern
 
+  class_methods do
+    def viewable_admin_sorts
+      {
+        "VPC"  => "#{model_name.plural}.viewable_post_count ASC",
+        "NVPC" => "#{model_name.plural}.non_viewable_post_count ASC",
+      }
+    end
+  end
+
   included do
     before_save :refresh_counts
 

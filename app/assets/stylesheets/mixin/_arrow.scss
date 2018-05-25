@@ -1,0 +1,67 @@
+@mixin arrow-base($underline: true) {
+  &:before,
+  &:after {
+    content: none;
+  }
+
+  @if ($underline) {
+    &:hover span {
+      text-decoration: underline;
+    }
+  }
+}
+
+@mixin no-arrow() {
+  &:before,
+  &:after {
+    content: none;
+  }
+}
+
+@mixin left-arrow($heavy: false, $color: false) {
+  @include arrow-base();
+
+  &:before {
+    content: if($heavy == true, "\25C0\00A0", "\2190\00A0");
+
+    @if $color {
+      color: $color;
+    }
+  }
+}
+
+@mixin right-arrow($heavy: false, $color: false) {
+  @include arrow-base();
+
+  &:after {
+    content: if($heavy == true, "\00A0\25B6", "\00A0\2192");
+
+    @if $color {
+      color: $color;
+    }
+  }
+}
+
+@mixin up-arrow($heavy: false, $color: false) {
+  @include arrow-base();
+
+  &:after {
+    content: if($heavy == true, "\00A0\25B2", "\00A0\2191");
+
+    @if $color {
+      color: $color;
+    }
+  }
+}
+
+@mixin down-arrow($heavy: false, $color: false) {
+  @include arrow-base();
+
+  &:after {
+    content: if($heavy == true, "\00A0\25BC", "\00A0\2193");
+
+    @if $color {
+      color: $color;
+    }
+  }
+}

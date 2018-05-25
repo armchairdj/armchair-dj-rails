@@ -3,8 +3,6 @@
 class AdminController < ApplicationController
   include SeoPaginatable
 
-  prepend_before_action :is_admin
-
   after_action :verify_authorized
 
 private
@@ -13,18 +11,19 @@ private
     "admin"
   end
 
-  def is_admin
-    @admin = true
-  end
-
-  def prepare_form; end
-
   def scoped_and_sorted_collection
+    @scope = params[:scope].try(:to_sym) || model_class.default_admin_scope
+    @sort  = params[:sort]               || model_class.default_admin_sort
     @page  = params[:page]
-    @scope = (params[:scope] || model_class.default_admin_scope).to_sym
 
-    raise Pundit::NotAuthorizedError unless model_class.admin_scopes.values.include? @scope
+    unless model_class.allowed_admin_scope?(@scope)
+      raise Pundit::NotAuthorizedError, "Unknown scope param [#{@scope}]."
+    end
 
-    policy_scope(model_class).send(@scope).order(created_at: :desc).page(@page)
+    unless model_class.allowed_admin_sort?(@sort)
+      raise Pundit::NotAuthorizedError, "Unknown sort param [#{@sort}]."
+    end
+
+    policy_scope(model_class).send(@scope).order(@sort).page(@page)
   end
 end

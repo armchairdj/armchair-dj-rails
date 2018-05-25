@@ -44,6 +44,14 @@ class Work < ApplicationRecord
     }
   end
 
+  def self.admin_sorts
+    {
+      "Medium"   => "media.name ASC, works.title ASC",
+      "Title"    => "works.title ASC",
+      "Creators" => "creators.name ASC, works.title ASC"
+    }.merge(viewable_admin_sorts).merge(super)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################

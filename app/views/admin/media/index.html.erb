@@ -19,9 +19,9 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= content_tag(:th, "Name") %>
-            <%= content_tag(:th, post_count_column_header,  class: "icon") %>
-            <%= content_tag(:th, draft_count_column_header, class: "icon") %>
-            <%= content_tag(:th, "Actions", class: "actions") %>
+            <%= content_tag(:th, viewable_post_count_icon,  class: "icon") %>
+            <%= content_tag(:th, non_viewable_post_count_icon, class: "icon") %>
+            <%= actions_th %>
           <% end %>
         <% end %>
 

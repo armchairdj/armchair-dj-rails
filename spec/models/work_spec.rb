@@ -630,49 +630,51 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#grouped_parent_dropdown_options" do
-      let(:creator) { create(:minimal_creator) }
+      describe "groups works by genre, excludes unavailable parents, and alphabetizes optgroups and options" do
+        let(:creator) { create(:minimal_creator) }
 
-      let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
-      let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
-      let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
+        let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
+        let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
+        let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
 
-      let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
-      let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
-      let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
-      let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
-      let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
-      let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
+        let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
+        let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
+        let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
+        let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
+        let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
+        let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
 
-      specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
+        specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
 
-      specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
-        [ "Dad",     [parent, uncle ] ],
-        [ "Grandpa", [grandparent   ] ],
-        [ "Son",     [child, sibling] ]
-      ]) }
+        specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle ] ],
+          [ "Grandpa", [grandparent   ] ],
+          [ "Son",     [child, sibling] ]
+        ]) }
 
-      specify { expect(uncle.grouped_parent_dropdown_options).to eq([
-        [ "Dad",      [parent        ] ],
-        [ "Grandpa",  [grandparent   ] ],
-        [ "Son",      [child, sibling] ]
-      ]) }
+        specify { expect(uncle.grouped_parent_dropdown_options).to eq([
+          [ "Dad",      [parent        ] ],
+          [ "Grandpa",  [grandparent   ] ],
+          [ "Son",      [child, sibling] ]
+        ]) }
 
-      specify { expect(parent.grouped_parent_dropdown_options).to eq([
-        [ "Dad",     [uncle      ] ],
-        [ "Grandpa", [grandparent] ]
-      ]) }
+        specify { expect(parent.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [uncle      ] ],
+          [ "Grandpa", [grandparent] ]
+        ]) }
 
-      specify { expect(sibling.grouped_parent_dropdown_options).to eq([
-        [ "Dad",     [parent, uncle] ],
-        [ "Grandpa", [grandparent  ] ],
-        [ "Son",     [child        ] ]
-      ]) }
+        specify { expect(sibling.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle] ],
+          [ "Grandpa", [grandparent  ] ],
+          [ "Son",     [child        ] ]
+        ]) }
 
-      specify { expect(child.grouped_parent_dropdown_options).to eq([
-        [ "Dad",     [parent, uncle] ],
-        [ "Grandpa", [grandparent  ] ],
-        [ "Son",     [sibling      ] ]
-      ]) }
+        specify { expect(child.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle] ],
+          [ "Grandpa", [grandparent  ] ],
+          [ "Son",     [sibling      ] ]
+        ]) }
+      end
     end
   end
 end

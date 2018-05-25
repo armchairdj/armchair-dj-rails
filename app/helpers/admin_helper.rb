@@ -141,15 +141,82 @@ module AdminHelper
   # COLUMN HEADERS.
   #############################################################################
 
-  def admin_column_header(icon, title, desc)
+  def admin_column_icon(icon, title, desc)
     svg_icon(icon, title: title, desc: desc, wrapper_class: "admin-column-header")
   end
 
-  def post_count_column_header
-    admin_column_header("lock-unlocked", "Public Posts", "unlocked icon")
+  def actions_th
+    content_tag(:th, "Actions", class: "actions")
   end
 
-  def draft_count_column_header
-    admin_column_header("lock-locked", "Draft Posts", "locked icon")
+  def vpc_th(model, key)
+    icon = admin_column_icon("lock-unlocked", "Public Post Count", "unlocked icon")
+
+    sortable_th(model, key, class: "icon", text: icon)
+  end
+
+  def nvpc_th(model, key)
+    icon = admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
+
+    sortable_th(model, key, class: "icon", text: icon)
+  end
+
+  def sortable_th(model, key, **opts)
+    sort = model.admin_sorts[key]
+    text = opts.delete(:text) || key
+    link = link_to(content_tag(:span, text), th_link_url_params(sort), class: th_link_classes(sort))
+
+    content_tag(:th, link, opts)
+  end
+
+  def th_link_classes(sort)
+    return nil unless equivalent_sort_clauses?(@sort, sort)
+
+    "active #{descending_sort_clause?(@sort) ? 'desc' : 'asc'}"
+  end
+
+  def equivalent_sort_clauses?(first, last)
+    base_sort_clause(first) == base_sort_clause(last)
+  end
+
+  def base_sort_clause(sort_clause)
+    sort_clause.gsub(/ (ASC|DESC)/, "")
+  end
+
+  def descending_sort_clause?(sort_clause)
+    sort_clause.split(/, ?/).first.match(/DESC/)
+  end
+
+  def th_link_url_params(sort)
+    url_params         = {}
+    url_params[:scope] = @scope
+    url_params[:sort]  = sort == @sort ? reverse_sort : sort
+    url_params
+  end
+
+  def reverse_sort
+    parts = @sort.split(/, ?/)
+
+    if parts[0].match(/DESC/)
+      parts[0] = parts[0].gsub("DESC", "ASC")
+    elsif parts[0].match(/ASC/)
+      parts[0] = parts[0].gsub("ASC", "DESC")
+    else
+      parts[0] = "#{parts[0]} DESC"
+    end
+
+    parts.join(", ")
+  end
+
+  #############################################################################
+  # COLUMN CELLS.
+  #############################################################################
+
+  def vpc_cell(instance)
+    content_tag(:td, instance.viewable_post_count, class: "icon")
+  end
+
+  def nvpc_cell(instance)
+    content_tag(:td, instance.non_viewable_post_count, class: "icon")
   end
 end

@@ -145,6 +145,18 @@ table.admin {
   th {
     text-transform: uppercase;
     color: $armchair-smoke;
+
+    a.active {
+      @include underline-never();
+
+      &.asc {
+        @include up-arrow($color: $armchair-smoke);
+      }
+
+      &.desc {
+        @include down-arrow($color: $armchair-smoke);
+      }
+    }
   }
 }
 

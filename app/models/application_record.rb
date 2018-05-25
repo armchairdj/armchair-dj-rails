@@ -13,7 +13,27 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.default_admin_scope
-    self.admin_scopes.values.first
+    admin_scopes.values.first
+  end
+
+  def self.allowed_admin_scope?(scope)
+    admin_scopes.values.include? scope
+  end
+
+  def self.admin_sorts
+    { "Default" => "updated_at DESC" }
+  end
+
+  def self.default_admin_sort
+    admin_sorts.values.first
+  end
+
+  def self.allowed_admin_sort?(sort)
+    admin_sorts.values.map { |s| base_sort_clause(s) }.include? base_sort_clause(sort)
+  end
+
+  def self.base_sort_clause(sort)
+    sort.gsub(/ (ASC|DESC)/, "")
   end
 
   def self.find_by_sorted_ids(ids)

@@ -1,3 +1,17 @@
+a {
+  .svg-icon.admin-column-header {
+    @include svg() {
+      @include svg-path-fill($link-color);
+    }
+
+    &:hover {
+      @include svg() {
+        @include svg-path-fill($link-color-hover);
+      }
+    }
+  }
+}
+
 .svg-icon {
   @include standard-svg-icon() {
     @include svg-path-fill($info-color);
@@ -5,6 +19,7 @@
 
   &.admin-column-header {
     @include svg() {
+      margin-bottom: -2px;
       @include svg-path-fill($armchair-smoke);
     }
   }

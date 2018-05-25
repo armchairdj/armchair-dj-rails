@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class PublicPolicy < ApplicationPolicy
+  class Scope < Scope
+    def resolve
+      scope.for_site
+    end
+  end
+
   def index?
     true
   end
