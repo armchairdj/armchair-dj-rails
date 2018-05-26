@@ -20,27 +20,6 @@ class Post < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.admin_scopes
-    {
-      "Draft"      => :draft,
-      "Scheduled"  => :scheduled,
-      "Published"  => :published,
-      "Review"     => :review,
-      "Post"       => :standalone,
-      "All"        => :for_admin,
-    }
-  end
-
-  def self.admin_sorts
-    always  = "posts.alpha ASC"
-
-    super.merge({
-      "Title"   => "#{always}",
-      "Type"    => "media.name ASC, #{always}",
-      "Status"  => "posts.published_at DESC, posts.publish_on DESC, posts.updated_at DESC, #{always}",
-    })
-  end
-
   def self.publish_scheduled
     ready = self.scheduled_ready
 

@@ -162,4 +162,22 @@ private
       format.json { render :index }
     end
   end
+
+  def allowed_scopes
+    super.merge({
+      "For Posts" => :for_posts,
+      "For Works" => :for_works,
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
+    })
+  end
+
+  def allowed_sorts
+    always = "tags.name ASC"
+
+    super(always).merge({
+      "Name"     => "#{always}, categories.name ASC",
+      "Category" => "categories.name ASC, #{always}"
+    })
+  end
 end

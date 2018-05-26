@@ -6,12 +6,10 @@
   ]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :edit,
-  headline:    @title.first,
-  instance:    @work,
-  public_link: admin_public_work_link(@work)
-} %>
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @work,
+) %>
 
 <%= render partial: "form", locals: {
   work:       @work,

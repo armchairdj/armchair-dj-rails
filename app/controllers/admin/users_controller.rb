@@ -121,4 +121,25 @@ private
       :bio
     )
   end
+
+  def allowed_scopes
+    super.merge({
+      "Member"      => :member,
+      "Writer"      => :writer,
+      "Editor"      => :editor,
+      "Admin"       => :admin,
+      "Super Admin" => :super_admin
+    })
+  end
+
+  def allowed_sorts
+    always = "users.alpha ASC"
+
+    super(always).merge({
+      "Name"     => always,
+      "Username" => "users.username ASC, #{always}",
+      "Email"    => "users.email ASC, #{always}",
+      "Role"     => "users.role ASC, #{always}",
+    })
+  end
 end

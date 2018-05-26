@@ -12,17 +12,7 @@ RSpec.describe Tag, type: :model do
   end
 
   context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "All",
-          "For Posts",
-          "For Works",
-          "Published",
-          "Draft",
-        ])
-      end
-    end
+    # Nothing so far.
   end
 
   context "scope-related" do

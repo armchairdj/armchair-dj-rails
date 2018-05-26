@@ -36,24 +36,6 @@ class Work < ApplicationRecord
     includes(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
-  def self.admin_scopes
-    {
-      "All"       => :for_admin,
-      "Published" => :viewable,
-      "Draft"     => :non_viewable,
-    }
-  end
-
-  def self.admin_sorts
-    always = "works.title ASC"
-
-    super.merge(viewable_admin_sorts(always)).merge({
-      "Title"    => always,
-      "Creators" => "creators.name ASC, #{always}",
-      "Medium"   => "media.name ASC, #{always}",
-    })
-  end
-
   #############################################################################
   # SCOPES.
   #############################################################################

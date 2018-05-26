@@ -16,23 +16,6 @@ RSpec.describe Post, type: :model do
   end
 
   context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "Draft",
-          "Scheduled",
-          "Published",
-          "Review",
-          "Post",
-          "All",
-        ])
-      end
-    end
-
-    describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:draft) }
-    end
-
     describe "self#publish_scheduled" do
       let!(:current) { create(:standalone_post, :scheduled, publish_on: 1.day.from_now) }
       let!( :future) { create(:standalone_post, :scheduled) }

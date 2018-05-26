@@ -2,14 +2,13 @@
   @title = "Roles"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@roles)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@roles),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Role } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @roles.empty? %>
@@ -18,8 +17,8 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Role, "Medium" %>
-            <%= sortable_th Role, "Name"   %>
+            <%= sortable_th Role, "Medium", @sort %>
+            <%= sortable_th Role, "Name",   @sort %>
 
             <%= actions_th %>
           <% end %>

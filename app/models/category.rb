@@ -14,26 +14,6 @@ class Category < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.admin_scopes
-    {
-      "All"    => :for_admin,
-      "String" => :string,
-      "Year"   => :year,
-      "Multi"  => :multi,
-      "Single" => :single,
-    }
-  end
-
-  def self.admin_sorts
-    always = "categories.name ASC"
-
-    super.merge({
-      "Name"   => always,
-      "Format" => "categories.format ASC, #{always}",
-      "Multi?" => "categories.allow_multiple ASC, #{always}"
-    })
-  end
-
   #############################################################################
   # SCOPES.
   #############################################################################

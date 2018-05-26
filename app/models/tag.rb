@@ -16,25 +16,6 @@ class Tag < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.admin_scopes
-    {
-      "All"       => :for_admin,
-      "For Posts" => :for_posts,
-      "For Works" => :for_works,
-      "Published" => :viewable,
-      "Draft"     => :non_viewable,
-    }
-  end
-
-  def self.admin_sorts
-    always = "tags.name ASC"
-
-    super.merge(viewable_admin_sorts(always)).merge({
-      "Name"     => "#{always}, categories.name ASC",
-      "Category" => "categories.name ASC, #{always}"
-    })
-  end
-
   #############################################################################
   # SCOPES.
   #############################################################################
@@ -48,9 +29,9 @@ class Tag < ApplicationRecord
   scope        :string, -> { categorized.where(category: { format: Category.formats[:string] }) }
   scope          :year, -> { categorized.where(category: { format: Category.formats[:year  ] }) }
 
-  scope        :eager, -> { left_outer_joins(:category).includes(:category, :works, :posts) }
-  scope    :for_admin, -> { eager }
-  scope     :for_site, -> { eager.alpha }
+  scope         :eager, -> { left_outer_joins(:category).includes(:category, :works, :posts) }
+  scope     :for_admin, -> { eager }
+  scope      :for_site, -> { eager.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

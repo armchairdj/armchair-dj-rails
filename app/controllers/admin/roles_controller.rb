@@ -126,4 +126,13 @@ private
   def prepare_form
     @media = Medium.for_admin.alpha
   end
+
+  def allowed_sorts
+    always = "roles.name ASC"
+
+    super(always).merge({
+      "Name"   => "#{always}, media.name ASC",
+      "Medium" => "media.name ASC, #{always}",
+    })
+  end
 end

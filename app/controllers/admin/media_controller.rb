@@ -150,4 +150,19 @@ private
 
     @categories = Category.for_admin.alpha
   end
+
+  def allowed_scopes
+    super.merge({
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
+    })
+  end
+
+  def allowed_sorts
+    always = "media.name ASC"
+
+    super(always).merge({
+      "Name" => always
+    })
+  end
 end

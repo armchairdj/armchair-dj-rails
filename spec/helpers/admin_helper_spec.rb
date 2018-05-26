@@ -97,7 +97,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to receive(:polymorphic_path).with(instance)
 
         expect(helper.admin_public_link(instance)).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
+          '<a title="view work on site" class="admin public-view" href="path">public</a>'
         )
       end
 
@@ -108,7 +108,7 @@ RSpec.describe AdminHelper, type: :helper do
         expect(helper).to_not receive(:polymorphic_path)
 
         expect(helper.admin_public_link(instance, "/")).to eq(
-          '<a title="view work on site" class="admin public-view" target="_blank" href="/">public</a>'
+          '<a title="view work on site" class="admin public-view" href="/">public</a>'
         )
       end
 
@@ -123,7 +123,7 @@ RSpec.describe AdminHelper, type: :helper do
             expect(helper).to receive(:polymorphic_path).with(instance)
 
             expect(helper.admin_public_creator_link(instance)).to eq(
-              '<a title="view creator on site" class="admin public-view" target="_blank" href="path">public</a>'
+              '<a title="view creator on site" class="admin public-view" href="path">public</a>'
             )
           end
 
@@ -146,7 +146,7 @@ RSpec.describe AdminHelper, type: :helper do
             expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
 
             expect(helper.admin_public_post_link(instance)).to eq(
-              '<a title="view post on site" class="admin public-view" target="_blank" href="path">public</a>'
+              '<a title="view post on site" class="admin public-view" href="path">public</a>'
             )
           end
 
@@ -171,7 +171,7 @@ RSpec.describe AdminHelper, type: :helper do
             expect(helper).to receive(:polymorphic_path).with(instance)
 
             expect(helper.admin_public_work_link(instance)).to eq(
-              '<a title="view work on site" class="admin public-view" target="_blank" href="path">public</a>'
+              '<a title="view work on site" class="admin public-view" href="path">public</a>'
             )
           end
 

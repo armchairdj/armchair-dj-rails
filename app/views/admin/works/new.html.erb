@@ -2,10 +2,9 @@
   @title = "Create Work"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :new,
-  headline: @title
-} %>
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
 
 <% if @work.medium_id.blank? %>
   <%= render partial: "form_medium_only", locals: {

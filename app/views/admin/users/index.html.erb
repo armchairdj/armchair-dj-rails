@@ -2,14 +2,13 @@
   @title = "Users"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@users)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@users),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: User } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @users.empty? %>
@@ -18,13 +17,13 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th User, "Name"     %>
-            <%= sortable_th User, "Username" %>
-            <%= sortable_th User, "Email"    %>
-            <%= sortable_th User, "Role"     %>
+            <%= sortable_th User, "Name",     @sort %>
+            <%= sortable_th User, "Username", @sort %>
+            <%= sortable_th User, "Email",    @sort %>
+            <%= sortable_th User, "Role",     @sort %>
 
-            <%= vpc_th  User, "VPC"  %>
-            <%= nvpc_th User, "NVPC" %>
+            <%= vpc_th  User, "VPC",  @sort %>
+            <%= nvpc_th User, "NVPC", @sort %>
 
             <%= actions_th %>
           <% end %>

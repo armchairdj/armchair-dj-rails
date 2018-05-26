@@ -2,12 +2,10 @@
   @title = ["Update Post", post_title(@post)]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :edit,
-  headline:    @title.first,
-  instance:    @post,
-  public_link: admin_public_post_link(@post)
-} %>
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @post,
+) %>
 
 <%= render partial: "form", locals: {
   available_tabs: @available_tabs,

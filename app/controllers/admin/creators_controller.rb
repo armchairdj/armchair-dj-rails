@@ -169,4 +169,21 @@ private
     @available_members    = Creator.available_members
     @available_groups     = Creator.available_groups
   end
+
+  def allowed_scopes
+    super.merge({
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
+    })
+  end
+
+  def allowed_sorts
+    always = "creators.name ASC"
+
+    super(always).merge({
+      "Name"       => always,
+      "Primary"    => "creators.primary ASC, #{always}",
+      "Individual" => "creators.individual ASC, #{always}"
+    })
+  end
 end

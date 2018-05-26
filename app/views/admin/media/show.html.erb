@@ -2,12 +2,10 @@
   @title = ["View Medium", @medium.name]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :show,
-  headline:    @title.first,
-  instance:    @medium,
-  public_link: admin_public_medium_link(@medium)
-} %>
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @medium,
+) %>
 
 <%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>

@@ -2,14 +2,13 @@
   @title = "Categories"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@categories)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@categories),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Category } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @categories.empty? %>
@@ -18,9 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Category, "Name"   %>
-            <%= sortable_th Category, "Format" %>
-            <%= sortable_th Category, "Multi?" %>
+            <%= sortable_th Category, "Name",   @sort %>
+            <%= sortable_th Category, "Format", @sort %>
+            <%= sortable_th Category, "Multi?", @sort %>
 
             <%= actions_th %>
           <% end %>

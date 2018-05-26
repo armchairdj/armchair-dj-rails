@@ -1,9 +1,0 @@
-<%= content_tag(:ul, class: "tabs") do %>
-  <% model.send(:admin_scopes).each do |scope_label, scope| %>
-    <% if @scope == scope %>
-      <%= content_tag(:li, content_tag(:span, scope_label, class: "tab-active")) %>
-    <% else %>
-      <%= content_tag(:li, link_to(scope_label, polymorphic_path([:admin, model], scope: scope))) %>
-    <% end %>
-  <% end %>
-<% end %>

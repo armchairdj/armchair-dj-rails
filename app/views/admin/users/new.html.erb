@@ -2,9 +2,8 @@
   @title = "Create User"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :new,
-  headline: @title
-} %>
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
 
 <%= render partial: "form", locals: { user: @user } %>

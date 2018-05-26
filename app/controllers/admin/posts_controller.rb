@@ -272,4 +272,24 @@ private
       end
     end
   end
+
+  def allowed_scopes
+    super.reverse_merge({
+      "Draft"      => :draft,
+      "Scheduled"  => :scheduled,
+      "Published"  => :published,
+      "Review"     => :review,
+      "Post"       => :standalone,
+    })
+  end
+
+  def allowed_sorts
+    always  = "posts.alpha ASC"
+
+    super(always).merge({
+      "Title"   => "#{always}",
+      "Type"    => "media.name ASC, #{always}",
+      "Status"  => "posts.published_at DESC, posts.publish_on DESC, posts.updated_at DESC, #{always}",
+    })
+  end
 end

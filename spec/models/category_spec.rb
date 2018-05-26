@@ -10,17 +10,7 @@ RSpec.describe Category, type: :model do
   end
 
   context "class" do
-    describe "self#admin_scopes" do
-      specify "keys are short tab names" do
-        expect(described_class.admin_scopes.keys).to eq([
-          "All",
-          "String",
-          "Year",
-          "Multi",
-          "Single",
-        ])
-      end
-    end
+    # Nothing so far.
   end
 
   context "scope-related" do

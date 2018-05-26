@@ -2,12 +2,10 @@
   @title = ["View Post", post_title(@post)]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :show,
-  headline:    @title.first,
-  instance:    @post,
-  public_link: admin_public_post_link(@post)
-} %>
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @post,
+) %>
 
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>

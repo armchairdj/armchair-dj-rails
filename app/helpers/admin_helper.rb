@@ -63,16 +63,6 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin list")
   end
 
-  def admin_public_link(instance, path = nil)
-    path ||= polymorphic_path(instance)
-
-    title = "view #{instance.model_name.singular} on site"
-    desc  = "public view icon"
-    icon  = "link-intact"
-
-    admin_link_to(icon, path, title, desc, class: "admin public-view", target: "_blank")
-  end
-
   def admin_update_link(instance)
     path  = edit_polymorphic_path([:admin, instance])
     title = "update #{instance.model_name.singular}"
@@ -95,10 +85,31 @@ module AdminHelper
   # PUBLIC LINKS.
   #############################################################################
 
-  def admin_public_category_link(category)
-    return unless category.viewable?
+  def admin_public_link_for(instance)
+    case instance.model_name
+    when "Creator"
+      admin_public_creator_link(instance)
+    when "Medium"
+      admin_public_medium_link(instance)
+    when "Post"
+      admin_public_post_link(instance)
+    when "Tag"
+      admin_public_tag_link(instance)
+    when "User"
+      admin_public_user_link(instance)
+    when "Work"
+      admin_public_work_link(instance)
+    end
+  end
 
-    admin_public_link(category)
+  def admin_public_link(instance, path = nil)
+    path ||= polymorphic_path(instance)
+
+    title = "view #{instance.model_name.singular} on site"
+    desc  = "public view icon"
+    icon  = "link-intact"
+
+    admin_link_to(icon, path, title, desc, class: "admin public-view")
   end
 
   def admin_public_creator_link(creator)
@@ -138,6 +149,78 @@ module AdminHelper
   end
 
   #############################################################################
+  # ACTION LINKS.
+  #############################################################################
+
+  # TODO pundit
+  def admin_header(model_class, action, **opts)
+    links  = admin_header_links(model_class, action, opts.delete(:instance))
+    pieces = opts.slice(:h4, :h1, :h2, :h3).map { |k, v| content_tag(k, v) }
+    pieces << content_tag(:div, links, class: "actions")
+
+    content_tag(:header, pieces.join.html_safe, class: "admin")
+  end
+
+  def admin_header_links(model_class, action, instance = nil)
+    links = case action
+    when :index
+      [
+        admin_create_link(    model_class)
+      ]
+    when :new
+      [
+        admin_list_link(      model_class)
+      ]
+    when :edit
+      [
+        admin_public_link_for(   instance),
+        admin_view_link(         instance),
+        admin_destroy_link(      instance),
+        admin_list_link(      model_class),
+      ]
+    when :show
+      [
+        admin_public_link_for(   instance),
+        admin_update_link(       instance),
+        admin_destroy_link(      instance),
+        admin_list_link(      model_class),
+      ]
+    end
+
+    links.join.html_safe
+  end
+
+  # TODO pundit
+  def admin_actions(instance)
+    links = [
+      admin_public_link_for(instance),
+      admin_view_link(      instance),
+      admin_update_link(    instance),
+      admin_destroy_link(   instance)
+    ].compact.join.html_safe
+
+    content_tag(:td, links, class: "actions")
+  end
+
+  #############################################################################
+  # INDEX TABS.
+  #############################################################################
+
+  def admin_index_tabs(current_scope, model_class)
+    tabs = allowed_scopes.map do |scope_label, scope|
+      content = if scope == current_scope
+        content_tag(:span, scope_label, class: "tab-active")
+      else
+        link_to(scope_label, polymorphic_path([:admin, model_class], scope: scope))
+      end
+
+      content_tag(:li, content)
+    end
+
+    content_tag(:ul, tabs.join.html_safe, class: "tabs")
+  end
+
+  #############################################################################
   # COLUMN HEADERS.
   #############################################################################
 
@@ -149,36 +232,38 @@ module AdminHelper
     content_tag(:th, "Actions", class: "actions")
   end
 
-  def vpc_th(model, key)
+  def vpc_th(model, key, current_sort)
     icon = admin_column_icon("lock-unlocked", "Public Post Count", "unlocked icon")
 
-    sortable_th(model, key, class: "icon", text: icon)
+    sortable_th(model, key, current_sort, class: "icon", text: icon)
   end
 
-  def post_status_th
-    icon = admin_column_icon("eye", "Post Status", "eye icon")
-
-    sortable_th(Post, "Status", class: "icon", text: icon)
-  end
-
-  def nvpc_th(model, key)
+  def nvpc_th(model, key, current_sort)
     icon = admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
 
-    sortable_th(model, key, class: "icon", text: icon)
+    sortable_th(model, key, current_sort, class: "icon", text: icon)
   end
 
-  def sortable_th(model, key, **opts)
-    sort = model.admin_sorts[key]
-    text = opts.delete(:text) || key
-    link = link_to(content_tag(:span, text), th_link_url_params(sort), class: th_link_classes(sort))
+  def post_status_th(current_sort)
+    icon  = admin_column_icon("eye", "Post Status", "eye icon")
+    model = Post
+    key   = "Status"
+
+    sortable_th(model, key, current_sort, class: "icon", text: icon)
+  end
+
+  def sortable_th(model, key, current_sort, **opts)
+    sort = allowed_sorts[key]
+    text = content_tag(:span, opts.delete(:text) || key)
+    link = link_to(text, th_link_url_params(sort, current_sort), class: th_link_classes(sort, current_sort))
 
     content_tag(:th, link, opts)
   end
 
-  def th_link_classes(sort)
-    return nil unless equivalent_sort_clauses?(@sort, sort)
+  def th_link_classes(sort, current_sort)
+    return nil unless equivalent_sort_clauses?(current_sort, sort)
 
-    "active #{descending_sort_clause?(@sort) ? 'desc' : 'asc'}"
+    "active #{descending_sort_clause?(current_sort) ? 'desc' : 'asc'}"
   end
 
   def equivalent_sort_clauses?(first, last)
@@ -194,15 +279,15 @@ module AdminHelper
     sort_clause.split(/, ?/).first.match(/DESC/)
   end
 
-  def th_link_url_params(sort)
+  def th_link_url_params(sort, current_sort)
     url_params         = {}
     url_params[:scope] = @scope
-    url_params[:sort]  = sort == @sort ? reverse_sort : sort
+    url_params[:sort ] = sort == current_sort ? reverse_sort(current_sort) : sort
     url_params
   end
 
-  def reverse_sort
-    parts = @sort.split(/, ?/)
+  def reverse_sort(current_sort)
+    parts = current_sort.split(/, ?/)
 
     if parts[0].match(/DESC/)
       parts[0] = parts[0].gsub("DESC", "ASC")

@@ -2,14 +2,13 @@
   @title = "Media"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@media)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@media),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Medium } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @media.empty? %>
@@ -18,10 +17,10 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Medium, "Name" %>
+            <%= sortable_th Medium, "Name", @sort %>
 
-            <%= vpc_th  Medium, "VPC"  %>
-            <%= nvpc_th Medium, "NVPC" %>
+            <%= vpc_th  Medium, "VPC",  @sort %>
+            <%= nvpc_th Medium, "NVPC", @sort %>
 
             <%= actions_th %>
           <% end %>

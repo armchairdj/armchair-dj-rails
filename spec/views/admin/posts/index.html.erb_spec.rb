@@ -14,7 +14,7 @@ RSpec.describe "admin/posts/index", type: :view do
 
     @model_class = assign(:model_name, Post)
     @scope       = assign(:scope, :for_admin)
-    @sort        = assign(:sort, @model_class.default_admin_sort)
+    @sort        = assign(:sort, @model_class.default_sort)
     @posts       = assign(:posts, Post.for_admin.page(1))
   end
 

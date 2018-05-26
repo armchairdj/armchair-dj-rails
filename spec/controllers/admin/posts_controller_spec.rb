@@ -1055,4 +1055,23 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
     end
   end
+
+  context "helpers" do
+    describe "#allowed_scopes" do
+      subject { described_class.new.send(:allowed_scopes) }
+
+      specify "keys are short tab names" do
+        expect(subject.keys).to eq([
+          "Draft",
+          "Scheduled",
+          "Published",
+          "Review",
+          "Post",
+          "All",
+        ])
+      end
+    end
+
+    pending "allowed_sorts"
+  end
 end

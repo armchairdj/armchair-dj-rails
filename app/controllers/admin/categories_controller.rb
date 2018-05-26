@@ -114,4 +114,23 @@ private
       :allow_multiple
     )
   end
+
+  def allowed_scopes
+    super.merge({
+      "String" => :string,
+      "Year"   => :year,
+      "Multi"  => :multi,
+      "Single" => :single,
+    })
+  end
+
+  def allowed_sorts
+    always = "categories.name ASC"
+
+    super(always).merge({
+      "Name"   => always,
+      "Format" => "categories.format ASC, #{always}",
+      "Multi?" => "categories.allow_multiple ASC, #{always}"
+    })
+  end
 end

@@ -181,4 +181,21 @@ private
       format.json { render json: @work.errors, status: :unprocessable_entity }
     end
   end
+
+  def allowed_scopes
+    super.merge({
+      "Published" => :viewable,
+      "Draft"     => :non_viewable,
+    })
+  end
+
+  def allowed_sorts
+    always = "works.title ASC"
+
+    super(always).merge({
+      "Title"    => always,
+      "Creators" => "creators.name ASC, #{always}",
+      "Medium"   => "media.name ASC, #{always}",
+    })
+  end
 end

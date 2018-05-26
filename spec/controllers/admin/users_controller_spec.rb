@@ -318,4 +318,23 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
   end
+
+  context "helpers" do
+    describe "#allowed_scopes" do
+      subject { described_class.new.send(:allowed_scopes) }
+
+      specify "keys are short tab names" do
+        expect(subject.keys).to eq([
+          "All",
+          "Member",
+          "Writer",
+          "Editor",
+          "Admin",
+          "Super Admin"
+        ])
+      end
+    end
+
+    pending "allowed_sorts"
+  end
 end

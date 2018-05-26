@@ -8,7 +8,7 @@ RSpec.describe "admin/categories/index", type: :view do
 
     @model_class = assign(:model_name, Category)
     @scope       = assign(:scope, :for_admin)
-    @sort        = assign(:sort, @model_class.default_admin_sort)
+    @sort        = assign(:sort, @model_class.default_sort)
     @categories  = assign(:categories, Category.for_admin.page(1))
   end
 

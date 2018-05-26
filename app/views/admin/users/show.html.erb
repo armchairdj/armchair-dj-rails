@@ -2,12 +2,10 @@
   @title = ["View User", @user.display_name ]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :show,
-  headline:    @title.first,
-  instance:    @user,
-  public_link: admin_public_user_link(@user)
-} %>
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @user,
+) %>
 
 <%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>

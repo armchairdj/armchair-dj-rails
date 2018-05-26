@@ -2,14 +2,13 @@
   @title = "Works"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@works)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@works),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Work } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @works.empty? %>
@@ -18,12 +17,12 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Work, "Medium"   %>
-            <%= sortable_th Work, "Title"    %>
-            <%= sortable_th Work, "Creators" %>
+            <%= sortable_th Work, "Medium",   @sort %>
+            <%= sortable_th Work, "Title",    @sort %>
+            <%= sortable_th Work, "Creators", @sort %>
 
-            <%= vpc_th  Work, "VPC"  %>
-            <%= nvpc_th Work, "NVPC" %>
+            <%= vpc_th  Work, "VPC",  @sort %>
+            <%= nvpc_th Work, "NVPC", @sort %>
 
             <%= actions_th %>
           <% end %>
@@ -39,12 +38,7 @@
               <%= vpc_cell( work) %>
               <%= nvpc_cell(work) %>
 
-              <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_work_link(work) %>
-                <%= admin_view_link(       work) %>
-                <%= admin_update_link(     work) %>
-                <%= admin_destroy_link(    work) %>
-              <% end %>
+              <%= admin_actions(work) %>
             <% end %>
           <% end %>
         <% end %>

@@ -2,12 +2,10 @@
   @title = ["Update Medium", @medium.name]
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:      :edit,
-  headline:    @title.first,
-  instance:    @medium,
-  public_link: admin_public_medium_link(@medium)
-} %>
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @medium,
+) %>
 
 <%= render partial: "form", locals: {
   medium:     @medium,

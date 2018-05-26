@@ -12,24 +12,7 @@ RSpec.describe User, type: :model do
   end
 
   context "class" do
-    describe "self#admin_scopes" do
-      subject { described_class.admin_scopes.keys }
-
-      specify "keys are short tab names" do
-        is_expected.to contain_exactly(
-          "All",
-          "Member",
-          "Writer",
-          "Editor",
-          "Admin",
-          "Super Admin"
-        )
-      end
-    end
-
-    describe "self#default_admin_scope" do
-      specify { expect(described_class.default_admin_scope).to eq(:for_admin) }
-    end
+    # Nothing so far.
   end
 
   context "scope-related" do

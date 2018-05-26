@@ -2,14 +2,13 @@
   @title = "Creators"
 %>
 
-<%= render partial: "admin/shared/admin_header", locals: {
-  action:   :index,
-  headline: @title,
-  prehead:  total_count_for(@creators)
-} %>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@creators),
+  h1: @title
+) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "admin/shared/index_tabs", locals: { model: Creator } %>
+  <%= admin_index_tabs(@scope, @model_class) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @creators.empty? %>
@@ -18,12 +17,12 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Creator, "Name"       %>
-            <%= sortable_th Creator, "Primary"    %>
-            <%= sortable_th Creator, "Individual" %>
+            <%= sortable_th Creator, "Name",       @sort %>
+            <%= sortable_th Creator, "Primary",    @sort %>
+            <%= sortable_th Creator, "Individual", @sort %>
 
-            <%= vpc_th  Creator, "VPC"  %>
-            <%= nvpc_th Creator, "NVPC" %>
+            <%= vpc_th  Creator, "VPC",  @sort %>
+            <%= nvpc_th Creator, "NVPC", @sort %>
 
             <%= actions_th %>
           <% end %>

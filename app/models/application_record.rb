@@ -8,35 +8,6 @@ class ApplicationRecord < ActiveRecord::Base
   include AtomicallyValidatable
   include Enumable
 
-  def self.admin_scopes
-    { "All" => :for_admin }
-  end
-
-  def self.default_admin_scope
-    admin_scopes.values.first
-  end
-
-  def self.allowed_admin_scope?(scope)
-    admin_scopes.values.include? scope
-  end
-
-  def self.admin_sorts
-    { "Default" => "#{model_name.plural}.updated_at DESC" }
-  end
-
-  def self.default_admin_sort
-    admin_sorts.values.first
-  end
-
-  def self.allowed_admin_sort?(sort)
-    admin_sorts.values.map { |s| base_sort_clause(s) }.include? base_sort_clause(sort)
-  end
-
-  # TODO get dry
-  def self.base_sort_clause(sort)
-    sort.gsub(/ (ASC|DESC)/, "")
-  end
-
   def self.find_by_sorted_ids(ids)
     return self.none unless ids.any?
 
