@@ -8,7 +8,7 @@
 ) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scope, @model_class) %>
+  <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @media.empty? %>
@@ -17,10 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Medium, "Name", @sort %>
-
-            <%= vpc_th  Medium, "VPC",  @sort %>
-            <%= nvpc_th Medium, "NVPC", @sort %>
+            <%= sortable_th @sorts, "Name" %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon %>
 
             <%= actions_th %>
           <% end %>
@@ -31,8 +30,8 @@
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, medium.name) %>
 
-              <%= vpc_cell( medium) %>
-              <%= nvpc_cell(medium) %>
+              <%= content_tag(:td, medium.viewable_post_count,     class: "icon") %>
+              <%= content_tag(:td, medium.non_viewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_medium_link(medium) %>

@@ -8,7 +8,7 @@
 ) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scope, @model_class) %>
+  <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @users.empty? %>
@@ -17,13 +17,12 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th User, "Name",     @sort %>
-            <%= sortable_th User, "Username", @sort %>
-            <%= sortable_th User, "Email",    @sort %>
-            <%= sortable_th User, "Role",     @sort %>
-
-            <%= vpc_th  User, "VPC",  @sort %>
-            <%= nvpc_th User, "NVPC", @sort %>
+            <%= sortable_th @sorts, "Name"     %>
+            <%= sortable_th @sorts, "Username" %>
+            <%= sortable_th @sorts, "Email"    %>
+            <%= sortable_th @sorts, "Role"     %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon %>
 
             <%= actions_th %>
           <% end %>
@@ -37,8 +36,8 @@
               <%= content_tag(:td, user.email       ) %>
               <%= content_tag(:td, user.human_role  ) %>
 
-              <%= vpc_cell( user) %>
-              <%= nvpc_cell(user) %>
+              <%= content_tag(:td, user.viewable_post_count,     class: "icon") %>
+              <%= content_tag(:td, user.non_viewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_user_link(user) %>

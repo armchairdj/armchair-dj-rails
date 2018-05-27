@@ -206,113 +206,51 @@ module AdminHelper
   # INDEX TABS.
   #############################################################################
 
-  def admin_index_tabs(current_scope, model_class)
-    tabs = allowed_scopes.map do |scope_label, scope|
-      content = if scope == current_scope
-        content_tag(:span, scope_label, class: "tab-active")
+  def admin_index_tabs(scopes)
+    tabs = scopes.map do |scope_name, props|
+      if props[:active?]
+        content_tag :li, content_tag(:span, scope_name, class: "tab-active")
       else
-        link_to(scope_label, polymorphic_path([:admin, model_class], scope: scope))
+        content_tag :li, link_to(scope_name, props[:url])
       end
-
-      content_tag(:li, content)
     end
 
     content_tag(:ul, tabs.join.html_safe, class: "tabs")
   end
 
   #############################################################################
-  # COLUMN HEADERS.
+  # TABLE ICONS.
   #############################################################################
 
   def admin_column_icon(icon, title, desc)
     svg_icon(icon, title: title, desc: desc, wrapper_class: "admin-column-header")
   end
 
+  def vpc_icon
+    admin_column_icon("lock-unlocked", "Public Post Count", "unlocked icon")
+  end
+
+  def nvpc_icon
+    admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
+  end
+
+  def post_status_icon
+    admin_column_icon("eye", "Post Status", "eye icon")
+  end
+
+  #############################################################################
+  # TABLES.
+  #############################################################################
+
   def actions_th
     content_tag(:th, "Actions", class: "actions")
   end
 
-  def vpc_th(model, key, current_sort)
-    icon = admin_column_icon("lock-unlocked", "Public Post Count", "unlocked icon")
+  def sortable_th(sorts, name, **opts)
+    props   = sorts[name]
+    text    = content_tag(:span, opts.delete(:text) || name)
+    classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
 
-    sortable_th(model, key, current_sort, class: "icon", text: icon)
-  end
-
-  def nvpc_th(model, key, current_sort)
-    icon = admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
-
-    sortable_th(model, key, current_sort, class: "icon", text: icon)
-  end
-
-  def post_status_th(current_sort)
-    icon  = admin_column_icon("eye", "Post Status", "eye icon")
-    model = Post
-    key   = "Status"
-
-    sortable_th(model, key, current_sort, class: "icon", text: icon)
-  end
-
-  def sortable_th(model, key, current_sort, **opts)
-    sort = allowed_sorts[key]
-    text = content_tag(:span, opts.delete(:text) || key)
-    link = link_to(text, th_link_url_params(sort, current_sort), class: th_link_classes(sort, current_sort))
-
-    content_tag(:th, link, opts)
-  end
-
-  def th_link_classes(sort, current_sort)
-    return nil unless equivalent_sort_clauses?(current_sort, sort)
-
-    "active #{descending_sort_clause?(current_sort) ? 'desc' : 'asc'}"
-  end
-
-  def equivalent_sort_clauses?(first, last)
-    base_sort_clause(first) == base_sort_clause(last)
-  end
-
-  # TODO get dry
-  def base_sort_clause(sort)
-    sort.gsub(/ (ASC|DESC)/, "")
-  end
-
-  def descending_sort_clause?(sort_clause)
-    sort_clause.split(/, ?/).first.match(/DESC/)
-  end
-
-  def th_link_url_params(sort, current_sort)
-    url_params         = {}
-    url_params[:scope] = @scope
-    url_params[:sort ] = sort == current_sort ? reverse_sort(current_sort) : sort
-    url_params
-  end
-
-  def reverse_sort(current_sort)
-    parts = current_sort.split(/, ?/)
-
-    if parts[0].match(/DESC/)
-      parts[0] = parts[0].gsub("DESC", "ASC")
-    elsif parts[0].match(/ASC/)
-      parts[0] = parts[0].gsub("ASC", "DESC")
-    else
-      parts[0] = "#{parts[0]} DESC"
-    end
-
-    parts.join(", ")
-  end
-
-  #############################################################################
-  # ICON CELLS.
-  #############################################################################
-
-  def vpc_cell(instance)
-    content_tag(:td, instance.viewable_post_count, class: "icon")
-  end
-
-  def nvpc_cell(instance)
-    content_tag(:td, instance.non_viewable_post_count, class: "icon")
-  end
-
-  def post_status_cell(post)
-    content_tag(:td, post_status_icon(post), class: "icon")
+    content_tag(:th, link_to(text, props[:url], class: classes), opts)
   end
 end

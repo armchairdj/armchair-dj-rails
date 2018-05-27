@@ -8,7 +8,7 @@
 ) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scope, @model_class) %>
+  <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @categories.empty? %>
@@ -17,9 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Category, "Name",   @sort %>
-            <%= sortable_th Category, "Format", @sort %>
-            <%= sortable_th Category, "Multi?", @sort %>
+            <%= sortable_th @sorts, "Name"     %>
+            <%= sortable_th @sorts, "Category" %>
+            <%= sortable_th @sorts, "Multi?"   %>
 
             <%= actions_th %>
           <% end %>

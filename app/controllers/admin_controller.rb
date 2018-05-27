@@ -12,35 +12,42 @@ private
   end
 
   def scoped_and_sorted_collection
-    @scope = params[:scope].try(:to_sym) || default_scope
-    @sort  = params[:sort]               || default_sort
-    @page  = params[:page]
+    @dir   = params[:dir  ] == "DESC" ? "DESC" : "ASC"
+    @scope = params[:scope] || allowed_scopes.keys.first
+    @sort  = params[:sort ] || allowed_sorts.keys.first
+    @page  = params[:page ]
 
-    unless allowed_scope?(@scope)
+    unless allowed_scopes.keys.include?(@scope)
       raise Pundit::NotAuthorizedError, "Unknown scope param [#{@scope}]."
     end
 
-    unless allowed_sort?(@sort)
+    unless allowed_sorts.keys.include?(@sort)
       raise Pundit::NotAuthorizedError, "Unknown sort param [#{@sort}]."
     end
 
-    policy_scope(model_class).send(@scope).order(@sort).page(@page)
+    @scopes = scopes_for_view
+    @sorts  = sorts_for_view
+
+    policy_scope(model_class).send(current_scope_value).order(current_sort_value).page(@page)
   end
 
   def allowed_scopes
     { "All" => :for_admin }
   end
 
-  helper_method :allowed_scopes
-
-  def default_scope
-    allowed_scopes.values.first
+  def scopes_for_view
+    allowed_scopes.keys.map do |key|
+      hash      = {}
+      hash[key] = {
+        :active? => key == @scope,
+        :url     => polymorphic_path([:admin, model_class], scope: key)
+      }
+      hash
+    end
   end
 
-  helper_method :default_scope
-
-  def allowed_scope?(scope)
-    allowed_scopes.values.include? scope
+  def current_scope_value
+    allowed_scopes[@scope]
   end
 
   def allowed_sorts(extra = nil)
@@ -54,17 +61,37 @@ private
     })
   end
 
-  helper_method :allowed_sorts
-
-  def default_sort
-    allowed_sorts.values.first
+  def sorts_for_view
+    allowed_sorts.keys.map do |key|
+      active    = key == @sort
+      dir       = active ? (@dir = "ASC" ? "DESC" : "ASC") : "ASC"
+      hash      = {}
+      hash[key] = {
+        :active? => active,
+        :desc?   => dir == "DESC",
+        :url     => polymorphic_path([:admin, model_class], scope: @scope, sort: key, dir: dir)
+      }
+      hash
+    end
   end
 
-  helper_method :default_sort
+  def current_sort_value
+    clause = allowed_sorts[@sort]
 
-  def allowed_sort?(sort)
-    allowed = allowed_sorts.values.map { |s| helpers.base_sort_clause(s) }
+    @dir == "DESC" ? reverse_sort(clause) : clause
+  end
 
-    allowed.include? helpers.base_sort_clause(sort)
+  def reverse_sort(clause)
+    parts = clause.split(/, ?/)
+
+    if parts[0].match(/DESC/)
+      parts[0] = parts[0].gsub("DESC", "ASC")
+    elsif parts[0].match(/ASC/)
+      parts[0] = parts[0].gsub("ASC", "DESC")
+    else
+      parts[0] = "#{parts[0]} DESC"
+    end
+
+    parts.join(", ")
   end
 end

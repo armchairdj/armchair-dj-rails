@@ -8,7 +8,7 @@
 ) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scope, @model_class) %>
+  <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @posts.empty? %>
@@ -17,9 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Post, "Title", @sort %>
-            <%= post_status_th             @sort %>
-            <%= sortable_th Post, "Type",  @sort, class: "actions" %>
+            <%= sortable_th @sorts  "Status", text: post_status_icon, class: "actions" %>
+            <%= sortable_th @sorts, "Title" %>
+            <%= sortable_th @sorts, "Type"  %>
 
             <%= actions_th %>
           <% end %>
@@ -28,9 +28,9 @@
         <%= content_tag(:tbody) do %>
           <% @posts.each do |post| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post_title(post)) %>
-              <%= post_status_cell(post) %>
-              <%= content_tag(:td, post.type, class: "actions") %>
+              <%= content_tag(:td, post_status_icon(post), class: "icon"   ) %>
+              <%= content_tag(:td, post_title(post)                        ) %>
+              <%= content_tag(:td, post.type,              class: "actions") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_post_link(post) %>

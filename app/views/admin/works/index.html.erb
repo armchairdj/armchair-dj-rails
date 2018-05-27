@@ -8,7 +8,7 @@
 ) %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scope, @model_class) %>
+  <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
     <% if @works.empty? %>
@@ -17,12 +17,11 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th Work, "Medium",   @sort %>
-            <%= sortable_th Work, "Title",    @sort %>
-            <%= sortable_th Work, "Creators", @sort %>
-
-            <%= vpc_th  Work, "VPC",  @sort %>
-            <%= nvpc_th Work, "NVPC", @sort %>
+            <%= sortable_th @sorts, "Medium"   %>
+            <%= sortable_th @sorts, "Title"    %>
+            <%= sortable_th @sorts, "Creators" %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon %>
 
             <%= actions_th %>
           <% end %>
@@ -35,8 +34,8 @@
               <%= content_tag(:td, work.title           ) %>
               <%= content_tag(:td, work.display_creators) %>
 
-              <%= vpc_cell( work) %>
-              <%= nvpc_cell(work) %>
+              <%= content_tag(:td, work.viewable_post_count,     class: "icon") %>
+              <%= content_tag(:td, work.non_viewable_post_count, class: "icon") %>
 
               <%= admin_actions(work) %>
             <% end %>
