@@ -17,9 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts  "Status", text: post_status_icon, class: "actions" %>
-            <%= sortable_th @sorts, "Title" %>
-            <%= sortable_th @sorts, "Type"  %>
+            <%= sortable_th @sorts, "Status", text: viewable_icon, class: "icon"   %>
+            <%= sortable_th @sorts, "Title"                                        %>
+            <%= sortable_th @sorts, "Type",                        class: "actions"%>
 
             <%= actions_th %>
           <% end %>

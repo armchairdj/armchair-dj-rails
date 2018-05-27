@@ -234,7 +234,7 @@ module AdminHelper
     admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
   end
 
-  def post_status_icon
+  def viewable_icon
     admin_column_icon("eye", "Post Status", "eye icon")
   end
 

@@ -19,8 +19,8 @@
           <%= content_tag(:tr) do %>
             <%= sortable_th @sorts, "Name"     %>
             <%= sortable_th @sorts, "Category" %>
-            <%= sortable_th @sorts, "VPC",  text: vpc_icon  %>
-            <%= sortable_th @sorts, "NVPC", text: nvpc_icon %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon,  class: "icon"  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon, class: "icon" %>
 
             <%= actions_th %>
           <% end %>

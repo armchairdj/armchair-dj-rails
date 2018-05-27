@@ -16,7 +16,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders with one record because there has to be at least one admin" do
             get :index
 
@@ -25,45 +25,45 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end
 
-        context ":member scope" do
+        context "Member scope" do
           it "renders" do
-            get :index, params: { scope: "member" }
+            get :index, params: { scope: "Member" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
-        context ":writer scope" do
+        context "Writer scope" do
           it "renders" do
-            get :index, params: { scope: "writer" }
+            get :index, params: { scope: "Writer" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
-        context ":editor scope" do
+        context "Editor scope" do
           it "renders" do
-            get :index, params: { scope: "editor" }
+            get :index, params: { scope: "Editor" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
-        context ":admin scope" do
+        context "Admin scope" do
           it "renders with one record because we are logged in as admin" do
-            get :index, params: { scope: "admin" }
+            get :index, params: { scope: "Admin" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(1)
           end
         end
 
-        context ":super_admin scope" do
+        context "Super Admin scope" do
           it "renders" do
-            get :index, params: { scope: "super_admin" }
+            get :index, params: { scope: "Super Admin" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
@@ -72,7 +72,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
              4.times { create(:member     ) }
              4.times { create(:writer     ) }
@@ -96,105 +96,114 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end
 
-        context ":member scope" do
+        context "Member scope" do
           before(:each) do
             21.times { create(:member) }
           end
 
           it "renders" do
-            get :index, params: { scope: "member" }
+            get :index, params: { scope: "Member" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "member", page: "2" }
+            get :index, params: { scope: "Member", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
-        context ":writer scope" do
+        context "Writer scope" do
           before(:each) do
             21.times { create(:writer) }
           end
 
           it "renders" do
-            get :index, params: { scope: "writer" }
+            get :index, params: { scope: "Writer" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "writer", page: "2" }
+            get :index, params: { scope: "Writer", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
-        context ":editor scope" do
+        context "Editor scope" do
           before(:each) do
             21.times { create(:editor) }
           end
 
           it "renders" do
-            get :index, params: { scope: "editor" }
+            get :index, params: { scope: "Editor" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "editor", page: "2" }
+            get :index, params: { scope: "Editor", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
-        context ":admin scope" do
+        context "Admin scope" do
           before(:each) do
             20.times { create(:admin) }
           end
 
           it "renders" do
-            get :index, params: { scope: "admin" }
+            get :index, params: { scope: "Admin" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "admin", page: "2" }
+            get :index, params: { scope: "Admin", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
 
-        context ":super_admin scope" do
+        context "Super Admin scope" do
           before(:each) do
             21.times { create(:super_admin) }
           end
 
           it "renders" do
-            get :index, params: { scope: "super_admin" }
+            get :index, params: { scope: "Super Admin" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "super_admin", page: "2" }
+            get :index, params: { scope: "Super Admin", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
+      end
+
+      context "sorts" do
+        pending "Name"
+        pending "Username"
+        pending "Email"
+        pending "Role"
+        pending "VPC"
+        pending "NVPC"
       end
     end
 

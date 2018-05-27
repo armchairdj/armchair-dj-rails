@@ -16,7 +16,7 @@ RSpec.describe Admin::CategoriesController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -27,7 +27,7 @@ RSpec.describe Admin::CategoriesController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             21.times { create(:minimal_category) }
           end
@@ -46,6 +46,19 @@ RSpec.describe Admin::CategoriesController, type: :controller do
             expect(assigns(:categories)).to paginate(1).of_total_records(21)
           end
         end
+      end
+
+      context "scopes" do
+        pending "String"
+        pending "Year"
+        pending "Multi"
+        pending "Single"
+      end
+
+      context "sorts" do
+        pending "Name"
+        pending "Format"
+        pending "Multi"?
       end
     end
 

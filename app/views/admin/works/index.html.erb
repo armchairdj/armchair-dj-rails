@@ -20,8 +20,8 @@
             <%= sortable_th @sorts, "Medium"   %>
             <%= sortable_th @sorts, "Title"    %>
             <%= sortable_th @sorts, "Creators" %>
-            <%= sortable_th @sorts, "VPC",  text: vpc_icon  %>
-            <%= sortable_th @sorts, "NVPC", text: nvpc_icon %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon,  class: "icon"  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon, class: "icon" %>
 
             <%= actions_th %>
           <% end %>

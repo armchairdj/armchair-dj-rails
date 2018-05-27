@@ -25,8 +25,8 @@ private
       raise Pundit::NotAuthorizedError, "Unknown sort param [#{@sort}]."
     end
 
-    @scopes = scopes_for_view
-    @sorts  = sorts_for_view
+    @scopes = scopes_for_view(@scope)
+    @sorts  = sorts_for_view(@scope, @sort, @dir)
 
     policy_scope(model_class).send(current_scope_value).order(current_sort_value).page(@page)
   end
@@ -46,24 +46,24 @@ private
     })
   end
 
-  def scopes_for_view
+  def scopes_for_view(scope)
     allowed_scopes.keys.each.inject({}) do |memo, (key)|
       memo[key] = {
-        :active? => key == @scope,
+        :active? => key == scope,
         :url     => polymorphic_path([:admin, model_class], scope: key)
       }
       memo
     end
   end
 
-  def sorts_for_view
+  def sorts_for_view(scope, sort, dir)
     allowed_sorts.keys.each.inject({}) do |memo, (key)|
-      active    = key == @sort
-      dir       = active ? reverse_dir(@dir) : "ASC"
+      active    = key == sort
+      link_dir  = active && dir == "ASC" ? "DESC" : "ASC"
       memo[key] = {
         :active? => active,
         :desc?   => dir == "DESC",
-        :url     => polymorphic_path([:admin, model_class], scope: @scope, sort: key, dir: dir)
+        :url     => polymorphic_path([:admin, model_class], scope: scope, sort: key, dir: link_dir)
       }
       memo
     end
@@ -91,9 +91,5 @@ private
     end
 
     parts.join(", ")
-  end
-
-  def reverse_dir(dir)
-    dir == "ASC" ? "DESC" : "ASC"
   end
 end

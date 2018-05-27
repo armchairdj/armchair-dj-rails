@@ -18,7 +18,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -28,9 +28,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context ":viewable scope" do
+        context "Published scope" do
           it "renders" do
-            get :index, params: { scope: "viewable" }
+            get :index, params: { scope: "Published" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -38,9 +38,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context ":non_viewable scope" do
+        context "Draft scope" do
           it "renders" do
-            get :index, params: { scope: "non_viewable" }
+            get :index, params: { scope: "Draft" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -50,7 +50,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             10.times { create(:review, :published) }
             11.times { create(:minimal_work) }
@@ -73,13 +73,13 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context ":viewable scope" do
+        context "Published scope" do
           before(:each) do
             21.times { create(:review, :published) }
           end
 
           it "renders" do
-            get :index, params: { scope: "viewable" }
+            get :index, params: { scope: "Published" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -87,7 +87,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
 
           it "renders second page" do
-            get :index, params: { scope: "viewable", page: "2" }
+            get :index, params: { scope: "Published", page: "2" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -95,13 +95,13 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context ":non_viewable scope" do
+        context "Draft scope" do
           before(:each) do
             21.times { create(:minimal_work) }
           end
 
           it "renders" do
-            get :index, params: { scope: "non_viewable" }
+            get :index, params: { scope: "Draft" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -109,13 +109,21 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
 
           it "renders second page" do
-            get :index, params: { scope: "non_viewable", page: "2" }
+            get :index, params: { scope: "Draft", page: "2" }
 
             is_expected.to successfully_render("admin/works/index")
 
             expect(assigns(:works)).to paginate(1).of_total_records(21)
           end
         end
+      end
+
+      context "sorts" do
+        pending "Title"
+        pending "Creators"
+        pending "Medium"
+        pending "VPC"
+        pending "NVPC"
       end
     end
 

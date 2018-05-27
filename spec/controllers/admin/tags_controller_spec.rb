@@ -16,7 +16,7 @@ RSpec.describe Admin::TagsController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -26,9 +26,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context ":for_posts scope" do
+        context "For Posts scope" do
           it "renders" do
-            get :index, params: { scope: "for_posts" }
+            get :index, params: { scope: "For Posts" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -36,9 +36,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context ":for_works scope" do
+        context "For Works scope" do
           it "renders" do
-            get :index, params: { scope: "for_works" }
+            get :index, params: { scope: "For Works" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -46,9 +46,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context ":viewable scope" do
+        context "Published scope" do
           it "renders" do
-            get :index, params: { scope: "viewable" }
+            get :index, params: { scope: "Published" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -56,9 +56,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context ":non_viewable scope" do
+        context "Draft scope" do
           it "renders" do
-            get :index, params: { scope: "non_viewable" }
+            get :index, params: { scope: "Draft" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -68,7 +68,7 @@ RSpec.describe Admin::TagsController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             21.times { create(:minimal_tag) }
           end
@@ -90,10 +90,17 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        pending ":for_posts scope"
-        pending ":for_works scope"
-        pending ":viewable scope"
-        pending ":non_viewable scope"
+        pending "For Posts scope"
+        pending "For Works scope"
+        pending "Published scope"
+        pending "Draft scope"
+      end
+
+      context "sorts" do
+        pending "Name"
+        pending "Category"
+        pending "VPC"
+        pending "NVPC"
       end
     end
 

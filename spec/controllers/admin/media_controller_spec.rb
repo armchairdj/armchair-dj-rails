@@ -16,7 +16,7 @@ RSpec.describe Admin::MediaController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -24,10 +24,13 @@ RSpec.describe Admin::MediaController, type: :controller do
             expect(assigns(:media)).to paginate(0).of_total_records(0)
           end
         end
+
+        pending "Published scope"
+        pending "Draft scope"
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             21.times { create(:minimal_medium) }
           end
@@ -46,6 +49,15 @@ RSpec.describe Admin::MediaController, type: :controller do
             expect(assigns(:media)).to paginate(1).of_total_records(21)
           end
         end
+
+        pending "Published scope"
+        pending "Draft scope"
+      end
+
+      context "sorts" do
+        pending "Name"
+        pending "VPC"
+        pending "NVPC"
       end
     end
 

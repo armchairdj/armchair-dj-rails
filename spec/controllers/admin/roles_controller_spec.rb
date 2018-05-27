@@ -16,7 +16,7 @@ RSpec.describe Admin::RolesController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -28,7 +28,7 @@ RSpec.describe Admin::RolesController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             21.times do
               medium = create(:medium_without_role)
@@ -53,6 +53,11 @@ RSpec.describe Admin::RolesController, type: :controller do
             expect(assigns(:roles)).to paginate(1).of_total_records(21)
           end
         end
+      end
+
+      context "sorts" do
+        pending "Name"
+        pending "Medium"
       end
     end
 

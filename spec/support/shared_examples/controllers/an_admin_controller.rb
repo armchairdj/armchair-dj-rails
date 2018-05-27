@@ -53,8 +53,6 @@ RSpec.shared_examples "an_admin_controller" do
       pending "#current_sort_value"
 
       pending "#reverse_sort"
-
-      pending "#reverse_dir"
     end
   end
 end

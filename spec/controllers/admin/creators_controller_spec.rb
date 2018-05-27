@@ -18,7 +18,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
     describe "GET #index" do
       context "without records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           it "renders" do
             get :index
 
@@ -27,18 +27,20 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           end
         end
 
-        context ":viewable scope" do
+        context "Published scope" do
           it "renders" do
-            get :index, params: { scope: "viewable" }
+            get :index, params: { scope: "Published" }
+
+            puts ">>", response.status
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
         end
 
-        context ":non_viewable scope" do
+        context "Draft scope" do
           it "renders" do
-            get :index, params: { scope: "non_viewable" }
+            get :index, params: { scope: "Draft" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
@@ -47,7 +49,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       end
 
       context "with records" do
-        context ":for_admin scope (default)" do
+        context "All scope (default)" do
           before(:each) do
             10.times { create(:review, :published) }
             11.times { create(:minimal_creator) }
@@ -68,44 +70,52 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           end
         end
 
-        context ":viewable scope" do
+        context "Published scope" do
           before(:each) do
             21.times { create(:review, :published) }
           end
 
           it "renders" do
-            get :index, params: { scope: "viewable" }
+            get :index, params: { scope: "Published" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "viewable", page: "2" }
+            get :index, params: { scope: "Published", page: "2" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
         end
 
-        context ":non_viewable scope" do
+        context "Draft scope" do
           before(:each) do
             21.times { create(:minimal_creator) }
           end
 
           it "renders" do
-            get :index, params: { scope: "non_viewable" }
+            get :index, params: { scope: "Draft" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "non_viewable", page: "2" }
+            get :index, params: { scope: "Draft", page: "2" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
+        end
+
+        context "sorts" do
+          pending "Name"
+          pending "Primary"
+          pending "Individual"
+          pending "VPC"
+          pending "NVPC"
         end
       end
     end

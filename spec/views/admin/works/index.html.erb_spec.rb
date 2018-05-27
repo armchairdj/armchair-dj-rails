@@ -3,15 +3,21 @@
 require "rails_helper"
 
 RSpec.describe "admin/works/index", type: :view do
+  let(:dummy) { Admin::WorksController.new }
+
   before(:each) do
     21.times do
       create(:stuffed_work, :with_published_post)
     end
 
+    allow(dummy).to receive(:polymorphic_path).and_return("/")
+
     @model_class = assign(:model_name, Work)
-    @scope       = assign(:scope, :for_admin)
-    @sort        = assign(:sort, "works.updated_at DESC")
-    @page        = assign(:page, 1)
+    @scope       = assign(:scope, "All")
+    @sort        = assign(:sort, "Default")
+    @dir         = assign(:dir, "ASC")
+    @scopes      = dummy.send(:scopes_for_view, @scope)
+    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
     @works       = assign(:works, Work.all.alpha.page(1))
   end
 
