@@ -58,7 +58,7 @@ RSpec.describe Admin::CategoriesController, type: :controller do
       context "sorts" do
         pending "Name"
         pending "Format"
-        pending "Multi"?
+        pending "Multi?"
       end
     end
 

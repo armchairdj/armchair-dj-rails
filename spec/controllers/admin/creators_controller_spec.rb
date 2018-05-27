@@ -31,8 +31,6 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           it "renders" do
             get :index, params: { scope: "Published" }
 
-            puts ">>", response.status
-
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
