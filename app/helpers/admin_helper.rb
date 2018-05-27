@@ -36,24 +36,6 @@ module AdminHelper
     link_to(svg, path, title: title, **opts)
   end
 
-  def admin_create_link(model)
-    path  = new_polymorphic_path([:admin, model])
-    title = "create #{model.model_name.singular}"
-    desc  = "create icon"
-    icon  = "plus"
-
-    admin_link_to(icon, path, title, desc, class: "admin create")
-  end
-
-  def admin_destroy_link(instance)
-    path  = polymorphic_path([:admin, instance])
-    title = "destroy #{instance.model_name.singular}"
-    desc  = "trash icon"
-    icon  = "trash"
-
-    admin_link_to(icon, path, title, desc, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")
-  end
-
   def admin_list_link(model)
     path  = polymorphic_path([:admin, model])
     title = "back to #{model.model_name.plural} list"
@@ -61,6 +43,24 @@ module AdminHelper
     icon  = "list"
 
     admin_link_to(icon, path, title, desc, class: "admin list")
+  end
+
+  def admin_view_link(instance)
+    path  = polymorphic_path([:admin, instance])
+    title = "view #{instance.model_name.singular}"
+    desc  = "view icon"
+    icon  = "eye"
+
+    admin_link_to(icon, path, title, desc, class: "admin view")
+  end
+
+  def admin_create_link(model)
+    path  = new_polymorphic_path([:admin, model])
+    title = "create #{model.model_name.singular}"
+    desc  = "create icon"
+    icon  = "plus"
+
+    admin_link_to(icon, path, title, desc, class: "admin create")
   end
 
   def admin_update_link(instance)
@@ -72,13 +72,13 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin edit")
   end
 
-  def admin_view_link(instance)
+  def admin_destroy_link(instance)
     path  = polymorphic_path([:admin, instance])
-    title = "view #{instance.model_name.singular}"
-    desc  = "view icon"
-    icon  = "eye"
+    title = "destroy #{instance.model_name.singular}"
+    desc  = "trash icon"
+    icon  = "trash"
 
-    admin_link_to(icon, path, title, desc, class: "admin view")
+    admin_link_to(icon, path, title, desc, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")
   end
 
   #############################################################################
@@ -191,7 +191,7 @@ module AdminHelper
   end
 
   # TODO pundit
-  def admin_actions(instance)
+  def admin_actions_cell(instance)
     links = [
       admin_public_link_for(instance),
       admin_view_link(      instance),
@@ -249,7 +249,7 @@ module AdminHelper
   def sortable_th(sorts, name, **opts)
     props   = sorts[name]
     text    = content_tag(:span, opts.delete(:text) || name)
-    classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
+    classes = props[:active?] ? "active #{props[:desc?] ? 'asc' : 'desc'}" : nil
 
     content_tag(:th, link_to(text, props[:url], class: classes), opts)
   end

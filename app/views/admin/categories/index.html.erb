@@ -17,9 +17,9 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "Name"     %>
-            <%= sortable_th @sorts, "Category" %>
-            <%= sortable_th @sorts, "Multi?"   %>
+            <%= sortable_th @sorts, "Name"   %>
+            <%= sortable_th @sorts, "Format" %>
+            <%= sortable_th @sorts, "Multi?" %>
 
             <%= actions_th %>
           <% end %>

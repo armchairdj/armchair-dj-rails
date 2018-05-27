@@ -12,9 +12,9 @@ private
   end
 
   def scoped_and_sorted_collection
-    @dir   = params[:dir  ] == "DESC" ? "DESC" : "ASC"
     @scope = params[:scope] || allowed_scopes.keys.first
     @sort  = params[:sort ] || allowed_sorts.keys.first
+    @dir   = params[:dir  ] || "ASC"
     @page  = params[:page ]
 
     unless allowed_scopes.keys.include?(@scope)
@@ -35,21 +35,6 @@ private
     { "All" => :for_admin }
   end
 
-  def scopes_for_view
-    allowed_scopes.keys.map do |key|
-      hash      = {}
-      hash[key] = {
-        :active? => key == @scope,
-        :url     => polymorphic_path([:admin, model_class], scope: key)
-      }
-      hash
-    end
-  end
-
-  def current_scope_value
-    allowed_scopes[@scope]
-  end
-
   def allowed_sorts(extra = nil)
     base = { "Default" => "#{controller_name}.updated_at DESC" }
 
@@ -61,18 +46,31 @@ private
     })
   end
 
+  def scopes_for_view
+    allowed_scopes.keys.each.inject({}) do |memo, (key)|
+      memo[key] = {
+        :active? => key == @scope,
+        :url     => polymorphic_path([:admin, model_class], scope: key)
+      }
+      memo
+    end
+  end
+
   def sorts_for_view
-    allowed_sorts.keys.map do |key|
+    allowed_sorts.keys.each.inject({}) do |memo, (key)|
       active    = key == @sort
-      dir       = active ? (@dir = "ASC" ? "DESC" : "ASC") : "ASC"
-      hash      = {}
-      hash[key] = {
+      dir       = active ? reverse_dir(@dir) : "ASC"
+      memo[key] = {
         :active? => active,
         :desc?   => dir == "DESC",
         :url     => polymorphic_path([:admin, model_class], scope: @scope, sort: key, dir: dir)
       }
-      hash
+      memo
     end
+  end
+
+  def current_scope_value
+    allowed_scopes[@scope]
   end
 
   def current_sort_value
@@ -93,5 +91,9 @@ private
     end
 
     parts.join(", ")
+  end
+
+  def reverse_dir(dir)
+    dir == "ASC" ? "DESC" : "ASC"
   end
 end

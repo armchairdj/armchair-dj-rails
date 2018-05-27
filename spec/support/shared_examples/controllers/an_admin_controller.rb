@@ -17,49 +17,44 @@ RSpec.shared_examples "an_admin_controller" do
         it { is_expected.to eq("admin") }
       end
 
-      describe "scope helpers" do
+      describe "#allowed_scopes" do
         subject { described_class.new }
 
         let(  :model) { subject.send(:model_class   ) }
-        let(:default) { subject.send(:default_scope ) }
         let( :scopes) { subject.send(:allowed_scopes) }
         let(   :keys) { scopes.keys   }
         let(   :vals) { scopes.values }
 
-        describe "#allowed_scopes" do
-          specify { expect(scopes).to be_a_kind_of(Hash) }
+        specify { expect(scopes).to be_a_kind_of(Hash) }
 
-          specify "keys are strings" do
-            keys.each { |key| expect(key).to be_a_kind_of(String) }
-          end
-
-          specify "values are symbols of scopes" do
-            vals.each do |val|
-              expect(val).to be_a_kind_of(Symbol)
-
-              expect(model).to respond_to(val)
-            end
-          end
+        specify "keys are strings" do
+          keys.each { |key| expect(key).to be_a_kind_of(String) }
         end
 
-        describe "#default_scope" do
-          specify { expect(default).to be_a_kind_of(Symbol) }
+        specify "values are symbols of scopes" do
+          vals.each do |val|
+            expect(val).to be_a_kind_of(Symbol)
 
-          specify { expect(default).to eq(scopes.values.first) }
-
-          specify { expect(model).to respond_to(default) }
+            expect(model).to respond_to(val)
+          end
         end
-
-        pending "allowed_scope?"
       end
 
       pending "allowed_sorts"
 
-      pending "default_sort"
-
-      pending "allowed_sort?"
-
       pending "#scoped_and_sorted_collection"
+
+      pending "#scopes_for_view"
+
+      pending "#sorts_for_view"
+
+      pending "#current_scope_value"
+
+      pending "#current_sort_value"
+
+      pending "#reverse_sort"
+
+      pending "#reverse_dir"
     end
   end
 end

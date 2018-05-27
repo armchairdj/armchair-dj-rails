@@ -24,6 +24,8 @@ brian = User.create_with(
   password:    "password1234"
 ).find_or_create_by(email: "armchairdj@gmail.com")
 
+brian.skip_confirmation!
+
 ##### MEDIA
 
 song          = FactoryBot.create(:medium, :skip_validation, name: "Song"         )
