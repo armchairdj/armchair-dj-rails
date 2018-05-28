@@ -55,7 +55,7 @@ class Post < ApplicationRecord
 
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
-  scope :eager,           -> { includes(:medium, :work, :creators, :author) }
+  scope :eager,           -> { left_outer_joins(:medium, :creators, :work).includes(:medium, :work, :creators, :author) }
 
   scope :for_admin,       -> { eager                        }
   scope :for_site,        -> { eager.published.reverse_cron }

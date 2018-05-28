@@ -22,6 +22,10 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
       it { is_expected.to respond_to(:enumable_attributes) }
     end
 
+    describe "self#alpha_order_clause_for" do
+      it { is_expected.to respond_to(:alpha_order_clause_for) }
+    end
+
     describe "self#retrieve_enumable_attributes" do
       specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
     end
@@ -68,15 +72,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             end
           end
 
-          describe "self#alphabetical_human_#{plural_attr}" do
-            it "gives alphabetical 2D array for use in dropdowns" do
-              expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
-              actual   = described_class.send("alphabetical_human_#{plural_attr}")
-
-              expect(actual).to eq(expected)
-            end
-          end
-
           describe "self#human_#{plural_attr}_with_keys" do
             it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
               expected = [["Z.", "b", 0], ["Y.", "a", 1], ["X.", "r", 2]]
@@ -86,10 +81,23 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             end
           end
 
+          describe "self#alphabetical_human_#{plural_attr}" do
+            it "gives alphabetical 2D array for use in dropdowns" do
+              expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
+              actual   = described_class.send("alphabetical_human_#{plural_attr}")
+
+              expect(actual).to eq(expected)
+            end
+          end
+
           describe "self#human_#{single_attr}" do
             specify { expect(described_class.send("human_#{single_attr}", "b")).to eq("Z.") }
             specify { expect(described_class.send("human_#{single_attr}", "a")).to eq("Y.") }
             specify { expect(described_class.send("human_#{single_attr}", "r")).to eq("X.") }
+          end
+
+          describe "self#alpha_order_clause_for" do
+            pending "works"
           end
         end
 

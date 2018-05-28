@@ -125,12 +125,14 @@ private
   end
 
   def allowed_sorts
-    always = "categories.name ASC"
+    name_sort   = "LOWER(categories.name) ASC"
+    format_sort = Category.alpha_order_clause_for(:format)
+    multi_sort  = "categories.allow_multiple ASC"
 
-    super(always).merge({
-      "Name"   => always,
-      "Format" => "categories.format ASC, #{always}",
-      "Multi?" => "categories.allow_multiple ASC, #{always}"
+    super(name_sort).merge({
+      "Name"   => name_sort,
+      "Format" => [format_sort, name_sort].join(", "),
+      "Multi?" => [multi_sort,  name_sort].join(", "),
     })
   end
 end

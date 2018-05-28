@@ -46,9 +46,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context "Published scope" do
+        context "Visible scope" do
           it "renders" do
-            get :index, params: { scope: "Published" }
+            get :index, params: { scope: "Visible" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -56,9 +56,9 @@ RSpec.describe Admin::TagsController, type: :controller do
           end
         end
 
-        context "Draft scope" do
+        context "Hidden scope" do
           it "renders" do
-            get :index, params: { scope: "Draft" }
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/tags/index")
 
@@ -92,8 +92,8 @@ RSpec.describe Admin::TagsController, type: :controller do
 
         pending "For Posts scope"
         pending "For Works scope"
-        pending "Published scope"
-        pending "Draft scope"
+        pending "Visible scope"
+        pending "Hidden scope"
       end
 
       context "sorts" do
@@ -269,10 +269,10 @@ RSpec.describe Admin::TagsController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to eq([
           "All",
+          "Visible",
+          "Hidden",
           "For Posts",
           "For Works",
-          "Published",
-          "Draft",
         ])
       end
     end

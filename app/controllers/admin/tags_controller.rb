@@ -167,17 +167,16 @@ private
     super.merge({
       "For Posts" => :for_posts,
       "For Works" => :for_works,
-      "Published" => :viewable,
-      "Draft"     => :non_viewable,
     })
   end
 
   def allowed_sorts
-    always = "tags.name ASC"
+    name_sort     = "LOWER(tags.name) ASC"
+    category_sort = "LOWER(categories.name) ASC"
 
-    super(always).merge({
-      "Name"     => "#{always}, categories.name ASC",
-      "Category" => "categories.name ASC, #{always}"
+    super(name_sort).merge({
+      "Name"     => [name_sort, category_sort].join(", "),
+      "Category" => [category_sort, name_sort].join(", "),
     })
   end
 end

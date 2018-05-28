@@ -69,6 +69,10 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
+
+        pending "Visible scope"
+
+        pending "Hidden scope"
       end
 
       context "with records" do
@@ -195,6 +199,10 @@ RSpec.describe Admin::UsersController, type: :controller do
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
+
+        pending "Visible scope"
+
+        pending "Hidden scope"
       end
 
       context "sorts" do
@@ -335,6 +343,8 @@ RSpec.describe Admin::UsersController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to eq([
           "All",
+          "Visible",
+          "Hidden",
           "Member",
           "Writer",
           "Editor",

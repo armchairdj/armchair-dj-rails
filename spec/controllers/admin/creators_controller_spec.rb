@@ -27,18 +27,18 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           end
         end
 
-        context "Published scope" do
+        context "Visible scope" do
           it "renders" do
-            get :index, params: { scope: "Published" }
+            get :index, params: { scope: "Visible" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
           end
         end
 
-        context "Draft scope" do
+        context "Hidden scope" do
           it "renders" do
-            get :index, params: { scope: "Draft" }
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(0).of_total_records(0)
@@ -68,40 +68,40 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           end
         end
 
-        context "Published scope" do
+        context "Visible scope" do
           before(:each) do
             21.times { create(:review, :published) }
           end
 
           it "renders" do
-            get :index, params: { scope: "Published" }
+            get :index, params: { scope: "Visible" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "Published", page: "2" }
+            get :index, params: { scope: "Visible", page: "2" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
           end
         end
 
-        context "Draft scope" do
+        context "Hidden scope" do
           before(:each) do
             21.times { create(:minimal_creator) }
           end
 
           it "renders" do
-            get :index, params: { scope: "Draft" }
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "Draft", page: "2" }
+            get :index, params: { scope: "Hidden", page: "2" }
 
             is_expected.to successfully_render("admin/creators/index")
             expect(assigns(:creators)).to paginate(1).of_total_records(21)
@@ -435,8 +435,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to eq([
           "All",
-          "Published",
-          "Draft",
+          "Visible",
+          "Hidden",
         ])
       end
     end

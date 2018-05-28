@@ -28,9 +28,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context "Published scope" do
+        context "Visible scope" do
           it "renders" do
-            get :index, params: { scope: "Published" }
+            get :index, params: { scope: "Visible" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -38,9 +38,9 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context "Draft scope" do
+        context "Hidden scope" do
           it "renders" do
-            get :index, params: { scope: "Draft" }
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -73,13 +73,13 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context "Published scope" do
+        context "Visible scope" do
           before(:each) do
             21.times { create(:review, :published) }
           end
 
           it "renders" do
-            get :index, params: { scope: "Published" }
+            get :index, params: { scope: "Visible" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -87,7 +87,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
 
           it "renders second page" do
-            get :index, params: { scope: "Published", page: "2" }
+            get :index, params: { scope: "Visible", page: "2" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -95,13 +95,13 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
 
-        context "Draft scope" do
+        context "Hidden scope" do
           before(:each) do
             21.times { create(:minimal_work) }
           end
 
           it "renders" do
-            get :index, params: { scope: "Draft" }
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -109,7 +109,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
 
           it "renders second page" do
-            get :index, params: { scope: "Draft", page: "2" }
+            get :index, params: { scope: "Hidden", page: "2" }
 
             is_expected.to successfully_render("admin/works/index")
 
@@ -120,7 +120,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "sorts" do
         pending "Title"
-        pending "Creators"
+        pending "Creator"
         pending "Medium"
         pending "VPC"
         pending "NVPC"
@@ -302,8 +302,8 @@ RSpec.describe Admin::WorksController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to eq([
           "All",
-          "Published",
-          "Draft",
+          "Visible",
+          "Hidden",
         ])
       end
     end

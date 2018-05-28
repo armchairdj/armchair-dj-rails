@@ -284,12 +284,16 @@ private
   end
 
   def allowed_sorts
-    always  = "posts.alpha ASC"
+    title_sort  = "posts.alpha ASC"
+    type_sort   = "LOWER(media.name) ASC"
+    status_sort = "posts.status ASC"
+    author_sort = "users.alpha ASC"
 
-    super(always).merge({
-      "Title"   => "#{always}",
-      "Type"    => "media.name ASC, #{always}",
-      "Status"  => "posts.published_at DESC, posts.publish_on DESC, posts.updated_at DESC, #{always}",
+    super(title_sort).merge({
+      "Title"   => title_sort,
+      "Type"    => [type_sort,   title_sort].join(", "),
+      "Status"  => [status_sort, title_sort].join(", "),
+      "Author"  => [author_sort, title_sort].join(", "),
     })
   end
 end

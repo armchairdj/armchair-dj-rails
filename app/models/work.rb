@@ -40,7 +40,7 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :posts) }
+  scope :eager,     -> { joins(:medium).includes(:medium, :credits, :creators, :contributions, :contributors, :posts) }
 
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.includes(:posts).alpha }

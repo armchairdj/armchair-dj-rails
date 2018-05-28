@@ -40,17 +40,28 @@ private
   end
 
   def allowed_scopes
-    { "All" => :for_admin }
-  end
-
-  def allowed_sorts(extra = nil)
-    base = { "Default" => "#{controller_name}.updated_at DESC" }
+    base = { "All" => :for_admin }
 
     return base unless model_class.include? Viewable
 
     base.merge({
-      "VPC"  => ["#{controller_name}.viewable_post_count ASC",     extra].compact.join(", "),
-      "NVPC" => ["#{controller_name}.non_viewable_post_count ASC", extra].compact.join(", "),
+      "Visible" => :viewable,
+      "Hidden"  => :non_viewable,
+    })
+  end
+
+  def allowed_sorts(extra = nil)
+    default_sort = "#{controller_name}.updated_at DESC"
+    vpc_sort     = "#{controller_name}.viewable_post_count ASC"
+    nvpc_sort    = "#{controller_name}.non_viewable_post_count ASC"
+
+    base = { "Default" => default_sort }
+
+    return base unless model_class.include? Viewable
+
+    base.merge({
+      "VPC"  => [vpc_sort,  extra].compact.join(", "),
+      "NVPC" => [nvpc_sort, extra].compact.join(", "),
     })
   end
 

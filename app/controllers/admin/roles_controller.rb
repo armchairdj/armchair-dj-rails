@@ -128,11 +128,12 @@ private
   end
 
   def allowed_sorts
-    always = "roles.name ASC"
+    name_sort   = "LOWER(roles.name) ASC"
+    medium_sort = "LOWER(media.name) ASC"
 
-    super(always).merge({
-      "Name"   => "#{always}, media.name ASC",
-      "Medium" => "media.name ASC, #{always}",
+    super(name_sort).merge({
+      "Name"   => [name_sort, medium_sort].join(", "),
+      "Medium" => [medium_sort, name_sort].join(", "),
     })
   end
 end

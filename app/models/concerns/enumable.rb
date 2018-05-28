@@ -60,6 +60,16 @@ module Enumable
     def retrieve_enumable_attributes
       self._enumable_attributes
     end
+
+    def alpha_order_clause_for(attribute)
+      humanized = human_enum_collection_with_keys(attribute, alphabetical: true)
+
+      whens = humanized.each.with_index.inject([]) do |memo, ((humanized, val, key), index)|
+        memo << "WHEN #{attribute}=#{key} THEN #{index}"; memo
+      end
+
+      "CASE #{whens.join(" ")} END"
+    end
   end
 
   included do

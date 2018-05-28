@@ -25,8 +25,8 @@ RSpec.describe Admin::MediaController, type: :controller do
           end
         end
 
-        pending "Published scope"
-        pending "Draft scope"
+        pending "Visible scope"
+        pending "Hidden scope"
       end
 
       context "with records" do
@@ -50,8 +50,8 @@ RSpec.describe Admin::MediaController, type: :controller do
           end
         end
 
-        pending "Published scope"
-        pending "Draft scope"
+        pending "Visible scope"
+        pending "Hidden scope"
       end
 
       context "sorts" do
@@ -218,8 +218,8 @@ RSpec.describe Admin::MediaController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to eq([
           "All",
-          "Published",
-          "Draft",
+          "Visible",
+          "Hidden",
         ])
       end
     end

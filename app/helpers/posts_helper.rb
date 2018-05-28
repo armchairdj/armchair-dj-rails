@@ -22,12 +22,14 @@ module PostsHelper
     time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
   end
 
-  def post_title(post, full: true)
-    if post.review?
+  def post_title(post, full: true, length: nil)
+    title = if post.review?
       full ? post.work.full_display_title : post.work.display_title
     else
       post.title
     end
+
+    length.nil? ? title : truncate(title, length: length, omission: "…")
   end
 
   #############################################################################

@@ -182,20 +182,15 @@ private
     end
   end
 
-  def allowed_scopes
-    super.merge({
-      "Published" => :viewable,
-      "Draft"     => :non_viewable,
-    })
-  end
-
   def allowed_sorts
-    always = "works.title ASC"
+    title_sort   = "LOWER(works.title) ASC"
+    creator_sort = "LOWER(creators.name) ASC"
+    medium_sort  = "LOWER(media.name) ASC"
 
-    super(always).merge({
-      "Title"    => always,
-      "Creators" => "creators.name ASC, #{always}",
-      "Medium"   => "media.name ASC, #{always}",
+    super(title_sort).merge({
+      "Title"   => title_sort,
+      "Creator" => [creator_sort, title_sort].join(", "),
+      "Medium"  => [medium_sort,  title_sort].join(", "),
     })
   end
 end
