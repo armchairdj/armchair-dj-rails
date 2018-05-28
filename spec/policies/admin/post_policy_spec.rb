@@ -3,9 +3,102 @@
 require "rails_helper"
 
 RSpec.describe Admin::PostPolicy do
-  it_behaves_like "an_admin_policy" do
-    let(:record) { create(:minimal_post) }
+  subject { described_class.new(user, record) }
+
+  let(:record) { create(:standalone_post) }
+
+  context "without user" do
+    let(:user) { nil }
+
+    it { is_expected.to raise_not_authorized_for(:index  ) }
+    it { is_expected.to raise_not_authorized_for(:show   ) }
+    it { is_expected.to raise_not_authorized_for(:new    ) }
+    it { is_expected.to raise_not_authorized_for(:create ) }
+    it { is_expected.to raise_not_authorized_for(:edit   ) }
+    it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  pending "scope"
+  context "as member" do
+    let(:user) { create(:member) }
+
+    it { is_expected.to raise_not_authorized_for(:index  ) }
+    it { is_expected.to raise_not_authorized_for(:show   ) }
+    it { is_expected.to raise_not_authorized_for(:new    ) }
+    it { is_expected.to raise_not_authorized_for(:create ) }
+    it { is_expected.to raise_not_authorized_for(:edit   ) }
+    it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
+  end
+
+  context "as writer" do
+    let(:user) { create(:writer) }
+
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:publish) }
+    it { is_expected.to forbid_action(:destroy) }
+
+    context "with own record" do
+      let(:record) { create(:standalone_post, author_id: user.id) }
+
+      it { is_expected.to permit_action(:index  ) }
+      it { is_expected.to permit_action(:show   ) }
+      it { is_expected.to permit_action(:new    ) }
+      it { is_expected.to permit_action(:create ) }
+      it { is_expected.to permit_action(:edit   ) }
+      it { is_expected.to permit_action(:update ) }
+
+      it { is_expected.to forbid_action(:publish) }
+      it { is_expected.to forbid_action(:destroy) }
+    end
+  end
+
+  context "as editor" do
+    let(:user) { create(:editor) }
+
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+
+    it { is_expected.to forbid_action(:publish) }
+    it { is_expected.to forbid_action(:destroy) }
+  end
+
+  context "as admin" do
+    let(:user) { create(:admin) }
+
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+    it { is_expected.to permit_action(:publish) }
+
+    it { is_expected.to forbid_action(:destroy) }
+  end
+
+  context "as root" do
+    let(:user) { create(:root) }
+
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+    it { is_expected.to permit_action(:publish) }
+    it { is_expected.to permit_action(:destroy) }
+  end
 end

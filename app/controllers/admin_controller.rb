@@ -5,6 +5,8 @@ class AdminController < ApplicationController
 
   after_action :verify_authorized
 
+private
+
   def policy_scope(scope)
     super([:admin, scope])
   end
@@ -12,8 +14,6 @@ class AdminController < ApplicationController
   def authorize(record, query = nil)
     super([:admin, record], query)
   end
-
-private
 
   def determine_layout
     "admin"

@@ -190,8 +190,8 @@ private
   end
 
   def prepare_form
-    @available_tabs = which_tabs
-    @selected_tab   = which_tab
+    @available_tabs = determine_available_tabs
+    @selected_tab   = determine_selected_tab
 
     @post.prepare_links
 
@@ -206,10 +206,16 @@ private
   end
 
   def authorize_instance
-    authorize @post
+    publishing? ? authorize(@post, :publish?) : authorize(@post)
   end
 
-  def which_tabs
+  def publishing?
+    return false unless %w(edit update                          ).include? action_name
+    return false unless %w(publish unpublish schedule unschedule).include? params[:step]
+    return true
+  end
+
+  def determine_available_tabs
     case action_name
     when "new", "create"
       ["post-choose-work", "post-new-work", "post-standalone"]
@@ -222,7 +228,7 @@ private
     end
   end
 
-  def which_tab
+  def determine_selected_tab
     case action_name
     when "new"
       "post-choose-work"

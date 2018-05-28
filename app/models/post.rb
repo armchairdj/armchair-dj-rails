@@ -55,7 +55,7 @@ class Post < ApplicationRecord
 
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
-  scope :eager,           -> { joins(:medium).includes(:medium, :work, :creators, :author) }
+  scope :eager,           -> { includes(:medium, :work, :creators, :author).references(:medium) }
 
   scope :for_admin,       -> { eager                        }
   scope :for_site,        -> { eager.published.reverse_cron }
@@ -112,7 +112,7 @@ class Post < ApplicationRecord
   def author_present
     if author.nil?
       self.errors.add(:base, :no_author)
-    elsif !author.can_post?
+    elsif !author.can_write?
       self.errors.add(:base, :invalid_author)
     end
   end

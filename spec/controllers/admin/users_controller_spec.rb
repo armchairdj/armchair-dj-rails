@@ -11,14 +11,32 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
   end
 
-  context "as admin" do
-    login_admin
+  context "as root" do
+    login_root
 
     describe "GET #index" do
       context "without records" do
         context "All scope (default)" do
-          it "renders with one record because there has to be at least one admin" do
+          it "renders with one record because we are logged in as root" do
             get :index
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(1)
+          end
+        end
+
+        context "Visible scope" do
+          it "renders" do
+            get :index, params: { scope: "Visible" }
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(0).of_total_records(0)
+          end
+        end
+
+        context "Hidden scope" do
+          it "renders with one record because we are logged in as root" do
+            get :index, params: { scope: "Hidden" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(1)
@@ -53,36 +71,32 @@ RSpec.describe Admin::UsersController, type: :controller do
         end
 
         context "Admin scope" do
-          it "renders with one record because we are logged in as admin" do
-            get :index, params: { scope: "Admin" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(1)
-          end
-        end
-
-        context "Super Admin scope" do
           it "renders" do
-            get :index, params: { scope: "Super Admin" }
+            get :index, params: { scope: "Admin" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(0).of_total_records(0)
           end
         end
 
-        pending "Visible scope"
+        context "Root scope" do
+          it "renders with one record because we are logged in as root" do
+            get :index, params: { scope: "Root" }
 
-        pending "Hidden scope"
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(1)
+          end
+        end
       end
 
       context "with records" do
         context "All scope (default)" do
           before(:each) do
-             4.times { create(:member     ) }
-             4.times { create(:writer     ) }
-             4.times { create(:editor     ) }
-             4.times { create(:admin      ) }
-             4.times { create(:super_admin) }
+             4.times { create(:member) }
+             4.times { create(:writer) }
+             4.times { create(:editor) }
+             4.times { create(:admin ) }
+             4.times { create(:root  ) }
           end
 
           it "renders" do
@@ -94,6 +108,46 @@ RSpec.describe Admin::UsersController, type: :controller do
 
           it "renders second page" do
             get :index, params: { page: "2" }
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
+          end
+        end
+
+        context "Visible scope" do
+          before(:each) do
+            21.times { create(:writer, :with_published_post) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "Visible" }
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "Visible", page: "2" }
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(1).of_total_records(21)
+          end
+        end
+
+        context "Hidden scope" do
+          before(:each) do
+            20.times { create(:writer) }
+          end
+
+          it "renders" do
+            get :index, params: { scope: "Hidden" }
+
+            is_expected.to successfully_render("admin/users/index")
+            expect(assigns(:users)).to paginate(20).of_total_records(21)
+          end
+
+          it "renders second page" do
+            get :index, params: { scope: "Hidden", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
@@ -162,7 +216,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
         context "Admin scope" do
           before(:each) do
-            20.times { create(:admin) }
+            21.times { create(:admin) }
           end
 
           it "renders" do
@@ -180,29 +234,25 @@ RSpec.describe Admin::UsersController, type: :controller do
           end
         end
 
-        context "Super Admin scope" do
+        context "Root scope" do
           before(:each) do
-            21.times { create(:super_admin) }
+            20.times { create(:root) }
           end
 
           it "renders" do
-            get :index, params: { scope: "Super Admin" }
+            get :index, params: { scope: "Root" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(20).of_total_records(21)
           end
 
           it "renders second page" do
-            get :index, params: { scope: "Super Admin", page: "2" }
+            get :index, params: { scope: "Root", page: "2" }
 
             is_expected.to successfully_render("admin/users/index")
             expect(assigns(:users)).to paginate(1).of_total_records(21)
           end
         end
-
-        pending "Visible scope"
-
-        pending "Hidden scope"
       end
 
       context "sorts" do
@@ -349,7 +399,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           "Writer",
           "Editor",
           "Admin",
-          "Super Admin"
+          "Root"
         ])
       end
     end

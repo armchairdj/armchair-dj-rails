@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe StyleGuidesController, type: :controller do
-  context "as admin" do
-    login_admin
+  context "as root" do
+    login_writer
 
     describe "GET #index" do
       it "renders" do

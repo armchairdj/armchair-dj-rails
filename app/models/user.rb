@@ -54,11 +54,11 @@ class User < ApplicationRecord
   #############################################################################
 
   enum role: {
-    member:      10,
-    writer:      20,
-    editor:      30,
-    admin:       40,
-    super_admin: 50
+    member: 10,
+    writer: 20,
+    editor: 30,
+    admin:  40,
+    root:   50
   }
 
   enumable_attributes :role
@@ -75,7 +75,7 @@ class User < ApplicationRecord
   validates :username,   presence:   true
   validates :username,   uniqueness: true
 
-  validates :bio, absence: true, unless: :can_post?
+  validates :bio, absence: true, unless: :can_write?
 
   #############################################################################
   # HOOKS.
@@ -85,12 +85,20 @@ class User < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def can_administer?
-    admin? || super_admin?
+  def can_write?
+    writer? || editor? || admin? || root?
   end
 
-  def can_post?
-    writer? || editor? || admin? || super_admin?
+  def can_edit?
+    editor? || admin? || root?
+  end
+
+  def can_publish?
+    admin? || root?
+  end
+
+  def can_destroy?
+    root?
   end
 
   def display_name

@@ -5,105 +5,81 @@ require "rails_helper"
 RSpec.shared_examples "a_public_policy" do
   subject { described_class.new(user, record) }
 
-  context "as guest" do
+  context "without user" do
     let(:user) { nil }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as member" do
     let(:user) { create(:member) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as writer" do
     let(:user) { create(:writer) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as editor" do
     let(:user) { create(:editor) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as admin" do
     let(:user) { create(:admin) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as admin" do
-    let(:user) { create(:super_admin) }
+  context "as root" do
+    let(:user) { create(:root) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
 
-    specify { is_expected.to forbid_actions([
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to forbid_action(:new    ) }
+    it { is_expected.to forbid_action(:create ) }
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:destroy) }
   end
 end

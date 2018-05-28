@@ -8,7 +8,7 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/users/form_fields", locals: {
       f:             f,
-      show_bio:      @user.can_post?,
+      show_bio:      @user.can_write?,
       show_password: false,
       show_role:     false
     } %>

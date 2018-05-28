@@ -15,8 +15,8 @@ RSpec.describe Admin::PostsController, type: :controller do
     end
   end
 
-  context "as admin" do
-    login_admin
+  context "as root" do
+    login_root
 
     describe "GET #index" do
       context "without records" do

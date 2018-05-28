@@ -23,7 +23,7 @@ protected
   def after_sign_in_path_for(user)
     if (requested_page = session.delete("user_return_to")).present?
       requested_page
-    elsif user.can_administer?
+    elsif user.can_write?
       admin_posts_path
     else
       posts_path

@@ -34,7 +34,7 @@
         <%= content_tag(:td, @user.email) %>
       <% end %>
 
-      <% if @user.can_post? %>
+      <% if @user.can_write? %>
         <%= content_tag(:tr) do %>
           <%= content_tag(:th, "Bio") %>
           <%= content_tag(:td, paragraphs(@user.bio)) %>
@@ -139,7 +139,7 @@
   <% end %>
 <% end %>
 
-<% if @user.can_post? %>
+<% if @user.can_write? %>
   <%= render partial: "admin/shared/playback/posts", locals: {
     posts: @user.posts.for_admin.reverse_cron
   } %>

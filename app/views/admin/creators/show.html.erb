@@ -103,7 +103,7 @@
 } %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @creator.posts.for_admin.reverse_cron
+  posts: @creator.posts.includes(:work).reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

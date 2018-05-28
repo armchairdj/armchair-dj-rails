@@ -48,8 +48,7 @@ class Creator < ApplicationRecord
   scope :available_pseudonyms, -> { alpha.secondary.orphaned }
 
   scope :eager, -> { includes(
-    :pseudonyms, :real_names,
-    :members, :groups,
+    :pseudonyms, :real_names, :members, :groups,
     :credits, :works, :posts,
     :contributions, :contributed_works, :contributed_posts
   ) }

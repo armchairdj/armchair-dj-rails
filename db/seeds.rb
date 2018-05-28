@@ -16,7 +16,7 @@ end
 ##### USERS
 
 brian = User.create_with(
-  role:        :super_admin,
+  role:        :root,
   username:    "armchairdj",
   first_name:  "Brian",
   middle_name: "J.",

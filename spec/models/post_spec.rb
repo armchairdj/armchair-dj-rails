@@ -297,8 +297,8 @@ RSpec.describe Post, type: :model do
           expect(subject).to receive(:author_present)
         end
 
-        specify "super_admin" do
-          subject.author = create(:super_admin)
+        specify "root" do
+          subject.author = create(:root)
 
           expect(subject).to be_valid
         end

@@ -107,13 +107,13 @@ FactoryBot.define do
       confirmed
     end
 
-    factory :super_admin do
-      role :super_admin
+    factory :root do
+      role :root
       bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
       valid
     end
 
-    factory :confirmed_super_admin, parent: :super_admin do
+    factory :confirmed_root, parent: :root do
       confirmed
     end
   end

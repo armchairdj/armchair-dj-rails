@@ -4,24 +4,16 @@ module PolicyMethods
 
 protected
 
-  def can_administer?
-    user.can_administer?
-  end
-
-  def owner_or_admin?
-    (user.can_administer? || user == record.user)
-  end
-
   def logged_in?
     return true if user
 
     raise Pundit::NotAuthenticatedError, "must be logged in"
   end
 
-  def logged_in_as_admin?
-    return true if user && can_administer?
+  def logged_in_as_cms_user?
+    return true if user && user.can_write?
 
-    raise Pundit::NotAuthorizedError, "must be admin"
+    raise Pundit::NotAuthorizedError, "must be CMS user"
   end
 
   def raise_unauthorized

@@ -5,111 +5,78 @@ require "rails_helper"
 RSpec.shared_examples "an_admin_policy" do
   subject { described_class.new(user, record) }
 
-  context "as guest" do
+  context "without user" do
     let(:user) { nil }
 
-    it "403s" do
-      [
-        :index,
-        :show,
-        :new,
-        :create,
-        :edit,
-        :update,
-        :destroy
-      ].each do |method|
-        expect {
-          subject.send("#{method.to_s}?")
-        }.to raise_error(Pundit::NotAuthorizedError, "must be admin")
-      end
-    end
+    it { is_expected.to raise_not_authorized_for(:index  ) }
+    it { is_expected.to raise_not_authorized_for(:show   ) }
+    it { is_expected.to raise_not_authorized_for(:new    ) }
+    it { is_expected.to raise_not_authorized_for(:create ) }
+    it { is_expected.to raise_not_authorized_for(:edit   ) }
+    it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
   context "as member" do
     let(:user) { create(:member) }
 
-    it "403s" do
-      [
-        :index,
-        :show,
-        :new,
-        :create,
-        :edit,
-        :update,
-        :destroy
-      ].each do |method|
-        expect {
-          subject.send("#{method.to_s}?")
-        }.to raise_error(Pundit::NotAuthorizedError, "must be admin")
-      end
-    end
+    it { is_expected.to raise_not_authorized_for(:index  ) }
+    it { is_expected.to raise_not_authorized_for(:show   ) }
+    it { is_expected.to raise_not_authorized_for(:new    ) }
+    it { is_expected.to raise_not_authorized_for(:create ) }
+    it { is_expected.to raise_not_authorized_for(:edit   ) }
+    it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
   context "as writer" do
     let(:user) { create(:writer) }
 
-    it "403s" do
-      [
-        :index,
-        :show,
-        :new,
-        :create,
-        :edit,
-        :update,
-        :destroy
-      ].each do |method|
-        expect {
-          subject.send("#{method.to_s}?")
-        }.to raise_error(Pundit::NotAuthorizedError, "must be admin")
-      end
-    end
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as editor" do
     let(:user) { create(:editor) }
 
-    it "403s" do
-      [
-        :index,
-        :show,
-        :new,
-        :create,
-        :edit,
-        :update,
-        :destroy
-      ].each do |method|
-        expect {
-          subject.send("#{method.to_s}?")
-        }.to raise_error(Pundit::NotAuthorizedError, "must be admin")
-      end
-    end
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+
+    it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as admin" do
-    let(:user) { create(:admin) }
+    let(:user) { create(:editor) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show,
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+
+    it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as super_admin" do
-    let(:user) { create(:super_admin) }
+  context "as root" do
+    let(:user) { create(:root) }
 
-    specify { is_expected.to permit_actions([
-      :index,
-      :show,
-      :new,
-      :create,
-      :edit,
-      :update,
-      :destroy
-    ]) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+    it { is_expected.to permit_action(:destroy) }
   end
 end

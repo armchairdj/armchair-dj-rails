@@ -35,11 +35,11 @@ en:
         middle_name: "Middle Name or Initial"
         password_confirmation: "Confirm Password"
         roles:
-          member:      "Member"
-          writer:      "Writer"
-          editor:      "Editor"
-          admin:       "Admin"
-          super_admin: "Super Admin"
+          member: "Member"
+          writer: "Writer"
+          editor: "Editor"
+          admin:  "Admin"
+          root:   "Root"
         username: "Handle"
       work:
         subtitle: "Subtitle or Version"

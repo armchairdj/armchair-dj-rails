@@ -41,9 +41,9 @@ module ControllerMacros
     end
   end
 
-  def login_super_admin
+  def login_root
     before(:each) do
-      user = FactoryBot.create(:super_admin)
+      user = FactoryBot.create(:root)
 
       @request.env["devise.mapping"] = Devise.mappings[:user]
 

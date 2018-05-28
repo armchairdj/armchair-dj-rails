@@ -124,11 +124,11 @@ private
 
   def allowed_scopes
     super.merge({
-      "Member"      => :member,
-      "Writer"      => :writer,
-      "Editor"      => :editor,
-      "Admin"       => :admin,
-      "Super Admin" => :super_admin
+      "Member" => :member,
+      "Writer" => :writer,
+      "Editor" => :editor,
+      "Admin"  => :admin,
+      "Root"   => :root
     })
   end
 

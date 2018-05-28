@@ -16,10 +16,10 @@ RSpec.describe User, type: :model do
   end
 
   context "scope-related" do
-    let!(  :jenny) { create(:writer,      first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
-    let!(:charlie) { create(:member,      first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-    let!(  :brian) { create(:super_admin, first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
-    let!( :gruber) { create(:editor,      first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
+    let!(  :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
+    let!(:charlie) { create(:member,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
+    let!(  :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+    let!( :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
 
     before(:each) do
       create(:minimal_post, :published, author: jenny )
@@ -127,8 +127,8 @@ RSpec.describe User, type: :model do
         it { is_expected.to_not  validate_absence_of(:bio) }
       end
 
-      context "as super_admin" do
-        subject { create(:super_admin) }
+      context "as root" do
+        subject { create(:root) }
 
         it { is_expected.to_not  validate_absence_of(:bio) }
       end
@@ -136,20 +136,36 @@ RSpec.describe User, type: :model do
   end
 
   context "instance" do
-    describe "can_administer?" do
-      specify { expect(create(     :member).can_administer?).to eq(false) }
-      specify { expect(create(     :writer).can_administer?).to eq(false) }
-      specify { expect(create(     :editor).can_administer?).to eq(false) }
-      specify { expect(create(      :admin).can_administer?).to eq(true ) }
-      specify { expect(create(:super_admin).can_administer?).to eq(true ) }
+    describe "can_write?" do
+      specify { expect(create(:member).can_write?).to eq(false) }
+      specify { expect(create(:writer).can_write?).to eq(true ) }
+      specify { expect(create(:editor).can_write?).to eq(true ) }
+      specify { expect(create( :admin).can_write?).to eq(true ) }
+      specify { expect(create(  :root).can_write?).to eq(true ) }
     end
 
-    describe "can_post?" do
-      specify { expect(create(     :member).can_post?).to eq(false) }
-      specify { expect(create(     :writer).can_post?).to eq(true ) }
-      specify { expect(create(     :editor).can_post?).to eq(true ) }
-      specify { expect(create(      :admin).can_post?).to eq(true ) }
-      specify { expect(create(:super_admin).can_post?).to eq(true ) }
+    describe "can_edit?" do
+      specify { expect(create(:member).can_edit?).to eq(false) }
+      specify { expect(create(:writer).can_edit?).to eq(false) }
+      specify { expect(create(:editor).can_edit?).to eq(true ) }
+      specify { expect(create( :admin).can_edit?).to eq(true ) }
+      specify { expect(create(  :root).can_edit?).to eq(true ) }
+    end
+
+    describe "can_publish?" do
+      specify { expect(create(:member).can_publish?).to eq(false) }
+      specify { expect(create(:writer).can_publish?).to eq(false) }
+      specify { expect(create(:editor).can_publish?).to eq(false) }
+      specify { expect(create( :admin).can_publish?).to eq(true ) }
+      specify { expect(create(  :root).can_publish?).to eq(true ) }
+    end
+
+    describe "can_destroy?" do
+      specify { expect(create(:member).can_destroy?).to eq(false) }
+      specify { expect(create(:writer).can_destroy?).to eq(false) }
+      specify { expect(create(:editor).can_destroy?).to eq(false) }
+      specify { expect(create( :admin).can_destroy?).to eq(false) }
+      specify { expect(create(  :root).can_destroy?).to eq(true ) }
     end
 
     describe "#display_name" do
