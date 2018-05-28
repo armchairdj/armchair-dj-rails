@@ -35,20 +35,14 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   # GET <%= route_url %>
   # GET <%= route_url %>.json
-  def index
-
-  end
+  def index; end
 
   # GET <%= route_url %>/1
   # GET <%= route_url %>/1.json
-  def show
-
-  end
+  def show; end
 
   # GET <%= route_url %>/new
-  def new
-
-  end
+  def new; end
 
   # POST <%= route_url %>
   # POST <%= route_url %>.json
@@ -65,9 +59,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   # GET <%= route_url %>/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT <%= route_url %>/1
   # PATCH/PUT <%= route_url %>/1.json

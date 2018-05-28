@@ -30,50 +30,53 @@ class Admin::UsersController < AdminController
     :destroy
   ]
 
+  before_action :prepare_form, only: [
+    :new,
+    :edit
+  ]
+
   # GET /users
   # GET /users.json
-  def index
-
-  end
+  def index; end
 
   # GET /users/1
   # GET /users/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /users/new
-  def new
-
-  end
-
-  # GET /users/1/edit
-  def edit
-
-  end
+  def new; end
 
   # POST /users
   # POST /users.json
   def create
     respond_to do |format|
-      if @user.save
+      if current_user.valid_role_assignment_for?(@user) && @user.save
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.create") }
         format.json { render :show, status: :created, location: @user }
       else
+        prepare_form
+
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
+  # GET /users/1/edit
+  def edit; end
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user.attributes = instance_params
+
     respond_to do |format|
-      if @user.update(instance_params)
+      if current_user.valid_role_assignment_for?(@user) && @user.save
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.update") }
         format.json { render :show, status: :ok, location: @user }
       else
+        prepare_form
+
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -94,7 +97,7 @@ class Admin::UsersController < AdminController
 private
 
   def find_collection
-    @users = scoped_and_sorted_collection
+    @users = scoped_collection
   end
 
   def build_new_instance
@@ -102,7 +105,7 @@ private
   end
 
   def find_instance
-    @user = User.find(params[:id])
+    @user = scoped_instance(params[:id])
   end
 
   def authorize_instance
@@ -110,7 +113,7 @@ private
   end
 
   def instance_params
-    params.fetch(:user, {}).permit(
+    fetched = params.fetch(:user, {}).permit(
       :first_name,
       :last_name,
       :middle_name,
@@ -120,6 +123,10 @@ private
       :role,
       :bio
     )
+  end
+
+  def prepare_form
+    @roles = current_user.assignable_role_options
   end
 
   def allowed_scopes

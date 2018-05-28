@@ -10,20 +10,10 @@ class Admin::PostPolicy < AdminPolicy
   end
 
   def update?
-    super && owns_or_can_edit?
+    super && (user.can_edit? || user == record.author)
   end
 
   def publish?
     update? && user.can_publish?
-  end
-
-protected
-
-  def owns_or_can_edit?
-    (user.can_edit? || user == record.author)
-  end
-
-  def publisher?
-    user.can_publish?
   end
 end

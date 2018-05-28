@@ -25,13 +25,9 @@ class PublicController < ApplicationController
 
   # GET /<plural_param_key>
   # GET /<plural_param_key>.json
-  def index
-
-  end
+  def index; end
 
   # GET /<plural_param_key>/1
   # GET /<plural_param_key>/1.json
-  def show
-
-  end
+  def show; end
 end

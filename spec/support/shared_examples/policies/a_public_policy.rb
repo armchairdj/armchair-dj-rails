@@ -82,4 +82,18 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:update ) }
     it { is_expected.to forbid_action(:destroy) }
   end
+
+  context "scope" do
+    subject { described_class::Scope.new(user, model_class.all).resolve }
+
+    let(:model_class) { record.class }
+    let(       :user) { nil }
+
+    it "uses for_site and resolves" do
+       allow(model_class).to receive(:for_site).and_call_original
+      expect(model_class).to receive(:for_site)
+
+      is_expected.to be_a_kind_of(ActiveRecord::Relation)
+    end
+  end
 end

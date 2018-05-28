@@ -56,7 +56,7 @@ RSpec.shared_examples "an_admin_policy" do
   end
 
   context "as admin" do
-    let(:user) { create(:editor) }
+    let(:user) { create(:admin) }
 
     it { is_expected.to permit_action(:index  ) }
     it { is_expected.to permit_action(:show   ) }
@@ -78,5 +78,19 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to permit_action(:edit   ) }
     it { is_expected.to permit_action(:update ) }
     it { is_expected.to permit_action(:destroy) }
+  end
+
+  context "scope" do
+    subject { described_class::Scope.new(user, model_class.all).resolve }
+
+    let(:model_class) { record.class }
+    let(       :user) { create(:writer) }
+
+    it "uses for_admin and resolves" do
+       allow(model_class).to receive(:for_admin).and_call_original
+      expect(model_class).to receive(:for_admin)
+
+      is_expected.to be_a_kind_of(ActiveRecord::Relation)
+    end
   end
 end

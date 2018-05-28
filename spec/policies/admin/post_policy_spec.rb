@@ -101,4 +101,17 @@ RSpec.describe Admin::PostPolicy do
     it { is_expected.to permit_action(:publish) }
     it { is_expected.to permit_action(:destroy) }
   end
+
+  context "scope" do
+    subject { described_class::Scope.new(user, model_class.all).resolve }
+
+    let(:model_class) { record.class }
+    let(       :user) { create(:writer) }
+
+    pending "for member"
+    pending "for writer"
+    pending "for editor"
+    pending "for admin"
+    pending "for root"
+  end
 end

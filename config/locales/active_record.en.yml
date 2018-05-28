@@ -106,3 +106,5 @@ en:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
+            role:
+              invalid_assignment: "You cannot create users with this role."

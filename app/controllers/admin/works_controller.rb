@@ -37,20 +37,14 @@ class Admin::WorksController < AdminController
 
   # GET /works
   # GET /works.json
-  def index
-
-  end
+  def index; end
 
   # GET /works/1
   # GET /works/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /works/new
-  def new
-
-  end
+  def new; end
 
   # POST /works
   # POST /works.json
@@ -71,9 +65,7 @@ class Admin::WorksController < AdminController
   end
 
   # GET /works/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /works/1
   # PATCH/PUT /works/1.json
@@ -107,7 +99,7 @@ class Admin::WorksController < AdminController
 private
 
   def find_collection
-    @works = scoped_and_sorted_collection
+    @works = scoped_collection
   end
 
   def build_new_instance
@@ -117,7 +109,7 @@ private
   end
 
   def find_instance
-    @work = Work.find(params[:id])
+    @work = scoped_instance(params[:id])
   end
 
   def authorize_instance

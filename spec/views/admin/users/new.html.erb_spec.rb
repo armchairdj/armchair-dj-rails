@@ -4,6 +4,7 @@ RSpec.describe "admin/users/new", type: :view do
   before(:each) do
     @model_class = assign(:model_name, User)
     @user        = assign(:user, build(:user))
+    @roles       = assign(:roles, create(:root).assignable_role_options)
   end
 
   it "renders new user form" do

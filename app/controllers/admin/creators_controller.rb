@@ -37,25 +37,17 @@ class Admin::CreatorsController < AdminController
 
   # GET /creators
   # GET /creators.json
-  def index
-
-  end
+  def index; end
 
   # GET /creators/1
   # GET /creators/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /creators/new
-  def new
-
-  end
+  def new; end
 
   # GET /creators/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # POST /creators
   # POST /creators.json
@@ -103,7 +95,7 @@ class Admin::CreatorsController < AdminController
 private
 
   def find_collection
-    @creators = scoped_and_sorted_collection
+    @creators = scoped_collection
   end
 
   def build_new_instance
@@ -111,7 +103,7 @@ private
   end
 
   def find_instance
-    @creator = Creator.find(params[:id])
+    @creator = scoped_instance(params[:id])
   end
 
   def authorize_instance

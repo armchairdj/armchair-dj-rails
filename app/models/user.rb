@@ -86,16 +86,17 @@ class User < ApplicationRecord
   #############################################################################
 
   def can_write?
-    writer? || editor? || admin? || root?
+    root? || admin? || editor? || writer?
   end
 
   def can_edit?
-    editor? || admin? || root?
+    root? || admin? || editor?
   end
 
   def can_publish?
-    admin? || root?
+    root? || admin?
   end
+  alias_method :can_administer?, :can_publish?
 
   def can_destroy?
     root?
@@ -107,5 +108,22 @@ class User < ApplicationRecord
 
   def alpha_parts
     [last_name, first_name, middle_name]
+  end
+
+  def assignable_role_options
+    return [] unless self.can_administer?
+
+    options = self.class.human_roles
+
+    options.slice(0..options.index { |o| o.last == self.role })
+  end
+
+  def valid_role_assignment_for?(instance)
+    return true if instance.role.blank?
+    return true if self.assignable_role_options.map(&:last).include?(instance.role)
+
+    instance.errors.add(:role, :invalid_assignment)
+
+    false
   end
 end

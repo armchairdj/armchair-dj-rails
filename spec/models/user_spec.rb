@@ -193,5 +193,193 @@ RSpec.describe User, type: :model do
         ])
       end
     end
+
+    describe "role assignment methods" do
+      describe "#assignable_role_options" do
+        specify do
+          expect(create(:member).assignable_role_options).to eq([])
+        end
+
+        specify do
+          expect(create(:writer).assignable_role_options).to eq([])
+        end
+
+        specify do
+          expect(create(:editor).assignable_role_options).to eq([])
+        end
+
+        specify do
+          expect(create(:admin).assignable_role_options).to eq([
+            [ "Member", "member" ],
+            [ "Writer", "writer" ],
+            [ "Editor", "editor" ],
+            [ "Admin",  "admin"  ],
+          ])
+        end
+
+        specify do
+          expect(create(:root).assignable_role_options).to eq([
+            [ "Member", "member" ],
+            [ "Writer", "writer" ],
+            [ "Editor", "editor" ],
+            [ "Admin",  "admin"  ],
+            [ "Root",   "root"   ],
+          ])
+        end
+      end
+
+      describe "#valid_role_assignment_for?" do
+        let(:member) { build(:member) }
+        let(:writer) { build(:writer) }
+        let(:editor) { build(:editor) }
+        let( :admin) { build(:admin ) }
+        let(  :root) { build(:root  ) }
+
+        describe "for member" do
+          subject { create(:member) }
+
+          specify do
+            expect(subject.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
+
+        describe "for writer" do
+          subject { create(:writer) }
+
+          specify do
+            expect(subject.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
+
+        describe "for editor" do
+          subject { create(:editor) }
+
+          specify do
+            expect(subject.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
+
+        describe "for admin" do
+          subject { create(:admin) }
+
+          specify do
+            expect(subject.valid_role_assignment_for?(member)).to eq(true)
+            expect(member).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(writer)).to eq(true)
+            expect(writer).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(editor)).to eq(true)
+            expect(editor).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(admin)).to eq(true)
+            expect(admin).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
+
+        describe "for root" do
+          subject { create(:root) }
+
+          specify do
+            expect(subject.valid_role_assignment_for?(member)).to eq(true)
+            expect(member).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(writer)).to eq(true)
+            expect(writer).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(editor)).to eq(true)
+            expect(editor).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(admin)).to eq(true)
+            expect(admin).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(subject.valid_role_assignment_for?(root)).to eq(true)
+            expect(root).to_not have_error(:role, :invalid_assignment)
+          end
+        end
+      end
+    end
   end
 end

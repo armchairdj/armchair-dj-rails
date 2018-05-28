@@ -37,20 +37,14 @@ class Admin::MediaController < AdminController
 
   # GET /admin/media
   # GET /admin/media.json
-  def index
-
-  end
+  def index; end
 
   # GET /admin/media/1
   # GET /admin/media/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /admin/media/new
-  def new
-
-  end
+  def new; end
 
   # POST /admin/media
   # POST /admin/media.json
@@ -69,9 +63,7 @@ class Admin::MediaController < AdminController
   end
 
   # GET /admin/media/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /admin/media/1
   # PATCH/PUT /admin/media/1.json
@@ -110,7 +102,7 @@ class Admin::MediaController < AdminController
 private
 
   def find_collection
-    @media = scoped_and_sorted_collection
+    @media = scoped_collection
   end
 
   def build_new_instance
@@ -118,7 +110,7 @@ private
   end
 
   def find_instance
-    @medium = Medium.find(params[:id])
+    @medium = scoped_instance(params[:id])
   end
 
   def authorize_instance

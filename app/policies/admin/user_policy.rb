@@ -3,27 +3,29 @@
 class Admin::UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.for_admin
+      return scope.for_admin if user.root?
+
+      scope.where("users.role <= ?", user.raw_role).where.not(id: user.id).for_admin
     end
   end
 
   def index?
-    logged_in_as_cms_user? && user.root?
+    logged_in_as_cms_user? && user.can_administer?
   end
 
   def show?
-    logged_in_as_cms_user? && user.root?
+    logged_in_as_cms_user? && user.can_administer?
   end
 
   def create?
-    logged_in_as_cms_user? && user.root?
+    logged_in_as_cms_user? && user.can_administer?
   end
 
   def update?
-    logged_in_as_cms_user? && user.root?
+    logged_in_as_cms_user? && user.can_administer?
   end
 
   def destroy?
-    logged_in_as_cms_user? && user.root?
+    logged_in_as_cms_user? && user.can_destroy?
   end
 end

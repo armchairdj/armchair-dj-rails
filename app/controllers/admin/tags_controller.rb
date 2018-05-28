@@ -35,20 +35,14 @@ class Admin::TagsController < AdminController
 
   # GET /admin/tags
   # GET /admin/tags.json
-  def index
-
-  end
+  def index; end
 
   # GET /admin/tags/1
   # GET /admin/tags/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /admin/tags/new
-  def new
-
-  end
+  def new; end
 
   # POST /admin/tags
   # POST /admin/tags.json
@@ -71,9 +65,7 @@ class Admin::TagsController < AdminController
   end
 
   # GET /admin/tags/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /admin/tags/1
   # PATCH/PUT /admin/tags/1.json
@@ -105,7 +97,7 @@ class Admin::TagsController < AdminController
 private
 
   def find_collection
-    @tags = scoped_and_sorted_collection
+    @tags = scoped_collection
   end
 
   def build_new_instance
@@ -113,7 +105,7 @@ private
   end
 
   def find_instance
-    @tag = Tag.find(params[:id])
+    @tag = scoped_instance(params[:id])
   end
 
   def authorize_instance

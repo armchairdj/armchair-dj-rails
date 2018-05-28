@@ -45,20 +45,14 @@ class Admin::PostsController < AdminController
 
   # GET /posts
   # GET /posts.json
-  def index
-
-  end
+  def index; end
 
   # GET /posts/1
   # GET /posts/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /posts/new
-  def new
-
-  end
+  def new; end
 
   # POST /posts
   # POST /posts.json
@@ -79,9 +73,7 @@ class Admin::PostsController < AdminController
   end
 
   # GET /posts/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
@@ -114,7 +106,7 @@ class Admin::PostsController < AdminController
 private
 
   def find_collection
-    @posts = scoped_and_sorted_collection
+    @posts = scoped_collection
   end
 
   def build_new_instance
@@ -122,7 +114,7 @@ private
   end
 
   def find_instance
-    @post = Post.find(params[:id])
+    @post = scoped_instance(params[:id])
   end
 
   def sanitize_create_params

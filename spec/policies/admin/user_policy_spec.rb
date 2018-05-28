@@ -56,14 +56,15 @@ RSpec.describe Admin::UserPolicy do
   end
 
   context "as admin" do
-    let(:user) { create(:editor) }
+    let(:user) { create(:admin) }
 
-    it { is_expected.to forbid_action(:index  ) }
-    it { is_expected.to forbid_action(:show   ) }
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to permit_action(:index  ) }
+    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:new    ) }
+    it { is_expected.to permit_action(:create ) }
+    it { is_expected.to permit_action(:edit   ) }
+    it { is_expected.to permit_action(:update ) }
+
     it { is_expected.to forbid_action(:destroy) }
   end
 
@@ -77,5 +78,18 @@ RSpec.describe Admin::UserPolicy do
     it { is_expected.to permit_action(:edit   ) }
     it { is_expected.to permit_action(:update ) }
     it { is_expected.to permit_action(:destroy) }
+  end
+
+  context "scope" do
+    subject { described_class::Scope.new(user, model_class.all).resolve }
+
+    let(:model_class) { record.class }
+    let(       :user) { create(:writer) }
+
+    pending "for member"
+    pending "for writer"
+    pending "for editor"
+    pending "for admin"
+    pending "for root"
   end
 end

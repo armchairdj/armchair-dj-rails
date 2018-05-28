@@ -35,20 +35,14 @@ class Admin::RolesController < AdminController
 
   # GET /admin/roles
   # GET /admin/roles.json
-  def index
-
-  end
+  def index; end
 
   # GET /admin/roles/1
   # GET /admin/roles/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /admin/roles/new
-  def new
-
-  end
+  def new; end
 
   # POST /admin/roles
   # POST /admin/roles.json
@@ -67,9 +61,7 @@ class Admin::RolesController < AdminController
   end
 
   # GET /admin/roles/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /admin/roles/1
   # PATCH/PUT /admin/roles/1.json
@@ -101,7 +93,7 @@ class Admin::RolesController < AdminController
 private
 
   def find_collection
-    @roles = scoped_and_sorted_collection
+    @roles = scoped_collection
   end
 
   def build_new_instance
@@ -109,7 +101,7 @@ private
   end
 
   def find_instance
-    @role = Role.find(params[:id])
+    @role = scoped_instance(params[:id])
   end
 
   def authorize_instance

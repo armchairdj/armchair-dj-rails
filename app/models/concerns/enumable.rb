@@ -27,31 +27,37 @@ module Enumable
     def enumable_attributes(*attributes)
       self._enumable_attributes = Set.new(attributes.map(&:to_sym))
 
-      attributes.map(&:to_s).each do |attribute|
+      attributes.map(&:to_s).each do |attr|
+        plural_attr = attr.pluralize
+
 
         # Define class methods
         singleton_class.instance_eval do
-          define_method :"human_#{attribute.pluralize}_with_keys" do
-            self.human_enum_collection_with_keys(attribute)
+          define_method :"human_#{plural_attr}_with_keys" do
+            self.human_enum_collection_with_keys(attr)
           end
 
-          define_method :"human_#{attribute.pluralize}" do
-            self.human_enum_collection(attribute)
+          define_method :"human_#{plural_attr}" do
+            self.human_enum_collection((attr))
           end
 
-          define_method :"alphabetical_human_#{attribute.pluralize}" do
-            self.human_enum_collection(attribute, alphabetical: true)
+          define_method :"alphabetical_human_#{plural_attr}" do
+            self.human_enum_collection((attr), alphabetical: true)
           end
 
-          define_method :"human_#{attribute}" do |val|
-            self.human_enum_value(attribute, val)
+          define_method :"human_#{attr}" do |val|
+            self.human_enum_value(attr, val)
           end
         end
 
         # Define instance methods
         self.class_eval do
-          define_method :"human_#{attribute}" do
-            self.class.send(:"human_#{attribute}", self.send(attribute))
+          define_method :"human_#{attr}" do
+            self.class.send(:"human_#{attr}", self.send(attr))
+          end
+
+          define_method :"raw_#{attr}" do
+            self.class.send(:"#{plural_attr}")[self.send(attr)]
           end
         end
       end

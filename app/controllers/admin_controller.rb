@@ -19,7 +19,7 @@ private
     "admin"
   end
 
-  def scoped_and_sorted_collection
+  def scoped_collection
     @scope = params[:scope] || allowed_scopes.keys.first
     @sort  = params[:sort ] || allowed_sorts.keys.first
     @dir   = params[:dir  ] || "ASC"
@@ -37,6 +37,10 @@ private
     @sorts  = sorts_for_view(@scope, @sort, @dir)
 
     policy_scope(model_class).send(current_scope_value).order(current_sort_value).page(@page)
+  end
+
+  def scoped_instance(id)
+    policy_scope(model_class).find(id)
   end
 
   def allowed_scopes

@@ -30,20 +30,14 @@ class Admin::CategoriesController < AdminController
 
   # GET /admin/categories
   # GET /admin/categories.json
-  def index
-
-  end
+  def index; end
 
   # GET /admin/categories/1
   # GET /admin/categories/1.json
-  def show
-
-  end
+  def show; end
 
   # GET /admin/categories/new
-  def new
-
-  end
+  def new; end
 
   # POST /admin/categories
   # POST /admin/categories.json
@@ -60,9 +54,7 @@ class Admin::CategoriesController < AdminController
   end
 
   # GET /admin/categories/1/edit
-  def edit
-
-  end
+  def edit; end
 
   # PATCH/PUT /admin/categories/1
   # PATCH/PUT /admin/categories/1.json
@@ -92,7 +84,7 @@ class Admin::CategoriesController < AdminController
 private
 
   def find_collection
-    @categories = scoped_and_sorted_collection
+    @categories = scoped_collection
   end
 
   def build_new_instance
@@ -100,7 +92,7 @@ private
   end
 
   def find_instance
-    @category = Category.find(params[:id])
+    @category = scoped_instance(params[:id])
   end
 
   def authorize_instance

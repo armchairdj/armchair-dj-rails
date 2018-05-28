@@ -6,4 +6,7 @@
   h1: @title
 ) %>
 
-<%= render partial: "form", locals: { user: @user } %>
+<%= render partial: "form", locals: {
+  user:  @user,
+  roles: @roles
+} %>
