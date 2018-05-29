@@ -99,9 +99,6 @@ class Post < ApplicationRecord
 
   validates :body, presence: true, unless: :draft?
 
-  validates :slug, presence: true, unless: :draft?
-  validates :slug, uniqueness: true
-
   validates :published_at, presence: true, if: :published?
   validates :publish_on,   presence: true, if: :scheduled?
 
@@ -149,8 +146,6 @@ class Post < ApplicationRecord
   #############################################################################
   # HOOKS.
   #############################################################################
-
-  before_save :handle_slug
 
   #############################################################################
   # STATE MACHINE.
@@ -240,12 +235,6 @@ class Post < ApplicationRecord
     plural ? base.pluralize : base
   end
 
-  def sluggable_type
-    return nil unless review?
-
-    type(plural: true)
-  end
-
   def not_published?
     draft? || scheduled?
   end
@@ -293,48 +282,25 @@ private
   # SLUG.
   #############################################################################
 
-  def handle_slug
-    return if slug_published?
-    return if slug_already_dirty?
-    return if slug_newly_dirty?
-
-    self.dirty_slug = false
-
-    slugify(:slug, sluggable_parts)
+  def should_validate_slug_presence?
+    !draft?
   end
 
-  def slug_published?
-    return false unless published?
-
-    self.errors.add(:slug, :locked) if slug_changed?
-
-    true
-  end
-
-  def slug_already_dirty?
-    dirty_slug? && !slug_changed?
-  end
-
-  def slug_newly_dirty?
-    return false unless slug_changed? && !slug.blank?
-
-    self.dirty_slug = true
-
-    slugify(:slug, slug)
-
-    true
+  def slug_is_locked?
+    published?
   end
 
   def sluggable_parts
-    return [title] if standalone?
-
-    [
-      sluggable_type,
-      work.display_creators(connector: " and "),
-      work.title,
-      work.subtitle
-    ].compact
-    # TODO BJD should sluggable do the compacting?
+    if standalone?
+      [ title ]
+    else
+      [
+        type(plural: true),
+        work.display_creators(connector: " and "),
+        work.title,
+        work.subtitle
+      ]
+    end
   end
 
   #############################################################################
@@ -365,10 +331,6 @@ private
     self.publish_on = temp
   end
 
-  #############################################################################
-  # MEMOIZATION.
-  #############################################################################
-
   def update_counts_for_descendents
     author.update_counts
 
@@ -381,5 +343,7 @@ private
 
     work.creators.each { |c| c.update_counts }
     work.tags.each     { |t| t.update_counts }
+
+    # TODO contributors
   end
 end

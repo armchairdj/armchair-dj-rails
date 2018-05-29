@@ -30,9 +30,7 @@ module Sluggable
     def uniquify_slug(instance, attribute, base)
       return base unless dupe = find_duplicate_slug(instance, attribute, base)
 
-      incremented = [base, self.next_slug_index(dupe).to_s].join(VERSION_SEPARATOR)
-
-      incremented
+      [base, self.next_slug_index(dupe).to_s].join(VERSION_SEPARATOR)
     end
 
     def find_duplicate_slug(instance, attribute, slug)
@@ -50,9 +48,31 @@ module Sluggable
 
   included do
     validates :slug, uniqueness: true, allow_blank: true
+    validates :slug, presence: true, if: :should_validate_slug_presence?
+
+    validate { preserve_locked_slug }
+
+    before_save :prepare_slug
   end
 
-  def slugify(attribute, *args)
+private
+
+  def prepare_slug
+    return if slug_is_locked?
+    return if self.dirty_slug? && !slug_changed?
+
+    if slug_changed? && !slug.blank?
+      self.dirty_slug = true
+
+      assign_slug(:slug, slug)
+    else
+      self.dirty_slug = false
+
+      assign_slug(:slug, sluggable_parts)
+    end
+  end
+
+  def assign_slug(attribute, *args)
     return unless slug = generate_slug(attribute, *args)
 
     self.send(:"#{attribute}=", slug)
@@ -64,5 +84,23 @@ module Sluggable
     return unless parts.any?
 
     self.class.generate_unique_slug(self, attribute, parts)
+  end
+
+  def preserve_locked_slug
+    if slug_is_locked? && slug_changed?
+      self.errors.add(:slug, :locked)
+    end
+  end
+
+  def should_validate_slug_presence?
+    true
+  end
+
+  def slug_is_locked?
+    persisted?
+  end
+
+  def sluggable_parts
+    raise NotImplementedError
   end
 end

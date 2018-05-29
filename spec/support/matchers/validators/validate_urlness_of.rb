@@ -19,7 +19,7 @@ RSpec::Matchers.define :validate_urlness_of do |property|
 
       subject.valid?
 
-      expect(subject).to_not have_error(property, :not_a_url)
+      is_expected.to_not have_error(property, :not_a_url)
     end
 
     bad.each do |val|
@@ -27,7 +27,7 @@ RSpec::Matchers.define :validate_urlness_of do |property|
 
       subject.valid?
 
-      expect(subject).to have_error(property, :not_a_url)
+      is_expected.to have_error(property, :not_a_url)
     end
   end
 

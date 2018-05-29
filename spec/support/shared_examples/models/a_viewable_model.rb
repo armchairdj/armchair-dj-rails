@@ -70,7 +70,7 @@ RSpec.shared_examples "a_viewable_model" do
 
         it "calls #refresh_counts" do
            allow(subject).to receive(:refresh_counts).and_call_original
-          expect(subject).to receive(:refresh_counts)
+          is_expected.to receive(:refresh_counts)
 
           subject.save
         end
@@ -89,7 +89,7 @@ RSpec.shared_examples "a_viewable_model" do
 
             before(:each) do
                allow(subject).to     receive(:save).and_call_original
-              expect(subject).to_not receive(:save)
+              is_expected.to_not receive(:save)
             end
 
             describe "with changes" do
@@ -140,7 +140,7 @@ RSpec.shared_examples "a_viewable_model" do
       before(:each) do
          allow(subject).to receive(:save          ).and_call_original
          allow(subject).to receive(:refresh_counts).and_call_original
-        expect(subject).to receive(:refresh_counts)
+        is_expected.to receive(:refresh_counts)
       end
 
       describe "with changes" do
@@ -150,7 +150,7 @@ RSpec.shared_examples "a_viewable_model" do
           expect(subject.viewable_post_count    ).to eq(0)
           expect(subject.non_viewable_post_count).to eq(0)
 
-          expect(subject).to receive(:save)
+          is_expected.to receive(:save)
 
           expect(subject.update_counts).to eq(true)
 
@@ -168,7 +168,7 @@ RSpec.shared_examples "a_viewable_model" do
           expect(subject.viewable_post_count    ).to eq(1)
           expect(subject.non_viewable_post_count).to eq(2)
 
-          expect(subject).to_not receive(:save)
+          is_expected.to_not receive(:save)
 
           expect(subject.update_counts).to eq(false)
 

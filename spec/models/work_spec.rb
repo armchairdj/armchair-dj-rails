@@ -262,19 +262,19 @@ RSpec.describe Work, type: :model do
 
         before(:each) do
            allow(subject).to receive(:at_least_one_credit).and_call_original
-          expect(subject).to receive(:at_least_one_credit)
+          is_expected.to receive(:at_least_one_credit)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.credits = []
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(credits: :missing)
+          is_expected.to have_error(credits: :missing)
         end
       end
 
@@ -288,7 +288,7 @@ RSpec.describe Work, type: :model do
           it "allows categorized tags" do
             subject.update(tag_ids: [tag_for_work.id])
 
-            expect(subject).to_not have_error(tag_ids: :uncategorized_tags)
+            is_expected.to_not have_error(tag_ids: :uncategorized_tags)
           end
         end
 
@@ -296,7 +296,7 @@ RSpec.describe Work, type: :model do
           it "disallows uncategorized tags" do
             subject.update(tag_ids: [tag_for_post.id])
 
-            expect(subject).to have_error(tag_ids: :uncategorized_tags)
+            is_expected.to have_error(tag_ids: :uncategorized_tags)
           end
         end
       end

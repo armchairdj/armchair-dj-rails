@@ -250,44 +250,268 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
   end
 
   context "included" do
-    subject { create_minimal_instance }
+    context "validation" do
+      context "basic" do
+        subject { create_minimal_instance }
 
-    it { is_expected.to validate_uniqueness_of(:slug) }
+        it { is_expected.to validate_uniqueness_of(:slug) }
+      end
+
+      context "conditional" do
+        describe "#should_validate_slug_presence?" do
+          context "when true" do
+            before(:each) do
+              allow(subject).to receive(:should_validate_slug_presence?).and_return(true)
+            end
+
+            it { is_expected.to validate_presence_of(:slug) }
+          end
+
+          context "when false" do
+            before(:each) do
+              allow(subject).to receive(:should_validate_slug_presence?).and_return(false)
+            end
+
+            it { is_expected.to_not validate_presence_of(:slug) }
+          end
+        end
+      end
+
+      context "custom" do
+        describe "#preserve_locked_slug" do
+          subject { create_minimal_instance }
+
+          it "passes when #slug_is_locked is false" do
+            allow(subject).to receive(:slug_is_locked?).and_return(false)
+
+            is_expected.to be_valid
+
+            is_expected.to_not have_error(:slug, :locked)
+          end
+
+          it "passes when #slug_is_locked is true but slug hasn't changed" do
+            allow(subject).to receive(:slug_is_locked?).and_return(true)
+
+            is_expected.to be_valid
+
+            is_expected.to_not have_error(:slug, :locked)
+          end
+
+          it "errors when #slug_is_locked is true and slug has changed" do
+            allow(subject).to receive(:slug_is_locked?).and_return(true)
+
+            subject.slug = "replacement slug"
+
+            is_expected.to_not be_valid
+
+            is_expected.to have_error(:slug, :locked)
+          end
+        end
+      end
+    end
+
+    context "hooks" do
+      context "before_save" do
+        context "calls #prepare_slug" do
+          before(:each) do
+             allow(subject).to receive(:prepare_slug).and_call_original
+            is_expected.to receive(:prepare_slug)
+          end
+
+          context "on new" do
+            subject { build_minimal_instance }
+            specify { subject.save }
+          end
+
+          context "on saved" do
+            subject { create_minimal_instance }
+            specify { subject.save }
+          end
+        end
+      end
+    end
   end
 
   context "instance" do
     subject { build_minimal_instance }
 
+    specify { expect(subject.respond_to?(:sluggable_parts, true)).to eq(true) }
+
+    describe "#prepare_slug" do
+      before(:each) do
+        allow(subject).to receive(:sluggable_parts).and_return(["Title"])
+
+        allow(subject).to receive(:assign_slug).and_call_original
+
+        allow(subject).to receive(:generate_slug).with(:slug, ["Title"]    ).and_return("latest_slug")
+        allow(subject).to receive(:generate_slug).with(:slug, "Newly Dirty").and_return("newly_dirty")
+      end
+
+      context "unsaved" do
+        subject { build_minimal_instance }
+
+        it "sets slug automatically" do
+          expect(subject).to receive(:assign_slug).with(:slug, ["Title"])
+
+          subject.send(:prepare_slug)
+
+          expect(subject.slug       ).to eq("latest_slug")
+          expect(subject.dirty_slug?).to eq(false)
+        end
+      end
+
+      context "saved and unlocked" do
+        subject { create_minimal_instance }
+
+        before(:each) do
+          allow(subject).to receive(:slug_is_locked?).and_return(false)
+        end
+
+        context "clean" do
+          it "resets slug" do
+            expect(subject).to receive(:assign_slug).with(:slug, ["Title"])
+
+            subject.send(:prepare_slug)
+
+            expect(subject.slug       ).to eq("latest_slug")
+            expect(subject.dirty_slug?).to eq(false)
+          end
+        end
+
+        context "newly dirty" do
+          it "slugifies dirty value and sets dirty flag" do
+            expect(subject).to receive(:assign_slug).with(:slug, "Newly Dirty")
+
+            subject.slug = "Newly Dirty"
+
+            subject.send(:prepare_slug)
+
+            expect(subject.slug       ).to eq("newly_dirty")
+            expect(subject.dirty_slug?).to eq(true)
+          end
+        end
+
+        context "already dirty" do
+          before(:each) do
+            subject.update_columns(slug: "already_dirty", dirty_slug: true)
+          end
+
+          it "does nothing if no change" do
+            subject.send(:prepare_slug)
+
+            expect(subject.slug       ).to eq("already_dirty")
+            expect(subject.dirty_slug?).to eq(true)
+          end
+
+          it "slugifies new value if new value is dirty" do
+            expect(subject).to receive(:assign_slug).with(:slug, "Newly Dirty")
+
+            subject.slug = "Newly Dirty"
+
+            subject.send(:prepare_slug)
+
+            expect(subject.slug       ).to eq("newly_dirty")
+            expect(subject.dirty_slug?).to eq(true)
+          end
+
+          it "resets slug and sets dirty to false if new value is blank" do
+            expect(subject).to receive(:assign_slug).with(:slug, ["Title"])
+
+            subject.slug = ""
+
+            subject.send(:prepare_slug)
+
+            expect(subject.slug       ).to eq("latest_slug")
+            expect(subject.dirty_slug?).to eq(false)
+          end
+        end
+      end
+
+      context "saved and locked" do
+        subject { create_minimal_instance }
+
+        before(:each) do
+          allow(subject).to receive(:slug_is_locked?).and_return(true)
+        end
+
+        it "does nothing if value has not changed" do
+          expect(subject).to_not receive(:assign_slug)
+
+          previous = subject.slug
+
+          subject.send(:prepare_slug)
+
+          expect(subject.slug       ).to eq(previous)
+          expect(subject.dirty_slug?).to eq(false)
+        end
+
+        it "falls back to validation if value has changed" do
+          expect(subject).to_not receive(:assign_slug)
+
+          subject.slug = "this will be caught by validation"
+
+          subject.send(:prepare_slug)
+
+          expect(subject.slug       ).to eq("this will be caught by validation")
+          expect(subject.dirty_slug?).to eq(false)
+        end
+      end
+    end
+
+    describe "#assign_slug" do
+      before(:each) do
+        allow(subject).to receive(:"#{sluggable_attribute}=")
+      end
+
+      it "sets attribute to unique slug with one part" do
+        is_expected.to receive(:"#{sluggable_attribute}=")
+
+        subject.send(:assign_slug, sluggable_attribute, ["foo"])
+      end
+
+      it "sets attribute to unique slug with multiple parts" do
+        is_expected.to receive(:"#{sluggable_attribute}=")
+
+        subject.send(:assign_slug, sluggable_attribute, ["foo", "bar"])
+      end
+
+      it "does nothing if no parts" do
+        is_expected.to_not receive(:"#{sluggable_attribute}=")
+
+        subject.send(:assign_slug, sluggable_attribute, [])
+      end
+    end
+
     describe "generate_slug" do
       context "no parts" do
-        specify { expect(subject.generate_slug(sluggable_attribute.to_s  )).to eq(nil) }
-        specify { expect(subject.generate_slug(sluggable_attribute.to_sym)).to eq(nil) }
+        specify { expect(subject.send(:generate_slug, sluggable_attribute.to_s  )).to eq(nil) }
+        specify { expect(subject.send(:generate_slug, sluggable_attribute.to_sym)).to eq(nil) }
       end
 
       context "with one part" do
         it "generates slug from parts array" do
-          actual   = subject.generate_slug(sluggable_attribute, ["Hounds of Love"])
+          actual   = subject.send(:generate_slug, sluggable_attribute, ["Hounds of Love"])
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from parts splat" do
-          actual   = subject.generate_slug(sluggable_attribute, "Hounds of Love")
+          actual   = subject.send(:generate_slug, sluggable_attribute, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute string" do
-          actual   = subject.generate_slug(sluggable_attribute.to_s, "Hounds of Love")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_s, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute symbol" do
-          actual   = subject.generate_slug(sluggable_attribute.to_sym, "Hounds of Love")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
@@ -297,7 +521,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
           dupe = create_minimal_instance
           dupe.update_column(sluggable_attribute.to_sym, "hounds_of_love")
 
-          actual   = subject.generate_slug(sluggable_attribute.to_sym, "Hounds of Love")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Hounds of Love")
           expected = "hounds_of_love/v2"
 
           expect(actual).to eq(expected)
@@ -306,28 +530,28 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
       context "with multiple parts" do
         it "generates slug from parts array" do
-          actual   = subject.generate_slug(sluggable_attribute, ["Songs", "Kate Bush", "The Dreaming"])
+          actual   = subject.send(:generate_slug, sluggable_attribute, ["Songs", "Kate Bush", "The Dreaming"])
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from parts splat" do
-          actual   = subject.generate_slug(sluggable_attribute, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, sluggable_attribute, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute string" do
-          actual   = subject.generate_slug(sluggable_attribute.to_s, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_s, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute symbol" do
-          actual   = subject.generate_slug(sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
@@ -337,35 +561,11 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
           dupe = create_minimal_instance
           dupe.update_column(sluggable_attribute.to_sym, "songs/kate_bush/the_dreaming")
 
-          actual   = subject.generate_slug(sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming/v2"
 
           expect(actual).to eq(expected)
         end
-      end
-    end
-
-    describe "#slugify" do
-      before(:each) do
-        allow(subject).to receive(:"#{sluggable_attribute}=")
-      end
-
-      it "sets attribute to unique slug with one part" do
-        expect(subject).to receive(:"#{sluggable_attribute}=")
-
-        subject.slugify(sluggable_attribute, ["foo"])
-      end
-
-      it "sets attribute to unique slug with multiple parts" do
-        expect(subject).to receive(:"#{sluggable_attribute}=")
-
-        subject.slugify(sluggable_attribute, ["foo", "bar"])
-      end
-
-      it "does nothing if no parts" do
-        expect(subject).to_not receive(:"#{sluggable_attribute}=")
-
-        subject.slugify(sluggable_attribute, [])
       end
     end
   end

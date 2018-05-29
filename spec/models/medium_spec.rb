@@ -175,19 +175,19 @@ RSpec.describe Medium, type: :model do
 
         before(:each) do
            allow(subject).to receive(:at_least_one_role).and_call_original
-          expect(subject).to receive(:at_least_one_role)
+          is_expected.to receive(:at_least_one_role)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.roles = []
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(roles: :missing)
+          is_expected.to have_error(roles: :missing)
         end
       end
     end

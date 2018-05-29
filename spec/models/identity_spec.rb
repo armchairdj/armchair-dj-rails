@@ -22,38 +22,38 @@ RSpec.describe Identity, type: :model do
       describe "#real_name_is_primary" do
         before(:each) do
            allow(subject).to receive(:real_name_is_primary).and_call_original
-          expect(subject).to receive(:real_name_is_primary)
+          is_expected.to receive(:real_name_is_primary)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.real_name = create(:secondary_creator)
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(real_name_id: :not_primary)
+          is_expected.to have_error(real_name_id: :not_primary)
         end
       end
 
       describe "#pseudonym_is_secondary" do
         before(:each) do
            allow(subject).to receive(:pseudonym_is_secondary).and_call_original
-          expect(subject).to receive(:pseudonym_is_secondary)
+          is_expected.to receive(:pseudonym_is_secondary)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.pseudonym = create(:primary_creator)
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(pseudonym_id: :not_secondary)
+          is_expected.to have_error(pseudonym_id: :not_secondary)
         end
       end
     end

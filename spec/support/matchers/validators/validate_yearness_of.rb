@@ -11,7 +11,7 @@ RSpec::Matchers.define :validate_yearness_of do |property|
 
       subject.valid?
 
-      expect(subject).to_not have_error(property, :not_a_year)
+      is_expected.to_not have_error(property, :not_a_year)
     end
 
     bad.each do |val|
@@ -19,7 +19,7 @@ RSpec::Matchers.define :validate_yearness_of do |property|
 
       subject.valid?
 
-      expect(subject).to have_error(property, :not_a_year)
+      is_expected.to have_error(property, :not_a_year)
     end
   end
 

@@ -249,24 +249,20 @@ RSpec.describe Post, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_uniqueness_of(:slug) }
-
     context "conditional" do
       context "draft" do
         subject { create(:minimal_post, :draft) }
 
-        it { is_expected.to_not  validate_presence_of(:body        ) }
-        it { is_expected.to_not  validate_presence_of(:slug        ) }
-        it { is_expected.to_not  validate_presence_of(:published_at) }
-        it { is_expected.to_not  validate_presence_of(:publish_on  ) }
+        it { is_expected.to_not validate_presence_of(:body        ) }
+        it { is_expected.to_not validate_presence_of(:published_at) }
+        it { is_expected.to_not validate_presence_of(:publish_on  ) }
       end
 
       context "scheduled" do
         subject { create(:minimal_post, :scheduled) }
 
         it { is_expected.to     validate_presence_of(:body        ) }
-        it { is_expected.to     validate_presence_of(:slug        ) }
-        it { is_expected.to_not  validate_presence_of(:published_at) }
+        it { is_expected.to_not validate_presence_of(:published_at) }
         it { is_expected.to     validate_presence_of(:publish_on  ) }
 
         specify "publish_on is future" do
@@ -282,9 +278,8 @@ RSpec.describe Post, type: :model do
         subject { create(:minimal_post, :published) }
 
         it { is_expected.to     validate_presence_of(:body        ) }
-        it { is_expected.to     validate_presence_of(:slug        ) }
         it { is_expected.to     validate_presence_of(:published_at) }
-        it { is_expected.to_not  validate_presence_of(:publish_on  ) }
+        it { is_expected.to_not validate_presence_of(:publish_on  ) }
       end
     end
 
@@ -429,164 +424,6 @@ RSpec.describe Post, type: :model do
             subject.update(tag_ids: [tag_for_work.id])
 
             expect(subject).to have_error(tag_ids: :categorized_tags)
-          end
-        end
-      end
-    end
-  end
-
-  context "hooks" do
-    context "before_save" do
-      context "calls #handle_slug" do
-        before(:each) do
-           allow(subject).to receive(:handle_slug).and_call_original
-          expect(subject).to receive(:handle_slug)
-        end
-
-        context "on new" do
-          subject { build_minimal_instance }
-
-          specify { subject.save }
-        end
-
-        context "on saved" do
-          subject { create_minimal_instance }
-
-          specify { subject.save }
-        end
-      end
-    end
-
-    context "callbacks" do
-      describe "#sluggable_parts" do
-        let(    :review) { create(:hounds_of_love_album_review               ) }
-        let(    :collab) { create(:unity_album_review                        ) }
-        let(:standalone) { create(:standalone_post, title: "Standalone Title") }
-
-        specify "for review" do
-          expect(review.send(:sluggable_parts)) .to eq(["Album Reviews", "Kate Bush", "Hounds of Love"])
-        end
-
-        specify "for review of collaborative work" do
-          expect(collab.send(:sluggable_parts)).to eq(["Album Reviews", "Carl Craig and Green Velvet", "Unity"])
-        end
-
-        specify "for standalone" do
-          expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
-        end
-      end
-
-      describe "#handle_slug" do
-        before(:each) do
-          allow(instance).to receive(:sluggable_parts).and_return(["Standalone Title"])
-
-          allow(instance).to receive(:slugify).and_call_original
-
-          allow(instance).to receive(:generate_slug).with(:slug, ["Standalone Title"]).and_return("latest_slug")
-          allow(instance).to receive(:generate_slug).with(:slug, "Newly Dirty"       ).and_return("newly_dirty")
-        end
-
-        context "unsaved draft" do
-          let(:instance) { build(:tiny_standalone_post) }
-
-          it "sets slug automatically" do
-            expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-            instance.send(:handle_slug)
-
-            expect(instance.slug       ).to eq("latest_slug")
-            expect(instance.dirty_slug?).to eq(false)
-          end
-        end
-
-        context "saved draft" do
-          let(:instance) { create(:tiny_standalone_post, :draft) }
-
-          context "clean" do
-            it "resets slug" do
-              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("latest_slug")
-              expect(instance.dirty_slug?).to eq(false)
-            end
-          end
-
-          context "newly dirty" do
-            it "slugifies dirty value and sets dirty flag" do
-              expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
-
-              instance.slug = "Newly Dirty"
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("newly_dirty")
-              expect(instance.dirty_slug?).to eq(true)
-            end
-          end
-
-          context "already dirty" do
-            before(:each) do
-              instance.update_columns(slug: "already_dirty", dirty_slug: true)
-            end
-
-            it "does nothing if no change" do
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("already_dirty")
-              expect(instance.dirty_slug?).to eq(true)
-            end
-
-            it "slugifies new value if new value is dirty" do
-              expect(instance).to receive(:slugify).with(:slug, "Newly Dirty")
-
-              instance.slug = "Newly Dirty"
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("newly_dirty")
-              expect(instance.dirty_slug?).to eq(true)
-            end
-
-            it "resets slug and sets dirty to false if new value is blank" do
-              expect(instance).to receive(:slugify).with(:slug, ["Standalone Title"])
-
-              instance.slug = ""
-
-              instance.send(:handle_slug)
-
-              expect(instance.slug       ).to eq("latest_slug")
-              expect(instance.dirty_slug?).to eq(false)
-            end
-          end
-        end
-
-        context "saved published" do
-          let(:instance) { create(:tiny_standalone_post, :published) }
-
-          it "does nothing if value has not changed" do
-            expect(instance).to_not receive(:slugify)
-
-            previous = instance.slug
-
-            instance.send(:handle_slug)
-
-            expect(instance.slug       ).to eq(previous)
-            expect(instance.dirty_slug?).to eq(false)
-            expect(instance.errors.details[:slug].first).to eq(nil)
-          end
-
-          it "does nothing if value has not changed" do
-            expect(instance).to_not receive(:slugify)
-
-            instance.slug = "this is not allowed"
-
-            instance.send(:handle_slug)
-
-            expect(instance.slug       ).to eq("this is not allowed")
-            expect(instance.dirty_slug?).to eq(false)
-            expect(instance.errors.details[:slug].first).to eq({ error: :locked })
           end
         end
       end
@@ -1184,11 +1021,6 @@ RSpec.describe Post, type: :model do
         specify { expect(    review.type              ).to eq("Song Review" ) }
         specify { expect(    review.type(plural: true)).to eq("Song Reviews") }
       end
-
-      describe "#sluggable_type" do
-        specify { expect(standalone.sluggable_type).to eq(nil            ) }
-        specify { expect(    review.sluggable_type).to eq("Song Reviews") }
-      end
     end
 
     context "booleans" do
@@ -1549,6 +1381,24 @@ RSpec.describe Post, type: :model do
         it "uses name" do
           expect(subject.alpha_parts).to eq([subject.work.alpha_parts])
         end
+      end
+    end
+
+    describe "#sluggable_parts" do
+      let(    :review) { create(:hounds_of_love_album_review               ) }
+      let(    :collab) { create(:unity_album_review                        ) }
+      let(:standalone) { create(:standalone_post, title: "Standalone Title") }
+
+      specify "for review" do
+        expect(review.send(:sluggable_parts)) .to eq(["Album Reviews", "Kate Bush", "Hounds of Love", nil])
+      end
+
+      specify "for review of collaborative work" do
+        expect(collab.send(:sluggable_parts)).to eq(["Album Reviews", "Carl Craig and Green Velvet", "Unity", nil])
+      end
+
+      specify "for standalone" do
+        expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
       end
     end
 

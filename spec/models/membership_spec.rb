@@ -22,38 +22,38 @@ RSpec.describe Membership, type: :model do
       describe "#group_is_collective" do
         before(:each) do
            allow(subject).to receive(:group_is_collective).and_call_original
-          expect(subject).to receive(:group_is_collective)
+          is_expected.to receive(:group_is_collective)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.group = create(:individual_creator)
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(group_id: :not_collective)
+          is_expected.to have_error(group_id: :not_collective)
         end
       end
 
       describe "#member_is_individual" do
         before(:each) do
            allow(subject).to receive(:member_is_individual).and_call_original
-          expect(subject).to receive(:member_is_individual)
+          is_expected.to receive(:member_is_individual)
         end
 
         specify "valid" do
-          expect(subject).to be_valid
+          is_expected.to be_valid
         end
 
         specify "invalid" do
           subject.member = create(:collective_creator)
 
-          expect(subject).to_not be_valid
+          is_expected.to_not be_valid
 
-          expect(subject).to have_error(member_id: :not_individual)
+          is_expected.to have_error(member_id: :not_individual)
         end
       end
     end
