@@ -74,6 +74,8 @@ module AdminHelper
   end
 
   def admin_destroy_link(instance)
+    return unless policy(instance).destroy?
+
     path  = polymorphic_path([:admin, instance])
     title = "destroy #{instance.model_name.singular}"
     desc  = "trash icon"
@@ -110,33 +112,55 @@ module AdminHelper
     content_tag(:header, [*decks, actions].compact.join.html_safe, **opts)
   end
 
+  def admin_nav_links
+    links = [
+      link_to("Media",       admin_media_path         ),
+      link_to("Roles",       admin_roles_path         ),
+      link_to("Categories",  admin_categories_path    ),
+      link_to("Tags",        admin_tags_path          ),
+      link_to("Creators",    admin_creators_path      ),
+      link_to("Works",       admin_works_path         ),
+      link_to("Posts",       admin_posts_path         ),
+      link_to("Style Guide", style_guides_path        ),
+      link_to("Log Out",     destroy_user_session_path)
+    ]
+
+    if current_user.can_administer?
+      links.unshift link_to("Users", admin_users_path)
+    end
+
+    markup = links.map { |link| content_tag(:li, link) }.compact.join("\n").html_safe
+
+    content_tag(:ul, markup, class: "arrowed")
+  end
+
   def admin_header_links(model_class, action, instance = nil)
     links = case action
     when :index
       [
-        admin_create_link(    model_class)
+        admin_create_link(model_class)
       ]
     when :new
       [
-        admin_list_link(      model_class)
+        admin_list_link(  model_class)
       ]
     when :edit
       [
-        admin_public_link(   instance),
-        admin_view_link(         instance),
-        admin_destroy_link(      instance),
-        admin_list_link(      model_class),
+        admin_public_link(  instance),
+        admin_view_link(    instance),
+        admin_destroy_link( instance),
+        admin_list_link( model_class),
       ]
     when :show
       [
-        admin_public_link(   instance),
-        admin_update_link(       instance),
-        admin_destroy_link(      instance),
-        admin_list_link(      model_class),
+        admin_public_link(  instance),
+        admin_update_link(  instance),
+        admin_destroy_link( instance),
+        admin_list_link( model_class),
       ]
     end
 
-    links.join.html_safe
+    links.compact.join.html_safe
   end
 
   def admin_actions_cell(instance)

@@ -28,6 +28,6 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/forms/link_fieldset", locals: {
+<%= render(partial: "admin/shared/forms/link_fieldset", locals: {
   f: f
-} %>
+}) if show_links %>

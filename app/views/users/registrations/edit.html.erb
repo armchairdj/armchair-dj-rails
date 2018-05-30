@@ -9,6 +9,7 @@
     <%= render partial: "admin/users/form_fields", locals: {
       f:             f,
       show_bio:      @user.can_write?,
+      show_links:    @user.can_write?,
       show_password: false,
       show_role:     false,
     } %>

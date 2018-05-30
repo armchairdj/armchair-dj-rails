@@ -86,6 +86,14 @@ class User < ApplicationRecord
   # HOOKS.
   #############################################################################
 
+  after_initialize :set_default_role
+
+  def set_default_role
+    self.role = :member if self.role.blank?
+  end
+
+  private :set_default_role
+
   #############################################################################
   # SLUGGABLE.
   #############################################################################

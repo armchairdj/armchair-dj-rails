@@ -137,6 +137,12 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context "hooks" do
+    context "after_initialize" do
+      pending "#set_default_role"
+    end
+  end
+
   context "instance" do
     describe "can_write?" do
       specify { expect(create(:member).can_write?).to eq(false) }
