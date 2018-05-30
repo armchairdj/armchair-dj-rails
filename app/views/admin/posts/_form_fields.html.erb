@@ -5,13 +5,7 @@
     <%= f.input :tag_ids,
       as:         :select,
       collection: tags,
-      input_html: {
-        multiple:                       true,
-        "data-controller":              "selectable-create",
-        "data-selectable-create-scope": "tag",
-        "data-selectable-create-url":   admin_tags_path,
-        "data-selectable-create-param": "tag[name]",
-      }
+      input_html: js_selectable_create_tag_attrs
     %>
   <% end %>
 <% end %>

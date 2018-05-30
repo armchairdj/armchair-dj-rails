@@ -52,7 +52,7 @@ class Admin::MediaController < AdminController
     respond_to do |format|
       if @medium.save
         format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.create") }
-        format.json { render :show, status: :created, location: @medium }
+        format.json { render :show, status: :created, location: admin_medium_url(@medium) }
       else
         prepare_form
 
@@ -71,7 +71,7 @@ class Admin::MediaController < AdminController
     respond_to do |format|
       if @medium.update(instance_params)
         format.html { redirect_to admin_medium_path(@medium), success: I18n.t("admin.flash.media.success.update") }
-        format.json { render :show, status: :ok, location: @medium }
+        format.json { render :show, status: :ok, location: admin_medium_url(@medium) }
       else
         prepare_form
 

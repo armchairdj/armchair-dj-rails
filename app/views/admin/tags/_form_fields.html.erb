@@ -5,12 +5,7 @@
       collection:    categories,
       required:      false,
       include_blank: :translate,
-      input_html:    {
-        "data-controller":              "selectable-create",
-        "data-selectable-create-scope": "category",
-        "data-selectable-create-url":   admin_categories_path,
-        "data-selectable-create-param": "category[name]",
-      }
+      input_html:    js_selectable_create_category_attrs
     %>
 
     <%= f.input :name %>

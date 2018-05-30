@@ -6,12 +6,7 @@
       collection:    creators,
       required:      false,
       include_blank: :translate,
-      input_html:    {
-        "data-controller":                "selectable-create",
-        "data-selectable-create-scope":   "creator",
-        "data-selectable-create-url":     admin_creators_path,
-        "data-selectable-create-param":   "creator[name]"
-      }
+      input_html:    js_selectabe_create_creator_attrs
     %>
 
     <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>

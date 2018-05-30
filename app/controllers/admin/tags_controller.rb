@@ -54,7 +54,7 @@ class Admin::TagsController < AdminController
     respond_to do |format|
       if @tag.save
         format.html { redirect_to admin_tag_path(@tag), success: I18n.t("admin.flash.tags.success.create") }
-        format.json { render :show, status: :created, location: @tag }
+        format.json { render :show, status: :created, location: admin_tag_url(@tag) }
       else
         prepare_form
 
@@ -73,7 +73,7 @@ class Admin::TagsController < AdminController
     respond_to do |format|
       if @tag.update(instance_params)
         format.html { redirect_to admin_tag_path(@tag), success: I18n.t("admin.flash.tags.success.update") }
-        format.json { render :show, status: :ok, location: @tag }
+        format.json { render :show, status: :ok, location: admin_tag_url(@tag) }
       else
         prepare_form
 

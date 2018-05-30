@@ -52,7 +52,7 @@ class Admin::UsersController < AdminController
     respond_to do |format|
       if current_user.valid_role_assignment_for?(@user) && @user.save
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.create") }
-        format.json { render :show, status: :created, location: @user }
+        format.json { render :show, status: :created, location: admin_user_url(@user) }
       else
         prepare_form
 
@@ -73,7 +73,7 @@ class Admin::UsersController < AdminController
     respond_to do |format|
       if current_user.valid_role_assignment_for?(@user) && @user.save
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.update") }
-        format.json { render :show, status: :ok, location: @user }
+        format.json { render :show, status: :ok, location: admin_user_url(@user) }
       else
         prepare_form
 

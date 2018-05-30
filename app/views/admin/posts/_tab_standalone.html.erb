@@ -2,12 +2,12 @@
 
 <% content_for(:tab_triggers) do %>
   <%= content_tag(:li) do %>
-    <%= link_to("Standalone", "##{tab_name}", "data-target": "tabbable.all", "data-action": "click->tabbable#activate", "data-tab-name": tab_name) %>
+    <%= js_tabbable_link("Standalone", tab_name) %>
   <% end %>
 <% end %>
 
 <% content_for(:tabs) do %>
-  <%= content_tag(:div, class: "tab", "data-target": "tabbable.all", "data-tab-name": tab_name, id: tab_name) do %>
+  <%= content_tag(:div, **js_tabbable_tab_attrs(tab_name)) do %>
     <%= content_tag(:fieldset, class: "chunk") do %>
       <%= content_tag(:legend, "Standalone", "data-target": "tabbable.remove") %>
 

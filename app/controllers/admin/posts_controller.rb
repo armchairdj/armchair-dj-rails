@@ -62,7 +62,7 @@ class Admin::PostsController < AdminController
     respond_to do |format|
       if @post.save
         format.html { redirect_to admin_post_path(@post), success: I18n.t("admin.flash.posts.success.create") }
-        format.json { render :show, status: :created, location: @post }
+        format.json { render :show, status: :created, location: admin_post_url(@post) }
       else
         prepare_form
 
@@ -253,7 +253,7 @@ private
     respond_to do |format|
       if @post.send(update_method, @sanitized_params)
         format.html { redirect_to admin_post_path(@post), success: I18n.t(success) }
-        format.json { render :show, status: :ok, location: @post }
+        format.json { render :show, status: :ok, location: admin_post_url(@post) }
       else
         prepare_form
 

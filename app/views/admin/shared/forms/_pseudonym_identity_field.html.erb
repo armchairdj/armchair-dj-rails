@@ -6,13 +6,7 @@
       collection:    creators,
       required:      false,
       include_blank: :translate,
-      input_html:    {
-        "data-controller":                     "selectable-create",
-        "data-selectable-create-scope":        "creator[psuedonym]",
-        "data-selectable-create-url":          admin_creators_path,
-        "data-selectable-create-param":        "creator[name]",
-        "data-selectable-create-extra-params": "creator[primary]=false"
-      }
+      input_html:    js_selectabe_create_creator_attrs("creator[psuedonym]")
     %>
 
     <%= ff.error :real_name_id %>

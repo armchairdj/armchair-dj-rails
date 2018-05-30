@@ -1,25 +1,6 @@
-<%
-  input_html = {
-    multiple:                              true,
-    "data-controller":                     "selectable-create",
-    "data-selectable-create-scope":        "tag[category_id=#{category.id}]",
-    "data-selectable-create-url":          admin_tags_path,
-    "data-selectable-create-param":        "tag[name]",
-    "data-selectable-create-extra-params": "tag[category_id]=#{category.id}",
-  }
-
-  if category.allow_multiple?
-    if category.year?
-      input_html["data-selectable-create-allow-range"] = "true";
-    end
-  else
-    input_html["data-selectable-create-max-items"] = "1"
-  end
-%>
-
 <%= f.input Work.permitted_tag_param(category),
   as:         :select,
   collection: available_tags,
   label:      category.display_name,
-  input_html: input_html
+  input_html: js_selectable_create_tag_attrs(category)
 %>

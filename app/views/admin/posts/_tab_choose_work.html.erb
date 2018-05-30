@@ -2,12 +2,12 @@
 
 <% content_for(:tab_triggers) do %>
   <%= content_tag(:li) do %>
-    <%= link_to("Choose Work", "##{tab_name}", "data-target": "tabbable.all", "data-action": "click->tabbable#activate", "data-tab-name": tab_name) %>
+    <%= js_tabbable_link("Choose Work", tab_name) %>
   <% end %>
 <% end %>
 
 <% content_for(:tabs) do %>
-  <%= content_tag(:div, class: "tab", "data-target": "tabbable.all", "data-tab-name": tab_name, id: tab_name) do %>
+  <%= content_tag(:div, **js_tabbable_tab_attrs(tab_name)) do %>
     <%= content_tag(:fieldset, class: "chunk") do %>
       <%= content_tag(:legend, "Choose Work", "data-target": "tabbable.remove") %>
 
@@ -20,12 +20,11 @@
         label_method:       :full_display_title,
         value_method:       :id,
         include_blank:      :translate,
-        input_html:         {
-          "data-controller":                              "selectable-prepare-work",
-          "data-selectable-prepare-work-tab-name":        "post-new-work",
-          "data-selectable-prepare-work-title-selector":  "#post_work_attributes_title",
-          "data-selectable-prepare-work-artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
-        }
+        input_html:         js_attrs("selectable-prepare-work",
+          "tab-name":        "post-new-work",
+          "title-selector":  "#post_work_attributes_title",
+          "artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
+        )
       %>
     <% end %>
   <% end %>

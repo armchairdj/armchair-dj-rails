@@ -50,7 +50,7 @@ class Admin::RolesController < AdminController
     respond_to do |format|
       if @role.save
         format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.create") }
-        format.json { render :show, status: :created, location: @role }
+        format.json { render :show, status: :created, location: admin_role_url@role) }
       else
         prepare_form
 
@@ -69,7 +69,7 @@ class Admin::RolesController < AdminController
     respond_to do |format|
       if @role.update(instance_params)
         format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.update") }
-        format.json { render :show, status: :ok, location: @role }
+        format.json { render :show, status: :ok, location: admin_role_url(@role) }
       else
         prepare_form
 

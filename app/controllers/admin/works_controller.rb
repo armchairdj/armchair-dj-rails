@@ -54,7 +54,7 @@ class Admin::WorksController < AdminController
     respond_to do |format|
       if @work.save
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.create") }
-        format.json { render :show, status: :created, location: @work }
+        format.json { render :show, status: :created, location: admin_work_url(@work) }
       else
         prepare_form
 
@@ -75,7 +75,7 @@ class Admin::WorksController < AdminController
     respond_to do |format|
       if @work.save
         format.html { redirect_to admin_work_path(@work), success: I18n.t("admin.flash.works.success.update") }
-        format.json { render :show, status: :ok, location: @work }
+        format.json { render :show, status: :ok, location: admin_work_url(@work) }
       else
         prepare_form
 
