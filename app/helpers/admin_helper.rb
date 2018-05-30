@@ -125,7 +125,7 @@ module AdminHelper
       link_to("Log Out",     destroy_user_session_path)
     ]
 
-    if current_user.can_administer?
+    if Pundit.policy!(current_user, [:admin, User]).index?
       links.unshift link_to("Users", admin_users_path)
     end
 
