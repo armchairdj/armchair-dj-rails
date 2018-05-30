@@ -151,7 +151,7 @@ class Work < ApplicationRecord
   #############################################################################
 
   def tags_by_category(for_site: false)
-    viewable_tags = all ? self.tags : self.tags.for_site
+    viewable_tags = for_site ? self.tags.for_site : self.tags
 
     collection = viewable_tags.alpha.includes(:category)
 

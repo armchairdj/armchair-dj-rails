@@ -152,3 +152,8 @@
     creators: @user.creators.for_admin.alpha
   } %>
 <% end %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @user.links
+} %>
+

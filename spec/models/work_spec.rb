@@ -3,6 +3,13 @@
 require "rails_helper"
 
 RSpec.describe Work, type: :model do
+
+
+
+  pending "#tags_by_category(for_site: true)"
+
+
+
   context "constants" do
     it { is_expected.to have_constant(:MAX_CREDITS_AT_ONCE) }
     it { is_expected.to have_constant(:MAX_CONTRIBUTIONS_AT_ONCE) }

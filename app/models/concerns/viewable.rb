@@ -41,7 +41,7 @@ module Viewable
   end
 
   def non_viewable?
-    !viewable
+    !viewable?
   end
 
   def viewable_posts

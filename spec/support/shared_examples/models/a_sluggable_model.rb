@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
+RSpec.shared_examples "a_sluggable_model" do
   context "constants" do
     it { is_expected.to have_constant(:PART_SEPARATOR   ) }
     it { is_expected.to have_constant(:VERSION_SEPARATOR) }
@@ -14,32 +14,32 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
       subject { build_minimal_instance }
 
       it "generates slug for unique base" do
-        actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, ["Foo Bar", "BAT"])
+        actual = described_class.generate_unique_slug(subject, :slug, ["Foo Bar", "BAT"])
 
         expect(actual).to eq("foo_bar/bat")
       end
 
       it "adds index for non-unique base" do
         existing = create_minimal_instance
-        existing.update_column(sluggable_attribute.to_sym, "foo_bar/bat")
+        existing.update_column(:slug, "foo_bar/bat")
 
-        actual   = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, ["Foo Bar", "BAT"])
+        actual   = described_class.generate_unique_slug(subject, :slug, ["Foo Bar", "BAT"])
 
         expect(actual).to eq("foo_bar/bat/v2")
       end
 
       it "does not add index for self" do
         subject.save
-        subject.update_column(sluggable_attribute.to_sym, "foo_bar/bat")
+        subject.update_column(:slug, "foo_bar/bat")
 
-        actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, ["Foo Bar", "BAT"])
+        actual = described_class.generate_unique_slug(subject, :slug, ["Foo Bar", "BAT"])
 
         expect(actual).to eq("foo_bar/bat")
       end
 
       context "real-world examples" do
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "Sigur Rós", "()"
           ])
 
@@ -47,7 +47,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         end
 
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "Sigur Rós", "Viðrar Vel Til Loftárása"
           ])
 
@@ -55,7 +55,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         end
 
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "A.A.L (Against All Logic)", "2012 - 2017"
           ])
 
@@ -63,7 +63,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         end
 
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "Laurent Garnier", "*?*"
           ])
 
@@ -71,7 +71,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         end
 
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "Was (Not Was)", "Man vs. the Empire Brain Building"
           ])
 
@@ -79,7 +79,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         end
 
         specify do
-          actual = described_class.generate_unique_slug(subject, sluggable_attribute.to_sym, [
+          actual = described_class.generate_unique_slug(subject, :slug, [
             "Siouxsie & The Banshees", "Kiss Them For Me"
           ])
 
@@ -184,9 +184,9 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
       it "finds only dupe" do
         existing = create_minimal_instance
-        existing.update_column(sluggable_attribute.to_sym, "some/slug")
+        existing.update_column(:slug, "some/slug")
 
-        actual = described_class.find_duplicate_slug(subject, sluggable_attribute, "some/slug")
+        actual = described_class.find_duplicate_slug(subject, :slug, "some/slug")
 
         expect(actual).to eq("some/slug")
       end
@@ -194,25 +194,25 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
       it "finds indexed dupe" do
         existing = [create_minimal_instance, create_minimal_instance]
 
-        existing[0].update_column(sluggable_attribute.to_sym, "some/slug"  )
-        existing[1].update_column(sluggable_attribute.to_sym, "some/slug/v2")
+        existing[0].update_column(:slug, "some/slug"  )
+        existing[1].update_column(:slug, "some/slug/v2")
 
-        actual = described_class.find_duplicate_slug(subject, sluggable_attribute, "some/slug")
+        actual = described_class.find_duplicate_slug(subject, :slug, "some/slug")
 
         expect(actual).to eq("some/slug/v2")
       end
 
       it "nil if only duplicate is self" do
         subject.save
-        subject.update_column(sluggable_attribute.to_sym, "some/slug")
+        subject.update_column(:slug, "some/slug")
 
-        actual = described_class.find_duplicate_slug(subject, sluggable_attribute, "some/slug")
+        actual = described_class.find_duplicate_slug(subject, :slug, "some/slug")
 
         expect(actual).to eq(nil)
       end
 
       it "nil if no duplicate" do
-        actual = described_class.find_duplicate_slug(subject, sluggable_attribute, "some/slug")
+        actual = described_class.find_duplicate_slug(subject, :slug, "some/slug")
 
         expect(actual).to eq(nil)
       end
@@ -460,58 +460,58 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
     describe "#assign_slug" do
       before(:each) do
-        allow(subject).to receive(:"#{sluggable_attribute}=")
+        allow(subject).to receive(:"#{:slug}=")
       end
 
       it "sets attribute to unique slug with one part" do
-        is_expected.to receive(:"#{sluggable_attribute}=")
+        is_expected.to receive(:"#{:slug}=")
 
-        subject.send(:assign_slug, sluggable_attribute, ["foo"])
+        subject.send(:assign_slug, :slug, ["foo"])
       end
 
       it "sets attribute to unique slug with multiple parts" do
-        is_expected.to receive(:"#{sluggable_attribute}=")
+        is_expected.to receive(:"#{:slug}=")
 
-        subject.send(:assign_slug, sluggable_attribute, ["foo", "bar"])
+        subject.send(:assign_slug, :slug, ["foo", "bar"])
       end
 
       it "does nothing if no parts" do
-        is_expected.to_not receive(:"#{sluggable_attribute}=")
+        is_expected.to_not receive(:"#{:slug}=")
 
-        subject.send(:assign_slug, sluggable_attribute, [])
+        subject.send(:assign_slug, :slug, [])
       end
     end
 
     describe "generate_slug" do
       context "no parts" do
-        specify { expect(subject.send(:generate_slug, sluggable_attribute.to_s  )).to eq(nil) }
-        specify { expect(subject.send(:generate_slug, sluggable_attribute.to_sym)).to eq(nil) }
+        specify { expect(subject.send(:generate_slug, "slug")).to eq(nil) }
+        specify { expect(subject.send(:generate_slug, :slug )).to eq(nil) }
       end
 
       context "with one part" do
         it "generates slug from parts array" do
-          actual   = subject.send(:generate_slug, sluggable_attribute, ["Hounds of Love"])
+          actual   = subject.send(:generate_slug, :slug, ["Hounds of Love"])
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from parts splat" do
-          actual   = subject.send(:generate_slug, sluggable_attribute, "Hounds of Love")
+          actual   = subject.send(:generate_slug, :slug, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute string" do
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_s, "Hounds of Love")
+          actual   = subject.send(:generate_slug, :slug.to_s, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute symbol" do
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Hounds of Love")
+          actual   = subject.send(:generate_slug, :slug, "Hounds of Love")
           expected = "hounds_of_love"
 
           expect(actual).to eq(expected)
@@ -519,9 +519,9 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
         it "generates slug when dupes" do
           dupe = create_minimal_instance
-          dupe.update_column(sluggable_attribute.to_sym, "hounds_of_love")
+          dupe.update_column(:slug, "hounds_of_love")
 
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Hounds of Love")
+          actual   = subject.send(:generate_slug, :slug, "Hounds of Love")
           expected = "hounds_of_love/v2"
 
           expect(actual).to eq(expected)
@@ -530,28 +530,28 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
       context "with multiple parts" do
         it "generates slug from parts array" do
-          actual   = subject.send(:generate_slug, sluggable_attribute, ["Songs", "Kate Bush", "The Dreaming"])
+          actual   = subject.send(:generate_slug, :slug, ["Songs", "Kate Bush", "The Dreaming"])
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from parts splat" do
-          actual   = subject.send(:generate_slug, sluggable_attribute, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, :slug, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute string" do
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_s, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, :slug.to_s, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
         end
 
         it "generates slug from attribute symbol" do
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, :slug, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming"
 
           expect(actual).to eq(expected)
@@ -559,9 +559,9 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
 
         it "generates slug when dupes" do
           dupe = create_minimal_instance
-          dupe.update_column(sluggable_attribute.to_sym, "songs/kate_bush/the_dreaming")
+          dupe.update_column(:slug, "songs/kate_bush/the_dreaming")
 
-          actual   = subject.send(:generate_slug, sluggable_attribute.to_sym, "Songs", "Kate Bush", "The Dreaming")
+          actual   = subject.send(:generate_slug, :slug, "Songs", "Kate Bush", "The Dreaming")
           expected = "songs/kate_bush/the_dreaming/v2"
 
           expect(actual).to eq(expected)

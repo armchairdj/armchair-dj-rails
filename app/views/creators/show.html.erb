@@ -23,7 +23,7 @@
 } %>
 
 <%= render partial: "shared/playback/roles_for_creator", locals: {
-  roles: @creator.display_roles(all: false)
+  roles: @creator.display_roles(for_site: true)
 } %>
 
 <%= render partial: "shared/playback/works", locals: {

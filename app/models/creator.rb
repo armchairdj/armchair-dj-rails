@@ -275,9 +275,9 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def display_roles(all: true)
-    displayable_media = all ? self.media             : self.media.for_site
-    displayable_roles = all ? self.contributed_roles : self.viewable_contributed_roles
+  def display_roles(for_site: false)
+    displayable_media = for_site ? self.media.for_site             : self.media
+    displayable_roles = for_site ? self.viewable_contributed_roles : self.contributed_roles
 
     created = displayable_media.each.inject({}) do |memo, (medium)|
       memo[medium.name] = ["Creator"]; memo

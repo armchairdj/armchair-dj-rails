@@ -14,6 +14,7 @@ class Post < ApplicationRecord
   include Alphabetizable
   include Linkable
   include Sluggable
+  include Summarizable
 
   #############################################################################
   # CLASS.

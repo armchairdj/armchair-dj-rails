@@ -10,6 +10,7 @@ class User < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Alphabetizable
   include Linkable
   include Viewable
 

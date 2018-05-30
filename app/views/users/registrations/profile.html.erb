@@ -22,3 +22,8 @@
 <%= render partial: "shared/playback/creators", locals: {
   creators: @user.creators.for_site
 } %>
+
+<%= render partial: "shared/playback/links", locals: {
+  links: @user.links
+} %>
+
