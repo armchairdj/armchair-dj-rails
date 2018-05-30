@@ -89,8 +89,8 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
-    describe "#admin_public_link_for" do
-      subject { helper.admin_public_link_for(instance) }
+    describe "#admin_public_link" do
+      subject { helper.admin_public_link(instance) }
 
       context "creators" do
         let(:instance) { create(:minimal_creator) }

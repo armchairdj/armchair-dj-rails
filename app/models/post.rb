@@ -261,6 +261,10 @@ class Post < ApplicationRecord
     plural ? base.pluralize : base
   end
 
+  def viewable?
+    published?
+  end
+
   def not_published?
     draft? || scheduled?
   end

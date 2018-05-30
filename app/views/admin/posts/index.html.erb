@@ -35,7 +35,7 @@
               <%= content_tag(:td, post.type,              class: "actions") %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_link_for(post) %>
+                <%= admin_public_link(post) %>
                 <%= admin_view_link(      post) %>
                 <%= admin_update_link(    post) %>
                 <%= admin_destroy_link(   post) %>

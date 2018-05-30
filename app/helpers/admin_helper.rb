@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module AdminHelper
+  include LinkHelper
 
   #############################################################################
   # FORMS.
@@ -85,12 +86,9 @@ module AdminHelper
   # PUBLIC LINKS.
   #############################################################################
 
-  def admin_public_link_for(instance)
-    return if (instance.model_name == "Post" ?
-      !instance.published? : !instance.viewable?
-    )
+  def admin_public_link(instance)
+    return unless path = permalink_path_for(instance)
 
-    path  = public_url_for(instance)
     title = "view #{instance.model_name.singular} on site"
     desc  = "public view icon"
     icon  = "link-intact"
@@ -98,34 +96,18 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin public-view")
   end
 
-  def public_url_for(instance)
-    case instance.model_name
-    when "Creator"
-      creator_permalink_path(slug: instance.slug)
-    when "Medium"
-      medium_permalink_path(slug: instance.slug)
-    when "Tag"
-      tag_permalink_path(slug: instance.slug)
-    when "Work"
-      work_permalink_path(slug: instance.slug)
-    when "Post"
-      post_permalink_path(slug: instance.slug)
-    when "User"
-      user_profile_path(username: instance.username)
-    end
-  end
-
   #############################################################################
   # ACTION LINKS.
   #############################################################################
 
-  # TODO pundit
   def admin_header(model_class, action, instance: nil, **opts)
-    links  = admin_header_links(model_class, action, instance)
-    pieces = opts.slice(:h4, :h1, :h2, :h3).map { |k, v| content_tag(k, v) }
-    pieces << content_tag(:div, links, class: "actions")
+    decks   = opts.slice(:h4, :h1, :h2, :h3)
+    decks   = decks.map { |k, v| content_tag(k, v) }
+    links   = admin_header_links(model_class, action, instance)
+    actions = content_tag(:div, links, class: "actions")
+    opts    = combine_attrs(opts, class: "admin")
 
-    content_tag(:header, pieces.join.html_safe, class: "admin")
+    content_tag(:header, [*decks, actions].compact.join.html_safe, **opts)
   end
 
   def admin_header_links(model_class, action, instance = nil)
@@ -140,14 +122,14 @@ module AdminHelper
       ]
     when :edit
       [
-        admin_public_link_for(   instance),
+        admin_public_link(   instance),
         admin_view_link(         instance),
         admin_destroy_link(      instance),
         admin_list_link(      model_class),
       ]
     when :show
       [
-        admin_public_link_for(   instance),
+        admin_public_link(   instance),
         admin_update_link(       instance),
         admin_destroy_link(      instance),
         admin_list_link(      model_class),
@@ -157,13 +139,12 @@ module AdminHelper
     links.join.html_safe
   end
 
-  # TODO pundit
   def admin_actions_cell(instance)
     links = [
-      admin_public_link_for(instance),
-      admin_view_link(      instance),
-      admin_update_link(    instance),
-      admin_destroy_link(   instance)
+      admin_public_link( instance),
+      admin_view_link(   instance),
+      admin_update_link( instance),
+      admin_destroy_link(instance)
     ].compact.join.html_safe
 
     content_tag(:td, links, class: "actions")
