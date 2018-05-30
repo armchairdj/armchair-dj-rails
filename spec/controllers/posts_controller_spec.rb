@@ -62,7 +62,7 @@ RSpec.describe PostsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:post) { create(:minimal_post, slug: "slug/path") }
+    let(:post) { create(:minimal_post, :published) }
 
     it "renders" do
       get :show, params: { slug: post.slug }

@@ -30,4 +30,22 @@ class PublicController < ApplicationController
   # GET /<plural_param_key>/1
   # GET /<plural_param_key>/1.json
   def show; end
+
+private
+
+  def set_meta_tags
+    @meta_description = @instance.summary
+  end
+
+  def authorize_instance
+    authorize @instance
+  end
+
+  def scoped_collection
+    policy_scope(model_class).page(params[:page])
+  end
+
+  def scoped_instance_by_slug
+    @instance = policy_scope(model_class).find_by!(slug: params[:slug])
+  end
 end

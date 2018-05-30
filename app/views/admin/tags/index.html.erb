@@ -36,7 +36,7 @@
               <%= content_tag(:td, tag.non_viewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_tag_link(tag) %>
+                <%= admin_public_link_for(tag) %>
                 <%= admin_view_link(      tag) %>
                 <%= admin_update_link(    tag) %>
                 <%= admin_destroy_link(   tag) %>

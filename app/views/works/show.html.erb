@@ -13,19 +13,19 @@
   <% end %>
 <% end %>
 
-<%= render partial: "shared/contributions", locals: {
+<%= render partial: "shared/playback/contributions", locals: {
   contributions: @work.contributions.for_site,
   context:       :work
 } %>
 
-<%= render partial: "shared/categories", locals: {
-  categories: @work.tags_by_category
+<%= render partial: "shared/playback/categories", locals: {
+  categories: @work.tags_by_category(for_site: true)
 } %>
 
-<%= render partial: "shared/links", locals: {
+<%= render partial: "shared/playback/links", locals: {
   links: @work.links
 } %>
 
-<%= render partial: "shared/posts", locals: {
+<%= render partial: "shared/playback/posts", locals: {
   posts: @work.posts.for_site
 } %>

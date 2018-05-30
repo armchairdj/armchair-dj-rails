@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-RSpec.describe CreatorsController, type: :controller do
+RSpec.describe MediaController, type: :controller do
   context "concerns" do
     it_behaves_like "a_public_controller"
 
     it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { creators_path }
+      let(:expected_redirect) { media_path }
     end
   end
 
@@ -16,8 +16,8 @@ RSpec.describe CreatorsController, type: :controller do
       it "renders" do
         get :index
 
-        is_expected.to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(0).of_total_records(0)
+        is_expected.to successfully_render("media/index")
+        expect(assigns(:media)).to paginate(0).of_total_records(0)
       end
     end
 
@@ -29,28 +29,28 @@ RSpec.describe CreatorsController, type: :controller do
       it "renders" do
         get :index
 
-        is_expected.to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(20).of_total_records(21)
+        is_expected.to successfully_render("media/index")
+        expect(assigns(:media)).to paginate(20).of_total_records(21)
       end
 
       it "renders second page" do
         get :index, params: { page: "2" }
 
-        is_expected.to successfully_render("creators/index")
-        expect(assigns(:creators)).to paginate(1).of_total_records(21)
+        is_expected.to successfully_render("media/index")
+        expect(assigns(:media)).to paginate(1).of_total_records(21)
       end
     end
   end
 
   describe "GET #show" do
-    let(:creator) { create(:minimal_creator) }
+    let(:medium) { create(:minimal_medium, :with_published_post) }
 
     it "renders" do
-        get :show, params: { id: creator.id }
+        get :show, params: { slug: medium.slug }
 
-        is_expected.to successfully_render("creators/show")
+        is_expected.to successfully_render("media/show")
 
-        expect(assigns(:creator)).to eq(creator)
+        expect(assigns(:medium)).to eq(medium)
     end
   end
 end

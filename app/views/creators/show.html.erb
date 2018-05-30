@@ -2,43 +2,43 @@
   @headline = @title = @creator.name
 %>
 
-<%= render partial: "shared/creators", locals: {
-  creators: @creator.groups,
+<%= render partial: "shared/playback/creators", locals: {
+  creators: @creator.groups.for_site,
   headline: "Groups"
 } %>
 
-<%= render partial: "shared/creators", locals: {
-  creators: @creator.members,
+<%= render partial: "shared/playback/creators", locals: {
+  creators: @creator.members.for_site,
   headline: "Members"
 } %>
 
-<%= render partial: "shared/creators", locals: {
-  creators: @creator.colleagues,
+<%= render partial: "shared/playback/creators", locals: {
+  creators: @creator.colleagues.for_site,
   headline: "Colleagues"
 } %>
 
-<%= render partial: "shared/creators", locals: {
-  creators: @creator.personae,
+<%= render partial: "shared/playback/creators", locals: {
+  creators: @creator.personae.for_site,
   headline: "Personae"
 } %>
 
-<%= render partial: "shared/roles_for_creator", locals: {
-  roles: @creator.display_roles
+<%= render partial: "shared/playback/roles_for_creator", locals: {
+  roles: @creator.display_roles(all: false)
 } %>
 
-<%= render partial: "shared/works", locals: {
+<%= render partial: "shared/playback/works", locals: {
   works: @creator.works.for_site
 } %>
 
-<%= render partial: "shared/contributions", locals: {
+<%= render partial: "shared/playback/contributions", locals: {
   contributions: @creator.contributions.for_site,
   context:       :creator
 } %>
 
-<%= render partial: "shared/posts", locals: {
+<%= render partial: "shared/playback/posts", locals: {
   posts: @creator.posts.for_site
 } %>
 
-<%= render partial: "shared/links", locals: {
+<%= render partial: "shared/playback/links", locals: {
   links: @creator.links
 } %>

@@ -13,12 +13,12 @@ RSpec.describe TagsController, type: :routing do
     end
 
     it "routes to #show" do
-      expect(get: "/tags/1").to route_to("tags#show", id: "1")
+      expect(get: "/tags/foo/bar/bat").to route_to("tags#show", slug: "foo/bar/bat")
     end
 
     describe "does not route to RESTful" do
       it "#new" do
-        expect(get: "/tags/new").to route_to("tags#show", id: "new")
+        expect(get: "/tags/new").to route_to("tags#show", slug: "new")
       end
 
       it "#create" do
@@ -26,7 +26,7 @@ RSpec.describe TagsController, type: :routing do
       end
 
       it "#edit" do
-        expect(get: "/tags/1/edit").to_not be_routable
+        expect(get: "/tags/1/edit").to route_to("tags#show", slug: "1/edit")
       end
 
       it "#update via PUT" do

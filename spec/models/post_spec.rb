@@ -10,7 +10,7 @@ RSpec.describe Post, type: :model do
 
     it_behaves_like "a_linkable_model"
 
-    it_behaves_like "a_sluggable_model", :slug
+    it_behaves_like "a_sluggable_model"
 
     it_behaves_like "a_summarizable_model"
   end
@@ -208,9 +208,10 @@ RSpec.describe Post, type: :model do
 
     it { is_expected.to belong_to(:work) }
 
-    it { is_expected.to have_one(:medium    ).through(:work) }
-    it { is_expected.to have_many(:creators ).through(:work) }
-    it { is_expected.to have_many(:work_tags).through(:work) }
+    it { is_expected.to have_one(:medium       ).through(:work) }
+    it { is_expected.to have_many(:creators    ).through(:work) }
+    it { is_expected.to have_many(:contributors).through(:work) }
+    it { is_expected.to have_many(:work_tags   ).through(:work) }
   end
 
   context "attributes" do
@@ -729,41 +730,47 @@ RSpec.describe Post, type: :model do
 
         describe "#update_counts_for_descendents" do
           context "review" do
-            let(     :post) { create(:unity_album_review) }
-            let(   :author) { double }
-            let(     :work) { double }
-            let(   :medium) { double }
-            let( :creators) { [double, double] }
-            let(     :tags) { [double, double] }
-            let(:work_tags) { [double, double] }
+            let(        :post) { create(:unity_album_review) }
+            let(      :author) { double }
+            let(        :tags) { [double, double] }
+            let(        :work) { double }
+            let(   :work_tags) { [double, double] }
+            let(      :medium) { double }
+            let(    :creators) { [double, double] }
+            let(:contributors) { [double, double] }
 
-            it "updates counts for author, work, medium & creators" do
-              allow(post).to receive(  :author).and_return(author   )
-              allow(post).to receive(    :tags).and_return(tags     )
-              allow(post).to receive(    :work).and_return(work     )
-              allow(work).to receive(    :tags).and_return(work_tags)
-              allow(work).to receive(  :medium).and_return(medium   )
-              allow(work).to receive(:creators).and_return(creators )
+            it "updates counts for all author, tags and all work-related descendents" do
+              allow(post).to receive(      :author).and_return(author      )
+              allow(post).to receive(        :tags).and_return(tags        )
+              allow(post).to receive(        :work).and_return(work        )
+              allow(post).to receive(   :work_tags).and_return(work_tags   )
+              allow(post).to receive(      :medium).and_return(medium      )
+              allow(post).to receive(    :creators).and_return(creators    )
+              allow(post).to receive(:contributors).and_return(contributors)
 
-               allow(         author).to receive(:update_counts)
-               allow(           work).to receive(:update_counts)
-               allow(         medium).to receive(:update_counts)
-               allow( creators.first).to receive(:update_counts)
-               allow(  creators.last).to receive(:update_counts)
-               allow(     tags.first).to receive(:update_counts)
-               allow(      tags.last).to receive(:update_counts)
-               allow(work_tags.first).to receive(:update_counts)
-               allow( work_tags.last).to receive(:update_counts)
+              allow(            author).to receive(:update_counts)
+              allow(        tags.first).to receive(:update_counts)
+              allow(         tags.last).to receive(:update_counts)
+              allow(              work).to receive(:update_counts)
+              allow(   work_tags.first).to receive(:update_counts)
+              allow(    work_tags.last).to receive(:update_counts)
+              allow(            medium).to receive(:update_counts)
+              allow(    creators.first).to receive(:update_counts)
+              allow(     creators.last).to receive(:update_counts)
+              allow(contributors.first).to receive(:update_counts)
+              allow( contributors.last).to receive(:update_counts)
 
-              expect(         author).to receive(:update_counts).once
-              expect(           work).to receive(:update_counts).once
-              expect(         medium).to receive(:update_counts).once
-              expect( creators.first).to receive(:update_counts).once
-              expect(  creators.last).to receive(:update_counts).once
-              expect(     tags.first).to receive(:update_counts).once
-              expect(      tags.last).to receive(:update_counts).once
-              expect(work_tags.first).to receive(:update_counts).once
-              expect( work_tags.last).to receive(:update_counts).once
+              expect(            author).to receive(:update_counts).once
+              expect(        tags.first).to receive(:update_counts).once
+              expect(         tags.last).to receive(:update_counts).once
+              expect(              work).to receive(:update_counts).once
+              expect(   work_tags.first).to receive(:update_counts).once
+              expect(    work_tags.last).to receive(:update_counts).once
+              expect(            medium).to receive(:update_counts).once
+              expect(    creators.first).to receive(:update_counts).once
+              expect(     creators.last).to receive(:update_counts).once
+              expect(contributors.first).to receive(:update_counts).once
+              expect( contributors.last).to receive(:update_counts).once
 
               post.send(:update_counts_for_descendents)
             end
@@ -774,7 +781,7 @@ RSpec.describe Post, type: :model do
             let(:author) { double }
             let(  :tags) { [double, double] }
 
-            it "updates counts for author" do
+            it "updates counts for author and tags" do
               allow(      post).to receive(:author).and_return(author)
               allow(      post).to receive(:tags  ).and_return(tags  )
 
@@ -1390,11 +1397,11 @@ RSpec.describe Post, type: :model do
       let(:standalone) { create(:standalone_post, title: "Standalone Title") }
 
       specify "for review" do
-        expect(review.send(:sluggable_parts)) .to eq(["Album Reviews", "Kate Bush", "Hounds of Love", nil])
+        expect(review.send(:sluggable_parts)) .to eq(["reviews", "Albums", "Kate Bush", "Hounds of Love", nil])
       end
 
       specify "for review of collaborative work" do
-        expect(collab.send(:sluggable_parts)).to eq(["Album Reviews", "Carl Craig and Green Velvet", "Unity", nil])
+        expect(collab.send(:sluggable_parts)).to eq(["reviews", "Albums", "Carl Craig and Green Velvet", "Unity", nil])
       end
 
       specify "for standalone" do

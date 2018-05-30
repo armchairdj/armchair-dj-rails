@@ -84,7 +84,7 @@ class Admin::CategoriesController < AdminController
 private
 
   def find_collection
-    @categories = scoped_collection
+    @categories = scoped_and_sorted_collection
   end
 
   def build_new_instance

@@ -3,61 +3,62 @@
 require "rails_helper"
 
 RSpec.describe WorksHelper, type: :helper do
-  let(  :unsaved) { build(:minimal_work                      ) }
-  let(    :saved) { create(:kate_bush_hounds_of_love         ) }
-  let(:subtitled) { create(:junior_boys_like_a_child_c2_remix) }
-
   describe "#link_to_work" do
-    specify { expect(helper.link_to_work(unsaved)).to eq(nil) }
+    let(:instance) { create(:minimal_work, medium_id: create(:book_medium).id, title: "Vacuum Flowers", credits_attributes: {
+      "0" => { creator_id: create(:minimal_creator, name: "Michael Swanwick").id }
+    }) }
 
-    context "default" do
-      it "by default uses creator and title" do
-        actual = helper.link_to_work(saved)
-
-        expect(actual).to have_tag('a[href^="/works/"]',
-          text:  "Kate Bush: Hounds of Love",
-          count: 1
-        )
+    context "viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(true)
       end
 
-      it "includes subtitle when available" do
-        actual = helper.link_to_work(subtitled)
+      context "public" do
+        subject { helper.link_to_work(instance, class: "test") }
 
-        expect(actual).to have_tag('a[href^="/works/"]',
-          text:  "Junior Boys: Like a Child: C2 Remix",
+        it { is_expected.to have_tag("a[href='/works/#{instance.slug}'][class='test']",
+          text:  "Michael Swanwick: Vacuum Flowers",
           count: 1
-        )
-      end
-    end
-
-    context "full: false" do
-      it "uses just title" do
-        actual = helper.link_to_work(saved, full: false)
-
-        expect(actual).to have_tag('a[href^="/works/"]',
-          text:  "Hounds of Love",
-          count: 1
-        )
+        ) }
       end
 
-      it "uses subtitle when available" do
-        actual = helper.link_to_work(subtitled, full: false)
+      context "full: false" do
+        subject { helper.link_to_work(instance, full: false) }
 
-        expect(actual).to have_tag('a[href^="/works/"]',
-          text:  "Like a Child: C2 Remix",
+        it { is_expected.to have_tag("a[href='/works/#{instance.slug}']",
+          text:  "Vacuum Flowers",
           count: 1
-        )
+        ) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_work(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/works/#{instance.id}']",
+          text:  "Michael Swanwick: Vacuum Flowers",
+          count: 1
+        ) }
       end
     end
 
-    context "admin: true" do
-      it "optionally links to admin" do
-        actual = helper.link_to_work(saved, admin: true)
+    context "non-viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(false)
+      end
 
-        expect(actual).to have_tag('a[href^="/admin/works/"]',
-          text:  "Kate Bush: Hounds of Love",
+      context "public" do
+        subject { helper.link_to_work(instance) }
+
+        it { is_expected.to eq(nil) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_work(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/works/#{instance.id}']",
+          text:  "Michael Swanwick: Vacuum Flowers",
           count: 1
-        )
+        ) }
       end
     end
   end

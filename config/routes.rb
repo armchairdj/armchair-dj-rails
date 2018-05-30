@@ -5,7 +5,7 @@
 Rails.application.routes.draw do
 
   #############################################################################
-  # Concerns.
+  # CONCERNS.
   #############################################################################
 
   concern :paginatable do
@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   end
 
   #############################################################################
-  # Users.
+  # USERS.
   #############################################################################
 
   devise_for :users, skip: [:sessions, :registrations], controllers: {
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   end
 
   #############################################################################
-  # Pages.
+  # PAGES.
   #############################################################################
 
   get "about",   to: "pages#about"
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   get "terms",   to: "pages#terms"
 
   #############################################################################
-  # Errors.
+  # ERRORS.
   #############################################################################
 
   get "403", to: "errors#permission_denied"
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   get "500", to: "errors#internal_server_error"
 
   #############################################################################
-  # Admin.
+  # ADMIN.
   #############################################################################
 
   namespace :admin do
@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   end
 
   #############################################################################
-  # Style Guide.
+  # STYLE GUIDES.
   #############################################################################
 
   get "style_guide", to: "style_guides#index", as: "style_guides"
@@ -109,11 +109,34 @@ Rails.application.routes.draw do
   end
 
   #############################################################################
-  # TAXONOMY.
+  # CREATORS.
   #############################################################################
 
-  resources :creators, only: [:index, :show], concerns: :paginatable
-  resources :media,    only: [:index, :show], concerns: :paginatable
-  resources :tags,     only: [:index, :show], concerns: :paginatable
-  resources :works,    only: [:index, :show], concerns: :paginatable
+  resources :creators, only: [:index], concerns: :paginatable
+
+  get "creators/*slug", to: "creators#show", as: "creator_permalink"
+
+  #############################################################################
+  # MEDIA.
+  #############################################################################
+
+  resources :media, only: [:index], concerns: :paginatable
+
+  get "media/*slug", to: "media#show", as: "medium_permalink"
+
+  #############################################################################
+  # TAGS.
+  #############################################################################
+
+  resources :tags, only: [:index], concerns: :paginatable
+
+  get "tags/*slug", to: "tags#show", as: "tag_permalink"
+
+  #############################################################################
+  # WORKS.
+  #############################################################################
+
+  resources :works, only: [:index], concerns: :paginatable
+
+  get "works/*slug", to: "works#show", as: "work_permalink"
 end

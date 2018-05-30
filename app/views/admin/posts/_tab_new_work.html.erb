@@ -13,14 +13,10 @@
 
       <%= f.simple_fields_for :work do |ff| %>
         <%= render partial: "admin/works/form_fields", locals: {
-          f:                 ff,
-          show_contributors: false,
-          show_summary:      false,
-          show_tags:         false,
-          show_links:        false,
-          show_parent:       false,
-          creators:          creators,
-          media:             media,
+          f:        ff,
+          show_all: false,
+          creators: creators,
+          media:    media,
         } %>
       <% end %>
     <% end %>

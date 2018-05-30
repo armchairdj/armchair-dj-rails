@@ -6,9 +6,7 @@ RSpec.describe Tag, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_viewable_model"
+    it_behaves_like "a_displayable_model"
   end
 
   context "class" do
@@ -87,9 +85,9 @@ RSpec.describe Tag, type: :model do
     end
 
     describe "#display_category" do
-      specify { expect(  categorized.display_category       ).to eq("Category"     ) }
-      specify { expect(uncategorized.display_category       ).to eq("Uncategorized") }
-      specify { expect(uncategorized.display_category("foo")).to eq("foo"          ) }
+      specify { expect(  categorized.display_category                ).to eq("Category"     ) }
+      specify { expect(uncategorized.display_category                ).to eq("Uncategorized") }
+      specify { expect(uncategorized.display_category(default: "foo")).to eq("foo"          ) }
     end
 
     describe "#display_name" do

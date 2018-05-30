@@ -8,6 +8,8 @@ RSpec.describe User, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "a_linkable_model"
+
     it_behaves_like "a_viewable_model"
   end
 

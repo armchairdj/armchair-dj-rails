@@ -95,7 +95,7 @@ class Admin::CreatorsController < AdminController
 private
 
   def find_collection
-    @creators = scoped_collection
+    @creators = scoped_and_sorted_collection
   end
 
   def build_new_instance

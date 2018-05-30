@@ -18,10 +18,7 @@ class Creator < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Alphabetizable
-  include Linkable
-  include Summarizable
-  include Viewable
+  include Displayable
 
   include Booletania
 
@@ -71,25 +68,30 @@ class Creator < ApplicationRecord
   # Contributions.
 
   has_many :contributions, inverse_of: :creator, dependent: :destroy
-  has_many :contributed_works,
-    through: :contributions, class_name: "Work", source: :work
-  has_many :contributed_posts,
-    through: :contributed_works, class_name: "Post", source: :posts
-  has_many :contributed_media,
-    through: :contributed_works, class_name: "Medium", source: :medium
+
+  has_many :contributed_works, through: :contributions,     class_name: "Work",   source: :work
+  has_many :contributed_posts, through: :contributed_works, class_name: "Post",   source: :posts
+  has_many :contributed_media, through: :contributed_works, class_name: "Medium", source: :medium
+
   has_many :contributed_roles, -> {
     includes(contributions: { work: :medium })
+  }, through: :contributions, class_name: "Role", source: :role
+
+  has_many :viewable_contributed_roles, -> {
+    includes(contributions: { work: :medium }).references("works").where("works.viewable_post_count > 0")
   }, through: :contributions, class_name: "Role", source: :role
 
   # Identities.
 
   has_many :pseudonym_identities, class_name: "Identity", dependent: :destroy,
     foreign_key: :real_name_id, inverse_of: :real_name
+
   has_many :real_name_identities, class_name: "Identity", dependent: :destroy,
     foreign_key: :pseudonym_id, inverse_of: :pseudonym
 
   has_many :pseudonyms, -> { order("creators.name") },
     through: :pseudonym_identities, source: :pseudonym
+
   has_many :real_names, -> { order("creators.name") },
     through: :real_name_identities, source: :real_name
 
@@ -97,11 +99,13 @@ class Creator < ApplicationRecord
 
   has_many :member_memberships, class_name: "Membership", dependent: :destroy,
     foreign_key: :group_id, inverse_of: :group
+
   has_many :group_memberships,  class_name: "Membership", dependent: :destroy,
-  foreign_key: :member_id, inverse_of: :member
+    foreign_key: :member_id, inverse_of: :member
 
   has_many :members, -> { order("creators.name") },
     through: :member_memberships, source: :member
+
   has_many  :groups, -> { order("creators.name") },
     through: :group_memberships,  source: :group
 
@@ -260,15 +264,26 @@ class Creator < ApplicationRecord
   private :enforce_individuality
 
   #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def sluggable_parts
+    [name]
+  end
+
+  #############################################################################
   # INSTANCE.
   #############################################################################
 
-  def display_roles
-    created = media.each.inject({}) do |memo, (media)|
-      memo[media.name] = ["Creator"]; memo
+  def display_roles(all: true)
+    displayable_media = all ? self.media             : self.media.for_site
+    displayable_roles = all ? self.contributed_roles : self.viewable_contributed_roles
+
+    created = displayable_media.each.inject({}) do |memo, (medium)|
+      memo[medium.name] = ["Creator"]; memo
     end
 
-    contributed = contributed_roles.group_by{ |r| r.medium.name }
+    contributed = displayable_roles.group_by{ |r| r.medium.name }
     contributed.transform_values! { |v| v.map(&:name) }
 
     final = created.merge(contributed) do |key, v1, v2|

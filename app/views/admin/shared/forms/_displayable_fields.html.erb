@@ -1,0 +1,7 @@
+<%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
+
+<% if f.object.slug_locked? %>
+  <%= f.input(:slug, readonly: true) %>
+<% elsif f.object.persisted? %>
+  <%= f.input(:slug) %>
+<% end %>

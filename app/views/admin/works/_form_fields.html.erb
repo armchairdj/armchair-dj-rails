@@ -1,8 +1,4 @@
-<% show_contributors = true if local_assigns[:show_contributors].nil? %>
-<% show_links        = true if local_assigns[:show_links       ].nil? %>
-<% show_parent       = true if local_assigns[:show_parent      ].nil? %>
-<% show_summary      = true if local_assigns[:show_summary     ].nil? %>
-<% show_tags         = true if local_assigns[:show_tags        ].nil? %>
+<% show_all = true if local_assigns[:show_all].nil? %>
 
 <%= content_tag(:fieldset) do %>
   <%= content_tag(:div, class: "boxed") do %>
@@ -19,7 +15,7 @@
 
     <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
 
-    <% if show_parent %>
+    <% if show_all %>
       <%= f.input :parent_id, as: :grouped_select,
         collection:         works,
         selected:           f.object.parent_id,
@@ -41,31 +37,25 @@
     creators: creators
   }) %>
 
-  <% if show_contributors %>
+  <% if show_all %>
     <%= render(partial: "admin/shared/forms/contribution_fieldset", locals: {
       f:        f,
       creators: creators,
       roles:    roles
     }) %>
-  <% end %>
 
-  <% if show_tags %>
     <%= render(partial: "admin/shared/forms/category_fieldset", locals: {
       f:          f,
       categories: categories
     }) %>
-  <% end %>
 
-  <% if show_links %>
     <%= render partial: "admin/shared/forms/link_fieldset", locals: {
       f: f
     } %>
-  <% end %>
 
-  <% if show_summary %>
     <%= content_tag(:fieldset) do %>
       <%= content_tag(:div, class: "boxed") do %>
-        <%= f.input(:summary, required: false, hint: true) %>
+        <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
       <% end %>
     <% end %>
   <% end %>

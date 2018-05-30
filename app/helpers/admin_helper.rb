@@ -86,25 +86,11 @@ module AdminHelper
   #############################################################################
 
   def admin_public_link_for(instance)
-    case instance.model_name
-    when "Creator"
-      admin_public_creator_link(instance)
-    when "Medium"
-      admin_public_medium_link(instance)
-    when "Post"
-      admin_public_post_link(instance)
-    when "Tag"
-      admin_public_tag_link(instance)
-    when "User"
-      admin_public_user_link(instance)
-    when "Work"
-      admin_public_work_link(instance)
-    end
-  end
+    return if (instance.model_name == "Post" ?
+      !instance.published? : !instance.viewable?
+    )
 
-  def admin_public_link(instance, path = nil)
-    path ||= polymorphic_path(instance)
-
+    path  = public_url_for(instance)
     title = "view #{instance.model_name.singular} on site"
     desc  = "public view icon"
     icon  = "link-intact"
@@ -112,40 +98,21 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin public-view")
   end
 
-  def admin_public_creator_link(creator)
-    return unless creator.viewable?
-
-    admin_public_link(creator)
-  end
-
-  def admin_public_medium_link(medium)
-    return unless medium.viewable?
-
-    admin_public_link(medium)
-  end
-
-  def admin_public_post_link(post)
-    return unless post.published?
-
-    admin_public_link(post, post_permalink_path(slug: post.slug))
-  end
-
-  def admin_public_tag_link(tag)
-    return unless tag.viewable?
-
-    admin_public_link(tag)
-  end
-
-  def admin_public_user_link(user)
-    return unless user.viewable?
-
-    admin_public_link(user, user_profile_path(username: user.username))
-  end
-
-  def admin_public_work_link(work)
-    return unless work.viewable?
-
-    admin_public_link(work)
+  def public_url_for(instance)
+    case instance.model_name
+    when "Creator"
+      creator_permalink_path(slug: instance.slug)
+    when "Medium"
+      medium_permalink_path(slug: instance.slug)
+    when "Tag"
+      tag_permalink_path(slug: instance.slug)
+    when "Work"
+      work_permalink_path(slug: instance.slug)
+    when "Post"
+      post_permalink_path(slug: instance.slug)
+    when "User"
+      user_profile_path(username: instance.username)
+    end
   end
 
   #############################################################################
@@ -153,8 +120,8 @@ module AdminHelper
   #############################################################################
 
   # TODO pundit
-  def admin_header(model_class, action, **opts)
-    links  = admin_header_links(model_class, action, opts.delete(:instance))
+  def admin_header(model_class, action, instance: nil, **opts)
+    links  = admin_header_links(model_class, action, instance)
     pieces = opts.slice(:h4, :h1, :h2, :h3).map { |k, v| content_tag(k, v) }
     pieces << content_tag(:div, links, class: "actions")
 
@@ -246,9 +213,9 @@ module AdminHelper
     content_tag(:th, "Actions", class: "actions")
   end
 
-  def sortable_th(sorts, name, **opts)
+  def sortable_th(sorts, name, text: nil, **opts)
     props   = sorts[name]
-    text    = content_tag(:span, opts.delete(:text) || name)
+    text    = content_tag(:span, text || name)
     classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
 
     content_tag(:th, link_to(text, props[:url], class: classes), opts)

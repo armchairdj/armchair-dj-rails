@@ -93,7 +93,7 @@ class Admin::RolesController < AdminController
 private
 
   def find_collection
-    @roles = scoped_collection
+    @roles = scoped_and_sorted_collection
   end
 
   def build_new_instance

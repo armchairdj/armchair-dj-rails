@@ -111,5 +111,9 @@ FactoryBot.define do
     factory :song_medium, parent: :minimal_medium do
       name "Song"
     end
+
+    factory :book_medium, parent: :minimal_medium do
+      name "Book"
+    end
   end
 end

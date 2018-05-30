@@ -4,10 +4,10 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/users/form_fields", locals: {
       f:             f,
+      roles:         roles,
       show_bio:      true,
       show_password: user.new_record?,
       show_role:     true,
-      roles:         roles,
     } %>
   <% end %>
 

@@ -13,13 +13,9 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "a_linkable_model"
+    it_behaves_like "a_displayable_model"
 
     it_behaves_like "a_parentable_model"
-
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_viewable_model"
   end
 
   context "class" do

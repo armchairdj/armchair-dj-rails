@@ -14,7 +14,6 @@ class Post < ApplicationRecord
   include Alphabetizable
   include Linkable
   include Sluggable
-  include Summarizable
 
   #############################################################################
   # CLASS.
@@ -70,9 +69,10 @@ class Post < ApplicationRecord
 
   belongs_to :work, optional: true
 
-  has_one :medium,     through: :work
-  has_many :creators,  through: :work
-  has_many :work_tags, through: :work, class_name: "Tag", source: :tags
+  has_one :medium,         through: :work
+  has_many :creators,      through: :work
+  has_many :contributors,  through: :work
+  has_many :work_tags,     through: :work, class_name: "Tag", source: :tags
 
   #############################################################################
   # ATTRIBUTES.
@@ -226,6 +226,31 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def sluggable_parts
+    if standalone?
+      [ title ]
+    else
+      [
+        ("reviews" if review?),
+        work.sluggable_parts
+      ].flatten
+    end
+  end
+
+  def slug_locked?
+    published?
+  end
+
+  def should_validate_slug_presence?
+    !draft?
+  end
+
+  private :should_validate_slug_presence?
+
+  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -279,31 +304,6 @@ class Post < ApplicationRecord
 private
 
   #############################################################################
-  # SLUG.
-  #############################################################################
-
-  def should_validate_slug_presence?
-    !draft?
-  end
-
-  def slug_is_locked?
-    published?
-  end
-
-  def sluggable_parts
-    if standalone?
-      [ title ]
-    else
-      [
-        type(plural: true),
-        work.display_creators(connector: " and "),
-        work.title,
-        work.subtitle
-      ]
-    end
-  end
-
-  #############################################################################
   # PUBLISHING.
   #############################################################################
 
@@ -339,11 +339,9 @@ private
     return unless work.present?
 
     work.update_counts
-    work.medium.update_counts
-
-    work.creators.each { |c| c.update_counts }
-    work.tags.each     { |t| t.update_counts }
-
-    # TODO contributors
+    medium.update_counts
+    contributors.each { |c| c.update_counts }
+    creators.each     { |c| c.update_counts }
+    work_tags.each    { |t| t.update_counts }
   end
 end

@@ -1,7 +1,3 @@
-<% show_bio      = false if local_assigns[:show_bio     ].nil? %>
-<% show_password = false if local_assigns[:show_password].nil? %>
-<% show_role     = false if local_assigns[:show_role    ].nil? %>
-
 <%= content_tag(:fieldset, class: "name legendary") do %>
   <%= content_tag(:div, class: "boxed") do %>
     <%= content_tag(:legend, "Name") %>
@@ -20,7 +16,7 @@
 
     <%= f.input(:password, required: true, hint: true) if show_password %>
 
-    <%= f.input(:username) %>
+    <%= f.input(:username, required: true) %>
 
     <%= f.input(:role,
       as:            :select,
@@ -31,3 +27,7 @@
     <%= f.input(:bio, hint: true) if show_bio %>
   <% end %>
 <% end %>
+
+<%= render partial: "admin/shared/forms/link_fieldset", locals: {
+  f: f
+} %>

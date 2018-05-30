@@ -21,18 +21,10 @@ private
 private
 
   def find_collection
-    @posts = policy_scope(Post).page(params[:page])
+    @posts = scoped_collection
   end
 
   def find_instance
-    @post = Post.find_by!(slug: params[:slug])
-  end
-
-  def authorize_instance
-    authorize @post
-  end
-
-  def set_meta_tags
-    @meta_description = @post.summary
+    @post = scoped_instance_by_slug
   end
 end

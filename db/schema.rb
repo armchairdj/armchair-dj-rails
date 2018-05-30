@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_22_155557) do
+ActiveRecord::Schema.define(version: 2018_05_29_194503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,10 +49,13 @@ ActiveRecord::Schema.define(version: 2018_05_22_155557) do
     t.boolean "primary", default: true, null: false
     t.boolean "individual", default: true, null: false
     t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["primary"], name: "index_creators_on_primary"
+    t.index ["slug"], name: "index_creators_on_slug", unique: true
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
   end
 
@@ -104,8 +107,11 @@ ActiveRecord::Schema.define(version: 2018_05_22_155557) do
     t.datetime "updated_at", null: false
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_media_on_alpha"
     t.index ["non_viewable_post_count"], name: "index_media_on_non_viewable_post_count"
+    t.index ["slug"], name: "index_media_on_slug", unique: true
     t.index ["viewable_post_count"], name: "index_media_on_viewable_post_count"
   end
 
@@ -164,9 +170,12 @@ ActiveRecord::Schema.define(version: 2018_05_22_155557) do
     t.text "summary"
     t.integer "non_viewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
     t.index ["category_id"], name: "index_tags_on_category_id"
     t.index ["non_viewable_post_count"], name: "index_tags_on_non_viewable_post_count"
+    t.index ["slug"], name: "index_tags_on_slug", unique: true
     t.index ["viewable_post_count"], name: "index_tags_on_viewable_post_count"
   end
 
@@ -228,10 +237,13 @@ ActiveRecord::Schema.define(version: 2018_05_22_155557) do
     t.bigint "medium_id"
     t.string "ancestry"
     t.integer "ancestry_depth", default: 0
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["ancestry"], name: "index_works_on_ancestry"
     t.index ["medium_id"], name: "index_works_on_medium_id"
     t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
+    t.index ["slug"], name: "index_works_on_slug", unique: true
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 

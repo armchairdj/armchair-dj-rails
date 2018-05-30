@@ -38,10 +38,10 @@
               <%= content_tag(:td, creator.non_viewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_creator_link(creator) %>
-                <%= admin_view_link(          creator) %>
-                <%= admin_update_link(        creator) %>
-                <%= admin_destroy_link(       creator) %>
+                <%= admin_public_link_for(creator) %>
+                <%= admin_view_link(      creator) %>
+                <%= admin_update_link(    creator) %>
+                <%= admin_destroy_link(   creator) %>
               <% end %>
             <% end %>
           <% end %>

@@ -5,18 +5,10 @@ class WorksController < PublicController
 private
 
   def find_collection
-    @works = policy_scope(Work).page(params[:page])
+    @works = scoped_collection
   end
 
   def find_instance
-    @work = Work.find(params[:id])
-  end
-
-  def authorize_instance
-    authorize @work
-  end
-
-  def set_meta_tags
-    @meta_description = @work.summary
+    @work = scoped_instance_by_slug
   end
 end

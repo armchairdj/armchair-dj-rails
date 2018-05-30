@@ -11,14 +11,14 @@
   <% end %>
 <% end %>
 
-<%= render partial: "shared/posts", locals: {
+<%= render partial: "shared/playback/posts", locals: {
   posts: @user.posts.for_site
 } %>
 
-<%= render partial: "shared/works", locals: {
+<%= render partial: "shared/playback/works", locals: {
   works: @user.works.for_site
 } %>
 
-<%= render partial: "shared/creators", locals: {
+<%= render partial: "shared/playback/creators", locals: {
   creators: @user.creators.for_site
 } %>

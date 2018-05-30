@@ -19,7 +19,7 @@ private
     "admin"
   end
 
-  def scoped_collection
+  def scoped_and_sorted_collection
     @scope = params[:scope] || allowed_scopes.keys.first
     @sort  = params[:sort ] || allowed_sorts.keys.first
     @dir   = params[:dir  ] || "ASC"

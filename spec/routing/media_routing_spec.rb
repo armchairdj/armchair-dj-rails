@@ -13,12 +13,12 @@ RSpec.describe MediaController, type: :routing do
     end
 
     it "routes to #show" do
-      expect(get: "/media/1").to route_to("media#show", id: "1")
+      expect(get: "/media/foo/bar/bat").to route_to("media#show", slug: "foo/bar/bat")
     end
 
     describe "does not route to RESTful" do
       it "#new" do
-        expect(get: "/media/new").to route_to("media#show", id: "new")
+        expect(get: "/media/new").to route_to("media#show", slug: "new")
       end
 
       it "#create" do
@@ -26,7 +26,7 @@ RSpec.describe MediaController, type: :routing do
       end
 
       it "#edit" do
-        expect(get: "/media/1/edit").to_not be_routable
+        expect(get: "/media/1/edit").to route_to("media#show", slug: "1/edit")
       end
 
       it "#update via PUT" do

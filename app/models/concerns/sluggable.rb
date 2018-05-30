@@ -55,10 +55,18 @@ module Sluggable
     before_save :prepare_slug
   end
 
+  def sluggable_parts
+    raise NotImplementedError
+  end
+
+  def slug_locked?
+    persisted?
+  end
+
 private
 
   def prepare_slug
-    return if slug_is_locked?
+    return if slug_locked?
     return if self.dirty_slug? && !slug_changed?
 
     if slug_changed? && !slug.blank?
@@ -87,20 +95,12 @@ private
   end
 
   def preserve_locked_slug
-    if slug_is_locked? && slug_changed?
+    if slug_locked? && slug_changed?
       self.errors.add(:slug, :locked)
     end
   end
 
   def should_validate_slug_presence?
     true
-  end
-
-  def slug_is_locked?
-    persisted?
-  end
-
-  def sluggable_parts
-    raise NotImplementedError
   end
 end

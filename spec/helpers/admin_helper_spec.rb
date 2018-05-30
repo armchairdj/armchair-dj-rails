@@ -28,12 +28,12 @@ RSpec.describe AdminHelper, type: :helper do
       allow(helper).to receive(:edit_polymorphic_path).and_return("path")
       allow(helper).to receive(  :post_permalink_path).and_return("path")
 
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/plus.svg",        anything).and_return("create")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/trash.svg",       anything).and_return("destroy")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/list.svg",        anything).and_return("list")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/pencil.svg",      anything).and_return("update")
-      allow(helper).to receive(   :semantic_svg_image).with("open_iconic/eye.svg",         anything).and_return("view")
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/plus.svg",        anything).and_return("create" )
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/trash.svg",       anything).and_return("destroy")
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/list.svg",        anything).and_return("list"   )
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/pencil.svg",      anything).and_return("update" )
+      allow(helper).to receive(:semantic_svg_image).with("open_iconic/eye.svg",         anything).and_return("view"   )
     end
 
     let(   :model) { Creator }
@@ -90,99 +90,131 @@ RSpec.describe AdminHelper, type: :helper do
     end
 
     describe "#admin_public_link_for" do
-      describe "#admin_public_link" do
-        it "generates link" do
-          post     = create(:review, :published)
-          instance = post.work
+      subject { helper.admin_public_link_for(instance) }
 
-          expect(helper).to receive(:polymorphic_path).with(instance)
+      context "creators" do
+        let(:instance) { create(:minimal_creator) }
 
-          expect(helper.admin_public_link(instance)).to eq(
-            '<a title="view work on site" class="admin public-view" href="path">public</a>'
-          )
+        describe "viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?             ).and_return(true       )
+            allow(helper  ).to receive(:creator_permalink_path).and_return("permalink")
+          end
+
+          it { is_expected.to eq('<a title="view creator on site" class="admin public-view" href="permalink">public</a>') }
         end
 
-        it "overrides url" do
-          post     = create(:review, :published)
-          instance = post.work
+        describe "non-viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?).and_return(false)
+          end
 
-          expect(helper).to_not receive(:polymorphic_path)
+          it { is_expected.to eq(nil) }
+        end
+      end
 
-          expect(helper.admin_public_link(instance, "/")).to eq(
-            '<a title="view work on site" class="admin public-view" href="/">public</a>'
-          )
+      context "media" do
+        let(:instance) { create(:minimal_medium) }
+
+        describe "viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?            ).and_return(true       )
+            allow(helper  ).to receive(:medium_permalink_path).and_return("permalink")
+          end
+
+          it { is_expected.to eq('<a title="view medium on site" class="admin public-view" href="permalink">public</a>') }
         end
 
-        context "specific models" do
-          describe "#admin_public_creator_link" do
-            it "generates link" do
-              post     = create(:review, :published)
-              instance = post.work.creators.first
-
-              expect(helper).to receive(:polymorphic_path).with(instance)
-
-              expect(helper.admin_public_link_for(instance)).to eq(
-                '<a title="view creator on site" class="admin public-view" href="path">public</a>'
-              )
-            end
-
-            it "nils unless published posts" do
-              post     = create(:review)
-              instance = post.work.creators.first
-
-              expect(helper).to_not receive(:polymorphic_path)
-
-              expect(helper.admin_public_link_for(instance)).to eq(nil)
-            end
+        describe "non-viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?).and_return(false)
           end
 
-          pending "#admin_public_medium_link"
+          it { is_expected.to eq(nil) }
+        end
+      end
 
-          describe "#admin_public_post_link" do
-            it "generates link" do
-              instance = create(:review, :published)
+      context "posts" do
+        let(:instance) { create(:minimal_post) }
 
-              expect(helper).to receive(:post_permalink_path).with(slug: instance.slug)
-
-              expect(helper.admin_public_link_for(instance)).to eq(
-                '<a title="view post on site" class="admin public-view" href="path">public</a>'
-              )
-            end
-
-            it "nils unless published" do
-              instance = create(:review)
-
-              expect(helper).to_not receive(:post_permalink_path)
-
-              expect(helper.admin_public_link_for(instance)).to eq(nil)
-            end
+        describe "published" do
+          before(:each) do
+            allow(instance).to receive(:published?         ).and_return(true       )
+            allow(helper  ).to receive(:post_permalink_path).and_return("permalink")
           end
 
-          pending "#admin_public_tag_link"
+          it { is_expected.to eq('<a title="view post on site" class="admin public-view" href="permalink">public</a>') }
+        end
 
-          pending "#admin_public_user_link"
-
-          describe "#admin_public_work_link" do
-            it "generates link" do
-              post     = create(:review, :published)
-              instance = post.work
-
-              expect(helper).to receive(:polymorphic_path).with(instance)
-
-              expect(helper.admin_public_link_for(instance)).to eq(
-                '<a title="view work on site" class="admin public-view" href="path">public</a>'
-              )
-            end
-
-            it "nils unless published posts" do
-              post     = create(:review)
-              instance = post.work
-
-              expect(helper).to_not receive(:polymorphic_path)
-
-              expect(helper.admin_public_link_for(instance)).to eq(nil)
-            end
+        describe "unpublished" do
+          before(:each) do
+            allow(instance).to receive(:published?).and_return(false)
           end
+
+          it { is_expected.to eq(nil) }
+        end
+      end
+
+      context "tags" do
+        let(:instance) { create(:minimal_tag) }
+
+        describe "viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?             ).and_return(true       )
+            allow(helper  ).to receive(:tag_permalink_path).and_return("permalink")
+          end
+
+          it { is_expected.to eq('<a title="view tag on site" class="admin public-view" href="permalink">public</a>') }
+        end
+
+        describe "non-viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?).and_return(false)
+          end
+
+          it { is_expected.to eq(nil) }
+        end
+      end
+
+      context "users" do
+        let(:instance) { create(:minimal_user) }
+
+        describe "viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?        ).and_return(true     )
+            allow(helper  ).to receive(:user_profile_path).and_return("profile")
+          end
+
+          it { is_expected.to eq('<a title="view user on site" class="admin public-view" href="profile">public</a>') }
+        end
+
+        describe "non-viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?).and_return(false)
+          end
+
+          it { is_expected.to eq(nil) }
+        end
+      end
+
+      context "works" do
+        let(:instance) { create(:minimal_work) }
+
+        describe "viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?          ).and_return(true       )
+            allow(helper  ).to receive(:work_permalink_path).and_return("permalink")
+          end
+
+          it { is_expected.to eq('<a title="view work on site" class="admin public-view" href="permalink">public</a>') }
+        end
+
+        describe "non-viewable" do
+          before(:each) do
+            allow(instance).to receive(:viewable?).and_return(false)
+          end
+
+          it { is_expected.to eq(nil) }
         end
       end
     end

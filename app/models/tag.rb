@@ -8,9 +8,7 @@ class Tag < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Alphabetizable
-  include Summarizable
-  include Viewable
+  include Displayable
 
   #############################################################################
   # CLASS.
@@ -69,6 +67,14 @@ class Tag < ApplicationRecord
   #############################################################################
 
   #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def sluggable_parts
+    [display_name(connector: "/")]
+  end
+
+  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -86,14 +92,14 @@ class Tag < ApplicationRecord
     !categorized?
   end
 
-  def display_category(default = "Uncategorized")
+  def display_category(default: "Uncategorized")
     categorized? ? category.name : default
   end
 
-  def display_name
+  def display_name(connector: ": ")
     return self.name unless categorized?
 
-    [self.category.name, self.name].join(": ")
+    [self.category.name, self.name].join(connector)
   end
 
   def all_posts

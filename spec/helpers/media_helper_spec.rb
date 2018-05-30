@@ -3,28 +3,52 @@
 require "rails_helper"
 
 RSpec.describe MediaHelper, type: :helper do
-  let(:unsaved) { build(:minimal_medium) }
-  let(  :saved) { create(:minimal_medium, name: "Movie") }
-
   describe "#link_to_medium" do
-    specify { expect(helper.link_to_medium(unsaved)).to eq(nil) }
+    let(:instance) { create(:minimal_medium, name: "Medium") }
 
-    it "links to site by default" do
-      actual = helper.link_to_medium(saved)
+    context "viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(true)
+      end
 
-      expect(actual).to have_tag('a[href^="/media/"]',
-        text:  "Movie",
-        count: 1
-      )
+      context "public" do
+        subject { helper.link_to_medium(instance, class: "test") }
+
+        it { is_expected.to have_tag("a[href='/media/#{instance.slug}'][class='test']",
+          text:  "Medium",
+          count: 1
+        ) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_medium(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/media/#{instance.id}']",
+          text:  "Medium",
+          count: 1
+        ) }
+      end
     end
 
-    it "links to admin" do
-      actual = helper.link_to_medium(saved, admin: true)
+    context "non-viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(false)
+      end
 
-      expect(actual).to have_tag('a[href^="/admin/media/"]',
-        text:  "Movie",
-        count: 1
-      )
+      context "public" do
+        subject { helper.link_to_medium(instance) }
+
+        it { is_expected.to eq(nil) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_medium(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/media/#{instance.id}']",
+          text:  "Medium",
+          count: 1
+        ) }
+      end
     end
   end
 end

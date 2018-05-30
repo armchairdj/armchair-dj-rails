@@ -114,84 +114,82 @@ RSpec.describe PostsHelper, type: :helper do
 
   context "link methods" do
     describe "#link_to_post" do
-      context "standalone" do
-        subject { build(:standalone_post, title: "Title") }
+      let(:instance) { create(:minimal_post) }
 
-        it "nils without slug" do
-          expect(helper.link_to_post(subject)).to eq(nil)
+      before(:each) do
+        allow(helper).to receive(:post_title).with(instance, full: true ).and_return("Long Title")
+        allow(helper).to receive(:post_title).with(instance, full: false).and_return("Short Title")
+      end
+
+      context "published" do
+        before(:each) do
+          allow(instance).to receive(:published?).and_return(true)
         end
 
-        it "creates link to permalink with post title" do
-          subject.save
+        context "public" do
+          subject { helper.link_to_post(instance, class: "test") }
 
-          actual = helper.link_to_post(subject)
-
-          expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
-            text:  "Title",
+          it { is_expected.to have_tag("a[href='/posts/#{instance.slug}'][class='test']",
+            text:  "Long Title",
             count: 1
-          )
+          ) }
         end
 
-        it "creates link to admin" do
-          subject.save
+        context "full: false" do
+          subject { helper.link_to_post(instance, full: false) }
 
-          actual = helper.link_to_post(subject, admin: true)
-
-          expect(actual).to have_tag("a[href='/admin/posts/#{subject.id}']",
-            text:  "Title",
+          it { is_expected.to have_tag("a[href='/posts/#{instance.slug}']",
+            text:  "Short Title",
             count: 1
-          )
+          ) }
+        end
+
+        context "admin" do
+          subject { helper.link_to_post(instance, admin: true) }
+
+          it { is_expected.to have_tag("a[href='/admin/posts/#{instance.id}']",
+            text:  "Long Title",
+            count: 1
+          ) }
         end
       end
 
-      context "review" do
-        subject { build(:review, work_id: create(:kate_bush_hounds_of_love).id) }
-
-        it "nils without slug" do
-          expect(helper.link_to_post(subject)).to eq(nil)
+      context "unpublished" do
+        before(:each) do
+          allow(instance).to receive(:published?).and_return(false)
         end
 
-        it "creates link to permalink with work creator and title" do
-          subject.save
+        context "public" do
+          subject { helper.link_to_post(instance) }
 
-          actual = helper.link_to_post(subject)
-
-          expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
-            text:  "Kate Bush: Hounds of Love",
-            count: 1
-          )
+          it { is_expected.to eq(nil) }
         end
 
-        it "creates link to permalink with work title only" do
-          subject.save
+        context "admin" do
+          subject { helper.link_to_post(instance, admin: true) }
 
-          actual = helper.link_to_post(subject, full: false)
-
-          expect(actual).to have_tag("a[href='/posts/#{subject.slug}']",
-            text:  "Hounds of Love",
+          it { is_expected.to have_tag("a[href='/admin/posts/#{instance.id}']",
+            text:  "Long Title",
             count: 1
-          )
-        end
-
-        it "creates link to admin" do
-          subject.save
-
-          actual = helper.link_to_post(subject, admin: true)
-
-          expect(actual).to have_tag("a[href='/admin/posts/#{subject.id}']",
-            text:  "Kate Bush: Hounds of Love",
-            count: 1
-          )
+          ) }
         end
       end
     end
 
     describe "#link_to_post_author" do
-      subject { build(:standalone_post, author: create(:writer, username: "armchairdj")) }
+      subject { link_to_post_author(instance) }
 
-      specify { expect(link_to_post_author(subject)).to match(
-        '<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>'
-      ) }
+      context "published" do
+        let(:instance) { create(:standalone_post, :published, author: create(:writer, username: "armchairdj")) }
+
+        it { is_expected.to eq('<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>') }
+      end
+
+      context "unpublished" do
+        let(:instance) { create(:standalone_post, :draft) }
+
+        it { is_expected.to eq(nil) }
+      end
     end
   end
 end

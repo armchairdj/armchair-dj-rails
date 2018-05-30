@@ -34,10 +34,10 @@
               <%= content_tag(:td, medium.non_viewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_medium_link(medium) %>
-                <%= admin_view_link(         medium) %>
-                <%= admin_update_link(       medium) %>
-                <%= admin_destroy_link(      medium) %>
+                <%= admin_public_link_for(medium) %>
+                <%= admin_view_link(      medium) %>
+                <%= admin_update_link(    medium) %>
+                <%= admin_destroy_link(   medium) %>
               <% end %>
             <% end %>
           <% end %>

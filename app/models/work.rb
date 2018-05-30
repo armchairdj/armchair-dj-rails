@@ -13,11 +13,8 @@ class Work < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Alphabetizable
-  include Linkable
   include Parentable
-  include Summarizable
-  include Viewable
+  include Displayable
 
   #############################################################################
   # CLASS.
@@ -153,8 +150,10 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def tags_by_category
-    collection = tags.alpha.includes(:category)
+  def tags_by_category(for_site: false)
+    viewable_tags = all ? self.tags : self.tags.for_site
+
+    collection = viewable_tags.alpha.includes(:category)
 
     return [] if collection.empty?
 
@@ -167,17 +166,18 @@ class Work < ApplicationRecord
     end
   end
 
-  # TODO This should take a full option and full_display_title should just call this
-  def display_title
+  def display_title(full: false)
     return unless persisted?
 
-    [title, subtitle].compact.join(": ")
+    parts = [title, subtitle]
+
+    parts.unshift(display_creators) if full
+
+    parts.compact.join(": ")
   end
 
   def full_display_title
-    return unless persisted?
-
-    [display_creators, title, subtitle].compact.join(": ")
+    display_title(full: true)
   end
 
   def display_creators(connector: " & ")
@@ -200,5 +200,18 @@ class Work < ApplicationRecord
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+  end
+
+  #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def sluggable_parts
+    [
+      medium.name.pluralize,
+      display_creators(connector: " and "),
+      title,
+      subtitle
+    ]
   end
 end

@@ -2,7 +2,7 @@
   <%= content_tag(:div, class: "boxed") do %>
     <%= f.input :name %>
 
-    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
+    <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
   <% end %>
 <% end %>
 

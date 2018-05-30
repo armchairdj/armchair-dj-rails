@@ -15,6 +15,10 @@
 
     <%= f.input :name %>
 
-    <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
+    <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
   <% end %>
 <% end %>
+
+<%= render partial: "admin/shared/forms/link_fieldset", locals: {
+  f: f
+} %>

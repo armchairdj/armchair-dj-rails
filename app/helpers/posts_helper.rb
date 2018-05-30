@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module PostsHelper
+  include UsersHelper
 
   #############################################################################
   # DISPLAY METHODS.
@@ -23,11 +24,7 @@ module PostsHelper
   end
 
   def post_title(post, full: true, length: nil)
-    title = if post.review?
-      full ? post.work.full_display_title : post.work.display_title
-    else
-      post.title
-    end
+    title = post.review? ? post.work.display_title(full: full) : post.title
 
     length.nil? ? title : truncate(title, length: length, omission: "…")
   end
@@ -58,18 +55,17 @@ module PostsHelper
   # LINK METHODS.
   #############################################################################
 
-  def link_to_post(post, full: true, admin: false)
-    return unless post.slug.present? || admin
+  def link_to_post(instance, admin: false, full: true, **opts)
+    return unless admin || instance.published?
 
-    text        = post_title(post, full: full)
-    url_options = admin ? admin_post_path(post) : post_permalink_path(slug: post.slug)
+    text = post_title(instance, full: full)
+    url  = admin ? admin_post_path(instance) : post_permalink_path(slug: instance.slug)
 
-    link_to(text, url_options)
+    link_to(text, url, **opts)
   end
 
   def link_to_post_author(post)
-    url  = user_profile_path(username: post.author.username)
-    link = link_to(post.author.username, url, rel: "author")
+    return unless link = link_to_user(post.author, rel: "author")
 
     content_tag(:address, link, class: "author")
   end

@@ -42,7 +42,7 @@ RSpec.shared_examples "an_admin_controller" do
 
       pending "allowed_sorts"
 
-      pending "#scoped_collection"
+      pending "#scoped_and_sorted_collection"
 
       pending "#scopes_for_view"
 

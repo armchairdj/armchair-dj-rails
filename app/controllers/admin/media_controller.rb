@@ -102,7 +102,7 @@ class Admin::MediaController < AdminController
 private
 
   def find_collection
-    @media = scoped_collection
+    @media = scoped_and_sorted_collection
   end
 
   def build_new_instance

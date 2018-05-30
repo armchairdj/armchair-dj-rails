@@ -106,7 +106,7 @@ class Admin::PostsController < AdminController
 private
 
   def find_collection
-    @posts = scoped_collection
+    @posts = scoped_and_sorted_collection
   end
 
   def build_new_instance

@@ -281,24 +281,24 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         describe "#preserve_locked_slug" do
           subject { create_minimal_instance }
 
-          it "passes when #slug_is_locked is false" do
-            allow(subject).to receive(:slug_is_locked?).and_return(false)
+          it "passes when #slug_locked is false" do
+            allow(subject).to receive(:slug_locked?).and_return(false)
 
             is_expected.to be_valid
 
             is_expected.to_not have_error(:slug, :locked)
           end
 
-          it "passes when #slug_is_locked is true but slug hasn't changed" do
-            allow(subject).to receive(:slug_is_locked?).and_return(true)
+          it "passes when #slug_locked is true but slug hasn't changed" do
+            allow(subject).to receive(:slug_locked?).and_return(true)
 
             is_expected.to be_valid
 
             is_expected.to_not have_error(:slug, :locked)
           end
 
-          it "errors when #slug_is_locked is true and slug has changed" do
-            allow(subject).to receive(:slug_is_locked?).and_return(true)
+          it "errors when #slug_locked is true and slug has changed" do
+            allow(subject).to receive(:slug_locked?).and_return(true)
 
             subject.slug = "replacement slug"
 
@@ -364,7 +364,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         subject { create_minimal_instance }
 
         before(:each) do
-          allow(subject).to receive(:slug_is_locked?).and_return(false)
+          allow(subject).to receive(:slug_locked?).and_return(false)
         end
 
         context "clean" do
@@ -431,7 +431,7 @@ RSpec.shared_examples "a_sluggable_model" do |sluggable_attribute|
         subject { create_minimal_instance }
 
         before(:each) do
-          allow(subject).to receive(:slug_is_locked?).and_return(true)
+          allow(subject).to receive(:slug_locked?).and_return(true)
         end
 
         it "does nothing if value has not changed" do

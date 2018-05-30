@@ -43,10 +43,10 @@ RSpec.describe TagsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:tag) { create(:minimal_tag) }
+    let(:tag) { create(:minimal_tag, :with_published_post) }
 
     it "renders" do
-        get :show, params: { id: tag.id }
+        get :show, params: { slug: tag.slug }
 
         is_expected.to successfully_render("tags/show")
 
