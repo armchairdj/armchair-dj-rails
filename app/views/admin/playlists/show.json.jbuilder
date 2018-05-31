@@ -1,1 +1,1 @@
-json.partial! "playlists/playlist", playlist: @playlist
+json.partial! "admin/playlists/playlist", playlist: @playlist

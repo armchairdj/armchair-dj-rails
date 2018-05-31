@@ -10,4 +10,14 @@ module LinkHelper
       send("#{instance.model_name.param_key}_permalink_path", slug: instance.slug)
     end
   end
+
+  def permalink_url_for(instance)
+    return unless instance.respond_to?(:viewable?) && instance.viewable?
+
+    if instance.is_a? User
+      user_profile_url(username: instance.username)
+    else
+      send("#{instance.model_name.param_key}_permalink_url", slug: instance.slug)
+    end
+  end
 end

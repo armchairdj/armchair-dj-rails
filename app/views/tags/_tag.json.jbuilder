@@ -1,2 +1,2 @@
 json.extract! tag, :id, :created_at, :updated_at
-json.url tag_url(tag, format: :json)
+json.url permalink_url_for(tag, format: :json)

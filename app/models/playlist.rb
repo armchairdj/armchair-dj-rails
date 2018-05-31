@@ -54,4 +54,7 @@ class Playlist < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [title]
+  end
 end

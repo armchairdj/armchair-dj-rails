@@ -1,4 +1,63 @@
 <%
-  @headline = @title = "Playlist"
+  @title = ["View Playlist", @playlist.author.username, @playlist.title]
 %>
 
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @playlist,
+) %>
+
+<%= content_tag(:section, class: "admin-section tabled") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Title") %>
+        <%= content_tag(:td, @playlist.title) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Author") %>
+        <%= content_tag(:td) do %>
+          <%= link_to(@playlist.author.username, admin_user_path(@playlist.author)) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Viewable Posts") %>
+        <%= content_tag(:td, @playlist.viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Non-Viewable Posts") %>
+        <%= content_tag(:td, @playlist.non_viewable_post_count) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@playlist.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@playlist.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @playlist.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @playlist.links
+} %>
+
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts: @playlist.posts.for_admin.reverse_cron
+} %>

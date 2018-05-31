@@ -1,4 +1,15 @@
 <%
-  @headline = @title = "Playlist"
+  @title = @playlist.title
 %>
 
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "playlist-header") do %>
+    <%= content_tag(:h1, @playlist.title) %>
+  <% end %>
+<% end %>
+
+DISPLAY PLAYLIST
+
+<%= render partial: "shared/playback/links", locals: {
+  links: @playlist.links
+} %>

@@ -1,5 +1,11 @@
 <%
-  @headline = @title = "Create Playlists"
+  @title = "Create Playlist"
 %>
 
-<%= render "form", playlist: @playlist %>
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
+
+<%= render partial: "form", locals: {
+  playlist:       @playlist,
+} %>

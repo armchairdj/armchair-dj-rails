@@ -1,25 +1,47 @@
 <%
-  @headline = @title = "Playlists"
+  @title = "Playlists"
 %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@playlists),
+  h1: @title
+) %>
 
-  <tbody>
-    <% @playlists.each do |playlist| %>
-      <tr>
-        <td><%= link_to "Show", playlist %></td>
-        <td><%= link_to "Edit", edit_playlist_path(playlist) %></td>
-        <td><%= link_to "Destroy", playlist, method: :delete, data: { confirm: "Are you sure?" } %></td>
-      </tr>
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= admin_index_tabs(@scopes) %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @playlists.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "Title"  %>
+            <%= sortable_th @sorts, "Author" %>
+            <%= sortable_th @sorts, "VPC",  text: vpc_icon,  class: "icon"  %>
+            <%= sortable_th @sorts, "NVPC", text: nvpc_icon, class: "icon" %>
+
+            <%= actions_th %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @playlists.each do |playlist| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, playlist.title          ) %>
+              <%= content_tag(:td, playlist.author.username) %>
+
+              <%= content_tag(:td, playlist.viewable_post_count,     class: "icon") %>
+              <%= content_tag(:td, playlist.non_viewable_post_count, class: "icon") %>
+
+              <%= admin_actions_cell(playlist) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
-  </tbody>
-</table>
 
-<br>
-
-<%= link_to "New Playlist", new_playlist_path %>
+    <%= paginate @playlists %>
+  <% end %>
+<% end %>

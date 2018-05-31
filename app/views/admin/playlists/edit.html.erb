@@ -1,5 +1,16 @@
 <%
-  @headline = @title = "Edit Playlist"
+  @title = [
+    "Update Playlist",
+    @playlist.author.username,
+    @playlist.title
+  ]
 %>
 
-<%= render "form", playlist: @playlist %>
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @playlist,
+) %>
+
+<%= render partial: "form", locals: {
+  playlist:       @playlist,
+} %>

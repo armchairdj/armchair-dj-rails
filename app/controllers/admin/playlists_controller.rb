@@ -108,6 +108,12 @@ private
   end
 
   def allowed_sorts
-    super(name_sort)
+    title_sort  = "playlists.alpha ASC"
+    author_sort = "users.alpha ASC"
+
+    super(title_sort).merge({
+      "Title"   => title_sort,
+      "Author"  => [author_sort, title_sort].join(", "),
+    })
   end
 end

@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories, concerns: :paginatable
     resources :creators,   concerns: :paginatable
+    resources :playlists,  concerns: :paginatable
     resources :posts,      concerns: :paginatable
     resources :roles,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
@@ -109,12 +110,28 @@ Rails.application.routes.draw do
   end
 
   #############################################################################
+  # PLAYLISTS.
+  #############################################################################
+
+  resources :playlists, only: [:index], concerns: :paginatable
+
+  get "playlists/*slug", to: "playlists#show", as: "playlist_permalink"
+
+  #############################################################################
   # CREATORS.
   #############################################################################
 
   resources :creators, only: [:index], concerns: :paginatable
 
   get "creators/*slug", to: "creators#show", as: "creator_permalink"
+
+  #############################################################################
+  # WORKS.
+  #############################################################################
+
+  resources :works, only: [:index], concerns: :paginatable
+
+  get "works/*slug", to: "works#show", as: "work_permalink"
 
   #############################################################################
   # MEDIA.
@@ -131,12 +148,4 @@ Rails.application.routes.draw do
   resources :tags, only: [:index], concerns: :paginatable
 
   get "tags/*slug", to: "tags#show", as: "tag_permalink"
-
-  #############################################################################
-  # WORKS.
-  #############################################################################
-
-  resources :works, only: [:index], concerns: :paginatable
-
-  get "works/*slug", to: "works#show", as: "work_permalink"
 end

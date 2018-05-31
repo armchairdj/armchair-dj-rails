@@ -1,10 +1,13 @@
-<%= simple_form_for(playlist) do |f| %>
+<%= simple_form_for([:admin, playlist], html: { class: "admin" }) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/playlists/form_fields", locals: {
+      f:          f,
+    } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :button, "Submit", type: :submit %>
+    <%= admin_submit_button(f) %>
   <% end %>
 <% end %>

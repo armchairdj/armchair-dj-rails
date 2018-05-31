@@ -1,5 +1,5 @@
 <%
-  @title = ["View Post", post_title(@post)]
+  @title = ["View Post", @post.author.username, post_title(@post)]
 %>
 
 <%= admin_header(@model_class, :show,
