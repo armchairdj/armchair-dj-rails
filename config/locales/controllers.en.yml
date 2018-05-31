@@ -27,6 +27,11 @@ en:
           create:  "Medium created."
           destroy: "Medium destroyed."
           update:  "Medium updated."
+      playlists:
+        success:
+          create:  "Playlist created."
+          destroy: "Playlist destroyed."
+          update:  "Playlist updated."
       posts:
         success:
           create:  "Post created."

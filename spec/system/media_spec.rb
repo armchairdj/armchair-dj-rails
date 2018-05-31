@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 RSpec.describe "media" do
-  pending "add some medium system tests"
+  pending "add some medium system specs"
 end

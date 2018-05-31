@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_29_194503) do
+ActiveRecord::Schema.define(version: 2018_05_31_011745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,23 @@ ActiveRecord::Schema.define(version: 2018_05_29_194503) do
     t.index ["member_id"], name: "index_memberships_on_member_id"
   end
 
+  create_table "playlists", force: :cascade do |t|
+    t.string "title"
+    t.bigint "author_id"
+    t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
+    t.text "summary"
+    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "viewable_post_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_playlists_on_alpha"
+    t.index ["non_viewable_post_count"], name: "index_playlists_on_non_viewable_post_count"
+    t.index ["slug"], name: "index_playlists_on_slug", unique: true
+    t.index ["viewable_post_count"], name: "index_playlists_on_viewable_post_count"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -184,6 +201,16 @@ ActiveRecord::Schema.define(version: 2018_05_29_194503) do
     t.bigint "tag_id", null: false
     t.index ["tag_id", "work_id"], name: "index_tags_works_on_tag_id_and_work_id"
     t.index ["work_id", "tag_id"], name: "index_tags_works_on_work_id_and_tag_id"
+  end
+
+  create_table "tracks", force: :cascade do |t|
+    t.bigint "playlist_id"
+    t.bigint "work_id"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_tracks_on_playlist_id"
+    t.index ["work_id"], name: "index_tracks_on_work_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -256,6 +283,7 @@ ActiveRecord::Schema.define(version: 2018_05_29_194503) do
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
+  add_foreign_key "playlists", "users", column: "author_id"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "roles", "media"
   add_foreign_key "tags", "categories"

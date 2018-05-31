@@ -1,0 +1,10 @@
+<%= simple_form_for(playlist) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :button, "Submit", type: :submit %>
+  <% end %>
+<% end %>
