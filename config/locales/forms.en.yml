@@ -39,6 +39,7 @@ en:
       defaults:
         _destroy: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
+        links: "For display on the public permalink page for this %{model_name}."
       category:
         allow_multiple: "&nbsp;"
       contribution:
@@ -57,6 +58,7 @@ en:
       work:
         subtitle: "Song remix, book subtitle, TV episode title, movie cut, etc."
         parent_id: "Original version of song, TV season, TV show, etc."
+        credits: "Select at least one."
     placeholders:
       defaults:
         email: "name@domain.com"

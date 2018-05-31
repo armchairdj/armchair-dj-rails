@@ -121,6 +121,12 @@ private
     params.fetch(:medium, {}).permit(
       :name,
       :summary,
+      :links_attributes => [
+        :id,
+        :_destroy,
+        :url,
+        :description
+      ],
       :roles_attributes => [
         :id,
         :_destroy,
@@ -139,6 +145,7 @@ private
   def prepare_form
     @medium.prepare_roles
     @medium.prepare_facets
+    @medium.prepare_links
 
     @categories = Category.for_admin.alpha
   end

@@ -121,11 +121,19 @@ private
       :username,
       :password,
       :role,
-      :bio
+      :bio,
+      :links_attributes => [
+        :id,
+        :_destroy,
+        :url,
+        :description
+      ],
     )
   end
 
   def prepare_form
+    @user.prepare_links
+
     @roles = current_user.assignable_role_options
   end
 

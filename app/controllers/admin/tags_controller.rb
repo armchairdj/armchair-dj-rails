@@ -116,11 +116,19 @@ private
     params.fetch(:tag, {}).permit(
       :name,
       :category_id,
-      :summary
+      :summary,
+      :links_attributes => [
+        :id,
+        :_destroy,
+        :url,
+        :description
+      ],
     )
   end
 
   def prepare_form
+    @tag.prepare_links
+
     @categories = Category.for_admin.alpha
   end
 
