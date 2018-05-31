@@ -3,6 +3,10 @@
 require "rails_helper"
 
 RSpec.describe AdminHelper, type: :helper do
+  before(:each) do
+    allow(helper).to receive(:current_user).and_return(create(:root))
+  end
+
   context "form methods" do
     pending "#admin_submit_button"
   end

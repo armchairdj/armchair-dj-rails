@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/categories/new", type: :view do
+  login_root
+
   before(:each) do
     @model_class = assign(:model_name, Category)
     @category    = assign(:category, build(:category))

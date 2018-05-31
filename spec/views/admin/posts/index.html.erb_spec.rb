@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/posts/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::PostsController.new }
 
   before(:each) do

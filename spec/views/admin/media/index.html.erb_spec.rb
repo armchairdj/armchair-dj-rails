@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/media/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::MediaController.new }
 
   before(:each) do

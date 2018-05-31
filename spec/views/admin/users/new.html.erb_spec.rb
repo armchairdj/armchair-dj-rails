@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/users/new", type: :view do
+  login_root
+
   before(:each) do
     @model_class = assign(:model_name, User)
     @user        = assign(:user, build(:user))

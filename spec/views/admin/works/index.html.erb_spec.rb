@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/works/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::WorksController.new }
 
   before(:each) do

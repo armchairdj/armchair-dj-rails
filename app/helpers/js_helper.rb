@@ -4,7 +4,7 @@ module JsHelper
   def js_attrs(controller, hash = nil, **opts)
     opts = hash.merge(opts) unless hash.nil?
 
-    attrs = { "data-controller": controller }
+    attrs = { class: opts.delete(:class), "data-controller": controller }
 
     opts.each.inject(attrs) do |memo, (key, val)|
       memo["data-#{controller}-#{key}"] = val; memo
@@ -33,7 +33,10 @@ module JsHelper
   end
 
   def js_selectable_create_role_attrs
-    attrs = { scope: "role", url: admin_roles_path, param: "role[name]", "form-params": "role[medium_id]=work[medium_id]" }
+    attrs = {
+      scope: "role", url: admin_roles_path, param: "role[name]",
+      "form-params": "role[medium_id]=work[medium_id]"
+    }
 
     js_attrs("selectable-create", attrs)
   end
@@ -55,11 +58,30 @@ module JsHelper
     js_attrs("selectable-create", attrs).merge(multiple: true)
   end
 
+  def js_selectable_prepare_work_attrs
+    js_attrs("selectable-prepare-work",
+      "tab-name":        "post-new-work",
+      "title-selector":  "#post_work_attributes_title",
+      "artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
+    )
+  end
+
+  def js_sortable_facet_attrs(medium)
+    js_attrs("sortable-facet",
+      class: "square sortable",
+      url:   reorder_facets_admin_medium_path(medium)
+    )
+  end
+
+  def js_tabbable_attrs(selected_tab)
+    js_attrs("tabbable", "selected-tab": selected_tab, class: "tabgroup same-page")
+  end
+
   def js_tabbable_link(text, tab_name)
     link_to text, "##{tab_name}",
-      "data-target":   "tabbable.all",
       "data-action":   "click->tabbable#activate",
-      "data-tab-name": tab_name
+      "data-tab-name": tab_name,
+      "data-target":   "tabbable.all"
   end
 
   def js_tabbable_tab_attrs(tab_name)
@@ -69,5 +91,12 @@ module JsHelper
       "data-tab-name": tab_name,
       "data-target":   "tabbable.all",
     }
+  end
+
+  def js_togglable_attrs(bool, css_class, expandable:)
+    target = "togglable-fieldset.#{bool ? 'trueFieldset' : 'falseFieldset'}"
+    attrs  = { class: css_class, "data-target": target }
+
+    expandable ? attrs.merge(js_attrs("expandable-fieldset")) : attrs
   end
 end

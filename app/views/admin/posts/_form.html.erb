@@ -22,7 +22,7 @@
     } %>
   <% end %>
 
-  <%= content_tag(:div, js_attrs("tabbable", "selected-tab": selected_tab).merge(class: "tabgroup same-page")) do %>
+  <%= content_tag(:div, js_tabbable_attrs(selected_tab)) do %>
     <%= content_tag(:p, "data-target": "tabbable.remove") do %>
       Choose a work to review, create a new work, or write a standalone post.
     <% end %>

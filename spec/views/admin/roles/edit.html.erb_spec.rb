@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/roles/edit", type: :view do
+  login_root
+
   before(:each) do
     5.times do
       create(:minimal_medium)

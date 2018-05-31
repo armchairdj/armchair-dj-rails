@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/tags/show", type: :view do
+  login_root
+
   before(:each) do
     @model_class = assign(:model_name, Tag)
   end

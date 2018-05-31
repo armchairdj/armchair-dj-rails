@@ -20,11 +20,7 @@
         label_method:       :full_display_title,
         value_method:       :id,
         include_blank:      :translate,
-        input_html:         js_attrs("selectable-prepare-work",
-          "tab-name":        "post-new-work",
-          "title-selector":  "#post_work_attributes_title",
-          "artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
-        )
+        input_html:         js_selectable_prepare_work_attrs
       %>
     <% end %>
   <% end %>

@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/creators/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::CreatorsController.new }
 
   before(:each) do

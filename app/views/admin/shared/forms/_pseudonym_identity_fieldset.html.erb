@@ -4,10 +4,7 @@
   classes = join_attr("fields-for", "toggle", ("fieldset-with-errors" if error))
 %>
 
-<%= content_tag(:fieldset, class: classes,
-  "data-controller": "expandable-fieldset",
-  "data-target":     "togglable-fieldset.trueFieldset"
-) do %>
+<%= content_tag(:fieldset, js_togglable_attrs(true, classes, expandable: true)) do %>
   <%= content_tag(:legend, "Pseudonyms") %>
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/categories/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::CategoriesController.new }
 
   before(:each) do

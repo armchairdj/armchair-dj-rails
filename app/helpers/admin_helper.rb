@@ -74,7 +74,7 @@ module AdminHelper
   end
 
   def admin_destroy_link(instance)
-    return unless policy(instance).destroy?
+    return unless Pundit.policy!(current_user, [:admin, instance.class]).destroy?
 
     path  = polymorphic_path([:admin, instance])
     title = "destroy #{instance.model_name.singular}"

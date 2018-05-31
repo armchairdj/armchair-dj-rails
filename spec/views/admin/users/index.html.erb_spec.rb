@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/users/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::UsersController.new }
 
   before(:each) do

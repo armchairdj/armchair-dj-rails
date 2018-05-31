@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/media/new", type: :view do
+  login_root
+
   before(:each) do
     5.times do
       create(:minimal_category)

@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/works/new", type: :view do
+  login_root
+
   before(:each) do
     3.times do
       create(:minimal_creator)

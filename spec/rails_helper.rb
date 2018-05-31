@@ -52,6 +52,7 @@ RSpec.configure do |config|
   config.include FactoryHelpers, type: :model
   config.include FactoryHelpers, type: :controller
   config.extend ControllerMacros, type: :controller
+  config.extend ViewMacros, type: :view
 end
 
 Shoulda::Matchers.configure do |config|

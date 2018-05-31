@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/tags/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::TagsController.new }
 
   before(:each) do

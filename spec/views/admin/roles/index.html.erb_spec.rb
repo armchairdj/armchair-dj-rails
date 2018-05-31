@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "admin/roles/index", type: :view do
+  login_root
+
   let(:dummy) { Admin::RolesController.new }
 
   before(:each) do
