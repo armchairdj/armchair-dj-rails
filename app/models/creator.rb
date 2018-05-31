@@ -264,14 +264,6 @@ class Creator < ApplicationRecord
   private :enforce_individuality
 
   #############################################################################
-  # SLUGGABLE.
-  #############################################################################
-
-  def sluggable_parts
-    [name]
-  end
-
-  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -291,6 +283,10 @@ class Creator < ApplicationRecord
     end
 
     final.sort.to_h
+  end
+
+  def sluggable_parts
+    [name]
   end
 
   def alpha_parts

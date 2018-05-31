@@ -67,22 +67,8 @@ class Tag < ApplicationRecord
   #############################################################################
 
   #############################################################################
-  # SLUGGABLE.
-  #############################################################################
-
-  def sluggable_parts
-    [display_name(connector: "/")]
-  end
-
-  #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def alpha_parts
-    return [name] unless categorized?
-
-    [category.try(:name), name]
-  end
 
   def categorized?
     category.present?
@@ -107,5 +93,15 @@ class Tag < ApplicationRecord
       direct_ids = Post.select("id").joins(      :tags).where("posts_tags.tag_id = ?", self.id)
 
     Post.where(id: [indirect_ids, direct_ids].flatten.uniq)
+  end
+
+  def sluggable_parts
+    [display_name(connector: "/")]
+  end
+
+  def alpha_parts
+    return [name] unless categorized?
+
+    [category.try(:name), name]
   end
 end

@@ -186,20 +186,12 @@ class Work < ApplicationRecord
     unsaved.any? ? unsaved.sort.join(connector) : nil
   end
 
-  def alpha_parts
-    [display_creators, title, subtitle]
-  end
-
   def grouped_parent_dropdown_options
     scope     = self.class.includes(:medium)
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
-
-  #############################################################################
-  # SLUGGABLE.
-  #############################################################################
 
   def sluggable_parts
     [
@@ -208,5 +200,9 @@ class Work < ApplicationRecord
       title,
       subtitle
     ]
+  end
+
+  def alpha_parts
+    [display_creators, title, subtitle]
   end
 end

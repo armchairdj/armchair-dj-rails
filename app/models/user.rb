@@ -95,14 +95,6 @@ class User < ApplicationRecord
   private :set_default_role
 
   #############################################################################
-  # SLUGGABLE.
-  #############################################################################
-
-  def sluggable_parts
-    [username]
-  end
-
-  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -127,10 +119,6 @@ class User < ApplicationRecord
     [first_name, middle_name, last_name].compact.join(" ")
   end
 
-  def alpha_parts
-    [last_name, first_name, middle_name]
-  end
-
   def assignable_role_options
     return [] unless self.can_administer?
 
@@ -146,5 +134,13 @@ class User < ApplicationRecord
     instance.errors.add(:role, :invalid_assignment)
 
     false
+  end
+
+  def sluggable_parts
+    [username]
+  end
+
+  def alpha_parts
+    [last_name, first_name, middle_name]
   end
 end
