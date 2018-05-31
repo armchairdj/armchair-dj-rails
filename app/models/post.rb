@@ -51,8 +51,9 @@ class Post < ApplicationRecord
 
   scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
 
-  scope :review,          -> { where.not(work_id: nil) }
-  scope :standalone,      -> { where(    work_id: nil) }
+  scope :mixtape,         -> { where.not(playlist_id: nil) }
+  scope :review,          -> { where.not(work_id:     nil) }
+  scope :standalone,      -> { where.not(title:       nil) }
 
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
@@ -106,22 +107,25 @@ class Post < ApplicationRecord
 
   validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
 
-  validate { work_or_title_present }
+  validate { has_title_or_postable }
 
-  def work_or_title_present
+  def has_title_or_postable
     if new_record?
-      self.errors.add(:base,    :has_work_and_title ) if  work &&  title
-      self.errors.add(:base,    :needs_work_or_title) if !work && !title
+      self.errors.add(:base,        :has_title_and_postable ) if     (title && (work || playlist))
+      self.errors.add(:base,        :needs_title_or_postable) unless (title || work || playlist)
     elsif standalone?
-      self.errors.add(:title,   :blank              ) if title.blank?
-      self.errors.add(:work_id, :present            ) if work.present?
+      self.errors.add(:title,       :blank                  ) if title.blank?
+      self.errors.add(:work_id,     :present                ) if work.present?
     elsif review?
-      self.errors.add(:title,   :present            ) if title.present?
-      self.errors.add(:work_id, :blank              ) if work.blank?
+      self.errors.add(:work_id,     :blank                  ) if work.blank?
+      self.errors.add(:title,       :present                ) if title.present?
+    elsif mixtape?
+      self.errors.add(:playlist_id, :blank                  ) if playlist.blank?
+      self.errors.add(:title,       :present                ) if title.present?
     end
   end
 
-  private :work_or_title_present
+  private :has_title_or_postable
 
   validate { only_uncategorized_tags }
 
@@ -138,7 +142,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   #############################################################################
-  # STATE MACHINE.
+  # AASM.
   #############################################################################
 
   aasm(
@@ -222,11 +226,10 @@ class Post < ApplicationRecord
   def sluggable_parts
     if standalone?
       [ title ]
-    else
-      [
-        ("reviews" if review?),
-        work.sluggable_parts
-      ].flatten
+    elsif review?
+      [ "reviews", work.sluggable_parts ]
+    elsif mixtape?
+      [ "mixes", playlist.sluggable_parts ]
     end
   end
 
@@ -241,28 +244,22 @@ class Post < ApplicationRecord
   private :should_validate_slug_presence?
 
   #############################################################################
-  # INSTANCE.
+  # INSTANCE: TYPE METHODS.
   #############################################################################
-
-  def type(plural: false)
-    base = review? ? "#{work.medium.name} Review" : "Post"
-
-    plural ? base.pluralize : base
-  end
-
-  def viewable?
-    published?
-  end
-
-  def not_published?
-    draft? || scheduled?
-  end
 
   def standalone?
     if new_record?
       return title.present?
     else
       return title_was.present?
+    end
+  end
+
+  def mixtape?
+    if new_record?
+      return playlist.present?
+    else
+      return playlist_id_was.present?
     end
   end
 
@@ -273,6 +270,32 @@ class Post < ApplicationRecord
       return work_id_was.present?
     end
   end
+
+  def type(plural: false)
+    base = case
+      when standalone?; "Post"
+      when mixtape?;    "Playlist"
+      when review?;     "#{work.medium.name} Review"
+    end
+
+    plural ? base.pluralize : base
+  end
+
+  #############################################################################
+  # INSTANCE: STATUS METHODS.
+  #############################################################################
+
+  def viewable?
+    published?
+  end
+
+  def unpublished
+    draft? || scheduled?
+  end
+
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
 
   def prepare_work_for_editing(params = nil)
     return if standalone?
@@ -287,22 +310,23 @@ class Post < ApplicationRecord
     work.prepare_credits
   end
 
-  def alpha_parts
-    standalone? ? [title] : [work.try(:alpha_parts)]
-  end
-
+  # TODO mixtape tags
   def all_tags
     Tag.where(id: [self.tag_ids, self.work.try(:tag_ids)].flatten.uniq)
+  end
+
+  def alpha_parts
+    standalone? ? [title] : [work.try(:alpha_parts)]
   end
 
 private
 
   #############################################################################
-  # PUBLISHING.
+  # AASM PRIVATE METHODS.
   #############################################################################
 
   def ready_to_publish?
-    persisted? && not_published? && valid? && body.present? && slug.present?
+    persisted? && unpublished && valid? && body.present? && slug.present?
   end
 
   def set_published_at

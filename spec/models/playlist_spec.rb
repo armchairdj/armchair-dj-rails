@@ -18,20 +18,52 @@ RSpec.describe Playlist, type: :model do
   end
 
   context "scope-related" do
-    # Nothing so far.
+    context "basics" do
+      let!( :first) { create(:complete_playlist, title: "First" ) }
+      let!(:middle) { create(:complete_playlist, title: "Middle") }
+      let!(  :last) { create(:complete_playlist, title: "Last"  ) }
+
+      let(:ids) { [first, middle, last].map(&:id) }
+
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        it { is_expected.to eager_load(:playlistings, :works) }
+      end
+
+      describe "self#for_admin" do
+        subject { described_class.for_admin.where(id: ids) }
+
+        specify "includes all, unsorted" do
+          is_expected.to match_array([first, middle, last])
+        end
+
+        it { is_expected.to eager_load(:playlistings, :works) }
+      end
+
+      describe "self#for_site" do
+        subject { described_class.for_site.where(id: ids) }
+
+        specify "includes all, sorted alphabetically" do
+          is_expected.to eq([first, last, middle])
+        end
+
+        it { is_expected.to eager_load(:playlistings, :works) }
+      end
+    end
   end
 
   context "associations" do
-    # Nothing so far.
+    it { is_expected.to have_many(:playlistings) }
+
+    it { is_expected.to have_many(:works).through(:playlistings) }
+
+    it { is_expected.to have_many(:posts) }
   end
 
   context "attributes" do
     context "nested" do
-      # Nothing so far.
-    end
-
-    context "enums" do
-      # Nothing so far.
+      pending "for playlistings"
     end
   end
 

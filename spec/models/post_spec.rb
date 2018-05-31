@@ -285,13 +285,13 @@ RSpec.describe Post, type: :model do
     end
 
     context "custom" do
-      describe "#work_or_title_present" do
+      describe "#has_title_or_postable" do
         context "unsaved" do
           describe "with just work" do
             subject { build(:post, work_id: create(:minimal_work).id) }
 
             specify "ok" do
-              subject.send(:work_or_title_present)
+              subject.send(:has_title_or_postable)
 
               expect(subject.errors.details[:base]).to eq([])
             end
@@ -301,7 +301,7 @@ RSpec.describe Post, type: :model do
             subject { build(:post, title: "") }
 
             specify "ok" do
-              subject.send(:work_or_title_present)
+              subject.send(:has_title_or_postable)
 
               expect(subject.errors.details[:base]).to eq([])
             end
@@ -311,9 +311,9 @@ RSpec.describe Post, type: :model do
             subject { build(:post) }
 
             specify "errors" do
-              subject.send(:work_or_title_present)
+              subject.send(:has_title_or_postable)
 
-              expect(subject.errors.details[:base].first[:error]).to eq(:needs_work_or_title)
+              expect(subject.errors.details[:base].first[:error]).to eq(:needs_title_or_postable)
             end
           end
 
@@ -321,9 +321,9 @@ RSpec.describe Post, type: :model do
             subject { build(:post, title: "title", work_id: create(:minimal_work).id) }
 
             specify "errors" do
-              subject.send(:work_or_title_present)
+              subject.send(:has_title_or_postable)
 
-              expect(subject.errors.details[:base].first[:error]).to eq(:has_work_and_title)
+              expect(subject.errors.details[:base].first[:error]).to eq(:has_title_and_postable)
             end
           end
         end
@@ -335,7 +335,7 @@ RSpec.describe Post, type: :model do
             subject.work_id = ""
             subject.title   = "title"
 
-            subject.send(:work_or_title_present)
+            subject.send(:has_title_or_postable)
 
             expect(subject.errors.details[:work_id].first).to eq({ error: :blank   })
             expect(subject.errors.details[:title  ].first).to eq({ error: :present })
@@ -349,7 +349,7 @@ RSpec.describe Post, type: :model do
             subject.title   = ""
             subject.work_id = create(:minimal_work).id
 
-            subject.send(:work_or_title_present)
+            subject.send(:has_title_or_postable)
 
             expect(subject.errors.details[:title  ].first).to eq({ error: :blank   })
             expect(subject.errors.details[:work_id].first).to eq({ error: :present })
@@ -1066,10 +1066,10 @@ RSpec.describe Post, type: :model do
           specify { expect(published.published?).to eq(true ) }
         end
 
-        describe "#not_published?" do
-          specify { expect(    draft.not_published?).to eq(true ) }
-          specify { expect(scheduled.not_published?).to eq(true ) }
-          specify { expect(published.not_published?).to eq(false) }
+        describe "#unpublished" do
+          specify { expect(    draft.unpublished).to eq(true ) }
+          specify { expect(scheduled.unpublished).to eq(true ) }
+          specify { expect(published.unpublished).to eq(false) }
         end
       end
     end

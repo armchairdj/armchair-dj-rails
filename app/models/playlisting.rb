@@ -1,4 +1,4 @@
-class Track < ApplicationRecord
+class Playlisting < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.

@@ -196,6 +196,23 @@ RSpec.describe Work, type: :model do
     it { is_expected.to validate_presence_of(:medium) }
     it { is_expected.to validate_presence_of(:title ) }
 
+
+    describe "is_expected.to validate_length_of(:credits).is_at_least(1)" do
+      subject { build(:minimal_work) }
+
+      specify "valid" do
+        is_expected.to be_valid
+      end
+
+      specify "invalid" do
+        subject.credits = []
+
+        is_expected.to_not be_valid
+
+        is_expected.to have_error(credits: :too_short)
+      end
+    end
+
     context "custom" do
       context "validate_nested_uniqueness_of" do
         subject { build_minimal_instance }
@@ -257,27 +274,6 @@ RSpec.describe Work, type: :model do
 
             is_expected.to have_error(:contributions, :nested_taken)
           end
-        end
-      end
-
-      describe "#at_least_one_credit" do
-        subject { build(:minimal_work) }
-
-        before(:each) do
-           allow(subject).to receive(:at_least_one_credit).and_call_original
-          is_expected.to receive(:at_least_one_credit)
-        end
-
-        specify "valid" do
-          is_expected.to be_valid
-        end
-
-        specify "invalid" do
-          subject.credits = []
-
-          is_expected.to_not be_valid
-
-          is_expected.to have_error(credits: :missing)
         end
       end
 

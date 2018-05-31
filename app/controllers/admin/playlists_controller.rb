@@ -102,8 +102,14 @@ private
   def instance_params
     params.fetch(:playlist, {}).permit(
       :name,
-      :format,
-      :allow_multiple
+      :title,
+      :author_id,
+      playlistings_attributes: [
+        :id,
+        :_destroy,
+        :playlist_id,
+        :work_id
+      ]
     )
   end
 

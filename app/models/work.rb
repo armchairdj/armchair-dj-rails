@@ -94,18 +94,10 @@ class Work < ApplicationRecord
 
   validates :title, presence: true
 
-  validate { at_least_one_credit }
+  validates :credits, length: { minimum: 1 }
 
   validate_nested_uniqueness_of :credits,       uniq_attr: :creator_id
   validate_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
-
-  def at_least_one_credit
-    return if self.credits.reject(&:marked_for_destruction?).any?
-
-    self.errors.add(:credits, :missing)
-  end
-
-  private :at_least_one_credit
 
   validate { only_categorized_tags }
 

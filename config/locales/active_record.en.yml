@@ -55,6 +55,8 @@ en:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
+            slug:
+              locked: "You cannot change the slug on a creator with published posts."
         credit:
           attributes:
             base:
@@ -72,6 +74,8 @@ en:
           attributes:
             roles:
               missing: "Please create at least one role."
+            slug:
+              locked: "You cannot change the slug on a medium with published posts."
         membership:
           attributes:
             group_id:
@@ -83,6 +87,12 @@ en:
             author:
               blank: "Please choose an author."
               invalid_author: "This author cannot post."
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
+            playlistings:
+              too_short: "Please choose at least 2 works."
+            slug:
+              locked: "You cannot change the slug on a playlist with published posts."
         post:
           attributes:
             author:
@@ -90,8 +100,8 @@ en:
               invalid_author: "This author cannot post."
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
-              has_work_and_title: "Please choose a work to review or a standalone title, but not both."
-              needs_work_or_title: "Please choose either a work to review or a standalone title."
+              has_title_and_postable: "Please either choose a work, choose a playlist or add a title for a standalone post."
+              needs_title_or_postable: "Please choose a work to review, a playlist to introduce or a title for a standalone post."
             body:
               blank_during_publish: "You cannot publish a post without a body."
             slug:
@@ -100,12 +110,18 @@ en:
               blank: "Please choose a publication date to schedule this review."
             tag_ids:
               uncategorized_tags: "Work tags cannot be categorized."
+        tag:
+          attributes:
+            slug:
+              locked: "You cannot change the slug on a tag with published posts."
         work:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
-              missing: "Please choose at least one creator."
+              too_short: "Please choose at least 1 creator."
+            slug:
+              locked: "You cannot change the slug on a work with published posts."
             tag_ids:
               uncategorized_tags: "Work tags must be categorized."
         user:
