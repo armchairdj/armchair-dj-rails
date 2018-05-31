@@ -31,7 +31,7 @@
               <%= content_tag(:td, medium.name) %>
 
               <%= content_tag(:td, medium.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, medium.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, medium.unviewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(medium) %>

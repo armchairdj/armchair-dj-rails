@@ -35,7 +35,7 @@
               <%= content_tag(:td, work.display_creators) %>
 
               <%= content_tag(:td, work.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, work.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, work.unviewable_post_count, class: "icon") %>
 
               <%= admin_actions_cell(work) %>
             <% end %>

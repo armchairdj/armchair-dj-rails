@@ -30,10 +30,10 @@
           <% @playlists.each do |playlist| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, playlist.title          ) %>
-              <%= content_tag(:td, playlist.author.username) %>
+              <%= content_tag(:td, playlist.display_author) %>
 
               <%= content_tag(:td, playlist.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, playlist.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, playlist.unviewable_post_count, class: "icon") %>
 
               <%= admin_actions_cell(playlist) %>
             <% end %>

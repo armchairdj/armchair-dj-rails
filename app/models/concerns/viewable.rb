@@ -9,7 +9,7 @@ module Viewable
 
   included do
     scope     :viewable, -> { eager.where.not(viewable_post_count: 0) }
-    scope :non_viewable, -> { eager.where(    viewable_post_count: 0) }
+    scope :unviewable, -> { eager.where(    viewable_post_count: 0) }
 
     before_save :refresh_counts
   end
@@ -24,10 +24,10 @@ module Viewable
   end
 
   def refresh_counts
-    self.non_viewable_post_count = posts.not_published.count
+    self.unviewable_post_count = posts.not_published.count
     self.viewable_post_count     = posts.published.count
 
-    non_viewable_post_count_changed? || viewable_post_count_changed?
+    unviewable_post_count_changed? || viewable_post_count_changed?
   end
 
   private :refresh_counts
@@ -40,7 +40,7 @@ module Viewable
     self.viewable_post_count > 0
   end
 
-  def non_viewable?
+  def unviewable?
     !viewable?
   end
 
@@ -48,7 +48,7 @@ module Viewable
     self.posts.published.reverse_cron
   end
 
-  def non_viewable_posts
+  def unviewable_posts
     self.posts.not_published.reverse_cron
   end
 
@@ -56,7 +56,7 @@ module Viewable
     self.viewable_posts.map(&:work).uniq
   end
 
-  def non_viewable_works
-    self.non_viewable_posts.map(&:work).uniq
+  def unviewable_works
+    self.unviewable_posts.map(&:work).uniq
   end
 end

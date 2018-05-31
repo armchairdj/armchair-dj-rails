@@ -31,7 +31,7 @@
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, post_status_icon(post), class: "icon"   ) %>
               <%= content_tag(:td, post_title(post, length: 40)            ) %>
-              <%= content_tag(:td, post.author.username                    ) %>
+              <%= content_tag(:td, post.display_author                    ) %>
               <%= content_tag(:td, post.type,              class: "actions") %>
 
               <%= content_tag(:td, class: "actions") do %>

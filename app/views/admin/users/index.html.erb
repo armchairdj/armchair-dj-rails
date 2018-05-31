@@ -37,7 +37,7 @@
               <%= content_tag(:td, user.human_role  ) %>
 
               <%= content_tag(:td, user.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, user.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, user.unviewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(user) %>

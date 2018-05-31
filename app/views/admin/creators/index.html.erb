@@ -35,7 +35,7 @@
               <%= content_tag(:td, creator.individual?) %>
 
               <%= content_tag(:td, creator.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, creator.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, creator.unviewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(creator) %>

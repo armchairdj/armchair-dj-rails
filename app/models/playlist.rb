@@ -8,6 +8,7 @@ class Playlist < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
+  include Authorable
   include Displayable
 
   #############################################################################
@@ -18,7 +19,7 @@ class Playlist < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:tracks, :works) }
+  scope :eager,     -> { includes(:playlistings, :works) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.alpha }
 
@@ -26,13 +27,18 @@ class Playlist < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :tracks, inverse_of: :playlist, dependent: :destroy
+  has_many :playlistings, inverse_of: :playlist, dependent: :destroy
 
-  has_many :works, through: :tracks
+  has_many :works, through: :playlistings
+
+  has_many :posts, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
+
+  accepts_nested_attributes_for :playlistings, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["work_id"].blank? }
 
   #############################################################################
   # VALIDATIONS.

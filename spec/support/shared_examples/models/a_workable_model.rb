@@ -30,8 +30,8 @@ RSpec.shared_examples "a_workable_model" do
         it { is_expected.to eager_load(:work, :creator) }
       end
 
-      describe "self#non_viewable" do
-        subject { described_class.non_viewable.where(id: ids) }
+      describe "self#unviewable" do
+        subject { described_class.unviewable.where(id: ids) }
 
         it { is_expected.to contain_exactly(with_scheduled, with_draft, with_none) }
 
@@ -83,12 +83,12 @@ RSpec.shared_examples "a_workable_model" do
         end
       end
 
-      describe "#non_viewable?" do
+      describe "#unviewable?" do
         it "delegates to work" do
-           allow(subject.work).to receive(:non_viewable?).and_call_original
-          expect(subject.work).to receive(:non_viewable?)
+           allow(subject.work).to receive(:unviewable?).and_call_original
+          expect(subject.work).to receive(:unviewable?)
 
-          subject.non_viewable?
+          subject.unviewable?
         end
       end
     end

@@ -33,7 +33,7 @@
               <%= content_tag(:td, tag.display_category) %>
 
               <%= content_tag(:td, tag.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, tag.non_viewable_post_count, class: "icon") %>
+              <%= content_tag(:td, tag.unviewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(tag) %>

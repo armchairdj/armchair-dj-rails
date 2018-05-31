@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_011745) do
+ActiveRecord::Schema.define(version: 2018_05_31_160503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.text "summary"
     t.boolean "primary", default: true, null: false
@@ -53,9 +53,9 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
-    t.index ["non_viewable_post_count"], name: "index_creators_on_non_viewable_post_count"
     t.index ["primary"], name: "index_creators_on_primary"
     t.index ["slug"], name: "index_creators_on_slug", unique: true
+    t.index ["unviewable_post_count"], name: "index_creators_on_unviewable_post_count"
     t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
   end
 
@@ -105,13 +105,13 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_media_on_alpha"
-    t.index ["non_viewable_post_count"], name: "index_media_on_non_viewable_post_count"
     t.index ["slug"], name: "index_media_on_slug", unique: true
+    t.index ["unviewable_post_count"], name: "index_media_on_unviewable_post_count"
     t.index ["viewable_post_count"], name: "index_media_on_viewable_post_count"
   end
 
@@ -124,6 +124,16 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.index ["member_id"], name: "index_memberships_on_member_id"
   end
 
+  create_table "playlistings", force: :cascade do |t|
+    t.bigint "playlist_id"
+    t.bigint "work_id"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_playlistings_on_playlist_id"
+    t.index ["work_id"], name: "index_playlistings_on_work_id"
+  end
+
   create_table "playlists", force: :cascade do |t|
     t.string "title"
     t.bigint "author_id"
@@ -131,13 +141,13 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.text "summary"
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alpha"], name: "index_playlists_on_alpha"
-    t.index ["non_viewable_post_count"], name: "index_playlists_on_non_viewable_post_count"
     t.index ["slug"], name: "index_playlists_on_slug", unique: true
+    t.index ["unviewable_post_count"], name: "index_playlists_on_unviewable_post_count"
     t.index ["viewable_post_count"], name: "index_playlists_on_viewable_post_count"
   end
 
@@ -155,8 +165,10 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.bigint "author_id"
     t.text "summary"
     t.string "alpha"
+    t.bigint "playlist_id"
     t.index ["alpha"], name: "index_posts_on_alpha"
     t.index ["author_id"], name: "index_posts_on_author_id"
+    t.index ["playlist_id"], name: "index_posts_on_playlist_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
   end
@@ -185,14 +197,14 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.datetime "updated_at", null: false
     t.string "alpha"
     t.text "summary"
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
     t.index ["category_id"], name: "index_tags_on_category_id"
-    t.index ["non_viewable_post_count"], name: "index_tags_on_non_viewable_post_count"
     t.index ["slug"], name: "index_tags_on_slug", unique: true
+    t.index ["unviewable_post_count"], name: "index_tags_on_unviewable_post_count"
     t.index ["viewable_post_count"], name: "index_tags_on_viewable_post_count"
   end
 
@@ -201,16 +213,6 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.bigint "tag_id", null: false
     t.index ["tag_id", "work_id"], name: "index_tags_works_on_tag_id_and_work_id"
     t.index ["work_id", "tag_id"], name: "index_tags_works_on_work_id_and_tag_id"
-  end
-
-  create_table "tracks", force: :cascade do |t|
-    t.bigint "playlist_id"
-    t.bigint "work_id"
-    t.integer "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["playlist_id"], name: "index_tracks_on_playlist_id"
-    t.index ["work_id"], name: "index_tracks_on_work_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -240,14 +242,14 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.string "username", null: false
     t.text "bio"
     t.string "alpha"
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["non_viewable_post_count"], name: "index_users_on_non_viewable_post_count"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
+    t.index ["unviewable_post_count"], name: "index_users_on_unviewable_post_count"
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["viewable_post_count"], name: "index_users_on_viewable_post_count"
   end
@@ -256,7 +258,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "non_viewable_post_count", default: 0, null: false
+    t.integer "unviewable_post_count", default: 0, null: false
     t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
     t.text "summary"
@@ -269,8 +271,8 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["ancestry"], name: "index_works_on_ancestry"
     t.index ["medium_id"], name: "index_works_on_medium_id"
-    t.index ["non_viewable_post_count"], name: "index_works_on_non_viewable_post_count"
     t.index ["slug"], name: "index_works_on_slug", unique: true
+    t.index ["unviewable_post_count"], name: "index_works_on_unviewable_post_count"
     t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
@@ -284,6 +286,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_011745) do
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "playlists", "users", column: "author_id"
+  add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "roles", "media"
   add_foreign_key "tags", "categories"

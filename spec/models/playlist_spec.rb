@@ -1,14 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Playlist, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   context "constants" do
     # Nothing so far.
   end
 
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an_application_record"
+
+    it_behaves_like "an_authorable_model"
+
+    it_behaves_like "a_displayable_model"
   end
 
   context "class" do

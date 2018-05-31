@@ -78,14 +78,20 @@ en:
               not_collective: "Only collectives can have members."
             member_id:
               not_individual: "Collectives cannot be members of other collectives."
+        playlist:
+          attributes:
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This author cannot post."
         post:
           attributes:
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This author cannot post."
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
               has_work_and_title: "Please choose a work to review or a standalone title, but not both."
               needs_work_or_title: "Please choose either a work to review or a standalone title."
-              invalid_author: "This user cannot post."
-              no_author: "Please choose a user."
             body:
               blank_during_publish: "You cannot publish a post without a body."
             slug:

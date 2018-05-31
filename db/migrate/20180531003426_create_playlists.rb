@@ -12,7 +12,7 @@ class CreatePlaylists < ActiveRecord::Migration[5.2]
 
       t.text :summary
 
-      t.integer :non_viewable_post_count, null: false, default: 0, index: true
+      t.integer :unviewable_post_count, null: false, default: 0, index: true
       t.integer :viewable_post_count,     null: false, default: 0, index: true
 
       t.timestamps

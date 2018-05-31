@@ -50,14 +50,14 @@ private
 
     base.merge({
       "Visible" => :viewable,
-      "Hidden"  => :non_viewable,
+      "Hidden"  => :unviewable,
     })
   end
 
   def allowed_sorts(extra = nil)
     default_sort = "#{controller_name}.updated_at DESC"
     vpc_sort     = "#{controller_name}.viewable_post_count ASC"
-    nvpc_sort    = "#{controller_name}.non_viewable_post_count ASC"
+    nvpc_sort    = "#{controller_name}.unviewable_post_count ASC"
 
     base = { "Default" => default_sort }
 

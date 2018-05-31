@@ -1,5 +1,5 @@
 <%
-  @title = ["View Post", @post.author.username, post_title(@post)]
+  @title = ["View Post", @post.display_author, post_title(@post)]
 %>
 
 <%= admin_header(@model_class, :show,
@@ -54,7 +54,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
         <%= content_tag(:td) do %>
-          <%= link_to(@post.author.username, admin_user_path(@post.author)) %>
+          <%= link_to(@post.display_author, admin_user_path(@post.author)) %>
         <% end %>
       <% end %>
 

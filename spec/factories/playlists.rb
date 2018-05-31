@@ -5,9 +5,81 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
+    trait :with_title do
+      title { FFaker::HipsterIpsum.phrase.titleize }
+    end
+
+    trait :with_author do
+      association :author, factory: :admin
+    end
+
+    trait :with_playlisting do
+      playlistings_attributes { {
+        "0" => attributes_for(:playlisting, :with_existing_work)
+      } }
+    end
+
+    trait :with_playlistings do
+      playlistings_attributes { {
+        "0" => attributes_for(:playlisting, :with_existing_work),
+        "1" => attributes_for(:playlisting, :with_existing_work),
+        "2" => attributes_for(:playlisting, :with_existing_work),
+        "3" => attributes_for(:playlisting, :with_existing_work),
+        "4" => attributes_for(:playlisting, :with_existing_work),
+      } }
+    end
+
+    trait :with_complete_playlistings do
+      playlistings_attributes { {
+        "0" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "1" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "2" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "3" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "4" => attributes_for(:playlisting, :with_existing_work, :with_post),
+      } }
+    end
+
+    trait :with_draft_post do
+      after(:create) do |playlist|
+        create(:post, :draft, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+
+        playlist.reload
+      end
+    end
+
+    trait :with_scheduled_post do
+      after(:create) do |playlist|
+        create(:post, :scheduled, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+
+        playlist.reload
+      end
+    end
+
+    trait :with_published_post do
+      after(:create) do |playlist|
+        create(:post, :published, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+
+        playlist.reload
+      end
+    end
+
+    trait :with_one_of_each_post_status do
+      with_draft_post
+      with_scheduled_post
+      with_published_post
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################
 
+    factory :minimal_playlist do
+      with_title
+      with_author
+    end
+
+    factory :complete_playlist, parent: :minimal_playlist do
+      with_complete_playlistings
+    end
   end
 end

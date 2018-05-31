@@ -11,11 +11,11 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
-          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
+        work = create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :draft, body: "body", work_attributes: attrs)
+        create(:post, :with_author, :draft, body: "body", work_id: work.id)
 
         creator.reload
       end
@@ -23,11 +23,11 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
-          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
+        work = create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :scheduled, body: "body", work_attributes: attrs)
+        create(:post, :with_author, :scheduled, body: "body", work_id: work.id)
 
         creator.reload
       end
@@ -35,11 +35,11 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        attrs = attributes_for(:work, :with_title, :with_existing_medium).merge({
-          "credits_attributes" => { "0" => attributes_for(:credit, creator_id: creator.id) }
+        work = create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :published, body: "body", work_attributes: attrs)
+        create(:post, :with_author, :published, body: "body", work_id: work.id)
 
         creator.reload
       end

@@ -3,7 +3,7 @@
 module Linkable
   extend ActiveSupport::Concern
 
-  MAX_LINKS_AT_ONCE  = 5.freeze
+  MAX_LINKS_AT_ONCE = 5.freeze
 
   included do
     has_many :links, as: :linkable, dependent: :destroy

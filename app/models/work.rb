@@ -61,7 +61,8 @@ class Work < ApplicationRecord
 
   has_and_belongs_to_many :tags
 
-  has_many :tracks, inverse_of: :work, dependent: :destroy
+  has_many :playlistings, inverse_of: :work, dependent: :destroy
+  has_many :playlists, through: :playlistings
 
   #############################################################################
   # ATTRIBUTES.

@@ -8,6 +8,8 @@ RSpec.describe Post, type: :model do
 
     it_behaves_like "an_application_record"
 
+    it_behaves_like "an_authorable_model"
+
     it_behaves_like "a_linkable_model"
 
     it_behaves_like "a_sluggable_model"
@@ -202,8 +204,6 @@ RSpec.describe Post, type: :model do
   end
 
   context "associations" do
-    it { is_expected.to belong_to(:author) }
-
     it { is_expected.to have_and_belong_to_many(:tags) }
 
     it { is_expected.to belong_to(:work) }
@@ -285,55 +285,6 @@ RSpec.describe Post, type: :model do
     end
 
     context "custom" do
-      describe "#author_present" do
-        subject { build(:minimal_post) }
-
-        before(:each) do
-           allow(subject).to receive(:author_present).and_call_original
-          expect(subject).to receive(:author_present)
-        end
-
-        specify "root" do
-          subject.author = create(:root)
-
-          expect(subject).to be_valid
-        end
-
-        specify "admin" do
-          subject.author = create(:admin)
-
-          expect(subject).to be_valid
-        end
-
-        specify "editor" do
-          subject.author = create(:editor)
-
-          expect(subject).to be_valid
-        end
-
-        specify "writer" do
-          subject.author = create(:editor)
-
-          expect(subject).to be_valid
-        end
-
-        specify "member" do
-          subject.author = create(:member)
-
-          expect(subject).to_not be_valid
-
-          expect(subject).to have_error(base: :invalid_author)
-        end
-
-        specify "nil" do
-          subject.author = nil
-
-          expect(subject).to_not be_valid
-
-          expect(subject).to have_error(base: :no_author)
-        end
-      end
-
       describe "#work_or_title_present" do
         context "unsaved" do
           describe "with just work" do

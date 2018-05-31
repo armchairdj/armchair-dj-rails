@@ -1,5 +1,5 @@
 <%
-  @title = ["View Playlist", @playlist.author.username, @playlist.title]
+  @title = ["View Playlist", @playlist.display_author, @playlist.title]
 %>
 
 <%= admin_header(@model_class, :show,
@@ -22,7 +22,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
         <%= content_tag(:td) do %>
-          <%= link_to(@playlist.author.username, admin_user_path(@playlist.author)) %>
+          <%= link_to(@playlist.display_author, admin_user_path(@playlist.author)) %>
         <% end %>
       <% end %>
 
@@ -33,7 +33,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Non-Viewable Posts") %>
-        <%= content_tag(:td, @playlist.non_viewable_post_count) %>
+        <%= content_tag(:td, @playlist.unviewable_post_count) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

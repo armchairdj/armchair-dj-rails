@@ -18,7 +18,7 @@ class Track < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :sorted,    -> { joins(:playlist, :work).order("playlist.title, tracks.position") }
+  scope :sorted,    -> { joins(:playlist, :work).order("playlists.title, playlistings.position") }
   scope :eager,     -> { includes(:playlist, :work) }
   scope :for_admin, -> { eager.sorted }
   scope :for_site,  -> { eager.sorted }
@@ -27,8 +27,8 @@ class Track < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  belongs_to :playlist, inverse_of: :tracks
-  belongs_to :work,     inverse_of: :tracks
+  belongs_to :playlist, inverse_of: :playlistings
+  belongs_to :work,     inverse_of: :playlistings
 
   #############################################################################
   # ATTRIBUTES.
@@ -39,7 +39,7 @@ class Track < ApplicationRecord
   #############################################################################
 
   validates :playlist, presence: true
-  validates :work, presence: true
+  validates :work,     presence: true
 
   #############################################################################
   # HOOKS.
