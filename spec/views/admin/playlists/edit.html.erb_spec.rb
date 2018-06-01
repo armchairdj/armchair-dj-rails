@@ -1,14 +1,18 @@
 require "rails_helper"
 
 RSpec.describe "admin/playlists/edit", type: :view do
+  login_root
+
   before(:each) do
-    @admin_playlist = assign(:admin_playlist, Playlist.create!())
+    @model_class = assign(:model_name, Playlist)
+    @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_post))
+    @works       = assign(:works, Work.grouped_options)
   end
 
-  it "renders the edit admin_playlist form" do
+  it "renders the edit playlist form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_playlist_path(@admin_playlist), "post" do
+    assert_select "form[action=?][method=?]", admin_playlist_path(@playlist), "post" do
     end
   end
 end

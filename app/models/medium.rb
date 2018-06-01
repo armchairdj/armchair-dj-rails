@@ -53,7 +53,7 @@ class Medium < ApplicationRecord
     MAX_ROLES_AT_ONCE.times { self.roles.build }
   end
 
-  accepts_nested_attributes_for :facets, allow_destroy: :true,
+  accepts_nested_attributes_for :facets, allow_destroy: true,
     reject_if: proc { |attrs| attrs["category_id"].blank? }
 
   def prepare_facets

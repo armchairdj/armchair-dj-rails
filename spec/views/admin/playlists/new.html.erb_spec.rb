@@ -1,11 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "admin/playlists/new", type: :view do
+  login_root
+
   before(:each) do
-    assign(:admin_playlist, Playlist.new())
+    @model_class = assign(:model_name, Playlist)
+    @playlist    = assign(:playlist, build(:playlist))
+    @works       = assign(:works, Work.grouped_options)
   end
 
-  it "renders new admin_playlist form" do
+  it "renders new playlist form" do
     render
 
     assert_select "form[action=?][method=?]", admin_playlists_path, "post" do
