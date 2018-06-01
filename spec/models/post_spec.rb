@@ -1329,11 +1329,11 @@ RSpec.describe Post, type: :model do
       let(:standalone) { create(:standalone_post, title: "Standalone Title") }
 
       specify "for review" do
-        expect(review.send(:sluggable_parts)) .to eq(["reviews", "Albums", "Kate Bush", "Hounds of Love", nil])
+        expect(review.send(:sluggable_parts)) .to eq(["reviews", ["Albums", "Kate Bush", "Hounds of Love", nil]])
       end
 
       specify "for review of collaborative work" do
-        expect(collab.send(:sluggable_parts)).to eq(["reviews", "Albums", "Carl Craig and Green Velvet", "Unity", nil])
+        expect(collab.send(:sluggable_parts)).to eq(["reviews", ["Albums", "Carl Craig and Green Velvet", "Unity", nil]])
       end
 
       specify "for standalone" do

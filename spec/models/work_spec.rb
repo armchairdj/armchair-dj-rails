@@ -158,7 +158,7 @@ RSpec.describe Work, type: :model do
 
           specify { expect { subject.save }.to change { Contribution.count }.by(1) }
 
-          specify { expect { subject.contributions }.to have(1).items }
+          specify { expect(subject.contributions).to have(1).items }
         end
 
         describe "#prepare_contributions" do

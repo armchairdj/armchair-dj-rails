@@ -316,7 +316,9 @@ class Post < ApplicationRecord
   end
 
   def alpha_parts
-    standalone? ? [title] : [work.try(:alpha_parts)]
+    return [                     title] if standalone?
+    return [playlist.try(:alpha_parts)] if mixtape?
+    return [    work.try(:alpha_parts)] if review?
   end
 
 private

@@ -84,7 +84,7 @@ RSpec.describe Playlist, type: :model do
           end
 
           context "saved instance with saved playlistings" do
-            subject { create(:minimal_playlisting) }
+            subject { create(:minimal_playlist) }
 
             it "builds 20 more playlistings" do
               expect(subject.playlistings).to have(2).items

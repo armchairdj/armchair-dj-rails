@@ -86,6 +86,8 @@ RSpec.describe Medium, type: :model do
 
   context "attributes" do
     context "nested" do
+      subject { create_minimal_instance }
+
       context "for roles" do
         it { is_expected.to accept_nested_attributes_for(:roles).allow_destroy(true) }
 

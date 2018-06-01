@@ -210,7 +210,7 @@ group :development, :test do
   gem "db-query-matchers"
   gem "rspec-collection_matchers"
   gem "rspec-html-matchers"
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", git: "https://github.com/thoughtbot/shoulda-matchers", branch: "master"
   gem "pundit-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
 

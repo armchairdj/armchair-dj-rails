@@ -46,7 +46,7 @@ FactoryBot.define do
       publish_on 3.weeks.from_now
 
       after(:create) do |post, evaluator|
-        raise AASM::InvalidTransition unless post.schedule!
+        raise StandardError("could not schedule: #{post.errors.inspect}") unless post.schedule!
 
         post.reload
       end
@@ -55,7 +55,7 @@ FactoryBot.define do
     trait :published do
       with_body
       after(:create) do |post, evaluator|
-        raise AASM::InvalidTransition unless post.publish!
+        raise StandardError.new("could not publish: #{post.errors.inspect}") unless post.publish!
 
         post.reload
       end
