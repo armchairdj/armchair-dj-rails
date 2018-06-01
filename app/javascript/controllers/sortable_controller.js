@@ -10,7 +10,8 @@ export default class extends Controller {
   }
 
   setup() {
-    this.url = this.data.get("url");
+    this.url   = this.data.get("url");
+    this.param = this.data.get("param");
 
     this.sortable = Sortable.create(this.element, {
       onUpdate: _.bind(this.handleUpdate, this)
@@ -29,9 +30,17 @@ export default class extends Controller {
     $.ajax({
       method: "POST",
       url:    this.url,
-      data:   { facet_ids: this.sortable.toArray() },
-      error:  _.bind(this.ajaxError,   this)
+      data:   this.params(),
+      error:  _.bind(this.ajaxError, this)
     });
+  }
+
+  params() {
+    const params = {};
+
+    params[this.param] = this.sortable.toArray();
+
+    return params;
   }
 
   ajaxError(xhr, status, error) {

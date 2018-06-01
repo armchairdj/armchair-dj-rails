@@ -9,7 +9,7 @@
     <% else %>
       <%= content_tag(:h3, @post.type) %>
       <%= content_tag(:h1) do %>
-        <%= content_tag(:span, @post.work.display_creators, class: "creators") %>
+        <%= content_tag(:span, @post.work.credited_artists, class: "creators") %>
         <%= content_tag(:span, @post.work.title,           class: "title"   ) %>
         <%= content_tag(:span, @post.work.subtitle,        class: "subtitle") %>
       <% end %>

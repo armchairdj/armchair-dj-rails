@@ -1,11 +1,3 @@
-<%= content_tag(:fieldset) do %>
-  <%= content_tag(:div, class: "boxed") do %>
-    <%= f.input :name %>
-
-    <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
-  <% end %>
-<% end %>
-
 <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
   <%= content_tag(:div, class: "boxed") do %>
     <%= content_tag(:legend, "Primary") %>
@@ -53,5 +45,9 @@
 <% end %>
 
 <%= render partial: "admin/shared/forms/link_fieldset", locals: {
+  f: f
+} %>
+
+<%= render partial: "admin/shared/forms/displayable_fieldset", locals: {
   f: f
 } %>

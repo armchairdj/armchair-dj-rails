@@ -99,7 +99,7 @@ RSpec.describe Work, type: :model do
   context "attributes" do
     context "nested" do
       context "credits" do
-        it { is_expected.to accept_nested_attributes_for(:credits) }
+        it { is_expected.to accept_nested_attributes_for(:credits).allow_destroy(true) }
 
         describe "reject_if" do
           it "rejects credits without a creator_id" do
@@ -146,27 +146,23 @@ RSpec.describe Work, type: :model do
       end
 
       context "contributions" do
-        it { is_expected.to accept_nested_attributes_for(:contributions) }
+        it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
-          it "rejects contributions without a creator_id" do
-            instance = build(:minimal_work, contributions_attributes: {
+          subject do
+            build(:minimal_work, contributions_attributes: {
               "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator).id),
-              "1" => attributes_for(:contribution, :with_role, creator_id: nil                 )
+              "1" => attributes_for(:contribution, :with_role, creator_id: nil                        )
             })
-
-            expect {
-              instance.save
-            }.to change {
-              Contribution.count
-            }.by(1)
-
-            expect(instance.contributions).to have(1).items
           end
+
+          specify { expect { subject.save }.to change { Contribution.count }.by(1) }
+
+          specify { expect { subject.contributions }.to have(1).items }
         end
 
         describe "#prepare_contributions" do
-          it "prepares max for new" do
+          it "new instance" do
             instance = described_class.new
 
             expect(instance.contributions).to have(0).items
@@ -176,7 +172,7 @@ RSpec.describe Work, type: :model do
             expect(instance.contributions).to have(10).items
           end
 
-          it "prepares up to max for saved" do
+          it "saved instance" do
             instance = create(:global_communications_76_14)
 
             expect(instance.contributions).to have(2).items
@@ -195,7 +191,6 @@ RSpec.describe Work, type: :model do
 
     it { is_expected.to validate_presence_of(:medium) }
     it { is_expected.to validate_presence_of(:title ) }
-
 
     describe "is_expected.to validate_length_of(:credits).is_at_least(1)" do
       subject { build(:minimal_work) }
@@ -575,41 +570,47 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "#display_creators" do
+    describe "#credited_artists" do
       let(:invalid) {  build(:work, :with_existing_medium, :with_title  ) }
       let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
       let(  :saved) { create(:kate_bush_hounds_of_love         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
 
       it "nils without error on missing creator" do
-        expect(invalid.display_creators).to eq(nil)
+        expect(invalid.credited_artists).to eq(nil)
       end
 
       it "gives single creator on unsaved" do
-        expect(unsaved.display_creators).to eq("Kate Bush")
+        expect(unsaved.credited_artists).to eq("Kate Bush")
       end
 
       it "gives single creator on saved" do
-        expect(saved.display_creators).to eq("Kate Bush")
+        expect(saved.credited_artists).to eq("Kate Bush")
       end
 
       it "gives mutiple creators alphabetically" do
-        expect(multi.display_creators).to eq("Carl Craig & Green Velvet")
+        expect(multi.credited_artists).to eq("Carl Craig & Green Velvet")
       end
 
       it "overrides connector" do
-        expect(multi.display_creators(connector: " x ")).to eq(
+        expect(multi.credited_artists(connector: " x ")).to eq(
           "Carl Craig x Green Velvet"
         )
       end
     end
+
+    pending "#all_creators"
+
+    pending "#all_creator_ids"
+
+    pending "#sluggable_parts"
 
     describe "#alpha_parts" do
       subject { create(:complete_work) }
 
       it "uses creators, title and subtitle" do
         expect(subject.alpha_parts).to eq([
-          subject.display_creators,
+          subject.credited_artists,
           subject.title,
           subject.subtitle
         ])

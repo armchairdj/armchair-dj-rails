@@ -1,0 +1,12 @@
+<% return if playlistings.empty? %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Tracks") %>
+    <%= content_tag(:h6, "Drag to Reorder") %>
+  <% end %>
+
+  <%= content_tag(:ol, js_sortable_playlistings_attrs(@playlist)) do %>
+    <%= render partial: "admin/shared/playback/playlisting", collection: playlistings %>
+  <% end %>
+<% end %>

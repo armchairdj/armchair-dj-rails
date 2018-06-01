@@ -6,7 +6,7 @@
     <%= content_tag(:h6, "Drag to Reorder") %>
   <% end %>
 
-  <%= content_tag(:ul, js_sortable_facet_attrs(@medium)) do %>
+  <%= content_tag(:ol, js_sortable_facets_attrs(@medium)) do %>
     <%= render partial: "admin/shared/playback/facet", collection: facets %>
   <% end %>
 <% end %>

@@ -53,10 +53,8 @@
       f: f
     } %>
 
-    <%= content_tag(:fieldset) do %>
-      <%= content_tag(:div, class: "boxed") do %>
-        <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
-      <% end %>
-    <% end %>
+    <%= render partial: "admin/shared/forms/displayable_fieldset", locals: {
+      f: f
+    } %>
   <% end %>
 <% end %>

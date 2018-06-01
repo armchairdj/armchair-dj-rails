@@ -47,6 +47,8 @@ en:
       credit:
       identity:
       membership:
+      playlist:
+        playlistings: "Select at least two."
       post:
         publish_on: "Leave blank unless scheduling a post for future publication."
         summary: "For use in the meta description tag."

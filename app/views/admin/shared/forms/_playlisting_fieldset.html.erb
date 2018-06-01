@@ -1,0 +1,19 @@
+<%
+  records     = f.object.playlistings
+  error       = f.error(:playlistings)
+  legend_hint = error || t("simple_form.hints.playlist.playlistings")
+  classes     = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+%>
+
+<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-fieldset") do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:legend) do %>Works <%= required_indicator %><% end %>
+
+    <%= content_tag(:div, legend_hint, class: "legend-hint") %>
+
+    <%= render partial: "admin/shared/forms/playlisting_field", collection: records, as: :playlisting, locals: {
+      f:     f,
+      works: works
+    } %>
+  <% end %>
+<% end %>

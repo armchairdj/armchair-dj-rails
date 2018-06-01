@@ -166,7 +166,7 @@ class Work < ApplicationRecord
 
     parts = [title, subtitle]
 
-    parts.unshift(display_creators) if full
+    parts.unshift(credited_artists) if full
 
     parts.compact.join(": ")
   end
@@ -175,15 +175,23 @@ class Work < ApplicationRecord
     display_title(full: true)
   end
 
-  def display_creators(connector: " & ")
+  def credited_artists(connector: " & ")
     return creators.alpha.to_a.map(&:name).join(connector) if persisted?
 
     # So we can correctly calculate memoized alpha post value during
     # nested object creation.
 
-    unsaved = credits.map{ |c| c.creator.try(:name) }.compact
+    unsaved = credits.map { |c| c.creator.try(:name) }.compact
 
     unsaved.any? ? unsaved.sort.join(connector) : nil
+  end
+
+  def all_creators
+    Creator.where(id: all_creator_ids)
+  end
+
+  def all_creator_ids
+    creators.map(&:id) + contributors.map(&:id)
   end
 
   def grouped_parent_dropdown_options
@@ -196,13 +204,13 @@ class Work < ApplicationRecord
   def sluggable_parts
     [
       medium.name.pluralize,
-      display_creators(connector: " and "),
+      credited_artists(connector: " and "),
       title,
       subtitle
     ]
   end
 
   def alpha_parts
-    [display_creators, title, subtitle]
+    [credited_artists, title, subtitle]
   end
 end

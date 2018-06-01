@@ -54,6 +54,14 @@
   <% end %>
 <% end %>
 
+<%= render partial: "admin/shared/playback/playlistings", locals: {
+  playlistings: @playlist.playlistings.for_admin
+} %>
+
+<%= render partial: "admin/shared/playback/creators", locals: {
+  creators: @playlist.all_creators.for_admin.alpha
+} %>
+
 <%= render partial: "admin/shared/playback/links", locals: {
   links: @playlist.links
 } %>

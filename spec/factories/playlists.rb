@@ -13,29 +13,40 @@ FactoryBot.define do
       association :author, factory: :admin
     end
 
-    trait :with_playlisting do
+    trait :with_2_tracks do
       playlistings_attributes { {
-        "0" => attributes_for(:playlisting, :with_existing_work)
+        "0" => attributes_for(:playlisting, :with_existing_work),
+        "1" => attributes_for(:playlisting, :with_existing_work),
       } }
     end
 
-    trait :with_playlistings do
+    trait :with_10_tracks do
       playlistings_attributes { {
         "0" => attributes_for(:playlisting, :with_existing_work),
         "1" => attributes_for(:playlisting, :with_existing_work),
         "2" => attributes_for(:playlisting, :with_existing_work),
         "3" => attributes_for(:playlisting, :with_existing_work),
         "4" => attributes_for(:playlisting, :with_existing_work),
+        "5" => attributes_for(:playlisting, :with_existing_work),
+        "6" => attributes_for(:playlisting, :with_existing_work),
+        "7" => attributes_for(:playlisting, :with_existing_work),
+        "8" => attributes_for(:playlisting, :with_existing_work),
+        "9" => attributes_for(:playlisting, :with_existing_work),
       } }
     end
 
-    trait :with_complete_playlistings do
+    trait :with_10_viewable_tracks do
       playlistings_attributes { {
         "0" => attributes_for(:playlisting, :with_existing_work, :with_post),
         "1" => attributes_for(:playlisting, :with_existing_work, :with_post),
         "2" => attributes_for(:playlisting, :with_existing_work, :with_post),
         "3" => attributes_for(:playlisting, :with_existing_work, :with_post),
         "4" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "5" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "6" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "7" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "8" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "9" => attributes_for(:playlisting, :with_existing_work, :with_post),
       } }
     end
 
@@ -76,10 +87,11 @@ FactoryBot.define do
     factory :minimal_playlist do
       with_title
       with_author
+      with_2_tracks
     end
 
     factory :complete_playlist, parent: :minimal_playlist do
-      with_complete_playlistings
+      with_10_viewable_tracks
     end
   end
 end

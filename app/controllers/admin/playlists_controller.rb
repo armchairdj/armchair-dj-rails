@@ -12,7 +12,8 @@ class Admin::PlaylistsController < AdminController
     :show,
     :edit,
     :update,
-    :destroy
+    :destroy,
+    :reorder_playlistings
   ]
 
   before_action :authorize_collection, only: [
@@ -25,7 +26,13 @@ class Admin::PlaylistsController < AdminController
     :show,
     :edit,
     :update,
-    :destroy
+    :destroy,
+    :reorder_playlistings
+  ]
+
+  before_action :prepare_form, only: [
+    :new,
+    :edit
   ]
 
   # GET /admin/playlists
@@ -47,6 +54,8 @@ class Admin::PlaylistsController < AdminController
         format.html { redirect_to admin_playlist_path(@playlist), success: I18n.t("admin.flash.playlists.success.create") }
         format.json { render :show, status: :created, location: admin_playlist_url(@playlist) }
       else
+        prepare_form
+
         format.html { render :new }
         format.json { render json: @playlist.errors, status: :unprocessable_entity }
       end
@@ -64,6 +73,8 @@ class Admin::PlaylistsController < AdminController
         format.html { redirect_to admin_playlist_path(@playlist), success: I18n.t("admin.flash.playlists.success.update") }
         format.json { render :show, status: :ok, location: admin_playlist_url(@playlist) }
       else
+        prepare_form
+
         format.html { render :edit }
         format.json { render json: @playlist.errors, status: :unprocessable_entity }
       end
@@ -79,6 +90,13 @@ class Admin::PlaylistsController < AdminController
       format.html { redirect_to admin_playlists_path, success: I18n.t("admin.flash.playlists.success.destroy") }
       format.json { head :no_content }
     end
+  end
+
+  # POST /admin/playlists/1/reorder_playlistings
+  def reorder_playlistings
+    raise ActionController::UnknownFormat unless request.xhr?
+
+    @playlist.reorder_playlistings!(params[:playlisting_ids])
   end
 
 private
@@ -100,7 +118,7 @@ private
   end
 
   def instance_params
-    params.fetch(:playlist, {}).permit(
+    fetched = params.fetch(:playlist, {}).permit(
       :name,
       :title,
       :author_id,
@@ -111,6 +129,14 @@ private
         :work_id
       ]
     )
+
+    fetched.merge(author: current_user)
+  end
+
+  def prepare_form
+    @playlist.prepare_playlistings
+
+    @works = Work.grouped_options
   end
 
   def allowed_sorts

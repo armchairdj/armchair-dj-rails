@@ -9,11 +9,13 @@
     %>
 
     <%= f.input :name %>
-
-    <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
   <% end %>
 <% end %>
 
 <%= render partial: "admin/shared/forms/link_fieldset", locals: {
+  f: f
+} %>
+
+<%= render partial: "admin/shared/forms/displayable_fieldset", locals: {
   f: f
 } %>

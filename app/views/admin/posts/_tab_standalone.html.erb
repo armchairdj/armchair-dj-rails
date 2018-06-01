@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for(:tabs) do %>
-  <%= content_tag(:div, **js_tabbable_tab_attrs(tab_name)) do %>
+  <%= content_tag(:div, js_tabbable_tab_attrs(tab_name)) do %>
     <%= content_tag(:fieldset, class: "chunk") do %>
       <%= content_tag(:legend, "Standalone", "data-target": "tabbable.remove") %>
 

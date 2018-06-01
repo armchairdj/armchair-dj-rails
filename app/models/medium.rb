@@ -90,8 +90,8 @@ class Medium < ApplicationRecord
 
     facets = Facet.find_by_sorted_ids(sorted_facet_ids).where(medium_id: self.id)
 
-    unless facets.length == sorted_facet_ids.length && self.facets.count == facets.length
-      raise ArgumentError.new("Bad facet reorder; ids don't match")
+    unless facets.length == sorted_facet_ids.length && facets.length == self.facets.count
+      raise ArgumentError.new("Bad facet reorder; ids don't match.")
     end
 
     Facet.acts_as_list_no_update do

@@ -3,7 +3,8 @@
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= render partial: "admin/playlists/form_fields", locals: {
-      f:          f,
+      f:     f,
+      works: works
     } %>
   <% end %>
 

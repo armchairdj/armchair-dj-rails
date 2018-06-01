@@ -231,7 +231,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { pseudonym_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
-        it { is_expected.to accept_nested_attributes_for(:pseudonym_identities) }
+        it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }
 
         describe "#prepare_pseudonym_identities" do
           it "builds 5 initially" do
@@ -318,7 +318,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { real_name_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
-        it { is_expected.to accept_nested_attributes_for(:real_name_identities) }
+        it { is_expected.to accept_nested_attributes_for(:real_name_identities).allow_destroy(true) }
 
         describe "#prepare_real_name_identities" do
           it "builds 1 initially" do
@@ -404,7 +404,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { member_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                       } } }
 
-        it { is_expected.to accept_nested_attributes_for(:member_memberships) }
+        it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
 
         describe "#prepare_member_memberships" do
           it "builds 5 initially" do
@@ -491,7 +491,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid_params) { { "0" => { group_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                      } } }
 
-        it { is_expected.to accept_nested_attributes_for(:group_memberships) }
+        it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
 
         describe "#prepare_group_memberships" do
           it "builds 5 initially" do
@@ -547,23 +547,6 @@ RSpec.describe Creator, type: :model do
             }.to change { Membership.count }.by(-1)
 
             expect(subject.reload.group_memberships).to have(0).items
-          end
-        end
-
-        describe "allow_destroy" do
-          it "destroys the identity but not the group" do
-            subject.update!(group_memberships_attributes: valid_params)
-
-            expect(subject.groups).to eq([valid])
-
-            subject.group_memberships.destroy_all
-
-            subject.reload
-
-            expect(subject.group_memberships).to eq([])
-            expect(subject.groups           ).to eq([])
-
-            expect(valid.reload).to eq(valid)
           end
         end
       end
@@ -843,6 +826,8 @@ RSpec.describe Creator, type: :model do
         })
       end
     end
+
+    pending "#sluggable_parts"
 
     describe "#alpha_parts" do
       subject { create_minimal_instance }

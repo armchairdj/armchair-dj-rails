@@ -65,12 +65,17 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories, concerns: :paginatable
     resources :creators,   concerns: :paginatable
-    resources :playlists,  concerns: :paginatable
     resources :posts,      concerns: :paginatable
     resources :roles,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
     resources :users,      concerns: :paginatable
     resources :works,      concerns: :paginatable
+
+    resources :playlists, concerns: :paginatable do
+      member do
+        post :reorder_playlistings
+      end
+    end
 
     resources :media, concerns: :paginatable do
       member do

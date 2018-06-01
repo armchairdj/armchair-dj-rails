@@ -63,7 +63,39 @@ RSpec.describe Playlist, type: :model do
 
   context "attributes" do
     context "nested" do
-      pending "for playlistings"
+      describe "playlistings" do
+        it { is_expected.to accept_nested_attributes_for(:playlistings).allow_destroy(true) }
+
+        pending "accepts"
+
+        pending "rejects"
+
+        describe "#prepare_playlistings" do
+          context "new instance" do
+            subject { described_class.new }
+
+            it "builds 20 playlistings" do
+              expect(subject.playlistings).to have(0).items
+
+              subject.prepare_playlistings
+
+              expect(subject.playlistings).to have(20).items
+            end
+          end
+
+          context "saved instance with saved playlistings" do
+            subject { create(:minimal_playlisting) }
+
+            it "builds 20 more playlistings" do
+              expect(subject.playlistings).to have(2).items
+
+              subject.prepare_playlistings
+
+              expect(subject.playlistings).to have(22).items
+            end
+          end
+        end
+      end
     end
   end
 
@@ -88,10 +120,14 @@ RSpec.describe Playlist, type: :model do
   end
 
   context "instance" do
-    # Nothing so far.
+    pending "#all_creators"
 
-    describe "private" do
-      # Nothing so far.
-    end
+    pending "#all_creator_ids"
+
+    pending "#reorder_playlistings!"
+
+    pending "#sluggable_parts"
+
+    pending "#alpha_parts"
   end
 end

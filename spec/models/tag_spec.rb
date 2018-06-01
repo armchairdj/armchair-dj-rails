@@ -38,14 +38,15 @@ RSpec.describe Tag, type: :model do
   end
 
   context "associations" do
-    it { is_expected.to belong_to(:category) }
+    it { is_expected.to belong_to(:category).optional }
 
     it { is_expected.to have_and_belong_to_many(:posts) }
 
     it { is_expected.to have_and_belong_to_many(:works) }
 
-    it { is_expected.to have_many(:creators).through(:works) }
-    it { is_expected.to have_many(:reviews ).through(:works) }
+    it { is_expected.to have_many(:creators    ).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+    it { is_expected.to have_many(:reviews     ).through(:works) }
   end
 
   context "validations" do
@@ -78,6 +79,8 @@ RSpec.describe Tag, type: :model do
     let(     :category) { create(:category, name: "Category") }
     let(:uncategorized) { create(:tag, name: "Uncategorized") }
     let(  :categorized) { create(:tag, name: "Categorized", category_id: category.id) }
+
+    pending "#sluggable_parts"
 
     describe "#alpha_parts" do
       specify { expect(uncategorized.alpha_parts).to eq(["Uncategorized"          ]) }

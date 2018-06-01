@@ -87,13 +87,11 @@ RSpec.describe Medium, type: :model do
   context "attributes" do
     context "nested" do
       context "for roles" do
-        it { is_expected.to accept_nested_attributes_for(:roles) }
+        it { is_expected.to accept_nested_attributes_for(:roles).allow_destroy(true) }
 
         pending "accepts"
 
         pending "rejects"
-
-        pending "allow_destroy"
 
         describe "#prepare_roles" do
           context "new instance" do
@@ -123,13 +121,11 @@ RSpec.describe Medium, type: :model do
       end
 
       context "for facets" do
-        it { is_expected.to accept_nested_attributes_for(:facets) }
+        it { is_expected.to accept_nested_attributes_for(:facets).allow_destroy(true) }
 
         pending "accepts"
 
         pending "rejects"
-
-        pending "allow_destroy"
 
         describe "#prepare_facets" do
           context "new instance" do
@@ -206,6 +202,8 @@ RSpec.describe Medium, type: :model do
 
       pending "provides a hash of options for category-specific tag dropdowns"
     end
+
+    pending "#sluggable_parts"
 
     describe "#alpha_parts" do
       subject { create_minimal_instance }

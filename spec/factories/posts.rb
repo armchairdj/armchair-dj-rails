@@ -33,6 +33,10 @@ FactoryBot.define do
       work_id { create(:minimal_work).id }
     end
 
+    trait :with_playlist do
+      playlist_id { create(:minimal_playlist).id }
+    end
+
     trait :draft do
       # default status is :draft
     end
@@ -93,6 +97,11 @@ FactoryBot.define do
     factory :review do
       with_existing_author
       with_work
+    end
+
+    factory :mixtape do
+      with_existing_author
+      with_playlist
     end
 
     factory :complete_review, parent: :review do

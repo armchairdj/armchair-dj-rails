@@ -106,7 +106,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     describe "POST #create" do
       let(:max_valid_params) { attributes_for(:complete_playlist) }
       let(:min_valid_params) { attributes_for(:minimal_playlist) }
-      let(  :invalid_params) { attributes_for(:minimal_playlist).except(:name) }
+      let(  :invalid_params) { attributes_for(:minimal_playlist).except(:title) }
 
       context "with min valid params" do
         it "creates a new Playlist" do
@@ -156,12 +156,15 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
         it "renders new" do
           post :create, params: { playlist: invalid_params }
 
+          ap assigns(:playlist).valid?
+          ap assigns(:playlist).errors
+
           is_expected.to successfully_render("admin/playlists/new")
 
           expect(assigns(:playlist)).to have_coerced_attributes(invalid_params)
           expect(assigns(:playlist)).to be_invalid
 
-          expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
+          expect(assigns(:works)).to be_a_kind_of(Array)
         end
       end
     end
@@ -180,8 +183,8 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     describe "PUT #update" do
       let(:playlist) { create(:minimal_playlist) }
 
-      let(:min_valid_params) { { name: "New Name" } }
-      let(  :invalid_params) { { name: ""         } }
+      let(:min_valid_params) { { title: "New Title" } }
+      let(  :invalid_params) { { title: ""         } }
 
       context "with valid params" do
         it "updates the requested playlist" do
@@ -207,7 +210,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
           is_expected.to assign(playlist, :playlist).with_attributes(invalid_params).and_be_invalid
 
-          expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
+          expect(assigns(:works)).to be_a_kind_of(Array)
         end
       end
     end

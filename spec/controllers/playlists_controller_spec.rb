@@ -23,7 +23,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
     context "with records" do
       before(:each) do
-        21.times { create(:standalone_post, :with_playlist, :published) }
+        21.times { create(:mixtape, :published) }
       end
 
       it "renders" do

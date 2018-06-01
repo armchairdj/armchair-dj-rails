@@ -1,1 +1,14 @@
-FORM FIELDS
+<%= content_tag(:fieldset) do %>
+  <%= content_tag(:div, class: "boxed") do %>
+    <%= f.input :title, required: true %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/forms/playlisting_fieldset", locals: {
+  f:     f,
+  works: works
+} %>
+
+<%= render partial: "admin/shared/forms/displayable_fieldset", locals: {
+  f: f
+} %>

@@ -1,12 +1,12 @@
 <%
-  @title = [@work.display_creators, @work.title]
+  @title = [@work.credited_artists, @work.title]
 %>
 
 <%= content_for(:header) do %>
   <%= content_tag(:header, class: "post-header") do %>
     <%= content_tag(:h3, @work.medium.name) %>
     <%= content_tag(:h1) do %>
-      <%= content_tag(:span, @work.display_creators, class: "creators") %>
+      <%= content_tag(:span, @work.credited_artists, class: "creators") %>
       <%= content_tag(:span, @work.title,            class: "title"   ) %>
       <%= content_tag(:span, @work.subtitle,         class: "subtitle") %>
     <% end %>

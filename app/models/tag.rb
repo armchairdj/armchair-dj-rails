@@ -43,7 +43,9 @@ class Tag < ApplicationRecord
 
   has_and_belongs_to_many :works
 
-  has_many :creators, through: :works
+  has_many :creators,     -> { distinct }, through: :works
+  has_many :contributors, -> { distinct }, through: :works
+
   has_many :reviews, through: :works, class_name: "Post", source: :posts
 
   #############################################################################

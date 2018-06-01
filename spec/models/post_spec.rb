@@ -206,7 +206,8 @@ RSpec.describe Post, type: :model do
   context "associations" do
     it { is_expected.to have_and_belong_to_many(:tags) }
 
-    it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:work    ).optional }
+    it { is_expected.to belong_to(:playlist).optional }
 
     it { is_expected.to have_one(:medium       ).through(:work) }
     it { is_expected.to have_many(:creators    ).through(:work) }
@@ -225,7 +226,7 @@ RSpec.describe Post, type: :model do
     end
 
     context "nested" do
-      it { is_expected.to accept_nested_attributes_for(:work) }
+      it { is_expected.to accept_nested_attributes_for(:work).allow_destroy(false) }
 
       describe "reject_if" do
         subject { build(:post, body: "body", work_attributes: { "0" => { "title" => "" } }) }
@@ -1322,6 +1323,24 @@ RSpec.describe Post, type: :model do
       end
     end
 
+    describe "#sluggable_parts" do
+      let(    :review) { create(:hounds_of_love_album_review               ) }
+      let(    :collab) { create(:unity_album_review                        ) }
+      let(:standalone) { create(:standalone_post, title: "Standalone Title") }
+
+      specify "for review" do
+        expect(review.send(:sluggable_parts)) .to eq(["reviews", "Albums", "Kate Bush", "Hounds of Love", nil])
+      end
+
+      specify "for review of collaborative work" do
+        expect(collab.send(:sluggable_parts)).to eq(["reviews", "Albums", "Carl Craig and Green Velvet", "Unity", nil])
+      end
+
+      specify "for standalone" do
+        expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
+      end
+    end
+
     describe "#alpha_parts" do
       subject { create_minimal_instance }
 
@@ -1339,24 +1358,6 @@ RSpec.describe Post, type: :model do
         it "uses name" do
           expect(subject.alpha_parts).to eq([subject.work.alpha_parts])
         end
-      end
-    end
-
-    describe "#sluggable_parts" do
-      let(    :review) { create(:hounds_of_love_album_review               ) }
-      let(    :collab) { create(:unity_album_review                        ) }
-      let(:standalone) { create(:standalone_post, title: "Standalone Title") }
-
-      specify "for review" do
-        expect(review.send(:sluggable_parts)) .to eq(["reviews", "Albums", "Kate Bush", "Hounds of Love", nil])
-      end
-
-      specify "for review of collaborative work" do
-        expect(collab.send(:sluggable_parts)).to eq(["reviews", "Albums", "Carl Craig and Green Velvet", "Unity", nil])
-      end
-
-      specify "for standalone" do
-        expect(standalone.send(:sluggable_parts)).to eq(["Standalone Title"])
       end
     end
 

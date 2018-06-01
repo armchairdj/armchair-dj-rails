@@ -32,7 +32,7 @@
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, work.medium.name     ) %>
               <%= content_tag(:td, work.title           ) %>
-              <%= content_tag(:td, work.display_creators) %>
+              <%= content_tag(:td, work.credited_artists) %>
 
               <%= content_tag(:td, work.viewable_post_count,     class: "icon") %>
               <%= content_tag(:td, work.unviewable_post_count, class: "icon") %>

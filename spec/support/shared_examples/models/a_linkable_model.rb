@@ -12,7 +12,7 @@ RSpec.shared_examples "a_linkable_model" do
 
     describe "attributes" do
       describe "links" do
-        it { is_expected.to accept_nested_attributes_for(:links) }
+        it { is_expected.to accept_nested_attributes_for(:links).allow_destroy(true) }
 
         describe "#prepare_links" do
           it "builds 5 initially" do

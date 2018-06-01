@@ -90,7 +90,7 @@ en:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             playlistings:
-              too_short: "Please choose at least 2 works."
+              too_short: "Please choose at least two works."
             slug:
               locked: "You cannot change the slug on a playlist with published posts."
         post:
@@ -119,7 +119,7 @@ en:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
-              too_short: "Please choose at least 1 creator."
+              too_short: "Please choose at least one creator."
             slug:
               locked: "You cannot change the slug on a work with published posts."
             tag_ids:
