@@ -199,11 +199,11 @@ module AdminHelper
     svg_icon(icon, title: title, desc: desc, wrapper_class: "admin-column-header")
   end
 
-  def vpc_icon
+  def ppc_icon
     admin_column_icon("lock-unlocked", "Public Post Count", "unlocked icon")
   end
 
-  def nvpc_icon
+  def dpc_icon
     admin_column_icon("lock-locked", "Draft Post Count", "locked icon")
   end
 

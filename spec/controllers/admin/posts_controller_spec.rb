@@ -19,146 +19,7 @@ RSpec.describe Admin::PostsController, type: :controller do
     login_root
 
     describe "GET #index" do
-      context "without records" do
-        context "Draft scope (default)" do
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Scheduled scope" do
-          it "renders" do
-            get :index, params: { scope: "Scheduled" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Published scope" do
-          it "renders" do
-            get :index, params: { scope: "Published" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        pending "Review scope"
-
-        pending "Post scope"
-
-        context "All scope" do
-          it "renders" do
-            get :index, params: { scope: "All" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(0).of_total_records(0)
-          end
-        end
-      end
-
-      context "with records" do
-        context "Draft scope (default)" do
-          before(:each) do
-            10.times { create(:review,          :draft) }
-            11.times { create(:standalone_post, :draft) }
-          end
-
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { page: "2" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Scheduled scope" do
-          before(:each) do
-            10.times { create(:review,          :scheduled) }
-            11.times { create(:standalone_post, :scheduled) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Scheduled" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Scheduled", page: "2" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Published scope" do
-          before(:each) do
-            10.times { create(:review,          :published) }
-            11.times { create(:standalone_post, :published) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Published" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Published", page: "2" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        pending "Review scope"
-
-        pending "Post scope"
-
-        context "All scope" do
-          before(:each) do
-            5.times { create(:review,          :draft     ) }
-            5.times { create(:standalone_post, :draft     ) }
-            5.times { create(:review,          :published ) }
-            5.times { create(:standalone_post, :published ) }
-            1.times { create(:standalone_post, :scheduled ) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "All" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "All", page: "2" }
-
-            is_expected.to successfully_render("admin/posts/index")
-            expect(assigns(:posts)).to paginate(1).of_total_records(21)
-          end
-        end
-      end
-
-      context "sorts" do
-        pending "Title"
-        pending "Type"
-        pending "Status"
-      end
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do
@@ -1075,7 +936,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to eq([
+        expect(subject.keys).to match_array([
           "Draft",
           "Scheduled",
           "Published",
@@ -1086,6 +947,18 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
     end
 
-    pending "allowed_sorts"
+    describe "#allowed_sorts" do
+      subject { described_class.new.send(:allowed_sorts) }
+
+      specify "keys are short sort names" do
+        expect(subject.keys).to match_array([
+          "Default",
+          "Title",
+          "Author",
+          "Type",
+          "Status",
+        ])
+      end
+    end
   end
 end

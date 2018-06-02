@@ -56,16 +56,16 @@ private
 
   def allowed_sorts(extra = nil)
     default_sort = "#{controller_name}.updated_at DESC"
-    vpc_sort     = "#{controller_name}.viewable_post_count ASC"
-    nvpc_sort    = "#{controller_name}.unviewable_post_count ASC"
+    ppc_sort     = "#{controller_name}.viewable_post_count ASC"
+    dpc_sort     = "#{controller_name}.unviewable_post_count ASC"
 
     base = { "Default" => default_sort }
 
     return base unless model_class.include? Viewable
 
     base.merge({
-      "VPC"  => [vpc_sort,  extra].compact.join(", "),
-      "NVPC" => [nvpc_sort, extra].compact.join(", "),
+      "PPC" => [ppc_sort,  extra].compact.join(", "),
+      "DPC" => [dpc_sort, extra].compact.join(", "),
     })
   end
 
@@ -98,8 +98,9 @@ private
 
   def current_sort_value
     clause = allowed_sorts[@sort]
+    clause = @dir == "DESC" ? reverse_sort(clause) : clause
 
-    @dir == "DESC" ? reverse_sort(clause) : clause
+    Arel.sql(clause)
   end
 
   def reverse_sort(clause)

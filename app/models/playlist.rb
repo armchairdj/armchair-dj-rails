@@ -21,7 +21,7 @@ class Playlist < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:playlistings, :works) }
+  scope :eager,     -> { includes(:author, :playlistings, :works).references(:author) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.alpha }
 

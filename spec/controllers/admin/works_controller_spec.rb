@@ -17,114 +17,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     login_root
 
     describe "GET #index" do
-      context "without records" do
-        context "All scope (default)" do
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Visible scope" do
-          it "renders" do
-            get :index, params: { scope: "Visible" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Hidden scope" do
-          it "renders" do
-            get :index, params: { scope: "Hidden" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(0).of_total_records(0)
-          end
-        end
-      end
-
-      context "with records" do
-        context "All scope (default)" do
-          before(:each) do
-            10.times { create(:review, :published) }
-            11.times { create(:minimal_work) }
-          end
-
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { page: "2" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Visible scope" do
-          before(:each) do
-            21.times { create(:review, :published) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Visible" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Visible", page: "2" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Hidden scope" do
-          before(:each) do
-            21.times { create(:minimal_work) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Hidden" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Hidden", page: "2" }
-
-            is_expected.to successfully_render("admin/works/index")
-
-            expect(assigns(:works)).to paginate(1).of_total_records(21)
-          end
-        end
-      end
-
-      context "sorts" do
-        pending "Title"
-        pending "Creator"
-        pending "Medium"
-        pending "VPC"
-        pending "NVPC"
-      end
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do
@@ -300,7 +193,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to eq([
+        expect(subject.keys).to match_array([
           "All",
           "Visible",
           "Hidden",
@@ -308,6 +201,19 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
     end
 
-    pending "allowed_sorts"
+    describe "#allowed_sorts" do
+      subject { described_class.new.send(:allowed_sorts) }
+
+      specify "keys are short sort names" do
+        expect(subject.keys).to match_array([
+          "Default",
+          "Title",
+          "Creator",
+          "Medium",
+          "PPC",
+          "DPC",
+        ])
+      end
+    end
   end
 end

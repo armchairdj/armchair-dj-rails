@@ -15,50 +15,7 @@ RSpec.describe Admin::MediaController, type: :controller do
     login_root
 
     describe "GET #index" do
-      context "without records" do
-        context "All scope (default)" do
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/media/index")
-            expect(assigns(:media)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        pending "Visible scope"
-        pending "Hidden scope"
-      end
-
-      context "with records" do
-        context "All scope (default)" do
-          before(:each) do
-            21.times { create(:minimal_medium) }
-          end
-
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/media/index")
-            expect(assigns(:media)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { page: "2" }
-
-            is_expected.to successfully_render("admin/media/index")
-            expect(assigns(:media)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        pending "Visible scope"
-        pending "Hidden scope"
-      end
-
-      context "sorts" do
-        pending "Name"
-        pending "VPC"
-        pending "NVPC"
-      end
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do
@@ -216,7 +173,7 @@ RSpec.describe Admin::MediaController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to eq([
+        expect(subject.keys).to match_array([
           "All",
           "Visible",
           "Hidden",
@@ -224,6 +181,17 @@ RSpec.describe Admin::MediaController, type: :controller do
       end
     end
 
-    pending "allowed_sorts"
+    describe "#allowed_sorts" do
+      subject { described_class.new.send(:allowed_sorts) }
+
+      specify "keys are short sort names" do
+        expect(subject.keys).to match_array([
+          "Default",
+          "Name",
+          "PPC",
+          "DPC",
+        ])
+      end
+    end
   end
 end

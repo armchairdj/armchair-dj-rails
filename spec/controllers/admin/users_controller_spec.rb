@@ -15,254 +15,7 @@ RSpec.describe Admin::UsersController, type: :controller do
     login_root
 
     describe "GET #index" do
-      context "without records" do
-        context "All scope (default)" do
-          it "renders with one record because we are logged in as root" do
-            get :index
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(1)
-          end
-        end
-
-        context "Visible scope" do
-          it "renders" do
-            get :index, params: { scope: "Visible" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Hidden scope" do
-          it "renders with one record because we are logged in as root" do
-            get :index, params: { scope: "Hidden" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(1)
-          end
-        end
-
-        context "Member scope" do
-          it "renders" do
-            get :index, params: { scope: "Member" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Writer scope" do
-          it "renders" do
-            get :index, params: { scope: "Writer" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Editor scope" do
-          it "renders" do
-            get :index, params: { scope: "Editor" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Admin scope" do
-          it "renders" do
-            get :index, params: { scope: "Admin" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Root scope" do
-          it "renders with one record because we are logged in as root" do
-            get :index, params: { scope: "Root" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(1)
-          end
-        end
-      end
-
-      context "with records" do
-        context "All scope (default)" do
-          before(:each) do
-             4.times { create(:member) }
-             4.times { create(:writer) }
-             4.times { create(:editor) }
-             4.times { create(:admin ) }
-             4.times { create(:root  ) }
-          end
-
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Visible scope" do
-          before(:each) do
-            21.times { create(:writer, :with_published_post) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Visible" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Visible", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Hidden scope" do
-          before(:each) do
-            20.times { create(:writer) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Hidden" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Hidden", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Member scope" do
-          before(:each) do
-            21.times { create(:member) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Member" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Member", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Writer scope" do
-          before(:each) do
-            21.times { create(:writer) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Writer" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Writer", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Editor scope" do
-          before(:each) do
-            21.times { create(:editor) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Editor" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Editor", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Admin scope" do
-          before(:each) do
-            21.times { create(:admin) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Admin" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Admin", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        context "Root scope" do
-          before(:each) do
-            20.times { create(:root) }
-          end
-
-          it "renders" do
-            get :index, params: { scope: "Root" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { scope: "Root", page: "2" }
-
-            is_expected.to successfully_render("admin/users/index")
-            expect(assigns(:users)).to paginate(1).of_total_records(21)
-          end
-        end
-      end
-
-      context "sorts" do
-        pending "Name"
-        pending "Username"
-        pending "Email"
-        pending "Role"
-        pending "VPC"
-        pending "NVPC"
-      end
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do
@@ -391,7 +144,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to eq([
+        expect(subject.keys).to match_array([
           "All",
           "Visible",
           "Hidden",
@@ -404,6 +157,20 @@ RSpec.describe Admin::UsersController, type: :controller do
       end
     end
 
-    pending "allowed_sorts"
+    describe "#allowed_sorts" do
+      subject { described_class.new.send(:allowed_sorts) }
+
+      specify "keys are short sort names" do
+        expect(subject.keys).to match_array([
+          "Default",
+          "Name",
+          "Username",
+          "Email",
+          "Role",
+          "PPC",
+          "DPC",
+        ])
+      end
+    end
   end
 end

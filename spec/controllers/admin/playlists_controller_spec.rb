@@ -15,70 +15,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     login_root
 
     describe "GET #index" do
-      context "without records" do
-        context "All scope (default)" do
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/playlists/index")
-
-            expect(assigns(:playlists)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Visible scope" do
-          it "renders" do
-            get :index, params: { scope: "Visible" }
-
-            is_expected.to successfully_render("admin/playlists/index")
-
-            expect(assigns(:playlists)).to paginate(0).of_total_records(0)
-          end
-        end
-
-        context "Hidden scope" do
-          it "renders" do
-            get :index, params: { scope: "Hidden" }
-
-            is_expected.to successfully_render("admin/playlists/index")
-
-            expect(assigns(:playlists)).to paginate(0).of_total_records(0)
-          end
-        end
-      end
-
-      context "with records" do
-        context "All scope (default)" do
-          before(:each) do
-            21.times { create(:minimal_playlist) }
-          end
-
-          it "renders" do
-            get :index
-
-            is_expected.to successfully_render("admin/playlists/index")
-
-            expect(assigns(:playlists)).to paginate(20).of_total_records(21)
-          end
-
-          it "renders second page" do
-            get :index, params: { page: "2" }
-
-            is_expected.to successfully_render("admin/playlists/index")
-
-            expect(assigns(:playlists)).to paginate(1).of_total_records(21)
-          end
-        end
-
-        pending "Visible scope"
-        pending "Hidden scope"
-      end
-
-      context "sorts" do
-        pending "Title"
-        pending "VPC"
-        pending "NVPC"
-      end
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do
@@ -155,9 +92,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       context "with invalid params" do
         it "renders new" do
           post :create, params: { playlist: invalid_params }
-
-          ap assigns(:playlist).valid?
-          ap assigns(:playlist).errors
 
           is_expected.to successfully_render("admin/playlists/new")
 
@@ -239,7 +173,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to eq([
+        expect(subject.keys).to match_array([
           "All",
           "Visible",
           "Hidden",
@@ -247,6 +181,18 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       end
     end
 
-    pending "allowed_sorts"
+    describe "#allowed_sorts" do
+      subject { described_class.new.send(:allowed_sorts) }
+
+      specify "keys are short sort names" do
+        expect(subject.keys).to match_array([
+          "Default",
+          "Title",
+          "Author",
+          "PPC",
+          "DPC",
+        ])
+      end
+    end
   end
 end
