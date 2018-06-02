@@ -1,18 +1,14 @@
 import Sortable from "sortablejs";
 
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
-  connect() {
-    this.setup();
-
-    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
+export default class extends BaseController {
+  initialize() {
+    this.url   = this.data.get("url");
+    this.param = this.data.get("param");
   }
 
   setup() {
-    this.url   = this.data.get("url");
-    this.param = this.data.get("param");
-
     this.sortable = Sortable.create(this.element, {
       onUpdate: _.bind(this.handleUpdate, this)
     });
@@ -30,8 +26,7 @@ export default class extends Controller {
     $.ajax({
       method: "POST",
       url:    this.url,
-      data:   this.params(),
-      error:  _.bind(this.ajaxError, this)
+      data:   this.params()
     });
   }
 
@@ -41,9 +36,5 @@ export default class extends Controller {
     params[this.param] = this.sortable.toArray();
 
     return params;
-  }
-
-  ajaxError(xhr, status, error) {
-    alert("Something went wrong.");
   }
 }

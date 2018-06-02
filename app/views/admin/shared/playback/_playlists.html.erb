@@ -1,1 +1,11 @@
-PLAYLISTS
+<% return if playlists.empty? %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Playlists") %>
+  <% end %>
+
+  <%= content_tag(:ul, class: "square") do %>
+    <%= render partial: "admin/shared/playback/playlist", collection: playlists %>
+  <% end %>
+<% end %>

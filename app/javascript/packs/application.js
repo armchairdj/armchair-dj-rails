@@ -23,6 +23,10 @@ $(document).on("turbolinks:load", function () {
   });
 })
 
+$(document).ajaxError(function () {
+  alert("Something went wrong. Please reload the page and start again.");
+});
+
 /* jQuery plugins. */
 
 require("monkey_patches/selectize");

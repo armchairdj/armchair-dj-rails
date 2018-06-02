@@ -118,8 +118,6 @@ export default class extends SelectableController {
   }
 
   ajaxError(callback, xhr, status, error) {
-    alert("Something went wrong.");
-
     callback();
   }
 

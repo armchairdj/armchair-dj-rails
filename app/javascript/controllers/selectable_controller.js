@@ -1,12 +1,6 @@
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
-  connect() {
-    this.setup();
-
-    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
-  }
-
+export default class extends BaseController {
   setup() {
     $(this.element).selectize(this.selectizeOpts());
 

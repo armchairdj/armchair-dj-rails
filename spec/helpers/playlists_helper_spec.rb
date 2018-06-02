@@ -1,15 +1,54 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-# Specs in this file have access to a helper object that includes
-# the PlaylistsHelper. For example:
-#
-# describe PlaylistsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
+require "rails_helper"
+
 RSpec.describe PlaylistsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#link_to_playlist" do
+    let(:instance) { create(:minimal_playlist, title: "Playlist") }
+
+    context "viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(true)
+      end
+
+      context "public" do
+        subject { helper.link_to_playlist(instance, class: "test") }
+
+        it { is_expected.to have_tag("a[href='/playlists/#{instance.slug}'][class='test']",
+          text:  "Playlist",
+          count: 1
+        ) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_playlist(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.id}']",
+          text:  "Playlist",
+          count: 1
+        ) }
+      end
+    end
+
+    context "non-viewable" do
+      before(:each) do
+        allow(instance).to receive(:viewable?).and_return(false)
+      end
+
+      context "public" do
+        subject { helper.link_to_playlist(instance) }
+
+        it { is_expected.to eq(nil) }
+      end
+
+      context "admin" do
+        subject { helper.link_to_playlist(instance, admin: true) }
+
+        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.id}']",
+          text:  "Playlist",
+          count: 1
+        ) }
+      end
+    end
+  end
 end

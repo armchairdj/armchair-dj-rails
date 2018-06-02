@@ -1,16 +1,10 @@
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
+export default class extends BaseController {
   static targets = [ "all", "remove" ];
 
   initialize() {
     this.handler = _.bind(this.activateFromAfar, this);
-  }
-
-  connect() {
-    this.setup();
-
-    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
   }
 
   setup() {

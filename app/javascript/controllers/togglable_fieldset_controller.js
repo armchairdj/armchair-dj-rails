@@ -1,16 +1,10 @@
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
+export default class extends BaseController {
   static targets = [ "trueFieldset", "falseFieldset" ];
 
   initialize() {
     this.handler = _.bind(this.toggle, this);
-  }
-
-  connect() {
-    this.setup();
-
-    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
   }
 
   setup() {

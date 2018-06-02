@@ -10,17 +10,10 @@ form.admin {
   max-width: 800px;
 }
 
-header.admin-nav {
-  background-color: $black;
-}
-
-footer.admin-nav {
-  background-color: $black;
-}
-
 .admin-nav {
   @include clearfix();
   padding: $spacing-s;
+  background-color: $black;
 
   .logo {
     display: block;
@@ -35,6 +28,7 @@ footer.admin-nav {
   nav.links {
     float: right;
     margin: 0;
+    font-size: $admin-nav-size;
 
     ul {
       margin: 0;

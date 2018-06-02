@@ -114,16 +114,16 @@ module AdminHelper
 
   def admin_nav_links
     links = [
+      link_to("Posts",       admin_posts_path         ),
+      link_to("Playlists",   admin_playlists_path     ),
+      link_to("Works",       admin_works_path         ),
+      link_to("Creators",    admin_creators_path      ),
       link_to("Media",       admin_media_path         ),
       link_to("Roles",       admin_roles_path         ),
       link_to("Categories",  admin_categories_path    ),
       link_to("Tags",        admin_tags_path          ),
-      link_to("Creators",    admin_creators_path      ),
-      link_to("Works",       admin_works_path         ),
-      link_to("Playlists",   admin_playlists_path     ),
-      link_to("Posts",       admin_posts_path         ),
-      link_to("Style Guide", style_guides_path        ),
-      # link_to("Log Out",     destroy_user_session_path)
+      link_to("Styles",      style_guides_path        ),
+      link_to("Log Out",     destroy_user_session_path)
     ]
 
     if Pundit.policy!(current_user, [:admin, User]).index?

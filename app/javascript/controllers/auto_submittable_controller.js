@@ -1,15 +1,23 @@
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
-  static targets = [ "field", "submit" ]
+export default class extends BaseController {
+  static targets = [ "field", "button" ]
 
-  connect() {
-    $(this.fieldTargets).on("change", _.bind(this.handleChange, this));
+  initialize() {
+    this.handler = _.bind(this.handleChange, this);
+  }
 
-    $(this.submitTargets).css("visibility", "hidden");
+  setup() {
+    $(this.fieldTargets).on("change", this.handler);
+
+    $(this.buttonTargets).css({ visibility: "hidden", height: 0 });
+  }
+
+  teardown() {
+    $(this.fieldTargets).off("change", this.handler);
   }
 
   handleChange(evt) {
-    $(this.submitTarget).click();
+    $(this.buttonTarget).click();
   }
 }

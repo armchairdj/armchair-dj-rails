@@ -1,13 +1,7 @@
-import { Controller } from "stimulus";
+import BaseController from "./base_controller";
 
-export default class extends Controller {
+export default class extends BaseController {
   static targets = [ "field" ];
-
-  connect() {
-    this.setup();
-
-    $(document).one("turbolinks:visit", _.bind(this.teardown, this));
-  }
 
   setup() {
     this.hidden = this.fieldTargets.filter(field => !$(field).find("select").val());
