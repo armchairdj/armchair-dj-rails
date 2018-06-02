@@ -1,0 +1,5 @@
+.adj-module {
+  @include module-box();
+  @include bottom-margin();
+  @include clearfix();
+}

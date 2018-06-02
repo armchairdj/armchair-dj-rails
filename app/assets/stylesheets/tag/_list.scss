@@ -50,11 +50,11 @@ dl {
   dt {
     text-transform: uppercase;
     color: $armchair-smoke;
-    @include bottom-margin($spacing-m * .25);
+    @include bottom-margin(1rem * .25);
   }
 
   dd {
-    @include bottom-margin($spacing-m * .75);
+    @include bottom-margin(.75rem);
   }
 
   &.horizontal {
@@ -62,7 +62,7 @@ dl {
 
     dt,
     dd {
-      @include bottom-margin($spacing-m * .25);
+      @include bottom-margin(1rem * .25);
     }
 
     dt {

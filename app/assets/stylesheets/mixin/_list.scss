@@ -7,7 +7,7 @@
     list-style-type: $list-style-type;
     padding-left: .5em;
     margin: 0 0 .5em;
-    @include bottom-margin($spacing-s);
+    @include bottom-margin(.5rem);
   }
 }
 
@@ -19,7 +19,7 @@
   > li {
     list-style-type: $type;
     list-style-position: outside;
-    @include bottom-margin($spacing-s);
+    @include bottom-margin(.5rem);
   }
 }
 

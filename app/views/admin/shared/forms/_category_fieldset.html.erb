@@ -3,8 +3,8 @@
   classes = join_attr("legendary", ("fieldset-with-errors" if error))
 %>
 
-<%= content_tag(:fieldset, class: classes) do %>
-  <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: classes) do %>
     <%= content_tag(:legend, "Tags") %>
 
     <%= content_tag(:div, error, class: "legend-hint") if error %>

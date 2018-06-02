@@ -1,6 +1,12 @@
-<%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
-  <%= content_tag(:div, class: "boxed") do %>
-    <%= content_tag(:legend, "Primary") %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset) do %>
+    <%= f.input :name %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+    <%= content_tag(:legend, "Primary or Pseudonym") %>
 
     <%= render partial: "shared/custom_radio_group", locals: {
       f:          f,
@@ -21,9 +27,9 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
-  <%= content_tag(:div, class: "boxed") do %>
-    <%= content_tag(:legend, "Collective") %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+    <%= content_tag(:legend, "Individual or Group") %>
 
     <%= render partial: "shared/custom_radio_group", locals: {
       f:          f,

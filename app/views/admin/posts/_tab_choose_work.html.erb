@@ -8,7 +8,7 @@
 
 <% content_for(:tabs) do %>
   <%= content_tag(:div, js_tabbable_tab_attrs(tab_name)) do %>
-    <%= content_tag(:fieldset, class: "chunk") do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
       <%= content_tag(:legend, "Choose Work", "data-target": "tabbable.remove") %>
 
       <%= f.input :work_id, as: :grouped_select,

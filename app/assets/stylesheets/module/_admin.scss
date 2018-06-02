@@ -12,7 +12,7 @@ form.admin {
 
 .admin-nav {
   @include clearfix();
-  padding: $spacing-s;
+  padding: .5rem;
   background-color: $black;
 
   .logo {
@@ -40,7 +40,7 @@ form.admin {
 a.admin {
   display: inline-block;
   @include underline-never();
-  @include left-margin-only($spacing-s);
+  @include left-margin-only(.5rem);
   @include standard-svg-icon();
   @include colored-svg-link();
 
@@ -64,7 +64,7 @@ header.admin {
     font-size: 14px;
     line-height: $readable;
     text-transform: uppercase;
-    @include right-margin-only($spacing-xs);
+    @include right-margin-only(.25rem);
     color: $trolley-grey;
   }
 
@@ -72,7 +72,7 @@ header.admin {
     font-size: $admin-headline-size;
     line-height: $readable;
     text-transform: uppercase;
-    @include right-margin-only($spacing-xs);
+    @include right-margin-only(.25rem);
   }
 
   .actions {
@@ -82,7 +82,7 @@ header.admin {
 
     a.admin {
       display: inline-block;
-      margin-bottom: $spacing-s;
+      margin-bottom: .5rem;
     }
   }
 }
@@ -113,7 +113,7 @@ table.admin {
   th,
   td {
     line-height: $spacious;
-    padding: $spacing-xs $spacing-s;
+    padding: .25rem .5rem;
 
     &:first-child {
       padding-left: 0;
@@ -126,7 +126,7 @@ table.admin {
     &.actions {
       text-align: right;
       white-space: nowrap;
-      padding-left: $spacing-m;
+      padding-left: 1rem;
     }
 
     &.icon {

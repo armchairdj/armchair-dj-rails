@@ -1,4 +1,4 @@
-@mixin border-top($padding: $spacing-m, $color: $standard-border-color, $style: solid, $all: false) {
+@mixin border-top($padding: 1rem, $color: $standard-border-color, $style: solid, $all: false) {
   border-top: 1px $style $color;
   padding-top: $padding;
 
@@ -10,7 +10,7 @@
   }
 }
 
-@mixin border-bottom($padding: $spacing-m, $color: $standard-border-color, $style: solid, $all: false) {
+@mixin border-bottom($padding: 1rem, $color: $standard-border-color, $style: solid, $all: false) {
   border-bottom: 1px $style $color;
   padding-bottom: $padding;
 

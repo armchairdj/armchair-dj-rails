@@ -22,7 +22,7 @@
 
 .button-group {
   @include clearfix();
-  @include bottom-margin-only($spacing-s);
+  @include bottom-margin-only(.5rem);
 
   a:not(.button) {
     @include button-layout($horizontal-padding: false);

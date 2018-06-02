@@ -26,7 +26,7 @@ export default class extends BaseController {
   addLink() {
     this.$link = $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-fieldset#expand">add another</a></div>');
 
-    $( $(this.element).find("> .boxed")[0] || this.element ).append(this.$link);
+    $(this.element).append(this.$link);
   }
 
   removeLink() {

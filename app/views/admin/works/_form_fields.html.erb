@@ -1,7 +1,7 @@
 <% show_all = true if local_assigns[:show_all].nil? %>
 
-<%= content_tag(:fieldset) do %>
-  <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset) do %>
     <% if f.object.persisted? %>
       <%= f.input :medium_id, as: :select, collection: media, disabled: true %>
     <% else %>

@@ -5,8 +5,8 @@
   legend_hint = error || t("simple_form.hints.defaults.links", model_name: controller_name.singularize)
 %>
 
-<%= content_tag(:fieldset, class: classes, "data-controller": "expandable-fieldset") do %>
-  <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: classes, "data-controller": "expandable-fieldset") do %>
     <%= content_tag(:legend, "Links") %>
 
     <%= content_tag(:div, legend_hint, class: "legend-hint") %>

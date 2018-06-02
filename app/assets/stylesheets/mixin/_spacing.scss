@@ -3,7 +3,7 @@
   margin-right: auto;
 }
 
-@mixin top-margin($margin: $spacing-m) {
+@mixin top-margin($margin: 1rem) {
   margin-top: $margin;
 
   &:first-child {
@@ -11,13 +11,13 @@
   }
 }
 
-@mixin top-margin-only($margin: $spacing-m) {
+@mixin top-margin-only($margin: 1rem) {
   margin: 0;
 
   @include top-margin($margin);
 }
 
-@mixin right-margin($margin: $spacing-m) {
+@mixin right-margin($margin: 1rem) {
   margin-right: $margin;
 
   &:last-child {
@@ -25,13 +25,13 @@
   }
 }
 
-@mixin right-margin-only($margin: $spacing-m) {
+@mixin right-margin-only($margin: 1rem) {
   margin: 0;
 
   @include right-margin($margin);
 }
 
-@mixin bottom-margin($margin: $spacing-m) {
+@mixin bottom-margin($margin: 1rem) {
   margin-bottom: $margin;
 
   &:last-child {
@@ -39,13 +39,13 @@
   }
 }
 
-@mixin bottom-margin-only($margin: $spacing-m) {
+@mixin bottom-margin-only($margin: 1rem) {
   margin: 0;
 
   @include bottom-margin($margin);
 }
 
-@mixin left-margin($margin: $spacing-m) {
+@mixin left-margin($margin: 1rem) {
   margin-left: $margin;
 
   &:first-child {
@@ -53,7 +53,7 @@
   }
 }
 
-@mixin left-margin-only($margin: $spacing-m) {
+@mixin left-margin-only($margin: 1rem) {
   margin: 0;
 
   @include left-margin($margin);

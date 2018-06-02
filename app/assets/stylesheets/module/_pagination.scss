@@ -8,11 +8,11 @@ nav.pagination {
 
   li {
     display: inline-block;
-    @include right-margin-only($spacing-s);
+    @include right-margin-only(.5rem);
 
     span,
     a {
-      padding: $spacing-xs $spacing-s;
+      padding: .25rem .5rem;
       border-radius: $standard-border-radius;
       border-width: 1px;
       border-style: solid;

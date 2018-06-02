@@ -1,12 +1,12 @@
 .tabgroup {
-  @include bottom-margin-only($spacing-m);
+  @include bottom-margin-only(1rem);
 
   ul.tabs {
     margin: 0;
 
     li {
       display: inline-block;
-      margin-left: $spacing-s;
+      margin-left: .5rem;
 
       span,
       a {
@@ -55,7 +55,7 @@
     }
 
     .tab {
-      @include bottom-margin-only($spacing-m);
+      @include bottom-margin-only(1rem);
     }
 
     &.initialized {

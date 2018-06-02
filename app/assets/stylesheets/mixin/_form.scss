@@ -1,12 +1,5 @@
-@mixin chunk-legend-text {
-  font-size: $chunk-legend-font-size;
-  color: $chunk-legend-color;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-@mixin legendary-legend-text {
-  font-size: $legendary-legend-font-size;
+@mixin legend-text {
+  font-size: $legend-font-size;
   text-transform: uppercase;
   letter-spacing: 0.10em;
 }
@@ -28,10 +21,6 @@
   @include luxurious();
 }
 
-@mixin form-field-error-text() {
-  font-size: $form-field-error-font-size;
-}
-
 @mixin form-field() {
   @include input-text();
   @include standard-transition(border-color);
@@ -41,6 +30,10 @@
   border-radius: $standard-border-radius;
   box-sizing: border-box;
   width: 100%;
+}
+
+@mixin form-field-error-text() {
+  font-size: $form-field-error-font-size;
 }
 
 @mixin form-field-states() {
@@ -60,12 +53,12 @@
 
 @mixin form-field-spacing() {
   display: block;
-  @include bottom-margin-only($spacing-xs);
+  @include bottom-margin-only(.25rem);
   @include form-field-padding();
 }
 
 @mixin form-field-padding() {
-  padding: 4px $spacing-s;
+  padding: 4px .5rem;
 }
 
 @mixin form-field-with-error() {

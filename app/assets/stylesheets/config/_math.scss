@@ -1,11 +1,3 @@
-/* Spacing. */
-
-$spacing-xl:    2rem;
-$spacing-l:   1.5rem;
-$spacing-m:     1rem;
-$spacing-s:   0.5rem;
-$spacing-xs: 0.25rem;
-
 /* Standards. */
 
 $standard-border-radius:       4px;
@@ -23,8 +15,7 @@ $h5-font-size: 1.2rem;
 $h6-font-size: 1rem;
 
 $standard-font-size:             1rem;
-$chunk-legend-font-size:       1.2rem;
-$legendary-legend-font-size:     1rem;
+$legend-font-size:               1rem;
 $label-font-size:                1rem;
 $input-font-size:              1.2rem;
 $hint-font-size:               0.8rem;
@@ -60,7 +51,7 @@ $dd-width: 60%;
 /* Buttons. */
 
 $button-border-radius: $standard-border-radius;
-$button-spacing:       $spacing-s;
+$button-spacing:       .5rem;
 
 
 /* Breakpoints. */

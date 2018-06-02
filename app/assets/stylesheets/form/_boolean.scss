@@ -10,7 +10,7 @@
 [type=checkbox],
 [type=radio] {
   display: inline;
-  margin-right: $spacing-xs;
+  margin-right: .25rem;
   @include focus-no-outline();
 }
 

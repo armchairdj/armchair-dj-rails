@@ -1,69 +1,72 @@
 .error-notification {
   color: $error-color;
-  @include bottom-margin-only($spacing-l);
+  @include bottom-margin-only(1.5rem);
 }
 
 .form-inputs {
-  @include bottom-margin-only($spacing-xl);
+  @include bottom-margin-only(2rem);
 }
 
-.boxed {
-  @include clearfix();
-  @include module-box();
-  @include bottom-margin();
-}
+.form-field {
+  @include bottom-margin-only(1.5rem);
 
-.tab,
-.boxed {
-  .boxed {
-    background-color: $masthead-bg-color;
+  &.with-error {
+    label,
+    legend {
+      color: $error-color;
+    }
   }
+}
+
+legend {
+  padding: 0;
+  display: table;
+  @include bottom-margin-only(.75rem);
+  @include legend-text();
+}
+
+.legend-hint {
+  margin-top: -.75rem;
+  @include bottom-margin(.75rem);
+  @include hint-text();
+
+  .error {
+    @include normal();
+  }
+}
+
+label {
+  cursor: pointer;
+  padding: 0;
+  @include bottom-margin-only(.05rem);
+  @include label-text();
+  @include pseudo-block();
+}
+
+.hint {
+  @include bottom-margin-only(.25rem);
+  @include hint-text();
+}
+
+.error {
+  color: $error-color;
+  @include form-field-error-text();
+  @include bottom-margin-only(.25rem);
 }
 
 fieldset {
   border: 0;
   padding: 0.01em 0 0 0;
   background-color: transparent;
-  @include bottom-margin-only($spacing-l);
-
-  .legend-hint {
-    margin-top: -$spacing-s;
-    @include bottom-margin($spacing-m * .75);
-    @include hint-text();
-
-    .error {
-      @include normal();
-    }
-  }
+  @include bottom-margin-only(1.5rem);
 
   &.toggle {
     margin: 0;
   }
 
-  &.chunk {
-    > .boxed > legend,
-    > legend {
-      @include bottom-margin-only($spacing-m * .75);
-      @include chunk-legend-text();
-    }
-  }
-
-  &.legendary {
-    > .boxed > legend,
-    > legend {
-      @include bottom-margin-only($spacing-m * .75);
-      @include legendary-legend-text();
-    }
-
-    > .hint {
-      margin: -($spacing-m * .75) 0 ($spacing-m * .75);
-      @include hint-text();
-    }
-  }
-
   &.compact {
     .form-field {
-      @include bottom-margin-only($spacing-s);
+      @include bottom-margin-only(.5rem);
     }
   }
 
@@ -85,16 +88,16 @@ fieldset {
   }
 
   &.accepts-nested {
-    @include bottom-margin-only($spacing-s);
-    @include border-bottom($padding: $spacing-s, $color: $armchair-blue-lightest, $style: solid);
+    @include bottom-margin-only(.5rem);
+    @include border-bottom($padding: .5rem, $color: $armchair-blue-lightest, $style: solid);
 
     .form-field {
-      @include bottom-margin-only($spacing-s);
+      @include bottom-margin-only(.5rem);
     }
 
-    .stacked {
+    .creator-role {
       @include clearfix();
-      @include bottom-margin-only($spacing-s);
+      @include bottom-margin-only(.5rem);
 
       .form-field {
         float: left;
@@ -108,43 +111,4 @@ fieldset {
       }
     }
   }
-}
-
-.form-field {
-  @include bottom-margin-only($spacing-l);
-
-  &.with-error {
-    label,
-    legend {
-      color: $error-color;
-    }
-  }
-}
-
-label,
-legend {
-  padding: 0;
-  @include bottom-margin-only(.05rem);
-  @include label-text();
-}
-
-legend {
-  padding: 0;
-  display: table;
-}
-
-label {
-  @include pseudo-block();
-  cursor: pointer;
-}
-
-.hint {
-  @include bottom-margin-only($spacing-xs);
-  @include hint-text();
-}
-
-.error {
-  color: $error-color;
-  @include form-field-error-text();
-  @include bottom-margin-only($spacing-xs);
 }

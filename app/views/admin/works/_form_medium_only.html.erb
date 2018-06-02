@@ -2,8 +2,8 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= content_tag(:fieldset) do %>
-      <%= content_tag(:div, class: "boxed") do %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
         <%= f.input :medium_id, as: :select,
           collection: media,
           hint:       "First, choose a medium.",

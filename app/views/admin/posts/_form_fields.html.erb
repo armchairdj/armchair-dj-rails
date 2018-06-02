@@ -1,5 +1,5 @@
-<%= content_tag(:fieldset) do %>
-  <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset) do %>
     <%= f.input :body, input_html: { class: "x-large" } %>
 
     <%= f.input :tag_ids,
@@ -14,8 +14,8 @@
   f: f
 } %>
 
-<%= content_tag(:fieldset, class: "legendary") do %>
-  <%= content_tag(:div, class: "boxed") do %>
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: "legendary") do %>
     <%= content_tag(:legend, "Publication Details") %>
 
     <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
