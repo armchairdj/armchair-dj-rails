@@ -21,9 +21,9 @@ module Displayable
     viewable?
   end
 
-  def should_validate_slug_presence?
+  def validate_slug_presence?
     viewable?
   end
 
-  private :should_validate_slug_presence?
+  private :validate_slug_presence?
 end

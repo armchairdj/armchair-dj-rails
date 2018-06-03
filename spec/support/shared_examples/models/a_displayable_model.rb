@@ -13,6 +13,18 @@ RSpec.shared_examples "a_displayable_model" do
 
   it_behaves_like "a_viewable_model"
 
-  pending "#slug_locked?"
-  pending "#should_validate_slug_presence?"
+  describe "sluggable methods" do
+    let(:unviewable) { create_minimal_instance }
+    let(  :viewable) { create_minimal_instance(:with_published_post) }
+
+    describe "#slug_locked?" do
+      specify { expect(unviewable.send(:slug_locked?)).to eq(false) }
+      specify { expect(  viewable.send(:slug_locked?)).to eq(true ) }
+    end
+
+    describe "#validate_slug_presence?" do
+      specify { expect(unviewable.send(:validate_slug_presence?)).to eq(false) }
+      specify { expect(  viewable.send(:validate_slug_presence?)).to eq(true ) }
+    end
+  end
 end

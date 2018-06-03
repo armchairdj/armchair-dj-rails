@@ -48,7 +48,7 @@ module Sluggable
 
   included do
     validates :slug, uniqueness: true, allow_blank: true
-    validates :slug, presence: true, if: :should_validate_slug_presence?
+    validates :slug, presence: true, if: :validate_slug_presence?
 
     validate { preserve_locked_slug }
 
@@ -100,7 +100,7 @@ private
     end
   end
 
-  def should_validate_slug_presence?
+  def validate_slug_presence?
     true
   end
 end

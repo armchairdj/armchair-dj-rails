@@ -237,11 +237,11 @@ class Post < ApplicationRecord
     published?
   end
 
-  def should_validate_slug_presence?
+  def validate_slug_presence?
     !draft?
   end
 
-  private :should_validate_slug_presence?
+  private :validate_slug_presence?
 
   #############################################################################
   # INSTANCE: TYPE METHODS.

@@ -258,10 +258,10 @@ RSpec.shared_examples "a_sluggable_model" do
       end
 
       context "conditional" do
-        describe "#should_validate_slug_presence?" do
+        describe "#validate_slug_presence?" do
           context "when true" do
             before(:each) do
-              allow(subject).to receive(:should_validate_slug_presence?).and_return(true)
+              allow(subject).to receive(:validate_slug_presence?).and_return(true)
             end
 
             it { is_expected.to validate_presence_of(:slug) }
@@ -269,7 +269,7 @@ RSpec.shared_examples "a_sluggable_model" do
 
           context "when false" do
             before(:each) do
-              allow(subject).to receive(:should_validate_slug_presence?).and_return(false)
+              allow(subject).to receive(:validate_slug_presence?).and_return(false)
             end
 
             it { is_expected.to_not validate_presence_of(:slug) }
