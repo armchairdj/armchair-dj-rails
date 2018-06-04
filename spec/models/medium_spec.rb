@@ -190,29 +190,33 @@ RSpec.describe Medium, type: :model do
   end
 
   context "instance" do
+    let(:instance) { create_minimal_instance }
+
     pending "#reorder_facets!"
 
     describe "#tags_by_category" do
-      subject { medium.tags_by_category }
-
-      let(:medium) do
+      let(:instance) do
         create(:minimal_medium, :with_tags, facets_attributes: {
           "0" => attributes_for(:facet, category_id: create(:category, name: "Genre").id),
           "1" => attributes_for(:facet, category_id: create(:category, name: "Mood" ).id)
         })
       end
 
+      subject { instance.tags_by_category }
+
       pending "provides a hash of options for category-specific tag dropdowns"
     end
 
-    pending "#sluggable_parts"
+    describe "#sluggable_parts" do
+      subject { instance.sluggable_parts }
+
+      it { is_expected.to eq([instance.name]) }
+    end
 
     describe "#alpha_parts" do
-      subject { create_minimal_instance }
+      subject { instance.alpha_parts }
 
-      it "uses name" do
-        expect(subject.alpha_parts).to eq([subject.name])
-      end
+      it { is_expected.to eq([instance.name]) }
     end
   end
 end

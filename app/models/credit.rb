@@ -44,6 +44,6 @@ class Credit < ApplicationRecord
   #############################################################################
 
   def alpha_parts
-    [work.try(:alpha_parts), creator.try(:name)]
+    [work.try(:alpha_parts), creator.try(:alpha_parts)]
   end
 end

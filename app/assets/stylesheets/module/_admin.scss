@@ -143,15 +143,17 @@ table.admin {
     text-transform: uppercase;
     color: $armchair-smoke;
 
-    a.active {
-      @include underline-never();
+    a {
+      @include underline-on-hover();
 
-      &.asc {
-        @include up-arrow($color: $armchair-smoke);
-      }
+      &.active {
+        &.asc {
+          @include up-arrow($color: $armchair-smoke);
+        }
 
-      &.desc {
-        @include down-arrow($color: $armchair-smoke);
+        &.desc {
+          @include down-arrow($color: $armchair-smoke);
+        }
       }
     }
   }

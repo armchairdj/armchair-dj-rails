@@ -827,7 +827,13 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    pending "#sluggable_parts"
+    describe "#sluggable_parts" do
+      let(:instance) { create_minimal_instance }
+
+      subject { instance.sluggable_parts }
+
+      it { is_expected.to eq([instance.name]) }
+    end
 
     describe "#alpha_parts" do
       subject { create_minimal_instance }

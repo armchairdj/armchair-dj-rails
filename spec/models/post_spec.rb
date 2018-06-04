@@ -1326,14 +1326,25 @@ RSpec.describe Post, type: :model do
     describe "#sluggable_parts" do
       let(    :review) { create(:hounds_of_love_album_review               ) }
       let(    :collab) { create(:unity_album_review                        ) }
+      let(   :mixtape) { create(:mixtape, playlist_id: create(:minimal_playlist, title: "Playlist").id) }
       let(:standalone) { create(:standalone_post, title: "Standalone Title") }
 
       specify "for review" do
         expect(review.send(:sluggable_parts)) .to eq(["reviews", ["Albums", "Kate Bush", "Hounds of Love", nil]])
       end
 
+      specify "for review of work with subtitle" do
+        review.work.subtitle = "Remastered"
+
+        expect(review.send(:sluggable_parts)) .to eq(["reviews", ["Albums", "Kate Bush", "Hounds of Love", "Remastered"]])
+      end
+
       specify "for review of collaborative work" do
         expect(collab.send(:sluggable_parts)).to eq(["reviews", ["Albums", "Carl Craig and Green Velvet", "Unity", nil]])
+      end
+
+      specify "for mixtape" do
+        expect(mixtape.send(:sluggable_parts)).to eq(["mixes", ["Playlist"]])
       end
 
       specify "for standalone" do

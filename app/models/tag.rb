@@ -72,6 +72,13 @@ class Tag < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def all_posts
+    indirect_ids = Post.select("id").joins(work: :tags).where("tags_works.tag_id = ?", self.id)
+      direct_ids = Post.select("id").joins(      :tags).where("posts_tags.tag_id = ?", self.id)
+
+    Post.where(id: [indirect_ids, direct_ids].flatten.uniq)
+  end
+
   def categorized?
     category.present?
   end
@@ -85,16 +92,7 @@ class Tag < ApplicationRecord
   end
 
   def display_name(connector: ": ")
-    return self.name unless categorized?
-
-    [self.category.name, self.name].join(connector)
-  end
-
-  def all_posts
-    indirect_ids = Post.select("id").joins(work: :tags).where("tags_works.tag_id = ?", self.id)
-      direct_ids = Post.select("id").joins(      :tags).where("posts_tags.tag_id = ?", self.id)
-
-    Post.where(id: [indirect_ids, direct_ids].flatten.uniq)
+    [self.category.try(:name), self.name].compact.join(connector)
   end
 
   def sluggable_parts

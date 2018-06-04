@@ -22,7 +22,7 @@ RSpec.describe Credit, type: :model do
       it "uses work and creator" do
         expect(subject.alpha_parts).to eq([
           subject.work.alpha_parts,
-          subject.creator.name
+          subject.creator.alpha_parts
         ])
       end
     end

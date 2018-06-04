@@ -166,6 +166,11 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
         )
       end
     end
+
+    describe "POST #reorder_playlistings" do
+      pending "errors on non-xhr"
+      pending "reorders playlistings"
+    end
   end
 
   context "helpers" do

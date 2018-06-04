@@ -20,16 +20,16 @@ RSpec.describe Contribution, type: :model do
   end
 
   context "instance" do
-    describe "#alpha_parts" do
-      subject { create_minimal_instance }
+    let(:instance) { create_minimal_instance }
 
-      it "uses work, role and creator" do
-        expect(subject.alpha_parts).to eq([
-          subject.work.alpha_parts,
-          subject.role.name,
-          subject.creator.name
-        ])
-      end
+    describe "#alpha_parts" do
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([
+        instance.work.alpha_parts,
+        instance.role.name,
+        instance.creator.name
+      ]) }
     end
   end
 end

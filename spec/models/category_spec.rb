@@ -125,24 +125,29 @@ RSpec.describe Category, type: :model do
 
   context "instance" do
     describe "#display_name" do
-      let!(:single) { create(:minimal_category, :disallowing_multiple, name: "Foo") }
-      let!( :multi) { create(:minimal_category,    :allowing_multiple, name: "Bar") }
+      describe "single" do
+        let(:instance) { create_minimal_instance(:disallowing_multiple, name: "Foo") }
 
-      it "does not pluralize single" do
-        expect(single.display_name).to eq("Foo")
+        subject { instance.display_name }
+
+        it { is_expected.to eq("Foo") }
       end
 
-      it "pluralizes multi" do
-        expect(multi.display_name).to eq("Bars")
+      describe "multi" do
+        let(:instance) { create_minimal_instance(:allowing_multiple, name: "Foo") }
+
+        subject { instance.display_name }
+
+        it { is_expected.to eq("Foos") }
       end
     end
 
     describe "#alpha_parts" do
-      subject { create_minimal_instance }
+      let(:instance) { create_minimal_instance }
 
-      it "uses name" do
-        expect(subject.alpha_parts).to eq([subject.name])
-      end
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([instance.name]) }
     end
   end
 end

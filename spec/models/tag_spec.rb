@@ -80,7 +80,10 @@ RSpec.describe Tag, type: :model do
     let(:uncategorized) { create(:tag, name: "Uncategorized") }
     let(  :categorized) { create(:tag, name: "Categorized", category_id: category.id) }
 
-    pending "#sluggable_parts"
+    describe "#sluggable_parts" do
+      specify { expect(uncategorized.sluggable_parts).to eq(["Uncategorized"       ]) }
+      specify { expect(  categorized.sluggable_parts).to eq(["Category/Categorized"]) }
+    end
 
     describe "#alpha_parts" do
       specify { expect(uncategorized.alpha_parts).to eq(["Uncategorized"          ]) }

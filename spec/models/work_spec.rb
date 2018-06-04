@@ -603,18 +603,29 @@ RSpec.describe Work, type: :model do
 
     pending "#all_creator_ids"
 
-    pending "#sluggable_parts"
+    describe "#sluggable_parts" do
+      let(:instance) do
+        create(:complete_work,
+          title: "Title",
+          subtitle: "Subtitle",
+          medium_id: create(:song_medium).id,
+          credits_attributes: {
+            "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "First").id),
+            "1" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Last").id)
+          } )
+      end
+
+      subject { instance.sluggable_parts }
+
+      it { is_expected.to eq(["Songs", "First and Last", "Title", "Subtitle"]) }
+    end
 
     describe "#alpha_parts" do
-      subject { create(:complete_work) }
+      let(:instance) { create(:complete_work) }
 
-      it "uses creators, title and subtitle" do
-        expect(subject.alpha_parts).to eq([
-          subject.credited_artists,
-          subject.title,
-          subject.subtitle
-        ])
-      end
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([instance.credited_artists, instance.title, instance.subtitle]) }
     end
 
     describe "#grouped_parent_dropdown_options" do

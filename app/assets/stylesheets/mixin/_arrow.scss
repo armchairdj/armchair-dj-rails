@@ -5,6 +5,8 @@
   }
 
   @if ($underline) {
+    @include underline-never();
+
     &:hover span {
       text-decoration: underline;
     }
@@ -18,8 +20,8 @@
   }
 }
 
-@mixin left-arrow($heavy: false, $color: false) {
-  @include arrow-base();
+@mixin left-arrow($heavy: false, $color: false, $underline: true) {
+  @include arrow-base($underline: $underline);
 
   &:before {
     content: if($heavy == true, "\25C0\00A0", "\2190\00A0");
@@ -30,8 +32,8 @@
   }
 }
 
-@mixin right-arrow($heavy: false, $color: false) {
-  @include arrow-base();
+@mixin right-arrow($heavy: false, $color: false, $underline: true) {
+  @include arrow-base($underline: $underline);
 
   &:after {
     content: if($heavy == true, "\00A0\25B6", "\00A0\2192");
@@ -42,8 +44,8 @@
   }
 }
 
-@mixin up-arrow($heavy: false, $color: false) {
-  @include arrow-base();
+@mixin up-arrow($heavy: false, $color: false, $underline: true) {
+  @include arrow-base($underline: $underline);
 
   &:after {
     content: if($heavy == true, "\00A0\25B2", "\00A0\2191");
@@ -54,8 +56,8 @@
   }
 }
 
-@mixin down-arrow($heavy: false, $color: false) {
-  @include arrow-base();
+@mixin down-arrow($heavy: false, $color: false, $underline: true) {
+  @include arrow-base($underline: $underline);
 
   &:after {
     content: if($heavy == true, "\00A0\25BC", "\00A0\2193");
