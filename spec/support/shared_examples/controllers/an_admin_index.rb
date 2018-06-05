@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "an_admin_index" do |scopes|
+RSpec.shared_examples "an_admin_index" do
   allowed_scopes = described_class.new.send(:allowed_scopes)
   allowed_sorts  = described_class.new.send(:allowed_sorts).keys
 

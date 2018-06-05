@@ -3,12 +3,6 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_sluggable_model" do
-  context "constants" do
-    it { is_expected.to have_constant(:PART_SEPARATOR   ) }
-    it { is_expected.to have_constant(:VERSION_SEPARATOR) }
-    it { is_expected.to have_constant(:FIND_V2_OR_HIGHER) }
-  end
-
   context "class" do
     describe "#generate_unique_slug" do
       subject { build_minimal_instance }

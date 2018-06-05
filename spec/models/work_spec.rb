@@ -8,13 +8,6 @@ RSpec.describe Work, type: :model do
 
   pending "#tags_by_category(for_site: true)"
 
-
-
-  context "constants" do
-    it { is_expected.to have_constant(:MAX_CREDITS_AT_ONCE) }
-    it { is_expected.to have_constant(:MAX_CONTRIBUTIONS_AT_ONCE) }
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -599,9 +592,34 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    pending "#all_creators"
+    describe "all-creator methods" do
+      let(:creator_1) { create(:minimal_creator, name: "One") }
+      let(:creator_2) { create(:minimal_creator, name: "Two") }
+      let(:creator_3) { create(:minimal_creator, name: "Three") }
 
-    pending "#all_creator_ids"
+      let(:instance) do
+        create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+        }, contributions_attributes: {
+          "0" => attributes_for(:minimal_contribution, creator_id: creator_3.id),
+          "1" => attributes_for(:minimal_contribution, creator_id: creator_2.id),
+        })
+      end
+
+      describe "#all_creator_ids" do
+        subject { instance.all_creator_ids }
+
+        it { is_expected.to match_array([ creator_1.id, creator_2.id, creator_3.id ]) }
+      end
+
+      describe "#all_creators" do
+        subject { instance.all_creators }
+
+        it { is_expected.to match_array([ creator_1, creator_2, creator_3 ]) }
+        it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+      end
+    end
 
     describe "#sluggable_parts" do
       let(:instance) do

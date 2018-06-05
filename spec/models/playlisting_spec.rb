@@ -1,12 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Playlisting, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an_acts_as_list_model"
   end
 
   context "class" do

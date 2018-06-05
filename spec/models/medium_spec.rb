@@ -1,11 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Medium, type: :model do
-  context "constants" do
-    it { is_expected.to have_constant(:MAX_ROLES_AT_ONCE ) }
-    it { is_expected.to have_constant(:MAX_FACETS_AT_ONCE ) }
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 

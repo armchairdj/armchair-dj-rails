@@ -3,13 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Creator, type: :model do
-  context "constants" do
-    it { is_expected.to have_constant(:MAX_PSEUDONYMS_AT_ONCE ) }
-    it { is_expected.to have_constant(:MAX_REAL_NAMES         ) }
-    it { is_expected.to have_constant(:MAX_MEMBERS_AT_ONCE    ) }
-    it { is_expected.to have_constant(:MAX_GROUPS_AT_ONCE     ) }
-  end
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 

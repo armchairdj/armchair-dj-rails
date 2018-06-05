@@ -191,7 +191,7 @@ class Work < ApplicationRecord
   end
 
   def all_creator_ids
-    creators.map(&:id) + contributors.map(&:id)
+    (creators.map(&:id) + contributors.map(&:id)).uniq
   end
 
   def grouped_parent_dropdown_options

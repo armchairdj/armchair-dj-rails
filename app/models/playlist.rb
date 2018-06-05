@@ -70,7 +70,7 @@ class Playlist < ApplicationRecord
   end
 
   def all_creator_ids
-    works.map(&:all_creator_ids).flatten
+    works.map(&:all_creator_ids).flatten.uniq
   end
 
   def reorder_playlistings!(sorted_playlisting_ids)

@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Playlist, type: :model do
-  context "constants" do
-    # Nothing so far.
-  end
-
   context "concerns" do
     it_behaves_like "an_application_record"
 
@@ -58,6 +54,9 @@ RSpec.describe Playlist, type: :model do
 
     it { is_expected.to have_many(:works).through(:playlistings) }
 
+    it { is_expected.to have_many(:creators    ).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+
     it { is_expected.to have_many(:posts) }
   end
 
@@ -100,34 +99,75 @@ RSpec.describe Playlist, type: :model do
   end
 
   context "validations" do
-    # Nothing so far.
+    subject { create_minimal_instance }
 
-    context "conditional" do
-      # Nothing so far.
-    end
+    it { is_expected.to validate_presence_of(:title) }
 
-    context "custom" do
-      # Nothing so far.
-    end
-  end
+    describe "is_expected.to validate_length_of(:playlistings).is_at_least(2)" do
+      it { is_expected.to be_valid }
 
-  context "hooks" do
-    # Nothing so far.
+      specify "invalid" do
+        subject.playlistings.first.destroy
+        subject.reload
 
-    context "callbacks" do
-      # Nothing so far.
+        is_expected.to_not be_valid
+
+        is_expected.to have_error(playlistings: :too_short)
+      end
     end
   end
 
   context "instance" do
-    pending "#all_creators"
-
-    pending "#all_creator_ids"
+    subject { create_minimal_instance }
 
     pending "#reorder_playlistings!"
 
     pending "#sluggable_parts"
 
     pending "#alpha_parts"
+
+    describe "all-creator methods" do
+      let(:creator_1) { create(:minimal_creator, name: "One") }
+      let(:creator_2) { create(:minimal_creator, name: "Two") }
+      let(:creator_3) { create(:minimal_creator, name: "Three") }
+      let(:creator_4) { create(:minimal_creator, name: "Four") }
+
+      let(:track_1) do
+        create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+        }, contributions_attributes: {
+          "0" => attributes_for(:minimal_contribution, creator_id: creator_3.id),
+          "1" => attributes_for(:minimal_contribution, creator_id: creator_2.id),
+        })
+      end
+
+      let(:track_2) do
+        create(:minimal_work, credits_attributes: {
+          "0" => attributes_for(:minimal_credit, creator_id: creator_4.id),
+        })
+      end
+
+      let(:instance) do
+        create(:minimal_playlist, playlistings_attributes: {
+          "0" => attributes_for(:minimal_playlisting, work_id: track_1.id),
+          "1" => attributes_for(:minimal_playlisting, work_id: track_2.id),
+        })
+      end
+
+
+      describe "#all_creator_ids" do
+        subject { instance.all_creator_ids }
+
+        it { is_expected.to match_array([ creator_1.id, creator_2.id, creator_3.id, creator_4.id ]) }
+      end
+
+      describe "#all_creators" do
+        subject { instance.all_creators }
+
+        it { is_expected.to match_array([ creator_1, creator_2, creator_3, creator_4 ]) }
+        it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+      end
+    end
   end
 end

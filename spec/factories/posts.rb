@@ -69,6 +69,10 @@ FactoryBot.define do
       tag_ids { [create(:minimal_tag).id, create(:minimal_tag).id, create(:minimal_tag).id] }
     end
 
+    trait :with_published_post do
+      published
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################
