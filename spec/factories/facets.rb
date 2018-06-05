@@ -12,6 +12,10 @@ FactoryBot.define do
       medium_id { create(:minimal_medium).id }
     end
 
+    trait :with_tags do
+      category_id { create(:minimal_category, :with_tags).id }
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

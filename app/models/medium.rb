@@ -37,7 +37,7 @@ class Medium < ApplicationRecord
 
   has_many :posts, through: :works
 
-  has_many :facets, inverse_of: :medium, dependent: :destroy
+  has_many :facets, -> { order(:position) }, inverse_of: :medium, dependent: :destroy
 
   has_many :categories, through: :facets
   has_many :tags,       through: :categories

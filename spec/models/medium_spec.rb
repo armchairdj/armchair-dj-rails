@@ -86,9 +86,21 @@ RSpec.describe Medium, type: :model do
       context "for roles" do
         it { is_expected.to accept_nested_attributes_for(:roles).allow_destroy(true) }
 
-        pending "accepts"
+        describe "rejects" do
+          let(:instance) do
+            create(:minimal_medium, roles_attributes: {
+              "0" => attributes_for(:minimal_role, name: "first"),
+              "1" => attributes_for(:minimal_role, name: "second"),
+              "2" => attributes_for(:minimal_role, name: ""),
+            })
+          end
 
-        pending "rejects"
+          it "rejects blank name" do
+            instance.save!
+
+            expect(instance.roles.length).to eq(2)
+          end
+        end
 
         describe "#prepare_roles" do
           context "new instance" do
@@ -120,9 +132,21 @@ RSpec.describe Medium, type: :model do
       context "for facets" do
         it { is_expected.to accept_nested_attributes_for(:facets).allow_destroy(true) }
 
-        pending "accepts"
+        describe "rejects" do
+          let(:instance) do
+            create(:minimal_medium, facets_attributes: {
+              "0" => attributes_for(:minimal_facet, category_id: create(:minimal_category).id),
+              "1" => attributes_for(:minimal_facet, category_id: create(:minimal_category).id),
+              "2" => attributes_for(:minimal_facet, category_id: nil),
+            })
+          end
 
-        pending "rejects"
+          it "rejects blank category_id" do
+            instance.save!
+
+            expect(instance.facets.length).to eq(2)
+          end
+        end
 
         describe "#prepare_facets" do
           context "new instance" do
@@ -187,19 +211,48 @@ RSpec.describe Medium, type: :model do
   context "instance" do
     let(:instance) { create_minimal_instance }
 
-    pending "#reorder_facets!"
+    describe "#reorder_facets!" do
+      let( :instance) { create_complete_instance }
+      let(      :ids) { instance.facets.map(&:id) }
+      let( :shuffled) { ids.shuffle }
+      let(    :other) { create_complete_instance }
+      let(:other_ids) { other.facets.map(&:id) }
 
-    describe "#tags_by_category" do
+      it "reorders" do
+        instance.reorder_facets!(shuffled)
+
+        actual = instance.reload.facets
+
+        expect(actual.map(&:id)).to eq(shuffled)
+        expect(actual.map(&:position)).to eq((0..2).to_a)
+      end
+
+      it "raises if bad ids" do
+        expect {
+          instance.reorder_facets!(other_ids)
+        }.to raise_exception(ArgumentError)
+      end
+
+      it "raises if not enough ids" do
+        shuffled.shift
+
+        expect {
+          instance.reorder_facets!(shuffled)
+        }.to raise_exception(ArgumentError)
+      end
+    end
+
+    describe "#categories_with_tags" do
       let(:instance) do
-        create(:minimal_medium, :with_tags, facets_attributes: {
-          "0" => attributes_for(:facet, category_id: create(:category, name: "Genre").id),
-          "1" => attributes_for(:facet, category_id: create(:category, name: "Mood" ).id)
+        create(:minimal_medium, facets_attributes: {
+          "0" => attributes_for(:facet, category_id: create(:category, :with_tags, name: "Genre").id),
+          "1" => attributes_for(:facet, category_id: create(:category, :with_tags, name: "Mood" ).id)
         })
       end
 
       subject { instance.tags_by_category }
 
-      pending "provides a hash of options for category-specific tag dropdowns"
+      pending "TODO"
     end
 
     describe "#sluggable_parts" do

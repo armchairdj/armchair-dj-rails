@@ -65,9 +65,21 @@ RSpec.describe Playlist, type: :model do
       describe "playlistings" do
         it { is_expected.to accept_nested_attributes_for(:playlistings).allow_destroy(true) }
 
-        pending "accepts"
+        describe "rejects" do
+          let(:instance) do
+            create(:minimal_playlist, playlistings_attributes: {
+              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
+              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
+              "2" => attributes_for(:minimal_playlisting, work_id: nil),
+            })
+          end
 
-        pending "rejects"
+          it "rejects blank work_id" do
+            instance.save!
+
+            expect(instance.playlistings.length).to eq(2)
+          end
+        end
 
         describe "#prepare_playlistings" do
           context "new instance" do
@@ -118,13 +130,38 @@ RSpec.describe Playlist, type: :model do
   end
 
   context "instance" do
-    subject { create_minimal_instance }
+    let(:instance) { create_minimal_instance }
 
-    pending "#reorder_playlistings!"
+    describe "#reorder_playlistings!" do
+      let( :instance) { create_complete_instance }
+      let(      :ids) { instance.playlistings.map(&:id) }
+      let( :shuffled) { ids.shuffle }
+      let(    :other) { create_complete_instance }
+      let(:other_ids) { other.playlistings.map(&:id) }
 
-    pending "#sluggable_parts"
+      it "reorders" do
+        instance.reorder_playlistings!(shuffled)
 
-    pending "#alpha_parts"
+        actual = instance.reload.playlistings
+
+        expect(actual.map(&:id)).to eq(shuffled)
+        expect(actual.map(&:position)).to eq((1..10).to_a)
+      end
+
+      it "raises if bad ids" do
+        expect {
+          instance.reorder_playlistings!(other_ids)
+        }.to raise_exception(ArgumentError)
+      end
+
+      it "raises if not enough ids" do
+        shuffled.shift
+
+        expect {
+          instance.reorder_playlistings!(shuffled)
+        }.to raise_exception(ArgumentError)
+      end
+    end
 
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
@@ -155,7 +192,6 @@ RSpec.describe Playlist, type: :model do
         })
       end
 
-
       describe "#all_creator_ids" do
         subject { instance.all_creator_ids }
 
@@ -168,6 +204,22 @@ RSpec.describe Playlist, type: :model do
         it { is_expected.to match_array([ creator_1, creator_2, creator_3, creator_4 ]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
       end
+    end
+
+    let(     :category) { create(:category, name: "Category") }
+    let(:uncategorized) { create(:tag, name: "Uncategorized") }
+    let(  :categorized) { create(:tag, name: "Categorized", category_id: category.id) }
+
+    describe "#sluggable_parts" do
+      subject { instance.sluggable_parts }
+
+      it { is_expected.to eq([instance.title]) }
+    end
+
+    describe "#alpha_parts" do
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([instance.title]) }
     end
   end
 end

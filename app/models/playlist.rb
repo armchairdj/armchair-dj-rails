@@ -29,7 +29,7 @@ class Playlist < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :playlistings, inverse_of: :playlist, dependent: :destroy
+  has_many :playlistings, -> { order(:position) }, inverse_of: :playlist, dependent: :destroy
 
   has_many :works, through: :playlistings
 
