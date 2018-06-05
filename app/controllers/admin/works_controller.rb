@@ -125,7 +125,7 @@ private
       @work.prepare_credits
       @work.prepare_contributions
 
-      @categories = @work.medium.tags_by_category
+      @categories = @work.medium.category_tag_options
       @creators   = Creator.all.alpha
       @roles      = Role.options_for(@work.medium)
       @works      = @work.grouped_parent_dropdown_options

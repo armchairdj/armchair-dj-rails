@@ -72,7 +72,17 @@ RSpec.describe Medium, type: :model do
 
     it { is_expected.to have_many(:posts).through(:works) }
 
-    it { is_expected.to have_many(:facets) }
+    describe "facets" do
+      let(:instance) { create_complete_instance }
+
+      it { is_expected.to have_many(:facets) }
+
+      describe "ordering" do
+        subject { instance.facets.map(&:position) }
+
+        it { is_expected.to eq((0..2).to_a) }
+      end
+    end
 
     it { is_expected.to have_many(:categories).through(:facets) }
 
@@ -162,7 +172,7 @@ RSpec.describe Medium, type: :model do
           end
 
           context "saved instance with saved facets" do
-            subject { create(:minimal_medium, :with_existing_category) }
+            subject { create(:minimal_medium, :with_facet) }
 
             it "builds 10 more facets" do
               expect(subject.facets).to have(1).items
@@ -242,17 +252,26 @@ RSpec.describe Medium, type: :model do
       end
     end
 
-    describe "#categories_with_tags" do
+    describe "#category_tag_options" do
+      let( :mood) { create(:category, :with_tags, name: "Mood" ) }
+      let(:genre) { create(:category, :with_tags, name: "Genre") }
+
       let(:instance) do
-        create(:minimal_medium, facets_attributes: {
-          "0" => attributes_for(:facet, category_id: create(:category, :with_tags, name: "Genre").id),
-          "1" => attributes_for(:facet, category_id: create(:category, :with_tags, name: "Mood" ).id)
-        })
+        instance = create(:minimal_medium)
+
+        instance.facets.create(category_id: genre.id)
+        instance.facets.create(category_id:  mood.id)
+
+        instance.reload
       end
 
-      subject { instance.tags_by_category }
+      subject { instance.category_tag_options }
 
-      pending "TODO"
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+
+      it { is_expected.to eager_load(:tags) }
+
+      it { is_expected.to eq([genre, mood]) }
     end
 
     describe "#sluggable_parts" do

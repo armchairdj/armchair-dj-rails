@@ -99,12 +99,8 @@ class Medium < ApplicationRecord
     end
   end
 
-  def tags_by_category
-    available = categories.includes(:tags)
-
-    return [] if available.empty?
-
-    available.to_a
+  def category_tag_options
+    categories.includes(:tags)
   end
 
   def sluggable_parts

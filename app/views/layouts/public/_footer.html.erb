@@ -12,10 +12,12 @@
 
       <%= content_tag(:ul, class: "arrowed") do %>
         <% if user_signed_in? %>
-          <%= content_tag(:li, link_to("Settings", settings_path            )) %>
-          <%= content_tag(:li, link_to("Password", settings_password_path   )) %>
-          <%= content_tag(:li, link_to("Admin",    admin_posts_path         )) if current_user.can_write? %>
-          <%= content_tag(:li, link_to("Log Out",  destroy_user_session_path)) %>
+          <% if current_user.can_write? %>
+            <%= content_tag(:li, link_to("Admin",  admin_posts_path          )) %>
+          <% end %>
+          <%= content_tag(:li, link_to("Settings", settings_path             )) %>
+          <%= content_tag(:li, link_to("Password", settings_password_path    )) %>
+          <%= content_tag(:li, link_to("Log Out",  destroy_user_session_path )) %>
         <% else %>
           <%= content_tag(:li, link_to("Register", new_user_registration_path)) %>
           <%= content_tag(:li, link_to("Log In",   new_user_session_path     )) %>

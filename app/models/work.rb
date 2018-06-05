@@ -99,15 +99,15 @@ class Work < ApplicationRecord
   validate_nested_uniqueness_of :credits,       uniq_attr: :creator_id
   validate_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
 
-  validate { only_categorized_tags }
+  validate { only_tags_with_category }
 
-  def only_categorized_tags
+  def only_tags_with_category
     return if tags.where(category_id: nil).empty?
 
-    self.errors.add(:tag_ids, :uncategorized_tags)
+    self.errors.add(:tag_ids, :has_uncategorized_tags)
   end
 
-  private :only_categorized_tags
+  private :only_tags_with_category
 
   #############################################################################
   # HOOKS.
@@ -146,9 +146,8 @@ class Work < ApplicationRecord
   #############################################################################
 
   def tags_by_category(for_site: false)
-    viewable_tags = for_site ? self.tags.for_site : self.tags
-
-    collection = viewable_tags.alpha.includes(:category)
+    collection = for_site ? self.tags.for_site : self.tags
+    collection = collection.alpha.includes(:category)
 
     return [] if collection.empty?
 
@@ -199,6 +198,15 @@ class Work < ApplicationRecord
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+  end
+
+  def update_counts_for_all
+    self.update_counts
+
+    medium.update_counts
+    creators.each(    &:update_counts)
+    contributors.each(&:update_counts)
+    tags.each(        &:update_counts)
   end
 
   def sluggable_parts

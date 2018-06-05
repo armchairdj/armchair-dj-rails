@@ -87,6 +87,12 @@ class Playlist < ApplicationRecord
     end
   end
 
+  def update_counts_for_all
+    self.update_counts
+
+    works.each(&:update_counts_for_all)
+  end
+
   def sluggable_parts
     [title]
   end

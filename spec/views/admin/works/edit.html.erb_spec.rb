@@ -18,7 +18,7 @@ RSpec.describe "admin/works/edit", type: :view do
     @creators    = assign(:creators,   Creator.all.alpha                    )
     @media       = assign(:media,      Medium.all.alpha                     )
     @roles       = assign(:roles,      Role.all.alpha                       )
-    @categories  = assign(:categories, @work.medium.tags_by_category        )
+    @categories  = assign(:categories, @work.medium.category_tag_options        )
     @works       = assign(:works,      @work.grouped_parent_dropdown_options)
   end
 

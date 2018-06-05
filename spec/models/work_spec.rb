@@ -3,11 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Work, type: :model do
-
-
-
-  pending "#tags_by_category(for_site: true)"
-
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -265,7 +260,7 @@ RSpec.describe Work, type: :model do
         end
       end
 
-      describe "#only_categorized_tags" do
+      describe "#only_tags_with_category" do
         let(:tag_for_post) { create(:tag_for_post) }
         let(:tag_for_work) { create(:tag_for_work) }
 
@@ -275,7 +270,7 @@ RSpec.describe Work, type: :model do
           it "allows categorized tags" do
             subject.update(tag_ids: [tag_for_work.id])
 
-            is_expected.to_not have_error(tag_ids: :uncategorized_tags)
+            is_expected.to_not have_error(tag_ids: :has_uncategorized_tags)
           end
         end
 
@@ -283,7 +278,7 @@ RSpec.describe Work, type: :model do
           it "disallows uncategorized tags" do
             subject.update(tag_ids: [tag_for_post.id])
 
-            is_expected.to have_error(tag_ids: :uncategorized_tags)
+            is_expected.to have_error(tag_ids: :has_uncategorized_tags)
           end
         end
       end
@@ -347,6 +342,8 @@ RSpec.describe Work, type: :model do
         it "groups into 2D array" do
           expect(subject.tags_by_category).to eq([])
         end
+        
+        pending "#tags_by_category(for_site: true)"
       end
 
       context "behavior" do

@@ -109,7 +109,7 @@ en:
             publish_on:
               blank: "Please choose a publication date to schedule this review."
             tag_ids:
-              uncategorized_tags: "Work tags cannot be categorized."
+              has_categorized_tags: "Post tags cannot be categorized."
         tag:
           attributes:
             slug:
@@ -123,7 +123,7 @@ en:
             slug:
               locked: "You cannot change the slug on a work with published posts."
             tag_ids:
-              uncategorized_tags: "Work tags must be categorized."
+              has_uncategorized_tags: "Work tags must be categorized."
         user:
           attributes:
             base:

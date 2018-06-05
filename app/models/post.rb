@@ -76,7 +76,6 @@ class Post < ApplicationRecord
   has_many :contributors,  through: :work
   has_many :work_tags,     through: :work, class_name: "Tag", source: :tags
 
-
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
@@ -127,15 +126,15 @@ class Post < ApplicationRecord
 
   private :has_title_or_postable
 
-  validate { only_uncategorized_tags }
+  validate { only_bare_tags }
 
-  def only_uncategorized_tags
+  def only_bare_tags
     return if tags.where.not(category_id: nil).empty?
 
-    self.errors.add(:tag_ids, :categorized_tags)
+    self.errors.add(:tag_ids, :has_categorized_tags)
   end
 
-  private :only_uncategorized_tags
+  private :only_bare_tags
 
   #############################################################################
   # HOOKS.
@@ -158,28 +157,28 @@ class Post < ApplicationRecord
     state :published
 
     event(:schedule,
-      after: :update_counts_for_descendents
+      after: :update_counts_for_all
     ) do
       transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
     end
 
     event(:unschedule,
       before: :clear_publish_on,
-      after:  :update_counts_for_descendents
+      after:  :update_counts_for_all
     ) do
       transitions from: :scheduled, to: :draft
     end
 
     event(:publish,
       before: :set_published_at,
-      after:  :update_counts_for_descendents
+      after:  :update_counts_for_all
     ) do
       transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
     end
 
     event(:unpublish,
       before: :clear_published_at,
-      after:  :update_counts_for_descendents
+      after:  :update_counts_for_all
     ) do
       transitions from: :published, to: :draft
     end
@@ -351,20 +350,15 @@ private
     self.publish_on = temp
   end
 
-  def update_counts_for_descendents
+  def update_counts_for_all
     author.update_counts
 
     tags.each { |t| t.update_counts }
 
     if work.present?
-      work.update_counts
-      medium.update_counts
-      contributors.each { |c| c.update_counts }
-      creators.each     { |c| c.update_counts }
-      work_tags.each    { |t| t.update_counts }
+      work.update_counts_for_all
     elsif playlist.present?
-      playlist.update_counts
-      # TODO update playlist descendent counts
+      playlist.update_counts_for_all
     end
   end
 end

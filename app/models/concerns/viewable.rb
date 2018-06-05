@@ -23,9 +23,13 @@ module Viewable
     refresh_counts && save
   end
 
+  def all_posts
+    posts
+  end
+
   def refresh_counts
-    self.unviewable_post_count = posts.not_published.count
-    self.viewable_post_count     = posts.published.count
+    self.unviewable_post_count = all_posts.not_published.count
+    self.viewable_post_count   = all_posts.published.count
 
     unviewable_post_count_changed? || viewable_post_count_changed?
   end

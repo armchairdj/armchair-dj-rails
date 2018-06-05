@@ -27,22 +27,22 @@ FactoryBot.define do
       } }
     end
 
-    trait :with_existing_category do
+    trait :with_facet do
       facets_attributes { {
-        "0" => attributes_for(:facet, :with_existing_category)
+        "0" => attributes_for(:minimal_facet)
       } }
     end
 
-    trait :with_categories do
+    trait :with_facets do
       facets_attributes { {
-        "0" => attributes_for(:facet, :with_existing_category),
-        "1" => attributes_for(:facet, :with_existing_category),
-        "2" => attributes_for(:facet, :with_existing_category),
+        "0" => attributes_for(:minimal_facet),
+        "1" => attributes_for(:minimal_facet),
+        "2" => attributes_for(:minimal_facet),
       } }
     end
 
     trait :with_tags do
-      with_categories
+      with_facets
 
       after(:create) do |medium|
         medium.categories.each do |category|

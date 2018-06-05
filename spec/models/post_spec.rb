@@ -358,7 +358,7 @@ RSpec.describe Post, type: :model do
         end
       end
 
-      describe "#only_uncategorized_tags" do
+      describe "#only_bare_tags" do
         let(:tag_for_post) { create(:tag_for_post) }
         let(:tag_for_work) { create(:tag_for_work) }
 
@@ -368,7 +368,7 @@ RSpec.describe Post, type: :model do
           it "allows uncategorized tags" do
             subject.update(tag_ids: [tag_for_post.id])
 
-            expect(subject).to_not have_error(tag_ids: :categorized_tags)
+            expect(subject).to_not have_error(tag_ids: :has_categorized_tags)
           end
         end
 
@@ -376,7 +376,7 @@ RSpec.describe Post, type: :model do
           it "disallows categorized tags" do
             subject.update(tag_ids: [tag_for_work.id])
 
-            expect(subject).to have_error(tag_ids: :categorized_tags)
+            expect(subject).to have_error(tag_ids: :has_categorized_tags)
           end
         end
       end
@@ -410,9 +410,9 @@ RSpec.describe Post, type: :model do
           end
 
           describe "after" do
-            it "calls #update_counts_for_descendents" do
-               allow(draft).to receive(:update_counts_for_descendents).and_call_original
-              expect(draft).to receive(:update_counts_for_descendents)
+            it "calls #update_counts_for_all" do
+               allow(draft).to receive(:update_counts_for_all).and_call_original
+              expect(draft).to receive(:update_counts_for_all)
 
               draft.publish_on = 3.weeks.from_now
 
@@ -434,9 +434,9 @@ RSpec.describe Post, type: :model do
           end
 
           describe "after" do
-            it "calls #update_counts_for_descendents" do
-               allow(scheduled).to receive(:update_counts_for_descendents).and_call_original
-              expect(scheduled).to receive(:update_counts_for_descendents)
+            it "calls #update_counts_for_all" do
+               allow(scheduled).to receive(:update_counts_for_all).and_call_original
+              expect(scheduled).to receive(:update_counts_for_all)
 
               expect(scheduled.unschedule!).to eq(true)
             end
@@ -465,9 +465,9 @@ RSpec.describe Post, type: :model do
           end
 
           describe "after" do
-            it "calls #update_counts_for_descendents" do
-               allow(draft).to receive(:update_counts_for_descendents).and_call_original
-              expect(draft).to receive(:update_counts_for_descendents)
+            it "calls #update_counts_for_all" do
+               allow(draft).to receive(:update_counts_for_all).and_call_original
+              expect(draft).to receive(:update_counts_for_all)
 
               expect(draft.publish!).to eq(true)
             end
@@ -487,9 +487,9 @@ RSpec.describe Post, type: :model do
           end
 
           describe "after" do
-            it "calls #update_counts_for_descendents" do
-               allow(published).to receive(:update_counts_for_descendents).and_call_original
-              expect(published).to receive(:update_counts_for_descendents)
+            it "calls #update_counts_for_all" do
+               allow(published).to receive(:update_counts_for_all).and_call_original
+              expect(published).to receive(:update_counts_for_all)
 
               expect(published.unpublish!).to eq(true)
             end
@@ -680,51 +680,46 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        describe "#update_counts_for_descendents" do
+        describe "#update_counts_for_all" do
           context "review" do
-            let(        :post) { create(:unity_album_review) }
-            let(      :author) { double }
-            let(        :tags) { [double, double] }
-            let(        :work) { double }
-            let(   :work_tags) { [double, double] }
-            let(      :medium) { double }
-            let(    :creators) { [double, double] }
-            let(:contributors) { [double, double] }
+            let(       :author) { create(:writer) }
+            let(    :creator_1) { create(:minimal_creator) }
+            let(    :creator_2) { create(:minimal_creator) }
+            let(:contributor_1) { create(:minimal_creator) }
+            let(:contributor_2) { create(:minimal_creator) }
+            let(     :category) { create(:minimal_category) }
+            let( :category_tag) { create(:minimal_tag, category_id: category.id) }
+            let(          :tag) { create(:minimal_tag) }
+            let(       :medium) { create(:minimal_medium) }
+            let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
 
-            it "updates counts for all author, tags and all work-related descendents" do
-              allow(post).to receive(      :author).and_return(author      )
-              allow(post).to receive(        :tags).and_return(tags        )
-              allow(post).to receive(        :work).and_return(work        )
-              allow(post).to receive(   :work_tags).and_return(work_tags   )
-              allow(post).to receive(      :medium).and_return(medium      )
-              allow(post).to receive(    :creators).and_return(creators    )
-              allow(post).to receive(:contributors).and_return(contributors)
+            let(:work) do
+              create(:minimal_work, medium_id: medium.id, tag_ids: [category_tag.id],
+                credits_attributes: {
+                  "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
+                  "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+                },
+                contributions_attributes: {
+                  "0" => attributes_for(:minimal_contribution, creator_id: contributor_1.id),
+                  "1" => attributes_for(:minimal_contribution, creator_id: contributor_2.id),
+                }
+              )
+            end
 
-              allow(            author).to receive(:update_counts)
-              allow(        tags.first).to receive(:update_counts)
-              allow(         tags.last).to receive(:update_counts)
-              allow(              work).to receive(:update_counts)
-              allow(   work_tags.first).to receive(:update_counts)
-              allow(    work_tags.last).to receive(:update_counts)
-              allow(            medium).to receive(:update_counts)
-              allow(    creators.first).to receive(:update_counts)
-              allow(     creators.last).to receive(:update_counts)
-              allow(contributors.first).to receive(:update_counts)
-              allow( contributors.last).to receive(:update_counts)
+            let(:post) { create(:review, :draft, author_id: author.id, work_id: work.id, tag_ids: [tag.id]) }
 
-              expect(            author).to receive(:update_counts).once
-              expect(        tags.first).to receive(:update_counts).once
-              expect(         tags.last).to receive(:update_counts).once
-              expect(              work).to receive(:update_counts).once
-              expect(   work_tags.first).to receive(:update_counts).once
-              expect(    work_tags.last).to receive(:update_counts).once
-              expect(            medium).to receive(:update_counts).once
-              expect(    creators.first).to receive(:update_counts).once
-              expect(     creators.last).to receive(:update_counts).once
-              expect(contributors.first).to receive(:update_counts).once
-              expect( contributors.last).to receive(:update_counts).once
+            it "updates counts for all descendents" do
+              post.update_and_publish(body: "ready to publish!")
 
-              post.send(:update_counts_for_descendents)
+              expect(       author.reload.viewable_post_count).to eq(1)
+              expect(          tag.reload.viewable_post_count).to eq(1)
+              expect(         work.reload.viewable_post_count).to eq(1)
+              expect(       medium.reload.viewable_post_count).to eq(1)
+              expect( category_tag.reload.viewable_post_count).to eq(1)
+              expect(    creator_1.reload.viewable_post_count).to eq(1)
+              expect(    creator_1.reload.viewable_post_count).to eq(1)
+              expect(contributor_1.reload.viewable_post_count).to eq(1)
+              expect(contributor_2.reload.viewable_post_count).to eq(1)
             end
           end
 
@@ -745,7 +740,7 @@ RSpec.describe Post, type: :model do
               expect(tags.first).to receive(:update_counts).once
               expect( tags.last).to receive(:update_counts).once
 
-              post.send(:update_counts_for_descendents)
+              post.send(:update_counts_for_all)
             end
           end
         end

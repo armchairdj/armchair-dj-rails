@@ -50,7 +50,17 @@ RSpec.describe Playlist, type: :model do
   end
 
   context "associations" do
-    it { is_expected.to have_many(:playlistings) }
+    describe "playlistings" do
+      let(:instance) { create_complete_instance }
+
+      it { is_expected.to have_many(:playlistings) }
+
+      describe "ordering" do
+        subject { instance.playlistings.map(&:position) }
+
+        it { is_expected.to eq((1..10).to_a) }
+      end
+    end
 
     it { is_expected.to have_many(:works).through(:playlistings) }
 

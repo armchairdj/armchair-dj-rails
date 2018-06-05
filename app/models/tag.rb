@@ -39,12 +39,12 @@ class Tag < ApplicationRecord
 
   belongs_to :category, optional: true
 
-  has_and_belongs_to_many :posts
-
   has_and_belongs_to_many :works
 
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
+
+  has_and_belongs_to_many :posts
 
   has_many :reviews, through: :works, class_name: "Post", source: :posts
 
@@ -73,10 +73,7 @@ class Tag < ApplicationRecord
   #############################################################################
 
   def all_posts
-    indirect_ids = Post.select("id").joins(work: :tags).where("tags_works.tag_id = ?", self.id)
-      direct_ids = Post.select("id").joins(      :tags).where("posts_tags.tag_id = ?", self.id)
-
-    Post.where(id: [indirect_ids, direct_ids].flatten.uniq)
+    Post.where(id: (reviews.map(&:id) + posts.map(&:id)).uniq)
   end
 
   def categorized?

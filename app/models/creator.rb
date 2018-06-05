@@ -267,6 +267,10 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def all_posts
+    Post.where(id: (contributed_posts.map(&:id) + posts.map(&:id)).uniq)
+  end
+
   def display_roles(for_site: false)
     displayable_media = for_site ? self.media.for_site             : self.media
     displayable_roles = for_site ? self.viewable_contributed_roles : self.contributed_roles
