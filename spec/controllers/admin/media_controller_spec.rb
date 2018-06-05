@@ -40,11 +40,9 @@ RSpec.describe Admin::MediaController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_valid_params) { attributes_for(:complete_medium) }
-      let(:min_valid_params) { attributes_for(:minimal_medium) }
-      let(  :invalid_params) { attributes_for(:minimal_medium).except(:name) }
-
       context "with min valid params" do
+        let(:min_valid_params) { attributes_for(:minimal_medium) }
+
         it "creates a new Medium" do
           expect {
             post :create, params: { medium: min_valid_params }
@@ -67,6 +65,8 @@ RSpec.describe Admin::MediaController, type: :controller do
       end
 
       context "with max valid params" do
+        let(:max_valid_params) { attributes_for(:complete_medium) }
+
         it "creates a new Medium" do
           expect {
             post :create, params: { medium: max_valid_params }
@@ -89,6 +89,8 @@ RSpec.describe Admin::MediaController, type: :controller do
       end
 
       context "with invalid params" do
+        let(:invalid_params) { attributes_for(:minimal_medium).except(:name) }
+
         it "renders new" do
           post :create, params: { medium: invalid_params }
 

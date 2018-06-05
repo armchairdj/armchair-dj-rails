@@ -338,14 +338,6 @@ RSpec.describe Work, type: :model do
         end
       end
 
-      describe "#tags_by_category" do
-        it "groups into 2D array" do
-          expect(subject.tags_by_category).to eq([])
-        end
-        
-        pending "#tags_by_category(for_site: true)"
-      end
-
       context "behavior" do
         let!( :trip_hop) { create(:tag, category: genre, name: "Trip-Hop" ) }
         let!(:downtempo) { create(:tag, category: genre, name: "Downtempo") }

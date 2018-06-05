@@ -8,12 +8,40 @@ RSpec.describe Role, type: :model do
   end
 
   context "class" do
-    pending "self#options_for"
+    describe "self#options_for" do
+      let(:medium_1) { create(:complete_medium) }
+      let(:medium_2) { create(:complete_medium) }
+
+      subject { described_class.options_for(medium_1) }
+
+      it { is_expected.to eq(medium_1.roles.alpha) }
+    end
   end
 
   context "scope-related" do
-    pending "self#eager"
-    pending "self#for_admin"
+    context "basics" do
+      let!( :first) { create(:minimal_role, name: "First" ) }
+      let!(:middle) { create(:minimal_role, name: "Middle") }
+      let!(  :last) { create(:minimal_role, name: "Last"  ) }
+
+      let(:ids) { [first, middle, last].map(&:id) }
+
+      describe "self#eager" do
+        subject { described_class.eager }
+
+        it { is_expected.to eager_load(:medium, :contributions, :works, :posts) }
+      end
+
+      describe "self#for_admin" do
+        subject { described_class.for_admin.where(id: ids) }
+
+        specify "includes all, unsorted" do
+          is_expected.to match_array([first, middle, last])
+        end
+
+        it { is_expected.to eager_load(:medium, :contributions, :works, :posts) }
+      end
+    end
   end
 
   context "associations" do

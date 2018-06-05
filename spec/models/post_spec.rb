@@ -706,10 +706,10 @@ RSpec.describe Post, type: :model do
               )
             end
 
-            let(:post) { create(:review, :draft, author_id: author.id, work_id: work.id, tag_ids: [tag.id]) }
+            let(:post) { create(:review, :draft, :with_body, author_id: author.id, work_id: work.id, tag_ids: [tag.id]) }
 
             it "updates counts for all descendents" do
-              post.update_and_publish(body: "ready to publish!")
+              post.publish!
 
               expect(       author.reload.viewable_post_count).to eq(1)
               expect(          tag.reload.viewable_post_count).to eq(1)

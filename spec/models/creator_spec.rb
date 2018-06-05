@@ -812,10 +812,18 @@ RSpec.describe Creator, type: :model do
       let!(:contrib_3) { subject.contributions.create(work: book_work, role: editor) }
       let!(:contrib_4) { subject.contributions.create(work: book_work, role: author) }
 
+      let!(:review) { create(:review, :with_body, :published, work_id: book_work.id) }
+
       it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
         expect(subject.display_roles).to eq({
           "Book"    => ["Author",  "Creator",  "Editor"    ],
           "TV Show" => ["Creator", "Director", "Showrunner"]
+        })
+      end
+
+      it "takes a for_site option that excludes unviewable roles" do
+        expect(subject.display_roles(for_site: true)).to eq({
+          "Book"    => ["Author", "Creator", "Editor"]
         })
       end
     end

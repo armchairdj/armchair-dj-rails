@@ -5,7 +5,7 @@ require "rspec/expectations"
 RSpec::Matchers.define :prepare_the_work_dropdowns do
   match do
     expect(assigns(:media     )).to be_a_kind_of(ActiveRecord::Relation)
-    expect(assigns(:categories)).to be_a_kind_of(Array)
+    expect(assigns(:categories)).to be_a_kind_of(ActiveRecord::Relation)
     expect(assigns(:creators  )).to be_a_kind_of(ActiveRecord::Relation)
     expect(assigns(:roles     )).to be_a_kind_of(ActiveRecord::Relation)
   end

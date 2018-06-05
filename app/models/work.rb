@@ -145,11 +145,8 @@ class Work < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def tags_by_category(for_site: false)
-    collection = for_site ? self.tags.for_site : self.tags
-    collection = collection.alpha.includes(:category)
-
-    return [] if collection.empty?
+  def tags_by_category
+    collection = self.tags.alpha.includes(:category)
 
     collection.group_by{ |t| t.category }.to_a.sort_by(&:first)
   end
