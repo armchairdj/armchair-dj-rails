@@ -2,10 +2,19 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "an_acts_as_list_model" do
+RSpec.shared_examples "an_acts_as_list_model" do |top_of_list, scope|
   context "configuration" do
-    pending "respects scope"
-    pending "respects top_of_list"
+    # :one and :two defined by caller as scoped acts_as_list_collections
+
+    it "respects scope" do
+      expect(one.maximum(:position)).to eq(top_of_list == 1 ? one.length : one.length - 1)
+      expect(two.maximum(:position)).to eq(top_of_list == 1 ? one.length : one.length - 1)
+    end
+
+    it "respects top_of_list" do
+      expect(one.minimum(:position)).to eq(top_of_list)
+      expect(two.minimum(:position)).to eq(top_of_list)
+    end
   end
 
   context "class" do

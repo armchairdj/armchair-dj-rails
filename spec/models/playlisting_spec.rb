@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.describe Playlisting, type: :model do
   context "concerns" do
-    it_behaves_like "an_acts_as_list_model"
+    it_behaves_like "an_acts_as_list_model", 1, :playlist do
+      let(:one) { create(:complete_playlist).playlistings }
+      let(:two) { create(:complete_playlist).playlistings }
+    end
   end
 
   context "class" do

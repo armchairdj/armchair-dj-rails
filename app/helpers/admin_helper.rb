@@ -221,7 +221,7 @@ module AdminHelper
 
   def sortable_th(sorts, name, text: nil, **opts)
     props   = sorts[name]
-    text    = content_tag(:span, text || name)
+    text    = text || content_tag(:span, name)
     classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
 
     content_tag(:th, link_to(text, props[:url], class: classes), opts)

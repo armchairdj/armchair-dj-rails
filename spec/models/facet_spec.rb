@@ -2,7 +2,11 @@ require "rails_helper"
 
 RSpec.describe Facet, type: :model do
   context "concerns" do
-    it_behaves_like "an_acts_as_list_model"
+    it_behaves_like "an_acts_as_list_model", 0, :medium do
+      let(:one) { create(:complete_medium).facets }
+      let(:two) { create(:complete_medium).facets }
+    end
+
     it_behaves_like "an_application_record"
   end
 

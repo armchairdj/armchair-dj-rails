@@ -15,9 +15,36 @@ RSpec.describe Tag, type: :model do
 
   context "scope-related" do
     context "basics" do
-      pending "self#eager"
-      pending "self#for_admin"
-      pending "self#for_site"
+      let(        :uv) { create(:minimal_tag, :with_published_post,  name: "UV") }
+      let(        :cv) { create(:minimal_tag, :with_viewable_work,   name: "CV") }
+      let(        :uu) { create(:minimal_tag, :with_draft_post,      name: "UU") }
+      let(        :cu) { create(:minimal_tag, :with_unviewable_work, name: "CU") }
+      let(       :ids) { [cu, cv, uu, uv].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+
+      describe "self#eager" do
+        subject { collection.eager }
+
+        it { is_expected.to eager_load(:category) }
+        it { is_expected.to eager_load(:works   ) }
+        it { is_expected.to eager_load(:posts   ) }
+
+        it { is_expected.to contain_exactly(cu, cv, uu, uv) }
+      end
+
+      describe "self#for_admin" do
+        subject { collection.for_admin }
+
+        it { is_expected.to contain_exactly(cu, cv, uu, uv) }
+        it { is_expected.to eager_load(:category, :works, :posts) }
+      end
+
+      describe "self#for_site" do
+        subject { collection.for_site }
+
+        it { is_expected.to eq([cv, uv]) }
+        it { is_expected.to eager_load(:category, :works, :posts) }
+      end
     end
 
     context "by category" do

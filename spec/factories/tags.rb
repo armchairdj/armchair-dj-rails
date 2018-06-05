@@ -29,25 +29,9 @@ FactoryBot.define do
       association :category, factory: :year_category
     end
 
-    trait :with_viewable_work do
-      with_existing_category
-
-      after(:create) do |tag|
-        medium = create(:minimal_medium, facets_attributes: {
-          "0" => attributes_for(:facet, category_id: tag.category.id)
-        })
-
-        work = create(:work, :with_title, :with_one_credit, medium_id: medium.id, tag_ids: [tag.id])
-
-        post = create(:review, work_id: work.id)
-
-        tag.reload
-      end
-    end
-
     trait :with_draft_post do
       after(:create) do |tag|
-        create(:standalone_post, :draft, body: "body", tag_ids: [tag.id])
+        create(:standalone_post, :draft, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -55,7 +39,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |tag|
-        create(:standalone_post, :scheduled, body: "body", tag_ids: [tag.id])
+        create(:standalone_post, :scheduled, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -63,7 +47,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |tag|
-        create(:standalone_post, :published, body: "body", tag_ids: [tag.id])
+        create(:standalone_post, :published, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -73,6 +57,30 @@ FactoryBot.define do
       with_draft_post
       with_scheduled_post
       with_published_post
+    end
+
+    trait :with_unviewable_work do
+      with_existing_category
+
+      after(:create) do |tag|
+        work = create(:minimal_work, tag_ids: [tag.id])
+
+        create(:review, :draft, :with_body, work_id: work.id)
+
+        tag.reload
+      end
+    end
+
+    trait :with_viewable_work do
+      with_existing_category
+
+      after(:create) do |tag|
+        work = create(:minimal_work, tag_ids: [tag.id])
+
+        create(:review, :published, :with_body, work_id: work.id)
+
+        tag.reload
+      end
     end
 
     ###########################################################################
@@ -87,14 +95,14 @@ FactoryBot.define do
       with_name
     end
 
-    factory :complete_tag do
-      with_name
+    factory :complete_tag, parent: :minimal_tag do
       with_summary
-      with_existing_category
     end
 
     factory :tag_for_post, parent: :minimal_tag do; end
 
-    factory :tag_for_work, parent: :complete_tag do; end
+    factory :tag_for_work, parent: :minimal_tag do
+      with_existing_category
+    end
   end
 end

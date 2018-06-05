@@ -49,11 +49,14 @@ RSpec.shared_examples "a_workable_model" do
       describe "self#for_site" do
         subject { described_class.for_site.where(id: ids) }
 
+        before(:each) do
+           allow(described_class).to receive(:alpha).and_call_original
+          expect(described_class).to receive(:alpha)
+        end
+
         it { is_expected.to contain_exactly(with_published) }
 
         it { is_expected.to eager_load(:work, :creator) }
-
-        pending "alpha"
       end
     end
 

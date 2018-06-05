@@ -70,11 +70,11 @@ RSpec.describe Post, type: :model do
 
   context "scope-related" do
     let!(:draft_standalone    ) { create(:standalone_post, :draft    ) }
-    let!(:draft_review        ) { create(:review,          :draft    ) }
     let!(:scheduled_standalone) { create(:standalone_post, :scheduled) }
-    let!(:scheduled_review    ) { create(:review,          :scheduled) }
     let!(:published_standalone) { create(:standalone_post, :published) }
     let!(:published_review    ) { create(:review,          :published) }
+    let!(:scheduled_review    ) { create(:review,          :scheduled) }
+    let!(:draft_review        ) { create(:review,          :draft    ) }
 
     context "basics" do
       describe "self#eager" do
@@ -86,17 +86,28 @@ RSpec.describe Post, type: :model do
       describe "self#reverse_cron" do
         subject { described_class.reverse_cron }
 
-        pending "publish_on, updated_at"
+        before(:each) do
+          draft_review.update_column         :updated_at, Time.now
+          draft_standalone.update_column     :updated_at, 1.week.ago
 
-        specify do
-          is_expected.to contain_exactly(
-            draft_standalone,
+          scheduled_standalone.update_column :publish_on, 3.weeks.from_now
+          scheduled_review.update_column     :publish_on, 2.weeks.from_now
+
+          published_review.update_column     :published_at, 2.weeks.ago
+          published_standalone.update_column :published_at, 3.weeks.ago
+        end
+
+        it "includes all posts ordered descending by published_at, published_on, updated_at" do
+          expected = [
             draft_review,
+            draft_standalone,
             scheduled_standalone,
             scheduled_review,
             published_review,
-            published_standalone
-          )
+            published_standalone,
+          ]
+
+          is_expected.to eq(expected)
         end
 
         it { is_expected.to_not eager_load(:medium, :work, :creators, :author) }
