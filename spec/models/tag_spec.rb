@@ -48,19 +48,91 @@ RSpec.describe Tag, type: :model do
     end
 
     context "by category" do
-      pending "self#categorized"
-      pending "self#uncategorized"
-      pending "self#for_posts"
-      pending "self#for_works"
-      pending "categorized?"
-      pending "uncategorized?"
+      let(:for_post_1) { create(:tag_for_post, name: "Z") }
+      let(:for_post_2) { create(:tag_for_post, name: "A") }
+      let(:for_work_1) { create(:tag_for_work, name: "X", category_name: "Foo") }
+      let(:for_work_2) { create(:tag_for_work, name: "X", category_name: "Bar") }
+      let(       :ids) { [for_post_1, for_post_2, for_work_1, for_work_2].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+
+      describe "self#categorized" do
+        subject { collection.categorized }
+
+        it { is_expected.to_not eager_load(:category, :works, :posts) }
+
+        it { is_expected.to match_array([for_work_1, for_work_2]) }
+      end
+
+      describe "self#uncategorized" do
+        subject { collection.uncategorized }
+
+        it { is_expected.to_not eager_load(:category, :works, :posts) }
+
+        it { is_expected.to match_array([for_post_1, for_post_2]) }
+      end
+
+      describe "self#for_posts" do
+        subject { collection.for_posts }
+
+        it { is_expected.to eager_load(:category, :works, :posts) }
+
+        it { is_expected.to eq([for_post_2, for_post_1]) }
+      end
+
+      describe "self#for_works" do
+        subject { collection.for_works }
+
+        it { is_expected.to eager_load(:category, :works, :posts) }
+
+        it { is_expected.to eq([for_work_2, for_work_1]) }
+      end
+
+      describe "categorized?" do
+        specify { expect(for_post_1.categorized?).to eq(false) }
+        specify { expect(for_post_2.categorized?).to eq(false) }
+        specify { expect(for_work_1.categorized?).to eq(true ) }
+        specify { expect(for_work_2.categorized?).to eq(true ) }
+      end
+
+      describe "uncategorized?" do
+        specify { expect(for_post_1.uncategorized?).to eq(true ) }
+        specify { expect(for_post_2.uncategorized?).to eq(true ) }
+        specify { expect(for_work_1.uncategorized?).to eq(false) }
+        specify { expect(for_work_2.uncategorized?).to eq(false) }
+      end
     end
 
     context "by format" do
-      pending "self#string"
-      pending "self#year"
-      pending "string?"
-      pending "year?"
+      let(    :string) { create(:string_tag) }
+      let(      :year) { create(:year_tag) }
+      let(       :ids) { [string, year].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+
+      describe "self#string" do
+        subject { collection.string }
+
+        it { is_expected.to_not eager_load(:category, :works, :posts) }
+
+        it { is_expected.to eq([string]) }
+      end
+
+      describe "self#year" do
+        subject { collection.year }
+
+        it { is_expected.to_not eager_load(:category, :works, :posts) }
+
+        it { is_expected.to eq([year]) }
+      end
+
+      describe "string?" do
+        specify { expect(string.string?).to eq(true ) }
+        specify { expect(  year.string?).to eq(false) }
+      end
+
+      describe "year?" do
+        specify { expect(string.year?).to eq(false) }
+        specify { expect(  year.year?).to eq(true ) }
+      end
     end
   end
 

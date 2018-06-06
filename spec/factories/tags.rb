@@ -3,6 +3,7 @@ FactoryBot.define do
   sequence :tag_name_year { |n| rand(1..2020) }
 
   factory :tag do
+
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -22,7 +23,11 @@ FactoryBot.define do
     end
 
     trait :with_existing_string_category do
-      category_id { create(:minimal_category).id }
+      transient do
+        category_name { generate(:category_name) }
+      end
+
+      category_id { create(:minimal_category, name: category_name).id }
     end
 
     trait :with_existing_year_category do

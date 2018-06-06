@@ -2,6 +2,9 @@ FactoryBot.define do
   sequence :category_name { |n| "Category #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
 
   factory :category do
+    name nil
+    initialize_with { Category.find_or_initialize_by(name: name) }
+
     ###########################################################################
     # TRAITS.
     ###########################################################################
