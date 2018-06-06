@@ -103,15 +103,15 @@ RSpec.describe Tag, type: :model do
     end
 
     context "by format" do
-      let(    :string) { create(:string_tag) }
-      let(      :year) { create(:year_tag) }
-      let(       :ids) { [string, year].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
+      let!(    :string) { create(:string_tag) }
+      let!(      :year) { create(:year_tag) }
+      let!(       :ids) { [string, year].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
 
       describe "self#string" do
         subject { collection.string }
 
-        it { is_expected.to_not eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :posts) }
 
         it { is_expected.to eq([string]) }
       end
@@ -119,7 +119,7 @@ RSpec.describe Tag, type: :model do
       describe "self#year" do
         subject { collection.year }
 
-        it { is_expected.to_not eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :posts) }
 
         it { is_expected.to eq([year]) }
       end

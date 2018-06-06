@@ -168,8 +168,35 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "POST #reorder_playlistings" do
-      pending "errors on non-xhr"
-      pending "reorders playlistings"
+      let(       :playlist) { create(:complete_playlist) }
+      let(:playlisting_ids) { playlist.playlistings.map(&:id) }
+      let(       :shuffled) { playlisting_ids.shuffle }
+
+      before(:each) do
+        allow(playlist).to receive(:reorder_playlistings!).and_call_original
+      end
+
+      context "non-xhr" do
+        it "errors" do
+          post :reorder_playlistings, params: {
+            id: playlist.to_param, playlisting_ids: shuffled
+          }
+
+          is_expected.to render_bad_request
+        end
+      end
+
+      context "xhr" do
+        it "reorders playlistings" do
+          post :reorder_playlistings, xhr: true, params: {
+            id: playlist.to_param, playlisting_ids: shuffled
+          }
+
+          expect(response).to have_http_status(204)
+
+          expect(playlist.reload.playlistings.map(&:id)).to eq(shuffled)
+        end
+      end
     end
   end
 

@@ -165,8 +165,31 @@ RSpec.describe Admin::MediaController, type: :controller do
     end
 
     describe "POST #reorder_facets" do
-      pending "errors on non-xhr"
-      pending "reorders facets"
+      let(   :medium) { create(:minimal_medium, :with_facets) }
+      let(:facet_ids) { medium.facets.map(&:id) }
+      let( :shuffled) { facet_ids.shuffle }
+
+      before(:each) do
+        allow(medium).to receive(:reorder_facets!).and_call_original
+      end
+
+      context "non-xhr" do
+        it "errors" do
+          post :reorder_facets, params: { id: medium.to_param, facet_ids: shuffled }
+
+          is_expected.to render_bad_request
+        end
+      end
+
+      context "xhr" do
+        it "reorders facets" do
+          post :reorder_facets, xhr: true, params: { id: medium.to_param, facet_ids: shuffled }
+
+          expect(response).to have_http_status(204)
+
+          expect(medium.reload.facets.map(&:id)).to eq(shuffled)
+        end
+      end
     end
   end
 

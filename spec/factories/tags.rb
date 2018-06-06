@@ -96,6 +96,12 @@ FactoryBot.define do
       with_year
     end
 
+    factory :string_tag do
+      with_existing_string_category
+
+      with_name
+    end
+
     factory :minimal_tag do
       with_name
     end

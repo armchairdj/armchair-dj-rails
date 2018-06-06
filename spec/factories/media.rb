@@ -44,9 +44,13 @@ FactoryBot.define do
     trait :with_tags do
       with_facets
 
-      after(:create) do |medium|
+      transient do
+        tag_count 3
+      end
+
+      after(:create) do |medium, evaluator|
         medium.categories.each do |category|
-          3.times { |i| create(:tag, category_id: category.id, name: "#{category.name} Tag #{i}") }
+          evaluator.tag_count.times { |i| create(:tag, category_id: category.id, name: "#{category.name} Tag #{i}") }
         end
 
         medium.reload

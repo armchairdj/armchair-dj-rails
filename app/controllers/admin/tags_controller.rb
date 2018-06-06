@@ -167,6 +167,8 @@ private
     super.merge({
       "For Posts" => :for_posts,
       "For Works" => :for_works,
+      "String"    => :string,
+      "Year"      => :year,
     })
   end
 

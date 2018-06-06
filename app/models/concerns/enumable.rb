@@ -30,7 +30,6 @@ module Enumable
       attributes.map(&:to_s).each do |attr|
         plural_attr = attr.pluralize
 
-
         # Define class methods
         singleton_class.instance_eval do
           define_method :"human_#{plural_attr}_with_keys" do

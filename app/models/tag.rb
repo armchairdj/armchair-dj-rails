@@ -21,11 +21,11 @@ class Tag < ApplicationRecord
   scope   :categorized, -> { joins(:category) }
   scope :uncategorized, -> { where(category_id: nil) }
 
-  scope     :for_posts, -> { uncategorized.eager.alpha }
   scope     :for_works, -> { categorized.eager.alpha }
+  scope     :for_posts, -> { uncategorized.eager.alpha }
 
-  scope        :string, -> { categorized.where(category: { format: Category.formats[:string] }) }
-  scope          :year, -> { categorized.where(category: { format: Category.formats[:year  ] }) }
+  scope        :string, -> { for_works.where(categories: { format: Category.formats[:string] }) }
+  scope          :year, -> { for_works.where(categories: { format: Category.formats[:year  ] }) }
 
   scope         :eager, -> { includes(:category, :works, :posts).references(:category) }
   scope     :for_admin, -> { eager }
@@ -51,6 +51,7 @@ class Tag < ApplicationRecord
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
+
 
   #############################################################################
   # VALIDATIONS.
@@ -82,6 +83,14 @@ class Tag < ApplicationRecord
 
   def uncategorized?
     !categorized?
+  end
+
+  def string?
+    category.try(:string?) || false
+  end
+
+  def year?
+    category.try(:year?) || false
   end
 
   def display_category(default: "Uncategorized")

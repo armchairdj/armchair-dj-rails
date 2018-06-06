@@ -187,6 +187,8 @@ RSpec.describe Admin::TagsController, type: :controller do
           "Hidden",
           "For Posts",
           "For Works",
+          "String",
+          "Year",
         ])
       end
     end
