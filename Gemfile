@@ -107,6 +107,9 @@ gem "nokogiri"
 # ACTIVE RECORD EXTENSIONS.
 ###############################################################################
 
+# Use ActiveModel has_secure_password.
+gem "bcrypt"
+
 # Pagination.
 gem "kaminari"
 
@@ -116,10 +119,10 @@ gem "nilify_blanks"
 # Ordinal ranking.
 gem "acts_as_list"
 
-# ActiveRecord tree structures.
+# Tree models.
 gem "ancestry"
 
-# Soft deletes for ActiveRecord.
+# Soft deletes.
 gem "discard"
 
 # Acts As State Machine.
@@ -128,11 +131,11 @@ gem "aasm"
 # Date validation.
 gem "validates_timeliness", '~> 4.0'
 
-# Use ActiveModel has_secure_password.
-gem "bcrypt"
-
 # Join scopes into one query.
 gem "active_record_union"
+
+# Friendly URLs.
+gem "friendly_id"
 
 ###############################################################################
 # UTILITIES.
@@ -201,6 +204,9 @@ group :development, :test do
   # Environment variable loader.
   gem "dotenv-rails"
 
+  # Fixture generator.
+  gem "factory_bot_rails"
+
   # Restore behavior of Rails <5 controller tests (assigns and assert_template).
   gem "rails-controller-testing"
 
@@ -213,9 +219,6 @@ group :development, :test do
   gem "shoulda-matchers", git: "https://github.com/thoughtbot/shoulda-matchers", branch: "master"
   gem "pundit-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
-
-  # Fixture generator.
-  gem "factory_bot_rails"
 
   # Adds support for Capybara system testing and selenium driver
   gem "capybara"
@@ -234,7 +237,7 @@ group :test do
   gem "timecop"
 
   # Test coverage measurement tool.
-  gem "simplecov", require: false, group: :test
+  gem "simplecov", require: false
 
   # Cache http responses from third parties in specs.
   gem "vcr"
