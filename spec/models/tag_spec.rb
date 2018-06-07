@@ -48,8 +48,8 @@ RSpec.describe Tag, type: :model do
     end
 
     context "by category" do
-      let(:for_post_1) { create(:tag_for_post, name: "Z") }
-      let(:for_post_2) { create(:tag_for_post, name: "A") }
+      let(:for_post_1) { create(:tag_for_item, name: "Z") }
+      let(:for_post_2) { create(:tag_for_item, name: "A") }
       let(:for_work_1) { create(:tag_for_work, name: "X", category_name: "Foo") }
       let(:for_work_2) { create(:tag_for_work, name: "X", category_name: "Bar") }
       let(       :ids) { [for_post_1, for_post_2, for_work_1, for_work_2].map(&:id) }

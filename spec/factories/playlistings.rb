@@ -15,7 +15,7 @@ FactoryBot.define do
 
     trait :with_post do
       after(:create) do |playlisting|
-        create(:review, work_id: playlisting.work.id)
+        create(:minimal_review, work_id: playlisting.work.id)
 
         playlisting.reload
       end

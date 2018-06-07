@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::PostPolicy do
   subject { described_class.new(user, record) }
 
-  let(:record) { create(:standalone_post) }
+  let(:record) { create(:minimal_post) }
 
   context "without user" do
     let(:user) { nil }
@@ -47,7 +47,7 @@ RSpec.describe Admin::PostPolicy do
     it { is_expected.to forbid_action(:destroy) }
 
     context "with own record" do
-      let(:record) { create(:standalone_post, author_id: user.id) }
+      let(:record) { create(:minimal_post, author_id: user.id) }
 
       it { is_expected.to permit_action(:index  ) }
       it { is_expected.to permit_action(:show   ) }

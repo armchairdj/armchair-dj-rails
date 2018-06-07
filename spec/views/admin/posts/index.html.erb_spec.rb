@@ -9,11 +9,11 @@ RSpec.describe "admin/posts/index", type: :view do
 
   before(:each) do
     10.times do
-      create(:standalone_post, :published)
+      create(:minimal_post, :published)
     end
 
     11.times do
-      create(:review, :published)
+      create(:minimal_review, :published)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

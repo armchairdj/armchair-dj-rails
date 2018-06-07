@@ -28,7 +28,7 @@ module Viewable
   end
 
   def refresh_counts
-    self.unviewable_post_count = all_posts.not_published.count
+    self.unviewable_post_count = all_posts.unpublished.count
     self.viewable_post_count   = all_posts.published.count
 
     unviewable_post_count_changed? || viewable_post_count_changed?
@@ -53,7 +53,7 @@ module Viewable
   end
 
   def unviewable_posts
-    self.posts.not_published.reverse_cron
+    self.posts.unpublished.reverse_cron
   end
 
   def viewable_works

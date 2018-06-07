@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "posts/show", type: :view do
   context "standalone" do
     before(:each) do
-      @post = assign(:post, create(:complete_standalone_post))
+      @post = assign(:post, create(:complete_post))
     end
 
     it "renders" do

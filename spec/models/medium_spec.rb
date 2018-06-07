@@ -22,15 +22,15 @@ RSpec.describe Medium, type: :model do
       let(:ids) { [song_medium, album_medium, movie_medium].map(&:id) }
 
       before(:each) do
-        create(:review, :with_author, :with_body, :published,
+        create(:minimal_review, :with_author, :with_body, :published,
           "work_attributes" => attributes_for(:minimal_work, medium: song_medium)
         )
 
-        create(:review, :with_author, :with_body, :published,
+        create(:minimal_review, :with_author, :with_body, :published,
           "work_attributes" => attributes_for(:minimal_work, medium: album_medium)
         )
 
-        create(:review, :with_author, :with_body, :draft,
+        create(:minimal_review, :with_author, :with_body, :draft,
           "work_attributes" => attributes_for(:minimal_work, medium: movie_medium)
         )
       end

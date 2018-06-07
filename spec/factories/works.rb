@@ -54,7 +54,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |work|
-        create(:review, :draft, work_id: work.id)
+        create(:minimal_review, :draft, work_id: work.id)
 
         work.reload
       end
@@ -62,7 +62,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |work|
-        create(:review, :scheduled, work_id: work.id)
+        create(:minimal_review, :scheduled, work_id: work.id)
 
         work.reload
       end
@@ -70,7 +70,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |work|
-        create(:review, :published, work_id: work.id)
+        create(:minimal_review, :published, work_id: work.id)
 
         work.reload
       end

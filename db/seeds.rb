@@ -550,7 +550,7 @@ the_kooky_scientist_album_unpopular_science = FactoryBot.create(:work, medium: a
 ##### POSTS: REVIEWS & STANDALONE
 
 Work.all.each do |work|
-  FactoryBot.create(:review,          random_status, author: brian, body: random_paragraphs, work: work)
+  FactoryBot.create(:minimal_review,          random_status, author: brian, body: random_paragraphs, work: work)
 
-  FactoryBot.create(:standalone_post, random_status, author: brian, body: random_paragraphs, title: random_title)
+  FactoryBot.create(:minimal_post, random_status, author: brian, body: random_paragraphs, title: random_title)
 end

@@ -24,7 +24,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
     describe "GET #show" do
       context "standalone" do
-        let(:post) { create(:standalone_post) }
+        let(:post) { create(:minimal_post) }
 
         it "renders" do
           get :show, params: { id: post.to_param }
@@ -35,7 +35,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "review" do
-        let(:post) { create(:review) }
+        let(:post) { create(:minimal_review) }
 
         it "renders" do
           get :show, params: { id: post.to_param }
@@ -60,8 +60,8 @@ RSpec.describe Admin::PostsController, type: :controller do
 
     describe "POST #create" do
       context "standalone" do
-        let(:max_valid_params) { attributes_for(:complete_standalone_post).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:standalone_post         ).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_post).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_post         ).except(:author_id) }
         let(  :invalid_params) { attributes_for(:post, :with_body        ).except(:author_id) }
 
         context "with max valid params" do
@@ -329,7 +329,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "review" do
-        let(:post) { create(:review) }
+        let(:post) { create(:minimal_review) }
 
         it "renders" do
           get :edit, params: { id: post.to_param }
@@ -345,7 +345,7 @@ RSpec.describe Admin::PostsController, type: :controller do
     describe "PUT #update" do
       context "draft" do
         context "standalone" do
-          let(:post) { create(:standalone_post) }
+          let(:post) { create(:minimal_post) }
 
           let(:min_valid_params) { { "title" => "New Title" } }
           let(  :invalid_params) { { "title" => ""          } }
@@ -379,7 +379,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:review) }
+          let(:post) { create(:minimal_review) }
 
           let(:min_valid_params) { { "work_id" => create(:minimal_work).id } }
           let(  :invalid_params) { { "work_id" => ""                       } }
@@ -412,7 +412,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         describe "replacing work with new work" do
-          let!(:post) { create(:review) }
+          let!(:post) { create(:minimal_review) }
 
           let(:min_valid_params) { attributes_for(        :review_with_new_work).except(:author_id).merge(work_id: post.work_id).deep_stringify_keys }
           let(  :invalid_params) { attributes_for(:invalid_review_with_new_work).except(:author_id).merge(work_id: post.work_id).deep_stringify_keys }
@@ -453,7 +453,7 @@ RSpec.describe Admin::PostsController, type: :controller do
       end
 
       context "replacing slug" do
-        let(:post) { create(:standalone_post) }
+        let(:post) { create(:minimal_post) }
 
         context "with custom slug" do
           let(:min_valid_params) { { "slug" => "custom/slug" } }
@@ -495,7 +495,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "publishing" do
         context "standalone" do
-          let(:post) { create(:standalone_post, :draft) }
+          let(:post) { create(:minimal_post, :draft) }
 
           let(:min_valid_params) { { "body" => "New body.", "title" => "New title." } }
           let(  :invalid_params) { { "body" => ""         , "title" => ""           } }
@@ -557,7 +557,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:review, :draft) }
+          let(:post) { create(:minimal_review, :draft) }
 
           let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""               } }
@@ -624,7 +624,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "unpublishing" do
         context "standalone" do
-          let(:post) { create(:standalone_post, :published) }
+          let(:post) { create(:minimal_post, :published) }
 
           let(:min_valid_params) { { "body" => "", "title" => "New title."} }
           let(  :invalid_params) { { "body" => "", "title" => ""          } }
@@ -663,7 +663,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:review, :published) }
+          let(:post) { create(:minimal_review, :published) }
 
           let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
@@ -704,7 +704,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "scheduling" do
         context "standalone" do
-          let(:post) { create(:standalone_post, :draft) }
+          let(:post) { create(:minimal_post, :draft) }
 
           let(:min_valid_params) { { "body" => "New body.", "title" => "New title.", publish_on: "01/01/2050" } }
           let(  :invalid_params) { { "body" => "",          "title" => ""                                     } }
@@ -766,7 +766,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:review) }
+          let(:post) { create(:minimal_review) }
 
           let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id, publish_on: "01/01/2050" } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""                                                 } }
@@ -833,7 +833,7 @@ RSpec.describe Admin::PostsController, type: :controller do
 
       context "unscheduling" do
         context "standalone" do
-          let(:post) { create(:standalone_post, :scheduled) }
+          let(:post) { create(:minimal_post, :scheduled) }
 
           let(:min_valid_params) { { "body" => "", "title" => "New title."} }
           let(  :invalid_params) { { "body" => "", "title" => ""          } }
@@ -872,7 +872,7 @@ RSpec.describe Admin::PostsController, type: :controller do
         end
 
         context "review" do
-          let(:post) { create(:review, :scheduled) }
+          let(:post) { create(:minimal_review, :scheduled) }
 
           let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }

@@ -28,10 +28,10 @@ RSpec.describe Work, type: :model do
     let!(     :black_box) { create(:black_box_strike_it_up, medium: song_medium) }
 
     before(:each) do
-      create(:review, :published, work: robyn_s     )
-      create(:review, :published, work: la_bouche   )
-      create(:review, :draft,     work: culture_beat)
-      create(:review, :draft,     work: black_box   )
+      create(:minimal_review, :published, work: robyn_s     )
+      create(:minimal_review, :published, work: la_bouche   )
+      create(:minimal_review, :draft,     work: culture_beat)
+      create(:minimal_review, :draft,     work: black_box   )
     end
 
     describe "self#grouped_options" do
@@ -261,7 +261,7 @@ RSpec.describe Work, type: :model do
       end
 
       describe "#only_tags_with_category" do
-        let(:tag_for_post) { create(:tag_for_post) }
+        let(:tag_for_item) { create(:tag_for_item) }
         let(:tag_for_work) { create(:tag_for_work) }
 
         subject { create(:minimal_work) }
@@ -276,7 +276,7 @@ RSpec.describe Work, type: :model do
 
         context "invalid" do
           it "disallows uncategorized tags" do
-            subject.update(tag_ids: [tag_for_post.id])
+            subject.update(tag_ids: [tag_for_item.id])
 
             is_expected.to have_error(tag_ids: :has_uncategorized_tags)
           end

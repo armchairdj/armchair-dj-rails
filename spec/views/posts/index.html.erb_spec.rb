@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "posts/index", type: :view do
   before(:each) do
     10.times do
-      create(:complete_standalone_post, :published)
+      create(:complete_post, :published)
     end
 
     11.times do

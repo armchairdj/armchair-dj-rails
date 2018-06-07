@@ -59,7 +59,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |medium|
-        create(:review, :draft, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :draft, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
 
         medium.reload
       end
@@ -67,7 +67,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |medium|
-        create(:review, :scheduled, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :scheduled, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
 
         medium.reload
       end
@@ -75,7 +75,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |medium|
-        create(:review, :published, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :published, body: "body", work_attributes: attributes_for(:minimal_work, medium: medium))
 
         medium.reload
       end

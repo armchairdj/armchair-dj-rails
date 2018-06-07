@@ -36,7 +36,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |tag|
-        create(:standalone_post, :draft, :with_body, tag_ids: [tag.id])
+        create(:minimal_post, :draft, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -44,7 +44,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |tag|
-        create(:standalone_post, :scheduled, :with_body, tag_ids: [tag.id])
+        create(:minimal_post, :scheduled, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -52,7 +52,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |tag|
-        create(:standalone_post, :published, :with_body, tag_ids: [tag.id])
+        create(:minimal_post, :published, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -70,7 +70,7 @@ FactoryBot.define do
       after(:create) do |tag|
         work = create(:minimal_work, tag_ids: [tag.id])
 
-        create(:review, :draft, :with_body, work_id: work.id)
+        create(:minimal_review, :draft, :with_body, work_id: work.id)
 
         tag.reload
       end
@@ -82,7 +82,7 @@ FactoryBot.define do
       after(:create) do |tag|
         work = create(:minimal_work, tag_ids: [tag.id])
 
-        create(:review, :published, :with_body, work_id: work.id)
+        create(:minimal_review, :published, :with_body, work_id: work.id)
 
         tag.reload
       end
@@ -110,7 +110,7 @@ FactoryBot.define do
       with_summary
     end
 
-    factory :tag_for_post, parent: :minimal_tag do; end
+    factory :tag_for_item, parent: :minimal_tag do; end
 
     factory :tag_for_work, parent: :minimal_tag do
       with_existing_category

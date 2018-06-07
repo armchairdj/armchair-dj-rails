@@ -48,9 +48,15 @@ module Publishable
     # SCOPES.
     ###########################################################################
 
-    scope :not_published,   -> { where.not(status: :published) }
+    scope :unpublished,     -> { where.not(status: :published) }
     scope :scheduled_ready, -> { scheduled.where("#{model_name.collection}.publish_on <= ?", DateTime.now) }
     scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+
+    #############################################################################
+    # ASSOCIATIONS.
+    #############################################################################
+
+    has_and_belongs_to_many :tags
 
     #############################################################################
     # ATTRIBUTES.
@@ -68,12 +74,24 @@ module Publishable
     # VALIDATION.
     ###########################################################################
 
+    validates :body, presence: true, unless: :draft?
+
     validates :status, presence: true
 
     validates :published_at, presence: true, if: :published?
     validates :publish_on,   presence: true, if: :scheduled?
 
     validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
+
+    validate { only_bare_tags }
+
+    def only_bare_tags
+      return if tags.where.not(category_id: nil).empty?
+
+      self.errors.add(:tag_ids, :has_categorized_tags)
+    end
+
+    private :only_bare_tags
 
     ###########################################################################
     # AASM.
@@ -92,28 +110,28 @@ module Publishable
       state :published
 
       event(:schedule,
-        after: :update_counts_for_all
+        after: [:update_counts_for_publishable, :update_counts_for_all]
       ) do
         transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
       end
 
       event(:unschedule,
         before: :clear_publish_on,
-        after:  :update_counts_for_all
+        after:  [:update_counts_for_publishable, :update_counts_for_all]
       ) do
         transitions from: :scheduled, to: :draft
       end
 
       event(:publish,
         before: :set_published_at,
-        after:  :update_counts_for_all
+        after:  [:update_counts_for_publishable, :update_counts_for_all]
       ) do
         transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
       end
 
       event(:unpublish,
         before: :clear_published_at,
-        after:  :update_counts_for_all
+        after:  [:update_counts_for_publishable, :update_counts_for_all]
       ) do
         transitions from: :published, to: :draft
       end
@@ -162,9 +180,27 @@ module Publishable
     published?
   end
 
-  def unpublished
+  def unpublished?
     draft? || scheduled?
   end
+
+  def update_counts_for_all
+    raise NotImplementedError
+  end
+
+  #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def slug_locked?
+    published?
+  end
+
+  def validate_slug_presence?
+    !draft?
+  end
+
+  private :validate_slug_presence?
 
 private
 
@@ -173,7 +209,7 @@ private
   #############################################################################
 
   def ready_to_publish?
-    persisted? && unpublished && valid? && body.present? && slug.present?
+    persisted? && unpublished && valid? && body.present?
   end
 
   def set_published_at
@@ -194,5 +230,11 @@ private
     self.update_column(:publish_on, nil)
 
     self.publish_on = temp
+  end
+
+  def update_counts_for_publishable
+    author.update_counts
+
+    tags.each { |t| t.update_counts }
   end
 end

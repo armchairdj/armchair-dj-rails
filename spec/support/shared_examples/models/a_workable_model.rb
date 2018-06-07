@@ -11,9 +11,9 @@ RSpec.shared_examples "a_workable_model" do
       let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
 
       before(:each) do
-        create(:review, :published, work: with_published.work)
-        create(:review, :scheduled, work: with_scheduled.work)
-        create(:review, :draft,     work:     with_draft.work)
+        create(:minimal_review, :published, work: with_published.work)
+        create(:minimal_review, :scheduled, work: with_scheduled.work)
+        create(:minimal_review, :draft,     work:     with_draft.work)
       end
 
       describe "self#eager" do

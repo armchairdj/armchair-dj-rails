@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe PostsHelper, type: :helper do
   context "display methods" do
     describe "#formatted_post_body" do
-      subject { create(:standalone_post) }
+      subject { create(:minimal_post) }
 
       it "creates paragraphs" do
         expected = "<p>one</p>\n<p>two</p>"
@@ -18,9 +18,9 @@ RSpec.describe PostsHelper, type: :helper do
     end
 
     describe "#post_published_date" do
-      let(:draft    ) { create(:standalone_post, :draft    ) }
-      let(:scheduled) { create(:standalone_post, :scheduled) }
-      let(:published) { create(:standalone_post, :published) }
+      let(:draft    ) { create(:minimal_post, :draft    ) }
+      let(:scheduled) { create(:minimal_post, :scheduled) }
+      let(:published) { create(:minimal_post, :published) }
 
       specify do
         Timecop.freeze(2050, 3, 3) do
@@ -35,9 +35,9 @@ RSpec.describe PostsHelper, type: :helper do
     end
 
     describe "#post_scheduled_date" do
-      let!(:draft    ) { create(:standalone_post, :draft    ) }
-      let!(:scheduled) { create(:standalone_post, :scheduled) }
-      let!(:published) { create(:standalone_post, :published) }
+      let!(:draft    ) { create(:minimal_post, :draft    ) }
+      let!(:scheduled) { create(:minimal_post, :scheduled) }
+      let!(:published) { create(:minimal_post, :published) }
 
       specify do
         Timecop.freeze(2050, 3, 3) do
@@ -54,13 +54,13 @@ RSpec.describe PostsHelper, type: :helper do
     end
 
     describe "#post_title" do
-      let(:standalone_post      ) { create(:standalone_post, title: "Standalone") }
+      let(:minimal_post      ) { create(:minimal_post, title: "Standalone") }
       let(:hounds_of_love_review) { create(:hounds_of_love_album_review) }
       let(:subtitled_review     ) { create(:junior_boys_remix_review) }
 
       context "default" do
         it "uses title for standalone" do
-          expect(helper.post_title(standalone_post)).to eq("Standalone")
+          expect(helper.post_title(minimal_post)).to eq("Standalone")
         end
 
         it "uses creator and title for review" do
@@ -180,13 +180,13 @@ RSpec.describe PostsHelper, type: :helper do
       subject { link_to_post_author(instance) }
 
       context "published" do
-        let(:instance) { create(:standalone_post, :published, author: create(:writer, username: "armchairdj")) }
+        let(:instance) { create(:minimal_post, :published, author: create(:writer, username: "armchairdj")) }
 
         it { is_expected.to eq('<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>') }
       end
 
       context "unpublished" do
-        let(:instance) { create(:standalone_post, :draft) }
+        let(:instance) { create(:minimal_post, :draft) }
 
         it { is_expected.to eq(nil) }
       end
