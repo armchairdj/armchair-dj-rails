@@ -3,59 +3,22 @@
 class Post < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
   # CONCERNS.
   #############################################################################
 
-  include AASM
   include Alphabetizable
-  include Authorable
   include Linkable
+  include Publishable
   include Sluggable
   include Summarizable
-
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
-  def self.publish_scheduled
-    ready = self.scheduled_ready
-
-    memo = {
-      total:   ready.length,
-      success: [],
-      failure: []
-    }
-
-    ready.each do |post|
-      post.unschedule!
-
-      if post.publish!
-        memo[:success] << post
-      else
-        memo[:failure] << post
-      end
-    end
-
-    memo
-  end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :not_published,   -> { where.not(status: :published) }
-
-  scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
-
   scope :mixtape,         -> { where.not(playlist_id: nil) }
   scope :review,          -> { where.not(work_id:     nil) }
   scope :standalone,      -> { where.not(title:       nil) }
-
-  scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
   scope :eager,           -> { includes(:medium, :work, :creators, :author).references(:medium) }
 
@@ -83,28 +46,13 @@ class Post < ApplicationRecord
   accepts_nested_attributes_for :work, allow_destroy: false,
     reject_if: proc { |attrs| attrs["title"].blank? }
 
-  enum status: {
-    draft:      0,
-    scheduled:  5,
-    published: 10
-  }
-
-  enumable_attributes :status
-
   attr_accessor :current_work_id
 
   #############################################################################
   # VALIDATIONS.
   #############################################################################
 
-  validates :status, presence: true
-
   validates :body, presence: true, unless: :draft?
-
-  validates :published_at, presence: true, if: :published?
-  validates :publish_on,   presence: true, if: :scheduled?
-
-  validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
 
   validate { has_title_or_postable }
 
@@ -139,84 +87,6 @@ class Post < ApplicationRecord
   #############################################################################
   # HOOKS.
   #############################################################################
-
-  #############################################################################
-  # AASM.
-  #############################################################################
-
-  aasm(
-    column:                   :status,
-    create_scopes:            true,
-    enum:                     true,
-    no_direct_assignment:     true,
-    whiny_persistence:        false,
-    whiny_transitions:        false
-  ) do
-    state :draft, initial: true
-    state :scheduled
-    state :published
-
-    event(:schedule,
-      after: :update_counts_for_all
-    ) do
-      transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
-    end
-
-    event(:unschedule,
-      before: :clear_publish_on,
-      after:  :update_counts_for_all
-    ) do
-      transitions from: :scheduled, to: :draft
-    end
-
-    event(:publish,
-      before: :set_published_at,
-      after:  :update_counts_for_all
-    ) do
-      transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
-    end
-
-    event(:unpublish,
-      before: :clear_published_at,
-      after:  :update_counts_for_all
-    ) do
-      transitions from: :published, to: :draft
-    end
-  end
-
-  def update_and_publish(params)
-    return true if self.update(params) && self.publish!
-
-    self.errors.add(:body, :blank_during_publish) unless body.present?
-
-    return false
-  end
-
-  def update_and_unpublish(params)
-    # Transition and reload to trigger validation changes before update.
-    unpublished = self.unpublish!
-    updated     = self.reload.update(params)
-
-    unpublished && updated
-  end
-
-  def update_and_schedule(params)
-    return true if self.update(params) && self.schedule!
-
-    clear_publish_on_from_database
-
-    self.errors.add(:body, :blank_during_publish) unless body.present?
-
-    return false
-  end
-
-  def update_and_unschedule(params)
-    # Transition and reload to trigger validation changes before update.
-    unscheduled = self.unschedule!
-    updated     = self.reload.update(params)
-
-    unscheduled && updated
-  end
 
   #############################################################################
   # SLUGGABLE.
@@ -281,18 +151,6 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # INSTANCE: STATUS METHODS.
-  #############################################################################
-
-  def viewable?
-    published?
-  end
-
-  def unpublished
-    draft? || scheduled?
-  end
-
-  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -318,36 +176,6 @@ class Post < ApplicationRecord
     return [                     title] if standalone?
     return [playlist.try(:alpha_parts)] if mixtape?
     return [    work.try(:alpha_parts)] if review?
-  end
-
-private
-
-  #############################################################################
-  # AASM PRIVATE METHODS.
-  #############################################################################
-
-  def ready_to_publish?
-    persisted? && unpublished && valid? && body.present? && slug.present?
-  end
-
-  def set_published_at
-    self.published_at = DateTime.now
-  end
-
-  def clear_published_at
-    self.published_at = nil
-  end
-
-  def clear_publish_on
-    self.publish_on = nil
-  end
-
-  def clear_publish_on_from_database
-    return unless temp = self.publish_on
-
-    self.update_column(:publish_on, nil)
-
-    self.publish_on = temp
   end
 
   def update_counts_for_all
