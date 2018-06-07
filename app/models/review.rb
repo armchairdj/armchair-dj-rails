@@ -64,7 +64,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def type(plural: false)
-    "#{work.medium.name} Review"
+    base = "#{work.medium.name} Review"
 
     plural ? base.pluralize : base
   end

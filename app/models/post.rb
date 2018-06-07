@@ -8,9 +8,10 @@ class Post < ApplicationRecord
 
   include Alphabetizable
   include Linkable
-  include Publishable
   include Sluggable
   include Summarizable
+
+  include Publishable
 
   #############################################################################
   # SCOPES.
@@ -51,7 +52,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def type(plural: false)
-    "Post"
+    plural ? "Posts" : "Post"
   end
 
   #############################################################################

@@ -43,7 +43,7 @@ FactoryBot.define do
   end
 
   trait :with_body do
-    body "This is a the body."
+    body "Give me body!"
   end
 
   trait :with_summary do

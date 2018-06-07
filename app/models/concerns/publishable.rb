@@ -136,41 +136,59 @@ module Publishable
         transitions from: :published, to: :draft
       end
     end
-
-    def update_and_publish(params)
-      return true if self.update(params) && self.publish!
-
-      self.errors.add(:body, :blank_during_publish) unless body.present?
-
-      return false
-    end
-
-    def update_and_unpublish(params)
-      # Transition and reload to trigger validation changes before update.
-      unpublished = self.unpublish!
-      updated     = self.reload.update(params)
-
-      unpublished && updated
-    end
-
-    def update_and_schedule(params)
-      return true if self.update(params) && self.schedule!
-
-      clear_publish_on_from_database
-
-      self.errors.add(:body, :blank_during_publish) unless body.present?
-
-      return false
-    end
-
-    def update_and_unschedule(params)
-      # Transition and reload to trigger validation changes before update.
-      unscheduled = self.unschedule!
-      updated     = self.reload.update(params)
-
-      unscheduled && updated
-    end
   end
+
+  #############################################################################
+  # TRANSITIONS.
+  #############################################################################
+
+  def update_and_publish(params)
+    return true if self.update(params) && self.publish!
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+
+    return false
+  end
+
+  def update_and_unpublish(params)
+    # Transition and reload to trigger validation changes before update.
+    unpublished = self.unpublish!
+    updated     = self.reload.update(params)
+
+    unpublished && updated
+  end
+
+  def update_and_schedule(params)
+    return true if self.update(params) && self.schedule!
+
+    clear_publish_on_from_database
+
+    self.errors.add(:body, :blank_during_publish) unless body.present?
+
+    return false
+  end
+
+  def update_and_unschedule(params)
+    # Transition and reload to trigger validation changes before update.
+    unscheduled = self.unschedule!
+    updated     = self.reload.update(params)
+
+    unscheduled && updated
+  end
+
+  #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def slug_locked?
+    published?
+  end
+
+  def validate_slug_presence?
+    !draft?
+  end
+
+  private :validate_slug_presence?
 
   #############################################################################
   # INSTANCE.
@@ -188,28 +206,14 @@ module Publishable
     raise NotImplementedError
   end
 
-  #############################################################################
-  # SLUGGABLE.
-  #############################################################################
-
-  def slug_locked?
-    published?
-  end
-
-  def validate_slug_presence?
-    !draft?
-  end
-
-  private :validate_slug_presence?
-
 private
 
   #############################################################################
-  # AASM PRIVATE METHODS.
+  # AASM CALLBACKS.
   #############################################################################
 
   def ready_to_publish?
-    persisted? && unpublished && valid? && body.present?
+    persisted? && unpublished? && valid? && body.present?
   end
 
   def set_published_at

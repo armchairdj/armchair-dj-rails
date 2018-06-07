@@ -38,7 +38,7 @@ RSpec.describe Post, type: :model do
           is_expected.to contain_exactly(draft, scheduled, published)
         end
 
-        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
+        it { is_expected.to eager_load(:author) }
       end
 
       describe "self#for_site" do
@@ -46,7 +46,7 @@ RSpec.describe Post, type: :model do
 
         it { is_expected.to eq [published] }
 
-        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
+        it { is_expected.to eager_load(:author) }
       end
     end
   end
@@ -67,6 +67,10 @@ RSpec.describe Post, type: :model do
     describe "#type" do
       specify { expect(instance.type              ).to eq("Post" ) }
       specify { expect(instance.type(plural: true)).to eq("Posts") }
+    end
+
+    describe "#update_counts_for_all" do
+      # Empty method
     end
 
     describe "#sluggable_parts" do

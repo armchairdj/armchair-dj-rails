@@ -12,10 +12,10 @@ RSpec.shared_examples "a_publishable_model" do
   context "class" do
     describe "self#publish_scheduled" do
       let!(:current) { create_minimal_instance(:scheduled, publish_on: 1.day.from_now) }
-      let!( :future) { create_minimal_instnace(:scheduled) }
+      let!( :future) { create_minimal_instance(:scheduled) }
 
       context "scope :scheduled_ready" do
-        it "includes only scheduled posts that have come due" do
+        it "includes only scheduled that have come due" do
           Timecop.freeze(Date.today + 3) do
             expect(described_class.scheduled_ready).to match_array([current])
           end
@@ -221,7 +221,9 @@ RSpec.shared_examples "a_publishable_model" do
     describe "events" do
       before(:each) do
         callbacks.each do |callback|
-          allow_any_instance_of(described_class).to receive(callback).and_call_original
+          allow(    draft).to receive(callback).and_call_original
+          allow(scheduled).to receive(callback).and_call_original
+          allow(published).to receive(callback).and_call_original
         end
       end
 
@@ -442,68 +444,26 @@ RSpec.shared_examples "a_publishable_model" do
         end
       end
 
-      describe "#update_counts_for_all" do
-        context "review" do
-          let(       :author) { create(:writer) }
-          let(    :creator_1) { create(:minimal_creator) }
-          let(    :creator_2) { create(:minimal_creator) }
-          let(:contributor_1) { create(:minimal_creator) }
-          let(:contributor_2) { create(:minimal_creator) }
-          let(     :category) { create(:minimal_category) }
-          let( :category_tag) { create(:minimal_tag, category_id: category.id) }
-          let(          :tag) { create(:minimal_tag) }
-          let(       :medium) { create(:minimal_medium) }
-          let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
+      describe "#update_counts_for_publishable" do
+        let(:instance) { create_minimal_instance }
+        let(  :author) { double }
+        let(    :tags) { [double, double] }
 
-          let(:work) do
-            create(:minimal_work, medium_id: medium.id, tag_ids: [category_tag.id],
-              credits_attributes: {
-                "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-                "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
-              },
-              contributions_attributes: {
-                "0" => attributes_for(:minimal_contribution, creator_id: contributor_1.id),
-                "1" => attributes_for(:minimal_contribution, creator_id: contributor_2.id),
-              }
-            )
-          end
+        before(:each) do
+          allow(instance  ).to receive(:author).and_return(author)
+          allow(instance  ).to receive(:tags  ).and_return(tags  )
 
-          let(:post) { create(:minimal_review, :draft, :with_body, author_id: author.id, work_id: work.id, tag_ids: [tag.id]) }
-
-          it "updates counts for all descendents" do
-            post.publish!
-
-            expect(       author.reload.viewable_post_count).to eq(1)
-            expect(          tag.reload.viewable_post_count).to eq(1)
-            expect(         work.reload.viewable_post_count).to eq(1)
-            expect(       medium.reload.viewable_post_count).to eq(1)
-            expect( category_tag.reload.viewable_post_count).to eq(1)
-            expect(    creator_1.reload.viewable_post_count).to eq(1)
-            expect(    creator_1.reload.viewable_post_count).to eq(1)
-            expect(contributor_1.reload.viewable_post_count).to eq(1)
-            expect(contributor_2.reload.viewable_post_count).to eq(1)
-          end
+          allow(author    ).to receive(:update_counts)
+          allow(tags.first).to receive(:update_counts)
+          allow(tags.last ).to receive(:update_counts)
         end
 
-        context "standalone" do
-          let(  :post) { create(:minimal_post) }
-          let(:author) { double }
-          let(  :tags) { [double, double] }
+        it "updates counts for author and tags" do
+          expect(author    ).to receive(:update_counts).once
+          expect(tags.first).to receive(:update_counts).once
+          expect(tags.last ).to receive(:update_counts).once
 
-          it "updates counts for author and tags" do
-            allow(      post).to receive(:author).and_return(author)
-            allow(      post).to receive(:tags  ).and_return(tags  )
-
-            allow(    author).to receive(:update_counts)
-            allow(tags.first).to receive(:update_counts)
-            allow( tags.last).to receive(:update_counts)
-
-            expect(    author).to receive(:update_counts).once
-            expect(tags.first).to receive(:update_counts).once
-            expect( tags.last).to receive(:update_counts).once
-
-            post.send(:update_counts_for_all)
-          end
+          instance.send(:update_counts_for_publishable)
         end
       end
     end
@@ -530,68 +490,67 @@ RSpec.shared_examples "a_publishable_model" do
 
     describe "update-transition methods" do
       describe "#update_and_publish" do
-        let(:instance) { create_minimal_instance(:with_body) }
+        subject { create_minimal_instance(:with_body) }
 
         before(:each) do
-          allow(instance).to receive(:update  ).and_call_original
-          allow(instance).to receive(:publish!).and_call_original
+          allow(subject).to receive(:update  ).and_call_original
+          allow(subject).to receive(:publish!).and_call_original
         end
-
-        subject { instance.update_and_publish(params) }
 
         context "valid" do
           let(:params) { { "body" => "New body" } }
 
-          it "calls methods" do
-            expect(instance).to receive(:update  )
-            expect(instance).to receive(:publish!)
+          it "publishes" do
+            expect(subject.update_and_publish(params)).to eq(true)
 
-            is_expected.to eq(true)
+            expect(subject.reload).to be_published
+          end
+
+          it "calls methods" do
+            expect(subject).to receive(:update  )
+            expect(subject).to receive(:publish!)
+
+            subject.update_and_publish(params)
           end
 
           it "updates attributes" do
-            is_expected.to eq(true)
+            subject.update_and_publish(params)
 
-            instance.reload
+            subject.reload
 
-            expect(instance.body).to eq(params["body"])
-          end
-
-          it "publishes" do
-            is_expected.to eq(true)
-
-            expect(instance.reload).to be_published
+            expect(subject.body).to eq(params["body"])
           end
         end
 
         context "invalid" do
           let(:params) { { "body" => "" } }
 
+          before(:each) do
+            allow(subject).to receive(:valid?).and_return(false)
+          end
+
+          it "does not publish" do
+            expect(subject.update_and_publish(params)).to eq(false)
+
+            expect(subject.reload).to_not be_published
+          end
+
           it "calls update but not publish" do
             expect(subject).to     receive(:update  )
             expect(subject).to_not receive(:publish!)
 
-            is_expected.to eq(false)
+            subject.update_and_publish(params)
           end
 
           it "updates atributes without saving" do
-            is_expected.to eq(false)
+            subject.update_and_publish(params)
 
-            expect(subject.body).to eq(nil)
-
-            subject.reload
-
-            expect(subject.body).to_not eq(nil)
-          end
-
-          it "does not publish" do
-            is_expected.to eq(false)
-
-            expect(subject).to_not be_published
+            expect(subject.body         ).to be_blank
+            expect(subject.body_changed?).to eq(true)
           end
 
           it "manually adds errors on empty body" do
-            is_expected.to eq(false)
+            subject.update_and_publish(params)
 
             is_expected.to have_error(body: :blank_during_publish)
           end
@@ -599,7 +558,7 @@ RSpec.shared_examples "a_publishable_model" do
       end
 
       describe "#update_and_unpublish" do
-        subject { create(:minimal_review, :published) }
+        subject { create_minimal_instance(:published) }
 
         before(:each) do
           allow(subject).to receive(:update    ).and_call_original
@@ -619,26 +578,23 @@ RSpec.shared_examples "a_publishable_model" do
 
             expect(subject.body).to eq(params["body"])
 
-            expect(subject).to_not be_published
+            expect(subject).to be_draft
           end
         end
 
         context "invalid" do
-          let(:params) { { "body" => "" } }
+          let(:params) { { "author_id" => nil, "body" => "" } }
 
           it "unpublishes, does not update and returns false" do
-            expect(subject).to receive(:update    )
             expect(subject).to receive(:unpublish!)
+            expect(subject).to receive(:update    )
 
             expect(subject.update_and_unpublish(params)).to eq(false)
 
-            expect(subject.body).to eq(nil)
+            expect(subject.body         ).to be_blank
+            expect(subject.body_changed?).to eq(true)
 
-            subject.reload
-
-            expect(subject.body).to_not eq(nil)
-
-            expect(subject).to_not be_published
+            expect(subject).to be_draft
           end
         end
       end
@@ -669,7 +625,7 @@ RSpec.shared_examples "a_publishable_model" do
         end
 
         context "invalid" do
-          let(:params) { { "body" => "", "publish_on" => 3.weeks.from_now } }
+          let(:params) { { "author_id" => nil, "body" => "", "publish_on" => 3.weeks.from_now } }
 
           it "does not update, does not attempt schedule and returns false" do
             expect(subject).to     receive(:update   )
@@ -677,14 +633,12 @@ RSpec.shared_examples "a_publishable_model" do
 
             expect(subject.update_and_schedule(params)).to eq(false)
 
-            expect(subject.body      ).to eq(nil)
             expect(subject.publish_on).to be_a_kind_of(ActiveSupport::TimeWithZone)
 
-            subject.reload
+            expect(subject.body         ).to be_blank
+            expect(subject.body_changed?).to eq(true)
 
-            expect(subject.body).to_not eq(nil)
-
-            expect(subject).to_not be_scheduled
+            expect(subject.reload).to_not be_scheduled
           end
 
           it "manually adds errors on empty body" do
@@ -696,7 +650,7 @@ RSpec.shared_examples "a_publishable_model" do
       end
 
       describe "#update_and_unschedule" do
-        subject { create(:minimal_review, :scheduled) }
+        subject { create_minimal_instance(:scheduled) }
 
         before(:each) do
           allow(subject).to receive(:update     ).and_call_original
@@ -704,7 +658,7 @@ RSpec.shared_examples "a_publishable_model" do
         end
 
         context "valid" do
-          let(:params) { { "work_id" => create(:minimal_work).id } }
+          let(:params) { { "body" => "" } }
 
           it "unschedules, updates, and returns true" do
             expect(subject).to receive(:update     )
@@ -712,16 +666,14 @@ RSpec.shared_examples "a_publishable_model" do
 
             expect(subject.update_and_unschedule(params)).to eq(true)
 
-            subject.reload
+            expect(subject.body).to be_blank
 
-            expect(subject.work_id).to eq(params["work_id"])
-
-            expect(subject).to_not be_scheduled
+            expect(subject.reload).to be_draft
           end
         end
 
         context "invalid" do
-          let(:params) { { "work_id" => "" } }
+          let(:params) { { "author_id" => nil, "body" => "" } }
 
           it "unschedules, fails update and returns false" do
             expect(subject).to receive(:update     )
@@ -729,13 +681,10 @@ RSpec.shared_examples "a_publishable_model" do
 
             expect(subject.update_and_unschedule(params)).to eq(false)
 
-            expect(subject.work_id).to eq(nil)
+            expect(subject.body         ).to be_blank
+            expect(subject.body_changed?).to eq(true)
 
-            subject.reload
-
-            expect(subject.work_id).to_not eq(nil)
-
-            expect(subject).to_not be_scheduled
+            expect(subject.reload).to be_draft
           end
         end
       end
