@@ -13,6 +13,10 @@ FactoryBot.define do
       playlist_id { create(:minimal_playlist).id }
     end
 
+    trait :with_published_publication do
+      published
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

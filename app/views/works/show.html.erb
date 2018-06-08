@@ -3,7 +3,7 @@
 %>
 
 <%= content_for(:header) do %>
-  <%= content_tag(:header, class: "article-header") do %>
+  <%= content_tag(:header, class: "post-header") do %>
     <%= content_tag(:h3, @work.medium.name) %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @work.credited_artists, class: "creators") %>

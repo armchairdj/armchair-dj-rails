@@ -18,8 +18,6 @@ private
     @homepage = true if request.url == "/"
   end
 
-private
-
   def find_collection
     @articles = scoped_collection
   end

@@ -20,7 +20,6 @@
             <%= sortable_th @sorts, "Status", text: viewable_status_icon, class: "icon"    %>
             <%= sortable_th @sorts, "Title"                                                %>
             <%= sortable_th @sorts, "Author"                                               %>
-            <%= sortable_th @sorts, "Type",                               class: "actions" %>
 
             <%= actions_th %>
           <% end %>
@@ -29,10 +28,9 @@
         <%= content_tag(:tbody) do %>
           <% @articles.each do |article| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post_status_icon(article), class: "icon"   ) %>
-              <%= content_tag(:td, article_title(article, length: 40)            ) %>
-              <%= content_tag(:td, article.display_author                     ) %>
-              <%= content_tag(:td, article.type,              class: "actions") %>
+              <%= content_tag(:td, post_status_icon(article), class: "icon") %>
+              <%= content_tag(:td, article_title(article, length: 40)      ) %>
+              <%= content_tag(:td, article.display_author                  ) %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link( article) %>

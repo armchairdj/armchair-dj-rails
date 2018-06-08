@@ -1,4 +1,4 @@
-header.article-header {
+header.post-header {
   @include bottom-margin-only();
   @include clearfix();
 
@@ -31,7 +31,7 @@ header.article-header {
   }
 }
 
-footer.article-byline {
+footer.post-byline {
   @include bottom-margin();
   font-size: .9rem;
 
@@ -40,7 +40,7 @@ footer.article-byline {
   }
 }
 
-aside.article-tags {
+aside.post-tags {
   @include bottom-margin();
   font-size: .9rem;
 }

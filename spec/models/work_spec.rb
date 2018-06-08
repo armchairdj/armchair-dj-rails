@@ -74,14 +74,22 @@ RSpec.describe Work, type: :model do
 
   context "associations" do
     it { is_expected.to have_many(:credits) }
-    it { is_expected.to have_many(:creators).through(:credits) }
-
     it { is_expected.to have_many(:contributions) }
+
+    it { is_expected.to have_many(:creators    ).through(:credits) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
+
+    it { is_expected.to belong_to(:medium) }
+    it { is_expected.to have_many(:facets).through(:medium) }
+    it { is_expected.to have_many(:categories).through(:facets) }
+
+    it { is_expected.to have_and_belong_to_many(:tags) }
 
     it { is_expected.to have_many(:reviews) }
 
-    it { is_expected.to have_and_belong_to_many(:tags) }
+    it { is_expected.to have_many(:playlistings) }
+    it { is_expected.to have_many(:playlists).through(:playlistings) }
+    it { is_expected.to have_many(:mixtapes ).through(:playlists) }
   end
 
   context "attributes" do

@@ -62,6 +62,7 @@ class Work < ApplicationRecord
 
   has_many :playlistings, inverse_of: :work, dependent: :destroy
   has_many :playlists, through: :playlistings
+  has_many :mixtapes,  through: :playlists
 
   #############################################################################
   # ATTRIBUTES.
