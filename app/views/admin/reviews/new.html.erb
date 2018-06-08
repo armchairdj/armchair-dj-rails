@@ -1,0 +1,16 @@
+<%
+  @title = "Create Review"
+%>
+
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
+
+<%= render partial: "form", locals: {
+  review:         @review,
+  selected_tab:   @selected_tab,
+  creators:       @creators,
+  media:          @media,
+  tags:           @tags,
+  works:          @works,
+} %>

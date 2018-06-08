@@ -49,8 +49,8 @@ RSpec.describe Tag, type: :model do
     end
 
     context "by category" do
-      let(:for_article_1) { create(:tag_for_item, name: "Z") }
-      let(:for_article_2) { create(:tag_for_item, name: "A") }
+      let(:for_article_1) { create(:tag_for_post, name: "Z") }
+      let(:for_article_2) { create(:tag_for_post, name: "A") }
       let(:for_work_1) { create(:tag_for_work, name: "X", category_name: "Foo") }
       let(:for_work_2) { create(:tag_for_work, name: "X", category_name: "Bar") }
       let(       :ids) { [for_article_1, for_article_2, for_work_1, for_work_2].map(&:id) }
@@ -72,8 +72,8 @@ RSpec.describe Tag, type: :model do
         it { is_expected.to match_array([for_article_1, for_article_2]) }
       end
 
-      describe "self#for_articles" do
-        subject { collection.for_articles }
+      describe "self#for_posts" do
+        subject { collection.for_posts }
 
         it { is_expected.to eager_load(:category, :works, :articles) }
 

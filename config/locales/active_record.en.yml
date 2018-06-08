@@ -26,6 +26,14 @@ en:
           scheduled: "Scheduled"
           published: "Published"
         tag_ids: "Tags"
+      mixtape:
+        published_at: "Publish Date"
+        publish_on: "Publish On"
+        statuses:
+          draft:     "Draft"
+          scheduled: "Scheduled"
+          published: "Published"
+        tag_ids: "Tags"
       review:
         published_at: "Publish Date"
         publish_on: "Publish On"

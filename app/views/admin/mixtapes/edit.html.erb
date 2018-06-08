@@ -1,0 +1,14 @@
+<%
+  @title = ["Update Mixtape", mixtape_title(@mixtape)]
+%>
+
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @mixtape,
+) %>
+
+<%= render partial: "form", locals: {
+  mixtape:   @mixtape,
+  tags:      @tags,
+  playlists: @playlists
+} %>

@@ -26,7 +26,7 @@ FactoryBot.define do
       with_playlist
     end
 
-    factory :complete_mixtape, parent: :minimal_review do
+    factory :complete_mixtape, parent: :minimal_mixtape do
       with_body
       with_summary
     end

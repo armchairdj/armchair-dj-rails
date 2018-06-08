@@ -88,7 +88,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -116,7 +116,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -164,7 +164,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -192,7 +192,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -254,7 +254,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -294,7 +294,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
             is_expected.to send_user_to(
               admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.articles.success.create")
+            ).with_flash(:success, "admin.flash.posts.success.create")
           end
         end
 
@@ -360,7 +360,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.update"
+              :success, "admin.flash.posts.success.update"
             ) }
           end
 
@@ -394,7 +394,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.update"
+              :success, "admin.flash.posts.success.update"
             ) }
           end
 
@@ -430,7 +430,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { id: article.to_param, article: min_valid_params }
 
               is_expected.to send_user_to(admin_article_path(article)).with_flash(
-                :success, "admin.flash.articles.success.update"
+                :success, "admin.flash.posts.success.update"
               )
             end
           end
@@ -469,7 +469,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           end
 
           it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-            :success, "admin.flash.articles.success.update"
+            :success, "admin.flash.posts.success.update"
           ) }
         end
 
@@ -488,7 +488,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           end
 
           it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-            :success, "admin.flash.articles.success.update"
+            :success, "admin.flash.posts.success.update"
           ) }
         end
       end
@@ -512,7 +512,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.publish"
+              :success, "admin.flash.posts.success.publish"
             ) }
           end
 
@@ -525,7 +525,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.publish"
+                :error, "admin.flash.posts.error.publish"
               )
 
               is_expected.to define_only_the_standalone_tab
@@ -541,7 +541,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "publish", id: article.to_param, article: invalid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.publish"
+                :error, "admin.flash.posts.error.publish"
               )
 
               is_expected.to define_only_the_standalone_tab
@@ -574,7 +574,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.publish"
+              :success, "admin.flash.posts.success.publish"
             ) }
           end
 
@@ -587,7 +587,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.publish"
+                :error, "admin.flash.posts.error.publish"
               )
 
               is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
@@ -606,7 +606,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "publish", id: article.to_param, article: invalid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.publish"
+                :error, "admin.flash.posts.error.publish"
               )
 
               is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
@@ -641,7 +641,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.unpublish"
+              :success, "admin.flash.posts.success.unpublish"
             ) }
           end
 
@@ -680,7 +680,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.unpublish"
+              :success, "admin.flash.posts.success.unpublish"
             ) }
           end
 
@@ -721,7 +721,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.schedule"
+              :success, "admin.flash.posts.success.schedule"
             ) }
           end
 
@@ -734,7 +734,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.schedule"
+                :error, "admin.flash.posts.error.schedule"
               )
 
               is_expected.to define_only_the_standalone_tab
@@ -750,7 +750,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "schedule", id: article.to_param, article: invalid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.schedule"
+                :error, "admin.flash.posts.error.schedule"
               )
 
               is_expected.to define_only_the_standalone_tab
@@ -783,7 +783,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.schedule"
+              :success, "admin.flash.posts.success.schedule"
             ) }
           end
 
@@ -796,7 +796,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.schedule"
+                :error, "admin.flash.posts.error.schedule"
               )
 
               is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
@@ -815,7 +815,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
               put :update, params: { step: "schedule", id: article.to_param, article: invalid_params }
 
               is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.articles.error.schedule"
+                :error, "admin.flash.posts.error.schedule"
               )
 
               is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
@@ -850,7 +850,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.unschedule"
+              :success, "admin.flash.posts.success.unschedule"
             ) }
           end
 
@@ -889,7 +889,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
             end
 
             it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.articles.success.unschedule"
+              :success, "admin.flash.posts.success.unschedule"
             ) }
           end
 
@@ -925,7 +925,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         delete :destroy, params: { id: article.to_param }
 
         is_expected.to send_user_to(admin_articles_path).with_flash(
-          :success, "admin.flash.articles.success.destroy"
+          :success, "admin.flash.posts.success.destroy"
         )
       end
     end

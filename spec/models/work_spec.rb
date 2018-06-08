@@ -269,7 +269,7 @@ RSpec.describe Work, type: :model do
       end
 
       describe "#only_tags_with_category" do
-        let(:tag_for_item) { create(:tag_for_item) }
+        let(:tag_for_post) { create(:tag_for_post) }
         let(:tag_for_work) { create(:tag_for_work) }
 
         subject { create(:minimal_work) }
@@ -284,7 +284,7 @@ RSpec.describe Work, type: :model do
 
         context "invalid" do
           it "disallows uncategorized tags" do
-            subject.update(tag_ids: [tag_for_item.id])
+            subject.update(tag_ids: [tag_for_post.id])
 
             is_expected.to have_error(tag_ids: :has_uncategorized_tags)
           end

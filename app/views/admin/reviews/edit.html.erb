@@ -1,0 +1,17 @@
+<%
+  @title = ["Update Review", review_title(@review)]
+%>
+
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @review,
+) %>
+
+<%= render partial: "form", locals: {
+  review:         @review,
+  selected_tab:   @selected_tab,
+  creators:       @creators,
+  media:          @media,
+  tags:           @tags,
+  works:          @works,
+} %>

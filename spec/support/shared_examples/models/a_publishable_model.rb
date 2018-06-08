@@ -177,14 +177,14 @@ RSpec.shared_examples "a_publishable_model" do
 
     context "custom" do
       describe "#only_bare_tags" do
-        let(:tag_for_item) { create(:tag_for_item) }
+        let(:tag_for_post) { create(:tag_for_post) }
         let(:tag_for_work) { create(:tag_for_work) }
 
         subject { create_minimal_instance }
 
         context "valid" do
           it "allows uncategorized tags" do
-            subject.update(tag_ids: [tag_for_item.id])
+            subject.update(tag_ids: [tag_for_post.id])
 
             expect(subject).to_not have_error(tag_ids: :has_categorized_tags)
           end

@@ -10,7 +10,7 @@ RSpec.describe "admin/articles/edit", type: :view do
       create(:minimal_creator)
       create(:minimal_medium)
       create(:minimal_work)
-      create(:tag_for_item)
+      create(:tag_for_post)
     end
 
     @creators = assign(:creators, Creator.all.alpha   )
@@ -27,7 +27,6 @@ RSpec.describe "admin/articles/edit", type: :view do
       before(:each) do
         @article           = assign(:article, create(:minimal_article))
         @selected_tab   = assign(:selected_tab, "article-standalone")
-        @available_tabs = assign(:available_tabs, ["article-standalone"])
       end
 
       context "pristine" do
@@ -78,7 +77,6 @@ RSpec.describe "admin/articles/edit", type: :view do
       before(:each) do
         @article           = assign(:article, create(:minimal_article))
         @selected_tab   = assign(:selected_tab, "article-choose-work")
-        @available_tabs = assign(:available_tabs, ["article-choose-work", "article-new-work"])
       end
 
       context "pristine" do

@@ -1,0 +1,13 @@
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: "legendary") do %>
+    <%= content_tag(:legend, "Publication Details") %>
+
+    <%= render partial: "admin/shared/forms/displayable_fields", locals: { f: f } %>
+
+    <% if f.object.published? %>
+      <%= f.input :published_at, as: :date, html5: true, readonly: true %>
+    <% elsif f.object.persisted? %>
+      <%= f.input :publish_on,   as: :date, html5: true, hint: true %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -114,9 +114,11 @@ module AdminHelper
 
   def admin_nav_links
     links = [
-      link_to("Articles",       admin_articles_path         ),
-      link_to("Playlists",   admin_playlists_path     ),
+      link_to("Articles",    admin_articles_path      ),
+      link_to("Reviews",     admin_reviews_path       ),
+      link_to("Mixtapes",    admin_mixtapes_path      ),
       link_to("Works",       admin_works_path         ),
+      link_to("Playlists",   admin_playlists_path     ),
       link_to("Creators",    admin_creators_path      ),
       link_to("Media",       admin_media_path         ),
       link_to("Roles",       admin_roles_path         ),

@@ -1,0 +1,85 @@
+<%
+  @title = ["View Mixtape", @mixtape.display_author, mixtape_title(@mixtape)]
+%>
+
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @mixtape,
+) %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, mixtape_title(@mixtape)) %>
+  <% end %>
+
+  <%= content_tag(:div, formatted_post_body(@mixtape)) %>
+<% end %>
+
+<%= content_tag(:section, class: "admin-section tabled") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Status") %>
+        <%= content_tag(:td) do %>
+          <%= @mixtape.human_status %>
+          <% if @mixtape.published? %>
+            on <%= admin_date(@mixtape.published_at, pubdate: "pubdate") %>
+          <% elsif @mixtape.scheduled? %>
+            for <%= admin_date(@mixtape.publish_on) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Playlist") %>
+        <%= content_tag(:td, link_to_playlist(@mixtape.playlist, admin: true)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Author") %>
+        <%= content_tag(:td) do %>
+          <%= link_to(@mixtape.display_author, admin_user_path(@mixtape.author)) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@mixtape.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td) do %>
+          <%= @mixtape.slug %> <%= "(dirty)" if @mixtape.dirty_slug? %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@mixtape.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@mixtape.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @mixtape.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/tags", locals: {
+  tags: @mixtape.all_tags.alpha
+} %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @mixtape.links
+} %>

@@ -1,0 +1,13 @@
+<%= simple_form_for([:admin, mixtape], html: { class: "admin"}) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/mixtapes/form_fields", locals: {
+      f:         f,
+      tags:      tags,
+      playlists: playlists
+    } %>
+  <% end %>
+
+  <%= render partial: "admin/posts/buttons", locals: { f: f } %>
+<% end %>

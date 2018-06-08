@@ -110,7 +110,7 @@ FactoryBot.define do
       with_summary
     end
 
-    factory :tag_for_item, parent: :minimal_tag do; end
+    factory :tag_for_post, parent: :minimal_tag do; end
 
     factory :tag_for_work, parent: :minimal_tag do
       with_existing_category

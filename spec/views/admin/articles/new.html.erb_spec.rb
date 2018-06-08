@@ -10,7 +10,7 @@ RSpec.describe "admin/articles/new", type: :view do
       create(:minimal_creator)
       create(:minimal_medium)
       create(:minimal_work)
-      create(:tag_for_item)
+      create(:tag_for_post)
     end
 
     @creators = assign(:creators, Creator.all.alpha   )

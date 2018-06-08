@@ -1,0 +1,13 @@
+<%
+  @title = "Create Mixtape"
+%>
+
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
+
+<%= render partial: "form", locals: {
+  mixtape:   @mixtape,
+  tags:      @tags,
+  playlists: @playlists
+} %>

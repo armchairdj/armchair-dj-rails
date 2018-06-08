@@ -35,20 +35,8 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Type") %>
-        <%= content_tag(:td, @article.type) %>
-      <% end %>
-
-      <% if @article.review? %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Subject") %>
-          <%= content_tag(:td, link_to_work(@article.work, admin: true)) %>
-        <% end %>
-      <% else %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Title") %>
-          <%= content_tag(:td, @article.title) %>
-        <% end %>
+        <%= content_tag(:th, "Title") %>
+        <%= content_tag(:td, @article.title) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
