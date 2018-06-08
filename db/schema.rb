@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_160503) do
+ActiveRecord::Schema.define(version: 2018_06_07_182249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,20 +43,17 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
     t.text "summary"
     t.boolean "primary", default: true, null: false
     t.boolean "individual", default: true, null: false
     t.string "alpha"
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["primary"], name: "index_creators_on_primary"
     t.index ["slug"], name: "index_creators_on_slug", unique: true
-    t.index ["unviewable_post_count"], name: "index_creators_on_unviewable_post_count"
-    t.index ["viewable_post_count"], name: "index_creators_on_viewable_post_count"
   end
 
   create_table "credits", force: :cascade do |t|
@@ -78,6 +75,18 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.integer "position"
     t.index ["category_id"], name: "index_facets_on_category_id"
     t.index ["medium_id"], name: "index_facets_on_medium_id"
+  end
+
+  create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
+    t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
   create_table "identities", force: :cascade do |t|
@@ -105,14 +114,11 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_media_on_alpha"
     t.index ["slug"], name: "index_media_on_slug", unique: true
-    t.index ["unviewable_post_count"], name: "index_media_on_unviewable_post_count"
-    t.index ["viewable_post_count"], name: "index_media_on_viewable_post_count"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -141,21 +147,17 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.text "summary"
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_playlists_on_alpha"
     t.index ["slug"], name: "index_playlists_on_slug", unique: true
-    t.index ["unviewable_post_count"], name: "index_playlists_on_unviewable_post_count"
-    t.index ["viewable_post_count"], name: "index_playlists_on_viewable_post_count"
   end
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.datetime "published_at"
-    t.bigint "work_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
@@ -165,10 +167,8 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.bigint "author_id"
     t.text "summary"
     t.string "alpha"
-    t.bigint "playlist_id"
     t.index ["alpha"], name: "index_posts_on_alpha"
     t.index ["author_id"], name: "index_posts_on_author_id"
-    t.index ["playlist_id"], name: "index_posts_on_playlist_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
   end
@@ -178,6 +178,33 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.bigint "tag_id", null: false
     t.index ["post_id", "tag_id"], name: "index_posts_tags_on_post_id_and_tag_id"
     t.index ["tag_id", "post_id"], name: "index_posts_tags_on_tag_id_and_post_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "author_id"
+    t.bigint "work_id"
+    t.text "body"
+    t.text "summary"
+    t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "publish_on"
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_reviews_on_alpha"
+    t.index ["author_id"], name: "index_reviews_on_author_id"
+    t.index ["slug"], name: "index_reviews_on_slug", unique: true
+    t.index ["status"], name: "index_reviews_on_status"
+    t.index ["work_id"], name: "index_reviews_on_work_id"
+  end
+
+  create_table "reviews_tags", id: false, force: :cascade do |t|
+    t.bigint "review_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["review_id", "tag_id"], name: "index_reviews_tags_on_review_id_and_tag_id"
+    t.index ["tag_id", "review_id"], name: "index_reviews_tags_on_tag_id_and_review_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -197,15 +224,12 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.datetime "updated_at", null: false
     t.string "alpha"
     t.text "summary"
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
     t.index ["category_id"], name: "index_tags_on_category_id"
     t.index ["slug"], name: "index_tags_on_slug", unique: true
-    t.index ["unviewable_post_count"], name: "index_tags_on_unviewable_post_count"
-    t.index ["viewable_post_count"], name: "index_tags_on_viewable_post_count"
   end
 
   create_table "tags_works", id: false, force: :cascade do |t|
@@ -242,24 +266,19 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.string "username", null: false
     t.text "bio"
     t.string "alpha"
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-    t.index ["unviewable_post_count"], name: "index_users_on_unviewable_post_count"
     t.index ["username"], name: "index_users_on_username", unique: true
-    t.index ["viewable_post_count"], name: "index_users_on_viewable_post_count"
   end
 
   create_table "works", force: :cascade do |t|
     t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "unviewable_post_count", default: 0, null: false
-    t.integer "viewable_post_count", default: 0, null: false
     t.string "subtitle"
     t.text "summary"
     t.string "alpha"
@@ -268,12 +287,11 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
     t.integer "ancestry_depth", default: 0
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
+    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["ancestry"], name: "index_works_on_ancestry"
     t.index ["medium_id"], name: "index_works_on_medium_id"
     t.index ["slug"], name: "index_works_on_slug", unique: true
-    t.index ["unviewable_post_count"], name: "index_works_on_unviewable_post_count"
-    t.index ["viewable_post_count"], name: "index_works_on_viewable_post_count"
   end
 
   add_foreign_key "contributions", "roles"
@@ -286,8 +304,9 @@ ActiveRecord::Schema.define(version: 2018_05_31_160503) do
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
   add_foreign_key "playlists", "users", column: "author_id"
-  add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
+  add_foreign_key "reviews", "users", column: "author_id"
+  add_foreign_key "reviews", "works"
   add_foreign_key "roles", "media"
   add_foreign_key "tags", "categories"
   add_foreign_key "works", "media"

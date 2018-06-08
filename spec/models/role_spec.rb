@@ -29,7 +29,7 @@ RSpec.describe Role, type: :model do
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { is_expected.to eager_load(:medium, :contributions, :works, :posts) }
+        it { is_expected.to eager_load(:medium, :contributions, :works, :reviews) }
       end
 
       describe "self#for_admin" do
@@ -39,7 +39,7 @@ RSpec.describe Role, type: :model do
           is_expected.to match_array([first, middle, last])
         end
 
-        it { is_expected.to eager_load(:medium, :contributions, :works, :posts) }
+        it { is_expected.to eager_load(:medium, :contributions, :works, :reviews) }
       end
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe Role, type: :model do
 
     it { is_expected.to have_many(:works).through(:contributions) }
 
-    it { is_expected.to have_many(:posts).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
   end
 
   context "validations" do

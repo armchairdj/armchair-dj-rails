@@ -126,6 +126,10 @@ RSpec.shared_examples "a_publishable_model" do
     end
   end
 
+  context "associations" do
+    it { is_expected.to have_and_belong_to_many(:tags) }
+  end
+
   context "attributes" do
     context "enums" do
       describe "status" do
@@ -207,8 +211,8 @@ RSpec.shared_examples "a_publishable_model" do
       :set_published_at,
       :clear_published_at,
       :clear_publish_on,
-      :update_counts_for_publishable,
-      :update_counts_for_all,
+      :update_viewable_for_publishable,
+      :update_viewable_for_all,
     ] }
 
     describe "states" do
@@ -230,8 +234,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "schedule" do
         before(:each) do
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:update_counts_for_publishable)
-          expect(draft).to receive(:update_counts_for_all)
+          expect(draft).to receive(:update_viewable_for_publishable)
+          expect(draft).to receive(:update_viewable_for_all)
         end
 
         specify do
@@ -244,8 +248,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "unschedule" do
         before(:each) do
           expect(scheduled).to receive(:clear_publish_on)
-          expect(scheduled).to receive(:update_counts_for_publishable)
-          expect(scheduled).to receive(:update_counts_for_all)
+          expect(scheduled).to receive(:update_viewable_for_publishable)
+          expect(scheduled).to receive(:update_viewable_for_all)
         end
 
         specify do
@@ -257,8 +261,8 @@ RSpec.shared_examples "a_publishable_model" do
         before(:each) do
           expect(draft).to receive(:set_published_at)
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:update_counts_for_publishable)
-          expect(draft).to receive(:update_counts_for_all)
+          expect(draft).to receive(:update_viewable_for_publishable)
+          expect(draft).to receive(:update_viewable_for_all)
         end
 
         specify do
@@ -269,8 +273,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "unpublish" do
         before(:each) do
           expect(published).to receive(:clear_published_at)
-          expect(published).to receive(:update_counts_for_publishable)
-          expect(published).to receive(:update_counts_for_all)
+          expect(published).to receive(:update_viewable_for_publishable)
+          expect(published).to receive(:update_viewable_for_all)
         end
 
         specify do
@@ -444,7 +448,7 @@ RSpec.shared_examples "a_publishable_model" do
         end
       end
 
-      describe "#update_counts_for_publishable" do
+      describe "#update_viewable_for_publishable" do
         let(:instance) { create_minimal_instance }
         let(  :author) { double }
         let(    :tags) { [double, double] }
@@ -453,17 +457,17 @@ RSpec.shared_examples "a_publishable_model" do
           allow(instance  ).to receive(:author).and_return(author)
           allow(instance  ).to receive(:tags  ).and_return(tags  )
 
-          allow(author    ).to receive(:update_counts)
-          allow(tags.first).to receive(:update_counts)
-          allow(tags.last ).to receive(:update_counts)
+          allow(author    ).to receive(:update_viewable)
+          allow(tags.first).to receive(:update_viewable)
+          allow(tags.last ).to receive(:update_viewable)
         end
 
         it "updates counts for author and tags" do
-          expect(author    ).to receive(:update_counts).once
-          expect(tags.first).to receive(:update_counts).once
-          expect(tags.last ).to receive(:update_counts).once
+          expect(author    ).to receive(:update_viewable).once
+          expect(tags.first).to receive(:update_viewable).once
+          expect(tags.last ).to receive(:update_viewable).once
 
-          instance.send(:update_counts_for_publishable)
+          instance.send(:update_viewable_for_publishable)
         end
       end
     end

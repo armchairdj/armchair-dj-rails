@@ -15,7 +15,7 @@ RSpec.shared_examples "a_displayable_model" do
 
   describe "sluggable methods" do
     let(:unviewable) { create_minimal_instance }
-    let(  :viewable) { create_minimal_instance(:with_published_post) }
+    let(  :viewable) { create_minimal_instance(:with_published_publication) }
 
     describe "#slug_locked?" do
       specify { expect(unviewable.send(:slug_locked?)).to eq(false) }

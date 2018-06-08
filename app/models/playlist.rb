@@ -36,7 +36,7 @@ class Playlist < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :posts, dependent: :destroy
+  # has_many :mixtapes, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.
@@ -87,10 +87,10 @@ class Playlist < ApplicationRecord
     end
   end
 
-  def update_counts_for_all
-    self.update_counts
+  def update_viewable_for_all
+    self.update_viewable
 
-    works.each(&:update_counts_for_all)
+    works.each(&:update_viewable_for_all)
   end
 
   def sluggable_parts

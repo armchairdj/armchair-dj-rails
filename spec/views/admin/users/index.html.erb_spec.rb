@@ -7,7 +7,7 @@ RSpec.describe "admin/users/index", type: :view do
 
   before(:each) do
     21.times do
-      create(:minimal_user, :with_published_post)
+      create(:minimal_user, :with_published_publication)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

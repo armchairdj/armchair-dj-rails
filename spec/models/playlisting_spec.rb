@@ -14,7 +14,7 @@ RSpec.describe Playlisting, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
+      let(:playlist_1) { create(:complete_playlist, :with_published_publication, title: "Z" ) }
       let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
       let(       :ids) { Playlisting.where(playlist_id: [playlist_1.id, playlist_2.id]).map(&:id).shuffle }
       let(:collection) { Playlisting.where(id: ids) }

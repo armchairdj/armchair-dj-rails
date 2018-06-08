@@ -22,7 +22,7 @@ class Role < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { joins(:medium).includes(:medium, :contributions, :works, :posts) }
+  scope :eager,     -> { joins(:medium).includes(:medium, :contributions, :works, :reviews) }
   scope :for_admin, -> { eager }
 
   #############################################################################
@@ -35,7 +35,7 @@ class Role < ApplicationRecord
 
   has_many :works, through: :contributions
 
-  has_many :posts, through: :works
+  has_many :reviews, through: :works
 
   #############################################################################
   # ATTRIBUTES.

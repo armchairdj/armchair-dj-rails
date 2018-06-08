@@ -9,7 +9,7 @@ RSpec.describe "admin/creators/index", type: :view do
 
   before(:each) do
     21.times do
-      create(:minimal_creator, :with_published_post)
+      create(:minimal_creator, :with_published_publication)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

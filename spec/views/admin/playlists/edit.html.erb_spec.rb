@@ -5,7 +5,7 @@ RSpec.describe "admin/playlists/edit", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Playlist)
-    @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_post))
+    @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_publication))
     @works       = assign(:works, Work.grouped_options)
   end
 

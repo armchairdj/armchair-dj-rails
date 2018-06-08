@@ -3,123 +3,107 @@
 RSpec.shared_examples "a_viewable_model" do
   context "included" do
     context "scope-related" do
-      let!(    :draft_instance) { create_minimal_instance(:with_draft_post    ) }
-      let!(:scheduled_instance) { create_minimal_instance(:with_scheduled_post) }
-      let!(:published_instance) { create_minimal_instance(:with_published_post) }
+      let!(    :draft) { create_minimal_instance(:with_draft_publication    ) }
+      let!(:scheduled) { create_minimal_instance(:with_scheduled_publication) }
+      let!(:published) { create_minimal_instance(:with_published_publication) }
 
-      let(:ids) { [draft_instance, scheduled_instance, published_instance].map(&:id) }
+      let(:ids) { [draft, scheduled, published].map(&:id) }
 
       context "scopes" do
         describe "self#viewable" do
           subject { described_class.viewable.where(id: ids) }
 
-          it { is_expected.to contain_exactly(published_instance) }
+          it { is_expected.to contain_exactly(published) }
         end
 
         describe "self#unviewable" do
           subject { described_class.unviewable.where(id: ids) }
 
-          it { is_expected.to contain_exactly(draft_instance, scheduled_instance) }
+          it { is_expected.to contain_exactly(draft, scheduled) }
         end
       end
 
       context "booleans" do
         describe "#viewable?" do
-          specify { expect(    draft_instance.viewable?).to eq(false) }
-          specify { expect(scheduled_instance.viewable?).to eq(false) }
-          specify { expect(published_instance.viewable?).to eq(true ) }
+          specify { expect(    draft.viewable?).to eq(false) }
+          specify { expect(scheduled.viewable?).to eq(false) }
+          specify { expect(published.viewable?).to eq(true ) }
         end
 
         describe "#unviewable?" do
-          specify { expect(    draft_instance.unviewable?).to eq(true ) }
-          specify { expect(scheduled_instance.unviewable?).to eq(true ) }
-          specify { expect(published_instance.unviewable?).to eq(false) }
-        end
-      end
-
-      context "scoped associations" do
-        describe "#viewable_posts" do
-          specify { expect(    draft_instance.viewable_posts).to have(0).items }
-          specify { expect(scheduled_instance.viewable_posts).to have(0).items }
-          specify { expect(published_instance.viewable_posts).to have(1).items }
-        end
-
-        describe "#unviewable_posts" do
-          specify { expect(    draft_instance.unviewable_posts).to have(1).items }
-          specify { expect(scheduled_instance.unviewable_posts).to have(1).items }
-          specify { expect(published_instance.unviewable_posts).to have(0).items }
-        end
-
-        describe "#viewable_works" do
-          specify { expect(    draft_instance.viewable_works).to have(0).items }
-          specify { expect(scheduled_instance.viewable_works).to have(0).items }
-          specify { expect(published_instance.viewable_works).to have(1).items }
-        end
-
-        describe "#unviewable_works" do
-          specify { expect(    draft_instance.unviewable_works).to have(1).items }
-          specify { expect(scheduled_instance.unviewable_works).to have(1).items }
-          specify { expect(published_instance.unviewable_works).to have(0).items }
+          specify { expect(    draft.unviewable?).to eq(true ) }
+          specify { expect(scheduled.unviewable?).to eq(true ) }
+          specify { expect(published.unviewable?).to eq(false) }
         end
       end
     end
 
     context "hooks" do
       describe "before_save" do
-        subject { build_minimal_instance }
+        subject { build_minimal_instance(:with_draft_publication) }
 
-        it "calls #refresh_counts" do
-           allow(subject).to receive(:refresh_counts).and_call_original
-          is_expected.to receive(:refresh_counts)
+        it "calls #refresh_viewable" do
+           allow(subject).to receive(:refresh_viewable).and_call_original
+          expect(subject).to receive(:refresh_viewable)
 
           subject.save
         end
 
         context "callbacks" do
-          describe "#refresh_counts" do
-            let(:instance_with_accurate_counts) {
-              create_minimal_instance(:with_one_of_each_post_status)
-            }
+          describe "#refresh_viewable (invoked via save)" do
+            describe "becoming viewable" do
+              subject { create_minimal_instance(:with_draft_publication) }
 
-            let(:instance_with_inaccurate_counts) {
-              instance = instance_with_accurate_counts
+              specify do
+                allow(subject).to receive(:has_published_content?).and_return(true)
 
-              instance.update_columns(viewable_post_count: 0, unviewable_post_count: 0)
+                expect(subject.viewable?).to eq(false)
 
-              instance
-            }
+                subject.save
 
-            before(:each) do
-              allow(subject).to receive(:save).and_call_original
-
-              is_expected.to_not receive(:save)
-            end
-
-            describe "with changes" do
-              subject { instance_with_inaccurate_counts }
-
-              it "caches counts without saving" do
-                expect(subject.viewable_post_count  ).to eq(0)
-                expect(subject.unviewable_post_count).to eq(0)
-
-                expect(subject.send(:refresh_counts)).to eq(true)
-
-                expect(subject.viewable_post_count  ).to eq(1)
-                expect(subject.unviewable_post_count).to eq(2)
+                expect(subject.viewable?).to eq(true)
               end
             end
 
-            describe "without changes" do
-              subject { instance_with_accurate_counts }
+            describe "becoming unviewable" do
+              subject { create_minimal_instance(:with_published_publication) }
 
-              it "does nothing" do
-                expect(subject.viewable_post_count  ).to eq(1)
-                expect(subject.unviewable_post_count).to eq(2)
+              specify do
+                allow(subject).to receive(:has_published_content?).and_return(false)
 
-                expect(subject.send(:refresh_counts)).to eq(false)
+                expect(subject.viewable?).to eq(true)
 
-                expect(subject.viewable_post_count  ).to eq(1)
-                expect(subject.unviewable_post_count).to eq(2)
+                subject.save
+
+                expect(subject.viewable?).to eq(false)
+              end
+            end
+
+            describe "already viewable" do
+              subject { create_minimal_instance(:with_published_publication) }
+
+              specify do
+                allow(subject).to receive(:has_published_content?).and_return(true)
+
+                expect(subject.viewable?).to eq(true)
+
+                subject.save
+
+                expect(subject.viewable?).to eq(true)
+              end
+            end
+
+            describe "still unviewable" do
+              subject { create_minimal_instance(:with_draft_publication) }
+
+              specify do
+                allow(subject).to receive(:has_published_content?).and_return(false)
+
+                expect(subject.viewable?).to eq(false)
+
+                subject.save
+
+                expect(subject.viewable?).to eq(false)
               end
             end
           end
@@ -129,57 +113,57 @@ RSpec.shared_examples "a_viewable_model" do
   end
 
   context "instance" do
-    describe "#update_counts" do
-      let(:instance_with_accurate_counts) {
-        create_minimal_instance(:with_one_of_each_post_status)
-      }
+    subject { create_minimal_instance }
 
-      let(:instance_with_inaccurate_counts) {
-        instance = instance_with_accurate_counts
-        instance.update_columns(viewable_post_count: 0, unviewable_post_count: 0)
-        instance
-      }
-
+    describe "#update_viewable" do
       before(:each) do
-        allow(subject).to receive(:save          ).and_call_original
-        allow(subject).to receive(:refresh_counts).and_call_original
-
-        is_expected.to receive(:refresh_counts)
+        allow(subject).to receive(:save            ).and_call_original
+        allow(subject).to receive(:refresh_viewable).and_call_original
       end
 
-      describe "with changes" do
-        subject { instance_with_inaccurate_counts }
+      describe "no change" do
+        before(:each) do
+          expect(subject).to     receive(:refresh_viewable)
+          expect(subject).to_not receive(:save)
+        end
 
-        it "caches counts and saves" do
-          expect(subject.viewable_post_count  ).to eq(0)
-          expect(subject.unviewable_post_count).to eq(0)
+        context "viewable" do
+          subject { create_minimal_instance(:with_published_publication) }
 
-          is_expected.to receive(:save)
+          specify { subject.update_viewable }
+        end
 
-          expect(subject.update_counts).to eq(true)
+        context "unviewable" do
+          subject { create_minimal_instance(:with_draft_publication) }
 
-          subject.reload
-
-          expect(subject.viewable_post_count  ).to eq(1)
-          expect(subject.unviewable_post_count).to eq(2)
+          specify { subject.update_viewable }
         end
       end
 
-      describe "without changes" do
-        subject { instance_with_accurate_counts }
+      describe "change" do
+        before(:each) do
+          expect(subject).to receive(:refresh_viewable)
+          expect(subject).to receive(:save)
+        end
 
-        it "does nothing" do
-          expect(subject.viewable_post_count  ).to eq(1)
-          expect(subject.unviewable_post_count).to eq(2)
+        context "viewable" do
+          before(:each) do
+            allow(subject).to receive(:has_published_content?).and_return(false)
+          end
 
-          is_expected.to_not receive(:save)
+          subject { create_minimal_instance(:with_published_publication) }
 
-          expect(subject.update_counts).to eq(false)
+          specify { subject.update_viewable }
+        end
 
-          subject.reload
+        context "unviewable" do
+          before(:each) do
+            allow(subject).to receive(:has_published_content?).and_return(true)
+          end
 
-          expect(subject.viewable_post_count  ).to eq(1)
-          expect(subject.unviewable_post_count).to eq(2)
+          subject { create_minimal_instance(:with_draft_publication) }
+
+          specify { subject.update_viewable }
         end
       end
     end

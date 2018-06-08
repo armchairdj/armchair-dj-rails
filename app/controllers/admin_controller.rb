@@ -55,17 +55,15 @@ private
   end
 
   def allowed_sorts(extra = nil)
-    default_sort = "#{controller_name}.updated_at DESC"
-    ppc_sort     = "#{controller_name}.viewable_post_count ASC"
-    dpc_sort     = "#{controller_name}.unviewable_post_count ASC"
+    default_sort  = "#{controller_name}.updated_at DESC"
+    viewable_sort = "#{controller_name}.viewable ASC"
 
     base = { "Default" => default_sort }
 
     return base unless model_class.include? Viewable
 
     base.merge({
-      "PPC" => [ppc_sort,  extra].compact.join(", "),
-      "DPC" => [dpc_sort, extra].compact.join(", "),
+      "Viewable" => [viewable_sort, extra].compact.join(", "),
     })
   end
 

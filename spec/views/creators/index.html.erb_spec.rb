@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "creators/index", type: :view do
   before(:each) do
     21.times do
-      create(:minimal_creator, :with_published_post)
+      create(:minimal_creator, :with_published_publication)
     end
 
     @creators = assign(:creators, Creator.all.alpha.page(1))

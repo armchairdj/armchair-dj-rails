@@ -27,7 +27,7 @@ class Tag < ApplicationRecord
   scope        :string, -> { for_works.where(categories: { format: Category.formats[:string] }) }
   scope          :year, -> { for_works.where(categories: { format: Category.formats[:year  ] }) }
 
-  scope         :eager, -> { includes(:category, :works, :posts).references(:category) }
+  scope         :eager, -> { includes(:category, :works, :posts, :reviews).references(:category) }
   scope     :for_admin, -> { eager }
   scope      :for_site, -> { eager.viewable.alpha }
 
@@ -39,19 +39,19 @@ class Tag < ApplicationRecord
 
   belongs_to :category, optional: true
 
-  has_and_belongs_to_many :works
-
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
   has_and_belongs_to_many :posts
+  has_and_belongs_to_many :reviews
 
-  has_many :reviews, through: :works, class_name: "Post", source: :posts
+  has_and_belongs_to_many :works
+
+  has_many :work_reviews, through: :works, source: :reviews, class_name: "Review"
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
-
 
   #############################################################################
   # VALIDATIONS.
@@ -72,10 +72,6 @@ class Tag < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def all_posts
-    Post.where(id: (reviews.map(&:id) + posts.map(&:id)).uniq)
-  end
 
   def categorized?
     category.present?
@@ -109,5 +105,11 @@ class Tag < ApplicationRecord
     return [name] unless categorized?
 
     [category.try(:name), name]
+  end
+
+private
+
+  def has_published_content?
+    super || self.work_reviews.published.count > 0
   end
 end

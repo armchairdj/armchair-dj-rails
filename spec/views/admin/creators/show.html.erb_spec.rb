@@ -7,7 +7,7 @@ RSpec.describe "admin/creators/show", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Creator)
-    @creator     = assign(:creator, create(:minimal_creator, :with_published_post))
+    @creator     = assign(:creator, create(:minimal_creator, :with_published_publication))
   end
 
   it "renders" do

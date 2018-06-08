@@ -21,7 +21,7 @@ class Medium < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:roles, :works, :posts, :facets, :categories, :tags) }
+  scope :eager,     -> { includes(:roles, :works, :reviews, :facets, :categories, :tags) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.alpha }
 
@@ -35,7 +35,7 @@ class Medium < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :posts, through: :works
+  has_many :reviews, through: :works
 
   has_many :facets, -> { order(:position) }, inverse_of: :medium, dependent: :destroy
 

@@ -15,9 +15,9 @@ RSpec.describe Tag, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let(        :uv) { create(:minimal_tag, :with_published_post,  name: "UV") }
+      let(        :uv) { create(:minimal_tag, :with_published_publication,  name: "UV") }
       let(        :cv) { create(:minimal_tag, :with_viewable_work,   name: "CV") }
-      let(        :uu) { create(:minimal_tag, :with_draft_post,      name: "UU") }
+      let(        :uu) { create(:minimal_tag, :with_draft_publication,      name: "UU") }
       let(        :cu) { create(:minimal_tag, :with_unviewable_work, name: "CU") }
       let(       :ids) { [cu, cv, uu, uv].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
@@ -28,6 +28,7 @@ RSpec.describe Tag, type: :model do
         it { is_expected.to eager_load(:category) }
         it { is_expected.to eager_load(:works   ) }
         it { is_expected.to eager_load(:posts   ) }
+        it { is_expected.to eager_load(:reviews ) }
 
         it { is_expected.to contain_exactly(cu, cv, uu, uv) }
       end
@@ -36,14 +37,14 @@ RSpec.describe Tag, type: :model do
         subject { collection.for_admin }
 
         it { is_expected.to contain_exactly(cu, cv, uu, uv) }
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :posts, :reviews) }
       end
 
       describe "self#for_site" do
         subject { collection.for_site }
 
         it { is_expected.to eq([cv, uv]) }
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :posts, :reviews) }
       end
     end
 
@@ -140,12 +141,11 @@ RSpec.describe Tag, type: :model do
     it { is_expected.to belong_to(:category).optional }
 
     it { is_expected.to have_and_belong_to_many(:posts) }
-
     it { is_expected.to have_and_belong_to_many(:works) }
 
     it { is_expected.to have_many(:creators    ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:reviews     ).through(:works) }
+    it { is_expected.to have_many(:work_reviews).through(:works) }
   end
 
   context "validations" do
@@ -199,7 +199,5 @@ RSpec.describe Tag, type: :model do
       specify { expect(uncategorized.display_name).to eq("Uncategorized"        ) }
       specify { expect(  categorized.display_name).to eq("Category: Categorized") }
     end
-
-    pending "#all_posts"
   end
 end

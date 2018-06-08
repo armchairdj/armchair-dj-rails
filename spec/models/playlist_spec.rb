@@ -67,7 +67,7 @@ RSpec.describe Playlist, type: :model do
     it { is_expected.to have_many(:creators    ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
-    it { is_expected.to have_many(:posts) }
+    # it { is_expected.to have_many(:mixtapes) }
   end
 
   context "attributes" do

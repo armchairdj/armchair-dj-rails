@@ -5,7 +5,7 @@ RSpec.describe "admin/playlists/show", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Playlist)
-    @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_post))
+    @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_publication))
   end
 
   it "renders" do

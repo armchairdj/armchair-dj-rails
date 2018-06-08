@@ -17,6 +17,10 @@ RSpec.describe Post, type: :model do
     it_behaves_like "a_summarizable_model"
   end
 
+  context "class" do
+    # Nothing so far.
+  end
+
   context "scope-related" do
     context "basics" do
       let!(     :draft) { create_minimal_instance(:draft    ) }
@@ -34,9 +38,7 @@ RSpec.describe Post, type: :model do
       describe "self#for_admin" do
         subject { collection.for_admin }
 
-        specify do
-          is_expected.to contain_exactly(draft, scheduled, published)
-        end
+        it { is_expected.to contain_exactly(draft, scheduled, published) }
 
         it { is_expected.to eager_load(:author) }
       end
@@ -52,7 +54,7 @@ RSpec.describe Post, type: :model do
   end
 
   context "associations" do
-    it { is_expected.to have_and_belong_to_many(:tags) }
+    # Nothing so far.
   end
 
   context "validations" do
@@ -69,7 +71,7 @@ RSpec.describe Post, type: :model do
       specify { expect(instance.type(plural: true)).to eq("Posts") }
     end
 
-    describe "#update_counts_for_all" do
+    describe "#update_viewable_for_all" do
       # Empty method
     end
 

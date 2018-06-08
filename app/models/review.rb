@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Post < ApplicationRecord
+class Review < ApplicationRecord
 
   #############################################################################
   # CONCERNS.
@@ -8,17 +8,18 @@ class Post < ApplicationRecord
 
   include Alphabetizable
   include Linkable
-  include Publishable
   include Sluggable
   include Summarizable
+
+  include Publishable
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,           -> { includes(:medium, :work, :creators, :author).references(:medium) }
-  scope :for_admin,       -> { eager                        }
-  scope :for_site,        -> { eager.published.reverse_cron }
+  scope :eager,     -> { includes(:author, :medium, :work, :creators).references(:medium) }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { eager.published.reverse_cron }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -44,7 +45,6 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :body, presence: true, unless: :draft?
   validates :work, presence: true
 
   #############################################################################
@@ -56,7 +56,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def sluggable_parts
-    [ work.sluggable_parts ]
+    work.try(:sluggable_parts) || []
   end
 
   #############################################################################
@@ -89,10 +89,10 @@ class Post < ApplicationRecord
   end
 
   def alpha_parts
-    [work.alpha_parts]
+    [ work.try(:alpha_parts) ]
   end
 
-  def update_counts_for_all
-    work.update_counts_for_all
+  def update_viewable_for_all
+    work.update_viewable_for_all
   end
 end

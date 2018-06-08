@@ -18,7 +18,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   scope :eager,     -> { includes(:author) }
-  scope :for_admin, -> { eager                        }
+  scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
   #############################################################################
@@ -67,7 +67,7 @@ class Post < ApplicationRecord
     [ title ]
   end
 
-  def update_counts_for_all
+  def update_viewable_for_all
     # Do nothing.
   end
 end

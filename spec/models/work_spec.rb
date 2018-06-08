@@ -48,7 +48,7 @@ RSpec.describe Work, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
     end
 
     describe "self#for_admin" do
@@ -58,17 +58,17 @@ RSpec.describe Work, type: :model do
         is_expected.to contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
       end
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
     end
 
     describe "self#for_site" do
       subject { described_class.for_site }
 
-      it "contains only works with published posts, alphabetically" do
+      it "contains only works with published reviews, alphabetically" do
         is_expected.to eq([la_bouche, robyn_s])
       end
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :posts) }
+      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:contributions) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
 
-    it { is_expected.to have_many(:posts) }
+    it { is_expected.to have_many(:reviews) }
 
     it { is_expected.to have_and_belong_to_many(:tags) }
   end

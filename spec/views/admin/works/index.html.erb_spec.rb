@@ -9,7 +9,7 @@ RSpec.describe "admin/works/index", type: :view do
 
   before(:each) do
     21.times do
-      create(:stuffed_work, :with_published_post)
+      create(:stuffed_work, :with_published_publication)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

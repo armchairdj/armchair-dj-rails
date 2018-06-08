@@ -110,28 +110,28 @@ module Publishable
       state :published
 
       event(:schedule,
-        after: [:update_counts_for_publishable, :update_counts_for_all]
+        after: [:update_viewable_for_publishable, :update_viewable_for_all]
       ) do
         transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
       end
 
       event(:unschedule,
         before: :clear_publish_on,
-        after:  [:update_counts_for_publishable, :update_counts_for_all]
+        after:  [:update_viewable_for_publishable, :update_viewable_for_all]
       ) do
         transitions from: :scheduled, to: :draft
       end
 
       event(:publish,
         before: :set_published_at,
-        after:  [:update_counts_for_publishable, :update_counts_for_all]
+        after:  [:update_viewable_for_publishable, :update_viewable_for_all]
       ) do
         transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
       end
 
       event(:unpublish,
         before: :clear_published_at,
-        after:  [:update_counts_for_publishable, :update_counts_for_all]
+        after:  [:update_viewable_for_publishable, :update_viewable_for_all]
       ) do
         transitions from: :published, to: :draft
       end
@@ -202,7 +202,7 @@ module Publishable
     draft? || scheduled?
   end
 
-  def update_counts_for_all
+  def update_viewable_for_all
     raise NotImplementedError
   end
 
@@ -236,9 +236,9 @@ private
     self.publish_on = temp
   end
 
-  def update_counts_for_publishable
-    author.update_counts
+  def update_viewable_for_publishable
+    author.update_viewable
 
-    tags.each { |t| t.update_counts }
+    tags.each { |t| t.update_viewable }
   end
 end

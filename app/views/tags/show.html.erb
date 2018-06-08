@@ -7,7 +7,7 @@
 } %>
 
 <%= render partial: "shared/playback/posts", locals: {
-  posts: @tag.all_posts.for_site
+  posts: @tag.posts.for_site
 } %>
 
 <%= render partial: "shared/playback/links", locals: {

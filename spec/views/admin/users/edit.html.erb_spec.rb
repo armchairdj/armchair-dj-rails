@@ -5,7 +5,7 @@ RSpec.describe "admin/users/edit", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, User)
-    @user        = assign(:user, create(:minimal_user, :with_published_post))
+    @user        = assign(:user, create(:minimal_user, :with_published_publication))
     @roles       = assign(:roles, create(:root).assignable_role_options)
   end
 

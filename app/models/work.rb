@@ -37,10 +37,9 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { joins(:medium).includes(:medium, :credits, :creators, :contributions, :contributors, :posts) }
-
+  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :reviews).references(:medium) }
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { viewable.includes(:posts).alpha }
+  scope :for_site,  -> { viewable.includes(:reviews).alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -52,7 +51,7 @@ class Work < ApplicationRecord
   has_many :creators,     through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
-  has_many :posts, dependent: :destroy
+  has_many :reviews, dependent: :destroy
 
   belongs_to :medium
 
@@ -174,7 +173,7 @@ class Work < ApplicationRecord
   def credited_artists(connector: " & ")
     return creators.alpha.to_a.map(&:name).join(connector) if persisted?
 
-    # So we can correctly calculate memoized alpha post value during
+    # So we can correctly calculate memoized alpha value for review during
     # nested object creation.
 
     unsaved = credits.map { |c| c.creator.try(:name) }.compact
@@ -197,13 +196,13 @@ class Work < ApplicationRecord
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
-  def update_counts_for_all
-    self.update_counts
+  def update_viewable_for_all
+    self.update_viewable
 
-    medium.update_counts
-    creators.each(    &:update_counts)
-    contributors.each(&:update_counts)
-    tags.each(        &:update_counts)
+    medium.update_viewable
+    creators.each(    &:update_viewable)
+    contributors.each(&:update_viewable)
+    tags.each(        &:update_viewable)
   end
 
   def sluggable_parts

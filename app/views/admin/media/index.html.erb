@@ -18,8 +18,6 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= sortable_th @sorts, "Name" %>
-            <%= sortable_th @sorts, "PPC", text: ppc_icon, class: "icon" %>
-            <%= sortable_th @sorts, "DPC", text: dpc_icon, class: "icon" %>
 
             <%= actions_th %>
           <% end %>
@@ -29,9 +27,6 @@
           <% @media.each do |medium| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, medium.name) %>
-
-              <%= content_tag(:td, medium.viewable_post_count,     class: "icon") %>
-              <%= content_tag(:td, medium.unviewable_post_count, class: "icon") %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(medium) %>

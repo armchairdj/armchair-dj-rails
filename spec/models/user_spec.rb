@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :reviews, :works, :creators) }
     end
 
     describe "self#for_admin" do
@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
         is_expected.to contain_exactly(jenny, charlie, brian, gruber)
       end
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :reviews, :works, :creators) }
     end
 
     describe "self#for_site" do
@@ -71,14 +71,16 @@ RSpec.describe User, type: :model do
         is_expected.to eq([brian, jenny])
       end
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:posts, :reviews, :works, :creators) }
     end
   end
 
   context "associations" do
    it { is_expected.to have_many(:posts) }
 
-   it { is_expected.to have_many(:works).through(:posts) }
+   it { is_expected.to have_many(:reviews) }
+
+   it { is_expected.to have_many(:works).through(:reviews) }
 
    it { is_expected.to have_many(:creators).through(:works) }
   end

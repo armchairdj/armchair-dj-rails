@@ -26,6 +26,14 @@ en:
           scheduled: "Scheduled"
           published: "Published"
         tag_ids: "Tags"
+      review:
+        published_at: "Publish Date"
+        publish_on: "Publish On"
+        statuses:
+          draft:     "Draft"
+          scheduled: "Scheduled"
+          published: "Published"
+        tag_ids: "Tags"
       user:
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
@@ -93,21 +101,34 @@ en:
               too_short: "Please choose at least two works."
             slug:
               locked: "You cannot change the slug on a playlist with published posts."
+        reviews:
+          attributes:
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This user is not an author."
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
+            body:
+              blank_during_publish: "You cannot publish a review without a body."
+            slug:
+              locked: "You cannot change the slug on a published review."
+            publish_on:
+              blank: "Please choose a publication date to schedule this review."
+            tag_ids:
+              has_categorized_tags: "Review tags cannot be categorized."
         post:
           attributes:
             author:
               blank: "Please choose an author."
-              invalid_author: "This author cannot post."
+              invalid_author: "This user is not an author."
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
-              has_title_and_postable: "Please either choose a work, choose a playlist or add a title for a standalone post."
-              needs_title_or_postable: "Please choose a work to review, a playlist to introduce or a title for a standalone post."
             body:
               blank_during_publish: "You cannot publish a post without a body."
             slug:
               locked: "You cannot change the slug on a published post."
             publish_on:
-              blank: "Please choose a publication date to schedule this review."
+              blank: "Please choose a publication date to schedule this post."
             tag_ids:
               has_categorized_tags: "Post tags cannot be categorized."
         tag:
