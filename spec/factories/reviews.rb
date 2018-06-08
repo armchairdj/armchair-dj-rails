@@ -30,14 +30,14 @@ FactoryBot.define do
       with_work
     end
 
-    factory :song_review do
-      with_existing_author
-      with_song
-    end
-
     factory :complete_review, parent: :minimal_review do
       with_body
       with_summary
+    end
+
+    factory :song_review do
+      with_existing_author
+      with_song
     end
 
     factory :review_with_new_work do

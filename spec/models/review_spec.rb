@@ -32,7 +32,7 @@ RSpec.describe Review, type: :model do
       describe "self#eager" do
         subject { collection.eager }
 
-        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
+        it { is_expected.to eager_load(:author, :tags, :work, :medium, :creators) }
       end
 
       describe "self#for_admin" do
@@ -40,7 +40,7 @@ RSpec.describe Review, type: :model do
 
         it { is_expected.to contain_exactly(draft, scheduled, published) }
 
-        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
+        it { is_expected.to eager_load(:author, :tags, :work, :medium, :creators) }
       end
 
       describe "self#for_site" do
@@ -48,7 +48,7 @@ RSpec.describe Review, type: :model do
 
         it { is_expected.to eq [published] }
 
-        it { is_expected.to eager_load(:medium, :work, :creators, :author) }
+        it { is_expected.to eager_load(:author, :tags, :work, :medium, :creators) }
       end
     end
   end
@@ -76,21 +76,13 @@ RSpec.describe Review, type: :model do
       it { is_expected.to accept_nested_attributes_for(:work).allow_destroy(false) }
 
       describe "reject_if" do
-        subject { build(:review, body: "body", work_attributes: { "0" => { "title" => "" } }) }
+        subject { build(:review, :with_body, work_attributes: { "0" => { "title" => "" } }) }
 
         it "rejects works with blank titles" do
           expect { subject.save }.to_not change { Work.count }
 
           expect(subject.work).to eq(nil)
         end
-      end
-    end
-
-    context "enums" do
-      describe "status" do
-        it { is_expected.to define_enum_for(:status) }
-
-        it_behaves_like "an_enumable_model", [:status]
       end
     end
   end
@@ -109,6 +101,19 @@ RSpec.describe Review, type: :model do
 
       specify { expect(instance.type              ).to eq("Song Review" ) }
       specify { expect(instance.type(plural: true)).to eq("Song Reviews") }
+    end
+
+    describe "#update_viewable_for_all" do
+      subject { create_minimal_instance }
+
+      before(:each) do
+         allow(subject.work).to receive(:update_viewable_for_all)
+        expect(subject.work).to receive(:update_viewable_for_all)
+      end
+
+      it "updates viewable for descendents" do
+        subject.update_viewable_for_all
+      end
     end
 
     describe "#prepare_work_for_editing" do
@@ -335,31 +340,6 @@ RSpec.describe Review, type: :model do
       end
     end
 
-    describe "#sluggable_parts" do
-      let(:review) { create(:hounds_of_love_album_review) }
-      let(:collab) { create(:unity_album_review         ) }
-
-      specify "for review" do
-        expect(review.send(:sluggable_parts)) .to eq(["Albums", "Kate Bush", "Hounds of Love", nil])
-      end
-
-      specify "for review of work with subtitle" do
-        review.work.subtitle = "Remastered"
-
-        expect(review.send(:sluggable_parts)) .to eq(["Albums", "Kate Bush", "Hounds of Love", "Remastered"])
-      end
-
-      specify "for review of collaborative work" do
-        expect(collab.send(:sluggable_parts)).to eq(["Albums", "Carl Craig and Green Velvet", "Unity", nil])
-      end
-    end
-
-    describe "#alpha_parts" do
-      subject { instance.alpha_parts }
-
-      it { is_expected.to eq([instance.work.alpha_parts]) }
-    end
-
     describe "#all_tags" do
       let(:instance) { create_minimal_instance }
 
@@ -369,43 +349,30 @@ RSpec.describe Review, type: :model do
 
       pending "better spec for all_tags"
     end
-  end
 
-  describe "#update_viewable_for_all" do
-    let(    :creator_1) { create(:minimal_creator) }
-    let(    :creator_2) { create(:minimal_creator) }
-    let(:contributor_1) { create(:minimal_creator) }
-    let(:contributor_2) { create(:minimal_creator) }
-    let(     :category) { create(:minimal_category) }
-    let( :category_tag) { create(:minimal_tag, category_id: category.id) }
-    let(       :medium) { create(:minimal_medium) }
-    let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
+    describe "#sluggable_parts" do
+      let(:review) { create(:hounds_of_love_album_review) }
+      let(:collab) { create(:unity_album_review         ) }
 
-    let(:work) do
-      create(:minimal_work, medium_id: medium.id, tag_ids: [category_tag.id],
-        credits_attributes: {
-          "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
-        },
-        contributions_attributes: {
-          "0" => attributes_for(:minimal_contribution, creator_id: contributor_1.id),
-          "1" => attributes_for(:minimal_contribution, creator_id: contributor_2.id),
-        }
-      )
+      specify "for review" do
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Hounds of Love", nil])
+      end
+
+      specify "for review of work with subtitle" do
+        review.work.subtitle = "Remastered"
+
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Hounds of Love", "Remastered"])
+      end
+
+      specify "for review of collaborative work" do
+        expect(collab.sluggable_parts).to eq(["Albums", "Carl Craig and Green Velvet", "Unity", nil])
+      end
     end
 
-    let(:review) { create(:minimal_review, :draft, :with_body, work_id: work.id) }
+    describe "#alpha_parts" do
+      subject { instance.alpha_parts }
 
-    it "updates viewable for descendents" do
-      review.publish!
-
-      expect(         work.reload.viewable?).to eq(true)
-      expect(       medium.reload.viewable?).to eq(true)
-      expect( category_tag.reload.viewable?).to eq(true)
-      expect(    creator_1.reload.viewable?).to eq(true)
-      expect(    creator_1.reload.viewable?).to eq(true)
-      expect(contributor_1.reload.viewable?).to eq(true)
-      expect(contributor_2.reload.viewable?).to eq(true)
+      it { is_expected.to eq([instance.work.alpha_parts]) }
     end
   end
 end

@@ -581,6 +581,92 @@ RSpec.describe Work, type: :model do
       end
     end
 
+    describe "#grouped_parent_dropdown_options" do
+      describe "groups works by genre, excludes unavailable parents, and alphabetizes optgroups and options" do
+        let(:creator) { create(:minimal_creator) }
+
+        let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
+        let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
+        let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
+
+        let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
+        let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
+        let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
+        let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
+        let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
+        let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
+
+        specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
+
+        specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle ] ],
+          [ "Grandpa", [grandparent   ] ],
+          [ "Son",     [child, sibling] ]
+        ]) }
+
+        specify { expect(uncle.grouped_parent_dropdown_options).to eq([
+          [ "Dad",      [parent        ] ],
+          [ "Grandpa",  [grandparent   ] ],
+          [ "Son",      [child, sibling] ]
+        ]) }
+
+        specify { expect(parent.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [uncle      ] ],
+          [ "Grandpa", [grandparent] ]
+        ]) }
+
+        specify { expect(sibling.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle] ],
+          [ "Grandpa", [grandparent  ] ],
+          [ "Son",     [child        ] ]
+        ]) }
+
+        specify { expect(child.grouped_parent_dropdown_options).to eq([
+          [ "Dad",     [parent, uncle] ],
+          [ "Grandpa", [grandparent  ] ],
+          [ "Son",     [sibling      ] ]
+        ]) }
+      end
+    end
+
+    describe "#update_viewable_for_all" do
+      let(    :creator_1) { create(:minimal_creator) }
+      let(    :creator_2) { create(:minimal_creator) }
+      let(:contributor_1) { create(:minimal_creator) }
+      let(:contributor_2) { create(:minimal_creator) }
+      let(     :category) { create(:minimal_category) }
+      let( :category_tag) { create(:minimal_tag, category_id: category.id) }
+      let(       :medium) { create(:minimal_medium) }
+      let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
+
+      let(:work) do
+        create(:minimal_work, medium_id: medium.id, tag_ids: [category_tag.id],
+          credits_attributes: {
+            "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+          },
+          contributions_attributes: {
+            "0" => attributes_for(:minimal_contribution, creator_id: contributor_1.id),
+            "1" => attributes_for(:minimal_contribution, creator_id: contributor_2.id),
+          }
+        )
+      end
+
+      let(:review) { create(:minimal_review, :draft, :with_body, work_id: work.id) }
+
+      it "updates viewable for descendents" do
+        review.publish!
+
+        expect(         work.reload.viewable?).to eq(true)
+        expect(       medium.reload.viewable?).to eq(true)
+        expect( category_tag.reload.viewable?).to eq(true)
+        expect(    creator_1.reload.viewable?).to eq(true)
+        expect(    creator_1.reload.viewable?).to eq(true)
+        expect(contributor_1.reload.viewable?).to eq(true)
+        expect(contributor_2.reload.viewable?).to eq(true)
+      end
+    end
+
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
@@ -633,54 +719,6 @@ RSpec.describe Work, type: :model do
       subject { instance.alpha_parts }
 
       it { is_expected.to eq([instance.credited_artists, instance.title, instance.subtitle]) }
-    end
-
-    describe "#grouped_parent_dropdown_options" do
-      describe "groups works by genre, excludes unavailable parents, and alphabetizes optgroups and options" do
-        let(:creator) { create(:minimal_creator) }
-
-        let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
-        let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
-        let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
-
-        let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
-        let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
-        let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
-        let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
-        let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
-        let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
-
-        specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
-
-        specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle ] ],
-          [ "Grandpa", [grandparent   ] ],
-          [ "Son",     [child, sibling] ]
-        ]) }
-
-        specify { expect(uncle.grouped_parent_dropdown_options).to eq([
-          [ "Dad",      [parent        ] ],
-          [ "Grandpa",  [grandparent   ] ],
-          [ "Son",      [child, sibling] ]
-        ]) }
-
-        specify { expect(parent.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [uncle      ] ],
-          [ "Grandpa", [grandparent] ]
-        ]) }
-
-        specify { expect(sibling.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle] ],
-          [ "Grandpa", [grandparent  ] ],
-          [ "Son",     [child        ] ]
-        ]) }
-
-        specify { expect(child.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle] ],
-          [ "Grandpa", [grandparent  ] ],
-          [ "Son",     [sibling      ] ]
-        ]) }
-      end
     end
   end
 end

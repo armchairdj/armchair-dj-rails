@@ -37,22 +37,22 @@ FactoryBot.define do
 
     trait :with_10_viewable_tracks do
       playlistings_attributes { {
-        "0" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "1" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "2" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "3" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "4" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "5" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "6" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "7" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "8" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
-        "9" => attributes_for(:playlisting, :with_existing_work, :with_mixtape),
+        "0" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "1" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "2" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "3" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "4" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "5" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "6" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "7" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "8" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "9" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
       } }
     end
 
     trait :with_draft_publication do
       after(:create) do |playlist|
-        create(:mixtape, :draft, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :draft, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -60,7 +60,7 @@ FactoryBot.define do
 
     trait :with_scheduled_publication do
       after(:create) do |playlist|
-        create(:mixtape, :scheduled, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :scheduled, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -68,7 +68,7 @@ FactoryBot.define do
 
     trait :with_published_publication do
       after(:create) do |playlist|
-        create(:mixtape, :published, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :published, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end

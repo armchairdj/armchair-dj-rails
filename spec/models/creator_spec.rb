@@ -52,7 +52,7 @@ RSpec.describe Creator, type: :model do
         specify do
           is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
+            :reviews, :contributions, :contributed_works, :contributed_reviews
           )
         end
       end
@@ -67,7 +67,7 @@ RSpec.describe Creator, type: :model do
         specify do
           is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
+            :reviews, :contributions, :contributed_works, :contributed_reviews
           )
         end
       end
@@ -75,14 +75,14 @@ RSpec.describe Creator, type: :model do
       describe "self#for_site" do
         subject { described_class.for_site.where(id: ids) }
 
-        specify "includes only creators with published posts, sorted alphabetically" do
+        specify "includes only creators with published reviews, sorted alphabetically" do
           is_expected.to eq([carl, richie])
         end
 
         specify do
           is_expected.to eager_load(
             :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
+            :reviews, :contributions, :contributed_works, :contributed_reviews
           )
         end
       end
@@ -192,12 +192,12 @@ RSpec.describe Creator, type: :model do
 
   context "associations" do
     it { is_expected.to have_many(:credits) }
-    it { is_expected.to have_many(:works).through(:credits) }
-    it { is_expected.to have_many(:posts).through(:works  ) }
+    it { is_expected.to have_many(:works  ).through(:credits) }
+    it { is_expected.to have_many(:reviews).through(:works  ) }
 
     it { is_expected.to have_many(:contributions) }
-    it { is_expected.to have_many(:contributed_works).through(:contributions    ) }
-    it { is_expected.to have_many(:contributed_posts).through(:contributed_works) }
+    it { is_expected.to have_many(:contributed_works  ).through(:contributions    ) }
+    it { is_expected.to have_many(:contributed_reviews).through(:contributed_works) }
 
     it { is_expected.to have_many(:pseudonym_identities) }
     it { is_expected.to have_many(:real_name_identities) }
@@ -791,7 +791,7 @@ RSpec.describe Creator, type: :model do
     end
 
     describe "#display_roles" do
-      subject { create(:minimal_creator) }
+      subject { create_minimal_instance }
 
       let(:tv_show) { create(:minimal_medium, name: "TV Show") }
       let(   :book) { create(:minimal_medium, name: "Book"   ) }
@@ -837,11 +837,11 @@ RSpec.describe Creator, type: :model do
     end
 
     describe "#alpha_parts" do
-      subject { create_minimal_instance }
+      let(:instance) { create_minimal_instance }
 
-      it "uses name" do
-        expect(subject.alpha_parts).to eq([subject.name])
-      end
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([instance.name]) }
     end
   end
 end

@@ -67,7 +67,7 @@ RSpec.describe Playlist, type: :model do
     it { is_expected.to have_many(:creators    ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
-    # it { is_expected.to have_many(:mixtapes) }
+    it { is_expected.to have_many(:mixtapes) }
   end
 
   context "attributes" do
@@ -173,6 +173,21 @@ RSpec.describe Playlist, type: :model do
       end
     end
 
+    describe "#update_viewable_for_all" do
+      subject { create_minimal_instance }
+
+      before(:each) do
+        subject.works.each do |work|
+           allow(work).to receive(:update_viewable_for_all)
+          expect(work).to receive(:update_viewable_for_all)
+        end
+      end
+
+      it "updates viewable for descendents" do
+        subject.update_viewable_for_all
+      end
+    end
+
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
@@ -215,10 +230,6 @@ RSpec.describe Playlist, type: :model do
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
       end
     end
-
-    let(     :category) { create(:category, name: "Category") }
-    let(:uncategorized) { create(:tag, name: "Uncategorized") }
-    let(  :categorized) { create(:tag, name: "Categorized", category_id: category.id) }
 
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }

@@ -70,7 +70,7 @@ RSpec.describe Medium, type: :model do
 
     it { is_expected.to have_many(:creators).through(:works) }
 
-    it { is_expected.to have_many(:posts).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
 
     describe "facets" do
       let(:instance) { create_complete_instance }

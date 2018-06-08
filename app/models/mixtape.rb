@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Post < ApplicationRecord
+class Mixtape < ApplicationRecord
 
   #############################################################################
   # CONCERNS.
@@ -17,13 +17,23 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:author, :tags) }
+  scope :eager,     -> { includes(:author, :tags, :playlist, :playlistings, :works, :creators) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
+
+  belongs_to :playlist
+
+  has_many :playlistings, through: :playlist
+  has_many :works,        through: :playlistings
+
+  has_many :media,         through: :works
+  has_many :creators,      through: :works
+  has_many :contributors,  through: :works
+  has_many :work_tags,     through: :works, class_name: "Tag", source: :tags
 
   #############################################################################
   # ATTRIBUTES.
@@ -33,7 +43,7 @@ class Post < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :title, presence: true
+  validates :playlist, presence: true
 
   #############################################################################
   # HOOKS.
@@ -44,7 +54,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def sluggable_parts
-    [ title ]
+    playlist.try(:sluggable_parts) || []
   end
 
   #############################################################################
@@ -52,7 +62,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def type(plural: false)
-    plural ? "Posts" : "Post"
+    plural ? "Mixtapes" : "Mixtape"
   end
 
   #############################################################################
@@ -60,14 +70,14 @@ class Post < ApplicationRecord
   #############################################################################
 
   def all_tags
-    tags
+    Tag.where(id: [self.tag_ids, self.work_tags.map(&:id)].flatten.uniq)
   end
 
   def alpha_parts
-    [ title ]
+    playlist.try(:alpha_parts) || []
   end
 
   def update_viewable_for_all
-    # Do nothing.
+    playlist.update_viewable_for_all
   end
 end

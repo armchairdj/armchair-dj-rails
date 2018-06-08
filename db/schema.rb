@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_07_182249) do
+ActiveRecord::Schema.define(version: 2018_06_08_005207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,33 @@ ActiveRecord::Schema.define(version: 2018_06_07_182249) do
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_memberships_on_group_id"
     t.index ["member_id"], name: "index_memberships_on_member_id"
+  end
+
+  create_table "mixtapes", force: :cascade do |t|
+    t.bigint "author_id"
+    t.bigint "playlist_id"
+    t.text "body"
+    t.text "summary"
+    t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "publish_on"
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_mixtapes_on_alpha"
+    t.index ["author_id"], name: "index_mixtapes_on_author_id"
+    t.index ["playlist_id"], name: "index_mixtapes_on_playlist_id"
+    t.index ["slug"], name: "index_mixtapes_on_slug", unique: true
+    t.index ["status"], name: "index_mixtapes_on_status"
+  end
+
+  create_table "mixtapes_tags", id: false, force: :cascade do |t|
+    t.bigint "mixtape_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["mixtape_id", "tag_id"], name: "index_mixtapes_tags_on_mixtape_id_and_tag_id"
+    t.index ["tag_id", "mixtape_id"], name: "index_mixtapes_tags_on_tag_id_and_mixtape_id"
   end
 
   create_table "playlistings", force: :cascade do |t|
@@ -303,6 +330,8 @@ ActiveRecord::Schema.define(version: 2018_06_07_182249) do
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
+  add_foreign_key "mixtapes", "playlists"
+  add_foreign_key "mixtapes", "users", column: "author_id"
   add_foreign_key "playlists", "users", column: "author_id"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "reviews", "users", column: "author_id"

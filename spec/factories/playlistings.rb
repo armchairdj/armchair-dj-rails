@@ -13,15 +13,29 @@ FactoryBot.define do
       work_id { create(:minimal_work).id }
     end
 
-    trait :with_post do
+    trait :with_draft_publication do
       after(:create) do |playlisting|
-        create(:minimal_review, work_id: playlisting.work.id)
+        create(:review, :draft, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
 
-        playlisting.reload
+        playlist.reload
       end
     end
 
+    trait :with_scheduled_publication do
+      after(:create) do |playlisting|
+        create(:review, :scheduled, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
 
+        playlist.reload
+      end
+    end
+
+    trait :with_published_publication do
+      after(:create) do |playlisting|
+        create(:review, :published, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
+
+        playlist.reload
+      end
+    end
     ###########################################################################
     # FACTORIES.
     ###########################################################################
@@ -32,7 +46,7 @@ FactoryBot.define do
     end
 
     factory :complete_playlisting, parent: :minimal_playlisting do
-      with_post
+      with_published_publication
     end
   end
 end

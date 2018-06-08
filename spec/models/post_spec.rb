@@ -32,7 +32,7 @@ RSpec.describe Post, type: :model do
       describe "self#eager" do
         subject { collection.eager }
 
-        it { is_expected.to eager_load(:author) }
+        it { is_expected.to eager_load(:author, :tags) }
       end
 
       describe "self#for_admin" do
@@ -40,7 +40,7 @@ RSpec.describe Post, type: :model do
 
         it { is_expected.to contain_exactly(draft, scheduled, published) }
 
-        it { is_expected.to eager_load(:author) }
+        it { is_expected.to eager_load(:author, :tags) }
       end
 
       describe "self#for_site" do
@@ -48,7 +48,7 @@ RSpec.describe Post, type: :model do
 
         it { is_expected.to eq [published] }
 
-        it { is_expected.to eager_load(:author) }
+        it { is_expected.to eager_load(:author, :tags) }
       end
     end
   end
@@ -76,11 +76,9 @@ RSpec.describe Post, type: :model do
     end
 
     describe "#sluggable_parts" do
-      let(:instance) { create(:minimal_post, title: "Standalone Title") }
+      subject { instance.sluggable_parts }
 
-      subject { instance.send(:sluggable_parts) }
-
-      it { is_expected.to eq(["Standalone Title"]) }
+      it { is_expected.to eq([instance.title]) }
     end
 
     describe "#alpha_parts" do

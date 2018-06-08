@@ -17,7 +17,7 @@ class Review < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:author, :medium, :work, :creators).references(:medium) }
+  scope :eager,     -> { includes(:author, :tags, :work, :medium, :creators).references(:medium) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
@@ -85,11 +85,11 @@ class Review < ApplicationRecord
   end
 
   def all_tags
-    Tag.where(id: [self.tag_ids, self.work.try(:tag_ids)].flatten.uniq)
+    Tag.where(id: [self.tag_ids, self.work_tags.map(&:id)].flatten.uniq)
   end
 
   def alpha_parts
-    [ work.try(:alpha_parts) ]
+    work.try(:alpha_parts) || []
   end
 
   def update_viewable_for_all
