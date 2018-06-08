@@ -3,40 +3,40 @@
 require "rails_helper"
 
 RSpec.describe Admin::PostsController, type: :routing do
-  describe "routing" do
-    it "routes to #index" do
+  describe "routes to" do
+    it "#index" do
       expect(get: "/admin/posts").to route_to("admin/posts#index")
     end
 
-    it "routes to #index pagination" do
+    it "#index pages" do
       expect(get: "/admin/posts/page/2").to route_to("admin/posts#index", page: "2")
     end
 
-    it "routes to #show" do
+    it "#show" do
       expect(get: "/admin/posts/1").to route_to("admin/posts#show", id: "1")
     end
 
-    it "routes to #new" do
+    it "#new" do
       expect(get: "/admin/posts/new").to route_to("admin/posts#new")
     end
 
-    it "routes to #create" do
+    it "#create" do
       expect(post: "/admin/posts").to route_to("admin/posts#create")
     end
 
-    it "routes to #edit" do
+    it "#edit" do
       expect(get: "/admin/posts/1/edit").to route_to("admin/posts#edit", id: "1")
     end
 
-    it "routes to #update via PUT" do
+    it "#update via PUT" do
       expect(put: "/admin/posts/1").to route_to("admin/posts#update", id: "1")
     end
 
-    it "routes to #update via PATCH" do
+    it "#update via PATCH" do
       expect(patch: "/admin/posts/1").to route_to("admin/posts#update", id: "1")
     end
 
-    it "routes to #destroy" do
+    it "#destroy" do
       expect(delete: "/admin/posts/1").to route_to("admin/posts#destroy", id: "1")
     end
   end

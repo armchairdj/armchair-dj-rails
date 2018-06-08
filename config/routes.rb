@@ -65,7 +65,9 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories, concerns: :paginatable
     resources :creators,   concerns: :paginatable
+    resources :mixtapes,   concerns: :paginatable
     resources :posts,      concerns: :paginatable
+    resources :reviews,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
     resources :users,      concerns: :paginatable
@@ -113,6 +115,22 @@ Rails.application.routes.draw do
   scope format: true, constraints: { format: "rss" } do
     get "/feed", to: "posts#feed"
   end
+
+  #############################################################################
+  # REVIEWS.
+  #############################################################################
+
+  resources :reviews, only: [:index], concerns: :paginatable
+
+  get "reviews/*slug", to: "reviews#show", as: "review_permalink"
+
+  #############################################################################
+  # MIXTAPES.
+  #############################################################################
+
+  resources :mixtapes, only: [:index], concerns: :paginatable
+
+  get "mixtapes/*slug", to: "mixtapes#show", as: "mixtape_permalink"
 
   #############################################################################
   # PLAYLISTS.

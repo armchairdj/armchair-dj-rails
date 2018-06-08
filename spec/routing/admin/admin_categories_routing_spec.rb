@@ -3,40 +3,40 @@
 require "rails_helper"
 
 RSpec.describe Admin::CategoriesController, type: :routing do
-  describe "routing" do
-    it "routes to #index" do
+  describe "routes to" do
+    it "#index" do
       expect(get: "/admin/categories").to route_to("admin/categories#index")
     end
 
-    it "routes to #index pagination" do
+    it "#index pages" do
       expect(get: "/admin/categories/page/2").to route_to("admin/categories#index", page: "2")
     end
 
-    it "routes to #show" do
+    it "#show" do
       expect(get: "/admin/categories/1").to route_to("admin/categories#show", id: "1")
     end
 
-    it "routes to #new" do
+    it "#new" do
       expect(get: "/admin/categories/new").to route_to("admin/categories#new")
     end
 
-    it "routes to #create" do
+    it "#create" do
       expect(post: "/admin/categories").to route_to("admin/categories#create")
     end
 
-    it "routes to #edit" do
+    it "#edit" do
       expect(get: "/admin/categories/1/edit").to route_to("admin/categories#edit", id: "1")
     end
 
-    it "routes to #update via PUT" do
+    it "#update via PUT" do
       expect(put: "/admin/categories/1").to route_to("admin/categories#update", id: "1")
     end
 
-    it "routes to #update via PATCH" do
+    it "#update via PATCH" do
       expect(patch: "/admin/categories/1").to route_to("admin/categories#update", id: "1")
     end
 
-    it "routes to #destroy" do
+    it "#destroy" do
       expect(delete: "/admin/categories/1").to route_to("admin/categories#destroy", id: "1")
     end
   end
