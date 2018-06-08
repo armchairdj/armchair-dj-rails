@@ -372,7 +372,7 @@ RSpec.describe Review, type: :model do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
 
-      it { is_expected.to eq([instance.work.alpha_parts]) }
+      it { is_expected.to eq(instance.work.alpha_parts) }
     end
   end
 end
