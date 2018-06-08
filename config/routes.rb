@@ -63,10 +63,10 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
+    resources :articles,   concerns: :paginatable
     resources :categories, concerns: :paginatable
     resources :creators,   concerns: :paginatable
     resources :mixtapes,   concerns: :paginatable
-    resources :posts,      concerns: :paginatable
     resources :reviews,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
@@ -108,12 +108,12 @@ Rails.application.routes.draw do
   # POSTS.
   #############################################################################
 
-  resources :posts, only: [:index], concerns: :paginatable, path: "/"
+  resources :articles, only: [:index], concerns: :paginatable, path: "/"
 
-  get "posts/*slug", to: "posts#show", as: "post_permalink"
+  get "articles/*slug", to: "articles#show", as: "article_permalink"
 
   scope format: true, constraints: { format: "rss" } do
-    get "/feed", to: "posts#feed"
+    get "/feed", to: "articles#feed"
   end
 
   #############################################################################

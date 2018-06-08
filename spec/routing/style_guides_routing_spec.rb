@@ -29,7 +29,7 @@ RSpec.describe StyleGuidesController, type: :routing do
         expect(get: "/style_guide/list").to route_to("style_guides#show", template: "list")
       end
 
-      it "#post" do
+      it "#article" do
         expect(get: "/style_guide/post").to route_to("style_guides#show", template: "post")
       end
 

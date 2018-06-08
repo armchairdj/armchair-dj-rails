@@ -140,8 +140,8 @@
 <% end %>
 
 <% if @user.can_write? %>
-  <%= render partial: "admin/shared/playback/posts", locals: {
-    posts: @user.posts.for_admin.reverse_cron
+  <%= render partial: "admin/shared/playback/articles", locals: {
+    articles: @user.articles.for_admin.reverse_cron
   } %>
 
   <%= render partial: "admin/shared/playback/works", locals: {

@@ -137,7 +137,7 @@ RSpec.shared_examples "a_sluggable_model" do
         expect(actual).to eq("heroes")
       end
 
-      it "removes apostrophes" do
+      it "removes aarticlerophes" do
         actual = described_class.generate_slug_part("It's Like I Love You")
 
         expect(actual).to eq("its_like_i_love_you")

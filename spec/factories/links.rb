@@ -1,6 +1,6 @@
 FactoryBot.define do
   sequence :link_url do |n|
-    "http://www.example.com/posts/#{n}"
+    "http://www.example.com/articles/#{n}"
   end
 
   factory :link do
@@ -21,8 +21,8 @@ FactoryBot.define do
       association :linkable, factory: :minimal_creator
     end
 
-    trait :with_post do
-      association :linkable, factory: :minimal_post
+    trait :with_article do
+      association :linkable, factory: :minimal_article
     end
 
     trait :with_work do
@@ -41,10 +41,10 @@ FactoryBot.define do
       with_creator
     end
 
-    factory :post_link do
+    factory :article_link do
       with_url
       with_description
-      with_post
+      with_article
     end
 
     factory :work_link do

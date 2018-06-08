@@ -84,6 +84,6 @@
   links: @work.links
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @work.posts.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/articles", locals: {
+  articles: @work.articles.for_admin.reverse_cron
 } %>

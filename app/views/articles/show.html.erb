@@ -1,0 +1,34 @@
+<%
+  @title = [@article.type, article_title(@article)].compact
+%>
+
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "article-header") do %>
+    <% if @article.standalone? %>
+      <%= content_tag(:h1, @article.title) %>
+    <% else %>
+      <%= content_tag(:h3, @article.type) %>
+      <%= content_tag(:h1) do %>
+        <%= content_tag(:span, @article.work.credited_artists, class: "creators") %>
+        <%= content_tag(:span, @article.work.title,           class: "title"   ) %>
+        <%= content_tag(:span, @article.work.subtitle,        class: "subtitle") %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= formatted_post_body(@article) %>
+
+<%= content_tag(:footer, class: "article-byline") do %>
+  Articleed by <%= link_to_post_author(@article) %> on <%= post_published_date(@article) %>
+<% end %>
+
+<%= content_tag(:aside, class: "article-tags") do %>
+  <%= render partial: "shared/playback/tags", locals: {
+    tags: @article.all_tags.for_site
+  } %>
+<% end %>
+
+<%= render partial: "shared/playback/links", locals: {
+  links: @article.links
+} %>

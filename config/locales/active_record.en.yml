@@ -18,7 +18,7 @@ en:
         pseudynym_id: "Pseudonym"
       membership:
         pseudynym_id: "Pseudonym"
-      post:
+      article:
         published_at: "Publish Date"
         publish_on: "Publish On"
         statuses:
@@ -64,7 +64,7 @@ en:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             slug:
-              locked: "You cannot change the slug on a creator with published posts."
+              locked: "You cannot change the slug on a creator with published articles."
         credit:
           attributes:
             base:
@@ -83,7 +83,7 @@ en:
             roles:
               missing: "Please create at least one role."
             slug:
-              locked: "You cannot change the slug on a medium with published posts."
+              locked: "You cannot change the slug on a medium with published articles."
         membership:
           attributes:
             group_id:
@@ -94,14 +94,44 @@ en:
           attributes:
             author:
               blank: "Please choose an author."
-              invalid_author: "This author cannot post."
+              invalid_author: "This user is not an author."
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             playlistings:
               too_short: "Please choose at least two works."
             slug:
-              locked: "You cannot change the slug on a playlist with published posts."
-        reviews:
+              locked: "You cannot change the slug on a playlist with published articles."
+        article:
+          attributes:
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This user is not an author."
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
+            body:
+              blank_during_publish: "You cannot publish an article without a body."
+            slug:
+              locked: "You cannot change the slug on a published article."
+            publish_on:
+              blank: "Please choose a publication date to schedule this article."
+            tag_ids:
+              has_categorized_tags: "Article tags cannot be categorized."
+        mixtape:
+          attributes:
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This user is not an author."
+            base:
+              missing_alpha: "Cannot calculate alphabetical sort value."
+            body:
+              blank_during_publish: "You cannot publish a mixtape without a body."
+            slug:
+              locked: "You cannot change the slug on a published mixtape."
+            publish_on:
+              blank: "Please choose a publication date to schedule this mixtape."
+            tag_ids:
+              has_categorized_tags: "Mixtape tags cannot be categorized."
+        review:
           attributes:
             author:
               blank: "Please choose an author."
@@ -116,25 +146,10 @@ en:
               blank: "Please choose a publication date to schedule this review."
             tag_ids:
               has_categorized_tags: "Review tags cannot be categorized."
-        post:
-          attributes:
-            author:
-              blank: "Please choose an author."
-              invalid_author: "This user is not an author."
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
-            body:
-              blank_during_publish: "You cannot publish a post without a body."
-            slug:
-              locked: "You cannot change the slug on a published post."
-            publish_on:
-              blank: "Please choose a publication date to schedule this post."
-            tag_ids:
-              has_categorized_tags: "Post tags cannot be categorized."
         tag:
           attributes:
             slug:
-              locked: "You cannot change the slug on a tag with published posts."
+              locked: "You cannot change the slug on a tag with published articles."
         work:
           attributes:
             base:
@@ -142,7 +157,7 @@ en:
             credits:
               too_short: "Please choose at least one creator."
             slug:
-              locked: "You cannot change the slug on a work with published posts."
+              locked: "You cannot change the slug on a work with published articles."
             tag_ids:
               has_uncategorized_tags: "Work tags must be categorized."
         user:

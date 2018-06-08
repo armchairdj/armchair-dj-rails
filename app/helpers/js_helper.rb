@@ -60,9 +60,9 @@ module JsHelper
 
   def js_selectable_prepare_work_attrs
     js_attrs("selectable-prepare-work",
-      "tab-name":        "post-new-work",
-      "title-selector":  "#post_work_attributes_title",
-      "artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
+      "tab-name":        "article-new-work",
+      "title-selector":  "#article_work_attributes_title",
+      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id"
     )
   end
 

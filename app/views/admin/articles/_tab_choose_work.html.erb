@@ -1,0 +1,27 @@
+<% tab_name = "article-choose-work" %>
+
+<% content_for(:tab_triggers) do %>
+  <%= content_tag(:li) do %>
+    <%= js_tabbable_link("Choose Work", tab_name) %>
+  <% end %>
+<% end %>
+
+<% content_for(:tabs) do %>
+  <%= content_tag(:div, js_tabbable_tab_attrs(tab_name)) do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Choose Work", "data-target": "tabbable.remove") %>
+
+      <%= f.input :work_id, as: :grouped_select,
+        collection:         works,
+        selected:           f.object.current_work_id,
+        required:           false,
+        group_label_method: :first,
+        group_method:       :last,
+        label_method:       :full_display_title,
+        value_method:       :id,
+        include_blank:      :translate,
+        input_html:         js_selectable_prepare_work_attrs
+      %>
+    <% end %>
+  <% end %>
+<% end %>

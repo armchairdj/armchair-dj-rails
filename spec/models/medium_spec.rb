@@ -54,7 +54,7 @@ RSpec.describe Medium, type: :model do
       describe "self#for_site" do
         subject { described_class.for_site.where(id: ids) }
 
-        specify "includes only media with published posts, sorted alphabetically" do
+        specify "includes only media with published articles, sorted alphabetically" do
           is_expected.to eq([album_medium, song_medium])
         end
 

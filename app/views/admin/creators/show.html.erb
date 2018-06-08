@@ -97,8 +97,8 @@
   context:       :creator
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @creator.posts.includes(:work).reverse_cron
+<%= render partial: "admin/shared/playback/articles", locals: {
+  articles: @creator.articles.includes(:work).reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

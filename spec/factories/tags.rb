@@ -36,7 +36,7 @@ FactoryBot.define do
 
     trait :with_draft_publication do
       after(:create) do |tag|
-        create(:minimal_post, :draft, :with_body, tag_ids: [tag.id])
+        create(:minimal_article, :draft, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -44,7 +44,7 @@ FactoryBot.define do
 
     trait :with_scheduled_publication do
       after(:create) do |tag|
-        create(:minimal_post, :scheduled, :with_body, tag_ids: [tag.id])
+        create(:minimal_article, :scheduled, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end
@@ -52,7 +52,7 @@ FactoryBot.define do
 
     trait :with_published_publication do
       after(:create) do |tag|
-        create(:minimal_post, :published, :with_body, tag_ids: [tag.id])
+        create(:minimal_article, :published, :with_body, tag_ids: [tag.id])
 
         tag.reload
       end

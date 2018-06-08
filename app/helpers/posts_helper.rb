@@ -7,25 +7,23 @@ module PostsHelper
   # DISPLAY METHODS.
   #############################################################################
 
-  def formatted_post_body(post)
-    paragraphs(post.body)
+  def formatted_post_body(article)
+    paragraphs(article.body)
   end
 
-  def post_published_date(post)
-    return unless post.published?
+  def post_published_date(article)
+    return unless article.published?
 
-    time_tag(post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
+    time_tag(article.published_at, article.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
   end
 
-  def post_scheduled_date(post)
-    return unless post.scheduled?
+  def post_scheduled_date(article)
+    return unless article.scheduled?
 
-    time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
+    time_tag article.publish_on, article.publish_on.strftime("%m/%d/%Y at %I:%M%p")
   end
 
-  def post_title(post, full: true, length: nil)
-    title = post.review? ? post.work.display_title(full: full) : post.title
-
+  def truncated_title(title, length: nil)
     length.nil? ? title : truncate(title, length: length, omission: "…")
   end
 
@@ -54,15 +52,6 @@ module PostsHelper
   #############################################################################
   # LINK METHODS.
   #############################################################################
-
-  def link_to_post(instance, admin: false, full: true, **opts)
-    return unless admin || instance.published?
-
-    text = post_title(instance, full: full)
-    url  = admin ? admin_post_path(instance) : post_permalink_path(slug: instance.slug)
-
-    link_to(text, url, **opts)
-  end
 
   def link_to_post_author(post)
     return unless link = link_to_user(post.author, rel: "author")

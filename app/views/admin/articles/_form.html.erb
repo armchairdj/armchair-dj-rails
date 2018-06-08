@@ -1,0 +1,81 @@
+<%= simple_form_for([:admin, article], html: { class: "admin"}) do |f| %>
+  <%= f.error_notification %>
+
+  <% if available_tabs.include?("article-choose-work") %>
+    <% render partial: "tab_choose_work", locals: {
+      f:     f,
+      works: works,
+    } %>
+  <% end %>
+
+  <% if available_tabs.include?("article-new-work") %>
+    <% render partial: "tab_new_work", locals: {
+      f:        f,
+      creators: creators,
+      media:    media,
+    } %>
+  <% end %>
+
+  <% if available_tabs.include?("article-standalone") %>
+    <% render partial: "tab_standalone", locals: {
+      f:    f
+    } %>
+  <% end %>
+
+  <%= content_tag(:div, js_tabbable_attrs(selected_tab)) do %>
+    <%= content_tag(:p, "data-target": "tabbable.remove") do %>
+      Choose a work to review, create a new work, or write a standalone article.
+    <% end %>
+
+    <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
+
+    <%= content_for(:tabs) %>
+  <% end %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/articles/form_fields", locals: {
+      f:    f,
+      tags: tags
+    } %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <%= f.button :button, "Save", type: :submit %>
+
+    <% if f.object.published? %>
+      <%= f.button :button, "Unpublish",
+        type:           :submit,
+        name:           "step",
+        value:          "unpublish",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% elsif f.object.persisted? %>
+      <%= f.button :button, "Publish",
+        type:           :submit,
+        name:           "step",
+        value:          "publish",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% end %>
+
+    <% if f.object.scheduled? %>
+      <%= f.button :button, "Unschedule",
+        type:           :submit,
+        name:           "step",
+        value:          "unschedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% elsif f.object.persisted? %>
+      <%= f.button :button, "Schedule",
+        type:           :submit,
+        name:           "step",
+        value:          "schedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% end %>
+  <% end %>
+<% end %>

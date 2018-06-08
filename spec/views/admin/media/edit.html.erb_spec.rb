@@ -16,7 +16,7 @@ RSpec.describe "admin/media/edit", type: :view do
   it "renders the edit medium form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_medium_path(@medium), "post" do
+    assert_select "form[action=?][method=?]", admin_medium_path(@medium), "article" do
     end
   end
 end

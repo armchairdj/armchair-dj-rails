@@ -10,10 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_08_005207) do
+ActiveRecord::Schema.define(version: 2018_06_08_172605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "title"
+    t.text "body"
+    t.text "summary"
+    t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "publish_on"
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_articles_on_alpha"
+    t.index ["author_id"], name: "index_articles_on_author_id"
+    t.index ["slug"], name: "index_articles_on_slug", unique: true
+    t.index ["status"], name: "index_articles_on_status"
+  end
+
+  create_table "articles_tags", id: false, force: :cascade do |t|
+    t.bigint "article_id", null: false
+    t.bigint "tag_id", null: false
+    t.index ["article_id", "tag_id"], name: "index_articles_tags_on_article_id_and_tag_id"
+    t.index ["tag_id", "article_id"], name: "index_articles_tags_on_tag_id_and_article_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -181,30 +207,11 @@ ActiveRecord::Schema.define(version: 2018_06_08_005207) do
     t.index ["slug"], name: "index_playlists_on_slug", unique: true
   end
 
-  create_table "posts", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
-    t.datetime "published_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.integer "status", default: 0, null: false
-    t.boolean "dirty_slug", default: false, null: false
-    t.datetime "publish_on"
-    t.bigint "author_id"
-    t.text "summary"
-    t.string "alpha"
-    t.index ["alpha"], name: "index_posts_on_alpha"
-    t.index ["author_id"], name: "index_posts_on_author_id"
-    t.index ["slug"], name: "index_posts_on_slug", unique: true
-    t.index ["status"], name: "index_posts_on_status"
-  end
-
-  create_table "posts_tags", id: false, force: :cascade do |t|
-    t.bigint "post_id", null: false
+  create_table "articles_tags", id: false, force: :cascade do |t|
+    t.bigint "article_id", null: false
     t.bigint "tag_id", null: false
-    t.index ["post_id", "tag_id"], name: "index_posts_tags_on_post_id_and_tag_id"
-    t.index ["tag_id", "post_id"], name: "index_posts_tags_on_tag_id_and_post_id"
+    t.index ["article_id", "tag_id"], name: "index_articles_tags_on_article_id_and_tag_id"
+    t.index ["tag_id", "article_id"], name: "index_articles_tags_on_tag_id_and_article_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -321,6 +328,7 @@ ActiveRecord::Schema.define(version: 2018_06_08_005207) do
     t.index ["slug"], name: "index_works_on_slug", unique: true
   end
 
+  add_foreign_key "articles", "users", column: "author_id"
   add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
@@ -333,7 +341,6 @@ ActiveRecord::Schema.define(version: 2018_06_08_005207) do
   add_foreign_key "mixtapes", "playlists"
   add_foreign_key "mixtapes", "users", column: "author_id"
   add_foreign_key "playlists", "users", column: "author_id"
-  add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "reviews", "users", column: "author_id"
   add_foreign_key "reviews", "works"
   add_foreign_key "roles", "media"

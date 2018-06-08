@@ -14,7 +14,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:minimal_post, :draft, :with_body, author: user)
+        create(:minimal_article, :draft, :with_body, author: user)
 
         user.reload
       end
@@ -24,7 +24,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:minimal_post, :scheduled, :with_body, author: user)
+        create(:minimal_article, :scheduled, :with_body, author: user)
 
         user.reload
       end
@@ -34,7 +34,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:minimal_post, :published, :with_body, author: user)
+        create(:minimal_article, :published, :with_body, author: user)
 
         user.reload
       end

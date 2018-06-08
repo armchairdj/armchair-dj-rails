@@ -165,7 +165,7 @@ private
 
   def allowed_scopes
     super.merge({
-      "For Posts" => :for_posts,
+      "For Articles" => :for_articles,
       "For Works" => :for_works,
       "String"    => :string,
       "Year"      => :year,

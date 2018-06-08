@@ -20,13 +20,13 @@ RSpec.describe "admin/tags/edit", type: :view do
     it "renders form" do
       render
 
-      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "post" do
+      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "article" do
         # TODO
       end
     end
   end
 
-  context "with post" do
+  context "with article" do
     before(:each) do
       @tag = assign(:tag, create(:minimal_tag, :with_published_publication))
     end
@@ -34,7 +34,7 @@ RSpec.describe "admin/tags/edit", type: :view do
     it "renders form" do
       render
 
-      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "post" do
+      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "article" do
         # TODO
       end
     end

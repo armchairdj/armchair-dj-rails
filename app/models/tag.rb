@@ -22,12 +22,12 @@ class Tag < ApplicationRecord
   scope :uncategorized, -> { where(category_id: nil) }
 
   scope     :for_works, -> { categorized.eager.alpha }
-  scope     :for_posts, -> { uncategorized.eager.alpha }
+  scope     :for_articles, -> { uncategorized.eager.alpha }
 
   scope        :string, -> { for_works.where(categories: { format: Category.formats[:string] }) }
   scope          :year, -> { for_works.where(categories: { format: Category.formats[:year  ] }) }
 
-  scope         :eager, -> { includes(:category, :works, :posts, :reviews).references(:category) }
+  scope         :eager, -> { includes(:category, :works, :articles, :reviews).references(:category) }
   scope     :for_admin, -> { eager }
   scope      :for_site, -> { eager.viewable.alpha }
 
@@ -42,7 +42,7 @@ class Tag < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_and_belongs_to_many :posts
+  has_and_belongs_to_many :articles
   has_and_belongs_to_many :reviews
 
   has_and_belongs_to_many :works

@@ -68,7 +68,7 @@ art_media          = [
 art_movement       = FactoryBot.create(:category, name: "Artistic Movement")
 art_movements      = [
                        FactoryBot.create(:tag, category: art_movement, name: "Pop Art"),
-                       FactoryBot.create(:tag, category: art_movement, name: "Postmodernism"),
+                       FactoryBot.create(:tag, category: art_movement, name: "Articlemodernism"),
                        FactoryBot.create(:tag, category: art_movement, name: "Modernism"),
                      ]
 
@@ -553,4 +553,4 @@ Work.all.each do |work|
   FactoryBot.create(:minimal_review, random_status, author: brian, body: random_paragraphs, work: work)
 end
 
-10.times { FactoryBot.create(:minimal_post, random_status, author: brian, body: random_paragraphs, title: random_title) }
+10.times { FactoryBot.create(:minimal_article, random_status, author: brian, body: random_paragraphs, title: random_title) }

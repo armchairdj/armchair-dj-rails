@@ -16,7 +16,7 @@ RSpec.describe "admin/tags/new", type: :view do
   it "renders form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_tags_path, "post" do
+    assert_select "form[action=?][method=?]", admin_tags_path, "article" do
       # TODO
     end
   end

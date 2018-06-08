@@ -1,0 +1,20 @@
+<%
+  @title = ["Update Article", article_title(@article)]
+%>
+
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @article,
+) %>
+
+<%= render partial: "form", locals: {
+  available_tabs: @available_tabs,
+  selected_tab:   @selected_tab,
+
+  article:           @article,
+
+  creators:       @creators,
+  media:          @media,
+  tags:           @tags,
+  works:          @works,
+} %>

@@ -30,7 +30,7 @@ RSpec.describe AdminHelper, type: :helper do
       allow(helper).to receive(     :polymorphic_path).and_return("path")
       allow(helper).to receive( :new_polymorphic_path).and_return("path")
       allow(helper).to receive(:edit_polymorphic_path).and_return("path")
-      allow(helper).to receive(  :post_permalink_path).and_return("path")
+      allow(helper).to receive(  :article_permalink_path).and_return("path")
 
       allow(helper).to receive(:semantic_svg_image).with("open_iconic/plus.svg",        anything).and_return("create" )
       allow(helper).to receive(:semantic_svg_image).with("open_iconic/trash.svg",       anything).and_return("destroy")
@@ -138,16 +138,16 @@ RSpec.describe AdminHelper, type: :helper do
         end
       end
 
-      context "posts" do
-        let(:instance) { create(:minimal_post) }
+      context "articles" do
+        let(:instance) { create(:minimal_article) }
 
         describe "published" do
           before(:each) do
             allow(instance).to receive(:published?         ).and_return(true       )
-            allow(helper  ).to receive(:post_permalink_path).and_return("permalink")
+            allow(helper  ).to receive(:article_permalink_path).and_return("permalink")
           end
 
-          it { is_expected.to eq('<a title="view post on site" class="admin public-view" href="permalink">public</a>') }
+          it { is_expected.to eq('<a title="view article on site" class="admin public-view" href="permalink">public</a>') }
         end
 
         describe "unpublished" do

@@ -1,0 +1,17 @@
+<% tab_name = "article-standalone" %>
+
+<% content_for(:tab_triggers) do %>
+  <%= content_tag(:li) do %>
+    <%= js_tabbable_link("Standalone", tab_name) %>
+  <% end %>
+<% end %>
+
+<% content_for(:tabs) do %>
+  <%= content_tag(:div, js_tabbable_tab_attrs(tab_name)) do %>
+    <%= content_tag(:fieldset, class: "legendary") do %>
+      <%= content_tag(:legend, "Standalone", "data-target": "tabbable.remove") %>
+
+      <%= f.input :title, required: true %>
+    <% end %>
+  <% end %>
+<% end %>

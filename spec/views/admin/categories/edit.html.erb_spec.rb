@@ -11,7 +11,7 @@ RSpec.describe "admin/categories/edit", type: :view do
   it "renders the edit category form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_category_path(@category), "post" do
+    assert_select "form[action=?][method=?]", admin_category_path(@category), "article" do
     end
   end
 end

@@ -114,7 +114,7 @@ module AdminHelper
 
   def admin_nav_links
     links = [
-      link_to("Posts",       admin_posts_path         ),
+      link_to("Articles",       admin_articles_path         ),
       link_to("Playlists",   admin_playlists_path     ),
       link_to("Works",       admin_works_path         ),
       link_to("Creators",    admin_creators_path      ),
@@ -200,7 +200,7 @@ module AdminHelper
   end
 
   def viewable_status_icon
-    admin_column_icon("eye", "Post Status", "eye icon")
+    admin_column_icon("eye", "Article Status", "eye icon")
   end
 
   def viewable_icon

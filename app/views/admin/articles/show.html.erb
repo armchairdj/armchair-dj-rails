@@ -1,0 +1,97 @@
+<%
+  @title = ["View Article", @article.display_author, article_title(@article)]
+%>
+
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @article,
+) %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, article_title(@article)) %>
+  <% end %>
+
+  <%= content_tag(:div, formatted_post_body(@article)) %>
+<% end %>
+
+<%= content_tag(:section, class: "admin-section tabled") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Status") %>
+        <%= content_tag(:td) do %>
+          <%= @article.human_status %>
+          <% if @article.published? %>
+            on <%= admin_date(@article.published_at, pubdate: "pubdate") %>
+          <% elsif @article.scheduled? %>
+            for <%= admin_date(@article.publish_on) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Type") %>
+        <%= content_tag(:td, @article.type) %>
+      <% end %>
+
+      <% if @article.review? %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Subject") %>
+          <%= content_tag(:td, link_to_work(@article.work, admin: true)) %>
+        <% end %>
+      <% else %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, "Title") %>
+          <%= content_tag(:td, @article.title) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Author") %>
+        <%= content_tag(:td) do %>
+          <%= link_to(@article.display_author, admin_user_path(@article.author)) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@article.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td) do %>
+          <%= @article.slug %> <%= "(dirty)" if @article.dirty_slug? %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@article.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@article.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @article.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/tags", locals: {
+  tags: @article.all_tags.alpha
+} %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @article.links
+} %>

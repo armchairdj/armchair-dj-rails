@@ -16,7 +16,7 @@ RSpec.describe "admin/roles/edit", type: :view do
   it "renders form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_role_path(@role), "post" do
+    assert_select "form[action=?][method=?]", admin_role_path(@role), "article" do
       # TODO
     end
   end

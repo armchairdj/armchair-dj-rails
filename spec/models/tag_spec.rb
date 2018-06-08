@@ -27,7 +27,7 @@ RSpec.describe Tag, type: :model do
 
         it { is_expected.to eager_load(:category) }
         it { is_expected.to eager_load(:works   ) }
-        it { is_expected.to eager_load(:posts   ) }
+        it { is_expected.to eager_load(:articles   ) }
         it { is_expected.to eager_load(:reviews ) }
 
         it { is_expected.to contain_exactly(cu, cv, uu, uv) }
@@ -37,29 +37,29 @@ RSpec.describe Tag, type: :model do
         subject { collection.for_admin }
 
         it { is_expected.to contain_exactly(cu, cv, uu, uv) }
-        it { is_expected.to eager_load(:category, :works, :posts, :reviews) }
+        it { is_expected.to eager_load(:category, :works, :articles, :reviews) }
       end
 
       describe "self#for_site" do
         subject { collection.for_site }
 
         it { is_expected.to eq([cv, uv]) }
-        it { is_expected.to eager_load(:category, :works, :posts, :reviews) }
+        it { is_expected.to eager_load(:category, :works, :articles, :reviews) }
       end
     end
 
     context "by category" do
-      let(:for_post_1) { create(:tag_for_item, name: "Z") }
-      let(:for_post_2) { create(:tag_for_item, name: "A") }
+      let(:for_article_1) { create(:tag_for_item, name: "Z") }
+      let(:for_article_2) { create(:tag_for_item, name: "A") }
       let(:for_work_1) { create(:tag_for_work, name: "X", category_name: "Foo") }
       let(:for_work_2) { create(:tag_for_work, name: "X", category_name: "Bar") }
-      let(       :ids) { [for_post_1, for_post_2, for_work_1, for_work_2].map(&:id) }
+      let(       :ids) { [for_article_1, for_article_2, for_work_1, for_work_2].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       describe "self#categorized" do
         subject { collection.categorized }
 
-        it { is_expected.to_not eager_load(:category, :works, :posts) }
+        it { is_expected.to_not eager_load(:category, :works, :articles) }
 
         it { is_expected.to match_array([for_work_1, for_work_2]) }
       end
@@ -67,37 +67,37 @@ RSpec.describe Tag, type: :model do
       describe "self#uncategorized" do
         subject { collection.uncategorized }
 
-        it { is_expected.to_not eager_load(:category, :works, :posts) }
+        it { is_expected.to_not eager_load(:category, :works, :articles) }
 
-        it { is_expected.to match_array([for_post_1, for_post_2]) }
+        it { is_expected.to match_array([for_article_1, for_article_2]) }
       end
 
-      describe "self#for_posts" do
-        subject { collection.for_posts }
+      describe "self#for_articles" do
+        subject { collection.for_articles }
 
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :articles) }
 
-        it { is_expected.to eq([for_post_2, for_post_1]) }
+        it { is_expected.to eq([for_article_2, for_article_1]) }
       end
 
       describe "self#for_works" do
         subject { collection.for_works }
 
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :articles) }
 
         it { is_expected.to eq([for_work_2, for_work_1]) }
       end
 
       describe "categorized?" do
-        specify { expect(for_post_1.categorized?).to eq(false) }
-        specify { expect(for_post_2.categorized?).to eq(false) }
+        specify { expect(for_article_1.categorized?).to eq(false) }
+        specify { expect(for_article_2.categorized?).to eq(false) }
         specify { expect(for_work_1.categorized?).to eq(true ) }
         specify { expect(for_work_2.categorized?).to eq(true ) }
       end
 
       describe "uncategorized?" do
-        specify { expect(for_post_1.uncategorized?).to eq(true ) }
-        specify { expect(for_post_2.uncategorized?).to eq(true ) }
+        specify { expect(for_article_1.uncategorized?).to eq(true ) }
+        specify { expect(for_article_2.uncategorized?).to eq(true ) }
         specify { expect(for_work_1.uncategorized?).to eq(false) }
         specify { expect(for_work_2.uncategorized?).to eq(false) }
       end
@@ -112,7 +112,7 @@ RSpec.describe Tag, type: :model do
       describe "self#string" do
         subject { collection.string }
 
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :articles) }
 
         it { is_expected.to eq([string]) }
       end
@@ -120,7 +120,7 @@ RSpec.describe Tag, type: :model do
       describe "self#year" do
         subject { collection.year }
 
-        it { is_expected.to eager_load(:category, :works, :posts) }
+        it { is_expected.to eager_load(:category, :works, :articles) }
 
         it { is_expected.to eq([year]) }
       end
@@ -140,7 +140,7 @@ RSpec.describe Tag, type: :model do
   context "associations" do
     it { is_expected.to belong_to(:category).optional }
 
-    it { is_expected.to have_and_belong_to_many(:posts) }
+    it { is_expected.to have_and_belong_to_many(:articles) }
     it { is_expected.to have_and_belong_to_many(:works) }
 
     it { is_expected.to have_many(:creators    ).through(:works) }

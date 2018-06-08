@@ -1,0 +1,19 @@
+<%
+  @title = "Create Article"
+%>
+
+<%= admin_header(@model_class, :new,
+  h1: @title
+) %>
+
+<%= render partial: "form", locals: {
+  available_tabs: @available_tabs,
+  selected_tab:   @selected_tab,
+
+  article:           @article,
+
+  creators:       @creators,
+  media:          @media,
+  tags:           @tags,
+  works:          @works,
+} %>

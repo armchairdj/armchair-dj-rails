@@ -24,19 +24,19 @@ a {
     }
   }
 
-  &.post-published {
+  &.article-published {
     @include svg() {
       @include svg-path-fill($success-color);
     }
   }
 
-  &.post-draft {
+  &.article-draft {
     @include svg() {
       @include svg-path-fill($error-color);
     }
   }
 
-  &.post-scheduled {
+  &.article-scheduled {
     @include svg() {
       @include svg-path-fill($info-color);
     }

@@ -40,8 +40,8 @@ RSpec.describe MarkupHelper, type: :helper do
 
   describe "#combine_classes" do
     specify do
-      expected = "post published standalone"
-      actual   = helper.combine_classes(" post ", "published", " ", nil, ["post", "\n\nstandalone  "])
+      expected = "article published standalone"
+      actual   = helper.combine_classes(" article ", "published", " ", nil, ["article", "\n\nstandalone  "])
 
       expect(actual).to eq(expected)
     end

@@ -56,8 +56,8 @@
   works: @tag.works.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @tag.posts.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/articles", locals: {
+  articles: @tag.articles.for_admin.reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

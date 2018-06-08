@@ -26,7 +26,7 @@ module FactoryHelpers
   end
 
   def get_constant
-    if describe_class.respond_to? :model_name
+    if described_class.respond_to? :model_name
       # Models
       described_class
     elsif described_class.respond_to? :controller_name

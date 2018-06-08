@@ -23,7 +23,7 @@ RSpec.describe "admin/works/new", type: :view do
     it "renders form with only the media dropdown" do
       render
 
-      assert_select "form[action=?][method=?]", admin_works_path, "post" do
+      assert_select "form[action=?][method=?]", admin_works_path, "article" do
         # TODO assert only one field
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe "admin/works/new", type: :view do
     xit "renders fully populated form" do
       render
 
-      assert_select "form[action=?][method=?]", admin_works_path, "post" do
+      assert_select "form[action=?][method=?]", admin_works_path, "article" do
         # TODO assert all fields
       end
     end

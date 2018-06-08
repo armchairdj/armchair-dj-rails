@@ -41,7 +41,7 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:posts, :reviews, :works, :creators) }
+  scope     :eager, -> { includes(:articles, :reviews, :works, :creators) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.viewable.alpha }
 
@@ -49,7 +49,7 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :posts,   dependent: :destroy, foreign_key: "author_id"
+  has_many :articles,   dependent: :destroy, foreign_key: "author_id"
   has_many :reviews, dependent: :destroy, foreign_key: "author_id"
 
   has_many :works, through: :reviews

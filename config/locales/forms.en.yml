@@ -14,6 +14,7 @@ en:
         created_at: "Created"
         updated_at: "Updated"
         _destroy: "Remove this association"
+      article:
       contribution:
       creator:
       credit:
@@ -23,7 +24,10 @@ en:
       membership:
         group_id: "Group"
         member_id: "Member"
-      post:
+      mixtape:
+      playlist:
+      review:
+      tag:
       user:
         first_name: "First"
         middle_name: "Middle"
@@ -40,6 +44,9 @@ en:
         _destroy: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
         links: "For display on the public permalink page for this %{model_name}."
+      article:
+        publish_on: "Leave blank unless scheduling an article for future publication."
+        summary: "For use in the meta description tag."
       category:
         allow_multiple: "&nbsp;"
       contribution:
@@ -47,11 +54,11 @@ en:
       credit:
       identity:
       membership:
+      mixtape:
       playlist:
         playlistings: "Select at least two."
-      post:
-        publish_on: "Leave blank unless scheduling a post for future publication."
-        summary: "For use in the meta description tag."
+      review:
+      tag:
       user:
         bio: "For display on your public author profile."
         current_password: "We need your current password to confirm your changes"
@@ -64,17 +71,23 @@ en:
     placeholders:
       defaults:
         email: "name@domain.com"
+      article:
       contribution:
       creator:
       credit:
+      facet:
       identity:
       membership:
-      post:
+      mixtape:
+      playlist:
+      review:
+      tag:
       user:
       work:
         subtitle: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\""
     include_blanks:
       defaults:
+      article:
       contribution:
         creator_id: "Please choose"
         role_id: "Please choose"
@@ -89,7 +102,10 @@ en:
       membership:
         group_id: "Please choose"
         member_id: "Please choose"
-      post:
+      mixtape:
+        playlist_id: "Please choose"
+      playlist:
+      review:
         work_id: "Please choose"
       tag:
         category_id: "Please choose"
@@ -98,11 +114,16 @@ en:
       work:
     prompts:
       defaults:
+      article:
       contribution:
       creator:
       credit:
+      facet:
       identity:
       membership:
-      post:
+      mixtape:
+      playlist:
+      review:
+      tag:
       user:
       work:

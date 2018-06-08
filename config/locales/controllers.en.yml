@@ -32,20 +32,20 @@ en:
           create:  "Playlist created."
           destroy: "Playlist destroyed."
           update:  "Playlist updated."
-      posts:
+      articles:
         success:
-          create:  "Post created."
-          destroy: "Post destroyed."
-          update:  "Post updated."
-          publish: "Post published."
-          unpublish: "Post unpublished."
-          schedule: "Post published."
-          unschedule: "Post unpublished."
+          create:  "Article created."
+          destroy: "Article destroyed."
+          update:  "Article updated."
+          publish: "Article published."
+          unpublish: "Article unpublished."
+          schedule: "Article published."
+          unschedule: "Article unpublished."
         error:
-          publish: "Post could not be published."
-          unpublish: "Post could not be unpublished."
-          schedule: "Post could not be scheduled."
-          unschedule: "Post could not be unscheduled."
+          publish: "Article could not be published."
+          unpublish: "Article could not be unpublished."
+          schedule: "Article could not be scheduled."
+          unschedule: "Article could not be unscheduled."
       roles:
         success:
           create:  "Role created."
