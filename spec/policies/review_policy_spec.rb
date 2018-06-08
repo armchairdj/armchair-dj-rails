@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe CreatorPolicy do
+RSpec.describe ReviewPolicy do
   it_behaves_like "a_public_policy"
 end

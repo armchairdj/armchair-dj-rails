@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::PlaylistPolicy do
-  it_behaves_like "an_admin_policy" do
-    let(:record) { create(:minimal_playlist) }
-  end
+  it_behaves_like "an_admin_policy"
 
   describe "reorder_playlistings?" do
     let(:record) { create(:minimal_playlist) }

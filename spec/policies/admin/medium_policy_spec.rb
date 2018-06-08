@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::MediumPolicy do
-  it_behaves_like "an_admin_policy" do
-    let(:record) { create(:minimal_medium) }
-  end
+  it_behaves_like "an_admin_policy"
 
   describe "reorder_facets?" do
     let(:record) { create(:minimal_medium) }

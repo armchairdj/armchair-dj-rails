@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::PostPolicy do
+RSpec.describe Admin::MixtapePolicy do
   it_behaves_like "an_admin_publishable_policy"
 end

@@ -3,7 +3,5 @@
 require "rails_helper"
 
 RSpec.describe Admin::RolePolicy do
-  it_behaves_like "an_admin_policy" do
-    let(:record) { create(:minimal_role) }
-  end
+  it_behaves_like "an_admin_policy"
 end

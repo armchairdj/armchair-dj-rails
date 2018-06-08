@@ -3,7 +3,5 @@
 require "rails_helper"
 
 RSpec.describe UserPolicy do
-  it_behaves_like "a_public_policy" do
-    let(:record) { create(:member) }
-  end
+  it_behaves_like "a_public_policy"
 end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "an_admin_policy" do
+RSpec.shared_examples "an_admin_publishable_policy" do
   let(:record) { create_minimal_instance }
 
   subject { described_class.new(user, record) }
@@ -16,6 +16,7 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to raise_not_authorized_for(:create ) }
     it { is_expected.to raise_not_authorized_for(:edit   ) }
     it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
@@ -28,6 +29,7 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to raise_not_authorized_for(:create ) }
     it { is_expected.to raise_not_authorized_for(:edit   ) }
     it { is_expected.to raise_not_authorized_for(:update ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
@@ -38,10 +40,25 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to permit_action(:show   ) }
     it { is_expected.to permit_action(:new    ) }
     it { is_expected.to permit_action(:create ) }
-    it { is_expected.to permit_action(:edit   ) }
-    it { is_expected.to permit_action(:update ) }
 
+    it { is_expected.to forbid_action(:edit   ) }
+    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:publish) }
     it { is_expected.to forbid_action(:destroy) }
+
+    context "with own record" do
+      let(:record) { create_minimal_instance(author_id: user.id) }
+
+      it { is_expected.to permit_action(:index  ) }
+      it { is_expected.to permit_action(:show   ) }
+      it { is_expected.to permit_action(:new    ) }
+      it { is_expected.to permit_action(:create ) }
+      it { is_expected.to permit_action(:edit   ) }
+      it { is_expected.to permit_action(:update ) }
+
+      it { is_expected.to forbid_action(:publish) }
+      it { is_expected.to forbid_action(:destroy) }
+    end
   end
 
   context "as editor" do
@@ -54,6 +71,7 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to permit_action(:edit   ) }
     it { is_expected.to permit_action(:update ) }
 
+    it { is_expected.to forbid_action(:publish) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
@@ -66,6 +84,7 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to permit_action(:create ) }
     it { is_expected.to permit_action(:edit   ) }
     it { is_expected.to permit_action(:update ) }
+    it { is_expected.to permit_action(:publish) }
 
     it { is_expected.to forbid_action(:destroy) }
   end
@@ -79,6 +98,7 @@ RSpec.shared_examples "an_admin_policy" do
     it { is_expected.to permit_action(:create ) }
     it { is_expected.to permit_action(:edit   ) }
     it { is_expected.to permit_action(:update ) }
+    it { is_expected.to permit_action(:publish) }
     it { is_expected.to permit_action(:destroy) }
   end
 
@@ -88,11 +108,10 @@ RSpec.shared_examples "an_admin_policy" do
     let(:model_class) { record.class }
     let(       :user) { create(:writer) }
 
-    it "uses for_admin and resolves" do
-       allow(model_class).to receive(:for_admin).and_call_original
-      expect(model_class).to receive(:for_admin)
-
-      is_expected.to be_a_kind_of(ActiveRecord::Relation)
-    end
+    pending "for member"
+    pending "for writer"
+    pending "for editor"
+    pending "for admin"
+    pending "for root"
   end
 end
