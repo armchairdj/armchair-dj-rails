@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Article < ApplicationRecord
+class Article < Post
 
   #############################################################################
   # CONCERNS.
@@ -10,8 +10,6 @@ class Article < ApplicationRecord
   include Linkable
   include Sluggable
   include Summarizable
-
-  include Publishable
 
   #############################################################################
   # SCOPES.
@@ -67,7 +65,7 @@ class Article < ApplicationRecord
     [ title ]
   end
 
-  def update_viewable_for_all
-    # Do nothing.
+  def cascade_viewable
+    super
   end
 end

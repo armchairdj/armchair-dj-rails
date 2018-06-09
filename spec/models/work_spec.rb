@@ -637,7 +637,7 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "#update_viewable_for_all" do
+    describe "#cascade_viewable" do
       let(    :creator_1) { create(:minimal_creator) }
       let(    :creator_2) { create(:minimal_creator) }
       let(:contributor_1) { create(:minimal_creator) }

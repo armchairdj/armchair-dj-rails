@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a_publishable_model" do
+RSpec.shared_examples "a_post" do
   subject { create_minimal_instance }
 
   context "concerns" do
@@ -211,8 +211,8 @@ RSpec.shared_examples "a_publishable_model" do
       :set_published_at,
       :clear_published_at,
       :clear_publish_on,
-      :update_viewable_for_publishable,
-      :update_viewable_for_all,
+      :cascade_viewable,
+      :cascade_viewable,
     ] }
 
     describe "states" do
@@ -234,8 +234,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "schedule" do
         before(:each) do
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:update_viewable_for_publishable)
-          expect(draft).to receive(:update_viewable_for_all)
+          expect(draft).to receive(:cascade_viewable)
+          expect(draft).to receive(:cascade_viewable)
         end
 
         specify do
@@ -248,8 +248,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "unschedule" do
         before(:each) do
           expect(scheduled).to receive(:clear_publish_on)
-          expect(scheduled).to receive(:update_viewable_for_publishable)
-          expect(scheduled).to receive(:update_viewable_for_all)
+          expect(scheduled).to receive(:cascade_viewable)
+          expect(scheduled).to receive(:cascade_viewable)
         end
 
         specify do
@@ -261,8 +261,8 @@ RSpec.shared_examples "a_publishable_model" do
         before(:each) do
           expect(draft).to receive(:set_published_at)
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:update_viewable_for_publishable)
-          expect(draft).to receive(:update_viewable_for_all)
+          expect(draft).to receive(:cascade_viewable)
+          expect(draft).to receive(:cascade_viewable)
         end
 
         specify do
@@ -273,8 +273,8 @@ RSpec.shared_examples "a_publishable_model" do
       describe "unpublish" do
         before(:each) do
           expect(published).to receive(:clear_published_at)
-          expect(published).to receive(:update_viewable_for_publishable)
-          expect(published).to receive(:update_viewable_for_all)
+          expect(published).to receive(:cascade_viewable)
+          expect(published).to receive(:cascade_viewable)
         end
 
         specify do
@@ -448,7 +448,7 @@ RSpec.shared_examples "a_publishable_model" do
         end
       end
 
-      describe "#update_viewable_for_publishable" do
+      describe "#cascade_viewable" do
         let(:instance) { create_minimal_instance }
         let(  :author) { double }
         let(    :tags) { [double, double] }
@@ -467,7 +467,7 @@ RSpec.shared_examples "a_publishable_model" do
           expect(tags.first).to receive(:update_viewable).once
           expect(tags.last ).to receive(:update_viewable).once
 
-          instance.send(:update_viewable_for_publishable)
+          instance.send(:cascade_viewable)
         end
       end
     end

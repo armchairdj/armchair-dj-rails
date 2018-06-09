@@ -10,7 +10,7 @@ RSpec.describe Article, type: :model do
 
     it_behaves_like "a_linkable_model"
 
-    it_behaves_like "a_publishable_model"
+    it_behaves_like "a_post"
 
     it_behaves_like "a_sluggable_model"
 
@@ -71,7 +71,7 @@ RSpec.describe Article, type: :model do
       specify { expect(instance.type(plural: true)).to eq("Articles") }
     end
 
-    describe "#update_viewable_for_all" do
+    describe "#cascade_viewable" do
       # Empty method
     end
 

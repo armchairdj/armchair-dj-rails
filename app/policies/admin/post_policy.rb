@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminPublishablePolicy < AdminPolicy
+class Admin::PostPolicy < AdminPolicy
   class Scope < Scope
     def resolve
       return scope.for_admin if user.can_edit?

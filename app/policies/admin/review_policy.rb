@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-class Admin::ReviewPolicy < AdminPublishablePolicy; end
+class Admin::ReviewPolicy < Admin::PostPolicy; end

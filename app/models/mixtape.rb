@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Mixtape < ApplicationRecord
+class Mixtape < Post
 
   #############################################################################
   # CONCERNS.
@@ -10,8 +10,6 @@ class Mixtape < ApplicationRecord
   include Linkable
   include Sluggable
   include Summarizable
-
-  include Publishable
 
   #############################################################################
   # SCOPES.
@@ -77,7 +75,9 @@ class Mixtape < ApplicationRecord
     playlist.try(:alpha_parts) || []
   end
 
-  def update_viewable_for_all
-    playlist.update_viewable_for_all
+  def cascade_viewable
+    super
+
+    playlist.cascade_viewable
   end
 end

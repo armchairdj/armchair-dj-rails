@@ -1,8 +1,13 @@
-class CreateMixtapes < ActiveRecord::Migration[5.2]
+class CreatePosts < ActiveRecord::Migration[5.2]
   def change
-    create_table :mixtapes do |t|
+    create_table :posts do |t|
+      t.string :type
       t.references :author, index: true, foreign_key: { to_table: :users }
+
+      t.string :title
+
       t.references :playlist, foreign_key: true, index: true
+      t.references :work,     foreign_key: true, index: true
 
       t.text :body
       t.text :summary
@@ -18,6 +23,6 @@ class CreateMixtapes < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :mixtapes, :slug, unique: true
+    add_index :posts, :slug, unique: true
   end
 end

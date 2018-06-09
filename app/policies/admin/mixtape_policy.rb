@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-class Admin::MixtapePolicy < AdminPublishablePolicy; end
+class Admin::MixtapePolicy < Admin::PostPolicy; end

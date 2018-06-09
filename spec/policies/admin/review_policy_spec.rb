@@ -3,5 +3,5 @@
 require "rails_helper"
 
 RSpec.describe Admin::ReviewPolicy do
-  it_behaves_like "an_admin_publishable_policy"
+  it_behaves_like "an_admin_post_policy"
 end

@@ -197,13 +197,14 @@ class Work < ApplicationRecord
     ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
   end
 
-  def update_viewable_for_all
+  def cascade_viewable
     self.update_viewable
 
     medium.update_viewable
-    creators.each(    &:update_viewable)
+
+        creators.each(&:update_viewable)
     contributors.each(&:update_viewable)
-    tags.each(        &:update_viewable)
+            tags.each(&:update_viewable)
   end
 
   def sluggable_parts

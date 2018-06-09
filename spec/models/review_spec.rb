@@ -103,16 +103,16 @@ RSpec.describe Review, type: :model do
       specify { expect(instance.type(plural: true)).to eq("Song Reviews") }
     end
 
-    describe "#update_viewable_for_all" do
+    describe "#cascade_viewable" do
       subject { create_minimal_instance }
 
       before(:each) do
-         allow(subject.work).to receive(:update_viewable_for_all)
-        expect(subject.work).to receive(:update_viewable_for_all)
+         allow(subject.work).to receive(:cascade_viewable)
+        expect(subject.work).to receive(:cascade_viewable)
       end
 
       it "updates viewable for descendents" do
-        subject.update_viewable_for_all
+        subject.cascade_viewable
       end
     end
 

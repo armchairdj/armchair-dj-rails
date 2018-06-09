@@ -83,16 +83,16 @@ RSpec.describe Mixtape, type: :model do
       specify { expect(instance.type(plural: true)).to eq("Mixtapes") }
     end
 
-    describe "#update_viewable_for_all" do
+    describe "#cascade_viewable" do
       subject { create_minimal_instance }
 
       before(:each) do
-         allow(subject.playlist).to receive(:update_viewable_for_all)
-        expect(subject.playlist).to receive(:update_viewable_for_all)
+         allow(subject.playlist).to receive(:cascade_viewable)
+        expect(subject.playlist).to receive(:cascade_viewable)
       end
 
       it "updates viewable for descendents" do
-        subject.update_viewable_for_all
+        subject.cascade_viewable
       end
     end
 

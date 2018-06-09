@@ -87,10 +87,10 @@ class Playlist < ApplicationRecord
     end
   end
 
-  def update_viewable_for_all
+  def cascade_viewable
     self.update_viewable
 
-    works.each(&:update_viewable_for_all)
+    works.each(&:cascade_viewable)
   end
 
   def sluggable_parts

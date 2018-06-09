@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Review < ApplicationRecord
+class Review < Post
 
   #############################################################################
   # CONCERNS.
@@ -10,8 +10,6 @@ class Review < ApplicationRecord
   include Linkable
   include Sluggable
   include Summarizable
-
-  include Publishable
 
   #############################################################################
   # SCOPES.
@@ -92,7 +90,9 @@ class Review < ApplicationRecord
     work.try(:alpha_parts) || []
   end
 
-  def update_viewable_for_all
-    work.update_viewable_for_all
+  def cascade_viewable
+    super
+
+    work.cascade_viewable
   end
 end

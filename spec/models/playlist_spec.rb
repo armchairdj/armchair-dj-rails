@@ -173,18 +173,18 @@ RSpec.describe Playlist, type: :model do
       end
     end
 
-    describe "#update_viewable_for_all" do
+    describe "#cascade_viewable" do
       subject { create_minimal_instance }
 
       before(:each) do
         subject.works.each do |work|
-           allow(work).to receive(:update_viewable_for_all)
-          expect(work).to receive(:update_viewable_for_all)
+           allow(work).to receive(:cascade_viewable)
+          expect(work).to receive(:cascade_viewable)
         end
       end
 
       it "updates viewable for descendents" do
-        subject.update_viewable_for_all
+        subject.cascade_viewable
       end
     end
 

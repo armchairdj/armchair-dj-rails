@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "an_admin_publishable_policy" do
+RSpec.shared_examples "an_admin_post_policy" do
   let(:record) { create_minimal_instance }
 
   subject { described_class.new(user, record) }
