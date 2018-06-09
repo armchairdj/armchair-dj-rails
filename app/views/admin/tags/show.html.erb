@@ -60,6 +60,14 @@
   articles: @tag.articles.for_admin.reverse_cron
 } %>
 
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @tag.reviews.for_admin.reverse_cron
+} %>
+
+<%= render partial: "admin/shared/playback/mixtapes", locals: {
+  mixtapes: @tag.mixtapes.for_admin.reverse_cron
+} %>
+
 <%= render partial: "admin/shared/playback/links", locals: {
   links: @tag.links
 } %>

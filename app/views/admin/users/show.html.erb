@@ -144,6 +144,14 @@
     articles: @user.articles.for_admin.reverse_cron
   } %>
 
+  <%= render partial: "admin/shared/playback/reviews", locals: {
+    reviews: @user.reviews.for_admin.reverse_cron
+  } %>
+
+  <%= render partial: "admin/shared/playback/mixtapes", locals: {
+    mixtapes: @user.mixtapes.for_admin.reverse_cron
+  } %>
+
   <%= render partial: "admin/shared/playback/works", locals: {
     works: @user.works.for_admin.alpha
   } %>

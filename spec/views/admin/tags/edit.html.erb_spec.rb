@@ -20,7 +20,7 @@ RSpec.describe "admin/tags/edit", type: :view do
     it "renders form" do
       render
 
-      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "article" do
+      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "post" do
         # TODO
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe "admin/tags/edit", type: :view do
     it "renders form" do
       render
 
-      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "article" do
+      assert_select "form[action=?][method=?]", admin_tag_path(@tag), "post" do
         # TODO
       end
     end

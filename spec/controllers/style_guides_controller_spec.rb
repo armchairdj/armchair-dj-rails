@@ -46,7 +46,7 @@ RSpec.describe StyleGuidesController, type: :controller do
       end
 
       it "renders article" do
-        get :show, params: { template: "article" }
+        get :show, params: { template: "post" }
 
         is_expected.to successfully_render("style_guides/post")
       end

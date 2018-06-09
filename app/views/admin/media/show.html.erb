@@ -63,8 +63,8 @@
   creators: @medium.creators.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/articles", locals: {
-  articles: @medium.articles.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @medium.reviews.for_admin.reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

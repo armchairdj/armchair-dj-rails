@@ -21,6 +21,6 @@
   links: @playlist.links
 } %>
 
-<%= render partial: "shared/playback/articles", locals: {
-  articles: @playlist.articles.for_site.reverse_cron
+<%= render partial: "shared/playback/mixtapes", locals: {
+  mixtapes: @playlist.mixtapes.for_site.reverse_cron
 } %>

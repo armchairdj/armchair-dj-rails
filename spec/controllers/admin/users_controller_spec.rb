@@ -167,8 +167,7 @@ RSpec.describe Admin::UsersController, type: :controller do
           "Username",
           "Email",
           "Role",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

@@ -210,8 +210,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           "Title",
           "Creator",
           "Medium",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

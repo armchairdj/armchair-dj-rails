@@ -25,7 +25,7 @@ RSpec.describe "admin/works/edit", type: :view do
   it "renders the edit work form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_work_path(@work), "article" do
+    assert_select "form[action=?][method=?]", admin_work_path(@work), "post" do
       # TODO
     end
   end

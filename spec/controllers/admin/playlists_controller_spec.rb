@@ -221,8 +221,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
           "Default",
           "Title",
           "Author",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

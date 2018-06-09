@@ -201,8 +201,7 @@ RSpec.describe Admin::TagsController, type: :controller do
           "Default",
           "Category",
           "Name",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

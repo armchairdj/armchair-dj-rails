@@ -16,7 +16,7 @@ RSpec.describe "admin/media/new", type: :view do
   it "renders new medium form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_media_path, "article" do
+    assert_select "form[action=?][method=?]", admin_media_path, "post" do
     end
   end
 end

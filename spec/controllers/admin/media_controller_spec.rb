@@ -213,8 +213,7 @@ RSpec.describe Admin::MediaController, type: :controller do
         expect(subject.keys).to match_array([
           "Default",
           "Name",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

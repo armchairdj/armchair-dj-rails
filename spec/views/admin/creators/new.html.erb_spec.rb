@@ -25,7 +25,7 @@ RSpec.describe "admin/creators/new", type: :view do
   it "renders new creator form" do
     render
 
-    assert_select "form[action=?][method=?]", admin_creators_path, "article" do
+    assert_select "form[action=?][method=?]", admin_creators_path, "post" do
       # TODO
     end
   end
