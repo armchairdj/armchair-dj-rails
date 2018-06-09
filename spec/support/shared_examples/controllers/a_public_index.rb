@@ -4,7 +4,7 @@ RSpec.shared_examples "a_public_index" do
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
 
-  let(         :ids) { 21.times.map { |i| create_minimal_instance(:with_published_publication).id } }
+  let(         :ids) { 21.times.map { |i| create_minimal_instance(:with_published_post).id } }
   let(   :paginated) { model_class.where(id: ids).for_site }
   let(        :none) { model_class.none.for_site }
 

@@ -19,7 +19,7 @@ RSpec.describe "admin/tags/show", type: :view do
 
   context "with article" do
     before(:each) do
-      @tag = assign(:tag, create(:minimal_tag, :with_published_publication))
+      @tag = assign(:tag, create(:minimal_tag, :with_published_post))
     end
 
     it "renders" do

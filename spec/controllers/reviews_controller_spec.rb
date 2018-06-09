@@ -16,7 +16,7 @@ RSpec.describe ReviewsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:review) { create(:minimal_review, :with_published_publication) }
+    let(:review) { create(:minimal_review, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: review.slug }

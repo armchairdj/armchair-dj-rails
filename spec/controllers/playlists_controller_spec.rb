@@ -16,7 +16,7 @@ RSpec.describe PlaylistsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:playlist) { create(:minimal_playlist, :with_published_publication) }
+    let(:playlist) { create(:minimal_playlist, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: playlist.slug }

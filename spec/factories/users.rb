@@ -10,7 +10,7 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_draft_publication do
+    trait :with_draft_post do
       role :writer
 
       after(:create) do |user|
@@ -20,7 +20,7 @@ FactoryBot.define do
       end
     end
 
-    trait :with_scheduled_publication do
+    trait :with_scheduled_post do
       role :writer
 
       after(:create) do |user|
@@ -30,7 +30,7 @@ FactoryBot.define do
       end
     end
 
-    trait :with_published_publication do
+    trait :with_published_post do
       role :writer
 
       after(:create) do |user|
@@ -40,10 +40,10 @@ FactoryBot.define do
       end
     end
 
-    trait :with_one_of_each_publication_status do
-      with_draft_publication
-      with_scheduled_publication
-      with_published_publication
+    trait :with_one_of_each_post_status do
+      with_draft_post
+      with_scheduled_post
+      with_published_post
     end
 
     trait :valid do

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "playlists/index", type: :view do
   before(:each) do
     21.times do
-      create(:minimal_playlist, :with_published_publication)
+      create(:minimal_playlist, :with_published_post)
     end
 
     @playlists = assign(:playlists, Playlist.all.alpha.page(1))

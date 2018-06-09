@@ -3,9 +3,9 @@
 RSpec.shared_examples "a_viewable_model" do
   context "included" do
     context "scope-related" do
-      let!(    :draft) { create_minimal_instance(:with_draft_publication    ) }
-      let!(:scheduled) { create_minimal_instance(:with_scheduled_publication) }
-      let!(:published) { create_minimal_instance(:with_published_publication) }
+      let!(    :draft) { create_minimal_instance(:with_draft_post    ) }
+      let!(:scheduled) { create_minimal_instance(:with_scheduled_post) }
+      let!(:published) { create_minimal_instance(:with_published_post) }
 
       let(:ids) { [draft, scheduled, published].map(&:id) }
 
@@ -40,7 +40,7 @@ RSpec.shared_examples "a_viewable_model" do
 
     context "hooks" do
       describe "before_save" do
-        subject { build_minimal_instance(:with_draft_publication) }
+        subject { build_minimal_instance(:with_draft_post) }
 
         it "calls #refresh_viewable" do
            allow(subject).to receive(:refresh_viewable).and_call_original
@@ -52,7 +52,7 @@ RSpec.shared_examples "a_viewable_model" do
         context "callbacks" do
           describe "#refresh_viewable (invoked via save)" do
             describe "becoming viewable" do
-              subject { create_minimal_instance(:with_draft_publication) }
+              subject { create_minimal_instance(:with_draft_post) }
 
               specify do
                 allow(subject).to receive(:has_published_content?).and_return(true)
@@ -66,7 +66,7 @@ RSpec.shared_examples "a_viewable_model" do
             end
 
             describe "becoming unviewable" do
-              subject { create_minimal_instance(:with_published_publication) }
+              subject { create_minimal_instance(:with_published_post) }
 
               specify do
                 allow(subject).to receive(:has_published_content?).and_return(false)
@@ -80,7 +80,7 @@ RSpec.shared_examples "a_viewable_model" do
             end
 
             describe "already viewable" do
-              subject { create_minimal_instance(:with_published_publication) }
+              subject { create_minimal_instance(:with_published_post) }
 
               specify do
                 allow(subject).to receive(:has_published_content?).and_return(true)
@@ -94,7 +94,7 @@ RSpec.shared_examples "a_viewable_model" do
             end
 
             describe "still unviewable" do
-              subject { create_minimal_instance(:with_draft_publication) }
+              subject { create_minimal_instance(:with_draft_post) }
 
               specify do
                 allow(subject).to receive(:has_published_content?).and_return(false)
@@ -128,13 +128,13 @@ RSpec.shared_examples "a_viewable_model" do
         end
 
         context "viewable" do
-          subject { create_minimal_instance(:with_published_publication) }
+          subject { create_minimal_instance(:with_published_post) }
 
           specify { subject.update_viewable }
         end
 
         context "unviewable" do
-          subject { create_minimal_instance(:with_draft_publication) }
+          subject { create_minimal_instance(:with_draft_post) }
 
           specify { subject.update_viewable }
         end
@@ -151,7 +151,7 @@ RSpec.shared_examples "a_viewable_model" do
             allow(subject).to receive(:has_published_content?).and_return(false)
           end
 
-          subject { create_minimal_instance(:with_published_publication) }
+          subject { create_minimal_instance(:with_published_post) }
 
           specify { subject.update_viewable }
         end
@@ -161,7 +161,7 @@ RSpec.shared_examples "a_viewable_model" do
             allow(subject).to receive(:has_published_content?).and_return(true)
           end
 
-          subject { create_minimal_instance(:with_draft_publication) }
+          subject { create_minimal_instance(:with_draft_post) }
 
           specify { subject.update_viewable }
         end

@@ -9,7 +9,7 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_published_publication do
+    trait :with_published_post do
       published
     end
 

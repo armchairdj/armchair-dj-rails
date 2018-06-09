@@ -16,7 +16,7 @@ RSpec.describe MediaController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:medium) { create(:minimal_medium, :with_published_publication) }
+    let(:medium) { create(:minimal_medium, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: medium.slug }

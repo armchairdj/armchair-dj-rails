@@ -7,7 +7,7 @@ RSpec.describe "admin/tags/index", type: :view do
 
   before(:each) do
     11.times do
-      create(:minimal_tag, :with_published_publication)
+      create(:minimal_tag, :with_published_post)
     end
 
     10.times do

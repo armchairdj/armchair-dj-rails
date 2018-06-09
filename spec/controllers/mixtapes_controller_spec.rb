@@ -16,7 +16,7 @@ RSpec.describe MixtapesController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:mixtape) { create(:minimal_mixtape, :with_published_publication) }
+    let(:mixtape) { create(:minimal_mixtape, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: mixtape.slug }

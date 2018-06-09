@@ -37,20 +37,20 @@ FactoryBot.define do
 
     trait :with_10_viewable_tracks do
       playlistings_attributes { {
-        "0" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "1" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "2" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "3" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "4" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "5" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "6" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "7" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "8" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
-        "9" => attributes_for(:playlisting, :with_existing_work, :with_published_publication),
+        "0" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "1" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "2" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "3" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "4" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "5" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "6" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "7" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "8" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "9" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
       } }
     end
 
-    trait :with_draft_publication do
+    trait :with_draft_post do
       after(:create) do |playlist|
         create(:mixtape, :draft, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
@@ -58,7 +58,7 @@ FactoryBot.define do
       end
     end
 
-    trait :with_scheduled_publication do
+    trait :with_scheduled_post do
       after(:create) do |playlist|
         create(:mixtape, :scheduled, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
@@ -66,7 +66,7 @@ FactoryBot.define do
       end
     end
 
-    trait :with_published_publication do
+    trait :with_published_post do
       after(:create) do |playlist|
         create(:mixtape, :published, :with_body, author_id: playlist.author.id, playlist_id: playlist.id)
 
@@ -74,10 +74,10 @@ FactoryBot.define do
       end
     end
 
-    trait :with_one_of_each_publication_status do
-      with_draft_publication
-      with_scheduled_publication
-      with_published_publication
+    trait :with_one_of_each_post_status do
+      with_draft_post
+      with_scheduled_post
+      with_published_post
     end
 
     ###########################################################################

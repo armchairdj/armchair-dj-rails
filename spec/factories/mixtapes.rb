@@ -13,7 +13,11 @@ FactoryBot.define do
       playlist_id { create(:minimal_playlist).id }
     end
 
-    trait :with_published_publication do
+    trait :with_complete_playlist do
+      playlist_id { create(:complete_playlist).id }
+    end
+
+    trait :with_published_post do
       published
     end
 
@@ -26,7 +30,9 @@ FactoryBot.define do
       with_playlist
     end
 
-    factory :complete_mixtape, parent: :minimal_mixtape do
+    factory :complete_mixtape do
+      with_existing_author
+      with_complete_playlist
       with_body
       with_summary
     end

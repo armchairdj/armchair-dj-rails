@@ -7,7 +7,7 @@ RSpec.describe "admin/playlists/index", type: :view do
 
   before(:each) do
     21.times do
-      create(:minimal_playlist, :with_published_publication)
+      create(:minimal_playlist, :with_published_post)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

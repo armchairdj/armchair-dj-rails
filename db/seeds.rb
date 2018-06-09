@@ -505,28 +505,28 @@ gas                 = Creator.find_by(name: "Gas")
 
 ##### WORKS, CREDITS & CONTRIBUTIONS
 
-kate_bush_album_tki   = FactoryBot.create(:work, medium: album, title: "The Kick Inside",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_lh    = FactoryBot.create(:work, medium: album, title: "Lionheart",         "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_nfe   = FactoryBot.create(:work, medium: album, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_td    = FactoryBot.create(:work, medium: album, title: "The Dreaming",      "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_hol   = FactoryBot.create(:work, medium: album, title: "Hounds of Love",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_tsw   = FactoryBot.create(:work, medium: album, title: "The Sensual world", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_trs   = FactoryBot.create(:work, medium: album, title: "The Red Shoes",     "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_aasoh = FactoryBot.create(:work, medium: album, title: "Aerial",            "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_dc    = FactoryBot.create(:work, medium: album, title: "Director's Cut",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_fwfs  = FactoryBot.create(:work, medium: album, title: "50 Words for Snow", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_btdl  = FactoryBot.create(:work, medium: album, title: "Before the Dawn",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_tki                    = FactoryBot.create(:work, medium: album, title: "The Kick Inside",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_lh                     = FactoryBot.create(:work, medium: album, title: "Lionheart",         "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_nfe                    = FactoryBot.create(:work, medium: album, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_td                     = FactoryBot.create(:work, medium: album, title: "The Dreaming",      "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_hol                    = FactoryBot.create(:work, medium: album, title: "Hounds of Love",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_tsw                    = FactoryBot.create(:work, medium: album, title: "The Sensual world", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_trs                    = FactoryBot.create(:work, medium: album, title: "The Red Shoes",     "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_aasoh                  = FactoryBot.create(:work, medium: album, title: "Aerial",            "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_dc                     = FactoryBot.create(:work, medium: album, title: "Director's Cut",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_fwfs                   = FactoryBot.create(:work, medium: album, title: "50 Words for Snow", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_btdl                   = FactoryBot.create(:work, medium: album, title: "Before the Dawn",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 
-plastikman_album_sheet_one        = FactoryBot.create(:work, medium: album, title: "Sheet One",        "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_musik            = FactoryBot.create(:work, medium: album, title: "Musik",            "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_recycled_plastik = FactoryBot.create(:work, medium: album, title: "Recycled Plastik", "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_consumed         = FactoryBot.create(:work, medium: album, title: "Consumed",         "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_artifakts        = FactoryBot.create(:work, medium: album, title: "Artifakts (BC)",   "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_closer           = FactoryBot.create(:work, medium: album, title: "Closer",           "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_ex               = FactoryBot.create(:work, medium: album, title: "EX",               "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_sheet_one             = FactoryBot.create(:work, medium: album, title: "Sheet One",        "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_musik                 = FactoryBot.create(:work, medium: album, title: "Musik",            "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_recycled_plastik      = FactoryBot.create(:work, medium: album, title: "Recycled Plastik", "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_consumed              = FactoryBot.create(:work, medium: album, title: "Consumed",         "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_artifakts             = FactoryBot.create(:work, medium: album, title: "Artifakts (BC)",   "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_closer                = FactoryBot.create(:work, medium: album, title: "Closer",           "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_album_ex                    = FactoryBot.create(:work, medium: album, title: "EX",               "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
 
-plastikman_song_hump             = FactoryBot.create(:work, medium: song, title: "Hump",             "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_song_plastique        = FactoryBot.create(:work, medium: song, title: "Plastique",        "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_song_hump                   = FactoryBot.create(:work, medium: song, title: "Hump",             "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_song_plastique              = FactoryBot.create(:work, medium: song, title: "Plastique",        "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
 
 fleetwood_mac_album_fleetwood_mac      = FactoryBot.create(:work, medium: album, title: "Fleetwood Mac",      "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 fleetwood_mac_album_rumors             = FactoryBot.create(:work, medium: album, title: "Rumors",             "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
@@ -534,16 +534,16 @@ fleetwood_mac_album_tusk               = FactoryBot.create(:work, medium: album,
 fleetwood_mac_album_mirage             = FactoryBot.create(:work, medium: album, title: "Mirage",             "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 fleetwood_mac_album_tango_in_the_night = FactoryBot.create(:work, medium: album, title: "Tango in the Night", "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 
-fleetwood_mac_song_little_lies        = FactoryBot.create(:work, medium: song, title: "Little Lies",         "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_dreams             = FactoryBot.create(:work, medium: song, title: "Dreams",              "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_dont_stop          = FactoryBot.create(:work, medium: song, title: "Don't Stop",          "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_gold_dust_woman    = FactoryBot.create(:work, medium: song, title: "Gold Dust Woman",     "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+fleetwood_mac_song_little_lies         = FactoryBot.create(:work, medium: song, title: "Little Lies",         "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+fleetwood_mac_song_dreams              = FactoryBot.create(:work, medium: song, title: "Dreams",              "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+fleetwood_mac_song_dont_stop           = FactoryBot.create(:work, medium: song, title: "Don't Stop",          "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+fleetwood_mac_song_gold_dust_woman     = FactoryBot.create(:work, medium: song, title: "Gold Dust Woman",     "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
 
-spawn_song_hammerknock      = FactoryBot.create(:work, medium: song, title: "Hammerknock",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_tension          = FactoryBot.create(:work, medium: song, title: "Tension",          "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltrator      = FactoryBot.create(:work, medium: song, title: "Infiltrator",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltration     = FactoryBot.create(:work, medium: song, title: "Infiltration",     "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_the_thinking_man = FactoryBot.create(:work, medium: song, title: "The Thinking Man", "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_hammerknock                 = FactoryBot.create(:work, medium: song, title: "Hammerknock",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_tension                     = FactoryBot.create(:work, medium: song, title: "Tension",          "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_infiltrator                 = FactoryBot.create(:work, medium: song, title: "Infiltrator",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_infiltration                = FactoryBot.create(:work, medium: song, title: "Infiltration",     "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+spawn_song_the_thinking_man            = FactoryBot.create(:work, medium: song, title: "The Thinking Man", "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
 
 the_kooky_scientist_album_unpopular_science = FactoryBot.create(:work, medium: album, title: "Unpopular Science", "credits_attributes" => { "0" => { "creator_id" => the_kooky_scientist.id } })
 
@@ -554,3 +554,5 @@ Work.all.each do |work|
 end
 
 10.times { FactoryBot.create(:minimal_article, random_status, author: brian, body: random_paragraphs, title: random_title) }
+
+5.times { FactoryBot.create(:complete_mixtape, :published) }

@@ -15,9 +15,9 @@ RSpec.describe Tag, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let(        :uv) { create(:minimal_tag, :with_published_publication,  name: "UV") }
+      let(        :uv) { create(:minimal_tag, :with_published_post,  name: "UV") }
       let(        :cv) { create(:minimal_tag, :with_viewable_work,   name: "CV") }
-      let(        :uu) { create(:minimal_tag, :with_draft_publication,      name: "UU") }
+      let(        :uu) { create(:minimal_tag, :with_draft_post,      name: "UU") }
       let(        :cu) { create(:minimal_tag, :with_unviewable_work, name: "CU") }
       let(       :ids) { [cu, cv, uu, uv].map(&:id) }
       let(:collection) { described_class.where(id: ids) }

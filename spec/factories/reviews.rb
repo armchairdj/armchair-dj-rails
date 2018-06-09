@@ -17,7 +17,7 @@ FactoryBot.define do
       work_id { create(:minimal_work).id }
     end
 
-    trait :with_published_publication do
+    trait :with_published_post do
       published
     end
 

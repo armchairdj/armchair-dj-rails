@@ -16,7 +16,7 @@ RSpec.describe TagsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:tag) { create(:minimal_tag, :with_published_publication) }
+    let(:tag) { create(:minimal_tag, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: tag.slug }
