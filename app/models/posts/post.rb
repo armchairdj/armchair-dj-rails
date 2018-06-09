@@ -7,7 +7,11 @@ class Post < ApplicationRecord
   #############################################################################
 
   include AASM
+  include Alphabetizable
   include Authorable
+  include Linkable
+  include Sluggable
+  include Summarizable
 
   #############################################################################
   # CLASS.
@@ -40,7 +44,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   scope :unpublished,     -> { where.not(status: :published) }
-  scope :scheduled_ready, -> { scheduled.where("#{model_name.collection}.publish_on <= ?", DateTime.now) }
+  scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
   #############################################################################
