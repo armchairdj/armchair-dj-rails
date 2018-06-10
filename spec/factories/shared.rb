@@ -5,6 +5,10 @@ FactoryBot.define do
     to_create { |instance| instance.save(validate: false) }
   end
 
+  trait :with_existing_work do
+    work_id { create(:minimal_work).id }
+  end
+
   trait :with_author do
     association :author, factory: :admin
   end

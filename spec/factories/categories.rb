@@ -21,20 +21,12 @@ FactoryBot.define do
       allow_multiple false
     end
 
-    trait :with_tags do
+    trait :with_aspects do
       after(:create) do |category|
-        3.times { create(:minimal_tag, category_id: category.id) }
+        3.times { create(:minimal_aspect, category_id: category.id) }
 
         category.reload
       end
-    end
-
-    trait :string_format do
-      format :string
-    end
-
-    trait :year_format do
-      format :year
     end
 
     ###########################################################################
@@ -46,16 +38,7 @@ FactoryBot.define do
     end
 
     factory :complete_category, parent: :minimal_category do
-      string_format
       allowing_multiple
-    end
-
-    factory :year_category, parent: :minimal_category do
-      year_format
-    end
-
-    factory :string_category, parent: :minimal_category do
-      string_format
     end
   end
 end

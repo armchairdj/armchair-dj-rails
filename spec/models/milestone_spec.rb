@@ -20,21 +20,26 @@ RSpec.describe Milestone, type: :model do
   end
 
   context "associations" do
-    # Nothing so far.
+    it { is_expected.to belong_to(:work) }
   end
 
   context "attributes" do
-    context "nested" do
-      # Nothing so far.
-    end
-
     context "enums" do
-      # Nothing so far.
+      it { is_expected.to define_enum_for(:action) }
+
+      it_behaves_like "an_enumable_model", [:action]
     end
   end
 
   context "validations" do
-    # Nothing so far.
+    subject { create_minimal_instance }
+
+    it { is_expected.to validate_presence_of(:work) }
+
+    it { is_expected.to validate_presence_of(:year) }
+    it { is_expected.to validate_yearness_of(:year) }
+
+    it { is_expected.to validate_presence_of(:action) }
 
     context "conditional" do
       # Nothing so far.

@@ -2,9 +2,6 @@ en:
   activerecord:
     attributes:
       category:
-        formats:
-          string: "String"
-          year:   "Year"
       contribution:
       creator:
       creator/primary:
@@ -42,6 +39,12 @@ en:
           scheduled: "Scheduled"
           published: "Published"
         tag_ids: "Tags"
+      milestone:
+        actions:
+          released:   "Released in"
+          reissued:   "Reissued in"
+          remastered: "Remastered in"
+          created:    "Created in"
       user:
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"

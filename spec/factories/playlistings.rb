@@ -9,10 +9,6 @@ FactoryBot.define do
       playlist_id { create(:minimal_playlist).id }
     end
 
-    trait :with_existing_work do
-      work_id { create(:minimal_work).id }
-    end
-
     trait :with_draft_post do
       after(:create) do |playlisting|
         create(:review, :draft, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)

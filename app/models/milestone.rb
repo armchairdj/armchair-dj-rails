@@ -27,17 +27,23 @@ class Milestone < ApplicationRecord
   #############################################################################
 
   enum action: {
-    release:  0,
-    reissue:  1,
-    remaster: 2
-    create:   3,
+    released:   0,
+    reissued:   1,
+    remastered: 2,
+    created:    3,
   }
+
+  enumable_attributes :action
 
   #############################################################################
   # VALIDATIONS.
   #############################################################################
 
   validates :work, presence: true
+
+  validates :action, presence: true
+
+  validates :year, presence: true, yearness: true
 
   #############################################################################
   # HOOKS.
