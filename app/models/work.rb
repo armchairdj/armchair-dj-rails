@@ -20,11 +20,11 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.permitted_tag_param(category)
-    :"#{self.tag_param(category)}_tag_ids"
+  def self.permitted_aspect_param(category)
+    :"#{self.aspect_param(category)}_aspect_ids"
   end
 
-  def self.tag_param(category)
+  def self.aspect_param(category)
     # TODO Deal with special characters
     category.name.downcase.gsub(/\s+/, "_")
   end
@@ -58,7 +58,7 @@ class Work < ApplicationRecord
   has_many :facets,     through: :medium
   has_many :categories, through: :facets
 
-  has_and_belongs_to_many :tags
+  has_many :aspects
 
   has_many :playlistings, inverse_of: :work, dependent: :destroy
   has_many :playlists, through: :playlistings
@@ -99,31 +99,21 @@ class Work < ApplicationRecord
   validate_nested_uniqueness_of :credits,       uniq_attr: :creator_id
   validate_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
 
-  validate { only_tags_with_category }
-
-  def only_tags_with_category
-    return if tags.where(category_id: nil).empty?
-
-    self.errors.add(:tag_ids, :has_uncategorized_tags)
-  end
-
-  private :only_tags_with_category
-
   #############################################################################
   # HOOKS.
   #############################################################################
 
-  after_initialize :define_tag_methods
+  after_initialize :define_aspect_methods
 
-  def define_tag_methods
+  def define_aspect_methods
     self.categories.each do |category|
-          param = self.class.tag_param(category)
-         getter = :"#{param}_tags"
-      id_getter = :"#{param}_tag_ids"
-      id_setter = :"#{param}_tag_ids="
+          param = self.class.aspect_param(category)
+         getter = :"#{param}_aspects"
+      id_getter = :"#{param}_aspect_ids"
+      id_setter = :"#{param}_aspect_ids="
 
       self.class.send :define_method, getter do
-        Tag.includes(:category).where(id: self.tag_ids).where(categories: { name: category.name })
+        Tag.includes(:category).where(id: self.aspect_ids).where(categories: { name: category.name })
       end
 
       self.class.send :define_method, id_getter do
@@ -132,28 +122,28 @@ class Work < ApplicationRecord
 
       self.class.send :define_method, id_setter do |*ids|
         to_remove = self.send(id_getter).delete_if { |id| ids.flatten.include? id }
-        to_keep   = [self.tag_ids, ids].flatten.compact.uniq - to_remove
+        to_keep   = [self.aspect_ids, ids].flatten.compact.uniq - to_remove
 
-        self.tag_ids = to_keep.compact
+        self.aspect_ids = to_keep.compact
       end
     end
   end
 
-  private :define_tag_methods
+  private :define_aspect_methods
 
   #############################################################################
   # INSTANCE.
   #############################################################################
 
-  def tags_by_category
-    collection = self.tags.alpha.includes(:category)
+  def aspects_by_category
+    collection = self.aspects.alpha.includes(:category)
 
     collection.group_by{ |t| t.category }.to_a.sort_by(&:first)
   end
 
-  def permitted_tag_params
+  def permitted_aspect_params
     categories.inject({}) do |memo, (cat)|
-      memo[:"#{self.class.permitted_tag_param(cat)}"] = []; memo
+      memo[:"#{self.class.permitted_aspect_param(cat)}"] = []; memo
     end
   end
 
@@ -204,7 +194,7 @@ class Work < ApplicationRecord
 
         creators.each(&:update_viewable)
     contributors.each(&:update_viewable)
-            tags.each(&:update_viewable)
+            aspects.each(&:update_viewable)
   end
 
   def sluggable_parts

@@ -11,6 +11,14 @@ RSpec.describe Work, type: :model do
     it_behaves_like "a_displayable_model"
 
     it_behaves_like "a_parentable_model"
+
+    it_behaves_like "a_linkable_model"
+
+    it_behaves_like "a_sluggable_model"
+
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -295,17 +303,17 @@ RSpec.describe Work, type: :model do
 
   context "hooks" do
     context "before_save" do
-      context "calls #define_tag_methods" do
+      context "calls #define_aspect_methods" do
         before(:each) do
-           allow_any_instance_of(described_class).to receive(:define_tag_methods)
-          expect_any_instance_of(described_class).to receive(:define_tag_methods)
+           allow_any_instance_of(described_class).to receive(:define_aspect_methods)
+          expect_any_instance_of(described_class).to receive(:define_aspect_methods)
         end
 
         specify { build_minimal_instance }
       end
     end
 
-    context "#define_tag_methods" do
+    context "#define_aspect_methods" do
       let!( :genre) { create(:minimal_category, name: "Musical Genre") }
       let!(  :mood) { create(:minimal_category, name: "Musical Mood" ) }
       let!(:medium) do
@@ -317,18 +325,18 @@ RSpec.describe Work, type: :model do
 
       subject { create(:minimal_work, medium: medium).reload }
 
-      describe "self#permitted_tag_param" do
-        specify { expect(described_class.permitted_tag_param(genre)).to eq(:musical_genre_tag_ids) }
-        specify { expect(described_class.permitted_tag_param(mood )).to eq(:musical_mood_tag_ids ) }
+      describe "self#permitted_aspect_param" do
+        specify { expect(described_class.permitted_aspect_param(genre)).to eq(:musical_genre_tag_ids) }
+        specify { expect(described_class.permitted_aspect_param(mood )).to eq(:musical_mood_tag_ids ) }
       end
 
-      describe "#self.tag_param" do
-        specify { expect(described_class.tag_param(genre)).to eq("musical_genre") }
-        specify { expect(described_class.tag_param(mood )).to eq("musical_mood" ) }
+      describe "#self.aspect_param" do
+        specify { expect(described_class.aspect_param(genre)).to eq("musical_genre") }
+        specify { expect(described_class.aspect_param(mood )).to eq("musical_mood" ) }
       end
 
-      specify "#permitted_tag_params" do
-        expect(subject.permitted_tag_params).to eq({
+      specify "#permitted_aspect_params" do
+        expect(subject.permitted_aspect_params).to eq({
           musical_genre_tag_ids: [],
           musical_mood_tag_ids:  []
         })

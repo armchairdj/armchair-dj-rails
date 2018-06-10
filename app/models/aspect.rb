@@ -1,4 +1,4 @@
-class Tag < ApplicationRecord
+class Aspect < ApplicationRecord
 
   #############################################################################
   # CONSTANTS.
@@ -18,7 +18,7 @@ class Tag < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:posts) }
+  scope     :eager, -> { includes(:category, :works, :posts).references(:category) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.viewable.alpha }
 
@@ -26,7 +26,16 @@ class Tag < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :posts
+  # has_ancestry
+
+  belongs_to :category
+
+  has_and_belongs_to_many :works
+
+  has_many :creators,     -> { distinct }, through: :works
+  has_many :contributors, -> { distinct }, through: :works
+
+  has_many :posts, through: works
 
   #############################################################################
   # ATTRIBUTES.
@@ -38,6 +47,8 @@ class Tag < ApplicationRecord
 
   validates :name, presence: true
 
+  validates :name, uniqueness: { scope: [:category_id] }
+
   #############################################################################
   # HOOKS.
   #############################################################################
@@ -46,11 +57,15 @@ class Tag < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def display_name(connector: ": ")
+    [self.category.try(:name), name].compact.join(connector)
+  end
+
   def sluggable_parts
-    [name]
+    [display_name(connector: "/")]
   end
 
   def alpha_parts
-    [name]
+    [display_name(connector: " ")]
   end
 end

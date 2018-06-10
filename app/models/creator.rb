@@ -296,6 +296,6 @@ class Creator < ApplicationRecord
 private
 
   def has_published_content?
-    super || contributed_reviews.published.count > 0
+    has_published_posts? || contributed_reviews.published.count > 0
   end
 end

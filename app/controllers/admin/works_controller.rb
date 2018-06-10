@@ -159,7 +159,7 @@ private
           :creator_id,
           :role_id,
         ]
-      }.merge(@work.permitted_tag_params)
+      }.merge(@work.permitted_aspect_params)
     ]
 
     params.fetch(:work, {}).permit(permitted)

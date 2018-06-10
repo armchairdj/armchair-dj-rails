@@ -35,7 +35,12 @@ private
   end
 
   def has_published_content?
-    return true if respond_to?(:articles   ) &&    articles.published.count > 0
+    has_published_posts?
+  end
+
+  def has_published_posts?
+    return true if respond_to?(:posts   ) &&    posts.published.count > 0
+    return true if respond_to?(:articles) && articles.published.count > 0
     return true if respond_to?(:reviews ) &&  reviews.published.count > 0
     return true if respond_to?(:mixtapes) && mixtapes.published.count > 0
 

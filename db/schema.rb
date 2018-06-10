@@ -10,10 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_09_201401) do
+ActiveRecord::Schema.define(version: 2018_06_10_000606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aspects", force: :cascade do |t|
+    t.string "name"
+    t.text "summary"
+    t.string "alpha"
+    t.string "slug"
+    t.boolean "dirty_slug", default: false, null: false
+    t.boolean "viewable", default: false, null: false
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha"], name: "index_aspects_on_alpha"
+    t.index ["category_id"], name: "index_aspects_on_category_id"
+    t.index ["slug"], name: "index_aspects_on_slug", unique: true
+  end
+
+  create_table "aspects_works", id: false, force: :cascade do |t|
+    t.bigint "work_id", null: false
+    t.bigint "aspect_id", null: false
+    t.index ["aspect_id", "work_id"], name: "index_aspects_works_on_aspect_id_and_work_id"
+    t.index ["work_id", "aspect_id"], name: "index_aspects_works_on_work_id_and_aspect_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -130,6 +152,16 @@ ActiveRecord::Schema.define(version: 2018_06_09_201401) do
     t.index ["member_id"], name: "index_memberships_on_member_id"
   end
 
+  create_table "milestones", force: :cascade do |t|
+    t.bigint "work_id"
+    t.integer "action", default: 0, null: false
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_milestones_on_action"
+    t.index ["work_id"], name: "index_milestones_on_work_id"
+  end
+
   create_table "playlistings", force: :cascade do |t|
     t.bigint "playlist_id"
     t.bigint "work_id"
@@ -196,25 +228,15 @@ ActiveRecord::Schema.define(version: 2018_06_09_201401) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.bigint "category_id"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "alpha"
     t.text "summary"
+    t.string "alpha"
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.boolean "viewable", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
-    t.index ["category_id"], name: "index_tags_on_category_id"
-    t.index ["slug"], name: "index_tags_on_slug", unique: true
-  end
-
-  create_table "tags_works", id: false, force: :cascade do |t|
-    t.bigint "work_id", null: false
-    t.bigint "tag_id", null: false
-    t.index ["tag_id", "work_id"], name: "index_tags_works_on_tag_id_and_work_id"
-    t.index ["work_id", "tag_id"], name: "index_tags_works_on_work_id_and_tag_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -237,7 +259,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_201401) do
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role", default: 1, null: false
+    t.integer "role", default: 10, null: false
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
@@ -272,6 +294,7 @@ ActiveRecord::Schema.define(version: 2018_06_09_201401) do
     t.index ["slug"], name: "index_works_on_slug", unique: true
   end
 
+  add_foreign_key "aspects", "categories"
   add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
@@ -281,11 +304,11 @@ ActiveRecord::Schema.define(version: 2018_06_09_201401) do
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
   add_foreign_key "memberships", "creators", column: "member_id"
+  add_foreign_key "milestones", "works"
   add_foreign_key "playlists", "users", column: "author_id"
   add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
   add_foreign_key "roles", "media"
-  add_foreign_key "tags", "categories"
   add_foreign_key "works", "media"
 end
