@@ -23,7 +23,7 @@ class Review < Post
   has_one :medium,         through: :work
   has_many :creators,      through: :work
   has_many :contributors,  through: :work
-  has_many :work_tags,     through: :work, class_name: "Tag", source: :tags
+  has_many :aspects,       through: :work
 
   #############################################################################
   # ATTRIBUTES.
@@ -75,10 +75,6 @@ class Review < Post
     build_work unless self.work.present?
 
     work.prepare_credits
-  end
-
-  def all_tags
-    Tag.where(id: [self.tag_ids, self.work_tags.map(&:id)].flatten.uniq)
   end
 
   def alpha_parts

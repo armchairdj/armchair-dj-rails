@@ -58,7 +58,7 @@ class Work < ApplicationRecord
   has_many :facets,     through: :medium
   has_many :categories, through: :facets
 
-  has_many :aspects
+  has_and_belongs_to_many :aspects
 
   has_many :playlistings, inverse_of: :work, dependent: :destroy
   has_many :playlists, through: :playlistings

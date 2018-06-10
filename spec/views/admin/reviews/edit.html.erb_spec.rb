@@ -10,7 +10,7 @@ RSpec.describe "admin/reviews/edit", type: :view do
       create(:minimal_creator)
       create(:minimal_medium)
       create(:minimal_work)
-      create(:tag_for_post)
+      create(:minimal_tag)
     end
 
     @model_class  = assign(:model_name, Review)

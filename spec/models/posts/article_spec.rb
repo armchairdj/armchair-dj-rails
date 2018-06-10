@@ -86,13 +86,5 @@ RSpec.describe Article, type: :model do
 
       it { is_expected.to eq([instance.title]) }
     end
-
-    describe "#all_tags" do
-      subject { instance.all_tags }
-
-      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
-
-      pending "better spec for all_tags"
-    end
   end
 end

@@ -59,7 +59,7 @@ RSpec.describe Review, type: :model do
     it { is_expected.to have_one(:medium       ).through(:work) }
     it { is_expected.to have_many(:creators    ).through(:work) }
     it { is_expected.to have_many(:contributors).through(:work) }
-    it { is_expected.to have_many(:work_tags   ).through(:work) }
+    it { is_expected.to have_many(:aspects     ).through(:work) }
   end
 
   context "attributes" do
@@ -76,7 +76,7 @@ RSpec.describe Review, type: :model do
       it { is_expected.to accept_nested_attributes_for(:work).allow_destroy(false) }
 
       describe "reject_if" do
-        subject { build(:review, :with_body, work_attributes: { "0" => { "title" => "" } }) }
+        subject { build(:review, work_attributes: { "0" => { "title" => "" } }) }
 
         it "rejects works with blank titles" do
           expect { subject.save }.to_not change { Work.count }
@@ -338,16 +338,6 @@ RSpec.describe Review, type: :model do
           end
         end
       end
-    end
-
-    describe "#all_tags" do
-      let(:instance) { create_minimal_instance }
-
-      subject { instance.all_tags }
-
-      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
-
-      pending "better spec for all_tags"
     end
 
     describe "#sluggable_parts" do

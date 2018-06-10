@@ -35,19 +35,19 @@ RSpec.describe Creator, type: :model do
       let(:ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
 
       before(:each) do
-        create(:minimal_review, :with_author, :with_body, :published,
+        create(:minimal_review, :with_author, :published
           "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => richie.id } }
           })
         )
 
-        create(:minimal_review, :with_author, :with_body, :published,
+        create(:minimal_review, :with_author, :published,
           "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => carl.id } }
           })
         )
 
-        create(:minimal_review, :with_author, :with_body, :draft,
+        create(:minimal_review, :with_author, :published,
           "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
             "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
           })
@@ -820,7 +820,7 @@ RSpec.describe Creator, type: :model do
       let!(:contrib_3) { subject.contributions.create(work: book_work, role: editor) }
       let!(:contrib_4) { subject.contributions.create(work: book_work, role: author) }
 
-      let!(:review) { create(:minimal_review, :with_body, :published, work_id: book_work.id) }
+      let!(:review) { create(:minimal_review, :published, work_id: book_work.id) }
 
       it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
         expect(subject.display_roles).to eq({

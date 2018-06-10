@@ -7,7 +7,7 @@ RSpec.describe "tags/index", type: :view do
     end
 
     10.times do
-      create(:minimal_tag, :with_viewable_work)
+      create(:minimal_tag, :with_published_post)
     end
 
     @model_class = assign(:model_name, Tag)

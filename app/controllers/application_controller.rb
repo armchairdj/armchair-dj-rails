@@ -36,7 +36,7 @@ protected
 
 private
 
-  def authorize_collection
+  def authorize_model
     authorize model_class
   end
 

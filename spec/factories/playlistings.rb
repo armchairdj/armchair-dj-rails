@@ -11,7 +11,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |playlisting|
-        create(:review, :draft, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
+        create(:review, :draft, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
 
         playlist.reload
       end
@@ -19,7 +19,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |playlisting|
-        create(:review, :scheduled, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
+        create(:review, :scheduled, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
 
         playlist.reload
       end
@@ -27,7 +27,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |playlisting|
-        create(:review, :published, :with_body, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
+        create(:review, :published, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
 
         playlist.reload
       end

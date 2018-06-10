@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::MixtapesController < AdminController
-  before_action :find_collection, only: [
-    :index
-  ]
-
   before_action :build_new_instance, only: [
     :new,
     :create
@@ -23,12 +19,6 @@ class Admin::MixtapesController < AdminController
 
   before_action :sanitize_update_params, only: [
     :update
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
   ]
 
   before_action :authorize_instance, only: [

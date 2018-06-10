@@ -52,10 +52,6 @@ class Article < Post
   # INSTANCE.
   #############################################################################
 
-  def all_tags
-    tags
-  end
-
   def alpha_parts
     [ title ]
   end

@@ -60,9 +60,9 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
     describe "POST #create" do
       context "standalone" do
-        let(:max_valid_params) { attributes_for(:complete_mixtape).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:minimal_mixtape         ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:mixtape, :with_body        ).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_mixtape   ).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_mixtape    ).except(:author_id) }
+        let(  :invalid_params) { attributes_for(:mixtape, :with_body).except(:author_id) }
 
         context "with max valid params" do
           it "creates a new Mixtape" do
@@ -136,8 +136,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
       end
 
       context "existing work" do
-        let(:max_valid_params) { attributes_for(:complete_review ).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:review          ).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_review    ).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:review             ).except(:author_id) }
         let(  :invalid_params) { attributes_for(:mixtape, :with_body).except(:author_id) }
 
         context "with max valid params" do

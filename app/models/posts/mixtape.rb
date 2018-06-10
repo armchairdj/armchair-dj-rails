@@ -26,7 +26,7 @@ class Mixtape < Post
   has_many :media,         through: :works
   has_many :creators,      through: :works
   has_many :contributors,  through: :works
-  has_many :work_tags,     through: :works, class_name: "Tag", source: :tags
+  has_many :aspects,       through: :works
 
   #############################################################################
   # ATTRIBUTES.
@@ -61,10 +61,6 @@ class Mixtape < Post
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def all_tags
-    Tag.where(id: [self.tag_ids, self.work_tags.map(&:id)].flatten.uniq)
-  end
 
   def alpha_parts
     playlist.try(:alpha_parts) || []

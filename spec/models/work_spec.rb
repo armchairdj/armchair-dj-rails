@@ -277,14 +277,14 @@ RSpec.describe Work, type: :model do
       end
 
       describe "#only_tags_with_category" do
-        let(:tag_for_post) { create(:tag_for_post) }
-        let(:tag_for_work) { create(:tag_for_work) }
+        let(:minimal_tag) { create(:minimal_tag) }
+        let(:minimal_aspect) { create(:minimal_aspect) }
 
         subject { create(:minimal_work) }
 
         context "valid" do
           it "allows categorized tags" do
-            subject.update(tag_ids: [tag_for_work.id])
+            subject.update(tag_ids: [minimal_aspect.id])
 
             is_expected.to_not have_error(tag_ids: :has_uncategorized_tags)
           end
@@ -292,7 +292,7 @@ RSpec.describe Work, type: :model do
 
         context "invalid" do
           it "disallows uncategorized tags" do
-            subject.update(tag_ids: [tag_for_post.id])
+            subject.update(tag_ids: [minimal_tag.id])
 
             is_expected.to have_error(tag_ids: :has_uncategorized_tags)
           end
@@ -668,7 +668,7 @@ RSpec.describe Work, type: :model do
         )
       end
 
-      let(:review) { create(:minimal_review, :draft, :with_body, work_id: work.id) }
+      let(:review) { create(:minimal_review, :draft, work_id: work.id) }
 
       it "updates viewable for descendents" do
         review.publish!

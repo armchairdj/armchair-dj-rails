@@ -7,7 +7,7 @@ RSpec.describe "admin/articles/new", type: :view do
 
   before(:each) do
     3.times do
-      create(:tag_for_post)
+      create(:minimal_tag)
     end
 
     @model_class = assign(:model_name, Article        )

@@ -62,7 +62,7 @@ RSpec.describe Mixtape, type: :model do
     it { is_expected.to have_many(:media       ).through(:works) }
     it { is_expected.to have_many(:creators    ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:work_tags   ).through(:works) }
+    it { is_expected.to have_many(:aspects     ).through(:works) }
   end
 
   context "attributes" do
@@ -94,16 +94,6 @@ RSpec.describe Mixtape, type: :model do
       it "updates viewable for descendents" do
         subject.cascade_viewable
       end
-    end
-
-    describe "#all_tags" do
-      let(:instance) { create_minimal_instance }
-
-      subject { instance.all_tags }
-
-      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
-
-      pending "better spec for all_tags"
     end
 
     describe "#sluggable_parts" do

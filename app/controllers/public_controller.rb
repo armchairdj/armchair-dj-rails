@@ -3,16 +3,16 @@
 class PublicController < ApplicationController
   include SeoPaginatable
 
+  before_action :authorize_model, only: [
+    :index
+  ]
+
   before_action :find_collection, only: [
     :index
   ]
 
   before_action :find_instance, only: [
     :show
-  ]
-
-  before_action :authorize_collection, only: [
-    :index
   ]
 
   before_action :authorize_instance, only: [

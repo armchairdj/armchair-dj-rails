@@ -8,7 +8,7 @@ RSpec.describe "admin/mixtapes/edit", type: :view do
   before(:each) do
     3.times do
       create(:minimal_playlist)
-      create(:tag_for_post)
+      create(:minimal_tag)
     end
 
     @model_class  = assign(:model_name, Mixtape)

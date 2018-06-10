@@ -5,8 +5,16 @@ FactoryBot.define do
     to_create { |instance| instance.save(validate: false) }
   end
 
-  trait :with_existing_work do
-    work_id { create(:minimal_work).id }
+  trait :with_title do
+    title { FFaker::HipsterIpsum.phrase.titleize }
+  end
+
+  trait :with_body do
+    body "Give me body!"
+  end
+
+  trait :with_summary do
+    summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
   end
 
   trait :with_author do
@@ -18,7 +26,7 @@ FactoryBot.define do
   end
 
   trait :draft do
-    # default status is :draft
+    with_body
   end
 
   trait :scheduled do
@@ -42,16 +50,8 @@ FactoryBot.define do
     end
   end
 
-  trait :with_title do
-    title { FFaker::HipsterIpsum.phrase.titleize }
-  end
-
-  trait :with_body do
-    body "Give me body!"
-  end
-
-  trait :with_summary do
-    summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
+  trait :with_existing_work do
+    work_id { create(:minimal_work).id }
   end
 
   trait :with_tags do

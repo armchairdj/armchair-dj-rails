@@ -24,9 +24,9 @@ RSpec.describe Tag, type: :model do
   context "scope-related" do
     context "basics" do
       let(        :uv) { create(:minimal_tag, :with_published_post,  name: "UV") }
-      let(        :cv) { create(:minimal_tag, :with_viewable_work,   name: "CV") }
+      let(        :cv) { create(:minimal_tag, :with_published_post,   name: "CV") }
       let(        :uu) { create(:minimal_tag, :with_draft_post,      name: "UU") }
-      let(        :cu) { create(:minimal_tag, :with_unviewable_work, name: "CU") }
+      let(        :cu) { create(:minimal_tag, :with_draft_post, name: "CU") }
       let(       :ids) { [cu, cv, uu, uv].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
@@ -57,10 +57,10 @@ RSpec.describe Tag, type: :model do
     end
 
     context "by category" do
-      let(:for_article_1) { create(:tag_for_post, name: "Z") }
-      let(:for_article_2) { create(:tag_for_post, name: "A") }
-      let(:for_work_1) { create(:tag_for_work, name: "X", category_name: "Foo") }
-      let(:for_work_2) { create(:tag_for_work, name: "X", category_name: "Bar") }
+      let(:for_article_1) { create(:minimal_tag, name: "Z") }
+      let(:for_article_2) { create(:minimal_tag, name: "A") }
+      let(:for_work_1) { create(:minimal_aspect, name: "X", category_name: "Foo") }
+      let(:for_work_2) { create(:minimal_aspect, name: "X", category_name: "Bar") }
       let(       :ids) { [for_article_1, for_article_2, for_work_1, for_work_2].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 

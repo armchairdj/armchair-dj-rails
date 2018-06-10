@@ -78,16 +78,6 @@ class Post < ApplicationRecord
 
   validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
 
-  validate { only_bare_tags }
-
-  def only_bare_tags
-    return if tags.where.not(category_id: nil).empty?
-
-    self.errors.add(:tag_ids, :has_categorized_tags)
-  end
-
-  private :only_bare_tags
-
   #############################################################################
   # HOOKS.
   #############################################################################

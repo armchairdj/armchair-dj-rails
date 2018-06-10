@@ -35,7 +35,7 @@ class Aspect < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :posts, through: works
+  has_many :posts, through: :works
 
   #############################################################################
   # ATTRIBUTES.

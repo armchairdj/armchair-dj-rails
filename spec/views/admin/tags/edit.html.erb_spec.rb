@@ -14,7 +14,7 @@ RSpec.describe "admin/tags/edit", type: :view do
 
   context "with work" do
     before(:each) do
-      @tag = assign(:tag, create(:minimal_tag, :with_viewable_work))
+      @tag = assign(:tag, create(:minimal_tag, :with_published_post))
     end
 
     it "renders form" do

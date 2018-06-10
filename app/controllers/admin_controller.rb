@@ -3,6 +3,35 @@
 class AdminController < ApplicationController
   include SeoPaginatable
 
+  before_action :authorize_model, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :find_collection, only: [
+    :index
+  ]
+
+  before_action :build_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :authorize_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
   after_action :verify_authorized
 
 private

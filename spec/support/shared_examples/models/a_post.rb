@@ -174,37 +174,12 @@ RSpec.shared_examples "a_post" do
         it { is_expected.to_not validate_presence_of(:publish_on  ) }
       end
     end
-
-    context "custom" do
-      describe "#only_bare_tags" do
-        let(:tag_for_post) { create(:tag_for_post) }
-        let(:tag_for_work) { create(:tag_for_work) }
-
-        subject { create_minimal_instance }
-
-        context "valid" do
-          it "allows uncategorized tags" do
-            subject.update(tag_ids: [tag_for_post.id])
-
-            expect(subject).to_not have_error(tag_ids: :has_categorized_tags)
-          end
-        end
-
-        context "invalid" do
-          it "disallows categorized tags" do
-            subject.update(tag_ids: [tag_for_work.id])
-
-            expect(subject).to have_error(tag_ids: :has_categorized_tags)
-          end
-        end
-      end
-    end
   end
 
   context "aasm" do
-    let!(    :draft) { create_minimal_instance(:with_body, :draft    ) }
-    let!(:scheduled) { create_minimal_instance(:with_body, :scheduled) }
-    let!(:published) { create_minimal_instance(:with_body, :published) }
+    let!(    :draft) { create_minimal_instance(:draft    ) }
+    let!(:scheduled) { create_minimal_instance(:scheduled) }
+    let!(:published) { create_minimal_instance(:published) }
 
     let(:callbacks) { [
       :ready_to_publish?,
