@@ -1,9 +1,6 @@
 require "ffaker"
 
 FactoryBot.define do
-  sequence :user_email    { |n| "user#{n}@example.com" }
-  sequence :user_username { |n| "realcoolperson#{n}"   }
-
   factory :user do
 
     ###########################################################################

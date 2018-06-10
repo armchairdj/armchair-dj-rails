@@ -19,7 +19,7 @@ class Facet < ApplicationRecord
   #############################################################################
 
   scope :sorted,    -> { joins(:medium, :category).order("media.name, facets.position") }
-  scope :eager,     -> { includes(:medium, :category) }
+  scope :eager,     -> { includes(:medium, :category, :aspects) }
   scope :for_admin, -> { eager.sorted }
   scope :for_site,  -> { eager.sorted }
 
@@ -29,6 +29,8 @@ class Facet < ApplicationRecord
 
   belongs_to :medium,   inverse_of: :facets
   belongs_to :category, inverse_of: :facets
+
+  has_many :aspects, through: :category
 
   #############################################################################
   # ATTRIBUTES.

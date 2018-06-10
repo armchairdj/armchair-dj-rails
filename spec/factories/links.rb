@@ -1,8 +1,4 @@
 FactoryBot.define do
-  sequence :link_url do |n|
-    "http://www.example.com/articles/#{n}"
-  end
-
   factory :link do
 
     ###########################################################################

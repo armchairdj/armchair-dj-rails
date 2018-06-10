@@ -1,6 +1,4 @@
 FactoryBot.define do
-  sequence :tag_name { |n| "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-
   factory :tag do
 
     ###########################################################################

@@ -4,10 +4,6 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_existing_category do
-      category_id { create(:minimal_category).id }
-    end
-
     trait :with_existing_medium do
       medium_id { create(:minimal_medium).id }
     end

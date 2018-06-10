@@ -1,6 +1,4 @@
 FactoryBot.define do
-  sequence :role_name { |n| "Role #{n}" }
-
   factory :role do
     medium_id nil
     name      nil

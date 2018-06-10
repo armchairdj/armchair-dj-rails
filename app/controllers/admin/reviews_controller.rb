@@ -159,7 +159,7 @@ private
 
     @creators = Creator.all.alpha
     @media    = Medium.all.alpha
-    @tags     = Tag.for_posts
+    @tags     = Tag.for_admin.alpha
     @works    = Work.grouped_options
   end
 

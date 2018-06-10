@@ -20,11 +20,6 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Format") %>
-        <%= content_tag(:td, @category.format) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Allow Multiple?") %>
         <%= content_tag(:td, @category.allow_multiple?) %>
       <% end %>

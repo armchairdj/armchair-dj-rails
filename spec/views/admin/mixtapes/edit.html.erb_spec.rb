@@ -13,7 +13,7 @@ RSpec.describe "admin/mixtapes/edit", type: :view do
 
     @model_class  = assign(:model_name, Mixtape)
     @playlists    = assign(:playlists,  Playlist.for_admin.alpha)
-    @tags         = assign(:tags,       Tag.for_posts)
+    @tags         = assign(:tags,       Tag.for_admin.alpha)
     @mixtape      = assign(:mixtape,    create(:minimal_mixtape))
   end
 

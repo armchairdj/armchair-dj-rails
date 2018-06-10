@@ -21,7 +21,7 @@ class Medium < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:roles, :works, :reviews, :facets, :categories, :tags) }
+  scope :eager,     -> { includes(:roles, :works, :reviews, :facets, :categories, :aspects) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.alpha }
 
@@ -40,7 +40,7 @@ class Medium < ApplicationRecord
   has_many :facets, -> { order(:position) }, inverse_of: :medium, dependent: :destroy
 
   has_many :categories, through: :facets
-  has_many :tags,       through: :categories
+  has_many :aspects,    through: :categories
 
   #############################################################################
   # ATTRIBUTES.
@@ -99,8 +99,8 @@ class Medium < ApplicationRecord
     end
   end
 
-  def category_tag_options
-    categories.includes(:tags)
+  def category_aspect_options
+    categories.includes(:aspects)
   end
 
   def sluggable_parts

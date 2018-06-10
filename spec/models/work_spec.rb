@@ -56,7 +56,7 @@ RSpec.describe Work, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
     end
 
     describe "self#for_admin" do
@@ -66,7 +66,7 @@ RSpec.describe Work, type: :model do
         is_expected.to contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
       end
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
     end
 
     describe "self#for_site" do
@@ -76,7 +76,7 @@ RSpec.describe Work, type: :model do
         is_expected.to eq([la_bouche, robyn_s])
       end
 
-      it { is_expected.to eager_load(:credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:facets).through(:medium) }
     it { is_expected.to have_many(:categories).through(:facets) }
 
-    it { is_expected.to have_and_belong_to_many(:tags) }
+    it { is_expected.to have_and_belong_to_many(:aspects) }
 
     it { is_expected.to have_many(:reviews) }
 
@@ -109,14 +109,10 @@ RSpec.describe Work, type: :model do
           it "rejects credits without a creator_id" do
             instance = build(:minimal_work, credits_attributes: {
               "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-              "1" => attributes_for(:credit, creator_id: nil                 )
+              "1" => attributes_for(:credit, creator_id: nil                        )
             })
 
-            expect {
-              instance.save
-            }.to change {
-              Credit.count
-            }.by(1)
+            expect { instance.save }.to change { Credit.count }.by(1)
 
             expect(instance.credits).to have(1).items
           end
@@ -275,29 +271,6 @@ RSpec.describe Work, type: :model do
           end
         end
       end
-
-      describe "#only_tags_with_category" do
-        let(:minimal_tag) { create(:minimal_tag) }
-        let(:minimal_aspect) { create(:minimal_aspect) }
-
-        subject { create(:minimal_work) }
-
-        context "valid" do
-          it "allows categorized tags" do
-            subject.update(tag_ids: [minimal_aspect.id])
-
-            is_expected.to_not have_error(tag_ids: :has_uncategorized_tags)
-          end
-        end
-
-        context "invalid" do
-          it "disallows uncategorized tags" do
-            subject.update(tag_ids: [minimal_tag.id])
-
-            is_expected.to have_error(tag_ids: :has_uncategorized_tags)
-          end
-        end
-      end
     end
   end
 
@@ -326,8 +299,8 @@ RSpec.describe Work, type: :model do
       subject { create(:minimal_work, medium: medium).reload }
 
       describe "self#permitted_aspect_param" do
-        specify { expect(described_class.permitted_aspect_param(genre)).to eq(:musical_genre_tag_ids) }
-        specify { expect(described_class.permitted_aspect_param(mood )).to eq(:musical_mood_tag_ids ) }
+        specify { expect(described_class.permitted_aspect_param(genre)).to eq(:musical_genre_aspect_ids) }
+        specify { expect(described_class.permitted_aspect_param(mood )).to eq(:musical_mood_aspect_ids ) }
       end
 
       describe "#self.aspect_param" do
@@ -337,46 +310,46 @@ RSpec.describe Work, type: :model do
 
       specify "#permitted_aspect_params" do
         expect(subject.permitted_aspect_params).to eq({
-          musical_genre_tag_ids: [],
-          musical_mood_tag_ids:  []
+          musical_genre_aspect_ids: [],
+          musical_mood_aspect_ids:  []
         })
       end
 
       describe "defines" do
         context "getters" do
-          it { is_expected.to respond_to(:musical_genre_tags) }
-          it { is_expected.to respond_to(:musical_mood_tags ) }
+          it { is_expected.to respond_to(:musical_genre_aspects) }
+          it { is_expected.to respond_to(:musical_mood_aspects ) }
         end
 
         context "setters" do
-          it { is_expected.to respond_to(:musical_genre_tag_ids=) }
-          it { is_expected.to respond_to(:musical_mood_tag_ids= ) }
+          it { is_expected.to respond_to(:musical_genre_aspect_ids=) }
+          it { is_expected.to respond_to(:musical_mood_aspect_ids= ) }
         end
       end
 
       context "behavior" do
-        let!( :trip_hop) { create(:tag, category: genre, name: "Trip-Hop" ) }
-        let!(:downtempo) { create(:tag, category: genre, name: "Downtempo") }
-        let!( :sinister) { create(:tag, category: mood,  name: "Sinister" ) }
-        let!(:uplifting) { create(:tag, category: mood,  name: "Uplifting") }
+        let!( :trip_hop) { create(:aspect, category: genre, name: "Trip-Hop" ) }
+        let!(:downtempo) { create(:aspect, category: genre, name: "Downtempo") }
+        let!( :sinister) { create(:aspect, category: mood,  name: "Sinister" ) }
+        let!(:uplifting) { create(:aspect, category: mood,  name: "Uplifting") }
 
         subject do
-          create(:minimal_work, medium: medium, tag_ids: [trip_hop.id, sinister.id]).reload
+          create(:minimal_work, medium: medium, aspect_ids: [trip_hop.id, sinister.id]).reload
         end
 
         context "getters" do
-          describe "retrieve scoped tags" do
-            specify "#tags" do
-              expect(subject.tags).to match_array([sinister, trip_hop])
+          describe "retrieve scoped aspects" do
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([sinister, trip_hop])
             end
 
-            specify "scoped tags methods" do
-              expect(subject.musical_genre_tags).to match_array([trip_hop])
-              expect(subject.musical_mood_tags ).to match_array([sinister])
+            specify "scoped aspects methods" do
+              expect(subject.musical_genre_aspects).to match_array([trip_hop])
+              expect(subject.musical_mood_aspects ).to match_array([sinister])
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [genre, [trip_hop]],
                 [mood,  [sinister]]
               ])
@@ -385,93 +358,93 @@ RSpec.describe Work, type: :model do
         end
 
         context "setters" do
-          describe "blanks out tags" do
+          describe "blanks out aspects" do
             before(:each) do
-              subject.musical_genre_tag_ids = []
+              subject.musical_genre_aspect_ids = []
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([sinister])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([sinister])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([]) }
-              it { expect(subject.musical_mood_tags ).to match_array([sinister]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([sinister]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [mood, [sinister]]
               ])
             end
           end
 
-          describe "overwrites tags for one facet" do
+          describe "overwrites aspects for one facet" do
             before(:each) do
-              subject.musical_genre_tag_ids = [downtempo.id]
+              subject.musical_genre_aspect_ids = [downtempo.id]
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([sinister, downtempo])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([sinister, downtempo])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([downtempo]) }
-              it { expect(subject.musical_mood_tags ).to match_array([sinister]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([downtempo]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([sinister]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [genre, [downtempo]],
                 [mood,  [sinister]]
               ])
             end
           end
 
-          describe "overwrites tags for multiple facets without overwriting all" do
+          describe "overwrites aspects for multiple facets without overwriting all" do
             before(:each) do
-              subject.musical_genre_tag_ids = [downtempo.id]
-              subject.musical_mood_tag_ids  = [uplifting.id]
+              subject.musical_genre_aspect_ids = [downtempo.id]
+              subject.musical_mood_aspect_ids  = [uplifting.id]
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([uplifting, downtempo])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([uplifting, downtempo])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([downtempo]) }
-              it { expect(subject.musical_mood_tags ).to match_array([uplifting]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([downtempo]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([uplifting]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [genre, [downtempo]],
                 [mood,  [uplifting]]
               ])
             end
           end
 
-          describe "adds tags without duplication" do
+          describe "adds aspects without duplication" do
             before(:each) do
-              subject.musical_genre_tag_ids = [trip_hop.id, downtempo.id]
-              subject.musical_mood_tag_ids  = [sinister.id, uplifting.id]
+              subject.musical_genre_aspect_ids = [trip_hop.id, downtempo.id]
+              subject.musical_mood_aspect_ids  = [sinister.id, uplifting.id]
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([sinister, uplifting, downtempo, trip_hop])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([sinister, uplifting, downtempo, trip_hop])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
-              it { expect(subject.musical_mood_tags ).to match_array([sinister, uplifting]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([downtempo, trip_hop]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([sinister, uplifting]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [genre, [downtempo, trip_hop]],
                 [mood,  [sinister, uplifting]]
               ])
@@ -481,24 +454,24 @@ RSpec.describe Work, type: :model do
           describe "works via update" do
             before(:each) do
               subject.update(
-                "musical_genre_tag_ids" => ["#{trip_hop.id}", "#{downtempo.id}"],
-                "musical_mood_tag_ids" =>  ["#{sinister.id}", "#{uplifting.id}"]
+                "musical_genre_aspect_ids" => ["#{trip_hop.id}", "#{downtempo.id}"],
+                "musical_mood_aspect_ids" =>  ["#{sinister.id}", "#{uplifting.id}"]
               )
 
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([sinister, uplifting, downtempo, trip_hop])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([sinister, uplifting, downtempo, trip_hop])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([downtempo, trip_hop]) }
-              it { expect(subject.musical_mood_tags ).to match_array([sinister, uplifting]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([downtempo, trip_hop]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([sinister, uplifting]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [genre, [downtempo, trip_hop]],
                 [mood,  [sinister, uplifting]]
               ])
@@ -507,21 +480,21 @@ RSpec.describe Work, type: :model do
 
           describe "gets all messed up if non-scoped setter is used" do
             before(:each) do
-              subject.tag_ids = [uplifting.id]
+              subject.aspect_ids = [uplifting.id]
               subject.reload
             end
 
-            specify "#tags" do
-              expect(subject.tags).to match_array([uplifting])
+            specify "#aspects" do
+              expect(subject.aspects).to match_array([uplifting])
             end
 
-            context "scoped tag methods" do
-              it { expect(subject.musical_genre_tags).to match_array([]) }
-              it { expect(subject.musical_mood_tags ).to match_array([uplifting]) }
+            context "scoped aspect methods" do
+              it { expect(subject.musical_genre_aspects).to match_array([]) }
+              it { expect(subject.musical_mood_aspects ).to match_array([uplifting]) }
             end
 
-            specify "#tags_by_category" do
-              expect(subject.tags_by_category).to eq([
+            specify "#aspects_by_category" do
+              expect(subject.aspects_by_category).to eq([
                 [mood,  [uplifting]]
               ])
             end
@@ -651,12 +624,12 @@ RSpec.describe Work, type: :model do
       let(:contributor_1) { create(:minimal_creator) }
       let(:contributor_2) { create(:minimal_creator) }
       let(     :category) { create(:minimal_category) }
-      let( :category_tag) { create(:minimal_tag, category_id: category.id) }
+      let( :category_aspect) { create(:minimal_aspect, category_id: category.id) }
       let(       :medium) { create(:minimal_medium) }
       let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
 
       let(:work) do
-        create(:minimal_work, medium_id: medium.id, tag_ids: [category_tag.id],
+        create(:minimal_work, medium_id: medium.id, aspect_ids: [category_aspect.id],
           credits_attributes: {
             "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
@@ -675,7 +648,7 @@ RSpec.describe Work, type: :model do
 
         expect(         work.reload.viewable?).to eq(true)
         expect(       medium.reload.viewable?).to eq(true)
-        expect( category_tag.reload.viewable?).to eq(true)
+        expect( category_aspect.reload.viewable?).to eq(true)
         expect(    creator_1.reload.viewable?).to eq(true)
         expect(    creator_1.reload.viewable?).to eq(true)
         expect(contributor_1.reload.viewable?).to eq(true)

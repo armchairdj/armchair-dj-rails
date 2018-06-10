@@ -5,8 +5,6 @@ RSpec.describe Category, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_application_record"
-
-    it_behaves_like "an_enumable_model", [:format]
   end
 
   context "class" do
@@ -19,49 +17,52 @@ RSpec.describe Category, type: :model do
       let!(:middle) { create(:minimal_category, name: "Middle") }
       let!(  :last) { create(:minimal_category, name: "Last"  ) }
 
-      let(:ids) { [first, middle, last].map(&:id) }
+      let(       :ids) { [first, middle, last].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       describe "self#eager" do
-        subject { described_class.eager }
+        subject { collection.eager }
 
-        it { is_expected.to eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :aspects) }
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { collection.for_admin }
 
         specify "includes all, unsorted" do
           is_expected.to match_array([first, middle, last])
         end
 
-        it { is_expected.to eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :aspects) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { collection.for_site }
 
         specify "includes all, sorted alphabetically" do
           is_expected.to eq([first, last, middle])
         end
 
-        it { is_expected.to eager_load(:facets, :media, :tags) }
+        it { is_expected.to eager_load(:facets, :media, :aspects) }
       end
     end
 
     context "by multi" do
-      let!( :multi) { create(:minimal_category,    :allowing_multiple) }
-      let!(:single) { create(:minimal_category, :disallowing_multiple) }
+      let!(    :multi) { create(:minimal_category,    :allowing_multiple) }
+      let!(   :single) { create(:minimal_category, :disallowing_multiple) }
+      let(       :ids) { [multi, single].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       describe "self#multi" do
-        subject { described_class.multi }
+        subject { collection.multi }
 
-        it { is_expected.to match_array([multi]) }
+        it { is_expected.to contain_exactly(multi) }
       end
 
       describe "self#single" do
-        subject { described_class.single }
+        subject { collection.single }
 
-        it { is_expected.to match_array([single]) }
+        it { is_expected.to contain_exactly(single) }
       end
 
       describe "#multi?" do
@@ -74,33 +75,6 @@ RSpec.describe Category, type: :model do
         specify { expect(single.single?).to eq(true ) }
       end
     end
-
-    context "by format" do
-      let!(:string) { create(:minimal_category, :string_format) }
-      let!(  :year) { create(:minimal_category,   :year_format) }
-
-      describe "self#string" do
-        subject { described_class.string }
-
-        it { is_expected.to match_array([string]) }
-      end
-
-      describe "self#year" do
-        subject { described_class.year }
-
-        it { is_expected.to match_array([year]) }
-      end
-
-      describe "#string?" do
-        specify { expect(string.string?).to eq(true ) }
-        specify { expect(  year.string?).to eq(false) }
-      end
-
-      describe "#year?" do
-        specify { expect(string.year?).to eq(false) }
-        specify { expect(  year.year?).to eq(true ) }
-      end
-    end
   end
 
   context "associations" do
@@ -108,13 +82,11 @@ RSpec.describe Category, type: :model do
 
     it { is_expected.to have_many(:media).through(:facets) }
 
-    it { is_expected.to have_many(:tags) }
+    it { is_expected.to have_many(:aspects) }
   end
 
   context "attributes" do
-    describe "format" do
-      it { is_expected.to define_enum_for(:format) }
-    end
+    # Nothing so far.
   end
 
   context "validations" do

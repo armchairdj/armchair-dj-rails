@@ -17,7 +17,7 @@ RSpec.describe "admin/reviews/edit", type: :view do
     @creators     = assign(:creators,     Creator.all.alpha   )
     @media        = assign(:media,        Medium.all.alpha    )
     @works        = assign(:works,        Work.grouped_options)
-    @tags         = assign(:tags,         Tag.for_posts)
+    @tags         = assign(:tags,         Tag.for_admin.alpha)
     @review       = assign(:review,       create(:minimal_review))
     @selected_tab = assign(:selected_tab, "review-choose-work")
   end

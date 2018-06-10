@@ -18,15 +18,13 @@ class Aspect < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:category, :works, :posts).references(:category) }
+  scope     :eager, -> { includes(:category, :works, :creators, :contributors, :reviews, :mixtapes).references(:category) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
-
-  # has_ancestry
 
   belongs_to :category
 
@@ -35,7 +33,8 @@ class Aspect < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :posts, through: :works
+  has_many :reviews,  through: :works
+  has_many :mixtapes, through: :works
 
   #############################################################################
   # ATTRIBUTES.
@@ -45,8 +44,9 @@ class Aspect < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :name, presence: true
+  validates :category, presence: true
 
+  validates :name, presence: true
   validates :name, uniqueness: { scope: [:category_id] }
 
   #############################################################################
@@ -58,14 +58,14 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   def display_name(connector: ": ")
-    [self.category.try(:name), name].compact.join(connector)
+    [category.name, name].compact.join(connector)
   end
 
   def sluggable_parts
-    [display_name(connector: "/")]
+    [category.name, name]
   end
 
   def alpha_parts
-    [display_name(connector: " ")]
+    [category.name, name]
   end
 end

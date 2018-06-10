@@ -25,74 +25,45 @@ RSpec.describe Creator, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!( :richie) { create(:creator, name: "Richie Hawtin") }
-      let!(    :amy) { create(:creator, name: "Amy Winehouse") }
-      let!(   :kate) { create(:creator, name: "Kate Bush"    ) }
-      let!(   :carl) { create(:creator, name: "Carl Craig"   ) }
-      let!(  :feist) { create(:creator, name: "Feist"        ) }
-      let!(:derrick) { create(:creator, name: "Derrick May"  ) }
+      let!( :richie) { create(:creator, :with_published_post, name: "Richie Hawtin") }
+      let!(    :amy) { create(:creator,                       name: "Amy Winehouse") }
+      let!(   :kate) { create(:creator,                       name: "Kate Bush"    ) }
+      let!(   :carl) { create(:creator, :with_published_post, name: "Carl Craig"   ) }
+      let!(  :feist) { create(:creator,                       name: "Feist"        ) }
+      let!(:derrick) { create(:creator, :with_published_post, name: "Derrick May"  ) }
 
-      let(:ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
-
-      before(:each) do
-        create(:minimal_review, :with_author, :published
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => richie.id } }
-          })
-        )
-
-        create(:minimal_review, :with_author, :published,
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => carl.id } }
-          })
-        )
-
-        create(:minimal_review, :with_author, :published,
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
-          })
-        )
-      end
+      let(       :ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       describe "self#eager" do
         subject { described_class.eager }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :reviews, :contributions, :contributed_works, :contributed_reviews
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { described_class.for_admin }
 
-        specify "includes all creators, unsorted" do
-          is_expected.to match_array([richie, amy, kate, carl, feist, derrick])
-        end
+        it { is_expected.to match_array([richie, amy, kate, carl, feist, derrick]) }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :reviews, :contributions, :contributed_works, :contributed_reviews
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { described_class.for_site }
 
-        specify "includes only creators with published reviews, sorted alphabetically" do
-          is_expected.to eq([carl, richie])
-        end
+        it { is_expected.to eq([carl, derrick, richie]) }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :reviews, :contributions, :contributed_works, :contributed_reviews
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
     end
 

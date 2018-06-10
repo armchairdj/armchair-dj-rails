@@ -9,10 +9,6 @@ FactoryBot.define do
       title { FFaker::HipsterIpsum.phrase.titleize }
     end
 
-    trait :with_author do
-      association :author, factory: :admin
-    end
-
     trait :with_2_tracks do
       playlistings_attributes { {
         "0" => attributes_for(:playlisting, :with_existing_work),
@@ -86,7 +82,7 @@ FactoryBot.define do
 
     factory :minimal_playlist do
       with_title
-      with_author
+      with_existing_author
       with_2_tracks
     end
 

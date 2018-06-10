@@ -15,7 +15,7 @@ FactoryBot.define do
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:review, :with_author, :draft, work_id: work.id)
+        create(:minimal_review, :draft, work_id: work.id)
 
         creator.reload
       end
@@ -27,7 +27,7 @@ FactoryBot.define do
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:review, :with_author, :scheduled, work_id: work.id)
+        create(:minimal_review, :scheduled, work_id: work.id)
 
         creator.reload
       end
@@ -39,7 +39,7 @@ FactoryBot.define do
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:review, :with_author, :published, work_id: work.id)
+        create(:minimal_review, :published, work_id: work.id)
 
         creator.reload
       end

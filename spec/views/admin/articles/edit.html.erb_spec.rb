@@ -13,7 +13,7 @@ RSpec.describe "admin/articles/edit", type: :view do
     @model_class = assign(:model_name, Article)
     @creators    = assign(:creators,   Creator.all.alpha)
     @media       = assign(:media,      Medium.all.alpha )
-    @tags        = assign(:tags,       Tag.for_posts     )
+    @tags        = assign(:tags,       Tag.for_admin.alpha     )
     @article     = assign(:article,    create(:minimal_article))
   end
 

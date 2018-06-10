@@ -21,46 +21,47 @@ RSpec.describe Facet, type: :model do
       let!(:a_1) { create(:minimal_facet, medium: medium_a) }
       let!(:a_2) { create(:minimal_facet, medium: medium_a) }
 
-      let(:ids) { [z_1, z_2, a_1, a_2].map(&:id) }
+      let(       :ids) { [z_1, z_2, a_1, a_2].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       before(:each) do
         a_2.move_to_top
       end
 
-      describe "self#eager" do
-        subject { described_class.eager }
-
-        it { is_expected.to eager_load(:medium, :category) }
-      end
-
       describe "self#sorted" do
-        subject { described_class.sorted.where(id: ids) }
+        subject { collection.sorted }
 
-        it { is_expected.to_not  eager_load(:medium, :category) }
+        it { is_expected.to_not  eager_load(:medium, :category, :aspects) }
 
         it "sorts by category and position" do
           is_expected.to eq([a_2, a_1, z_1, z_2])
         end
       end
 
+      describe "self#eager" do
+        subject { collection.eager }
+
+        it { is_expected.to eager_load(:medium, :category, :aspects) }
+      end
+
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { collection.for_admin }
 
         specify "includes all, sorted" do
           is_expected.to eq([a_2, a_1, z_1, z_2])
         end
 
-        it { is_expected.to eager_load(:medium, :category) }
+        it { is_expected.to eager_load(:medium, :category, :aspects) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { collection.for_site }
 
         specify "includes all, sorted" do
           is_expected.to eq([a_2, a_1, z_1, z_2])
         end
 
-        it { is_expected.to eager_load(:medium, :category) }
+        it { is_expected.to eager_load(:medium, :category, :aspects) }
       end
     end
   end

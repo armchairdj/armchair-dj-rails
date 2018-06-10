@@ -140,7 +140,7 @@ private
   def prepare_form
     @mixtape.prepare_links
 
-    @tags      = Tag.for_posts
+    @tags      = Tag.for_admin.alpha
     @playlists = Playlist.for_admin.alpha
   end
 

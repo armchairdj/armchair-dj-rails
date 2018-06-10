@@ -11,7 +11,7 @@ RSpec.describe "admin/articles/new", type: :view do
     end
 
     @model_class = assign(:model_name, Article        )
-    @tags        = assign(:tags,       Tag.for_posts   )
+    @tags        = assign(:tags,       Tag.for_admin.alpha   )
     @article     = assign(:article,    build(:article))
   end
 

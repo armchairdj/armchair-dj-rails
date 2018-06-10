@@ -92,15 +92,12 @@ private
   def instance_params
     params.fetch(:category, {}).permit(
       :name,
-      :format,
       :allow_multiple
     )
   end
 
   def allowed_scopes
     super.merge({
-      "String" => :string,
-      "Year"   => :year,
       "Multi"  => :multi,
       "Single" => :single,
     })
@@ -108,12 +105,10 @@ private
 
   def allowed_sorts
     name_sort   = "LOWER(categories.name) ASC"
-    format_sort = Category.alpha_order_clause_for(:format)
     multi_sort  = "categories.allow_multiple ASC"
 
     super(name_sort).merge({
       "Name"   => name_sort,
-      "Format" => [format_sort, name_sort].join(", "),
       "Multi?" => [multi_sort,  name_sort].join(", "),
     })
   end

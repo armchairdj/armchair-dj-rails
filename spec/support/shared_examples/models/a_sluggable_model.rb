@@ -23,7 +23,7 @@ RSpec.shared_examples "a_sluggable_model" do
       end
 
       it "does not add index for self" do
-        subject.save
+        subject.save!
         subject.update_column(:slug, "foo_bar/bat")
 
         actual = described_class.generate_unique_slug(subject, :slug, ["Foo Bar", "BAT"])
@@ -197,7 +197,7 @@ RSpec.shared_examples "a_sluggable_model" do
       end
 
       it "nil if only duplicate is self" do
-        subject.save
+        subject.save!
         subject.update_column(:slug, "some/slug")
 
         actual = described_class.find_duplicate_slug(subject, :slug, "some/slug")

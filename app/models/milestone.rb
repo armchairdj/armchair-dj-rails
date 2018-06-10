@@ -16,6 +16,11 @@ class Milestone < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :sorted,    -> { order(:year) }
+  scope :eager,     -> { includes(:work) }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { eager.sorted }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -27,10 +32,17 @@ class Milestone < ApplicationRecord
   #############################################################################
 
   enum action: {
-    released:   0,
-    reissued:   1,
-    remastered: 2,
-    created:    3,
+    released:    0,
+    published:   1,
+    aired:       2,
+
+    created:    10,
+
+    reissued:   20,
+    rereleased: 21,
+    remastered: 22,
+    recut:      23,
+    remixed:    24
   }
 
   enumable_attributes :action

@@ -1,14 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Milestone, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
-
   context "constants" do
     # Nothing so far.
   end
 
   context "concerns" do
-    # Nothing so far.
+    it_behaves_like "an_application_record"
   end
 
   context "class" do
@@ -16,7 +14,34 @@ RSpec.describe Milestone, type: :model do
   end
 
   context "scope-related" do
-    # Nothing so far.
+    context "basics" do
+      let(:remastered) { create(:minimal_milestone, action: :remastered, year: 2005) }
+      let(  :released) { create(:minimal_milestone, action: :released,   year: 1977) }
+      let(  :reissued) { create(:minimal_milestone, action: :reissued,   year: 2017) }
+      let(       :ids) { [remastered, released, reissued].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+
+      describe "self#eager" do
+        subject { collection.eager }
+
+        it { is_expected.to eager_load(:work) }
+        it { is_expected.to match_array(collection.to_a) }
+      end
+
+      describe "self#for_admin" do
+        subject { collection.for_admin.where(id: ids) }
+
+        it { is_expected.to eager_load(:work) }
+        it { is_expected.to match_array(collection.to_a) }
+      end
+
+      describe "self#for_site" do
+        subject { collection.for_site.where(id: ids) }
+
+        it { is_expected.to eager_load(:work) }
+        it { is_expected.to eq([released, remastered, reissued]) }
+      end
+    end
   end
 
   context "associations" do

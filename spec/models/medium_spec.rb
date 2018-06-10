@@ -23,50 +23,31 @@ RSpec.describe Medium, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!( :song_medium) { create(:minimal_medium, name: "Song" ) }
-      let!(:album_medium) { create(:minimal_medium, name: "Album") }
-      let!(:movie_medium) { create(:minimal_medium, name: "Movie") }
-
-      let(:ids) { [song_medium, album_medium, movie_medium].map(&:id) }
-
-      before(:each) do
-        create(:minimal_review, :with_author, :published
-          "work_attributes" => attributes_for(:minimal_work, medium: song_medium)
-        )
-
-        create(:minimal_review, :with_author, :published,
-          "work_attributes" => attributes_for(:minimal_work, medium: album_medium)
-        )
-
-        create(:minimal_review, :with_author, :published,
-          "work_attributes" => attributes_for(:minimal_work, medium: movie_medium)
-        )
-      end
+      let!( :song_medium) { create(:minimal_medium, :with_published_post, name: "Song" ) }
+      let!(:album_medium) { create(:minimal_medium, :with_published_post, name: "Album") }
+      let!(:movie_medium) { create(:minimal_medium,                       name: "Movie") }
+      let(          :ids) { [song_medium, album_medium, movie_medium].map(&:id) }
+      let(   :collection) { described_class.where(id: ids) }
 
       describe "self#eager" do
-        subject { described_class.eager }
+        subject { collection.eager }
 
-        it { is_expected.to eager_load(:roles, :works) }
+        it { is_expected.to eager_load(:roles, :works, :reviews, :facets, :categories, :aspects) }
+        it { is_expected.to match_array(collection.to_a) }
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { collection.for_admin.where(id: ids) }
 
-        specify "includes all media, unsorted" do
-          is_expected.to match_array([song_medium, album_medium, movie_medium])
-        end
-
-        it { is_expected.to eager_load(:roles, :works) }
+        it { is_expected.to match_array(collection.to_a) }
+        it { is_expected.to eager_load(:roles, :works, :reviews, :facets, :categories, :aspects) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { collection.for_site.where(id: ids) }
 
-        specify "includes only media with published articles, sorted alphabetically" do
-          is_expected.to eq([album_medium, song_medium])
-        end
-
-        it { is_expected.to eager_load(:roles, :works) }
+        it { is_expected.to eq([album_medium, song_medium]) }
+        it { is_expected.to eager_load(:roles, :works, :reviews, :facets, :categories, :aspects) }
       end
     end
   end
@@ -94,7 +75,7 @@ RSpec.describe Medium, type: :model do
 
     it { is_expected.to have_many(:categories).through(:facets) }
 
-    it { is_expected.to have_many(:tags).through(:categories) }
+    it { is_expected.to have_many(:aspects).through(:categories) }
   end
 
   context "attributes" do
@@ -260,9 +241,9 @@ RSpec.describe Medium, type: :model do
       end
     end
 
-    describe "#category_tag_options" do
-      let( :mood) { create(:category, :with_tags, name: "Mood" ) }
-      let(:genre) { create(:category, :with_tags, name: "Genre") }
+    describe "#category_aspect_options" do
+      let( :mood) { create(:category, :with_aspects, name: "Mood" ) }
+      let(:genre) { create(:category, :with_aspects, name: "Genre") }
 
       let(:instance) do
         instance = create(:minimal_medium)
@@ -273,11 +254,11 @@ RSpec.describe Medium, type: :model do
         instance.reload
       end
 
-      subject { instance.category_tag_options }
+      subject { instance.category_aspect_options }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
-      it { is_expected.to eager_load(:tags) }
+      it { is_expected.to eager_load(:aspects) }
 
       it { is_expected.to eq([genre, mood]) }
     end

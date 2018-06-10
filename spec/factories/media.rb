@@ -1,6 +1,4 @@
 FactoryBot.define do
-  sequence :medium_name { |n| "Medium #{n}" }
-
   factory :medium do
     name nil
     initialize_with { Medium.find_or_initialize_by(name: name) }
@@ -41,16 +39,16 @@ FactoryBot.define do
       } }
     end
 
-    trait :with_tags do
+    trait :with_aspects do
       with_facets
 
       transient do
-        tag_count 3
+        aspect_count 3
       end
 
       after(:create) do |medium, evaluator|
         medium.categories.each do |category|
-          evaluator.tag_count.times { |i| create(:tag, category_id: category.id, name: "#{category.name} Tag #{i}") }
+          evaluator.aspect_count.times { |i| create(:aspect, category_id: category.id, name: "#{category.name} Tag #{i}") }
         end
 
         medium.reload
@@ -105,7 +103,7 @@ FactoryBot.define do
       with_name
       with_summary
       with_roles
-      with_tags
+      with_aspects
     end
 
     factory :album_medium, parent: :minimal_medium do

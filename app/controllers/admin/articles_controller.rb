@@ -140,7 +140,7 @@ private
   def prepare_form
     @article.prepare_links
 
-    @tags = Tag.for_posts
+    @tags = Tag.for_admin.alpha
   end
 
   def authorize_instance

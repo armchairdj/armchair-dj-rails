@@ -21,7 +21,7 @@ class Category < ApplicationRecord
   scope :multi,     -> { where(allow_multiple: true ) }
   scope :single,    -> { where(allow_multiple: false) }
 
-  scope :eager,     -> { includes(:facets, :media, :tags) }
+  scope :eager,     -> { includes(:facets, :media, :aspects) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.alpha }
 
@@ -33,26 +33,17 @@ class Category < ApplicationRecord
 
   has_many :media, through: :facets
 
-  has_many :tags, dependent: :destroy
+  has_many :aspects, dependent: :destroy
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
-
-  enum format: {
-    string: 0,
-    year:   1,
-  }
-
-  enumable_attributes :format
 
   #############################################################################
   # VALIDATIONS.
   #############################################################################
 
   validates :name, presence: true
-
-  validates :format, presence: true
 
   #############################################################################
   # HOOKS.

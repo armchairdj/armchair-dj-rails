@@ -37,7 +37,7 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :reviews).references(:medium) }
+  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects).references(:medium) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { viewable.includes(:reviews).alpha }
 
@@ -51,8 +51,6 @@ class Work < ApplicationRecord
   has_many :creators,     through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
-  has_many :reviews, dependent: :destroy
-
   belongs_to :medium
 
   has_many :facets,     through: :medium
@@ -60,9 +58,13 @@ class Work < ApplicationRecord
 
   has_and_belongs_to_many :aspects
 
+  has_many :milestones
+
+  has_many :reviews, dependent: :destroy
+
   has_many :playlistings, inverse_of: :work, dependent: :destroy
   has_many :playlists, through: :playlistings
-  has_many :mixtapes,  through: :playlists
+  has_many :mixtapes, through: :playlists
 
   #############################################################################
   # ATTRIBUTES.

@@ -1,6 +1,4 @@
 FactoryBot.define do
-  sequence :aspect_name { |n| "aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-
   factory :aspect do
 
     ###########################################################################
@@ -9,14 +7,6 @@ FactoryBot.define do
 
     trait :with_name do
       name { generate(:aspect_name) }
-    end
-
-    trait :with_existing_category do
-      transient do
-        category_name { generate(:category_name) }
-      end
-
-      category_id { create(:minimal_category, name: category_name).id }
     end
 
     trait :with_work do
@@ -31,7 +21,7 @@ FactoryBot.define do
       with_work
 
       after(:create) do |aspect|
-        create(:minimal_review, :draft, aspect.works.first.id)
+        create(:minimal_review, :draft, work_id: aspect.works.first.id)
 
         aspect.reload
       end
@@ -41,7 +31,7 @@ FactoryBot.define do
       with_work
 
       after(:create) do |aspect|
-        create(:minimal_review, :scheduled, aspect.works.first.id)
+        create(:minimal_review, :scheduled, work_id: aspect.works.first.id)
 
         aspect.reload
       end
@@ -51,7 +41,7 @@ FactoryBot.define do
       with_work
 
       after(:create) do |aspect|
-        create(:minimal_review, :published, aspect.works.first.id)
+        create(:minimal_review, :published, work_id: aspect.works.first.id)
 
         aspect.reload
       end
@@ -68,6 +58,7 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_aspect do
+      with_existing_category
       with_name
     end
 
