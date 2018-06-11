@@ -31,10 +31,8 @@ RSpec.describe "admin/works/new", type: :view do
 
   context "with populated medium" do
     before(:each) do
-      @media       = assign(:media, Medium.all.alpha)
-
       @model_class = assign(:model_name, Work)
-      @work        = assign(:work, build(:work, medium_id: @media.first.id))
+      @work        = assign(:work, build(:song))
 
       @categories  = assign(:categories, @media.first.category_aspect_options        )
       @creators    = assign(:creators,   Creator.all.alpha                    )

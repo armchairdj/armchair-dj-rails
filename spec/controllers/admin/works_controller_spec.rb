@@ -49,7 +49,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with initial params" do
         it "renders new with full form but no errors" do
-          post :create, params: { step: "select_medium", work: initial_params }
+          post :create, params: { step: "select_work_type", work: initial_params }
 
           is_expected.to successfully_render("admin/works/new")
 

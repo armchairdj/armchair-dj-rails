@@ -14,7 +14,7 @@
       f:          f,
       categories: categories,
       creators:   creators,
-      media:      media,
+      types:      types,
       roles:      roles,
       works:      works,
     } %>
@@ -24,7 +24,7 @@
     <%= admin_submit_button(f) %>
 
     <%= f.button(:button, "Update Medium", type: :submit,
-      name: "step", value: "select_medium", class: "secondary",
+      name: "step", value: "select_work_type", class: "secondary",
       "data-target": "auto-submittable.button"
     ) if f.object.new_record? %>
   <% end %>

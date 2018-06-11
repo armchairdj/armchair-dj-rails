@@ -6,7 +6,7 @@
   h1: @title
 ) %>
 
-<% if @work.medium_id.blank? %>
+<% if @work.type.blank? %>
   <%= render partial: "form_medium_only", locals: {
     work:  @work,
     media: @media,

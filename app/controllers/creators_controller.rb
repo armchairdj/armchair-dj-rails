@@ -9,6 +9,6 @@ private
   end
 
   def find_instance
-    @creator = scoped_instance_by_slug
+    @creator = scoped_instance
   end
 end

@@ -23,6 +23,6 @@ private
   end
 
   def find_instance
-    @article = scoped_instance_by_slug
+    @article = scoped_instance
   end
 end

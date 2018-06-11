@@ -9,6 +9,6 @@ private
   end
 
   def find_instance
-    @mixtape = scoped_instance_by_slug
+    @mixtape = scoped_instance
   end
 end

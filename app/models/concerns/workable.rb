@@ -33,4 +33,8 @@ module Workable
 
   delegate :viewable?,   to: :work
   delegate :unviewable?, to: :work
+
+  def display_type
+    work.model_name.human
+  end
 end

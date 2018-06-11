@@ -39,7 +39,7 @@ class Admin::WorksController < AdminController
   # POST /works
   # POST /works.json
   def create
-    return handle_medium if params[:step] == "select_medium"
+    return handle_work_type if params[:step] == "select_work_type"
 
     respond_to do |format|
       if @work.save
@@ -93,7 +93,7 @@ private
   end
 
   def build_new_instance
-    @work = Work.new(medium_id: params[:work].try(:[], :medium_id))
+    @work = Work.new(type: params[:work].try(:[], :type))
 
     @work.attributes = instance_params
   end
@@ -107,11 +107,11 @@ private
   end
 
   def prepare_form
-    @media = Medium.all.alpha
+    @types = Work.type_options
 
     @work.prepare_links
 
-    if @work.medium.present?
+    if @work.type.present?
       @work.prepare_credits
       @work.prepare_contributions
 
@@ -124,7 +124,7 @@ private
 
   def instance_params
     permitted = [
-      :medium_id,
+      :type,
       :parent_id,
       :title,
       :subtitle,
@@ -155,7 +155,7 @@ private
     params.fetch(:work, {}).permit(permitted)
   end
 
-  def handle_medium
+  def handle_work_type
     respond_to do |format|
       prepare_form
 
@@ -167,12 +167,12 @@ private
   def allowed_sorts
     title_sort   = "LOWER(works.title) ASC"
     creator_sort = "LOWER(creators.name) ASC"
-    medium_sort  = "LOWER(media.name) ASC"
+    type_sort    = "LOWER(works.type) ASC"
 
     super(title_sort).merge({
       "Title"   => title_sort,
       "Creator" => [creator_sort, title_sort].join(", "),
-      "Medium"  => [medium_sort,  title_sort].join(", "),
+      "Type"    => [type_sort,    title_sort].join(", "),
     })
   end
 end

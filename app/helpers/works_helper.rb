@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module WorksHelper
-  def link_to_work(instance, full: true, admin: false, **opts)
-    return unless admin || instance.viewable?
+  def link_to_work(work, full: true, admin: false, **opts)
+    return unless admin || work.viewable?
 
-    text = instance.display_title(full: full)
-    url  = admin ? admin_work_path(instance) : work_permalink_path(slug: instance.slug)
+    text = work.display_title(full: full)
+    url  = admin ? admin_work_path(work) : work_path(work)
 
     link_to(text, url, **opts)
   end

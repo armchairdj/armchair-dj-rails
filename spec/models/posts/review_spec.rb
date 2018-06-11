@@ -173,13 +173,13 @@ RSpec.describe Review, type: :model do
 
         describe "dirty work_attributes" do
           let(:valid_attributes) { {
-            "medium_id"          => create(:minimal_medium).id,
+            "type"               => "Song",
             "title"              => "Hounds of Love",
             "credits_attributes" => { "0" => { "creator_id" => create(:minimal_creator).id } }
           } }
 
           let(:invalid_attributes) {
-            valid_attributes.except(:medium_id)
+            valid_attributes.except(:title)
           }
 
           context "and clean work_id" do
@@ -193,7 +193,7 @@ RSpec.describe Review, type: :model do
               expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
-              expect(subject.work.title     ).to eq("Hounds of Love")
+              expect(subject.work.title     ).to be_blank
             end
           end
 
@@ -284,13 +284,13 @@ RSpec.describe Review, type: :model do
 
         describe "dirty work_attributes" do
           let(:valid_attributes) { {
-            "medium_id"                => create(:minimal_medium).id,
+            "type"                     => "Song",
             "title"                    => "Hounds of Love",
             "contributions_attributes" => { "0" => { "creator_id" => create(:minimal_creator).id } }
           } }
 
           let(:invalid_attributes) {
-            valid_attributes.except(:medium_id)
+            valid_attributes.except(:title)
           }
 
           context "and clean work_id" do
@@ -304,7 +304,7 @@ RSpec.describe Review, type: :model do
               expect(subject.current_work_id).to eq(work_id)
               expect(subject.work_id        ).to eq(nil)
               expect(subject.work           ).to be_a_populated_new_work
-              expect(subject.work.title     ).to eq("Hounds of Love")
+              expect(subject.work.title     ).to be_blank
             end
           end
 

@@ -43,6 +43,10 @@ class Credit < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def name
+    "Creator"
+  end
+
   def alpha_parts
     [work.try(:alpha_parts), creator.try(:alpha_parts)]
   end

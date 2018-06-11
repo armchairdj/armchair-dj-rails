@@ -71,11 +71,7 @@ class Creator < ApplicationRecord
   has_many :contributed_reviews, through: :contributed_works, class_name: "Review", source: :reviews
 
   has_many :contributed_roles, -> {
-    includes(contributions: { work: :medium })
-  }, through: :contributions, class_name: "Role", source: :role
-
-  has_many :viewable_contributed_roles, -> {
-    includes(contributions: { work: :medium }).references("works").where("works.viewable = ?", true)
+    includes(contributions: :work)
   }, through: :contributions, class_name: "Role", source: :role
 
   # Identities.
@@ -265,23 +261,12 @@ class Creator < ApplicationRecord
   #############################################################################
 
   def display_roles(for_site: false)
-    
+    cred =       credits.includes(:work).send(for_site ? :for_site : :itself)
+    cont = contributions.includes(:work).send(for_site ? :for_site : :itself)
 
-    displayable_media = for_site ? self.media.for_site             : self.media
-    displayable_roles = for_site ? self.viewable_contributed_roles : self.contributed_roles
+    all = (cred.to_a + cont.to_a).group_by(&:display_type)
 
-    created = displayable_media.each.inject({}) do |memo, (medium)|
-      memo[medium.name] = ["Creator"]; memo
-    end
-
-    contributed = displayable_roles.group_by{ |r| r.medium.name }
-    contributed.transform_values! { |v| v.map(&:name) }
-
-    final = created.merge(contributed) do |key, v1, v2|
-      [v1, v2].flatten.compact.sort
-    end
-
-    final.sort.to_h
+    all.transform_values! { |v| v.map(&:name).uniq.sort }
   end
 
   def sluggable_parts

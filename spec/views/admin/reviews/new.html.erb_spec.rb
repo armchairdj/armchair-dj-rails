@@ -8,7 +8,6 @@ RSpec.describe "admin/reviews/new", type: :view do
   before(:each) do
     3.times do
       create(:minimal_creator)
-      create(:minimal_medium)
       create(:minimal_song)
       create(:minimal_tag)
     end

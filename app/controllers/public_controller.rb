@@ -45,7 +45,7 @@ private
     policy_scope(model_class).page(params[:page])
   end
 
-  def scoped_instance_by_slug
-    @instance = policy_scope(model_class).find_by!(slug: params[:slug])
+  def scoped_instance
+    @instance = policy_scope(model_class).find(params[:id])
   end
 end

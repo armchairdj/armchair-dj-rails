@@ -101,10 +101,6 @@ Rails.application.routes.draw do
   # POSTS.
   #############################################################################
 
-  resources :articles, only: [:index], concerns: :paginatable, path: "/"
-
-  get "articles/*slug", to: "articles#show", as: "article_permalink"
-
   scope format: true, constraints: { format: "rss" } do
     get "/feed", to: "articles#feed"
   end
@@ -113,55 +109,38 @@ Rails.application.routes.draw do
   # REVIEWS.
   #############################################################################
 
-  resources :reviews, only: [:index], concerns: :paginatable
-
-  get "reviews/*slug", to: "reviews#show", as: "review_permalink"
+  resources :reviews, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # MIXTAPES.
   #############################################################################
 
-  resources :mixtapes, only: [:index], concerns: :paginatable
-
-  get "mixtapes/*slug", to: "mixtapes#show", as: "mixtape_permalink"
+  resources :mixtapes, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # PLAYLISTS.
   #############################################################################
 
-  resources :playlists, only: [:index], concerns: :paginatable
-
-  get "playlists/*slug", to: "playlists#show", as: "playlist_permalink"
+  resources :playlists, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # CREATORS.
   #############################################################################
 
-  resources :creators, only: [:index], concerns: :paginatable
-
-  get "creators/*slug", to: "creators#show", as: "creator_permalink"
+  resources :creators, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # WORKS.
   #############################################################################
 
-  resources :works, only: [:index], concerns: :paginatable
-
-  get "works/*slug", to: "works#show", as: "work_permalink"
-
-  #############################################################################
-  # MEDIA.
-  #############################################################################
-
-  resources :media, only: [:index], concerns: :paginatable
-
-  get "media/*slug", to: "media#show", as: "medium_permalink"
+  resources :works, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # TAGS.
   #############################################################################
 
-  resources :tags, only: [:index], concerns: :paginatable
+  resources :tags, only: [:index, :show], concerns: :paginatable
 
-  get "tags/*slug", to: "tags#show", as: "tag_permalink"
+
+  resources :articles, only: [:index, :show], concerns: :paginatable, path: "/"
 end

@@ -4,9 +4,9 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
-        <%= f.input :medium_id, as: :select,
-          collection: media,
-          hint:       "First, choose a medium.",
+        <%= f.input :type, as: :select,
+          collection: types,
+          hint:       "First, choose a type.",
           input_html: {
             "data-controller": "selectable",
             "data-target":     "auto-submittable.field"
@@ -18,7 +18,7 @@
 
   <%= content_tag(:div, class: "button-group") do %>
     <%= f.button(:button, "Continue", type: :submit,
-      name: "step", value: "select_medium",
+      name: "step", value: "select_work_type",
       "data-target": "auto-submittable.button"
     ) %>
   <% end %>

@@ -9,6 +9,6 @@ private
   end
 
   def find_instance
-    @work = scoped_instance_by_slug
+    @work = scoped_instance
   end
 end

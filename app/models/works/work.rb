@@ -36,11 +36,27 @@ class Work < ApplicationRecord
     [self]
   end
 
+  def self.type_options
+    load_descendants
+
+    descendants.map { |s| [s.model_name.name, s.model_name.human] }.sort_by(&:last)
+  end
+
+  def self.load_descendants
+    return if descendants.any?
+
+    Dir["#{Rails.root}/app/models/works/*.rb"].each do |file|
+      next if File.basename(file, ".rb") == File.basename(__FILE__, ".rb")
+
+      require_dependency file
+    end
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes).references(:medium) }
+  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.viewable.alpha }
 

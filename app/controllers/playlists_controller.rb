@@ -7,6 +7,6 @@ private
   end
 
   def find_instance
-    @playlist = scoped_instance_by_slug
+    @playlist = scoped_instance
   end
 end

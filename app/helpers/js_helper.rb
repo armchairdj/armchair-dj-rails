@@ -35,7 +35,7 @@ module JsHelper
   def js_selectable_create_role_attrs
     attrs = {
       scope: "role", url: admin_roles_path, param: "role[name]",
-      "form-params": "role[medium_id]=work[medium_id]"
+      "form-params": "role[work_type]=work[type]"
     }
 
     js_attrs("selectable-create", attrs)

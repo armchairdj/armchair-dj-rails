@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module CreatorsHelper
-  def link_to_creator(instance, admin: false, **opts)
-    return unless admin || instance.viewable?
+  def link_to_creator(creator, admin: false, **opts)
+    return unless admin || creator.viewable?
 
-    text = instance.name
-    url  = admin ? admin_creator_path(instance) : creator_permalink_path(slug: instance.slug)
+    text = creator.name
+    url  = admin ? admin_creator_path(creator) : creator_path(creator)
 
     link_to(text, url, **opts)
   end

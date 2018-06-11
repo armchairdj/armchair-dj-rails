@@ -110,7 +110,6 @@ private
   def sanitize_create_params
     fetched = instance_params
 
-    fetched.delete(:slug)
     fetched.delete(:publish_on)
 
     @sanitized_params = fetched.merge(author: current_user)
@@ -125,7 +124,6 @@ private
       :work_id,
       :body,
       :summary,
-      :slug,
       :publish_on,
       :tag_ids => [],
       :links_attributes => [
@@ -137,7 +135,6 @@ private
       :work_attributes => [
         :id,
         :review_id,
-        :medium_id,
         :title,
         :subtitle,
         :credits_attributes => [
@@ -217,10 +214,10 @@ private
   end
 
   def allowed_sorts
-    title_sort  = "reviews.alpha ASC"
-    type_sort   = "LOWER(media.name) ASC"
-    status_sort = "reviews.status ASC"
+    title_sort  = "posts.alpha ASC"
+    status_sort = "posts.status ASC"
     author_sort = "users.alpha ASC"
+    type_sort   = "LOWER(works.type) ASC"
 
     super(title_sort).merge({
       "Title"   => title_sort,

@@ -9,7 +9,7 @@ module ReviewsHelper
     return unless admin || review.published?
 
     text = review_title(review, full: full, length: length)
-    url  = admin ? admin_review_path(review) : review_permalink_path(slug: review.slug)
+    url  = admin ? admin_review_path(review) : review_path(review)
 
     link_to(text, url, **opts)
   end

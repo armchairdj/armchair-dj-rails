@@ -26,8 +26,8 @@ private
     [:base_slug, :sequenced_slug]
   end
 
-  def base_slug(*args)
-    parts = args.flatten.compact.map { |x| x.split(PART_SEPARATOR) }.flatten.compact
+  def base_slug
+    parts = sluggable_parts.flatten.compact.map { |x| x.split(PART_SEPARATOR) }.flatten.compact
 
     generate_slug_from_parts(parts)
   end

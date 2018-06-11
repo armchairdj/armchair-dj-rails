@@ -101,21 +101,21 @@ private
   def instance_params
     params.fetch(:role, {}).permit(
       :name,
-      :medium_id
+      :work_type
     )
   end
 
   def prepare_form
-    @media = Medium.for_admin.alpha
+    @work_types = Work.type_options
   end
 
   def allowed_sorts
-    name_sort   = "LOWER(roles.name) ASC"
-    medium_sort = "LOWER(media.name) ASC"
+    name_sort = "LOWER(roles.name) ASC"
+    type_sort = "LOWER(roles.work_type) ASC"
 
     super(name_sort).merge({
-      "Name"   => [name_sort, medium_sort].join(", "),
-      "Medium" => [medium_sort, name_sort].join(", "),
+      "Name" => [name_sort, type_sort].join(", "),
+      "Type" => [type_sort, name_sort].join(", "),
     })
   end
 end

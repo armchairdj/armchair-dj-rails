@@ -9,6 +9,6 @@ private
   end
 
   def find_instance
-    @review = scoped_instance_by_slug
+    @review = scoped_instance
   end
 end

@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::RolesController, type: :controller do
+  let(:type_options) { Work.type_options }
+
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
@@ -31,12 +33,6 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "GET #new" do
-      let!(:media) do
-        5.times { create(:medium_without_role) }
-
-        Medium.all
-      end
-
       it "renders" do
         get :new
 
@@ -44,19 +40,13 @@ RSpec.describe Admin::RolesController, type: :controller do
 
         expect(assigns(:role)).to be_a_new(Role)
 
-        expect(assigns(:media)).to match_array(media)
+        expect(assigns(:work_types)).to match_array(type_options)
       end
     end
 
     describe "POST #create" do
-      let!(:media) do
-        5.times { create(:medium_without_role) }
-
-        Medium.all
-      end
-
-      let(:max_valid_params) { attributes_for(:complete_role, medium_id: media.first.id) }
-      let(:min_valid_params) { attributes_for(:minimal_role,  medium_id: media.first.id) }
+      let(:max_valid_params) { attributes_for(:complete_role, work_type: type_options.first) }
+      let(:min_valid_params) { attributes_for(:minimal_role,  work_type: type_options.first) }
       let(  :invalid_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
@@ -112,19 +102,13 @@ RSpec.describe Admin::RolesController, type: :controller do
           expect(assigns(:role)).to have_coerced_attributes(invalid_params)
           expect(assigns(:role)).to be_invalid
 
-          expect(assigns(:media)).to match_array(media)
+          expect(assigns(:work_types)).to match_array(type_options)
         end
       end
     end
 
     describe "GET #edit" do
-      let!(:media) do
-        5.times { create(:medium_without_role) }
-
-        Medium.all
-      end
-
-      let(:role) { create(:minimal_role, medium_id: media.first.id) }
+      let(:role) { create(:minimal_role, work_type: type_options.first) }
 
       it "renders" do
         get :edit, params: { id: role.to_param }
@@ -133,18 +117,12 @@ RSpec.describe Admin::RolesController, type: :controller do
 
         is_expected.to assign(role, :role)
 
-        expect(assigns(:media)).to match_array(media)
+        expect(assigns(:work_types)).to match_array(type_options)
       end
     end
 
     describe "PUT #update" do
-      let!(:media) do
-        5.times { create(:medium_without_role) }
-
-        Medium.all
-      end
-
-      let(:role) { create(:minimal_role, medium_id: media.first.id) }
+      let(:role) { create(:minimal_role, work_type: type_options.first) }
 
       let(:min_valid_params) { { name: "New Name" } }
       let(  :invalid_params) { { name: ""         } }
@@ -173,7 +151,7 @@ RSpec.describe Admin::RolesController, type: :controller do
 
           is_expected.to assign(role, :role).with_attributes(invalid_params).and_be_invalid
 
-          expect(assigns(:media)).to match_array(media)
+          expect(assigns(:work_types)).to match_array(type_options)
         end
       end
     end

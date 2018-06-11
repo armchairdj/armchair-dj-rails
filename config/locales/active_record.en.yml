@@ -4,7 +4,7 @@ en:
       graphic_novel: "Graphic Novel"
       radio_show: "Radio Show"
       tv_epside: "TV Episode"
-      tv_season: "TV Show"
+      tv_season: "TV Season"
       tv_show: "TV Show"
       video_game: "Video Game"
     attributes:
