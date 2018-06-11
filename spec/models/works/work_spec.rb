@@ -26,9 +26,9 @@ RSpec.describe VideoGame, type: :model do
   end
 
   context "scope-related" do
-    let(      :draft) { create_minimal_instance(                      title: "D", name_for_creator: "Kate Bush"  ) }
-    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", name_for_creator: "Prince"     ) }
-    let(:published_2) { create_minimal_instance(:with_published_post, title: "A", name_for_creator: "David Bowie") }
+    let(      :draft) { create_minimal_instance(                      title: "D", creator_names: ["Kate Bush"  ]) }
+    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", creator_names: ["Prince"     ]) }
+    let(:published_2) { create_minimal_instance(:with_published_post, title: "A", creator_names: ["David Bowie"]) }
 
     let(        :ids) { [draft, published_1, published_2].map(&:id) }
     let( :collection) { described_class.where(id: ids) }
@@ -259,8 +259,8 @@ RSpec.describe VideoGame, type: :model do
 
     describe "#display_title" do
       it "displays with just title" do
-        expect(create(:kate_bush_hounds_of_love).display_title).to eq(
-          "Hounds of Love"
+        expect(create(:kate_bush_never_for_ever).display_title).to eq(
+          "Never for Ever"
         )
       end
 
@@ -271,14 +271,14 @@ RSpec.describe VideoGame, type: :model do
       end
 
       it "nils unless persisted" do
-        expect(build(:kate_bush_hounds_of_love).display_title).to eq(nil)
+        expect(build(:kate_bush_never_for_ever).display_title).to eq(nil)
       end
     end
 
     describe "#full_display_title" do
       it "displays with one creator" do
-        expect(create(:kate_bush_hounds_of_love).full_display_title).to eq(
-          "Kate Bush: Hounds of Love"
+        expect(create(:kate_bush_never_for_ever).full_display_title).to eq(
+          "Kate Bush: Never for Ever"
         )
       end
 
@@ -289,14 +289,14 @@ RSpec.describe VideoGame, type: :model do
       end
 
       it "nils unless persisted" do
-        expect(build(:kate_bush_hounds_of_love).full_display_title).to eq(nil)
+        expect(build(:kate_bush_never_for_ever).full_display_title).to eq(nil)
       end
     end
 
     describe "#credited_artists" do
       let(:invalid) {  build(:work, :with_title                ) }
-      let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
-      let(  :saved) { create(:kate_bush_hounds_of_love         ) }
+      let(:unsaved) {  build(:kate_bush_never_for_ever         ) }
+      let(  :saved) { create(:kate_bush_never_for_ever         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
 
       it "nils without error on missing creator" do
@@ -393,7 +393,7 @@ RSpec.describe VideoGame, type: :model do
       subject { instance.sluggable_parts }
 
       it { is_expected.to eq([
-        instance.model_name.human,
+        instance.model_name.human.pluralize,
         instance.credited_artists(connector: " and "),
         instance.title,
         instance.subtitle

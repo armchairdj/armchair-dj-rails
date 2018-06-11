@@ -65,7 +65,7 @@ RSpec.describe Review, type: :model do
     let(:instance) { create_minimal_instance }
 
     describe "#type" do
-      let(:instance) { create(:hounds_of_love_album_review) }
+      let(:instance) { create(:never_for_ever_album_review) }
 
       specify { expect(instance.type              ).to eq("Album Review" ) }
       specify { expect(instance.type(plural: true)).to eq("Album Reviews") }
@@ -85,17 +85,17 @@ RSpec.describe Review, type: :model do
     end
 
     describe "#sluggable_parts" do
-      let(:review) { create(:hounds_of_love_album_review) }
+      let(:review) { create(:never_for_ever_album_review) }
       let(:collab) { create(:unity_album_review         ) }
 
       specify "for review" do
-        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Hounds of Love", nil])
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Never for Ever", nil])
       end
 
       specify "for review of work with subtitle" do
         review.work.subtitle = "Remastered"
 
-        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Hounds of Love", "Remastered"])
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Never for Ever", "Remastered"])
       end
 
       specify "for review of collaborative work" do

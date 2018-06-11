@@ -96,15 +96,15 @@ RSpec.describe LayoutHelper, type: :helper do
 
   describe "#page_title" do
     it "uses string instance variable" do
-      assign(:title, "Kate Bush: Hounds of Love")
+      assign(:title, "Kate Bush: Never for Ever")
 
-      expect(helper.page_title).to eq("#{t("site.name")} | Kate Bush: Hounds of Love")
+      expect(helper.page_title).to eq("#{t("site.name")} | Kate Bush: Never for Ever")
     end
 
     it "uses array instance variable" do
-      assign(:title, ["Kate Bush", "Hounds of Love"])
+      assign(:title, ["Kate Bush", "Never for Ever"])
 
-      expect(helper.page_title).to eq("#{t("site.name")} | Kate Bush | Hounds of Love")
+      expect(helper.page_title).to eq("#{t("site.name")} | Kate Bush | Never for Ever")
     end
 
     it "raises without instance variable" do

@@ -17,40 +17,38 @@ FactoryBot.define do
       subtitle "Subtitle"
     end
 
-    trait :with_version do
-      subtitle "Version"
-    end
-
-    trait :with_one_credit do
+    trait :with_credits do
       transient do
-        name_for_creator { generate(:creator_name) }
+        creator_names { [generate(:creator_name)] }
+
+        creator_count 1
       end
 
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: name_for_creator).id)
-      } }
+      credits_attributes do
+        creator_count.times.inject({}) do |memo, (i)|
+          name    = creator_names[i] || generate(:creator_name)
+          creator = create(:minimal_creator, name: name)
+
+          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); memo
+        end
+      end
     end
 
-    trait :with_multiple_credits do
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-        "1" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-        "2" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-      } }
-    end
+    trait :with_contributions do
+      transient do
+        contributor_names { [generate(:creator_name)] }
 
-    trait :with_one_contribution do
-      contributions_attributes { {
-        "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
-      } }
-    end
+        contributor_count 1
+      end
 
-    trait :with_multiple_contributions do
-      contributions_attributes { {
-        "0" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
-        "1" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
-        "2" => attributes_for(:minimal_contribution, creator_id: create(:minimal_creator).id),
-      } }
+      contributions_attributes do
+        contributor_count.times.inject({}) do |memo, (i)|
+          name    = contributor_names[i] || generate(:creator_name)
+          creator = create(:minimal_creator, name: name)
+
+          memo[i.to_s] = attributes_for(:minimal_contribution, creator_id: creator.id); memo
+        end
+      end
     end
 
     trait :with_draft_post do
@@ -83,17 +81,13 @@ FactoryBot.define do
       with_published_post
     end
 
-    trait :with_child do
-      after(:create) do |work|
-        create(:minimal_work, parent: work)
-
-        work.reload
-      end
-    end
-
     trait :with_children do
-      after(:create) do |work|
-        3.times { create(:minimal_work, parent: work) }
+      transient do
+        child_count 1
+      end
+
+      after(:create) do |work, evaluator|
+        evaluator.child_count.times { create(:minimal_work, parent: work) }
 
         work.reload
       end
@@ -113,23 +107,21 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_work do
+    factory :minimal_work_parent do
       with_title
-      with_one_credit
+      with_credits
     end
 
-    factory :complete_work do
-      with_title
+    factory :complete_work_parent, parent: :minimal_work_parent do
       with_subtitle
-      with_one_credit
-      with_one_contribution
+      with_contributions
     end
 
-    factory :stuffed_work do
-      with_title
-      with_subtitle
-      with_multiple_credits
-      with_multiple_contributions
+    factory :stuffed_work_parent, parent: :stuffed_work_parent do
+      transient do
+        creator_count 3
+        contributor_count 3
+      end
     end
   end
 end

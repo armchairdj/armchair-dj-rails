@@ -56,36 +56,36 @@ RSpec.shared_examples "an_alphabetizable_model" do
             specify "multiple parts" do
               allow(subject).to receive(:alpha_parts).and_return([
                 "Kate Bush",
-                "Hounds of Love"
+                "Never for Ever"
               ])
 
               subject.send(:set_alpha)
 
-              expect(subject.alpha).to eq("kate bush hounds of love")
+              expect(subject.alpha).to eq("kate bush never for ever")
             end
 
             specify "blank parts" do
               allow(subject).to receive(:alpha_parts).and_return([
                 "Kate Bush",
                 nil,
-                "Hounds of Love",
+                "Never for Ever",
                 ""
               ])
 
               subject.send(:set_alpha)
 
-              expect(subject.alpha).to eq("kate bush hounds of love")
+              expect(subject.alpha).to eq("kate bush never for ever")
             end
 
             specify "nested parts" do
               allow(subject).to receive(:alpha_parts).and_return([
-                ["Kate Bush", "Hounds of Love"],
+                ["Kate Bush", "Never for Ever"],
                 "Remastered Edition"
               ])
 
               subject.send(:set_alpha)
 
-              expect(subject.alpha).to eq("kate bush hounds of love remastered edition")
+              expect(subject.alpha).to eq("kate bush never for ever remastered edition")
             end
           end
         end

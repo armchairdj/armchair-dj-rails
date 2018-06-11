@@ -15,13 +15,14 @@ FactoryBot.define do
 
     factory :minimal_article, class: "Article", parent: :minimal_post_parent do
       with_title
+
+      factory :minimal_post do; end
     end
 
     factory :complete_article, class: "Article", parent: :complete_post_parent do
       with_title
-    end
 
-    factory :minimal_post,  parent: :minimal_article  do; end
-    factory :complete_post, parent: :complete_article do; end
+      factory :complete_post do; end
+    end
   end
 end

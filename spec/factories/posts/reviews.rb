@@ -25,9 +25,9 @@ FactoryBot.define do
     # SPECIFIC FACTORIES.
     ###########################################################################
 
-    factory :hounds_of_love_album_review, parent: :minimal_review do
+    factory :never_for_ever_album_review, parent: :minimal_review do
       body        "It's in the trees! It's coming!"
-      association :work, factory: :kate_bush_hounds_of_love
+      association :work, factory: :kate_bush_never_for_ever
     end
 
     factory :unity_album_review, parent: :minimal_review do

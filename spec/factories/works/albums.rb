@@ -5,62 +5,52 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory  :minimal_album, class: "Album", parent: :minimal_work do; end
-    factory :complete_album, class: "Album", parent: :minimal_work do; end
-    factory  :stuffed_album, class: "Album", parent: :minimal_work do; end
+    factory  :minimal_album, class: "Album", parent: :minimal_work_parent do; end
+    factory :complete_album, class: "Album", parent: :complete_work_parent do; end
+    factory  :stuffed_album, class: "Album", parent: :stuffed_work_parent do; end
 
     ###########################################################################
     # SPECIFIC FACTORIES.
     ###########################################################################
 
-    factory :global_communications_76_14, parent: :album do
+    factory :global_communications_76_14, parent: :complete_album do
       title "76:14"
 
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Global Communication").id)
-      } }
-
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "Tom Middleton" ).id),
-        "1" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "Mark Pritchard").id)
-      } }
+      transient do
+        creator_count     1
+        creator_names     ["Global Communication"]
+        contributor_count 2
+        contributor_names ["Tom Middleton", "Mark Pritchard"]
+      end
     end
 
-    factory :carl_craig_and_green_velvet_unity, parent: :album do
+    factory :carl_craig_and_green_velvet_unity, parent: :complete_album do
       title  "Unity"
+      subtitle nil
 
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Green Velvet").id),
-        "1" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Carl Craig"  ).id)
-      } }
+      transient do
+        creator_count 2
+        creator_names ["Green Velvet", "Carl Craig"]
+      end
     end
 
-    factory :kate_bush_hounds_of_love, parent: :album do
-      title "Hounds of Love"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:kate_bush).id),
-      } }
+    factory :kate_bush_never_for_ever, parent: :minimal_album do
+      title "Never for Ever"
+      transient { creator_names ["Kate Bush"] }
     end
 
-    factory :kate_bush_directors_cut, parent: :album do
+    factory :kate_bush_directors_cut, parent: :minimal_album do
       title "Director's Cut"
-
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:kate_bush).id),
-      } }
+      transient { creator_names ["Kate Bush"] }
     end
 
-    factory :madonna_ray_of_light, parent: :album do
+    factory :madonna_ray_of_light, parent: :complete_album do
       title  "Ray of Light"
 
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Madonna").id)
-      } }
-
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator, name: "William Orbit").id),
-      } }
+      transient do
+        creator_names     ["Madonna"]
+        contributor_names ["William Orbit"]
+      end
     end
   end
 end

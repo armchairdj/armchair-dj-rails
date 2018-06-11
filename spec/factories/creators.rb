@@ -4,6 +4,8 @@ require "ffaker"
 
 FactoryBot.define do
   factory :creator do
+    name nil
+    initialize_with { Creator.find_or_initialize_by(name: name) }
 
     ###########################################################################
     # TRAITS.

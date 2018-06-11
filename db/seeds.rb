@@ -312,7 +312,7 @@ kate_bush_album_tki                    = FactoryBot.create(:album, title: "The K
 kate_bush_album_lh                     = FactoryBot.create(:album, title: "Lionheart",         "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 kate_bush_album_nfe                    = FactoryBot.create(:album, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 kate_bush_album_td                     = FactoryBot.create(:album, title: "The Dreaming",      "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_hol                    = FactoryBot.create(:album, title: "Hounds of Love",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+kate_bush_album_hol                    = FactoryBot.create(:album, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 kate_bush_album_tsw                    = FactoryBot.create(:album, title: "The Sensual world", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 kate_bush_album_trs                    = FactoryBot.create(:album, title: "The Red Shoes",     "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
 kate_bush_album_aasoh                  = FactoryBot.create(:album, title: "Aerial",            "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
