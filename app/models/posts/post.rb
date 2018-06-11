@@ -47,7 +47,7 @@ class Post < ApplicationRecord
   scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
-  scope :eager,     -> { includes(:author, :tags) }
+  scope :eager,     -> { includes(:author, :tags).references(:author) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
@@ -72,6 +72,8 @@ class Post < ApplicationRecord
   #############################################################################
   # VALIDATION.
   #############################################################################
+
+  validates :type, presence: true
 
   validates :body, presence: true, unless: :draft?
 

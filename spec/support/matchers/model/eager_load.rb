@@ -10,13 +10,13 @@ RSpec::Matchers.define :eager_load do |*associations|
   end
 
   match do
-    associations.each do |assoc|
+    [associations].flatten.each do |assoc|
       expect(testable_instance(subject).association(assoc)).to be_loaded
     end
   end
 
   match_when_negated do
-    associations.each do |assoc|
+    [associations].flatten.each do |assoc|
       expect(testable_instance(subject).association(assoc)).to_not be_loaded
     end
   end

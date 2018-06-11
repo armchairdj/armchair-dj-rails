@@ -772,28 +772,25 @@ RSpec.describe Creator, type: :model do
     describe "#display_roles" do
       subject { create_minimal_instance }
 
-      let(:tv_show) { create(:minimal_medium, name: "TV Show") }
-      let(   :book) { create(:minimal_medium, name: "Book"   ) }
+      let(    :editor) { create(:minimal_role, work_type: "Book",   name: "Editor"    ) }
+      let(    :author) { create(:minimal_role, work_type: "Book",   name: "Author"    ) }
+      let(:showrunner) { create(:minimal_role, work_type: "TvShow", name: "Showrunner") }
+      let(  :director) { create(:minimal_role, work_type: "TvShow", name: "Director"  ) }
 
-      let(    :editor) { create(:minimal_role, medium: book,    name: "Editor"    ) }
-      let(    :author) { create(:minimal_role, medium: book,    name: "Author"    ) }
-      let(:showrunner) { create(:minimal_role, medium: tv_show, name: "Showrunner") }
-      let(  :director) { create(:minimal_role, medium: tv_show, name: "Director"  ) }
+      let(:tv_show) { create(:minimal_tv_show) }
+      let(   :book) { create(:minimal_book) }
 
-      let(:tv_show_work) { create(:minimal_song, medium: tv_show) }
-      let(   :book_work) { create(:minimal_song, medium: book   ) }
+      let!( :credit_1) { subject.credits.create(      work: tv_show                  ) }
+      let!(:contrib_1) { subject.contributions.create(work: tv_show, role: showrunner) }
+      let!(:contrib_2) { subject.contributions.create(work: tv_show, role: director  ) }
 
-      let!( :credit_1) { subject.credits.create(      work: tv_show_work                  ) }
-      let!(:contrib_1) { subject.contributions.create(work: tv_show_work, role: showrunner) }
-      let!(:contrib_2) { subject.contributions.create(work: tv_show_work, role: director  ) }
+      let!( :credit_2) { subject.credits.create(      work: book              ) }
+      let!(:contrib_3) { subject.contributions.create(work: book, role: editor) }
+      let!(:contrib_4) { subject.contributions.create(work: book, role: author) }
 
-      let!( :credit_2) { subject.credits.create(      work: book_work              ) }
-      let!(:contrib_3) { subject.contributions.create(work: book_work, role: editor) }
-      let!(:contrib_4) { subject.contributions.create(work: book_work, role: author) }
+      let!(:review) { create(:minimal_review, :published, work_id: book.id) }
 
-      let!(:review) { create(:minimal_review, :published, work_id: book_work.id) }
-
-      it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
+      it "returns hash of credits and contributions sorted alphabetically and grouped by work_type" do
         expect(subject.display_roles).to eq({
           "Book"    => ["Author",  "Creator",  "Editor"    ],
           "TV Show" => ["Creator", "Director", "Showrunner"]

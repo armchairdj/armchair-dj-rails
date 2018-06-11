@@ -9,15 +9,14 @@
 <% if @work.type.blank? %>
   <%= render partial: "form_medium_only", locals: {
     work:  @work,
-    media: @media,
+    types: @types,
   } %>
 
 <% else %>
   <%= render partial: "form", locals: {
     work:       @work,
-    categories: @categories,
     creators:   @creators,
-    media:      @media,
+    types:      @types,
     roles:      @roles,
     works:      @works,
   } %>

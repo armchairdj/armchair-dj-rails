@@ -60,9 +60,9 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
     describe "POST #create" do
       context "standalone" do
-        let(:max_valid_params) { attributes_for(:complete_article   ).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:minimal_article    ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:article, :with_body).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_article).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_article ).except(:author_id) }
+        let(  :invalid_params) { attributes_for(:minimal_article ).except(:author_id, :title) }
 
         context "with max valid params" do
           it "creates a new Article" do
@@ -136,9 +136,9 @@ RSpec.describe Admin::ArticlesController, type: :controller do
       end
 
       context "existing work" do
-        let(:max_valid_params) { attributes_for(:complete_review    ).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:review             ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:article, :with_body).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_review).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_review ).except(:author_id) }
+        let(  :invalid_params) { attributes_for(:minimal_review ).except(:author_id, :work_id) }
 
         context "with max valid params" do
           it "creates a new Article" do

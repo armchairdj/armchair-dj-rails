@@ -17,8 +17,7 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "Name"     %>
-            <%= sortable_th @sorts, "Category" %>
+            <%= sortable_th @sorts, "Name" %>
 
             <%= actions_th %>
           <% end %>
@@ -27,8 +26,7 @@
         <%= content_tag(:tbody) do %>
           <% @tags.each do |tag| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, tag.name            ) %>
-              <%= content_tag(:td, tag.display_category) %>
+              <%= content_tag(:td, tag.name) %>
 
               <%= content_tag(:td, class: "actions") do %>
                 <%= admin_public_link(tag) %>

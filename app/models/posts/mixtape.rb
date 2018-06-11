@@ -10,7 +10,7 @@ class Mixtape < Post
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:author, :tags, :playlist, :playlistings, :works, :creators) }
+  scope :eager, -> { includes(:author, :tags, :playlist, :playlistings, :works, :creators, :contributors, :aspects).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.

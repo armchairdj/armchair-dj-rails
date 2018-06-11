@@ -13,12 +13,6 @@ module JsHelper
     attrs
   end
 
-  def js_selectable_create_category_attrs(scope = "category")
-    attrs = { scope: scope, url: admin_categories_path, param: "category[name]" }
-
-    js_attrs("selectable-create", attrs)
-  end
-
   def js_selectabe_create_creator_attrs(scope = "creator")
     attrs = { scope: scope, url: admin_creators_path, param: "creator[name]" }
 
@@ -41,19 +35,19 @@ module JsHelper
     js_attrs("selectable-create", attrs)
   end
 
-  def js_selectable_create_tag_attrs(category = nil)
+  def js_selectable_create_aspect_attrs(characteristic)
+    attrs = {
+      "url":          admin_aspects_path,
+      "param":        "aspect[name]",
+      "scope":        "aspect[characteristic=#{characteristic}]",
+      "extra-params": "aspect[characteristic]=#{characteristic}",
+    }
+
+    js_attrs("selectable-create", attrs).merge(multiple: true)
+  end
+
+  def js_selectable_create_tag_attrs
     attrs = { scope: "tag", url: admin_tags_path, param: "tag[name]" }
-
-    unless category.nil?
-      attrs["scope"       ] = "tag[category_id=#{category.id}]"
-      attrs["extra-params"] = "tag[category_id]=#{category.id}"
-
-      if category.allow_multiple?
-        params["allow-range"] = "true" if category.year?
-      else
-        params["max-items"  ] = "1"
-      end
-    end
 
     js_attrs("selectable-create", attrs).merge(multiple: true)
   end

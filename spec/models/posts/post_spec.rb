@@ -2,11 +2,23 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a_post" do
+RSpec.describe Post, type: :model do
   subject { create_minimal_instance }
 
   context "concerns" do
+    it_behaves_like "an_alphabetizable_model"
+
     it_behaves_like "an_authorable_model"
+
+    it_behaves_like "an_application_record"
+
+    it_behaves_like "an_authorable_model"
+
+    it_behaves_like "a_linkable_model"
+
+    it_behaves_like "a_sluggable_model"
+
+    it_behaves_like "a_summarizable_model"
   end
 
   context "class" do
@@ -141,6 +153,14 @@ RSpec.shared_examples "a_post" do
   end
 
   context "validations" do
+    describe "validates type presence" do
+      subject { described_class.new }
+
+      before(:each) { subject.valid? }
+
+      it { is_expected.to have_error(type: :blank) }
+    end
+
     context "conditional" do
       context "draft" do
         subject { create_minimal_instance(:draft) }

@@ -106,6 +106,7 @@ class Work < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validates :type, presence: true
   validates :title, presence: true
 
   validates :credits, length: { minimum: 1 }
@@ -172,7 +173,7 @@ class Work < ApplicationRecord
 
   def sluggable_parts
     [
-      model_name.human,
+      model_name.human.pluralize,
       credited_artists(connector: " and "),
       title,
       subtitle

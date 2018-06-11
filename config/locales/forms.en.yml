@@ -47,8 +47,6 @@ en:
       article:
         publish_on: "Leave blank unless scheduling an article for future publication."
         summary: "For use in the meta description tag."
-      category:
-        allow_multiple: "&nbsp;"
       contribution:
       creator:
       credit:
@@ -105,7 +103,6 @@ en:
       review:
         work_id: "Please choose"
       tag:
-        category_id: "Please choose"
       user:
         role: "Please choose"
       work:

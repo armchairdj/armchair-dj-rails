@@ -9,52 +9,16 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_song do
-      association :work, factory: :song
-    end
-
-    trait :with_work do
-      work_id { create(:minimal_song).id }
-    end
-
-    trait :with_published_post do
-      published
-    end
-
     ###########################################################################
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_review do
-      with_existing_author
-      with_work
+    factory :minimal_review, class: "Review", parent: :minimal_post_parent do
+      with_existing_work
     end
 
-    factory :complete_review, parent: :minimal_review do
-      with_body
-      with_summary
-    end
-
-    factory :song_review do
-      with_existing_author
-      with_song
-    end
-
-    factory :review_with_new_work do
-      with_existing_author
-      work_attributes { attributes_for(:minimal_song) }
-    end
-
-    factory :complete_review_with_new_work do
-      with_existing_author
-      with_body
-      with_summary
-      work_attributes { attributes_for(:stuffed_song) }
-    end
-
-    factory :invalid_review_with_new_work do
-      with_existing_author
-      work_attributes { attributes_for(:minimal_work).except(:title) }
+    factory :complete_review, class: "Review", parent: :complete_post_parent do
+      with_existing_work
     end
 
     ###########################################################################

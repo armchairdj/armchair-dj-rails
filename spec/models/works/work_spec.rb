@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a_work" do
+RSpec.describe VideoGame, type: :model do
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -26,8 +26,8 @@ RSpec.shared_examples "a_work" do
   end
 
   context "scope-related" do
-    let(      :draft) { create_minimal_instance(                      title: "D", name_for_creator: "Kate Bush") }
-    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", name_for_creator: "Prince") }
+    let(      :draft) { create_minimal_instance(                      title: "D", name_for_creator: "Kate Bush"  ) }
+    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", name_for_creator: "Prince"     ) }
     let(:published_2) { create_minimal_instance(:with_published_post, title: "A", name_for_creator: "David Bowie") }
 
     let(        :ids) { [draft, published_1, published_2].map(&:id) }
@@ -164,7 +164,9 @@ RSpec.shared_examples "a_work" do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:title ) }
+    it { is_expected.to validate_presence_of(:type) }
+
+    it { is_expected.to validate_presence_of(:title) }
 
     describe "is_expected.to validate_length_of(:credits).is_at_least(1)" do
       subject { build(:minimal_song) }

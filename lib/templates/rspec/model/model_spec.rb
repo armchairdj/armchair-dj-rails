@@ -9,7 +9,7 @@ RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
   end
 
   context "concerns" do
-    it_behaves_like "a_work"
+    # Nothing so far.
   end
 
   context "class" do

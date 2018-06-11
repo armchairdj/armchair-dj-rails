@@ -7,7 +7,7 @@ class CreateAspects < ActiveRecord::Migration[5.2]
       t.string :slug
       t.boolean :dirty_slug, default: false, null: false
       t.boolean :viewable, default: false, null: false
-      t.references :category, index: true, foreign_key: { to_table: :categories }
+      t.integer :characteristic, null: false, index: true
 
       t.timestamps
     end

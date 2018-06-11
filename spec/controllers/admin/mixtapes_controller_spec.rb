@@ -34,8 +34,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
         end
       end
 
-      context "review" do
-        let(:mixtape) { create(:minimal_review) }
+      context "mixtape" do
+        let(:mixtape) { create(:minimal_mixtape) }
 
         it "renders" do
           get :show, params: { id: mixtape.to_param }
@@ -60,9 +60,9 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
     describe "POST #create" do
       context "standalone" do
-        let(:max_valid_params) { attributes_for(:complete_mixtape   ).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:minimal_mixtape    ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:mixtape, :with_body).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_mixtape).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_mixtape ).except(:author_id) }
+        let(  :invalid_params) { attributes_for(:minimal_mixtape ).except(:author_id, :play_list_id) }
 
         context "with max valid params" do
           it "creates a new Mixtape" do
@@ -136,9 +136,9 @@ RSpec.describe Admin::MixtapesController, type: :controller do
       end
 
       context "existing work" do
-        let(:max_valid_params) { attributes_for(:complete_review    ).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:review             ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:mixtape, :with_body).except(:author_id) }
+        let(:max_valid_params) { attributes_for(:complete_mixtape).except(:author_id) }
+        let(:min_valid_params) { attributes_for(:minimal_mixtape ).except(:author_id) }
+        let(  :invalid_params) { attributes_for(:minimal_mixtape ).except(:author_id, :play_list_id) }
 
         context "with max valid params" do
           it "creates a new Mixtape" do
@@ -212,9 +212,9 @@ RSpec.describe Admin::MixtapesController, type: :controller do
       end
 
       context "new work" do
-        let(:max_valid_params) { attributes_for(:complete_review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(:min_valid_params) { attributes_for(         :review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(  :invalid_params) { attributes_for( :invalid_review_with_new_work).except(:author_id).deep_stringify_keys }
+        let(:max_valid_params) { attributes_for(:complete_mixtape_with_new_work).except(:author_id).deep_stringify_keys }
+        let(:min_valid_params) { attributes_for(         :mixtape_with_new_work).except(:author_id).deep_stringify_keys }
+        let(  :invalid_params) { attributes_for( :invalid_mixtape_with_new_work).except(:author_id).deep_stringify_keys }
 
         context "with max valid params" do
           it "creates a new Mixtape" do
@@ -328,8 +328,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
         end
       end
 
-      context "review" do
-        let(:mixtape) { create(:minimal_review) }
+      context "mixtape" do
+        let(:mixtape) { create(:minimal_mixtape) }
 
         it "renders" do
           get :edit, params: { id: mixtape.to_param }
@@ -337,7 +337,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           is_expected.to successfully_render("admin/mixtapes/edit")
           is_expected.to assign(mixtape, :mixtape)
 
-          is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+          is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
         end
       end
     end
@@ -378,8 +378,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           end
         end
 
-        context "review" do
-          let(:mixtape) { create(:minimal_review) }
+        context "mixtape" do
+          let(:mixtape) { create(:minimal_mixtape) }
 
           let(:min_valid_params) { { "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "work_id" => ""                       } }
@@ -406,16 +406,16 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
               is_expected.to assign(mixtape, :mixtape).with_attributes(invalid_params).and_be_invalid
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
             end
           end
         end
 
         describe "replacing work with new work" do
-          let!(:mixtape) { create(:minimal_review) }
+          let!(:mixtape) { create(:minimal_mixtape) }
 
-          let(:min_valid_params) { attributes_for(        :review_with_new_work).except(:author_id).merge(work_id: mixtape.work_id).deep_stringify_keys }
-          let(  :invalid_params) { attributes_for(:invalid_review_with_new_work).except(:author_id).merge(work_id: mixtape.work_id).deep_stringify_keys }
+          let(:min_valid_params) { attributes_for(        :mixtape_with_new_work).except(:author_id).merge(work_id: mixtape.work_id).deep_stringify_keys }
+          let(  :invalid_params) { attributes_for(:invalid_mixtape_with_new_work).except(:author_id).merge(work_id: mixtape.work_id).deep_stringify_keys }
 
           context "with valid params" do
             it "updates the requested mixtape, ignoring work_id in favor of work_attributes" do
@@ -446,7 +446,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
               expect(assigns(:mixtape).work).to be_a_new(Work)
               expect(assigns(:mixtape).work).to be_invalid
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-new-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-new-work")
             end
           end
         end
@@ -556,8 +556,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           end
         end
 
-        context "review" do
-          let(:mixtape) { create(:minimal_review, :draft) }
+        context "mixtape" do
+          let(:mixtape) { create(:minimal_mixtape, :draft) }
 
           let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""               } }
@@ -590,7 +590,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
                 :error, "admin.flash.posts.error.publish"
               )
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes({
                 body:            min_valid_params["body"   ],
@@ -609,7 +609,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
                 :error, "admin.flash.posts.error.publish"
               )
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes(invalid_params).with_errors({
                 body:    :blank_during_publish,
@@ -662,8 +662,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           end
         end
 
-        context "review" do
-          let(:mixtape) { create(:minimal_review, :published) }
+        context "mixtape" do
+          let(:mixtape) { create(:minimal_mixtape, :published) }
 
           let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
@@ -690,7 +690,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
               is_expected.to successfully_render("admin/mixtapes/edit").with_flash(:error, nil)
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes(invalid_params).with_errors({
                 work_id: :blank
@@ -765,8 +765,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           end
         end
 
-        context "review" do
-          let(:mixtape) { create(:minimal_review) }
+        context "mixtape" do
+          let(:mixtape) { create(:minimal_mixtape) }
 
           let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id, publish_on: "01/01/2050" } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""                                                 } }
@@ -799,7 +799,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
                 :error, "admin.flash.posts.error.schedule"
               )
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes({
                 body:            min_valid_params["body"   ],
@@ -818,7 +818,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
                 :error, "admin.flash.posts.error.schedule"
               )
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes(invalid_params).with_errors({
                 body:    :blank_during_publish,
@@ -871,8 +871,8 @@ RSpec.describe Admin::MixtapesController, type: :controller do
           end
         end
 
-        context "review" do
-          let(:mixtape) { create(:minimal_review, :scheduled) }
+        context "mixtape" do
+          let(:mixtape) { create(:minimal_mixtape, :scheduled) }
 
           let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
@@ -899,7 +899,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
               is_expected.to successfully_render("admin/mixtapes/edit").with_flash(:error, nil)
 
-              is_expected.to define_only_the_review_tabs.and_select("mixtape-choose-work")
+              is_expected.to define_only_the_mixtape_tabs.and_select("mixtape-choose-work")
 
               is_expected.to assign(mixtape, :mixtape).with_attributes(invalid_params).with_errors({
                 work_id: :blank

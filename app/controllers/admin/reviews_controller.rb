@@ -151,12 +151,6 @@ private
     @selected_tab = determine_selected_tab
 
     @review.prepare_links
-
-    @review.prepare_work_for_editing(@sanitized_params)
-
-    @creators = Creator.all.alpha
-    @tags     = Tag.for_admin.alpha
-    @works    = Work.grouped_options
   end
 
   def authorize_instance

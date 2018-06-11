@@ -5,8 +5,8 @@ RSpec.describe TvSeason, type: :model do
     # Nothing so far.
   end
 
-  context "concerns" do
-    it_behaves_like "a_work"
+  context "sti" do
+    specify { expect(described_class.superclass).to eq(Work) }
   end
 
   context "class" do

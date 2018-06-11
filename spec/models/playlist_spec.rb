@@ -23,36 +23,32 @@ RSpec.describe Playlist, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!( :first) { create(:complete_playlist, title: "First" ) }
-      let!(:middle) { create(:complete_playlist, title: "Middle") }
-      let!(  :last) { create(:complete_playlist, title: "Last"  ) }
-
-      let(:ids) { [first, middle, last].map(&:id) }
+      let!(     :first) { create(:complete_playlist,                       title: "First" ) }
+      let!(    :middle) { create(:complete_playlist, :with_published_post, title: "Middle") }
+      let!(      :last) { create(:complete_playlist, :with_published_post, title: "Last"  ) }
+      let(        :ids) { [first, middle, last].map(&:id) }
+      let( :collection) { described_class.where(id: ids) }
+      let(:eager_loads) { [:author, :playlistings, :works] }
 
       describe "self#eager" do
-        subject { described_class.eager }
+        subject { collection.eager }
 
-        it { is_expected.to eager_load(:playlistings, :works) }
+        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to match_array(collection.to_a) }
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { collection.for_admin }
 
-        specify "includes all, unsorted" do
-          is_expected.to match_array([first, middle, last])
-        end
-
-        it { is_expected.to eager_load(:playlistings, :works) }
+        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to match_array(collection.to_a) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { collection.for_site }
 
-        specify "includes all, sorted alphabetically" do
-          is_expected.to eq([first, last, middle])
-        end
-
-        it { is_expected.to eager_load(:playlistings, :works) }
+        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to eq([last, middle]) }
       end
     end
   end

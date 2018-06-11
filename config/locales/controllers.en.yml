@@ -12,21 +12,11 @@ en:
     content:
       no_records: "Nothing to see here, folks."
     flash:
-      categories:
-        success:
-          create:  "Category created."
-          destroy: "Category destroyed."
-          update:  "Category updated."
       creators:
         success:
           create:  "Creator created."
           destroy: "Creator destroyed."
           update:  "Creator updated."
-      media:
-        success:
-          create:  "Medium created."
-          destroy: "Medium destroyed."
-          update:  "Medium updated."
       playlists:
         success:
           create:  "Playlist created."

@@ -4,17 +4,7 @@ require "rails_helper"
 
 RSpec.describe Article, type: :model do
   context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
-    it_behaves_like "an_application_record"
-
-    it_behaves_like "a_linkable_model"
-
-    it_behaves_like "a_post"
-
-    it_behaves_like "a_sluggable_model"
-
-    it_behaves_like "a_summarizable_model"
+    specify { expect(described_class.superclass).to eq(Post) }
   end
 
   context "class" do
@@ -22,33 +12,33 @@ RSpec.describe Article, type: :model do
   end
 
   context "scope-related" do
-    context "basics" do
-      let!(     :draft) { create_minimal_instance(:draft    ) }
-      let!( :scheduled) { create_minimal_instance(:scheduled) }
-      let!( :published) { create_minimal_instance(:published) }
-      let!(       :ids) { [draft, scheduled, published].map(&:id) }
-      let!(:collection) { described_class.where(id: ids) }
+    let!(      :draft) { create_minimal_instance(:draft    ) }
+    let!(  :scheduled) { create_minimal_instance(:scheduled) }
+    let!(  :published) { create_minimal_instance(:published) }
+    let!(        :ids) { [draft, scheduled, published].map(&:id) }
+    let!( :collection) { described_class.where(id: ids) }
+    let!(:eager_loads) { [:author, :tags] }
 
+    context "basics" do
       describe "self#eager" do
         subject { collection.eager }
 
-        it { is_expected.to eager_load(:author, :tags) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+        it { is_expected.to eager_load(eager_loads) }
       end
 
       describe "self#for_admin" do
         subject { collection.for_admin }
 
-        it { is_expected.to contain_exactly(draft, scheduled, published) }
-
-        it { is_expected.to eager_load(:author, :tags) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+        it { is_expected.to eager_load(eager_loads) }
       end
 
       describe "self#for_site" do
         subject { collection.for_site }
 
         it { is_expected.to eq [published] }
-
-        it { is_expected.to eager_load(:author, :tags) }
+        it { is_expected.to eager_load(eager_loads) }
       end
     end
   end

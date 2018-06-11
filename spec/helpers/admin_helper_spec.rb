@@ -117,27 +117,6 @@ RSpec.describe AdminHelper, type: :helper do
         end
       end
 
-      context "media" do
-        let(:instance) { create(:minimal_medium) }
-
-        describe "viewable" do
-          before(:each) do
-            allow(instance).to receive(:viewable?            ).and_return(true       )
-            allow(helper  ).to receive(:medium_permalink_path).and_return("permalink")
-          end
-
-          it { is_expected.to eq('<a title="view medium on site" class="admin public-view" href="permalink">public</a>') }
-        end
-
-        describe "non-viewable" do
-          before(:each) do
-            allow(instance).to receive(:viewable?).and_return(false)
-          end
-
-          it { is_expected.to eq(nil) }
-        end
-      end
-
       context "articles" do
         let(:instance) { create(:minimal_article) }
 

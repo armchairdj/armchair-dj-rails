@@ -1,15 +1,5 @@
 <%= content_tag(:section, class: "adj-module") do %>
-  <%= content_tag(:fieldset) do %>
-    <%= f.input :category_id,
-      as:            :select,
-      collection:    categories,
-      required:      false,
-      include_blank: :translate,
-      input_html:    js_selectable_create_category_attrs
-    %>
-
-    <%= f.input :name %>
-  <% end %>
+  <%= f.input :name %>
 <% end %>
 
 <%= render partial: "admin/shared/forms/link_fieldset", locals: {

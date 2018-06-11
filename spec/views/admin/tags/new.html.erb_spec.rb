@@ -10,7 +10,6 @@ RSpec.describe "admin/tags/new", type: :view do
 
     @model_class = assign(:model_name, Tag)
     @tag         = assign(:tag, build(:tag))
-    @categories  = assign(:categories, Category.for_admin.alpha)
   end
 
   it "renders form" do

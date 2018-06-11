@@ -8,7 +8,6 @@ en:
       tv_show: "TV Show"
       video_game: "Video Game"
     attributes:
-      category:
       contribution:
       creator:
       creator/primary:
@@ -22,30 +21,20 @@ en:
         pseudynym_id: "Pseudonym"
       membership:
         pseudynym_id: "Pseudonym"
+      post: &post_attributes
+        published_at: "Publish Date"
+        publish_on: "Publish On"
+        statuses:
+          draft:     "Draft"
+          scheduled: "Scheduled"
+          published: "Published"
+        tag_ids: "Tags"
       article:
-        published_at: "Publish Date"
-        publish_on: "Publish On"
-        statuses:
-          draft:     "Draft"
-          scheduled: "Scheduled"
-          published: "Published"
-        tag_ids: "Tags"
+        <<: *post_attributes
       mixtape:
-        published_at: "Publish Date"
-        publish_on: "Publish On"
-        statuses:
-          draft:     "Draft"
-          scheduled: "Scheduled"
-          published: "Published"
-        tag_ids: "Tags"
+        <<: *post_attributes
       review:
-        published_at: "Publish Date"
-        publish_on: "Publish On"
-        statuses:
-          draft:     "Draft"
-          scheduled: "Scheduled"
-          published: "Published"
-        tag_ids: "Tags"
+        <<: *post_attributes
       milestone:
         actions:
           released:   "Released in"
@@ -57,6 +46,34 @@ en:
           rereleased: "Re-released in"
           recut:      "Re-edited in"
           remixed:    "Remixed in"
+      aspect:
+        characteristics:
+          album_type:         "Type"
+          song_type:          "Type"
+          music_label:        "Label"
+          musical_genre:      "Genre"
+          musical_mood:       "Mood"
+
+          audio_show_format:  "Format"
+          radio_network:      "Network"
+          podcast_network:    "Network"
+
+          narrative_genre:    "Genre"
+          hollywood_studio:   "Studio"
+          tv_network:         "Network"
+
+          publisher:          "Publisher"
+          publication_type:   "Type"
+
+          tech_platform:      "Platform"
+          tech_company:       "Company"
+          device_type:        "Device Type"
+
+          product_type:       "Type"
+          manufacturer:       "Manufacturer"
+
+          game_mechanic:      "Mechanic"
+          game_studio:        "Studio"
       user:
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
@@ -101,12 +118,6 @@ en:
             pseudonym_id:
               not_secondary: "Primary creators cannot be pseudonyms."
               taken: "This pseudonym is already taken."
-        medium:
-          attributes:
-            roles:
-              missing: "Please create at least one role."
-            slug:
-              locked: "You cannot change the slug on a medium with published articles."
         membership:
           attributes:
             group_id:
@@ -137,8 +148,6 @@ en:
               locked: "You cannot change the slug on a published article."
             publish_on:
               blank: "Please choose a publication date to schedule this article."
-            tag_ids:
-              has_categorized_tags: "Article tags cannot be categorized."
         mixtape:
           attributes:
             author:
@@ -152,8 +161,6 @@ en:
               locked: "You cannot change the slug on a published mixtape."
             publish_on:
               blank: "Please choose a publication date to schedule this mixtape."
-            tag_ids:
-              has_categorized_tags: "Mixtape tags cannot be categorized."
         review:
           attributes:
             author:
@@ -167,8 +174,6 @@ en:
               locked: "You cannot change the slug on a published review."
             publish_on:
               blank: "Please choose a publication date to schedule this review."
-            tag_ids:
-              has_categorized_tags: "Review tags cannot be categorized."
         tag:
           attributes:
             slug:
@@ -181,8 +186,6 @@ en:
               too_short: "Please choose at least one creator."
             slug:
               locked: "You cannot change the slug on a work with published articles."
-            tag_ids:
-              has_uncategorized_tags: "Work tags must be categorized."
         user:
           attributes:
             base:

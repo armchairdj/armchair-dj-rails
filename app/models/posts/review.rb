@@ -10,7 +10,7 @@ class Review < Post
   # SCOPES.
   #############################################################################
 
-  scope :eager, -> { includes(:author, :tags, :work, :medium, :creators).references(:medium) }
+  scope :eager, -> { includes(:author, :tags, :work, :creators).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -18,19 +18,13 @@ class Review < Post
 
   belongs_to :work
 
-  has_one :medium,         through: :work
-  has_many :creators,      through: :work
-  has_many :contributors,  through: :work
-  has_many :aspects,       through: :work
+  has_many :creators,     through: :work
+  has_many :contributors, through: :work
+  has_many :aspects,      through: :work
 
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
-
-  accepts_nested_attributes_for :work, allow_destroy: false,
-    reject_if: proc { |attrs| attrs["title"].blank? }
-
-  attr_accessor :current_work_id
 
   #############################################################################
   # VALIDATIONS.
@@ -55,7 +49,7 @@ class Review < Post
   #############################################################################
 
   def type(plural: false)
-    base = "#{work.medium.name} Review"
+    base = [work.try(:model_name).try(:human), "Review"].join(" ")
 
     plural ? base.pluralize : base
   end
@@ -63,17 +57,6 @@ class Review < Post
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def prepare_work_for_editing(params = nil)
-    if current_work_id = params.try(:[], "work_id") || work_id
-      self.current_work_id = current_work_id.to_i
-      self.work_id         = nil
-    end
-
-    build_work unless self.work.present?
-
-    work.prepare_credits
-  end
 
   def alpha_parts
     work.try(:alpha_parts) || []

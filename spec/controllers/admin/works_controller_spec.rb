@@ -32,13 +32,13 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #new" do
-      it "renders only the media dropdown" do
+      it "renders only the type dropdown" do
         get :new
 
         is_expected.to successfully_render("admin/works/new")
         expect(assigns(:work)).to be_a_new(Work)
 
-        is_expected.to prepare_only_the_media_dropdown
+        is_expected.to prepare_only_the_type_dropdown
       end
     end
 

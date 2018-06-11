@@ -9,7 +9,6 @@ RSpec.describe "admin/tags/edit", type: :view do
     end
 
     @model_class = assign(:model_name, Tag)
-    @categories  = assign(:categories, Category.for_admin.alpha)
   end
 
   context "with work" do

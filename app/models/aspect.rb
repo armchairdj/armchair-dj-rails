@@ -18,7 +18,7 @@ class Aspect < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:works, :creators, :contributors, :reviews, :mixtapes) }
+  scope     :eager, -> { includes(:works, :creators, :contributors, :playlists, :mixtapes, :reviews) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.viewable.alpha }
 
@@ -31,8 +31,9 @@ class Aspect < ApplicationRecord
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :reviews,  through: :works
-  has_many :mixtapes, through: :works
+  has_many :playlists, through: :works
+  has_many :mixtapes,  through: :works
+  has_many :reviews,   through: :works
 
   #############################################################################
   # ATTRIBUTES.
@@ -43,6 +44,7 @@ class Aspect < ApplicationRecord
     song_type:            1,
     music_label:          2,
     musical_genre:        3,
+    musical_mood:         4,
 
     audio_show_format:  100,
     radio_network:      101,
@@ -86,14 +88,14 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   def display_name(connector: ": ")
-    [characteristic, name].compact.join(connector)
+    [human_characteristic, name].compact.join(connector)
   end
 
   def sluggable_parts
-    [characteristic, name]
+    [human_characteristic, name]
   end
 
   def alpha_parts
-    [characteristic, name]
+    [human_characteristic, name]
   end
 end

@@ -5,10 +5,8 @@ require "ffaker"
 FactoryBot.define do
 
   sequence :aspect_name    { |n| "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-  sequence :category_name  { |n| "Category #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
   sequence :creator_name   { |n| FFaker::Music.artist }
   sequence :link_url       { |n| "http://www.example.com/articles/#{n}" }
-  sequence :medium_name    { |n| "Medium #{n}" }
   sequence :role_name      { |n| "Role #{n}" }
   sequence :tag_name       { |n| "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
   sequence :user_email     { |n| "user#{n}@example.com" }
@@ -21,10 +19,6 @@ FactoryBot.define do
 
   trait :with_title do
     title { FFaker::HipsterIpsum.phrase.titleize }
-  end
-
-  trait :with_body do
-    body "Give me body!"
   end
 
   trait :with_summary do
