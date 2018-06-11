@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require "ffaker"
+
 FactoryBot.define do
 
   sequence :aspect_name    { |n| "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
   sequence :category_name  { |n| "Category #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
+  sequence :creator_name   { |n| FFaker::Music.artist }
   sequence :link_url       { |n| "http://www.example.com/articles/#{n}" }
   sequence :medium_name    { |n| "Medium #{n}" }
   sequence :role_name      { |n| "Role #{n}" }
@@ -59,18 +62,10 @@ FactoryBot.define do
 
   trait :with_existing_work do
     transient do
-      work_title { FFaker::Music.song }
+      title_for_work { FFaker::Music.song }
     end
 
-    work_id { create(:minimal_song, title: work_title).id }
-  end
-
-  trait :with_existing_category do
-    transient do
-      name_for_category { generate(:category_name) }
-    end
-
-    category_id { create(:minimal_category, name: name_for_category).id }
+    work_id { create(:minimal_song, title: title_for_work).id }
   end
 
   trait :with_tags do

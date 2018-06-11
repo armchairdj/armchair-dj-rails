@@ -5,6 +5,10 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
+    trait :with_characteristic do
+      characteristic :song_type
+    end
+
     trait :with_name do
       name { generate(:aspect_name) }
     end
@@ -58,7 +62,7 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_aspect do
-      with_existing_category
+      with_characteristic
       with_name
     end
 

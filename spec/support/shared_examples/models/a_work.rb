@@ -26,34 +26,35 @@ RSpec.shared_examples "a_work" do
   end
 
   context "scope-related" do
-    pending "self#grouped_options" do
-    end
+    let(      :draft) { create_minimal_instance(                      title: "D", name_for_creator: "Kate Bush") }
+    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", name_for_creator: "Prince") }
+    let(:published_2) { create_minimal_instance(:with_published_post, title: "A", name_for_creator: "David Bowie") }
+
+    let(        :ids) { [draft, published_1, published_2].map(&:id) }
+    let( :collection) { described_class.where(id: ids) }
 
     describe "self#eager" do
-      subject { described_class.eager }
+      subject { collection.eager }
 
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to contain_exactly(draft, published_1, published_2) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
     end
 
     describe "self#for_admin" do
-      subject { described_class.for_admin }
+      subject { collection.for_admin }
 
-      it "contains everything, unsorted" do
-        is_expected.to contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
-      end
-
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to contain_exactly(draft, published_1, published_2) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
     end
 
     describe "self#for_site" do
-      subject { described_class.for_site }
+      subject { collection.for_site }
 
-      it "contains only works with published reviews, alphabetically" do
-        is_expected.to eq([la_bouche, robyn_s])
-      end
-
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
+      it { is_expected.to eq([published_2, published_1]) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
     end
+
+    pending "self#grouped_options"
   end
 
   context "associations" do
@@ -216,8 +217,8 @@ RSpec.shared_examples "a_work" do
 
         describe "contributions" do
           let(   :creator) { create(:minimal_creator) }
-          let( :dupe_role) { create(:minimal_role, medium_id: subject.medium.id) }
-          let(:other_role) { create(:minimal_role, medium_id: subject.medium.id) }
+          let( :dupe_role) { create(:minimal_role, work_type: described_class.model_name.human) }
+          let(:other_role) { create(:minimal_role, work_type: described_class.model_name.human) }
 
           let(:good_attributes) { {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id:  dupe_role.id),
@@ -319,71 +320,24 @@ RSpec.shared_examples "a_work" do
       end
     end
 
-    describe "#grouped_parent_dropdown_options" do
-      describe "groups works by type, excludes unavailable parents, and alphabetizes optgroups and options" do
-        let(:creator) { create(:minimal_creator) }
-
-        let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
-        let!(     :parent_medium) { create(:minimal_medium, name: "Dad"    ) }
-        let!(      :child_medium) { create(:minimal_medium, name: "Son"    ) }
-
-        let!(    :unsaved) {  build_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium                                 ) }
-        let!(:grandparent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium: grandparent_medium, title: "G"                     ) }
-        let!(      :uncle) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "U", parent: grandparent) }
-        let!(     :parent) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:      parent_medium, title: "P", parent: grandparent) }
-        let!(    :sibling) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "S", parent:      parent) }
-        let!(      :child) { create_minimal_instance(credits_attributes: { "0" => { creator_id: creator.id } }, medium:       child_medium, title: "C", parent:      parent) }
-
-        specify { expect(grandparent.grouped_parent_dropdown_options).to eq([]) }
-
-        specify { expect(unsaved.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle ] ],
-          [ "Grandpa", [grandparent   ] ],
-          [ "Son",     [child, sibling] ]
-        ]) }
-
-        specify { expect(uncle.grouped_parent_dropdown_options).to eq([
-          [ "Dad",      [parent        ] ],
-          [ "Grandpa",  [grandparent   ] ],
-          [ "Son",      [child, sibling] ]
-        ]) }
-
-        specify { expect(parent.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [uncle      ] ],
-          [ "Grandpa", [grandparent] ]
-        ]) }
-
-        specify { expect(sibling.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle] ],
-          [ "Grandpa", [grandparent  ] ],
-          [ "Son",     [child        ] ]
-        ]) }
-
-        specify { expect(child.grouped_parent_dropdown_options).to eq([
-          [ "Dad",     [parent, uncle] ],
-          [ "Grandpa", [grandparent  ] ],
-          [ "Son",     [sibling      ] ]
-        ]) }
-      end
-    end
-
+    pending "#grouped_parent_dropdown_options"
+ 
     describe "#cascade_viewable" do
       let(    :creator_1) { create(:minimal_creator) }
       let(    :creator_2) { create(:minimal_creator) }
       let(:contributor_1) { create(:minimal_creator) }
       let(:contributor_2) { create(:minimal_creator) }
-      let(       :aspect) { create(:minimal_aspect) }
-      let(       :medium) { create(:minimal_medium) }
+      let(       :aspect) { create(:minimal_aspect, characteristic: described_class.characteristics.first) }
 
       let(:work) do
-        create(:minimal_song, medium_id: medium.id, aspect_ids: [category_aspect.id],
+        create_minimal_instance(aspect_ids: [aspect.id],
           credits_attributes: {
             "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
           },
           contributions_attributes: {
-            "0" => attributes_for(:minimal_contribution, creator_id: contributor_1.id),
-            "1" => attributes_for(:minimal_contribution, creator_id: contributor_2.id),
+            "0" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: described_class.model_name.name), creator_id: contributor_1.id),
+            "1" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: described_class.model_name.name), creator_id: contributor_2.id),
           }
         )
       end

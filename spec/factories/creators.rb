@@ -191,6 +191,10 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
+    factory :minimal_creator do
+      name { generate(:creator_name) }
+    end
+
     factory :primary_creator, parent: :minimal_creator do
       primary
     end
@@ -205,10 +209,6 @@ FactoryBot.define do
 
     factory :collective_creator, parent: :minimal_creator do
       collective
-    end
-
-    factory :minimal_creator do
-      name { FFaker::Music.artist }
     end
 
     ###########################################################################

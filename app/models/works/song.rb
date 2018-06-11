@@ -16,6 +16,10 @@ class Song < Work
     [:song_type, :musical_genre, :music_label]
   end
 
+  def self.available_parent_types
+    super + [Album]
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################

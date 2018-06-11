@@ -22,8 +22,12 @@ FactoryBot.define do
     end
 
     trait :with_one_credit do
+      transient do
+        name_for_creator { generate(:creator_name) }
+      end
+
       credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id)
+        "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: name_for_creator).id)
       } }
     end
 

@@ -25,14 +25,22 @@ class Work < ApplicationRecord
   end
 
   def self.available_roles
-    Role.where(work_type: self.model_name.human)
+    Role.where(work_type: self.model_name.name)
+  end
+
+  def self.available_parents
+    self.superclass.where(type: available_parent_types.map{ |x| x.model_name.name })
+  end
+
+  def self.available_parent_types
+    [self]
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :reviews, :playlists).references(:medium) }
+  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes).references(:medium) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.viewable.alpha }
 
@@ -42,7 +50,7 @@ class Work < ApplicationRecord
 
   has_many :milestones
 
-  has_many :aspects
+  has_and_belongs_to_many :aspects
 
   has_many :credits,       inverse_of: :work, dependent: :destroy
   has_many :contributions, inverse_of: :work, dependent: :destroy
@@ -131,8 +139,8 @@ class Work < ApplicationRecord
   end
 
   def grouped_parent_dropdown_options
-    # TODO FIX THIS
-    scope     = self.class.all
+    # TODO FIX ORDERING
+    scope     = self.class.available_parents
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
     ungrouped.group_by(&:type).to_a.sort_by(&:first)
