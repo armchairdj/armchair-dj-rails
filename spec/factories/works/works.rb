@@ -10,7 +10,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_title do
-      title { FFaker::Music.work }
+      title { FFaker::Music.song }
     end
 
     trait :with_subtitle do

@@ -5,9 +5,9 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory  :minimal_song, parent: :minimal_work do; end
-    factory :complete_song, parent: :minimal_work do; end
-    factory  :stuffed_song, parent: :minimal_work do; end
+    factory  :minimal_song, class: "Song", parent: :minimal_work do; end
+    factory :complete_song, class: "Song", parent: :minimal_work do; end
+    factory  :stuffed_song, class: "Song", parent: :minimal_work do; end
 
     ###########################################################################
     # SPECIFIC FACTORIES.

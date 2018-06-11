@@ -66,14 +66,6 @@ module JsHelper
     )
   end
 
-  def js_sortable_facets_attrs(medium)
-    js_attrs("sortable",
-      class: "numbered sortable",
-      param: "facet_ids",
-      url:   reorder_facets_admin_medium_path(medium)
-    )
-  end
-
   def js_sortable_playlistings_attrs(playlist)
     js_attrs("sortable",
       class: "numbered sortable",

@@ -5,6 +5,10 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
+    factory  :minimal_album, class: "Album", parent: :minimal_work do; end
+    factory :complete_album, class: "Album", parent: :minimal_work do; end
+    factory  :stuffed_album, class: "Album", parent: :minimal_work do; end
+
     ###########################################################################
     # SPECIFIC FACTORIES.
     ###########################################################################

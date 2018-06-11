@@ -24,12 +24,6 @@ class TvSeason < Work
   # ASSOCIATIONS.
   #############################################################################
 
-  tv_season_facets = [
-    FactoryBot.create(:facet, medium: tv_season, category: narrative_genre),
-    FactoryBot.create(:facet, medium: tv_season, category: hollywood_studio),
-    FactoryBot.create(:facet, medium: tv_season, category: tv_network),
-  ]
-
   #############################################################################
   # ATTRIBUTES.
   #############################################################################

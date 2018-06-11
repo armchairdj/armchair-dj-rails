@@ -75,7 +75,6 @@ en:
       contribution:
       creator:
       credit:
-      facet:
       identity:
       membership:
       mixtape:
@@ -94,8 +93,6 @@ en:
       creator:
       credit:
         creator_id: "Please choose"
-      facet:
-        category_id: "Please choose"
       identity:
         pseudonym_id: "Please choose"
         real_name_id: "Please choose"
@@ -118,7 +115,6 @@ en:
       contribution:
       creator:
       credit:
-      facet:
       identity:
       membership:
       mixtape:

@@ -21,7 +21,6 @@ class Mixtape < Post
   has_many :playlistings, through: :playlist
   has_many :works,        through: :playlistings
 
-  has_many :media,         through: :works
   has_many :creators,      through: :works
   has_many :contributors,  through: :works
   has_many :aspects,       through: :works

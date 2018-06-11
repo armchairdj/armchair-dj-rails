@@ -372,10 +372,8 @@ RSpec.shared_examples "a_work" do
       let(    :creator_2) { create(:minimal_creator) }
       let(:contributor_1) { create(:minimal_creator) }
       let(:contributor_2) { create(:minimal_creator) }
-      let(     :category) { create(:minimal_category) }
-      let( :category_aspect) { create(:minimal_aspect, category_id: category.id) }
+      let(       :aspect) { create(:minimal_aspect) }
       let(       :medium) { create(:minimal_medium) }
-      let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
 
       let(:work) do
         create(:minimal_song, medium_id: medium.id, aspect_ids: [category_aspect.id],
@@ -396,8 +394,7 @@ RSpec.shared_examples "a_work" do
         review.publish!
 
         expect(         work.reload.viewable?).to eq(true)
-        expect(       medium.reload.viewable?).to eq(true)
-        expect( category_aspect.reload.viewable?).to eq(true)
+        expect(       aspect.reload.viewable?).to eq(true)
         expect(    creator_1.reload.viewable?).to eq(true)
         expect(    creator_1.reload.viewable?).to eq(true)
         expect(contributor_1.reload.viewable?).to eq(true)

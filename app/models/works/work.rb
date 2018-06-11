@@ -42,6 +42,8 @@ class Work < ApplicationRecord
 
   has_many :milestones
 
+  has_many :aspects
+
   has_many :credits,       inverse_of: :work, dependent: :destroy
   has_many :contributions, inverse_of: :work, dependent: :destroy
 

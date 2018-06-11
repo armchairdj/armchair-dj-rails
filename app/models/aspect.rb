@@ -18,15 +18,13 @@ class Aspect < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:category, :works, :creators, :contributors, :reviews, :mixtapes).references(:category) }
+  scope     :eager, -> { includes(:works, :creators, :contributors, :reviews, :mixtapes) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
-
-  belongs_to :category
 
   has_and_belongs_to_many :works
 
@@ -73,10 +71,10 @@ class Aspect < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :category, presence: true
+  validates :characteristic, presence: true
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: [:category_id] }
+  validates :name, uniqueness: { scope: [:characteristic] }
 
   #############################################################################
   # HOOKS.
@@ -87,14 +85,14 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   def display_name(connector: ": ")
-    [category.name, name].compact.join(connector)
+    [characteristic, name].compact.join(connector)
   end
 
   def sluggable_parts
-    [category.name, name]
+    [characteristic, name]
   end
 
   def alpha_parts
-    [category.name, name]
+    [characteristic, name]
   end
 end

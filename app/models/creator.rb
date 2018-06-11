@@ -62,8 +62,6 @@ class Creator < ApplicationRecord
   has_many :credits, inverse_of: :creator, dependent: :destroy
   has_many :works, through: :credits
   has_many :reviews, through: :works
-  has_many :media, -> { distinct }, through: :works, source: :medium
-
 
   # Contributions.
 
@@ -71,7 +69,6 @@ class Creator < ApplicationRecord
 
   has_many :contributed_works,   through: :contributions,     class_name: "Work",   source: :work
   has_many :contributed_reviews, through: :contributed_works, class_name: "Review", source: :reviews
-  has_many :contributed_media,   through: :contributed_works, class_name: "Medium", source: :medium
 
   has_many :contributed_roles, -> {
     includes(contributions: { work: :medium })
@@ -268,6 +265,8 @@ class Creator < ApplicationRecord
   #############################################################################
 
   def display_roles(for_site: false)
+    
+
     displayable_media = for_site ? self.media.for_site             : self.media
     displayable_roles = for_site ? self.viewable_contributed_roles : self.contributed_roles
 

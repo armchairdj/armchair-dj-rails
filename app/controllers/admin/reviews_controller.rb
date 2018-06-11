@@ -158,7 +158,6 @@ private
     @review.prepare_work_for_editing(@sanitized_params)
 
     @creators = Creator.all.alpha
-    @media    = Medium.all.alpha
     @tags     = Tag.for_admin.alpha
     @works    = Work.grouped_options
   end

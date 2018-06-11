@@ -64,7 +64,6 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :articles,   concerns: :paginatable
-    resources :categories, concerns: :paginatable
     resources :creators,   concerns: :paginatable
     resources :mixtapes,   concerns: :paginatable
     resources :reviews,    concerns: :paginatable
@@ -76,12 +75,6 @@ Rails.application.routes.draw do
     resources :playlists, concerns: :paginatable do
       member do
         post :reorder_playlistings
-      end
-    end
-
-    resources :media, concerns: :paginatable do
-      member do
-        post :reorder_facets
       end
     end
   end
