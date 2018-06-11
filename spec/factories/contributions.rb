@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :with_work do
-      association :work, factory: :minimal_work
+      association :work, factory: :minimal_song
     end
 
     trait :with_creator do

@@ -57,7 +57,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |medium|
-        create(:minimal_review, :draft, work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :draft, work_attributes: attributes_for(:minimal_song, medium: medium))
 
         medium.reload
       end
@@ -65,7 +65,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |medium|
-        create(:minimal_review, :scheduled, work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :scheduled, work_attributes: attributes_for(:minimal_song, medium: medium))
 
         medium.reload
       end
@@ -73,7 +73,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |medium|
-        create(:minimal_review, :published, work_attributes: attributes_for(:minimal_work, medium: medium))
+        create(:minimal_review, :published, work_attributes: attributes_for(:minimal_song, medium: medium))
 
         medium.reload
       end
@@ -104,18 +104,6 @@ FactoryBot.define do
       with_summary
       with_roles
       with_aspects
-    end
-
-    factory :album_medium, parent: :minimal_medium do
-      name "Album"
-    end
-
-    factory :song_medium, parent: :minimal_medium do
-      name "Song"
-    end
-
-    factory :book_medium, parent: :minimal_medium do
-      name "Book"
     end
   end
 end

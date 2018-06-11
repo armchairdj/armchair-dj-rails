@@ -121,7 +121,7 @@ RSpec.describe Review, type: :model do
         subject { create(:minimal_review) }
 
         let!(      :work_id) { subject.work_id }
-        let!(:other_work_id) { create(:minimal_work).id }
+        let!(:other_work_id) { create(:minimal_song).id }
 
         describe "clean" do
           it "moves current_work_id to saved work_id and sets up work_attributes" do
@@ -232,7 +232,7 @@ RSpec.describe Review, type: :model do
         subject { build(:minimal_review) }
 
         let!(      :work_id) { subject.work_id }
-        let!(:other_work_id) { create(:minimal_work).id }
+        let!(:other_work_id) { create(:minimal_song).id }
 
         describe "clean" do
           it "moves current_work_id to saved work_id and sets up work_attributes" do

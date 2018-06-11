@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Work, type: :model do
+RSpec.shared_examples "a_work" do
   context "concerns" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -26,37 +26,13 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    let( :song_medium) { create(:minimal_medium, name: "Song" ) }
-    let(:album_medium) { create(:minimal_medium, name: "Album") }
-
-    let!(  :culture_beat) { create(:culture_beat_mr_vain,   medium: song_medium) }
-    let!(       :robyn_s) { create(:robyn_s_give_me_love,   medium: album_medium) }
-    let!(:ce_ce_peniston) { create(:ce_ce_peniston_finally, medium: song_medium) }
-    let!(     :la_bouche) { create(:la_bouche_be_my_lover,  medium: album_medium) }
-    let!(     :black_box) { create(:black_box_strike_it_up, medium: song_medium) }
-
-    before(:each) do
-      create(:minimal_review, :published, work: robyn_s     )
-      create(:minimal_review, :published, work: la_bouche   )
-      create(:minimal_review, :draft,     work: culture_beat)
-      create(:minimal_review, :draft,     work: black_box   )
-    end
-
-    describe "self#grouped_options" do
-      subject { described_class.grouped_options }
-
-      specify "gives an array of optgroups and options" do
-        is_expected.to eq([
-          ["Album", [la_bouche, robyn_s                     ]],
-          ["Song",  [black_box, ce_ce_peniston, culture_beat]]
-        ])
-      end
+    pending "self#grouped_options" do
     end
 
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
     end
 
     describe "self#for_admin" do
@@ -66,7 +42,7 @@ RSpec.describe Work, type: :model do
         is_expected.to contain_exactly(robyn_s, culture_beat, ce_ce_peniston, la_bouche, black_box)
       end
 
-      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
     end
 
     describe "self#for_site" do
@@ -76,22 +52,20 @@ RSpec.describe Work, type: :model do
         is_expected.to eq([la_bouche, robyn_s])
       end
 
-      it { is_expected.to eager_load(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects) }
+      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :reviews) }
     end
   end
 
   context "associations" do
+    it { is_expected.to have_many(:milestones) }
+
+    it { is_expected.to have_and_belong_to_many(:aspects) }
+
     it { is_expected.to have_many(:credits) }
     it { is_expected.to have_many(:contributions) }
 
     it { is_expected.to have_many(:creators    ).through(:credits) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
-
-    it { is_expected.to belong_to(:medium) }
-    it { is_expected.to have_many(:facets).through(:medium) }
-    it { is_expected.to have_many(:categories).through(:facets) }
-
-    it { is_expected.to have_and_belong_to_many(:aspects) }
 
     it { is_expected.to have_many(:reviews) }
 
@@ -107,7 +81,7 @@ RSpec.describe Work, type: :model do
 
         describe "reject_if" do
           it "rejects credits without a creator_id" do
-            instance = build(:minimal_work, credits_attributes: {
+            instance = build_minimal_instance(credits_attributes: {
               "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
               "1" => attributes_for(:credit, creator_id: nil                        )
             })
@@ -150,7 +124,7 @@ RSpec.describe Work, type: :model do
 
         describe "reject_if" do
           subject do
-            build(:minimal_work, contributions_attributes: {
+            build(:minimal_song, contributions_attributes: {
               "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator).id),
               "1" => attributes_for(:contribution, :with_role, creator_id: nil                        )
             })
@@ -189,11 +163,10 @@ RSpec.describe Work, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:medium) }
     it { is_expected.to validate_presence_of(:title ) }
 
     describe "is_expected.to validate_length_of(:credits).is_at_least(1)" do
-      subject { build(:minimal_work) }
+      subject { build(:minimal_song) }
 
       specify "valid" do
         is_expected.to be_valid
@@ -275,236 +248,12 @@ RSpec.describe Work, type: :model do
   end
 
   context "hooks" do
-    context "before_save" do
-      context "calls #define_aspect_methods" do
-        before(:each) do
-           allow_any_instance_of(described_class).to receive(:define_aspect_methods)
-          expect_any_instance_of(described_class).to receive(:define_aspect_methods)
-        end
-
-        specify { build_minimal_instance }
-      end
-    end
-
-    context "#define_aspect_methods" do
-      let!( :genre) { create(:minimal_category, name: "Musical Genre") }
-      let!(  :mood) { create(:minimal_category, name: "Musical Mood" ) }
-      let!(:medium) do
-        create(:minimal_medium, facets_attributes: {
-          "0" => { category_id:  genre.id },
-          "1" => { category_id:  mood.id },
-        })
-      end
-
-      subject { create(:minimal_work, medium: medium).reload }
-
-      describe "self#permitted_aspect_param" do
-        specify { expect(described_class.permitted_aspect_param(genre)).to eq(:musical_genre_aspect_ids) }
-        specify { expect(described_class.permitted_aspect_param(mood )).to eq(:musical_mood_aspect_ids ) }
-      end
-
-      describe "#self.aspect_param" do
-        specify { expect(described_class.aspect_param(genre)).to eq("musical_genre") }
-        specify { expect(described_class.aspect_param(mood )).to eq("musical_mood" ) }
-      end
-
-      specify "#permitted_aspect_params" do
-        expect(subject.permitted_aspect_params).to eq({
-          musical_genre_aspect_ids: [],
-          musical_mood_aspect_ids:  []
-        })
-      end
-
-      describe "defines" do
-        context "getters" do
-          it { is_expected.to respond_to(:musical_genre_aspects) }
-          it { is_expected.to respond_to(:musical_mood_aspects ) }
-        end
-
-        context "setters" do
-          it { is_expected.to respond_to(:musical_genre_aspect_ids=) }
-          it { is_expected.to respond_to(:musical_mood_aspect_ids= ) }
-        end
-      end
-
-      context "behavior" do
-        let!( :trip_hop) { create(:aspect, category: genre, name: "Trip-Hop" ) }
-        let!(:downtempo) { create(:aspect, category: genre, name: "Downtempo") }
-        let!( :sinister) { create(:aspect, category: mood,  name: "Sinister" ) }
-        let!(:uplifting) { create(:aspect, category: mood,  name: "Uplifting") }
-
-        subject do
-          create(:minimal_work, medium: medium, aspect_ids: [trip_hop.id, sinister.id]).reload
-        end
-
-        context "getters" do
-          describe "retrieve scoped aspects" do
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([sinister, trip_hop])
-            end
-
-            specify "scoped aspects methods" do
-              expect(subject.musical_genre_aspects).to match_array([trip_hop])
-              expect(subject.musical_mood_aspects ).to match_array([sinister])
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [genre, [trip_hop]],
-                [mood,  [sinister]]
-              ])
-            end
-          end
-        end
-
-        context "setters" do
-          describe "blanks out aspects" do
-            before(:each) do
-              subject.musical_genre_aspect_ids = []
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([sinister])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([sinister]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [mood, [sinister]]
-              ])
-            end
-          end
-
-          describe "overwrites aspects for one facet" do
-            before(:each) do
-              subject.musical_genre_aspect_ids = [downtempo.id]
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([sinister, downtempo])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([downtempo]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([sinister]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [genre, [downtempo]],
-                [mood,  [sinister]]
-              ])
-            end
-          end
-
-          describe "overwrites aspects for multiple facets without overwriting all" do
-            before(:each) do
-              subject.musical_genre_aspect_ids = [downtempo.id]
-              subject.musical_mood_aspect_ids  = [uplifting.id]
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([uplifting, downtempo])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([downtempo]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([uplifting]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [genre, [downtempo]],
-                [mood,  [uplifting]]
-              ])
-            end
-          end
-
-          describe "adds aspects without duplication" do
-            before(:each) do
-              subject.musical_genre_aspect_ids = [trip_hop.id, downtempo.id]
-              subject.musical_mood_aspect_ids  = [sinister.id, uplifting.id]
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([sinister, uplifting, downtempo, trip_hop])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([downtempo, trip_hop]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([sinister, uplifting]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [genre, [downtempo, trip_hop]],
-                [mood,  [sinister, uplifting]]
-              ])
-            end
-          end
-
-          describe "works via update" do
-            before(:each) do
-              subject.update(
-                "musical_genre_aspect_ids" => ["#{trip_hop.id}", "#{downtempo.id}"],
-                "musical_mood_aspect_ids" =>  ["#{sinister.id}", "#{uplifting.id}"]
-              )
-
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([sinister, uplifting, downtempo, trip_hop])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([downtempo, trip_hop]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([sinister, uplifting]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [genre, [downtempo, trip_hop]],
-                [mood,  [sinister, uplifting]]
-              ])
-            end
-          end
-
-          describe "gets all messed up if non-scoped setter is used" do
-            before(:each) do
-              subject.aspect_ids = [uplifting.id]
-              subject.reload
-            end
-
-            specify "#aspects" do
-              expect(subject.aspects).to match_array([uplifting])
-            end
-
-            context "scoped aspect methods" do
-              it { expect(subject.musical_genre_aspects).to match_array([]) }
-              it { expect(subject.musical_mood_aspects ).to match_array([uplifting]) }
-            end
-
-            specify "#aspects_by_category" do
-              expect(subject.aspects_by_category).to eq([
-                [mood,  [uplifting]]
-              ])
-            end
-          end
-        end
-      end
-    end
+    # Nothing so far.
   end
 
   context "instance" do
+    let(:instance) { create_minimal_instance }
+
     describe "#display_title" do
       it "displays with just title" do
         expect(create(:kate_bush_hounds_of_love).display_title).to eq(
@@ -542,7 +291,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#credited_artists" do
-      let(:invalid) {  build(:work, :with_existing_medium, :with_title  ) }
+      let(:invalid) {  build(:work, :with_title                ) }
       let(:unsaved) {  build(:kate_bush_hounds_of_love         ) }
       let(  :saved) { create(:kate_bush_hounds_of_love         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
@@ -571,7 +320,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#grouped_parent_dropdown_options" do
-      describe "groups works by genre, excludes unavailable parents, and alphabetizes optgroups and options" do
+      describe "groups works by type, excludes unavailable parents, and alphabetizes optgroups and options" do
         let(:creator) { create(:minimal_creator) }
 
         let!(:grandparent_medium) { create(:minimal_medium, name: "Grandpa") }
@@ -629,7 +378,7 @@ RSpec.describe Work, type: :model do
       let(        :facet) { create(:facet, category_id: category.id, medium_id: medium.id) }
 
       let(:work) do
-        create(:minimal_work, medium_id: medium.id, aspect_ids: [category_aspect.id],
+        create(:minimal_song, medium_id: medium.id, aspect_ids: [category_aspect.id],
           credits_attributes: {
             "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
@@ -662,7 +411,7 @@ RSpec.describe Work, type: :model do
       let(:creator_3) { create(:minimal_creator, name: "Three") }
 
       let(:instance) do
-        create(:minimal_work, credits_attributes: {
+        create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
           "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
         }, contributions_attributes: {
@@ -686,24 +435,20 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#sluggable_parts" do
-      let(:instance) do
-        create(:complete_work,
-          title: "Title",
-          subtitle: "Subtitle",
-          medium_id: create(:song_medium).id,
-          credits_attributes: {
-            "0" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "First").id),
-            "1" => attributes_for(:credit, creator_id: create(:minimal_creator, name: "Last").id)
-          } )
-      end
+      let(:instance) { create_complete_instance }
 
       subject { instance.sluggable_parts }
 
-      it { is_expected.to eq(["Songs", "First and Last", "Title", "Subtitle"]) }
+      it { is_expected.to eq([
+        instance.model_name.human,
+        instance.credited_artists(connector: " and "),
+        instance.title,
+        instance.subtitle
+      ]) }
     end
 
     describe "#alpha_parts" do
-      let(:instance) { create(:complete_work) }
+      let(:instance) { create_complete_instance }
 
       subject { instance.alpha_parts }
 

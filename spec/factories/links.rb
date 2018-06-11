@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     trait :with_work do
-      association :linkable, factory: :minimal_work
+      association :linkable, factory: :minimal_song
     end
 
     ###########################################################################

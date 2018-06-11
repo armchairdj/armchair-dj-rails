@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_10_002538) do
+ActiveRecord::Schema.define(version: 2018_06_11_000740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,11 +22,11 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.boolean "viewable", default: false, null: false
-    t.bigint "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "characteristic", null: false
     t.index ["alpha"], name: "index_aspects_on_alpha"
-    t.index ["category_id"], name: "index_aspects_on_category_id"
+    t.index ["characteristic"], name: "index_aspects_on_characteristic"
     t.index ["slug"], name: "index_aspects_on_slug", unique: true
   end
 
@@ -35,15 +35,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.bigint "aspect_id", null: false
     t.index ["aspect_id", "work_id"], name: "index_aspects_works_on_aspect_id_and_work_id"
     t.index ["work_id", "aspect_id"], name: "index_aspects_works_on_work_id_and_aspect_id"
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "alpha"
-    t.boolean "allow_multiple", default: true, null: false
-    t.index ["alpha"], name: "index_categories_on_alpha"
   end
 
   create_table "contributions", force: :cascade do |t|
@@ -87,16 +78,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.index ["work_id"], name: "index_credits_on_work_id"
   end
 
-  create_table "facets", force: :cascade do |t|
-    t.bigint "medium_id"
-    t.bigint "category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "position"
-    t.index ["category_id"], name: "index_facets_on_category_id"
-    t.index ["medium_id"], name: "index_facets_on_medium_id"
-  end
-
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -126,19 +107,6 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
-  end
-
-  create_table "media", force: :cascade do |t|
-    t.string "name"
-    t.string "alpha"
-    t.text "summary"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "slug"
-    t.boolean "dirty_slug", default: false, null: false
-    t.boolean "viewable", default: false, null: false
-    t.index ["alpha"], name: "index_media_on_alpha"
-    t.index ["slug"], name: "index_media_on_slug", unique: true
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -205,6 +173,7 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.index ["playlist_id"], name: "index_posts_on_playlist_id"
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["status"], name: "index_posts_on_status"
+    t.index ["type"], name: "index_posts_on_type"
     t.index ["work_id"], name: "index_posts_on_work_id"
   end
 
@@ -216,13 +185,13 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.bigint "medium_id"
     t.string "name"
     t.string "alpha"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "work_type", null: false
     t.index ["alpha"], name: "index_roles_on_alpha"
-    t.index ["medium_id"], name: "index_roles_on_medium_id"
+    t.index ["work_type"], name: "index_roles_on_work_type"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -280,24 +249,21 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
     t.string "subtitle"
     t.text "summary"
     t.string "alpha"
-    t.bigint "medium_id"
     t.string "ancestry"
     t.integer "ancestry_depth", default: 0
     t.string "slug"
     t.boolean "dirty_slug", default: false, null: false
     t.boolean "viewable", default: false, null: false
+    t.string "type"
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["ancestry"], name: "index_works_on_ancestry"
-    t.index ["medium_id"], name: "index_works_on_medium_id"
     t.index ["slug"], name: "index_works_on_slug", unique: true
+    t.index ["type"], name: "index_works_on_type"
   end
 
-  add_foreign_key "aspects", "categories"
   add_foreign_key "contributions", "roles"
   add_foreign_key "credits", "creators"
   add_foreign_key "credits", "works"
-  add_foreign_key "facets", "categories"
-  add_foreign_key "facets", "media"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"
@@ -307,6 +273,4 @@ ActiveRecord::Schema.define(version: 2018_06_10_002538) do
   add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
-  add_foreign_key "roles", "media"
-  add_foreign_key "works", "media"
 end

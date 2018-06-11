@@ -10,9 +10,7 @@ class Review < Post
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:author, :tags, :work, :medium, :creators).references(:medium) }
-  scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.published.reverse_cron }
+  scope :eager, -> { includes(:author, :tags, :work, :medium, :creators).references(:medium) }
 
   #############################################################################
   # ASSOCIATIONS.

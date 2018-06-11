@@ -13,7 +13,7 @@ RSpec.describe "admin/works/edit", type: :view do
     end
 
     @model_class = assign(:model_name, Work)
-    @work        = assign(:work, create(:minimal_work))
+    @work        = assign(:work, create(:minimal_song))
 
     @creators    = assign(:creators,   Creator.all.alpha                    )
     @media       = assign(:media,      Medium.all.alpha                     )

@@ -202,7 +202,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
 
       context "works" do
-        let(:instance) { create(:minimal_work) }
+        let(:instance) { create(:minimal_song) }
 
         describe "viewable" do
           before(:each) do

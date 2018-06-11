@@ -86,8 +86,8 @@ RSpec.describe Playlist, type: :model do
         describe "rejects" do
           let(:instance) do
             create(:minimal_playlist, playlistings_attributes: {
-              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
-              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
+              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
+              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
               "2" => attributes_for(:minimal_playlisting, work_id: nil),
             })
           end
@@ -203,7 +203,7 @@ RSpec.describe Playlist, type: :model do
       let(:creator_4) { create(:minimal_creator, name: "Four") }
 
       let(:track_1) do
-        create(:minimal_work, credits_attributes: {
+        create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
           "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
         }, contributions_attributes: {
@@ -213,7 +213,7 @@ RSpec.describe Playlist, type: :model do
       end
 
       let(:track_2) do
-        create(:minimal_work, credits_attributes: {
+        create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_4.id),
         })
       end

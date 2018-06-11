@@ -9,7 +9,7 @@ RSpec.describe "admin/reviews/new", type: :view do
     3.times do
       create(:minimal_creator)
       create(:minimal_medium)
-      create(:minimal_work)
+      create(:minimal_song)
       create(:minimal_tag)
     end
 
@@ -61,7 +61,7 @@ RSpec.describe "admin/reviews/new", type: :view do
 
     context "review of existing work" do
       before(:each) do
-        @review.work_id = create(:minimal_work).id
+        @review.work_id = create(:minimal_song).id
         @review.summary = "too short"
         @review.valid?
       end
@@ -83,7 +83,7 @@ RSpec.describe "admin/reviews/new", type: :view do
 
     context "review of new work" do
       before(:each) do
-        @review.work_attributes = attributes_for(:work, :with_existing_medium, :with_title)
+        @review.work_attributes = attributes_for(:work, :with_title)
         @review.valid?
       end
 

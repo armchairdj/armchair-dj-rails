@@ -47,6 +47,10 @@ class Post < ApplicationRecord
   scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
   scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
+  scope :eager,     -> { includes(:author, :tags) }
+  scope :for_admin, -> { eager }
+  scope :for_site,  -> { eager.published.reverse_cron }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################

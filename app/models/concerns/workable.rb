@@ -14,7 +14,7 @@ module Workable
     scope :unviewable, -> { eager.where(works: { viewable: false }) }
 
     scope :for_admin,  -> { eager }
-    scope :for_site,   -> { viewable.alpha }
+    scope :for_site,   -> { eager.viewable.alpha }
 
     ###########################################################################
     # ASSOCIATIONS.

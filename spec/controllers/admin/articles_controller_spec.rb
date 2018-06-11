@@ -381,7 +381,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         context "review" do
           let(:article) { create(:minimal_review) }
 
-          let(:min_valid_params) { { "work_id" => create(:minimal_work).id } }
+          let(:min_valid_params) { { "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "work_id" => ""                       } }
 
           context "with valid params" do
@@ -559,7 +559,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         context "review" do
           let(:article) { create(:minimal_review, :draft) }
 
-          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id } }
+          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""               } }
 
           context "with valid params" do
@@ -665,7 +665,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         context "review" do
           let(:article) { create(:minimal_review, :published) }
 
-          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
+          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
 
           context "with valid params" do
@@ -768,7 +768,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         context "review" do
           let(:article) { create(:minimal_review) }
 
-          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id, publish_on: "01/01/2050" } }
+          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id, publish_on: "01/01/2050" } }
           let(  :invalid_params) { { "body" => ""         , "work_id" => ""                                                 } }
 
           context "with valid params" do
@@ -874,7 +874,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         context "review" do
           let(:article) { create(:minimal_review, :scheduled) }
 
-          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_work).id } }
+          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
           let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
 
           context "with valid params" do

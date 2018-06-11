@@ -23,7 +23,7 @@ class Medium < ApplicationRecord
 
   scope :eager,     -> { includes(:roles, :works, :reviews, :facets, :categories, :aspects) }
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { viewable.alpha }
+  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

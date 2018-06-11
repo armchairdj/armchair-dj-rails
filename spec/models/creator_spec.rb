@@ -780,8 +780,8 @@ RSpec.describe Creator, type: :model do
       let(:showrunner) { create(:minimal_role, medium: tv_show, name: "Showrunner") }
       let(  :director) { create(:minimal_role, medium: tv_show, name: "Director"  ) }
 
-      let(:tv_show_work) { create(:minimal_work, medium: tv_show) }
-      let(   :book_work) { create(:minimal_work, medium: book   ) }
+      let(:tv_show_work) { create(:minimal_song, medium: tv_show) }
+      let(   :book_work) { create(:minimal_song, medium: book   ) }
 
       let!( :credit_1) { subject.credits.create(      work: tv_show_work                  ) }
       let!(:contrib_1) { subject.contributions.create(work: tv_show_work, role: showrunner) }

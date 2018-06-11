@@ -20,45 +20,33 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.permitted_aspect_param(category)
-    :"#{self.aspect_param(category)}_aspect_ids"
-  end
-
-  def self.aspect_param(category)
-    # TODO Deal with special characters
-    category.name.downcase.gsub(/\s+/, "_")
-  end
-
   def self.grouped_options
-    includes(:medium).alpha.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+    order(:type, :alpha).group_by{ |x| x.model_name.human }.to_a
+  end
+
+  def self.available_roles
+    Role.where(work_type: self.model_name.human)
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:medium, :credits, :creators, :contributions, :contributors, :reviews, :aspects).references(:medium) }
+  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :reviews, :playlists).references(:medium) }
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { viewable.includes(:reviews).alpha }
+  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
+
+  has_many :milestones
 
   has_many :credits,       inverse_of: :work, dependent: :destroy
   has_many :contributions, inverse_of: :work, dependent: :destroy
 
   has_many :creators,     through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
-
-  belongs_to :medium
-
-  has_many :facets,     through: :medium
-  has_many :categories, through: :facets
-
-  has_and_belongs_to_many :aspects
-
-  has_many :milestones
 
   has_many :reviews, dependent: :destroy
 
@@ -92,8 +80,6 @@ class Work < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :medium, presence: true
-
   validates :title, presence: true
 
   validates :credits, length: { minimum: 1 }
@@ -105,49 +91,9 @@ class Work < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  after_initialize :define_aspect_methods
-
-  def define_aspect_methods
-    self.categories.each do |category|
-          param = self.class.aspect_param(category)
-         getter = :"#{param}_aspects"
-      id_getter = :"#{param}_aspect_ids"
-      id_setter = :"#{param}_aspect_ids="
-
-      self.class.send :define_method, getter do
-        Tag.includes(:category).where(id: self.aspect_ids).where(categories: { name: category.name })
-      end
-
-      self.class.send :define_method, id_getter do
-        self.send(getter).map(&:id)
-      end
-
-      self.class.send :define_method, id_setter do |*ids|
-        to_remove = self.send(id_getter).delete_if { |id| ids.flatten.include? id }
-        to_keep   = [self.aspect_ids, ids].flatten.compact.uniq - to_remove
-
-        self.aspect_ids = to_keep.compact
-      end
-    end
-  end
-
-  private :define_aspect_methods
-
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def aspects_by_category
-    collection = self.aspects.alpha.includes(:category)
-
-    collection.group_by{ |t| t.category }.to_a.sort_by(&:first)
-  end
-
-  def permitted_aspect_params
-    categories.inject({}) do |memo, (cat)|
-      memo[:"#{self.class.permitted_aspect_param(cat)}"] = []; memo
-    end
-  end
 
   def display_title(full: false)
     return unless persisted?
@@ -183,25 +129,24 @@ class Work < ApplicationRecord
   end
 
   def grouped_parent_dropdown_options
-    scope     = self.class.includes(:medium)
+    # TODO FIX THIS
+    scope     = self.class.all
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
-    ungrouped.group_by{ |w| w.medium.name }.to_a.sort_by(&:first)
+    ungrouped.group_by(&:type).to_a.sort_by(&:first)
   end
 
   def cascade_viewable
     self.update_viewable
 
-    medium.update_viewable
-
         creators.each(&:update_viewable)
     contributors.each(&:update_viewable)
-            aspects.each(&:update_viewable)
+         aspects.each(&:update_viewable)
   end
 
   def sluggable_parts
     [
-      medium.name.pluralize,
+      model_name.human,
       credited_artists(connector: " and "),
       title,
       subtitle

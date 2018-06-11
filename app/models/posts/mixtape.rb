@@ -11,8 +11,6 @@ class Mixtape < Post
   #############################################################################
 
   scope :eager,     -> { includes(:author, :tags, :playlist, :playlistings, :works, :creators) }
-  scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.published.reverse_cron }
 
   #############################################################################
   # ASSOCIATIONS.

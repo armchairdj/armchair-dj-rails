@@ -11,7 +11,7 @@ FactoryBot.define do
 
     trait :with_work do
       after(:create) do |aspect|
-        create(:minimal_work, aspect_ids: [aspect.id])
+        create(:minimal_song, aspect_ids: [aspect.id])
 
         aspect.reload
       end

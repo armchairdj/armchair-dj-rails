@@ -62,7 +62,7 @@ FactoryBot.define do
       work_title { FFaker::Music.song }
     end
 
-    work_id { create(:minimal_work, title: work_title).id }
+    work_id { create(:minimal_song, title: work_title).id }
   end
 
   trait :with_existing_category do

@@ -40,6 +40,35 @@ class Aspect < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
+  enum characteristic: {
+    album_type:           0,
+    song_type:            1,
+    music_label:          2,
+    musical_genre:        3,
+
+    audio_show_format:  100,
+    radio_network:      101,
+
+    narrative_genre:    200,
+    hollywood_studio:   201,
+    tv_network:         202,
+
+    publisher:          301,
+    publication_type:   302,
+
+    tech_platform:      401,
+    tech_company:       402,
+    device_type:        403,
+
+    product_type:       501,
+    manufacturer:       502,
+
+    game_mechanic:      601,
+    game_studio:        602,
+  }
+
+  enumable_attributes :characteristic
+
   #############################################################################
   # VALIDATIONS.
   #############################################################################
