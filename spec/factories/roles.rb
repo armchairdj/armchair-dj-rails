@@ -1,10 +1,8 @@
 FactoryBot.define do
-  sequence :role_name { |n| "Role #{n}" }
-
   factory :role do
-    medium_id nil
+    work_type nil
     name      nil
-    initialize_with { Role.find_or_initialize_by(medium_id: medium_id, name: name) }
+    initialize_with { Role.find_or_initialize_by(work_type: work_type, name: name) }
 
     ###########################################################################
     # TRAITS.
@@ -14,8 +12,8 @@ FactoryBot.define do
       name { generate(:role_name) }
     end
 
-    trait :with_existing_medium do
-      medium_id { create(:minimal_medium).id }
+    trait :with_work_type do
+      work_type "Song"
     end
 
     ###########################################################################
@@ -24,7 +22,7 @@ FactoryBot.define do
 
     factory :minimal_role do
       with_name
-      with_existing_medium
+      with_work_type
     end
 
     factory :complete_role, parent: :minimal_role do; end

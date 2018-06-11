@@ -49,13 +49,8 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Viewable Posts") %>
-        <%= content_tag(:td, @work.viewable_post_count) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Non-Viewable Posts") %>
-        <%= content_tag(:td, @work.unviewable_post_count) %>
+        <%= content_tag(:th, "Viewable?") %>
+        <%= content_tag(:td, @work.viewable?) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -89,6 +84,10 @@
   links: @work.links
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @work.posts.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @work.reviews.for_admin.reverse_cron
+} %>
+
+<%= render partial: "admin/shared/playback/playlists", locals: {
+  playlists: @work.playlists.for_admin.alpha
 } %>

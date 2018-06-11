@@ -8,59 +8,42 @@ module Viewable
   #############################################################################
 
   included do
-    scope     :viewable, -> { eager.where.not(viewable_post_count: 0) }
-    scope :unviewable, -> { eager.where(    viewable_post_count: 0) }
+    scope   :viewable, -> { eager.where(viewable: true ) }
+    scope :unviewable, -> { eager.where(viewable: false) }
 
-    before_save :refresh_counts
+    before_save :refresh_viewable
   end
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  # Public method called from Post.
-  def update_counts
-    refresh_counts && save
-  end
-
-  def all_posts
-    posts
-  end
-
-  def refresh_counts
-    self.unviewable_post_count = all_posts.not_published.count
-    self.viewable_post_count   = all_posts.published.count
-
-    unviewable_post_count_changed? || viewable_post_count_changed?
-  end
-
-  private :refresh_counts
 
   #############################################################################
   # INSTANCE.
   #############################################################################
 
-  def viewable?
-    self.viewable_post_count > 0
-  end
-
   def unviewable?
     !viewable?
   end
 
-  def viewable_posts
-    self.posts.published.reverse_cron
+  def update_viewable
+    refresh_viewable && save
   end
 
-  def unviewable_posts
-    self.posts.not_published.reverse_cron
+private
+
+  def refresh_viewable
+    self.viewable = has_published_content?
+
+    viewable_changed?
   end
 
-  def viewable_works
-    self.viewable_posts.map(&:work).uniq
+  def has_published_content?
+    has_published_posts?
   end
 
-  def unviewable_works
-    self.unviewable_posts.map(&:work).uniq
+  def has_published_posts?
+    return true if respond_to?(:posts   ) &&    posts.published.count > 0
+    return true if respond_to?(:articles) && articles.published.count > 0
+    return true if respond_to?(:reviews ) &&  reviews.published.count > 0
+    return true if respond_to?(:mixtapes) && mixtapes.published.count > 0
+
+    false
   end
 end

@@ -9,6 +9,14 @@ RSpec.describe Creator, type: :model do
     it_behaves_like "an_application_record"
 
     it_behaves_like "a_displayable_model"
+
+    it_behaves_like "a_linkable_model"
+
+    it_behaves_like "a_sluggable_model"
+
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -17,74 +25,45 @@ RSpec.describe Creator, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let!( :richie) { create(:creator, name: "Richie Hawtin") }
-      let!(    :amy) { create(:creator, name: "Amy Winehouse") }
-      let!(   :kate) { create(:creator, name: "Kate Bush"    ) }
-      let!(   :carl) { create(:creator, name: "Carl Craig"   ) }
-      let!(  :feist) { create(:creator, name: "Feist"        ) }
-      let!(:derrick) { create(:creator, name: "Derrick May"  ) }
+      let!( :richie) { create(:creator, :with_published_post, name: "Richie Hawtin") }
+      let!(    :amy) { create(:creator,                       name: "Amy Winehouse") }
+      let!(   :kate) { create(:creator,                       name: "Kate Bush"    ) }
+      let!(   :carl) { create(:creator, :with_published_post, name: "Carl Craig"   ) }
+      let!(  :feist) { create(:creator,                       name: "Feist"        ) }
+      let!(:derrick) { create(:creator, :with_published_post, name: "Derrick May"  ) }
 
-      let(:ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
-
-      before(:each) do
-        create(:review, :with_author, :with_body, :published,
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => richie.id } }
-          })
-        )
-
-        create(:review, :with_author, :with_body, :published,
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => carl.id } }
-          })
-        )
-
-        create(:review, :with_author, :with_body, :draft,
-          "work_attributes" => attributes_for(:work, :with_existing_medium, :with_title).merge({
-            "credits_attributes" => { "0" => { "creator_id" => derrick.id } }
-          })
-        )
-      end
+      let(       :ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       describe "self#eager" do
         subject { described_class.eager }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
 
       describe "self#for_admin" do
-        subject { described_class.for_admin.where(id: ids) }
+        subject { described_class.for_admin }
 
-        specify "includes all creators, unsorted" do
-          is_expected.to match_array([richie, amy, kate, carl, feist, derrick])
-        end
+        it { is_expected.to match_array([richie, amy, kate, carl, feist, derrick]) }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
 
       describe "self#for_site" do
-        subject { described_class.for_site.where(id: ids) }
+        subject { described_class.for_site }
 
-        specify "includes only creators with published posts, sorted alphabetically" do
-          is_expected.to eq([carl, richie])
-        end
+        it { is_expected.to eq([carl, derrick, richie]) }
 
-        specify do
-          is_expected.to eager_load(
-            :pseudonyms, :real_names, :members, :groups, :credits, :works,
-            :posts, :contributions, :contributed_works, :contributed_posts
-          )
-        end
+        it { is_expected.to eager_load(
+          :pseudonyms, :real_names, :members, :groups, :credits, :works,
+          :reviews, :contributions, :contributed_works, :contributed_reviews
+        ) }
       end
     end
 
@@ -192,12 +171,12 @@ RSpec.describe Creator, type: :model do
 
   context "associations" do
     it { is_expected.to have_many(:credits) }
-    it { is_expected.to have_many(:works).through(:credits) }
-    it { is_expected.to have_many(:posts).through(:works  ) }
+    it { is_expected.to have_many(:works  ).through(:credits) }
+    it { is_expected.to have_many(:reviews).through(:works  ) }
 
     it { is_expected.to have_many(:contributions) }
-    it { is_expected.to have_many(:contributed_works).through(:contributions    ) }
-    it { is_expected.to have_many(:contributed_posts).through(:contributed_works) }
+    it { is_expected.to have_many(:contributed_works  ).through(:contributions    ) }
+    it { is_expected.to have_many(:contributed_reviews).through(:contributed_works) }
 
     it { is_expected.to have_many(:pseudonym_identities) }
     it { is_expected.to have_many(:real_name_identities) }
@@ -791,7 +770,7 @@ RSpec.describe Creator, type: :model do
     end
 
     describe "#display_roles" do
-      subject { create(:minimal_creator) }
+      subject { create_minimal_instance }
 
       let(:tv_show) { create(:minimal_medium, name: "TV Show") }
       let(   :book) { create(:minimal_medium, name: "Book"   ) }
@@ -801,8 +780,8 @@ RSpec.describe Creator, type: :model do
       let(:showrunner) { create(:minimal_role, medium: tv_show, name: "Showrunner") }
       let(  :director) { create(:minimal_role, medium: tv_show, name: "Director"  ) }
 
-      let(:tv_show_work) { create(:minimal_work, medium: tv_show) }
-      let(   :book_work) { create(:minimal_work, medium: book   ) }
+      let(:tv_show_work) { create(:minimal_song, medium: tv_show) }
+      let(   :book_work) { create(:minimal_song, medium: book   ) }
 
       let!( :credit_1) { subject.credits.create(      work: tv_show_work                  ) }
       let!(:contrib_1) { subject.contributions.create(work: tv_show_work, role: showrunner) }
@@ -812,7 +791,7 @@ RSpec.describe Creator, type: :model do
       let!(:contrib_3) { subject.contributions.create(work: book_work, role: editor) }
       let!(:contrib_4) { subject.contributions.create(work: book_work, role: author) }
 
-      let!(:review) { create(:review, :with_body, :published, work_id: book_work.id) }
+      let!(:review) { create(:minimal_review, :published, work_id: book_work.id) }
 
       it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
         expect(subject.display_roles).to eq({
@@ -837,11 +816,11 @@ RSpec.describe Creator, type: :model do
     end
 
     describe "#alpha_parts" do
-      subject { create_minimal_instance }
+      let(:instance) { create_minimal_instance }
 
-      it "uses name" do
-        expect(subject.alpha_parts).to eq([subject.name])
-      end
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([instance.name]) }
     end
   end
 end

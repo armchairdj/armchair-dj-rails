@@ -3,20 +3,20 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :routing do
-  describe "routing" do
-    it "routes to #about" do
+  describe "routes to" do
+    it "#about" do
       expect(get: "/about").to route_to("pages#about")
     end
 
-    it "routes to #credits" do
+    it "#credits" do
       expect(get: "/credits").to route_to("pages#credits")
     end
 
-    it "routes to #privacy" do
+    it "#privacy" do
       expect(get: "/privacy").to route_to("pages#privacy")
     end
 
-    it "routes to #terms" do
+    it "#terms" do
       expect(get: "/terms").to route_to("pages#terms")
     end
   end

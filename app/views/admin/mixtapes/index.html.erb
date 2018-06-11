@@ -1,0 +1,49 @@
+<%
+  @title = "Mixtapes"
+%>
+
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@mixtapes),
+  h1: @title
+) %>
+
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= admin_index_tabs(@scopes) %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @mixtapes.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "Status", text: viewable_status_icon, class: "icon" %>
+            <%= sortable_th @sorts, "Title"                                             %>
+            <%= sortable_th @sorts, "Author"                                            %>
+
+            <%= actions_th %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @mixtapes.each do |mixtape| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, post_status_icon(mixtape), class: "icon") %>
+              <%= content_tag(:td, mixtape_title(mixtape, length: 40)      ) %>
+              <%= content_tag(:td, mixtape.display_author                  ) %>
+
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_public_link( mixtape) %>
+                <%= admin_view_link(   mixtape) %>
+                <%= admin_update_link( mixtape) %>
+                <%= admin_destroy_link(mixtape) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @mixtapes %>
+    <% end %>
+  <% end %>
+<% end %>

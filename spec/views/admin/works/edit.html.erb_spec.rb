@@ -13,12 +13,12 @@ RSpec.describe "admin/works/edit", type: :view do
     end
 
     @model_class = assign(:model_name, Work)
-    @work        = assign(:work, create(:minimal_work))
+    @work        = assign(:work, create(:minimal_song))
 
     @creators    = assign(:creators,   Creator.all.alpha                    )
     @media       = assign(:media,      Medium.all.alpha                     )
     @roles       = assign(:roles,      Role.all.alpha                       )
-    @categories  = assign(:categories, @work.medium.category_tag_options        )
+    @categories  = assign(:categories, @work.medium.category_aspect_options        )
     @works       = assign(:works,      @work.grouped_parent_dropdown_options)
   end
 

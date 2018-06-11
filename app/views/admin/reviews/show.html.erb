@@ -1,0 +1,90 @@
+<%
+  @title = ["View Review", @review.display_author, review_title(@review)]
+%>
+
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @review,
+) %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, review_title(@review)) %>
+  <% end %>
+
+  <%= content_tag(:div, formatted_post_body(@review)) %>
+<% end %>
+
+<%= content_tag(:section, class: "admin-section tabled") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Status") %>
+        <%= content_tag(:td) do %>
+          <%= @review.human_status %>
+          <% if @review.published? %>
+            on <%= admin_date(@review.published_at, pubdate: "pubdate") %>
+          <% elsif @review.scheduled? %>
+            for <%= admin_date(@review.publish_on) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Type") %>
+        <%= content_tag(:td, @review.type) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Work") %>
+        <%= content_tag(:td, link_to_work(@review.work, admin: true)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Author") %>
+        <%= content_tag(:td) do %>
+          <%= link_to(@review.display_author, admin_user_path(@review.author)) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@review.summary)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td) do %>
+          <%= @review.slug %> <%= "(dirty)" if @review.dirty_slug? %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@review.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@review.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @review.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/tags", locals: {
+  tags: @review.tags.alpha
+} %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @review.links
+} %>

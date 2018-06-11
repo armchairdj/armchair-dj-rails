@@ -4,7 +4,7 @@ require_dependency "<%= namespaced_file_path %>/application_controller"
 <% end -%>
 <% module_namespacing do -%>
 class <%= controller_class_name %>Controller < ApplicationController
-  before_action :authorize_collection, only: [
+  before_action :authorize_model, only: [
     :index,
     :new,
     :create
@@ -88,7 +88,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
 private
 
-  def authorize_collection
+  def authorize_model
     authorize @<%= plural_table_name %>
   end
 

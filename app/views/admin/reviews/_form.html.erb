@@ -1,0 +1,33 @@
+<%= simple_form_for([:admin, review], html: { class: "admin"}) do |f| %>
+  <%= f.error_notification %>
+
+  <% render partial: "tab_choose_work", locals: {
+    f:     f,
+    works: works,
+  } %>
+
+  <% render partial: "tab_new_work", locals: {
+    f:        f,
+    creators: creators,
+    media:    media,
+  } %>
+
+  <%= content_tag(:div, js_tabbable_attrs(selected_tab)) do %>
+    <%= content_tag(:p, "data-target": "tabbable.remove") do %>
+      Choose a work to review or create a new work.
+    <% end %>
+
+    <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
+
+    <%= content_for(:tabs) %>
+  <% end %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/reviews/form_fields", locals: {
+      f:    f,
+      tags: tags
+    } %>
+  <% end %>
+
+  <%= render partial: "admin/posts/buttons", locals: { f: f } %>
+<% end %>

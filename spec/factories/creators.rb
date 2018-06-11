@@ -11,11 +11,11 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |creator|
-        work = create(:minimal_work, credits_attributes: {
+        work = create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :draft, body: "body", work_id: work.id)
+        create(:minimal_review, :draft, work_id: work.id)
 
         creator.reload
       end
@@ -23,11 +23,11 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |creator|
-        work = create(:minimal_work, credits_attributes: {
+        work = create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :scheduled, body: "body", work_id: work.id)
+        create(:minimal_review, :scheduled, work_id: work.id)
 
         creator.reload
       end
@@ -35,11 +35,11 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |creator|
-        work = create(:minimal_work, credits_attributes: {
+        work = create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:credit, creator_id: creator.id)
         })
 
-        create(:post, :with_author, :published, body: "body", work_id: work.id)
+        create(:minimal_review, :published, work_id: work.id)
 
         creator.reload
       end
@@ -191,6 +191,10 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
+    factory :minimal_creator do
+      name { generate(:creator_name) }
+    end
+
     factory :primary_creator, parent: :minimal_creator do
       primary
     end
@@ -205,10 +209,6 @@ FactoryBot.define do
 
     factory :collective_creator, parent: :minimal_creator do
       collective
-    end
-
-    factory :minimal_creator do
-      name { FFaker::Music.artist }
     end
 
     ###########################################################################

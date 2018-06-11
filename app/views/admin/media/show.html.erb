@@ -25,13 +25,8 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Viewable Posts") %>
-        <%= content_tag(:td, @medium.viewable_post_count) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Non-Viewable Posts") %>
-        <%= content_tag(:td, @medium.unviewable_post_count) %>
+        <%= content_tag(:th, "Viewable?") %>
+        <%= content_tag(:td, @medium.viewable?) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -56,10 +51,6 @@
   roles: @medium.roles.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/facets", locals: {
-  facets: @medium.facets.for_admin
-} %>
-
 <%= render partial: "admin/shared/playback/works", locals: {
   works: @medium.works.for_admin.alpha
 } %>
@@ -68,8 +59,8 @@
   creators: @medium.creators.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @medium.posts.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @medium.reviews.for_admin.reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

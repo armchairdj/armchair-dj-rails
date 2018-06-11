@@ -16,7 +16,7 @@ RSpec.describe WorksController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:work) { create(:minimal_work, :with_published_post) }
+    let(:work) { create(:minimal_song, :with_published_post) }
 
     it "renders" do
         get :show, params: { slug: work.slug }

@@ -52,8 +52,10 @@ RSpec.shared_examples "an_application_record" do
   end
 
   context "included" do
+    subject { create_minimal_instance }
+
     describe "nilify_blanks" do
-      it { is_expected.to nilify_blanks(before: :validation) }
+      xit { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 end

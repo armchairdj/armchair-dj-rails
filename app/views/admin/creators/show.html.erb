@@ -42,13 +42,8 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Viewable Posts") %>
-        <%= content_tag(:td, @creator.viewable_post_count) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Non-Viewable Posts") %>
-        <%= content_tag(:td, @creator.unviewable_post_count) %>
+        <%= content_tag(:th, "Viewable?") %>
+        <%= content_tag(:td, @creator.viewable?) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -102,8 +97,8 @@
   context:       :creator
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @creator.posts.includes(:work).reverse_cron
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @creator.reviews.includes(:work).reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/links", locals: {

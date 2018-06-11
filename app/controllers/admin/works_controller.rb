@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::WorksController < AdminController
-  before_action :find_collection, only: [
-    :index
-  ]
-
   before_action :build_new_instance, only: [
     :new,
     :create
@@ -15,12 +11,6 @@ class Admin::WorksController < AdminController
     :edit,
     :update,
     :destroy
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
   ]
 
   before_action :authorize_instance, only: [
@@ -125,7 +115,7 @@ private
       @work.prepare_credits
       @work.prepare_contributions
 
-      @categories = @work.medium.category_tag_options
+      @categories = @work.medium.category_aspect_options
       @creators   = Creator.all.alpha
       @roles      = Role.options_for(@work.medium)
       @works      = @work.grouped_parent_dropdown_options
@@ -159,7 +149,7 @@ private
           :creator_id,
           :role_id,
         ]
-      }.merge(@work.permitted_tag_params)
+      }.merge(@work.permitted_aspect_params)
     ]
 
     params.fetch(:work, {}).permit(permitted)

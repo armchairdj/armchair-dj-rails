@@ -24,19 +24,19 @@ protected
     if (requested_page = session.delete("user_return_to")).present?
       requested_page
     elsif user.can_write?
-      admin_posts_path
+      admin_articles_path
     else
-      posts_path
+      articles_path
     end
   end
 
   def after_sign_out_path_for(resource_or_scope)
-    posts_path
+    articles_path
   end
 
 private
 
-  def authorize_collection
+  def authorize_model
     authorize model_class
   end
 

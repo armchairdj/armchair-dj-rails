@@ -11,7 +11,7 @@ RSpec.describe "admin/tags/index", type: :view do
     end
 
     10.times do
-      create(:minimal_tag, :with_viewable_work)
+      create(:minimal_tag, :with_published_post)
     end
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")

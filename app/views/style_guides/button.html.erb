@@ -24,7 +24,7 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      <%= link_to("Button Link", posts_path, class: "button") %>
+      <%= link_to("Button Link", articles_path, class: "button") %>
     <% end %>
   <% end %>
 
@@ -46,7 +46,7 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      <%= link_to("Button Link", posts_path, class: "button secondary") %>
+      <%= link_to("Button Link", articles_path, class: "button secondary") %>
     <% end %>
   <% end %>
 
@@ -68,7 +68,7 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      <%= link_to("Button Link", posts_path, class: "button tertiary") %>
+      <%= link_to("Button Link", articles_path, class: "button tertiary") %>
     <% end %>
   <% end %>
 
@@ -90,7 +90,7 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      <%= link_to("Button Link", posts_path, class: "button danger") %>
+      <%= link_to("Button Link", articles_path, class: "button danger") %>
     <% end %>
   <% end %>
 
@@ -112,7 +112,7 @@
     <% end %>
 
     <%= content_tag(:div, class: "button-group") do %>
-      <%= link_to("Button Link", posts_path, class: "button disabled") %>
+      <%= link_to("Button Link", articles_path, class: "button disabled") %>
     <% end %>
   <% end %>
 
@@ -173,7 +173,7 @@
 
     <%= content_tag(:div, class: "button-group") do %>
       <%= f.button :button, "Primary", type: :submit %>
-      <%= link_to "Alternate", posts_path %>
+      <%= link_to "Alternate", articles_path %>
     <% end %>
   <% end %>
 
@@ -185,7 +185,7 @@
     <%= content_tag(:div, class: "button-group") do %>
       <%= f.button :button, "Primary", type: :submit %>
       <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
-      <%= link_to "Alternate", posts_path %>
+      <%= link_to "Alternate", articles_path %>
     <% end %>
   <% end %>
 
@@ -198,7 +198,7 @@
       <%= f.button :button, "Primary", type: :submit %>
       <%= f.button :button, "Secondary", type: :submit, class: "secondary" %>
       <%= f.button :button, "Tertiary", type: :submit, class: "tertiary" %>
-      <%= link_to "Alternate", posts_path %>
+      <%= link_to "Alternate", articles_path %>
     <% end %>
   <% end %>
 <% end %>

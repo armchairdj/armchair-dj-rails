@@ -1,0 +1,49 @@
+<%
+  @title = "Reviews"
+%>
+
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@reviews),
+  h1: @title
+) %>
+
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= admin_index_tabs(@scopes) %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @reviews.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "Status", text: viewable_status_icon, class: "icon"    %>
+            <%= sortable_th @sorts, "Title"                                                %>
+            <%= sortable_th @sorts, "Author"                                               %>
+
+            <%= actions_th %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @reviews.each do |review| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, post_status_icon(review), class: "icon") %>
+              <%= content_tag(:td, review_title(review, length: 40)      ) %>
+              <%= content_tag(:td, review.display_author                  ) %>
+
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_public_link( review) %>
+                <%= admin_view_link(   review) %>
+                <%= admin_update_link( review) %>
+                <%= admin_destroy_link(review) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @reviews %>
+    <% end %>
+  <% end %>
+<% end %>

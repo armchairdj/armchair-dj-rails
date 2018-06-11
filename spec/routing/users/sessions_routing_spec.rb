@@ -3,16 +3,16 @@
 require "rails_helper"
 
 RSpec.describe Users::SessionsController, type: :routing do
-  describe "routing" do
-    it "routes to #new" do
+  describe "routes to" do
+    it "#new" do
       expect(get: "/log_in").to route_to("users/sessions#new")
     end
 
-    it "routes to #create" do
+    it "#create" do
       expect(post: "/log_in").to route_to("users/sessions#create")
     end
 
-    it "routes to #destroy" do
+    it "#destroy" do
       expect(get: "/log_out").to route_to("users/sessions#destroy")
     end
   end

@@ -46,6 +46,6 @@
   works: @role.works.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @role.posts.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/reviews", locals: {
+  reviews: @role.reviews.for_admin.reverse_cron
 } %>

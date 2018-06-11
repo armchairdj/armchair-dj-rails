@@ -1,0 +1,25 @@
+<%
+  @title = article_title(@article)
+%>
+
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "post-header") do %>
+    <%= content_tag(:h1, @article.title) %>
+  <% end %>
+<% end %>
+
+<%= formatted_post_body(@article) %>
+
+<%= content_tag(:footer, class: "post-byline") do %>
+  Posted by <%= link_to_post_author(@article) %> on <%= post_published_date(@article) %>
+<% end %>
+
+<%= content_tag(:aside, class: "post-tags") do %>
+  <%= render partial: "shared/playback/tags", locals: {
+    tags: @article.tags.for_site
+  } %>
+<% end %>
+
+<%= render partial: "shared/playback/links", locals: {
+  links: @article.links
+} %>

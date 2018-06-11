@@ -1,0 +1,11 @@
+<% return if reviews.empty? %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Reviews") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "admin/shared/playback/review", collection: reviews %>
+  <% end %>
+<% end %>

@@ -24,9 +24,9 @@ RSpec.describe User, type: :model do
     let!( :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
 
     before(:each) do
-      create(:minimal_post, :published, author: jenny )
-      create(:minimal_post, :published, author: brian )
-      create(:minimal_post, :draft,     author: gruber)
+      create(:minimal_article, :published, author: jenny )
+      create(:minimal_article, :published, author: brian )
+      create(:minimal_article, :draft,     author: gruber)
     end
 
     describe "self#published_author!" do
@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
     describe "self#eager" do
       subject { described_class.eager }
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
     end
 
     describe "self#for_admin" do
@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
         is_expected.to contain_exactly(jenny, charlie, brian, gruber)
       end
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
     end
 
     describe "self#for_site" do
@@ -71,14 +71,16 @@ RSpec.describe User, type: :model do
         is_expected.to eq([brian, jenny])
       end
 
-      it { is_expected.to eager_load(:posts, :works, :creators) }
+      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
     end
   end
 
   context "associations" do
-   it { is_expected.to have_many(:posts) }
+   it { is_expected.to have_many(:articles) }
+   it { is_expected.to have_many(:reviews ) }
+   it { is_expected.to have_many(:mixtapes) }
 
-   it { is_expected.to have_many(:works).through(:posts) }
+   it { is_expected.to have_many(:works).through(:reviews) }
 
    it { is_expected.to have_many(:creators).through(:works) }
   end

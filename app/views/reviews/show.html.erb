@@ -1,0 +1,30 @@
+<%
+  @title = [@review.type, review_title(@review)].compact
+%>
+
+<%= content_for(:header) do %>
+  <%= content_tag(:header, class: "post-header") do %>
+    <%= content_tag(:h3, @review.type) %>
+    <%= content_tag(:h1) do %>
+      <%= content_tag(:span, @review.work.credited_artists, class: "creators") %>
+      <%= content_tag(:span, @review.work.title,            class: "title"   ) %>
+      <%= content_tag(:span, @review.work.subtitle,         class: "subtitle") %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= formatted_post_body(@review) %>
+
+<%= content_tag(:footer, class: "post-byline") do %>
+  Posted by <%= link_to_post_author(@review) %> on <%= post_published_date(@review) %>
+<% end %>
+
+<%= content_tag(:aside, class: "post-tags") do %>
+  <%= render partial: "shared/playback/tags", locals: {
+    tags: @review.tags.for_site
+  } %>
+<% end %>
+
+<%= render partial: "shared/playback/links", locals: {
+  links: @review.links
+} %>

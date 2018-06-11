@@ -7,6 +7,14 @@ RSpec.describe Playlist, type: :model do
     it_behaves_like "an_authorable_model"
 
     it_behaves_like "a_displayable_model"
+
+    it_behaves_like "a_linkable_model"
+
+    it_behaves_like "a_sluggable_model"
+
+    it_behaves_like "a_summarizable_model"
+
+    it_behaves_like "a_viewable_model"
   end
 
   context "class" do
@@ -67,7 +75,7 @@ RSpec.describe Playlist, type: :model do
     it { is_expected.to have_many(:creators    ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
-    it { is_expected.to have_many(:posts) }
+    it { is_expected.to have_many(:mixtapes) }
   end
 
   context "attributes" do
@@ -78,8 +86,8 @@ RSpec.describe Playlist, type: :model do
         describe "rejects" do
           let(:instance) do
             create(:minimal_playlist, playlistings_attributes: {
-              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
-              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_work).id),
+              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
+              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
               "2" => attributes_for(:minimal_playlisting, work_id: nil),
             })
           end
@@ -173,6 +181,21 @@ RSpec.describe Playlist, type: :model do
       end
     end
 
+    describe "#cascade_viewable" do
+      subject { create_minimal_instance }
+
+      before(:each) do
+        subject.works.each do |work|
+           allow(work).to receive(:cascade_viewable)
+          expect(work).to receive(:cascade_viewable)
+        end
+      end
+
+      it "updates viewable for descendents" do
+        subject.cascade_viewable
+      end
+    end
+
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
@@ -180,7 +203,7 @@ RSpec.describe Playlist, type: :model do
       let(:creator_4) { create(:minimal_creator, name: "Four") }
 
       let(:track_1) do
-        create(:minimal_work, credits_attributes: {
+        create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
           "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
         }, contributions_attributes: {
@@ -190,7 +213,7 @@ RSpec.describe Playlist, type: :model do
       end
 
       let(:track_2) do
-        create(:minimal_work, credits_attributes: {
+        create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_4.id),
         })
       end
@@ -215,10 +238,6 @@ RSpec.describe Playlist, type: :model do
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
       end
     end
-
-    let(     :category) { create(:category, name: "Category") }
-    let(:uncategorized) { create(:tag, name: "Uncategorized") }
-    let(  :categorized) { create(:tag, name: "Categorized", category_id: category.id) }
 
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }

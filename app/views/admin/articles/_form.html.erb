@@ -1,0 +1,12 @@
+<%= simple_form_for([:admin, article], html: { class: "admin"}) do |f| %>
+  <%= f.error_notification %>
+
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= render partial: "admin/articles/form_fields", locals: {
+      f:    f,
+      tags: tags
+    } %>
+  <% end %>
+
+  <%= render partial: "admin/posts/buttons", locals: { f: f } %>
+<% end %>

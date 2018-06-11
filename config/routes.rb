@@ -63,9 +63,10 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
-    resources :categories, concerns: :paginatable
+    resources :articles,   concerns: :paginatable
     resources :creators,   concerns: :paginatable
-    resources :posts,      concerns: :paginatable
+    resources :mixtapes,   concerns: :paginatable
+    resources :reviews,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
     resources :users,      concerns: :paginatable
@@ -74,12 +75,6 @@ Rails.application.routes.draw do
     resources :playlists, concerns: :paginatable do
       member do
         post :reorder_playlistings
-      end
-    end
-
-    resources :media, concerns: :paginatable do
-      member do
-        post :reorder_facets
       end
     end
   end
@@ -106,13 +101,29 @@ Rails.application.routes.draw do
   # POSTS.
   #############################################################################
 
-  resources :posts, only: [:index], concerns: :paginatable, path: "/"
+  resources :articles, only: [:index], concerns: :paginatable, path: "/"
 
-  get "posts/*slug", to: "posts#show", as: "post_permalink"
+  get "articles/*slug", to: "articles#show", as: "article_permalink"
 
   scope format: true, constraints: { format: "rss" } do
-    get "/feed", to: "posts#feed"
+    get "/feed", to: "articles#feed"
   end
+
+  #############################################################################
+  # REVIEWS.
+  #############################################################################
+
+  resources :reviews, only: [:index], concerns: :paginatable
+
+  get "reviews/*slug", to: "reviews#show", as: "review_permalink"
+
+  #############################################################################
+  # MIXTAPES.
+  #############################################################################
+
+  resources :mixtapes, only: [:index], concerns: :paginatable
+
+  get "mixtapes/*slug", to: "mixtapes#show", as: "mixtape_permalink"
 
   #############################################################################
   # PLAYLISTS.

@@ -352,8 +352,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           "Name",
           "Primary",
           "Individual",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

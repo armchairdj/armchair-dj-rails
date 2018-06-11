@@ -11,7 +11,7 @@ RSpec.describe "creators/index", type: :view do
     @creators = assign(:creators, Creator.all.alpha.page(1))
   end
 
-  it "renders a list of works" do
+  it "renders a list of creators" do
     render
   end
 end

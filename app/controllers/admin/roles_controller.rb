@@ -1,8 +1,4 @@
 class Admin::RolesController < AdminController
-  before_action :find_collection, only: [
-    :index
-  ]
-
   before_action :build_new_instance, only: [
     :new,
     :create
@@ -13,12 +9,6 @@ class Admin::RolesController < AdminController
     :edit,
     :update,
     :destroy
-  ]
-
-  before_action :authorize_collection, only: [
-    :index,
-    :new,
-    :create
   ]
 
   before_action :authorize_instance, only: [

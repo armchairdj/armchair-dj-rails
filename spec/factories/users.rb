@@ -1,9 +1,6 @@
 require "ffaker"
 
 FactoryBot.define do
-  sequence :user_email    { |n| "user#{n}@example.com" }
-  sequence :user_username { |n| "realcoolperson#{n}"   }
-
   factory :user do
 
     ###########################################################################
@@ -14,7 +11,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:standalone_post, :draft, body: "body", author: user)
+        create(:minimal_article, :draft, author: user)
 
         user.reload
       end
@@ -24,7 +21,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:standalone_post, :scheduled, body: "body", author: user)
+        create(:minimal_article, :scheduled, author: user)
 
         user.reload
       end
@@ -34,7 +31,7 @@ FactoryBot.define do
       role :writer
 
       after(:create) do |user|
-        create(:standalone_post, :published, body: "body", author: user)
+        create(:minimal_article, :published, author: user)
 
         user.reload
       end

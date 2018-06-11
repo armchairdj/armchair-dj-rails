@@ -1,0 +1,49 @@
+<%
+  @title = "Articles"
+%>
+
+<%= admin_header(@model_class, :index,
+  h4: total_count_for(@articles),
+  h1: @title
+) %>
+
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= admin_index_tabs(@scopes) %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if @articles.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "Status", text: viewable_status_icon, class: "icon" %>
+            <%= sortable_th @sorts, "Title"                                             %>
+            <%= sortable_th @sorts, "Author"                                            %>
+
+            <%= actions_th %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% @articles.each do |article| %>
+            <%= content_tag(:tr) do %>
+              <%= content_tag(:td, post_status_icon(article), class: "icon") %>
+              <%= content_tag(:td, article_title(article, length: 40)      ) %>
+              <%= content_tag(:td, article.display_author                  ) %>
+
+              <%= content_tag(:td, class: "actions") do %>
+                <%= admin_public_link( article) %>
+                <%= admin_view_link(   article) %>
+                <%= admin_update_link( article) %>
+                <%= admin_destroy_link(article) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= paginate @articles %>
+    <% end %>
+  <% end %>
+<% end %>

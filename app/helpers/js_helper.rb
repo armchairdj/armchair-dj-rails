@@ -60,17 +60,9 @@ module JsHelper
 
   def js_selectable_prepare_work_attrs
     js_attrs("selectable-prepare-work",
-      "tab-name":        "post-new-work",
-      "title-selector":  "#post_work_attributes_title",
-      "artist-selector": "#post_work_attributes_credits_attributes_0_creator_id"
-    )
-  end
-
-  def js_sortable_facets_attrs(medium)
-    js_attrs("sortable",
-      class: "numbered sortable",
-      param: "facet_ids",
-      url:   reorder_facets_admin_medium_path(medium)
+      "tab-name":        "article-new-work",
+      "title-selector":  "#article_work_attributes_title",
+      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id"
     )
   end
 

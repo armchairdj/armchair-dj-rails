@@ -21,7 +21,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #show" do
-      let(:work) { create(:minimal_work) }
+      let(:work) { create(:minimal_song) }
 
       it "renders" do
         get :show, params: { id: work.to_param }
@@ -100,7 +100,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "GET #edit" do
       context "plain jane" do
-        let(:work) { create(:minimal_work) }
+        let(:work) { create(:minimal_song) }
 
         it "renders" do
           get :edit, params: { id: work.to_param }
@@ -115,7 +115,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
 
       context "with contribution" do
-        let(:work) { create(:minimal_work, :with_one_contribution) }
+        let(:work) { create(:minimal_song, :with_one_contribution) }
 
         it "renders" do
           get :edit, params: { id: work.to_param }
@@ -130,7 +130,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "PUT #update" do
-      let(:work) { create(:minimal_work) }
+      let(:work) { create(:minimal_song) }
 
       let(  :valid_params) { { title: "New Title" } }
       let(:invalid_params) { { title: ""          } }
@@ -170,7 +170,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "DELETE #destroy" do
-      let!(:work) { create(:minimal_work) }
+      let!(:work) { create(:minimal_song) }
 
       it "destroys the requested work" do
         expect {
@@ -210,8 +210,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           "Title",
           "Creator",
           "Medium",
-          "PPC",
-          "DPC",
+          "Viewable",
         ])
       end
     end

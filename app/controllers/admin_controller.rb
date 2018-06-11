@@ -3,6 +3,35 @@
 class AdminController < ApplicationController
   include SeoPaginatable
 
+  before_action :authorize_model, only: [
+    :index,
+    :new,
+    :create
+  ]
+
+  before_action :find_collection, only: [
+    :index
+  ]
+
+  before_action :build_new_instance, only: [
+    :new,
+    :create
+  ]
+
+  before_action :find_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
+  before_action :authorize_instance, only: [
+    :show,
+    :edit,
+    :update,
+    :destroy
+  ]
+
   after_action :verify_authorized
 
 private
@@ -55,17 +84,15 @@ private
   end
 
   def allowed_sorts(extra = nil)
-    default_sort = "#{controller_name}.updated_at DESC"
-    ppc_sort     = "#{controller_name}.viewable_post_count ASC"
-    dpc_sort     = "#{controller_name}.unviewable_post_count ASC"
+    default_sort  = "#{controller_name}.updated_at DESC"
+    viewable_sort = "#{controller_name}.viewable ASC"
 
     base = { "Default" => default_sort }
 
     return base unless model_class.include? Viewable
 
     base.merge({
-      "PPC" => [ppc_sort,  extra].compact.join(", "),
-      "DPC" => [dpc_sort, extra].compact.join(", "),
+      "Viewable" => [viewable_sort, extra].compact.join(", "),
     })
   end
 

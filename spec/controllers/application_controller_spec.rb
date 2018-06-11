@@ -30,7 +30,7 @@ RSpec.describe ApplicationController, type: :controller do
         specify { expect(controller.send(:determine_layout)).to eq("public") }
       end
 
-      pending "#authorize_collection"
+      pending "#authorize_model"
     end
   end
 end

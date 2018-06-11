@@ -1,0 +1,39 @@
+<%= content_tag(:div, class: "button-group") do %>
+  <%= f.button :button, "Save", type: :submit %>
+
+  <% if f.object.published? %>
+    <%= f.button :button, "Unpublish",
+      type:           :submit,
+      name:           "step",
+      value:          "unpublish",
+      class:          "danger",
+      "data-confirm": "Are you sure?"
+    %>
+  <% elsif f.object.persisted? %>
+    <%= f.button :button, "Publish",
+      type:           :submit,
+      name:           "step",
+      value:          "publish",
+      class:          "danger",
+      "data-confirm": "Are you sure?"
+    %>
+  <% end %>
+
+  <% if f.object.scheduled? %>
+    <%= f.button :button, "Unschedule",
+      type:           :submit,
+      name:           "step",
+      value:          "unschedule",
+      class:          "danger",
+      "data-confirm": "Are you sure?"
+    %>
+  <% elsif f.object.persisted? %>
+    <%= f.button :button, "Schedule",
+      type:           :submit,
+      name:           "step",
+      value:          "schedule",
+      class:          "danger",
+      "data-confirm": "Are you sure?"
+    %>
+  <% end %>
+<% end %>

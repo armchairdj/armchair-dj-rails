@@ -9,10 +9,6 @@ FactoryBot.define do
       title { FFaker::HipsterIpsum.phrase.titleize }
     end
 
-    trait :with_author do
-      association :author, factory: :admin
-    end
-
     trait :with_2_tracks do
       playlistings_attributes { {
         "0" => attributes_for(:playlisting, :with_existing_work),
@@ -37,22 +33,22 @@ FactoryBot.define do
 
     trait :with_10_viewable_tracks do
       playlistings_attributes { {
-        "0" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "1" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "2" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "3" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "4" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "5" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "6" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "7" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "8" => attributes_for(:playlisting, :with_existing_work, :with_post),
-        "9" => attributes_for(:playlisting, :with_existing_work, :with_post),
+        "0" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "1" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "2" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "3" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "4" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "5" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "6" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "7" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "8" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
+        "9" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
       } }
     end
 
     trait :with_draft_post do
       after(:create) do |playlist|
-        create(:post, :draft, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :draft, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -60,7 +56,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |playlist|
-        create(:post, :scheduled, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :scheduled, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -68,7 +64,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |playlist|
-        create(:post, :published, body: "body", author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:mixtape, :published, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -86,7 +82,7 @@ FactoryBot.define do
 
     factory :minimal_playlist do
       with_title
-      with_author
+      with_existing_author
       with_2_tracks
     end
 

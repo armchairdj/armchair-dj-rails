@@ -46,12 +46,12 @@ class Creator < ApplicationRecord
 
   scope :eager, -> { includes(
     :pseudonyms, :real_names, :members, :groups,
-    :credits, :works, :posts,
-    :contributions, :contributed_works, :contributed_posts
+    :credits, :works, :reviews,
+    :contributions, :contributed_works, :contributed_reviews
   ) }
 
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { viewable.alpha }
+  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -61,24 +61,21 @@ class Creator < ApplicationRecord
 
   has_many :credits, inverse_of: :creator, dependent: :destroy
   has_many :works, through: :credits
-  has_many :posts, through: :works
-  has_many :media, -> { distinct }, through: :works, source: :medium
-
+  has_many :reviews, through: :works
 
   # Contributions.
 
   has_many :contributions, inverse_of: :creator, dependent: :destroy
 
-  has_many :contributed_works, through: :contributions,     class_name: "Work",   source: :work
-  has_many :contributed_posts, through: :contributed_works, class_name: "Post",   source: :posts
-  has_many :contributed_media, through: :contributed_works, class_name: "Medium", source: :medium
+  has_many :contributed_works,   through: :contributions,     class_name: "Work",   source: :work
+  has_many :contributed_reviews, through: :contributed_works, class_name: "Review", source: :reviews
 
   has_many :contributed_roles, -> {
     includes(contributions: { work: :medium })
   }, through: :contributions, class_name: "Role", source: :role
 
   has_many :viewable_contributed_roles, -> {
-    includes(contributions: { work: :medium }).references("works").where("works.viewable_post_count > 0")
+    includes(contributions: { work: :medium }).references("works").where("works.viewable = ?", true)
   }, through: :contributions, class_name: "Role", source: :role
 
   # Identities.
@@ -267,11 +264,9 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def all_posts
-    Post.where(id: (contributed_posts.map(&:id) + posts.map(&:id)).uniq)
-  end
-
   def display_roles(for_site: false)
+    
+
     displayable_media = for_site ? self.media.for_site             : self.media
     displayable_roles = for_site ? self.viewable_contributed_roles : self.contributed_roles
 
@@ -295,5 +290,11 @@ class Creator < ApplicationRecord
 
   def alpha_parts
     [name]
+  end
+
+private
+
+  def has_published_content?
+    has_published_posts? || contributed_reviews.published.count > 0
   end
 end

@@ -114,8 +114,8 @@ RSpec.describe SvgHelper, type: :helper do
     end
 
     it "allows html_opts for wrapper_class" do
-      expected = '<span class="svg-icon post-published">inlined_svg</span>'
-      actual   = helper.svg_icon("icon", title: "title", desc: "desc", wrapper_class: "post-published")
+      expected = '<span class="svg-icon article-published">inlined_svg</span>'
+      actual   = helper.svg_icon("icon", title: "title", desc: "desc", wrapper_class: "article-published")
 
       expect(actual).to eq(expected)
     end

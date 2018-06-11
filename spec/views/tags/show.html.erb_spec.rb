@@ -7,7 +7,7 @@ RSpec.describe "tags/show", type: :view do
 
   context "with work" do
     before(:each) do
-      @tag = assign(:tag, create(:minimal_tag, :with_viewable_work))
+      @tag = assign(:tag, create(:minimal_tag, :with_published_post))
     end
 
     it "renders" do
@@ -15,7 +15,7 @@ RSpec.describe "tags/show", type: :view do
     end
   end
 
-  context "with post" do
+  context "with article" do
     before(:each) do
       @tag = assign(:tag, create(:minimal_tag, :with_published_post))
     end
