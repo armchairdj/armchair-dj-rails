@@ -1,5 +1,5 @@
 <%
-  @title = ["View Role", @role.medium.name, @role.name]
+  @title = ["View Role", @role.work_type, @role.name]
 %>
 
 <%= admin_header(@model_class, :show,
@@ -16,7 +16,7 @@
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @role.medium.name) %>
+        <%= content_tag(:td, @role.work_type) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

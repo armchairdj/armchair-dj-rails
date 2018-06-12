@@ -7,7 +7,7 @@
 ) %>
 
 <% if @work.type.blank? %>
-  <%= render partial: "form_medium_only" %>
+  <%= render partial: "form_work_type_only" %>
 <% else %>
   <%= render partial: "form" %>
 <% end %>

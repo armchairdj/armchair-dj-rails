@@ -8,14 +8,12 @@ RSpec.describe "admin/reviews/edit", type: :view do
   before(:each) do
     3.times do
       create(:minimal_creator)
-      create(:minimal_medium)
       create(:minimal_song)
       create(:minimal_tag)
     end
 
     @model_class  = assign(:model_name, Review)
     @creators     = assign(:creators,     Creator.all.alpha   )
-    @media        = assign(:media,        Medium.all.alpha    )
     @works        = assign(:works,        Work.grouped_options)
     @tags         = assign(:tags,         Tag.for_admin.alpha)
     @review       = assign(:review,       create(:minimal_review))

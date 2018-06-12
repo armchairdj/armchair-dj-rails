@@ -8,7 +8,6 @@ RSpec.describe "admin/works/edit", type: :view do
   before(:each) do
     3.times do
       create(:minimal_creator)
-      create(:complete_medium)
       create(:minimal_role)
     end
 
@@ -16,7 +15,6 @@ RSpec.describe "admin/works/edit", type: :view do
     @work        = assign(:work, create(:minimal_song))
 
     @creators    = assign(:creators,   Creator.all.alpha                    )
-    @media       = assign(:media,      Medium.all.alpha                     )
     @roles       = assign(:roles,      Role.all.alpha                       )
     @works       = assign(:works,      @work.grouped_parent_dropdown_options)
   end

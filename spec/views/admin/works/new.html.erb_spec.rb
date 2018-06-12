@@ -8,14 +8,12 @@ RSpec.describe "admin/works/new", type: :view do
   before(:each) do
     3.times do
       create(:minimal_creator)
-      create(:complete_medium)
       create(:minimal_role)
     end
   end
 
   context "initial state" do
     before(:each) do
-      @media       = assign(:media, Medium.all.alpha)
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work))
     end
@@ -34,8 +32,8 @@ RSpec.describe "admin/works/new", type: :view do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:song))
 
-      @creators    = assign(:creators,   Creator.all.alpha                    )
-      @roles       = assign(:roles,      Role.options_for(@work.medium)       )
+      @creators    = assign(:creators,   Creator.all.alpha)
+      @roles       = assign(:roles,      Role.where(work_type: @work.model_name.name))
       @works       = assign(:works,      @work.grouped_parent_dropdown_options)
     end
 

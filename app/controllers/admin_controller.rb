@@ -89,8 +89,8 @@ private
   end
 
   def allowed_sorts(extra = nil)
-    default_sort  = "#{controller_name}.updated_at DESC"
-    viewable_sort = "#{controller_name}.viewable ASC"
+    default_sort  = "#{model_class.table_name}.updated_at DESC"
+    viewable_sort = "#{model_class.table_name}.viewable ASC"
 
     base = { "Default" => default_sort }
 
