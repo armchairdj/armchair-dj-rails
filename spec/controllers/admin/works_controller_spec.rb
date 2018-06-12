@@ -45,7 +45,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     describe "POST #create" do
       let(:initial_params) { attributes_for(:work, :with_existing_medium) }
       let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, :with_summary) }
-      let(:invalid_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
+      let(:bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do
@@ -84,11 +84,11 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { work: invalid_params }
+          post :create, params: { work: bad_params }
 
           is_expected.to successfully_render("admin/works/new")
 
-          expect(assigns(:work)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:work)).to have_coerced_attributes(bad_params)
           expect(assigns(:work)).to be_invalid
 
           is_expected.to prepare_the_work_dropdowns
@@ -133,7 +133,7 @@ RSpec.describe Admin::WorksController, type: :controller do
       let(:work) { create(:minimal_song) }
 
       let(  :valid_params) { { title: "New Title" } }
-      let(:invalid_params) { { title: ""          } }
+      let(:bad_params) { { title: ""          } }
 
       context "with valid params" do
         it "updates the requested work" do
@@ -155,7 +155,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: work.to_param, work: invalid_params }
+          put :update, params: { id: work.to_param, work: bad_params }
 
           is_expected.to successfully_render("admin/works/edit")
 

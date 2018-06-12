@@ -45,25 +45,25 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_valid_params) { attributes_for(:complete_role, work_type: type_options.first) }
-      let(:min_valid_params) { attributes_for(:minimal_role,  work_type: type_options.first) }
-      let(  :invalid_params) { attributes_for(:minimal_role).except(:name) }
+      let(:max_params) { attributes_for(:complete_role, work_type: type_options.first) }
+      let(:min_params) { attributes_for(:minimal_role,  work_type: type_options.first) }
+      let(  :bad_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
         it "creates a new Role" do
           expect {
-            post :create, params: { role: min_valid_params }
+            post :create, params: { role: min_params }
           }.to change(Role, :count).by(1)
         end
 
         it "creates the right attributes" do
-          post :create, params: { role: min_valid_params }
+          post :create, params: { role: min_params }
 
-          is_expected.to assign(Role.last, :role).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(Role.last, :role).with_attributes(min_params).and_be_valid
         end
 
         it "redirects to index" do
-          post :create, params: { role: min_valid_params }
+          post :create, params: { role: min_params }
 
           is_expected.to send_user_to(
             admin_role_path(assigns(:role))
@@ -74,18 +74,18 @@ RSpec.describe Admin::RolesController, type: :controller do
       context "with max valid params" do
         it "creates a new Role" do
           expect {
-            post :create, params: { role: max_valid_params }
+            post :create, params: { role: max_params }
           }.to change(Role, :count).by(1)
         end
 
         it "creates the right attributes" do
-          post :create, params: { role: max_valid_params }
+          post :create, params: { role: max_params }
 
-          is_expected.to assign(Role.last, :role).with_attributes(max_valid_params).and_be_valid
+          is_expected.to assign(Role.last, :role).with_attributes(max_params).and_be_valid
         end
 
         it "redirects to index" do
-          post :create, params: { role: max_valid_params }
+          post :create, params: { role: max_params }
 
           is_expected.to send_user_to(
             admin_role_path(assigns(:role))
@@ -95,11 +95,11 @@ RSpec.describe Admin::RolesController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { role: invalid_params }
+          post :create, params: { role: bad_params }
 
           is_expected.to successfully_render("admin/roles/new")
 
-          expect(assigns(:role)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:role)).to have_coerced_attributes(bad_params)
           expect(assigns(:role)).to be_invalid
 
           expect(assigns(:work_types)).to match_array(type_options)
@@ -124,18 +124,18 @@ RSpec.describe Admin::RolesController, type: :controller do
     describe "PUT #update" do
       let(:role) { create(:minimal_role, work_type: type_options.first) }
 
-      let(:min_valid_params) { { name: "New Name" } }
-      let(  :invalid_params) { { name: ""         } }
+      let(:min_params) { { name: "New Name" } }
+      let(  :bad_params) { { name: ""         } }
 
       context "with valid params" do
         it "updates the requested role" do
-          put :update, params: { id: role.to_param, role: min_valid_params }
+          put :update, params: { id: role.to_param, role: min_params }
 
-          is_expected.to assign(role, :role).with_attributes(min_valid_params).and_be_valid
+          is_expected.to assign(role, :role).with_attributes(min_params).and_be_valid
         end
 
         it "redirects to index" do
-          put :update, params: { id: role.to_param, role: min_valid_params }
+          put :update, params: { id: role.to_param, role: min_params }
 
           is_expected.to send_user_to(
             admin_role_path(assigns(:role))
@@ -145,11 +145,11 @@ RSpec.describe Admin::RolesController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: role.to_param, role: invalid_params }
+          put :update, params: { id: role.to_param, role: bad_params }
 
           is_expected.to successfully_render("admin/roles/edit")
 
-          is_expected.to assign(role, :role).with_attributes(invalid_params).and_be_invalid
+          is_expected.to assign(role, :role).with_attributes(bad_params).and_be_invalid
 
           expect(assigns(:work_types)).to match_array(type_options)
         end

@@ -33,7 +33,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_params) {
+  let(:bad_params) {
     skip("Add a hash of attributes invalid for your model")
   }
 
@@ -95,9 +95,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     context "with invalid params" do
       it "renders a JSON response with errors for the new <%= ns_file_name %>" do
 <% if RUBY_VERSION < "1.9.3" -%>
-        post :create, {:<%= ns_file_name %> => invalid_params}, valid_session
+        post :create, {:<%= ns_file_name %> => bad_params}, valid_session
 <% else %>
-        post :create, params: {<%= ns_file_name %>: invalid_params}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: bad_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq("application/json")
@@ -138,9 +138,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       it "renders a JSON response with errors for the <%= ns_file_name %>" do
         <%= file_name %> = <%= class_name %>.create! valid_params
 <% if RUBY_VERSION < "1.9.3" -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_params}, valid_session
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => bad_params}, valid_session
 <% else %>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_params}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: bad_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq("application/json")

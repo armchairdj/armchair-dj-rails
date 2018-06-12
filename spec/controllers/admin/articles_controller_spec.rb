@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::ArticlesController, type: :controller do
   let(:summary) { "summary summary summary summary summary." }
+  let(:article) { create(:minimal_article, :draft) }
 
   context "concerns" do
     it_behaves_like "an_admin_controller"
@@ -23,20 +24,14 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "GET #show" do
-      let(:article) { create(:minimal_article) }
-
-      before(:each) do
-        get :show, params: { id: article.to_param }
-      end
+      before(:each) { get :show, params: { id: article.to_param } }
 
       it { is_expected.to successfully_render("admin/articles/show") }
       it { is_expected.to assign(article, :article) }
     end
 
     describe "GET #new" do
-      before(:each) do
-        get :new
-      end
+      before(:each) { get :new }
 
       it { is_expected.to successfully_render("admin/articles/new") }
       it { is_expected.to prepare_the_article_form }
@@ -44,816 +39,291 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "POST #create" do
-      context "standalone" do
-        let(:max_valid_params) { attributes_for(:complete_article).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:minimal_article ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:minimal_article ).except(:author_id, :title) }
+      let(:max_params) { attributes_for(:complete_article).except(:author_id) }
+      let(:min_params) { attributes_for(:minimal_article ).except(:author_id) }
+      let(:bad_params) { attributes_for(:minimal_article ).except(:author_id, :title) }
 
-        context "with max valid params" do
-          it "creates a new Article" do
-            expect {
-              post :create, params: { article: max_valid_params }
-            }.to change(Article, :count).by(1)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(max_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+      context "with max valid params" do
+        it "creates a new Article" do
+          expect {
+            post :create, params: { article: max_params }
+          }.to change(Article, :count).by(1)
         end
 
-        context "with min valid params" do
-          it "creates a new Article" do
-            expect {
-              post :create, params: { article: min_valid_params }
-            }.to change(Article, :count).by(1)
-          end
+        it "creates the right attributes" do
+          post :create, params: { article: max_params }
 
-          it "creates the right attributes" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(min_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+          is_expected.to assign(Article.last, :article).with_attributes(max_params).and_be_valid
         end
 
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { article: invalid_params }
+        it "article belongs to current_user" do
+          post :create, params: { article: max_params }
 
-            is_expected.to successfully_render("admin/articles/new")
+          is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
+        end
 
-            is_expected.to define_all_tabs.and_select("article-choose-work")
+        it "redirects to article" do
+          post :create, params: { article: max_params }
 
-            expect(assigns(:article)).to be_a_populated_new_article
-            expect(assigns(:article)).to have_coerced_attributes(invalid_params)
-            expect(assigns(:article)).to be_invalid
-          end
+          is_expected.to send_user_to(
+            admin_article_path(assigns(:article))
+          ).with_flash(:success, "admin.flash.posts.success.create")
         end
       end
 
-      context "existing work" do
-        let(:max_valid_params) { attributes_for(:complete_review).except(:author_id) }
-        let(:min_valid_params) { attributes_for(:minimal_review ).except(:author_id) }
-        let(  :invalid_params) { attributes_for(:minimal_review ).except(:author_id, :work_id) }
-
-        context "with max valid params" do
-          it "creates a new Article" do
-            expect {
-              post :create, params: { article: max_valid_params }
-            }.to change(Article, :count).by(1)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(max_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+      context "with min valid params" do
+        it "creates a new Article" do
+          expect {
+            post :create, params: { article: min_params }
+          }.to change(Article, :count).by(1)
         end
 
-        context "with min valid params" do
-          it "creates a new Article" do
-            expect {
-              post :create, params: { article: min_valid_params }
-            }.to change(Article, :count).by(1)
-          end
+        it "creates the right attributes" do
+          post :create, params: { article: min_params }
 
-          it "creates the right attributes" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(min_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+          is_expected.to assign(Article.last, :article).with_attributes(min_params).and_be_valid
         end
 
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { article: invalid_params }
+        it "article belongs to current_user" do
+          post :create, params: { article: min_params }
 
-            is_expected.to successfully_render("admin/articles/new")
+          is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
+        end
 
-            is_expected.to define_all_tabs.and_select("article-choose-work")
+        it "redirects to article" do
+          post :create, params: { article: min_params }
 
-            expect(assigns(:article)).to be_a_populated_new_article
-            expect(assigns(:article)).to have_coerced_attributes(invalid_params)
-            expect(assigns(:article)).to be_invalid
-          end
+          is_expected.to send_user_to(
+            admin_article_path(assigns(:article))
+          ).with_flash(:success, "admin.flash.posts.success.create")
         end
       end
 
-      context "new work" do
-        let(:max_valid_params) { attributes_for(:complete_review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(:min_valid_params) { attributes_for(         :review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(  :invalid_params) { attributes_for( :invalid_review_with_new_work).except(:author_id).deep_stringify_keys }
-
-        context "with max valid params" do
-          it "creates a new Article" do
-            post :create, params: { article: max_valid_params }
-
-            expect {
-              post :create, params: { article: max_valid_params }
-            }.to change(Article, :count).by(1)
-          end
-
-          it "creates a new Work" do
-            expect {
-              post :create, params: { article: max_valid_params }
-            }.to change(Work, :count).by(1)
-          end
-
-          it "creates new Credits" do
-            expect {
-              post :create, params: { article: max_valid_params }
-            }.to change(Credit, :count).by(3)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { article: max_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(max_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+      context "with invalid params" do
+        before(:each) do
+          post :create, params: { article: bad_params }
         end
 
-        context "with min valid params" do
-          it "creates a new Article" do
-            expect {
-              post :create, params: { article: min_valid_params }
-            }.to change(Article, :count).by(1)
-          end
+        it { is_expected.to successfully_render("admin/articles/new") }
 
-          it "creates a new Work" do
-            expect {
-              post :create, params: { article: min_valid_params }
-            }.to change(Work, :count).by(1)
-          end
+        it { is_expected.to prepare_the_article_form }
 
-          it "creates new Credits" do
-            expect {
-              post :create, params: { article: min_valid_params }
-            }.to change(Credit, :count).by(1)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(min_valid_params).and_be_valid
-          end
-
-          it "article belongs to current_user" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to article" do
-            post :create, params: { article: min_valid_params }
-
-            is_expected.to send_user_to(
-              admin_article_path(assigns(:article))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
-        end
-
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { article: invalid_params }
-
-            is_expected.to successfully_render("admin/articles/new")
-
-            is_expected.to define_all_tabs.and_select("article-new-work")
-
-            expect(assigns(:article)).to be_a_populated_new_article
-            expect(assigns(:article)).to have_coerced_attributes(invalid_params)
-            expect(assigns(:article)).to be_invalid
-          end
-        end
+        it { expect(assigns(:article)).to be_a_populated_new_article }
+        it { expect(assigns(:article)).to have_coerced_attributes(bad_params) }
+        it { expect(assigns(:article)).to be_invalid }
       end
     end
 
     describe "GET #edit" do
-      context "standalone" do
-        let(:article) { create(:minimal_article) }
+      before(:each) { get :edit, params: { id: article.to_param } }
 
-        it "renders" do
-          get :edit, params: { id: article.to_param }
-
-          is_expected.to successfully_render("admin/articles/edit")
-          is_expected.to assign(article, :article)
-
-          is_expected.to define_only_the_standalone_tab
-        end
-      end
-
-      context "review" do
-        let(:article) { create(:minimal_review) }
-
-        it "renders" do
-          get :edit, params: { id: article.to_param }
-
-          is_expected.to successfully_render("admin/articles/edit")
-          is_expected.to assign(article, :article)
-
-          is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
-        end
-      end
+      it { is_expected.to successfully_render("admin/articles/edit") }
+      it { is_expected.to assign(article, :article) }
+      it { is_expected.to prepare_the_article_form }
     end
 
     describe "PUT #update" do
+      pending "replacing slug"
+
+      let(:min_params) { { "body" => "New body.", "title" => "New title." } }
+      let(:bad_params) { { "body" => ""         , "title" => ""           } }
+
       context "draft" do
-        context "standalone" do
-          let(:article) { create(:minimal_article) }
-
-          let(:min_valid_params) { { "title" => "New Title" } }
-          let(  :invalid_params) { { "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.update"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { id: article.to_param, article: min_params }
           end
 
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: article.to_param, article: invalid_params }
-
-              is_expected.to successfully_render("admin/articles/edit")
-              is_expected.to assign(article, :article)
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).and_be_invalid
-
-              is_expected.to define_only_the_standalone_tab
-            end
-          end
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
         end
 
-        context "review" do
-          let(:article) { create(:minimal_review) }
-
-          let(:min_valid_params) { { "work_id" => create(:minimal_song).id } }
-          let(  :invalid_params) { { "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.update"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { id: article.to_param, article: bad_params }
           end
 
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: article.to_param, article: invalid_params }
-
-              is_expected.to successfully_render("admin/articles/edit")
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).and_be_invalid
-
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
-            end
-          end
-        end
-
-        describe "replacing work with new work" do
-          let!(:article) { create(:minimal_review) }
-
-          let(:min_valid_params) { attributes_for(        :review_with_new_work).except(:author_id).merge(work_id: article.work_id).deep_stringify_keys }
-          let(  :invalid_params) { attributes_for(:invalid_review_with_new_work).except(:author_id).merge(work_id: article.work_id).deep_stringify_keys }
-
-          context "with valid params" do
-            it "updates the requested article, ignoring work_id in favor of work_attributes" do
-              expect {
-                put :update, params: { id: article.to_param, article: min_valid_params }
-              }.to change { Work.count }.by(1)
-
-              is_expected.to assign(article, :article).with_attributes(min_valid_params.except("work_id")).and_be_valid
-            end
-
-            specify do
-              put :update, params: { id: article.to_param, article: min_valid_params }
-
-              is_expected.to send_user_to(admin_article_path(article)).with_flash(
-                :success, "admin.flash.posts.success.update"
-              )
-            end
-          end
-
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: article.to_param, article: invalid_params }
-
-              is_expected.to successfully_render("admin/articles/edit")
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params.except("work_id")).and_be_invalid
-
-              expect(assigns(:article).work).to be_a_new(Work)
-              expect(assigns(:article).work).to be_invalid
-
-              is_expected.to define_only_the_review_tabs.and_select("article-new-work")
-            end
-          end
+          it { is_expected.to successfully_render("admin/articles/edit") }
+          it { is_expected.to assign(article, :article).with_attributes(bad_params).and_be_invalid }
+          it { is_expected.to prepare_the_article_form }
         end
       end
 
-      pending "replacing slug"
-
       context "publishing" do
-        context "standalone" do
-          let(:article) { create(:minimal_article, :draft) }
-
-          let(:min_valid_params) { { "body" => "New body.", "title" => "New title." } }
-          let(  :invalid_params) { { "body" => ""         , "title" => ""           } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates and publishes the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_published
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.publish"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "publish", id: article.to_param, article: min_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-            it "updates article and renders edit with message" do
-              put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
+          it { expect(assigns(:article)).to be_published }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(article.reload).to_not be_published
-            end
-          end
-
-          context "with invalid params" do
-            it "fails to publish and renders edit with message and errors" do
-              put :update, params: { step: "publish", id: article.to_param, article: invalid_params }
-
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                body:  :blank_during_publish,
-                title: :blank
-              })
-
-              expect(article.reload).to_not be_published
-            end
-          end
+          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
+            :success, "admin.flash.posts.success.publish"
+          ) }
         end
 
-        context "review" do
-          let(:article) { create(:minimal_review, :draft) }
+        context "with failed transition" do
+          before(:each) do
+            allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
 
-          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id } }
-          let(  :invalid_params) { { "body" => ""         , "work_id" => ""               } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates and publishes the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_published
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.publish"
-            ) }
+            put :update, params: { step: "publish", id: article.to_param, article: min_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(
+            :error, "admin.flash.posts.error.publish"
+          ) }
 
-            it "updates article and renders edit with message" do
-              put :update, params: { step: "publish", id: article.to_param, article: min_valid_params }
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { expect(article.reload).to_not be_published }
+        end
 
-              is_expected.to assign(article, :article).with_attributes({
-                body:            min_valid_params["body"   ],
-                current_work_id: min_valid_params["work_id"]
-              })
-
-              expect(article.reload).to_not be_published
-            end
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "publish", id: article.to_param, article: bad_params }
           end
 
-          context "with invalid params" do
-            it "fails to publish and renders edit with message and errors" do
-              put :update, params: { step: "publish", id: article.to_param, article: invalid_params }
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(
+            :error, "admin.flash.posts.error.publish"
+          ) }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+            body:  :blank_during_publish,
+            title: :blank
+          }) }
 
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                body:    :blank_during_publish,
-                work_id: :blank
-              })
-
-              expect(article.reload).to_not be_published
-            end
-          end
+          it { expect(article.reload).to_not be_published }
         end
       end
 
       context "unpublishing" do
-        context "standalone" do
-          let(:article) { create(:minimal_article, :published) }
+        let(:article) { create(:minimal_article, :published) }
 
-          let(:min_valid_params) { { "body" => "", "title" => "New title."} }
-          let(  :invalid_params) { { "body" => "", "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unpublish", id: article.to_param, article: min_valid_params }
-            end
-
-            it "unpublishes and updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.unpublish"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "unpublish", id: article.to_param, article: min_params }
           end
 
-          context "with invalid params" do
-            it "unpublishes and renders edit with errors" do
-              put :update, params: { step: "unpublish", id: article.to_param, article: invalid_params }
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil)
+          it { expect(assigns(:article)).to be_draft }
 
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                title: :blank
-              })
-
-              expect(assigns(:article)).to be_draft
-            end
-          end
+          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
+            :success, "admin.flash.posts.success.unpublish"
+          ) }
         end
 
-        context "review" do
-          let(:article) { create(:minimal_review, :published) }
-
-          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
-          let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unpublish", id: article.to_param, article: min_valid_params }
-            end
-
-            it "unpublishes and updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.unpublish"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "unpublish", id: article.to_param, article: bad_params }
           end
 
-          context "with invalid params" do
-            it "unpublishes and renders edit with errors" do
-              put :update, params: { step: "unpublish", id: article.to_param, article: invalid_params }
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil) }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil)
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+            title: :blank
+          }) }
 
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                work_id: :blank
-              })
-
-              expect(assigns(:article)).to be_draft
-            end
-          end
+          it { expect(assigns(:article)).to be_draft }
         end
       end
 
       context "scheduling" do
-        context "standalone" do
-          let(:article) { create(:minimal_article, :draft) }
+        let(:article) { create(:minimal_article, :draft) }
 
-          let(:min_valid_params) { { "body" => "New body.", "title" => "New title.", publish_on: "01/01/2050" } }
-          let(  :invalid_params) { { "body" => "",          "title" => ""                                     } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates and schedules the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_scheduled
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.schedule"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "schedule", id: article.to_param, article: min_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-            it "updates article and renders edit with message" do
-              put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
+          it { expect(assigns(:article)).to be_scheduled }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(article.reload).to_not be_scheduled
-            end
-          end
-
-          context "with invalid params" do
-            it "fails to schedule and renders edit with message and errors" do
-              put :update, params: { step: "schedule", id: article.to_param, article: invalid_params }
-
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                body:  :blank_during_publish,
-                title: :blank
-              })
-
-              expect(article.reload).to_not be_scheduled
-            end
-          end
+          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
+            :success, "admin.flash.posts.success.schedule"
+          ) }
         end
 
-        context "review" do
-          let(:article) { create(:minimal_review) }
+        context "with failed transition" do
+          before(:each) do
+            allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
 
-          let(:min_valid_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id, publish_on: "01/01/2050" } }
-          let(  :invalid_params) { { "body" => ""         , "work_id" => ""                                                 } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
-            end
-
-            it "updates and schedules the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_scheduled
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.schedule"
-            ) }
+            put :update, params: { step: "schedule", id: article.to_param, article: min_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(
+            :error, "admin.flash.posts.error.schedule"
+          ) }
 
-            it "updates article and renders edit with message" do
-              put :update, params: { step: "schedule", id: article.to_param, article: min_valid_params }
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { expect(article.reload).to_not be_scheduled }
+        end
 
-              is_expected.to assign(article, :article).with_attributes({
-                body:            min_valid_params["body"   ],
-                current_work_id: min_valid_params["work_id"]
-              })
-
-              expect(article.reload).to_not be_scheduled
-            end
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "schedule", id: article.to_param, article: bad_params }
           end
 
-          context "with invalid params" do
-            it "fails to schedule and renders edit with message and errors" do
-              put :update, params: { step: "schedule", id: article.to_param, article: invalid_params }
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(
+            :error, "admin.flash.posts.error.schedule"
+          ) }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+            body:  :blank_during_publish,
+            title: :blank
+          }) }
 
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                body:    :blank_during_publish,
-                work_id: :blank
-              })
-
-              expect(article.reload).to_not be_scheduled
-            end
-          end
+          it { expect(article.reload).to_not be_scheduled }
         end
       end
 
       context "unscheduling" do
-        context "standalone" do
-          let(:article) { create(:minimal_article, :scheduled) }
+        let(:article) { create(:minimal_article, :scheduled) }
 
-          let(:min_valid_params) { { "body" => "", "title" => "New title."} }
-          let(  :invalid_params) { { "body" => "", "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unschedule", id: article.to_param, article: min_valid_params }
-            end
-
-            it "unschedules and updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.unschedule"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "unschedule", id: article.to_param, article: min_params }
           end
 
-          context "with invalid params" do
-            it "unschedules and renders edit with errors" do
-              put :update, params: { step: "unschedule", id: article.to_param, article: invalid_params }
+          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil)
+          it { expect(assigns(:article)).to be_draft }
 
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                title: :blank
-              })
-
-              expect(assigns(:article)).to be_draft
-            end
-          end
+          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
+            :success, "admin.flash.posts.success.unschedule"
+          ) }
         end
 
-        context "review" do
-          let(:article) { create(:minimal_review, :scheduled) }
-
-          let(:min_valid_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
-          let(  :invalid_params) { { "body" => "", "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unschedule", id: article.to_param, article: min_valid_params }
-            end
-
-            it "unschedules and updates the requested article" do
-              is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-              expect(assigns(:article)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-              :success, "admin.flash.posts.success.unschedule"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "unschedule", id: article.to_param, article: bad_params }
           end
 
-          context "with invalid params" do
-            it "unschedules and renders edit with errors" do
-              put :update, params: { step: "unschedule", id: article.to_param, article: invalid_params }
+          it { is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil) }
 
-              is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil)
+          it { is_expected.to prepare_the_article_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("article-choose-work")
+          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+            title: :blank
+          }) }
 
-              is_expected.to assign(article, :article).with_attributes(invalid_params).with_errors({
-                work_id: :blank
-              })
-
-              expect(assigns(:article)).to be_draft
-            end
-          end
+          it { expect(assigns(:article)).to be_draft }
         end
       end
     end
@@ -886,9 +356,6 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           "Draft",
           "Scheduled",
           "Published",
-          "Review",
-          "Article",
-          "All",
         ])
       end
     end

@@ -47,7 +47,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       let(    :max_params) { attributes_for(:minimal_creator, :with_summary, :with_new_member, :with_new_pseudonym) }
       let(:alt_max_params) { attributes_for(:minimal_creator, :with_summary, :with_new_group,  :with_new_real_name) }
       let(  :valid_params) { attributes_for(:minimal_creator) }
-      let(:invalid_params) { attributes_for(:minimal_creator).except(:name) }
+      let(:bad_params) { attributes_for(:minimal_creator).except(:name) }
 
       context "with max valid params including memeber and pseudonym" do
         it "creates a new Creator" do
@@ -141,12 +141,12 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { creator: invalid_params }
+          post :create, params: { creator: bad_params }
 
           is_expected.to successfully_render("admin/creators/new")
 
           expect(assigns(:creator)).to be_a_populated_new_creator
-          expect(assigns(:creator)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:creator)).to have_coerced_attributes(bad_params)
 
           is_expected.to prepare_identity_and_membership_dropdowns
         end
@@ -223,7 +223,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       let(:ignored_params) { attributes_for(:minimal_creator, :with_summary, :with_new_group,  :with_new_real_name) }
 
       let(  :valid_params) { { name: "New Name" } }
-      let(:invalid_params) { { name: ""         } }
+      let(:bad_params) { { name: ""         } }
 
       context "with max valid params" do
         it "updates the requested creator" do
@@ -299,7 +299,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: creator.to_param, creator: invalid_params }
+          put :update, params: { id: creator.to_param, creator: bad_params }
 
           is_expected.to successfully_render("admin/creators/edit")
 

@@ -9,7 +9,7 @@ RSpec.describe UsersController, type: :controller do
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_params) {
+  let(:bad_params) {
     skip("Add a hash of attributes invalid for your model")
   }
 
@@ -52,7 +52,7 @@ RSpec.describe UsersController, type: :controller do
 
     context "with invalid params" do
       it "renders (i.e. to display the 'new' template)" do
-        post :create, params: {user: invalid_params}, session: valid_session
+        post :create, params: {user: bad_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
     end
@@ -89,7 +89,7 @@ RSpec.describe UsersController, type: :controller do
     context "with invalid params" do
       it "renders (i.e. to display the 'edit' template)" do
         user = User.create! valid_params
-        put :update, params: {id: user.to_param, user: invalid_params}, session: valid_session
+        put :update, params: {id: user.to_param, user: bad_params}, session: valid_session
         expect(response).to have_http_status(200)
       end
     end

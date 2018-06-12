@@ -200,7 +200,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid) { create(:primary_creator  ) }
 
         let(  :valid_params) { { "0" => { pseudonym_id:   valid.id } } }
-        let(:invalid_params) { { "0" => { pseudonym_id: invalid.id } } }
+        let(:bad_params) { { "0" => { pseudonym_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
         it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }
@@ -242,7 +242,7 @@ RSpec.describe Creator, type: :model do
           end
 
           specify "primary" do
-            subject.pseudonym_identities_attributes = invalid_params
+            subject.pseudonym_identities_attributes = bad_params
 
             expect(subject.pseudonym_identities).to have(0).items
           end
@@ -287,7 +287,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid) { create(:secondary_creator) }
 
         let(  :valid_params) { { "0" => { real_name_id:   valid.id } } }
-        let(:invalid_params) { { "0" => { real_name_id: invalid.id } } }
+        let(:bad_params) { { "0" => { real_name_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                          } } }
 
         it { is_expected.to accept_nested_attributes_for(:real_name_identities).allow_destroy(true) }
@@ -328,7 +328,7 @@ RSpec.describe Creator, type: :model do
           end
 
           specify "secondary" do
-            subject.real_name_identities_attributes = invalid_params
+            subject.real_name_identities_attributes = bad_params
 
             expect(subject.real_name_identities).to have(0).items
           end
@@ -373,7 +373,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid) { create(:collective_creator) }
 
         let(  :valid_params) { { "0" => { member_id:   valid.id } } }
-        let(:invalid_params) { { "0" => { member_id: invalid.id } } }
+        let(:bad_params) { { "0" => { member_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                       } } }
 
         it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
@@ -415,7 +415,7 @@ RSpec.describe Creator, type: :model do
           end
 
           specify "collective" do
-            subject.member_memberships_attributes = invalid_params
+            subject.member_memberships_attributes = bad_params
 
             expect(subject.member_memberships).to have(0).items
           end
@@ -460,7 +460,7 @@ RSpec.describe Creator, type: :model do
         let(:invalid) { create(:individual_creator) }
 
         let(  :valid_params) { { "0" => { group_id:   valid.id } } }
-        let(:invalid_params) { { "0" => { group_id: invalid.id } } }
+        let(:bad_params) { { "0" => { group_id: invalid.id } } }
         let(  :empty_params) { { "0" => {                      } } }
 
         it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
@@ -502,7 +502,7 @@ RSpec.describe Creator, type: :model do
           end
 
           specify "individual" do
-            subject.group_memberships_attributes = invalid_params
+            subject.group_memberships_attributes = bad_params
 
             expect(subject.group_memberships).to have(0).items
           end

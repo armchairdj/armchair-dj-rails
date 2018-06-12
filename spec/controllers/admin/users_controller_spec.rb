@@ -40,7 +40,7 @@ RSpec.describe Admin::UsersController, type: :controller do
 
     describe "POST #create" do
       let(  :valid_params) { attributes_for(:complete_user) }
-      let(:invalid_params) { attributes_for(:complete_user).except(:first_name) }
+      let(:bad_params) { attributes_for(:complete_user).except(:first_name) }
 
       context "with valid params" do
         it "creates a new User" do
@@ -66,11 +66,11 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { user: invalid_params }
+          post :create, params: { user: bad_params }
 
           is_expected.to successfully_render("admin/users/new")
 
-          expect(assigns(:user)).to have_coerced_attributes(invalid_params)
+          expect(assigns(:user)).to have_coerced_attributes(bad_params)
           expect(assigns(:user)).to be_invalid
         end
       end
@@ -91,7 +91,7 @@ RSpec.describe Admin::UsersController, type: :controller do
       let(:user) { create(:minimal_user) }
 
       let(  :valid_params) { { first_name: "New First Name" } }
-      let(:invalid_params) { { first_name: ""               } }
+      let(:bad_params) { { first_name: ""               } }
 
       context "with valid params" do
         it "updates the requested user" do
@@ -111,11 +111,11 @@ RSpec.describe Admin::UsersController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: user.to_param, user: invalid_params }
+          put :update, params: { id: user.to_param, user: bad_params }
 
           is_expected.to successfully_render("admin/users/edit")
 
-          is_expected.to assign(user, :user).with_attributes(invalid_params).and_be_invalid
+          is_expected.to assign(user, :user).with_attributes(bad_params).and_be_invalid
         end
       end
     end

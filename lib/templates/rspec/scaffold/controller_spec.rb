@@ -10,7 +10,7 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_params) {
+  let(:bad_params) {
     skip("Add a hash of attributes invalid for your model")
   }
 
@@ -76,9 +76,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
     context "with invalid params" do
       it "renders (i.e. to display the 'new' template)" do
 <% if Rails::VERSION::STRING < "5.0" -%>
-        post :create, {:<%= ns_file_name %> => invalid_params}
+        post :create, {:<%= ns_file_name %> => bad_params}
 <% else -%>
-        post :create, params: {<%= ns_file_name %>: invalid_params}, session: valid_session
+        post :create, params: {<%= ns_file_name %>: bad_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(200)
       end
@@ -129,9 +129,9 @@ RSpec.describe <%= controller_class_name %>Controller, <%= type_metatag(:control
       it "renders (i.e. to display the 'edit' template)" do
         <%= file_name %> = <%= class_name %>.create! valid_params
 <% if Rails::VERSION::STRING < "5.0" -%>
-        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => invalid_params}
+        put :update, {:id => <%= file_name %>.to_param, :<%= ns_file_name %> => bad_params}
 <% else -%>
-        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: invalid_params}, session: valid_session
+        put :update, params: {id: <%= file_name %>.to_param, <%= ns_file_name %>: bad_params}, session: valid_session
 <% end -%>
         expect(response).to have_http_status(200)
       end
