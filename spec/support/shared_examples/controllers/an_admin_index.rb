@@ -7,9 +7,11 @@ RSpec.shared_examples "an_admin_index" do
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
 
-  let(         :ids) { 21.times.map { |i| create_minimal_instance.id } }
   let(   :paginated) { model_class.where(id: ids).for_admin }
   let(        :none) { model_class.none.for_admin }
+
+  let(         :ids) { 21.times.map { |i| create_minimal_instance.id } }
+
 
   allowed_scopes.each do |scope, method|
     context "for #{scope} scope" do

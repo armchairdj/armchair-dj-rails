@@ -13,6 +13,7 @@ class User < ApplicationRecord
   include Alphabetizable
   include Linkable
   include Viewable
+  include Sluggable
 
   #############################################################################
   # PLUGINS.
@@ -33,10 +34,6 @@ class User < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.published_author!(username)
-    viewable.where(username: username).take!
-  end
-
   #############################################################################
   # SCOPES.
   #############################################################################
@@ -49,9 +46,11 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :articles, dependent: :destroy, foreign_key: "author_id"
-  has_many :reviews,  dependent: :destroy, foreign_key: "author_id"
-  has_many :mixtapes, dependent: :destroy, foreign_key: "author_id"
+  has_many :posts,     dependent: :destroy, foreign_key: "author_id"
+  has_many :articles,  dependent: :destroy, foreign_key: "author_id"
+  has_many :reviews,   dependent: :destroy, foreign_key: "author_id"
+  has_many :mixtapes,  dependent: :destroy, foreign_key: "author_id"
+  has_many :playlists, dependent: :destroy, foreign_key: "author_id"
 
   has_many :works, through: :reviews
   has_many :creators, -> { distinct }, through: :works

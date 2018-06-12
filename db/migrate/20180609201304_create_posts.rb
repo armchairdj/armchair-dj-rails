@@ -14,7 +14,6 @@ class CreatePosts < ActiveRecord::Migration[5.2]
 
       t.string :alpha, index: true
       t.string :slug
-      t.boolean :dirty_slug, default: false, null: false
 
       t.integer :status, index: true, default: 0, null: false
       t.datetime :publish_on

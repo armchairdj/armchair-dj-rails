@@ -1,6 +1,6 @@
 <%
   @title = [
-    "Update #{@work.medium.name}",
+    "Update #{@work.model_name.human}",
     @work.credited_artists,
     @work.title
   ]
@@ -11,10 +11,4 @@
   instance: @work,
 ) %>
 
-<%= render partial: "form", locals: {
-  work:       @work,
-  creators:   @creators,
-  types:      @types,
-  roles:      @roles,
-  works:      @works,
-} %>
+<%= render partial: "form" %>

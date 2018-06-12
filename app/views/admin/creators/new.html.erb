@@ -6,10 +6,4 @@
   h1: @title
 ) %>
 
-<%= render partial: "form", locals: {
-  creator:              @creator,
-  available_pseudonyms: @available_pseudonyms,
-  available_real_names: @available_real_names,
-  available_members:    @available_members,
-  available_groups:     @available_groups
-} %>
+<%= render partial: "form" %>

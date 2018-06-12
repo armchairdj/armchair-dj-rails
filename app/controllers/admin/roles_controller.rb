@@ -1,27 +1,4 @@
 class Admin::RolesController < AdminController
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
 
   # GET /admin/roles
   # GET /admin/roles.json
@@ -42,9 +19,7 @@ class Admin::RolesController < AdminController
         format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.create") }
         format.json { render :show, status: :created, location: admin_role_url(@role) }
       else
-        prepare_form
-
-        format.html { render :new }
+        format.html { prepare_form; render :new }
         format.json { render json: @role.errors, status: :unprocessable_entity }
       end
     end
@@ -61,9 +36,7 @@ class Admin::RolesController < AdminController
         format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.update") }
         format.json { render :show, status: :ok, location: admin_role_url(@role) }
       else
-        prepare_form
-
-        format.html { render :edit }
+        format.html { prepare_form; render :edit }
         format.json { render json: @role.errors, status: :unprocessable_entity }
       end
     end

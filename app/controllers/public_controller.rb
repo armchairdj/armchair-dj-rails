@@ -27,25 +27,29 @@ class PublicController < ApplicationController
   # GET /<plural_param_key>.json
   def index; end
 
-  # GET /<plural_param_key>/1
-  # GET /<plural_param_key>/1.json
+  # GET /<plural_param_key>/friendly_id
+  # GET /<plural_param_key>/friendly_id.json
   def show; end
 
 private
 
-  def set_meta_tags
-    @meta_description = @instance.summary
+  def find_collection
+    @collection = policy_scope(model_class).page(params[:page])
+
+    instance_variable_set(:"@#{controller_name}", @collection)
+  end
+
+  def find_instance
+    @instance = policy_scope(model_class).friendly.find(params[:id])
+
+    instance_variable_set(:"@#{controller_name.singularize}", @instance)
   end
 
   def authorize_instance
     authorize @instance
   end
 
-  def scoped_collection
-    policy_scope(model_class).page(params[:page])
-  end
-
-  def scoped_instance
-    @instance = policy_scope(model_class).find(params[:id])
+  def set_meta_tags
+    @meta_description = @instance.summary
   end
 end

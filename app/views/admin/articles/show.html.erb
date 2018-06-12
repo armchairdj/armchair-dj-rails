@@ -53,9 +53,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td) do %>
-          <%= @article.slug %> <%= "(dirty)" if @article.dirty_slug? %>
-        <% end %>
+        <%= content_tag(:td, @article.slug) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

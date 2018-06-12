@@ -452,46 +452,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
         end
       end
 
-      context "replacing slug" do
-        let(:mixtape) { create(:minimal_mixtape) }
-
-        context "with custom slug" do
-          let(:min_valid_params) { { "slug" => "custom/slug" } }
-
-          before(:each) do
-            put :update, params: { id: mixtape.to_param, mixtape: min_valid_params }
-          end
-
-          it "sets custom slug" do
-            is_expected.to assign(mixtape, :mixtape).with_attributes(min_valid_params).and_be_valid
-
-            expect(assigns(:mixtape).dirty_slug?).to eq(true)
-          end
-
-          it { is_expected.to send_user_to(admin_mixtape_path(mixtape)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-
-        context "with blank slug" do
-          let(:min_valid_params) { { "slug" => "" } }
-
-          before(:each) do
-            put :update, params: { id: mixtape.to_param, mixtape: min_valid_params }
-          end
-
-          it "regenerates slug" do
-            is_expected.to assign(mixtape, :mixtape).and_be_valid
-
-            expect(assigns(:mixtape).slug).to_not be_blank
-            expect(assigns(:mixtape).dirty_slug?).to eq(false)
-          end
-
-          it { is_expected.to send_user_to(admin_mixtape_path(mixtape)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-      end
+      pending "replacing slug"
 
       context "publishing" do
         context "standalone" do

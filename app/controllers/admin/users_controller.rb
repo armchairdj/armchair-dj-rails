@@ -1,29 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < AdminController
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
 
   # GET /users
   # GET /users.json
@@ -44,9 +21,7 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.create") }
         format.json { render :show, status: :created, location: admin_user_url(@user) }
       else
-        prepare_form
-
-        format.html { render :new }
+        format.html { prepare_form; render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -65,9 +40,7 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_user_path(@user), success: I18n.t("admin.flash.users.success.update") }
         format.json { render :show, status: :ok, location: admin_user_url(@user) }
       else
-        prepare_form
-
-        format.html { render :edit }
+        format.html { prepare_form; render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

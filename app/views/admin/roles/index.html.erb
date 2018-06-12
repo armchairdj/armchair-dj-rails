@@ -17,7 +17,7 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "Medium" %>
+            <%= sortable_th @sorts, "Work Type" %>
             <%= sortable_th @sorts, "Name"   %>
 
             <%= actions_th %>
@@ -27,7 +27,7 @@
         <%= content_tag(:tbody) do %>
           <% @roles.each do |role| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, role.medium.name) %>
+              <%= content_tag(:td, role.work_type) %>
               <%= content_tag(:td, role.name       ) %>
 
               <%= content_tag(:td, class: "actions") do %>

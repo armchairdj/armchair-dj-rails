@@ -36,8 +36,6 @@ Rails.application.routes.draw do
 
     get    "settings/password", to: "users/registrations#edit_password"
     match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
-
-    get    "profile/:username", to: "users/registrations#profile",         as: :user_profile
   end
 
   #############################################################################
@@ -68,7 +66,7 @@ Rails.application.routes.draw do
     resources :mixtapes,   concerns: :paginatable
     resources :reviews,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
-    resources :tags,       concerns: :paginatable
+    # resources :tags,       concerns: :paginatable
     resources :users,      concerns: :paginatable
     resources :works,      concerns: :paginatable
 
@@ -101,9 +99,17 @@ Rails.application.routes.draw do
   # POSTS.
   #############################################################################
 
+  resources :posts, only: [:index], concerns: :paginatable, path: "/"
+
   scope format: true, constraints: { format: "rss" } do
-    get "/feed", to: "articles#feed"
+    get "/feed", to: "posts#feed"
   end
+
+  #############################################################################
+  # ARTICLES.
+  #############################################################################
+
+  resources :articles, only: [:index, :show], concerns: :paginatable
 
   #############################################################################
   # REVIEWS.
@@ -139,8 +145,11 @@ Rails.application.routes.draw do
   # TAGS.
   #############################################################################
 
-  resources :tags, only: [:index, :show], concerns: :paginatable
+  # resources :tags, only: [:index, :show], concerns: :paginatable
 
+  #############################################################################
+  # USERS.
+  #############################################################################
 
-  resources :articles, only: [:index, :show], concerns: :paginatable, path: "/"
+  get "profile/:id", to: "users#show", as: :user
 end

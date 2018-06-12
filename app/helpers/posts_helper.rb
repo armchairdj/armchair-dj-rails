@@ -7,20 +7,31 @@ module PostsHelper
   # DISPLAY METHODS.
   #############################################################################
 
-  def formatted_post_body(article)
-    paragraphs(article.body)
+  def formatted_post_body(post)
+    paragraphs(post.body)
   end
 
-  def post_published_date(article)
-    return unless article.published?
-
-    time_tag(article.published_at, article.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
+  def post_title(post, **args)
+    case
+    when post.is_a?(Article)
+      article_title(post, **args)
+    when post.is_a?(Review)
+      review_title(post, **args)
+    when post.is_a?(Mixtape)
+      mixtape_title(post, **args)
+    end
   end
 
-  def post_scheduled_date(article)
-    return unless article.scheduled?
+  def post_published_date(post)
+    return unless post.published?
 
-    time_tag article.publish_on, article.publish_on.strftime("%m/%d/%Y at %I:%M%p")
+    time_tag(post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
+  end
+
+  def post_scheduled_date(post)
+    return unless post.scheduled?
+
+    time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
   end
 
   def truncated_title(title, length: nil)

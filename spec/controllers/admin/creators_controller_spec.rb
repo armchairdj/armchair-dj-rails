@@ -219,8 +219,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     describe "PUT #update" do
       let!(:creator) { create(:minimal_creator, :with_member, :with_pseudonym) }
 
-      let(    :max_params) { attributes_for(:creator, :with_summary, :with_new_member, :with_new_pseudonym) }
-      let(:ignored_params) { attributes_for(:creator, :with_summary, :with_new_group,  :with_new_real_name) }
+      let(    :max_params) { attributes_for(:minimal_creator, :with_summary, :with_new_member, :with_new_pseudonym) }
+      let(:ignored_params) { attributes_for(:minimal_creator, :with_summary, :with_new_group,  :with_new_real_name) }
 
       let(  :valid_params) { { name: "New Name" } }
       let(:invalid_params) { { name: ""         } }

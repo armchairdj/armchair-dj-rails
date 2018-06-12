@@ -15,6 +15,18 @@
   articles: @user.articles.for_site
 } %>
 
+<%= render partial: "shared/playback/reviews", locals: {
+  reviews: @user.reviews.for_site
+} %>
+
+<%= render partial: "shared/playback/mixtapes", locals: {
+  mixtapes: @user.mixtapes.for_site
+} %>
+
+<%= render partial: "shared/playback/playlists", locals: {
+  playlists: @user.playlists.for_site
+} %>
+
 <%= render partial: "shared/playback/works", locals: {
   works: @user.works.for_site
 } %>

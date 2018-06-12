@@ -1,7 +1,6 @@
 <%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
 
-<% if f.object.slug_locked? %>
+<% if f.object.persisted? %>
   <%= f.input(:slug, readonly: true) %>
-<% elsif f.object.persisted? %>
-  <%= f.input(:slug) %>
+  TODO RESET SLUG CONTROL
 <% end %>

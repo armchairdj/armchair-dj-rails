@@ -19,7 +19,7 @@ RSpec.describe CreatorsController, type: :controller do
     let(:creator) { create(:minimal_creator, :with_published_post) }
 
     it "renders" do
-        get :show, params: { slug: creator.slug }
+        get :show, params: { id: creator.to_param }
 
         is_expected.to successfully_render("creators/show")
 

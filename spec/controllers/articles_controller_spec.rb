@@ -19,25 +19,11 @@ RSpec.describe ArticlesController, type: :controller do
     let(:article) { create(:minimal_article, :published) }
 
     it "renders" do
-      get :show, params: { slug: article.slug }
+      get :show, params: { id: article.to_param }
 
       is_expected.to successfully_render("articles/show")
 
       expect(assigns(:article)).to eq(article)
-    end
-  end
-
-  describe "GET #feed" do
-    before(:each) do
-      101.times { create(:minimal_article, :published) }
-    end
-
-    it "renders last 100 published articles as rss" do
-      get :feed, params: { format: :rss }
-
-      expect(response).to have_http_status(200)
-
-      expect(assigns(:articles)).to have(100).items
     end
   end
 end

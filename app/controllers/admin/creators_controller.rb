@@ -1,30 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::CreatorsController < AdminController
-  before_action :build_new_instance, only: [
-    :new,
-    :create
-  ]
-
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
-  ]
-
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
   # GET /creators
   # GET /creators.json
   def index; end
@@ -47,9 +23,7 @@ class Admin::CreatorsController < AdminController
         format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.create") }
         format.json { render :show, status: :created, location: admin_creator_url(@creator) }
       else
-        prepare_form
-
-        format.html { render :new }
+        format.html { prepare_form; render :new }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end
@@ -63,9 +37,7 @@ class Admin::CreatorsController < AdminController
         format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.update") }
         format.json { render :show, status: :ok, location: admin_creator_url(@creator) }
       else
-        prepare_form
-
-        format.html { render :edit }
+        format.html { prepare_form; render :edit }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end

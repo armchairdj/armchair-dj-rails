@@ -53,9 +53,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td) do %>
-          <%= @mixtape.slug %> <%= "(dirty)" if @mixtape.dirty_slug? %>
-        <% end %>
+        <%= content_tag(:td, @mixtape.slug) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

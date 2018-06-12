@@ -16,10 +16,10 @@ RSpec.describe ReviewsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:review) { create(:minimal_review, :with_published_post) }
+    let(:review) { create(:minimal_review, :published) }
 
     it "renders" do
-        get :show, params: { slug: review.slug }
+        get :show, params: { id: review.to_param }
 
         is_expected.to successfully_render("reviews/show")
 

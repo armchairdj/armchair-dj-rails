@@ -1,14 +1,3 @@
 # frozen_string_literal: true
 
-class MixtapesController < PublicController
-
-private
-
-  def find_collection
-    @mixtapes = scoped_collection
-  end
-
-  def find_instance
-    @mixtape = scoped_instance
-  end
-end
+class MixtapesController < PublicController; end

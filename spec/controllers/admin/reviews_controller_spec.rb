@@ -452,46 +452,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
         end
       end
 
-      context "replacing slug" do
-        let(:review) { create(:minimal_review) }
-
-        context "with custom slug" do
-          let(:min_valid_params) { { "slug" => "custom/slug" } }
-
-          before(:each) do
-            put :update, params: { id: review.to_param, review: min_valid_params }
-          end
-
-          it "sets custom slug" do
-            is_expected.to assign(review, :review).with_attributes(min_valid_params).and_be_valid
-
-            expect(assigns(:review).dirty_slug?).to eq(true)
-          end
-
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-
-        context "with blank slug" do
-          let(:min_valid_params) { { "slug" => "" } }
-
-          before(:each) do
-            put :update, params: { id: review.to_param, review: min_valid_params }
-          end
-
-          it "regenerates slug" do
-            is_expected.to assign(review, :review).and_be_valid
-
-            expect(assigns(:review).slug).to_not be_blank
-            expect(assigns(:review).dirty_slug?).to eq(false)
-          end
-
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-      end
+      pending "replacing slug"
 
       context "publishing" do
         context "standalone" do

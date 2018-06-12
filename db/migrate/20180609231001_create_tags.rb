@@ -5,7 +5,6 @@ class CreateTags < ActiveRecord::Migration[5.2]
       t.text :summary
       t.string :alpha, index: true
       t.string :slug
-      t.boolean :dirty_slug, default: false, null: false
       t.boolean :viewable, default: false, null: false
 
       t.timestamps

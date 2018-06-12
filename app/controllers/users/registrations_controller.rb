@@ -99,10 +99,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def profile
-    @user = User.published_author!(params[:username])
-  end
-
 protected
 
   def configure_sign_up_params

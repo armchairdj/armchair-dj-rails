@@ -1,6 +1,6 @@
 <%= content_tag(wrapper, class: "admin-nav") do %>
   <%= content_tag(:div, class: "constrain-wide") do %>
-    <%= link_to(site_logo, articles_path, title: "public site", class: "logo") %>
+    <%= link_to(site_logo, posts_path, title: "public site", class: "logo") %>
 
     <%= content_tag(:nav, admin_nav_links, class: "links") %>
   <% end %>

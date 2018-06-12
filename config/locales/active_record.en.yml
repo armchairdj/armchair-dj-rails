@@ -103,8 +103,6 @@ en:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
-            slug:
-              locked: "You cannot change the slug on a creator with published articles."
         credit:
           attributes:
             base:
@@ -133,8 +131,6 @@ en:
               missing_alpha: "Cannot calculate alphabetical sort value."
             playlistings:
               too_short: "Please choose at least two works."
-            slug:
-              locked: "You cannot change the slug on a playlist with published articles."
         article:
           attributes:
             author:
@@ -144,8 +140,6 @@ en:
               missing_alpha: "Cannot calculate alphabetical sort value."
             body:
               blank_during_publish: "You cannot publish an article without a body."
-            slug:
-              locked: "You cannot change the slug on a published article."
             publish_on:
               blank: "Please choose a publication date to schedule this article."
         mixtape:
@@ -157,8 +151,6 @@ en:
               missing_alpha: "Cannot calculate alphabetical sort value."
             body:
               blank_during_publish: "You cannot publish a mixtape without a body."
-            slug:
-              locked: "You cannot change the slug on a published mixtape."
             publish_on:
               blank: "Please choose a publication date to schedule this mixtape."
         review:
@@ -170,22 +162,16 @@ en:
               missing_alpha: "Cannot calculate alphabetical sort value."
             body:
               blank_during_publish: "You cannot publish a review without a body."
-            slug:
-              locked: "You cannot change the slug on a published review."
             publish_on:
               blank: "Please choose a publication date to schedule this review."
         tag:
           attributes:
-            slug:
-              locked: "You cannot change the slug on a tag with published articles."
         work:
           attributes:
             base:
               missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
               too_short: "Please choose at least one creator."
-            slug:
-              locked: "You cannot change the slug on a work with published articles."
         user:
           attributes:
             base:

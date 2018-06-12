@@ -19,7 +19,7 @@ RSpec.describe WorksController, type: :controller do
     let(:work) { create(:minimal_song, :with_published_post) }
 
     it "renders" do
-        get :show, params: { slug: work.slug }
+        get :show, params: { id: work.to_param }
 
         is_expected.to successfully_render("works/show")
 

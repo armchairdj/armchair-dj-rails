@@ -23,39 +23,24 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "GET #show" do
-      context "standalone" do
-        let(:article) { create(:minimal_article) }
+      let(:article) { create(:minimal_article) }
 
-        it "renders" do
-          get :show, params: { id: article.to_param }
-
-          is_expected.to successfully_render("admin/articles/show")
-          is_expected.to assign(article, :article)
-        end
+      before(:each) do
+        get :show, params: { id: article.to_param }
       end
 
-      context "review" do
-        let(:article) { create(:minimal_review) }
-
-        it "renders" do
-          get :show, params: { id: article.to_param }
-
-          is_expected.to successfully_render("admin/articles/show")
-          is_expected.to assign(article, :article)
-        end
-      end
+      it { is_expected.to successfully_render("admin/articles/show") }
+      it { is_expected.to assign(article, :article) }
     end
 
     describe "GET #new" do
-      it "renders" do
+      before(:each) do
         get :new
-
-        is_expected.to successfully_render("admin/articles/new")
-
-        is_expected.to define_all_tabs.and_select("article-choose-work")
-
-        expect(assigns(:article)).to be_a_populated_new_article
       end
+
+      it { is_expected.to successfully_render("admin/articles/new") }
+      it { is_expected.to prepare_the_article_form }
+      it { expect(assigns(:article)).to be_a_populated_new_article }
     end
 
     describe "POST #create" do
@@ -452,46 +437,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         end
       end
 
-      context "replacing slug" do
-        let(:article) { create(:minimal_article) }
-
-        context "with custom slug" do
-          let(:min_valid_params) { { "slug" => "custom/slug" } }
-
-          before(:each) do
-            put :update, params: { id: article.to_param, article: min_valid_params }
-          end
-
-          it "sets custom slug" do
-            is_expected.to assign(article, :article).with_attributes(min_valid_params).and_be_valid
-
-            expect(assigns(:article).dirty_slug?).to eq(true)
-          end
-
-          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-
-        context "with blank slug" do
-          let(:min_valid_params) { { "slug" => "" } }
-
-          before(:each) do
-            put :update, params: { id: article.to_param, article: min_valid_params }
-          end
-
-          it "regenerates slug" do
-            is_expected.to assign(article, :article).and_be_valid
-
-            expect(assigns(:article).slug).to_not be_blank
-            expect(assigns(:article).dirty_slug?).to eq(false)
-          end
-
-          it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
-            :success, "admin.flash.posts.success.update"
-          ) }
-        end
-      end
+      pending "replacing slug"
 
       context "publishing" do
         context "standalone" do

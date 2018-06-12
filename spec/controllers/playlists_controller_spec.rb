@@ -19,7 +19,7 @@ RSpec.describe PlaylistsController, type: :controller do
     let(:playlist) { create(:minimal_playlist, :with_published_post) }
 
     it "renders" do
-        get :show, params: { slug: playlist.slug }
+        get :show, params: { id: playlist.to_param }
 
         is_expected.to successfully_render("playlists/show")
 

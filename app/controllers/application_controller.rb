@@ -26,12 +26,12 @@ protected
     elsif user.can_write?
       admin_articles_path
     else
-      articles_path
+      posts_path
     end
   end
 
   def after_sign_out_path_for(resource_or_scope)
-    articles_path
+    posts_path
   end
 
 private

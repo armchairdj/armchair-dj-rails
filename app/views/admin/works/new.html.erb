@@ -7,17 +7,7 @@
 ) %>
 
 <% if @work.type.blank? %>
-  <%= render partial: "form_medium_only", locals: {
-    work:  @work,
-    types: @types,
-  } %>
-
+  <%= render partial: "form_medium_only" %>
 <% else %>
-  <%= render partial: "form", locals: {
-    work:       @work,
-    creators:   @creators,
-    types:      @types,
-    roles:      @roles,
-    works:      @works,
-  } %>
+  <%= render partial: "form" %>
 <% end %>

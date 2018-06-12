@@ -5,7 +5,7 @@ require "ffaker"
 FactoryBot.define do
 
   sequence :aspect_name    { |n| "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-  sequence :creator_name   { |n| FFaker::Music.artist }
+  sequence :creator_name   { |n| "#{FFaker::Music.artist}-#{n}" }
   sequence :link_url       { |n| "http://www.example.com/articles/#{n}" }
   sequence :role_name      { |n| "Role #{n}" }
   sequence :tag_name       { |n| "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }

@@ -29,25 +29,6 @@ RSpec.describe User, type: :model do
       create(:minimal_article, :draft,     author: gruber)
     end
 
-    describe "self#published_author!" do
-      it "finds only published writers by username" do
-        expect(described_class.published_author!("jenny")).to eq(jenny)
-        expect(described_class.published_author!("brian")).to eq(brian)
-      end
-
-      it "raises if not published" do
-        expect {
-          described_class.published_author!("gruber")
-        }.to raise_exception(ActiveRecord::RecordNotFound)
-      end
-
-      it "raises if not found" do
-        expect {
-          described_class.published_author!("oops")
-        }.to raise_exception(ActiveRecord::RecordNotFound)
-      end
-    end
-
     describe "self#eager" do
       subject { described_class.eager }
 

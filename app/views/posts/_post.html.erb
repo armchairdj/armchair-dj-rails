@@ -1,0 +1,8 @@
+<% case %>
+<% when post.is_a?(Article) %>
+  <%= render partial: "shared/playback/article", locals: { article: post } %>
+<% when post.is_a?(Review) %>
+  <%= render partial: "shared/playback/review",  locals: { review:  post } %>
+<% when post.is_a?(Mixtape) %>
+  <%= render partial: "shared/playback/mixtape", locals: { mixtape: post } %>
+<% end %>

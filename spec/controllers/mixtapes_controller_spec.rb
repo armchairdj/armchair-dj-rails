@@ -16,10 +16,10 @@ RSpec.describe MixtapesController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:mixtape) { create(:minimal_mixtape, :with_published_post) }
+    let(:mixtape) { create(:minimal_mixtape, :published) }
 
     it "renders" do
-        get :show, params: { slug: mixtape.slug }
+        get :show, params: { id: mixtape.to_param }
 
         is_expected.to successfully_render("mixtapes/show")
 

@@ -32,6 +32,11 @@ class AdminController < ApplicationController
     :destroy
   ]
 
+  before_action :prepare_form, only: [
+    :new,
+    :edit
+  ]
+
   after_action :verify_authorized
 
 private
@@ -69,7 +74,7 @@ private
   end
 
   def scoped_instance(id)
-    policy_scope(model_class).find(id)
+    policy_scope(model_class).friendly.find(id)
   end
 
   def allowed_scopes
