@@ -4,22 +4,22 @@ require "rails_helper"
 
 RSpec.describe ArticlesController, type: :routing do
   describe "routes to" do
-    it "homepage" do
-      expect(get: "/").to route_to("articles#index")
+    it "#index" do
+      expect(get: "/articles").to route_to("articles#index")
     end
 
     it "#index pages" do
-      expect(get: "/page/2").to route_to("articles#index", page: "2")
+      expect(get: "/articles/page/2").to route_to("articles#index", page: "2")
     end
 
     it "#show" do
-      expect(get: "/articles/foo/bar/bat").to route_to("articles#show", slug: "foo/bar/bat")
+      expect(get: "/articles/friendly_id").to route_to("articles#show", id: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/articles/new").to route_to("articles#show", slug: "new")
+      expect(get: "/articles/new").to route_to("articles#show", id: "new")
     end
 
     it "#create" do
@@ -27,19 +27,19 @@ RSpec.describe ArticlesController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/articles/1/edit").to route_to("articles#show", slug: "1/edit")
+      expect(get: "/articles/friendly_id/edit").to_not be_routable
     end
 
     it "#update via PUT" do
-      expect(put: "/articles/1").to_not be_routable
+      expect(put: "/articles/friendly_id").to_not be_routable
     end
 
     it "#update via PATCH" do
-      expect(patch: "/articles/1").to_not be_routable
+      expect(patch: "/articles/friendly_id").to_not be_routable
     end
 
     it "#destroy" do
-      expect(delete: "/articles/1").to_not be_routable
+      expect(delete: "/articles/friendly_id").to_not be_routable
     end
   end
 end

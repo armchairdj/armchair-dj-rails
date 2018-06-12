@@ -13,7 +13,7 @@ RSpec.describe Admin::WorksController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/works/1").to route_to("admin/works#show", id: "1")
+      expect(get: "/admin/works/friendly_id").to route_to("admin/works#show", id: "friendly_id")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::WorksController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/works/1/edit").to route_to("admin/works#edit", id: "1")
+      expect(get: "/admin/works/friendly_id/edit").to route_to("admin/works#edit", id: "friendly_id")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/works/1").to route_to("admin/works#update", id: "1")
+      expect(put: "/admin/works/friendly_id").to route_to("admin/works#update", id: "friendly_id")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/works/1").to route_to("admin/works#update", id: "1")
+      expect(patch: "/admin/works/friendly_id").to route_to("admin/works#update", id: "friendly_id")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/works/1").to route_to("admin/works#destroy", id: "1")
+      expect(delete: "/admin/works/friendly_id").to route_to("admin/works#destroy", id: "friendly_id")
     end
   end
 end

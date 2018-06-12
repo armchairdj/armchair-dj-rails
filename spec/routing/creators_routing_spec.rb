@@ -13,13 +13,13 @@ RSpec.describe CreatorsController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/creators/foo/bar/bat").to route_to("creators#show", slug: "foo/bar/bat")
+      expect(get: "/creators/friendly_id").to route_to("creators#show", id: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/creators/new").to route_to("creators#show", slug: "new")
+      expect(get: "/creators/new").to route_to("creators#show", id: "new")
     end
 
     it "#create" do
@@ -27,19 +27,19 @@ RSpec.describe CreatorsController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/creators/1/edit").to route_to("creators#show", slug: "1/edit")
+      expect(get: "/creators/friendly_id/edit").to_not be_routable
     end
 
     it "#update via PUT" do
-      expect(put: "/creators/1").to_not be_routable
+      expect(put: "/creators/friendly_id").to_not be_routable
     end
 
     it "#update via PATCH" do
-      expect(patch: "/creators/1").to_not be_routable
+      expect(patch: "/creators/friendly_id").to_not be_routable
     end
 
     it "#destroy" do
-      expect(delete: "/creators/1").to_not be_routable
+      expect(delete: "/creators/friendly_id").to_not be_routable
     end
   end
 end

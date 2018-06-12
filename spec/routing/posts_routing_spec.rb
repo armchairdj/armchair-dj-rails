@@ -1,35 +1,50 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe PostsController, type: :routing do
-  it "#index" do
-    expect(get: "/posts").to route_to("posts#index")
+  describe "routes to" do
+    it "#index" do
+      expect(get: "/").to route_to("posts#index")
+    end
+
+    it "#index pages" do
+      expect(get: "/page/2").to route_to("posts#index", page: "2")
+    end
+
+    it "#feed" do
+      expect(get: "/feed.rss").to route_to("posts#feed", format: "rss")
+    end
+
   end
 
-  it "#new" do
-    expect(get: "/posts/new").to route_to("posts#new")
-  end
+  describe "does not route to RESTful" do
+    it "#show" do
+      expect(get: "/posts/friendly_id").to_not be_routable
+    end
 
-  it "#show" do
-    expect(get: "/posts/1").to route_to("posts#show", :id => "1")
-  end
+    it "#new" do
+      expect(get: "/posts/new").to_not be_routable
+    end
 
-  it "#edit" do
-    expect(get: "/posts/1/edit").to route_to("posts#edit", :id => "1")
-  end
+    it "#create" do
+      expect(post: "/posts").to_not be_routable
+    end
 
-  it "#create" do
-    expect(:post => "/posts").to route_to("posts#create")
-  end
+    it "#edit" do
+      expect(get: "/posts/friendly_id/edit").to_not be_routable
+    end
 
-  it "#update via PUT" do
-    expect(put: "/posts/1").to route_to("posts#update", :id => "1")
-  end
+    it "#update via PUT" do
+      expect(put: "/posts/friendly_id").to_not be_routable
+    end
 
-  it "#update via PATCH" do
-    expect(patch: "/posts/1").to route_to("posts#update", :id => "1")
-  end
+    it "#update via PATCH" do
+      expect(patch: "/posts/friendly_id").to_not be_routable
+    end
 
-  it "#destroy" do
-    expect(delete: "/posts/1").to route_to("posts#destroy", :id => "1")
+    it "#destroy" do
+      expect(delete: "/posts/friendly_id").to_not be_routable
+    end
   end
 end

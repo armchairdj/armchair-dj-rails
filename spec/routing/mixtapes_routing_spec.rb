@@ -13,13 +13,13 @@ RSpec.describe MixtapesController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/mixtapes/foo/bar/bat").to route_to("mixtapes#show", slug: "foo/bar/bat")
+      expect(get: "/mixtapes/friendly_id").to route_to("mixtapes#show", id: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/mixtapes/new").to route_to("mixtapes#show", slug: "new")
+      expect(get: "/mixtapes/new").to route_to("mixtapes#show", id: "new")
     end
 
     it "#create" do
@@ -27,19 +27,19 @@ RSpec.describe MixtapesController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/mixtapes/1/edit").to route_to("mixtapes#show", slug: "1/edit")
+      expect(get: "/mixtapes/friendly_id/edit").to_not be_routable
     end
 
     it "#update via PUT" do
-      expect(put: "/mixtapes/1").to_not be_routable
+      expect(put: "/mixtapes/friendly_id").to_not be_routable
     end
 
     it "#update via PATCH" do
-      expect(patch: "/mixtapes/1").to_not be_routable
+      expect(patch: "/mixtapes/friendly_id").to_not be_routable
     end
 
     it "#destroy" do
-      expect(delete: "/mixtapes/1").to_not be_routable
+      expect(delete: "/mixtapes/friendly_id").to_not be_routable
     end
   end
 end

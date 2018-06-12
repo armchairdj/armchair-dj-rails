@@ -13,7 +13,7 @@ RSpec.describe Admin::MixtapesController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/mixtapes/1").to route_to("admin/mixtapes#show", id: "1")
+      expect(get: "/admin/mixtapes/friendly_id").to route_to("admin/mixtapes#show", id: "friendly_id")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::MixtapesController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/mixtapes/1/edit").to route_to("admin/mixtapes#edit", id: "1")
+      expect(get: "/admin/mixtapes/friendly_id/edit").to route_to("admin/mixtapes#edit", id: "friendly_id")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/mixtapes/1").to route_to("admin/mixtapes#update", id: "1")
+      expect(put: "/admin/mixtapes/friendly_id").to route_to("admin/mixtapes#update", id: "friendly_id")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/mixtapes/1").to route_to("admin/mixtapes#update", id: "1")
+      expect(patch: "/admin/mixtapes/friendly_id").to route_to("admin/mixtapes#update", id: "friendly_id")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/mixtapes/1").to route_to("admin/mixtapes#destroy", id: "1")
+      expect(delete: "/admin/mixtapes/friendly_id").to route_to("admin/mixtapes#destroy", id: "friendly_id")
     end
   end
 end

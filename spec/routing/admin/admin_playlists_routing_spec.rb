@@ -11,11 +11,11 @@ RSpec.describe Admin::PlaylistsController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/playlists/1").to route_to("admin/playlists#show", :id => "1")
+      expect(get: "/admin/playlists/friendly_id").to route_to("admin/playlists#show", id: "friendly_id")
     end
 
     it "#edit" do
-      expect(get: "/admin/playlists/1/edit").to route_to("admin/playlists#edit", :id => "1")
+      expect(get: "/admin/playlists/friendly_id/edit").to route_to("admin/playlists#edit", id: "friendly_id")
     end
 
     it "#create" do
@@ -23,15 +23,15 @@ RSpec.describe Admin::PlaylistsController, type: :routing do
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/playlists/1").to route_to("admin/playlists#update", :id => "1")
+      expect(put: "/admin/playlists/friendly_id").to route_to("admin/playlists#update", id: "friendly_id")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/playlists/1").to route_to("admin/playlists#update", :id => "1")
+      expect(patch: "/admin/playlists/friendly_id").to route_to("admin/playlists#update", id: "friendly_id")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/playlists/1").to route_to("admin/playlists#destroy", :id => "1")
+      expect(delete: "/admin/playlists/friendly_id").to route_to("admin/playlists#destroy", id: "friendly_id")
     end
   end
 end

@@ -39,9 +39,5 @@ RSpec.describe Users::RegistrationsController, type: :routing do
     it "#destroy" do
       expect(delete: "/settings").to route_to("users/registrations#destroy")
     end
-
-    it "#profile" do
-      expect(get: "/profile/username").to route_to("users/registrations#profile", username: "username")
-    end
   end
 end

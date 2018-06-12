@@ -13,13 +13,13 @@ RSpec.describe WorksController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/works/foo/bar/bat").to route_to("works#show", slug: "foo/bar/bat")
+      expect(get: "/works/friendly_id").to route_to("works#show", id: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/works/new").to route_to("works#show", slug: "new")
+      expect(get: "/works/new").to route_to("works#show", id: "new")
     end
 
     it "#create" do
@@ -27,19 +27,19 @@ RSpec.describe WorksController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/works/1/edit").to route_to("works#show", slug: "1/edit")
+      expect(get: "/works/friendly_id/edit").to_not be_routable
     end
 
     it "#update via PUT" do
-      expect(put: "/works/1").to_not be_routable
+      expect(put: "/works/friendly_id").to_not be_routable
     end
 
     it "#update via PATCH" do
-      expect(patch: "/works/1").to_not be_routable
+      expect(patch: "/works/friendly_id").to_not be_routable
     end
 
     it "#destroy" do
-      expect(delete: "/works/1").to_not be_routable
+      expect(delete: "/works/friendly_id").to_not be_routable
     end
   end
 end

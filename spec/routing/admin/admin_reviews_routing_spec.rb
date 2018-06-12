@@ -13,7 +13,7 @@ RSpec.describe Admin::ReviewsController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/reviews/1").to route_to("admin/reviews#show", id: "1")
+      expect(get: "/admin/reviews/friendly_id").to route_to("admin/reviews#show", id: "friendly_id")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::ReviewsController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/reviews/1/edit").to route_to("admin/reviews#edit", id: "1")
+      expect(get: "/admin/reviews/friendly_id/edit").to route_to("admin/reviews#edit", id: "friendly_id")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/reviews/1").to route_to("admin/reviews#update", id: "1")
+      expect(put: "/admin/reviews/friendly_id").to route_to("admin/reviews#update", id: "friendly_id")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/reviews/1").to route_to("admin/reviews#update", id: "1")
+      expect(patch: "/admin/reviews/friendly_id").to route_to("admin/reviews#update", id: "friendly_id")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/reviews/1").to route_to("admin/reviews#destroy", id: "1")
+      expect(delete: "/admin/reviews/friendly_id").to route_to("admin/reviews#destroy", id: "friendly_id")
     end
   end
 end

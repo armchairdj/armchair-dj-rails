@@ -13,7 +13,7 @@ RSpec.describe Admin::ArticlesController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/articles/1").to route_to("admin/articles#show", id: "1")
+      expect(get: "/admin/articles/friendly_id").to route_to("admin/articles#show", id: "friendly_id")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::ArticlesController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/articles/1/edit").to route_to("admin/articles#edit", id: "1")
+      expect(get: "/admin/articles/friendly_id/edit").to route_to("admin/articles#edit", id: "friendly_id")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/articles/1").to route_to("admin/articles#update", id: "1")
+      expect(put: "/admin/articles/friendly_id").to route_to("admin/articles#update", id: "friendly_id")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/articles/1").to route_to("admin/articles#update", id: "1")
+      expect(patch: "/admin/articles/friendly_id").to route_to("admin/articles#update", id: "friendly_id")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/articles/1").to route_to("admin/articles#destroy", id: "1")
+      expect(delete: "/admin/articles/friendly_id").to route_to("admin/articles#destroy", id: "friendly_id")
     end
   end
 end
