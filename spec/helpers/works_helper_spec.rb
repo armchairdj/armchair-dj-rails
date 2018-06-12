@@ -34,7 +34,7 @@ RSpec.describe WorksHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_work(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/works/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
           text:  "Michael Swanwick: Vacuum Flowers",
           count: 1
         ) }
@@ -55,7 +55,7 @@ RSpec.describe WorksHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_work(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/works/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
           text:  "Michael Swanwick: Vacuum Flowers",
           count: 1
         ) }

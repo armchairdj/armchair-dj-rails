@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe MixtapesHelper, type: :helper do
+RSpec.describe ReviewsHelper, type: :helper do
   let(    :work) { create(:kate_bush_never_for_ever, subtitle: "Alternative Version") }
   let(:instance) { create(:minimal_review, work: work) }
 
@@ -62,7 +62,7 @@ RSpec.describe MixtapesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_review(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.to_param}']",
           text:  "Kate Bush: Never for Ever: Alternative Version",
           count: 1
         ) }
@@ -83,7 +83,7 @@ RSpec.describe MixtapesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_review(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.to_param}']",
           text:  "Kate Bush: Never for Ever: Alternative Version",
           count: 1
         ) }

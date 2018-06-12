@@ -23,7 +23,7 @@ RSpec.describe TagsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_tag(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/tags/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/tags/#{instance.to_param}']",
           text:  "Tag",
           count: 1
         ) }
@@ -44,7 +44,7 @@ RSpec.describe TagsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_tag(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/tags/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/tags/#{instance.to_param}']",
           text:  "Tag",
           count: 1
         ) }

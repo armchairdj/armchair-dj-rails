@@ -23,7 +23,7 @@ RSpec.describe PlaylistsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_playlist(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.to_param}']",
           text:  "Playlist",
           count: 1
         ) }
@@ -44,7 +44,7 @@ RSpec.describe PlaylistsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_playlist(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.to_param}']",
           text:  "Playlist",
           count: 1
         ) }

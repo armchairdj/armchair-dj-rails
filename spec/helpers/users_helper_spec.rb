@@ -23,7 +23,7 @@ RSpec.describe UsersHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_user(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/users/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/users/#{instance.to_param}']",
           text:  "ArmchairDJ",
           count: 1
         ) }
@@ -44,7 +44,7 @@ RSpec.describe UsersHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_user(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/users/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/users/#{instance.to_param}']",
           text:  "ArmchairDJ",
           count: 1
         ) }

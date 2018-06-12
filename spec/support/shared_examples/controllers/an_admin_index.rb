@@ -10,7 +10,7 @@ RSpec.shared_examples "an_admin_index" do
   let(   :paginated) { model_class.where(id: ids).for_admin }
   let(        :none) { model_class.none.for_admin }
 
-  let(         :ids) { 21.times.map { |i| create_minimal_instance.id } }
+  let(         :ids) { 21.times.map { |i| create_minimal_instance.to_param } }
 
 
   allowed_scopes.each do |scope, method|

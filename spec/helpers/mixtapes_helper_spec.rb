@@ -47,7 +47,7 @@ RSpec.describe MixtapesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",
           text:  "This Is the Title",
           count: 1
         ) }
@@ -68,7 +68,7 @@ RSpec.describe MixtapesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",
           text:  "This Is the Title",
           count: 1
         ) }

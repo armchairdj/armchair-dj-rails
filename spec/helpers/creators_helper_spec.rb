@@ -23,7 +23,7 @@ RSpec.describe CreatorsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_creator(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/creators/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/creators/#{instance.to_param}']",
           text:  "Kate Bush",
           count: 1
         ) }
@@ -44,7 +44,7 @@ RSpec.describe CreatorsHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_creator(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/creators/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/creators/#{instance.to_param}']",
           text:  "Kate Bush",
           count: 1
         ) }

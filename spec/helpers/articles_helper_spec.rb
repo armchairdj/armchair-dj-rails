@@ -46,7 +46,7 @@ RSpec.describe ArticlesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_article(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/articles/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/articles/#{instance.to_param}']",
           text:  "This Is the Title",
           count: 1
         ) }
@@ -67,7 +67,7 @@ RSpec.describe ArticlesHelper, type: :helper do
       context "admin" do
         subject { helper.link_to_article(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/articles/#{instance.id}']",
+        it { is_expected.to have_tag("a[href='/admin/articles/#{instance.to_param}']",
           text:  "This Is the Title",
           count: 1
         ) }

@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 module LinkHelper
-  def permalink_path_for(instance)
+  def permalink_for(instance, full: false)
     return unless instance.respond_to?(:viewable?) && instance.viewable?
 
-    polymorphic_path(instance)
-  end
-
-  def permalink_url_for(instance)
-    return unless instance.respond_to?(:viewable?) && instance.viewable?
-
-    polymorphic_url(instance)
+    full ? polymorphic_url(instance) : polymorphic_path(instance)
   end
 end

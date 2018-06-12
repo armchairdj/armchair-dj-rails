@@ -89,7 +89,7 @@ module AdminHelper
   #############################################################################
 
   def admin_public_link(instance)
-    return unless path = permalink_path_for(instance)
+    return unless path = permalink_for(instance)
 
     title = "view #{instance.model_name.singular} on site"
     desc  = "public view icon"
