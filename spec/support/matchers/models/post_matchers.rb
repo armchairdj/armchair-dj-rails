@@ -5,12 +5,63 @@ require "rspec/expectations"
 RSpec::Matchers.define :be_a_populated_new_article do
   match do |actual|
     expect(actual).to be_a_new(Post)
+    expect(actual).to be_a_new(Article)
 
     expect(actual).to_not be_valid
   end
 
   failure_message do |actual|
     "expected #{actual} to be a populated new article, but was not"
+  end
+end
+
+RSpec::Matchers.define :be_a_populated_new_review do
+  match do |actual|
+    expect(actual).to be_a_new(Post)
+    expect(actual).to be_a_new(Review)
+
+    expect(actual).to_not be_valid
+  end
+
+  failure_message do |actual|
+    "expected #{actual} to be a populated new review, but was not"
+  end
+end
+
+RSpec::Matchers.define :be_a_populated_new_mixtape do
+  match do |actual|
+    expect(actual).to be_a_new(Post)
+    expect(actual).to be_a_new(Mixtape)
+
+    expect(actual).to_not be_valid
+  end
+
+  failure_message do |actual|
+    "expected #{actual} to be a populated new mixtape, but was not"
+  end
+end
+
+RSpec::Matchers.define :be_a_populated_new_article do
+  match do |actual|
+    expect(actual).to be_a_new(Post)
+
+    expect(actual).to_not be_valid
+  end
+
+  failure_message do |actual|
+    "expected #{actual} to be a populated new post, but was not"
+  end
+end
+
+RSpec::Matchers.define :be_a_populated_new_article do
+  match do |actual|
+    expect(actual).to be_a_new(Post)
+
+    expect(actual).to_not be_valid
+  end
+
+  failure_message do |actual|
+    "expected #{actual} to be a populated new post, but was not"
   end
 end
 

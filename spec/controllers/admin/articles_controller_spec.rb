@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::ArticlesController, type: :controller do
-  let(:article) { create(:minimal_article, :draft) }
+  let(:article) { create_minimal_instance(:draft) }
 
   context "concerns" do
     it_behaves_like "an_admin_controller"
@@ -38,9 +38,9 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_article).except(:author_id) }
-      let(:min_params) { attributes_for(:minimal_article ).except(:author_id) }
-      let(:bad_params) { attributes_for(:minimal_article ).except(:author_id, :title) }
+      let(:max_params) { complete_attributes.except(:author_id) }
+      let(:min_params) { minimal_attributes.except(:author_id) }
+      let(:bad_params) { minimal_attributes.except(:author_id, :title) }
 
       context "with max valid params" do
         it "creates a new Article" do
@@ -52,13 +52,13 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { article: max_params }
 
-          is_expected.to assign(Article.last, :article).with_attributes(max_params).and_be_valid
+          is_expected.to assign(Post.last, :article).with_attributes(max_params).and_be_valid
         end
 
         it "article belongs to current_user" do
           post :create, params: { article: max_params }
 
-          is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
+          is_expected.to assign(Post.last, :article).with_attributes(author: controller.current_user)
         end
 
         it "redirects to article" do
@@ -80,13 +80,13 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         it "creates the right attributes" do
           post :create, params: { article: min_params }
 
-          is_expected.to assign(Article.last, :article).with_attributes(min_params).and_be_valid
+          is_expected.to assign(Post.last, :article).with_attributes(min_params).and_be_valid
         end
 
         it "article belongs to current_user" do
           post :create, params: { article: min_params }
 
-          is_expected.to assign(Article.last, :article).with_attributes(author: controller.current_user)
+          is_expected.to assign(Post.last, :article).with_attributes(author: controller.current_user)
         end
 
         it "redirects to article" do
@@ -122,16 +122,16 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "PUT #update" do
-      let(:min_params) { { "body" => "New body.", "title" => "New title." } }
-      let(:bad_params) { { "body" => ""         , "title" => ""           } }
+      let(    :update_params) { { "body" => "New body.", "title" => "New title." } }
+      let(:bad_update_params) { { "body" => ""         , "title" => ""           } }
 
       context "draft" do
         context "with valid params" do
           before(:each) do
-            put :update, params: { id: article.to_param, article: min_params }
+            put :update, params: { id: article.to_param, article: update_params }
           end
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
           it { is_expected.to send_user_to(admin_article_path(article)).with_flash(
             :success, "admin.flash.posts.success.update"
           ) }
@@ -139,11 +139,11 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { id: article.to_param, article: bad_params }
+            put :update, params: { id: article.to_param, article: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit") }
-          it { is_expected.to assign(article, :article).with_attributes(bad_params).and_be_invalid }
+          it { is_expected.to assign(article, :article).with_attributes(bad_update_params).and_be_invalid }
           it { is_expected.to prepare_the_article_form }
         end
       end
@@ -151,10 +151,10 @@ RSpec.describe Admin::ArticlesController, type: :controller do
       context "publishing" do
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "publish", id: article.to_param, article: min_params }
+            put :update, params: { step: "publish", id: article.to_param, article: update_params }
           end
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:article)).to be_published }
 
@@ -167,7 +167,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           before(:each) do
             allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
 
-            put :update, params: { step: "publish", id: article.to_param, article: min_params }
+            put :update, params: { step: "publish", id: article.to_param, article: update_params }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -176,14 +176,14 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(article.reload).to_not be_published }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "publish", id: article.to_param, article: bad_params }
+            put :update, params: { step: "publish", id: article.to_param, article: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -192,7 +192,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+          it { is_expected.to assign(article, :article).with_attributes(bad_update_params).with_errors({
             body:  :blank,
             title: :blank
           }) }
@@ -206,10 +206,10 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "unpublish", id: article.to_param, article: min_params }
+            put :update, params: { step: "unpublish", id: article.to_param, article: update_params }
           end
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:article)).to be_draft }
 
@@ -220,14 +220,14 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "unpublish", id: article.to_param, article: bad_params }
+            put :update, params: { step: "unpublish", id: article.to_param, article: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil) }
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+          it { is_expected.to assign(article, :article).with_attributes(bad_update_params).with_errors({
             title: :blank
           }) }
 
@@ -240,10 +240,10 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: article.to_param, article: min_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: article.to_param, article: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:article)).to be_scheduled }
 
@@ -256,7 +256,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           before(:each) do
             allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
 
-            put :update, params: { step: "schedule", id: article.to_param, article: min_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: article.to_param, article: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -265,14 +265,14 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(article.reload).to_not be_scheduled }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: article.to_param, article: bad_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: article.to_param, article: bad_update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -281,7 +281,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+          it { is_expected.to assign(article, :article).with_attributes(bad_update_params).with_errors({
             body:  :blank,
             title: :blank
           }) }
@@ -295,10 +295,10 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "unschedule", id: article.to_param, article: min_params }
+            put :update, params: { step: "unschedule", id: article.to_param, article: update_params }
           end
 
-          it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
+          it { is_expected.to assign(article, :article).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:article)).to be_draft }
 
@@ -309,14 +309,14 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "unschedule", id: article.to_param, article: bad_params }
+            put :update, params: { step: "unschedule", id: article.to_param, article: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(:error, nil) }
 
           it { is_expected.to prepare_the_article_form }
 
-          it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
+          it { is_expected.to assign(article, :article).with_attributes(bad_update_params).with_errors({
             title: :blank
           }) }
 

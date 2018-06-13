@@ -4,8 +4,8 @@ class Admin::MixtapesController < Admin::PostsController
 
 private
 
-  def update_params
-    super.permit(:playlist_id)
+  def permitted_keys
+    super.unshift(:playlist_id)
   end
 
   def prepare_form

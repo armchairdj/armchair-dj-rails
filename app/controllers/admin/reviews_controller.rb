@@ -4,8 +4,8 @@ class Admin::ReviewsController < Admin::PostsController
 
 private
 
-  def update_params
-    super.permit(:work_id)
+  def permitted_keys
+    super.unshift(:work_id)
   end
 
   def prepare_form

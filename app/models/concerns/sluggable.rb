@@ -26,9 +26,6 @@ module Sluggable
   private
 
     def handle_cleared_slug
-      ap "handle_cleared_slug"
-      ap clear_slug?
-
       self.slug = nil if persisted? && clear_slug?
 
       valid?

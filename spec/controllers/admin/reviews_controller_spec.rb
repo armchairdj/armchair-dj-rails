@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::ReviewsController, type: :controller do
-  let(:summary) { "summary summary summary summary summary." }
+  let(:review) { create_minimal_instance(:draft) }
 
   context "concerns" do
     it_behaves_like "an_admin_controller"
@@ -23,852 +23,317 @@ RSpec.describe Admin::ReviewsController, type: :controller do
     end
 
     describe "GET #show" do
-      context "standalone" do
-        let(:review) { create(:minimal_review) }
+      before(:each) { get :show, params: { id: review.to_param } }
 
-        it "renders" do
-          get :show, params: { id: review.to_param }
-
-          is_expected.to successfully_render("admin/reviews/show")
-          is_expected.to assign(review, :review)
-        end
-      end
-
-      context "review" do
-        let(:review) { create(:minimal_review) }
-
-        it "renders" do
-          get :show, params: { id: review.to_param }
-
-          is_expected.to successfully_render("admin/reviews/show")
-          is_expected.to assign(review, :review)
-        end
-      end
+      it { is_expected.to successfully_render("admin/reviews/show") }
+      it { is_expected.to assign(review, :review) }
     end
 
     describe "GET #new" do
-      it "renders" do
-        get :new
+      before(:each) { get :new }
 
-        is_expected.to successfully_render("admin/reviews/new")
-
-        is_expected.to define_all_tabs.and_select("review-choose-work")
-
-        expect(assigns(:review)).to be_a_populated_new_review
-      end
+      it { is_expected.to successfully_render("admin/reviews/new") }
+      it { is_expected.to prepare_the_review_form }
+      it { expect(assigns(:review)).to be_a_populated_new_review }
     end
 
     describe "POST #create" do
-      context "standalone" do
-        let(:max_params) { attributes_for(:complete_review   ).except(:author_id) }
-        let(:min_params) { attributes_for(:minimal_review    ).except(:author_id) }
-        let(  :bad_params) { attributes_for(:review, :with_body).except(:author_id) }
+      let(:max_params) { complete_attributes.except(:author_id) }
+      let(:min_params) { minimal_attributes.except(:author_id) }
+      let(:bad_params) { minimal_attributes.except(:author_id, :work_id) }
 
-        context "with max valid params" do
-          it "creates a new Review" do
-            expect {
-              post :create, params: { review: max_params }
-            }.to change(Review, :count).by(1)
-          end
-
-          it "creates the right attributes" do
+      context "with max valid params" do
+        it "creates a new Review" do
+          expect {
             post :create, params: { review: max_params }
 
-            is_expected.to assign(Review.last, :review).with_attributes(max_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: max_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: max_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+          }.to change(Review, :count).by(1)
         end
 
-        context "with min valid params" do
-          it "creates a new Review" do
-            expect {
-              post :create, params: { review: min_params }
-            }.to change(Review, :count).by(1)
-          end
+        it "creates the right attributes" do
+          post :create, params: { review: max_params }
 
-          it "creates the right attributes" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(min_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: min_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+          is_expected.to assign(Post.last, :review).with_attributes(max_params).and_be_valid
         end
 
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { review: bad_params }
+        it "review belongs to current_user" do
+          post :create, params: { review: max_params }
 
-            is_expected.to successfully_render("admin/reviews/new")
+          is_expected.to assign(Post.last, :review).with_attributes(author: controller.current_user)
+        end
 
-            is_expected.to define_all_tabs.and_select("review-choose-work")
+        it "redirects to review" do
+          post :create, params: { review: max_params }
 
-            expect(assigns(:review)).to be_a_populated_new_review
-            expect(assigns(:review)).to have_coerced_attributes(bad_params)
-            expect(assigns(:review)).to be_invalid
-          end
+          is_expected.to send_user_to(
+            admin_review_path(assigns(:review))
+          ).with_flash(:success, "admin.flash.posts.success.create")
         end
       end
 
-      context "existing work" do
-        let(:max_params) { attributes_for(:complete_review   ).except(:author_id) }
-        let(:min_params) { attributes_for(:review            ).except(:author_id) }
-        let(  :bad_params) { attributes_for(:review, :with_body).except(:author_id) }
-
-        context "with max valid params" do
-          it "creates a new Review" do
-            expect {
-              post :create, params: { review: max_params }
-            }.to change(Review, :count).by(1)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { review: max_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(max_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: max_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: max_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+      context "with min valid params" do
+        it "creates a new Review" do
+          expect {
+            post :create, params: { review: min_params }
+          }.to change(Review, :count).by(1)
         end
 
-        context "with min valid params" do
-          it "creates a new Review" do
-            expect {
-              post :create, params: { review: min_params }
-            }.to change(Review, :count).by(1)
-          end
+        it "creates the right attributes" do
+          post :create, params: { review: min_params }
 
-          it "creates the right attributes" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(min_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: min_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+          is_expected.to assign(Post.last, :review).with_attributes(min_params).and_be_valid
         end
 
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { review: bad_params }
+        it "review belongs to current_user" do
+          post :create, params: { review: min_params }
 
-            is_expected.to successfully_render("admin/reviews/new")
+          is_expected.to assign(Post.last, :review).with_attributes(author: controller.current_user)
+        end
 
-            is_expected.to define_all_tabs.and_select("review-choose-work")
+        it "redirects to review" do
+          post :create, params: { review: min_params }
 
-            expect(assigns(:review)).to be_a_populated_new_review
-            expect(assigns(:review)).to have_coerced_attributes(bad_params)
-            expect(assigns(:review)).to be_invalid
-          end
+          is_expected.to send_user_to(
+            admin_review_path(assigns(:review))
+          ).with_flash(:success, "admin.flash.posts.success.create")
         end
       end
 
-      context "new work" do
-        let(:max_params) { attributes_for(:complete_review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(:min_params) { attributes_for(         :review_with_new_work).except(:author_id).deep_stringify_keys }
-        let(  :bad_params) { attributes_for( :invalid_review_with_new_work).except(:author_id).deep_stringify_keys }
-
-        context "with max valid params" do
-          it "creates a new Review" do
-            post :create, params: { review: max_params }
-
-            expect {
-              post :create, params: { review: max_params }
-            }.to change(Review, :count).by(1)
-          end
-
-          it "creates a new Work" do
-            expect {
-              post :create, params: { review: max_params }
-            }.to change(Work, :count).by(1)
-          end
-
-          it "creates new Credits" do
-            expect {
-              post :create, params: { review: max_params }
-            }.to change(Credit, :count).by(3)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { review: max_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(max_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: min_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
+      context "with invalid params" do
+        before(:each) do
+          post :create, params: { review: bad_params }
         end
 
-        context "with min valid params" do
-          it "creates a new Review" do
-            expect {
-              post :create, params: { review: min_params }
-            }.to change(Review, :count).by(1)
-          end
+        it { is_expected.to successfully_render("admin/reviews/new") }
 
-          it "creates a new Work" do
-            expect {
-              post :create, params: { review: min_params }
-            }.to change(Work, :count).by(1)
-          end
+        it { is_expected.to prepare_the_review_form }
 
-          it "creates new Credits" do
-            expect {
-              post :create, params: { review: min_params }
-            }.to change(Credit, :count).by(1)
-          end
-
-          it "creates the right attributes" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(min_params).and_be_valid
-          end
-
-          it "review belongs to current_user" do
-            post :create, params: { review: min_params }
-
-            is_expected.to assign(Review.last, :review).with_attributes(author: controller.current_user)
-          end
-
-          it "redirects to review" do
-            post :create, params: { review: min_params }
-
-            is_expected.to send_user_to(
-              admin_review_path(assigns(:review))
-            ).with_flash(:success, "admin.flash.posts.success.create")
-          end
-        end
-
-        context "with invalid params" do
-          it "renders new" do
-            post :create, params: { review: bad_params }
-
-            is_expected.to successfully_render("admin/reviews/new")
-
-            is_expected.to define_all_tabs.and_select("review-new-work")
-
-            expect(assigns(:review)).to be_a_populated_new_review
-            expect(assigns(:review)).to have_coerced_attributes(bad_params)
-            expect(assigns(:review)).to be_invalid
-          end
-        end
+        it { expect(assigns(:review)).to be_a_populated_new_review }
+        it { expect(assigns(:review)).to have_coerced_attributes(bad_params) }
+        it { expect(assigns(:review)).to be_invalid }
       end
     end
 
     describe "GET #edit" do
-      context "standalone" do
-        let(:review) { create(:minimal_review) }
+      before(:each) { get :edit, params: { id: review.to_param } }
 
-        it "renders" do
-          get :edit, params: { id: review.to_param }
-
-          is_expected.to successfully_render("admin/reviews/edit")
-          is_expected.to assign(review, :review)
-
-          is_expected.to define_only_the_standalone_tab
-        end
-      end
-
-      context "review" do
-        let(:review) { create(:minimal_review) }
-
-        it "renders" do
-          get :edit, params: { id: review.to_param }
-
-          is_expected.to successfully_render("admin/reviews/edit")
-          is_expected.to assign(review, :review)
-
-          is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
-        end
-      end
+      it { is_expected.to successfully_render("admin/reviews/edit") }
+      it { is_expected.to assign(review, :review) }
+      it { is_expected.to prepare_the_review_form }
     end
 
     describe "PUT #update" do
+      let(    :update_params) { { "body" => "New body.", "work_id" => create(:minimal_work).id } }
+      let(:bad_update_params) { { "body" => ""         , "work_id" => ""                       } }
+
       context "draft" do
-        context "standalone" do
-          let(:review) { create(:minimal_review) }
-
-          let(:min_params) { { "title" => "New Title" } }
-          let(  :bad_params) { { "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { id: review.to_param, review: min_params }
-            end
-
-            it "updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.update"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { id: review.to_param, review: update_params }
           end
 
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: review.to_param, review: bad_params }
-
-              is_expected.to successfully_render("admin/reviews/edit")
-              is_expected.to assign(review, :review)
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).and_be_invalid
-
-              is_expected.to define_only_the_standalone_tab
-            end
-          end
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+            :success, "admin.flash.posts.success.update"
+          ) }
         end
 
-        context "review" do
-          let(:review) { create(:minimal_review) }
-
-          let(:min_params) { { "work_id" => create(:minimal_song).id } }
-          let(  :bad_params) { { "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { id: review.to_param, review: min_params }
-            end
-
-            it "updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.update"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { id: review.to_param, review: bad_update_params }
           end
 
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: review.to_param, review: bad_params }
-
-              is_expected.to successfully_render("admin/reviews/edit")
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).and_be_invalid
-
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
-            end
-          end
-        end
-
-        describe "replacing work with new work" do
-          let!(:review) { create(:minimal_review) }
-
-          let(:min_params) { attributes_for(        :review_with_new_work).except(:author_id).merge(work_id: review.work_id).deep_stringify_keys }
-          let(  :bad_params) { attributes_for(:invalid_review_with_new_work).except(:author_id).merge(work_id: review.work_id).deep_stringify_keys }
-
-          context "with valid params" do
-            it "updates the requested review, ignoring work_id in favor of work_attributes" do
-              expect {
-                put :update, params: { id: review.to_param, review: min_params }
-              }.to change { Work.count }.by(1)
-
-              is_expected.to assign(review, :review).with_attributes(min_params.except("work_id")).and_be_valid
-            end
-
-            specify do
-              put :update, params: { id: review.to_param, review: min_params }
-
-              is_expected.to send_user_to(admin_review_path(review)).with_flash(
-                :success, "admin.flash.posts.success.update"
-              )
-            end
-          end
-
-          context "with invalid params" do
-            it "renders edit" do
-              put :update, params: { id: review.to_param, review: bad_params }
-
-              is_expected.to successfully_render("admin/reviews/edit")
-
-              is_expected.to assign(review, :review).with_attributes(bad_params.except("work_id")).and_be_invalid
-
-              expect(assigns(:review).work).to be_a_new(Work)
-              expect(assigns(:review).work).to be_invalid
-
-              is_expected.to define_only_the_review_tabs.and_select("review-new-work")
-            end
-          end
+          it { is_expected.to successfully_render("admin/reviews/edit") }
+          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).and_be_invalid }
+          it { is_expected.to prepare_the_review_form }
         end
       end
 
-      pending "replacing slug"
-
       context "publishing" do
-        context "standalone" do
-          let(:review) { create(:minimal_review, :draft) }
-
-          let(:min_params) { { "body" => "New body.", "title" => "New title." } }
-          let(  :bad_params) { { "body" => ""         , "title" => ""           } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "publish", id: review.to_param, review: min_params }
-            end
-
-            it "updates and publishes the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_published
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.publish"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "publish", id: review.to_param, review: update_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-            it "updates review and renders edit with message" do
-              put :update, params: { step: "publish", id: review.to_param, review: min_params }
+          it { expect(assigns(:review)).to be_published }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(review.reload).to_not be_published
-            end
-          end
-
-          context "with invalid params" do
-            it "fails to publish and renders edit with message and errors" do
-              put :update, params: { step: "publish", id: review.to_param, review: bad_params }
-
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:  :blank,
-                title: :blank
-              })
-
-              expect(review.reload).to_not be_published
-            end
-          end
+          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+            :success, "admin.flash.posts.success.publish"
+          ) }
         end
 
-        context "review" do
-          let(:review) { create(:minimal_review, :draft) }
+        context "with failed transition" do
+          before(:each) do
+            allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
 
-          let(:min_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id } }
-          let(  :bad_params) { { "body" => ""         , "work_id" => ""               } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "publish", id: review.to_param, review: min_params }
-            end
-
-            it "updates and publishes the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_published
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.publish"
-            ) }
+            put :update, params: { step: "publish", id: review.to_param, review: update_params }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(
+            :error, "admin.flash.posts.error.publish"
+          ) }
 
-            it "updates review and renders edit with message" do
-              put :update, params: { step: "publish", id: review.to_param, review: min_params }
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { expect(review.reload).to_not be_published }
+        end
 
-              is_expected.to assign(review, :review).with_attributes({
-                body:            min_params["body"   ],
-                current_work_id: min_params["work_id"]
-              })
-
-              expect(review.reload).to_not be_published
-            end
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "publish", id: review.to_param, review: bad_update_params }
           end
 
-          context "with invalid params" do
-            it "fails to publish and renders edit with message and errors" do
-              put :update, params: { step: "publish", id: review.to_param, review: bad_params }
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(
+            :error, "admin.flash.posts.error.publish"
+          ) }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.publish"
-              )
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+            body: :blank,
+            work: :blank
+          }) }
 
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:    :blank,
-                work_id: :blank
-              })
-
-              expect(review.reload).to_not be_published
-            end
-          end
+          it { expect(review.reload).to_not be_published }
         end
       end
 
       context "unpublishing" do
-        context "standalone" do
-          let(:review) { create(:minimal_review, :published) }
+        let(:review) { create(:minimal_review, :published) }
 
-          let(:min_params) { { "body" => "", "title" => "New title."} }
-          let(  :bad_params) { { "body" => "", "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unpublish", id: review.to_param, review: min_params }
-            end
-
-            it "unpublishes and updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.unpublish"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "unpublish", id: review.to_param, review: update_params }
           end
 
-          context "with invalid params" do
-            it "unpublishes and renders edit with errors" do
-              put :update, params: { step: "unpublish", id: review.to_param, review: bad_params }
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil)
+          it { expect(assigns(:review)).to be_draft }
 
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                title: :blank
-              })
-
-              expect(assigns(:review)).to be_draft
-            end
-          end
+          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+            :success, "admin.flash.posts.success.unpublish"
+          ) }
         end
 
-        context "review" do
-          let(:review) { create(:minimal_review, :published) }
-
-          let(:min_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
-          let(  :bad_params) { { "body" => "", "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unpublish", id: review.to_param, review: min_params }
-            end
-
-            it "unpublishes and updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.unpublish"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "unpublish", id: review.to_param, review: bad_update_params }
           end
 
-          context "with invalid params" do
-            it "unpublishes and renders edit with errors" do
-              put :update, params: { step: "unpublish", id: review.to_param, review: bad_params }
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil) }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil)
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+            work: :blank
+          }) }
 
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                work_id: :blank
-              })
-
-              expect(assigns(:review)).to be_draft
-            end
-          end
+          it { expect(assigns(:review)).to be_draft }
         end
       end
 
       context "scheduling" do
-        context "standalone" do
-          let(:review) { create(:minimal_review, :draft) }
+        let(:review) { create(:minimal_review, :draft) }
 
-          let(:min_params) { { "body" => "New body.", "title" => "New title.", publish_on: "01/01/2050" } }
-          let(  :bad_params) { { "body" => "",          "title" => ""                                     } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "schedule", id: review.to_param, review: min_params }
-            end
-
-            it "updates and schedules the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_scheduled
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.schedule"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "schedule", id: review.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-            it "updates review and renders edit with message" do
-              put :update, params: { step: "schedule", id: review.to_param, review: min_params }
+          it { expect(assigns(:review)).to be_scheduled }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(review.reload).to_not be_scheduled
-            end
-          end
-
-          context "with invalid params" do
-            it "fails to schedule and renders edit with message and errors" do
-              put :update, params: { step: "schedule", id: review.to_param, review: bad_params }
-
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
-
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:  :blank,
-                title: :blank
-              })
-
-              expect(review.reload).to_not be_scheduled
-            end
-          end
+          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+            :success, "admin.flash.posts.success.schedule"
+          ) }
         end
 
-        context "review" do
-          let(:review) { create(:minimal_review) }
+        context "with failed transition" do
+          before(:each) do
+            allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
 
-          let(:min_params) { { "body" => "New body.", "work_id" => create(:minimal_song).id, publish_on: "01/01/2050" } }
-          let(  :bad_params) { { "body" => ""         , "work_id" => ""                                                 } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "schedule", id: review.to_param, review: min_params }
-            end
-
-            it "updates and schedules the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_scheduled
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.schedule"
-            ) }
+            put :update, params: { step: "schedule", id: review.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
-          context "with failed transition" do
-            before(:each) do
-              allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
-            end
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(
+            :error, "admin.flash.posts.error.schedule"
+          ) }
 
-            it "updates review and renders edit with message" do
-              put :update, params: { step: "schedule", id: review.to_param, review: min_params }
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { expect(review.reload).to_not be_scheduled }
+        end
 
-              is_expected.to assign(review, :review).with_attributes({
-                body:            min_params["body"   ],
-                current_work_id: min_params["work_id"]
-              })
-
-              expect(review.reload).to_not be_scheduled
-            end
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "schedule", id: review.to_param, review: bad_update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
-          context "with invalid params" do
-            it "fails to schedule and renders edit with message and errors" do
-              put :update, params: { step: "schedule", id: review.to_param, review: bad_params }
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(
+            :error, "admin.flash.posts.error.schedule"
+          ) }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(
-                :error, "admin.flash.posts.error.schedule"
-              )
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+            body: :blank,
+            work: :blank
+          }) }
 
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:    :blank,
-                work_id: :blank
-              })
-
-              expect(review.reload).to_not be_scheduled
-            end
-          end
+          it { expect(review.reload).to_not be_scheduled }
         end
       end
 
       context "unscheduling" do
-        context "standalone" do
-          let(:review) { create(:minimal_review, :scheduled) }
+        let(:review) { create(:minimal_review, :scheduled) }
 
-          let(:min_params) { { "body" => "", "title" => "New title."} }
-          let(  :bad_params) { { "body" => "", "title" => ""          } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unschedule", id: review.to_param, review: min_params }
-            end
-
-            it "unschedules and updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.unschedule"
-            ) }
+        context "with valid params" do
+          before(:each) do
+            put :update, params: { step: "unschedule", id: review.to_param, review: update_params }
           end
 
-          context "with invalid params" do
-            it "unschedules and renders edit with errors" do
-              put :update, params: { step: "unschedule", id: review.to_param, review: bad_params }
+          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil)
+          it { expect(assigns(:review)).to be_draft }
 
-              is_expected.to define_only_the_standalone_tab
-
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                title: :blank
-              })
-
-              expect(assigns(:review)).to be_draft
-            end
-          end
+          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+            :success, "admin.flash.posts.success.unschedule"
+          ) }
         end
 
-        context "review" do
-          let(:review) { create(:minimal_review, :scheduled) }
-
-          let(:min_params) { { "body" => "", "work_id" => create(:minimal_song).id } }
-          let(  :bad_params) { { "body" => "", "work_id" => ""                       } }
-
-          context "with valid params" do
-            before(:each) do
-              put :update, params: { step: "unschedule", id: review.to_param, review: min_params }
-            end
-
-            it "unschedules and updates the requested review" do
-              is_expected.to assign(review, :review).with_attributes(min_params).and_be_valid
-
-              expect(assigns(:review)).to be_draft
-            end
-
-            it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
-              :success, "admin.flash.posts.success.unschedule"
-            ) }
+        context "with invalid params" do
+          before(:each) do
+            put :update, params: { step: "unschedule", id: review.to_param, review: bad_update_params }
           end
 
-          context "with invalid params" do
-            it "unschedules and renders edit with errors" do
-              put :update, params: { step: "unschedule", id: review.to_param, review: bad_params }
+          it { is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil) }
 
-              is_expected.to successfully_render("admin/reviews/edit").with_flash(:error, nil)
+          it { is_expected.to prepare_the_review_form }
 
-              is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
+          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+            work: :blank
+          }) }
 
-              is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                work_id: :blank
-              })
+          it { expect(assigns(:review)).to be_draft }
+        end
+      end
 
-              expect(assigns(:review)).to be_draft
-            end
-          end
+      context "replacing slug" do
+        before(:each) { review.update_column(:slug, "old") }
+
+        let(:params) { { "clear_slug" => "1" } }
+
+        it "sets the flag" do
+          put :update, params: { id: review.to_param, review: params }
+
+          expect(assigns(:review).slug).to_not eq("old")
         end
       end
     end
@@ -898,12 +363,10 @@ RSpec.describe Admin::ReviewsController, type: :controller do
 
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
+          "All",
           "Draft",
           "Scheduled",
           "Published",
-          "Review",
-          "Review",
-          "All",
         ])
       end
     end
@@ -917,8 +380,8 @@ RSpec.describe Admin::ReviewsController, type: :controller do
           "ID",
           "Title",
           "Author",
-          "Type",
           "Status",
+          "Type",
         ])
       end
     end
