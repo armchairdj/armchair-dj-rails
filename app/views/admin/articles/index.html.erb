@@ -18,8 +18,9 @@
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
             <%= sortable_th @sorts, "Status", text: viewable_status_icon, class: "icon" %>
-            <%= sortable_th @sorts, "Title"                                             %>
-            <%= sortable_th @sorts, "Author"                                            %>
+            <%= sortable_th @sorts, "ID"     %> 
+            <%= sortable_th @sorts, "Title"  %>
+            <%= sortable_th @sorts, "Author" %>
 
             <%= actions_th %>
           <% end %>
@@ -29,6 +30,7 @@
           <% @articles.each do |article| %>
             <%= content_tag(:tr) do %>
               <%= content_tag(:td, post_status_icon(article), class: "icon") %>
+              <%= content_tag(:td, article.id                              ) %>
               <%= content_tag(:td, article_title(article, length: 40)      ) %>
               <%= content_tag(:td, article.display_author                  ) %>
 

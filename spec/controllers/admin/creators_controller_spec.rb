@@ -349,6 +349,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
           "Default",
+          "ID",
           "Name",
           "Primary",
           "Individual",

@@ -38,3 +38,4 @@ en:
       nested_taken: "Please choose unique values."
       not_a_url: "Please enter a URL in the format http://www.example.com."
       not_a_year: "Please enter a year between %{year_min} and %{year_max}."
+      missing_alpha: "Cannot calculate alphabetical sort value."

@@ -2,5 +2,5 @@
 
 <% if f.object.persisted? %>
   <%= f.input(:slug, readonly: true) %>
-  TODO RESET SLUG CONTROL
+  <%= f.input(:clear_slug, as: :boolean) %>
 <% end %>

@@ -47,6 +47,7 @@ module JsHelper
   end
 
   def js_selectable_create_tag_attrs
+    return
     attrs = { scope: "tag", url: admin_tags_path, param: "tag[name]" }
 
     js_attrs("selectable-create", attrs).merge(multiple: true)

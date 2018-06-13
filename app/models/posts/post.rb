@@ -141,7 +141,7 @@ class Post < ApplicationRecord
   def update_and_publish(params)
     return true if self.update(params) && self.publish!
 
-    self.errors.add(:body, :blank_during_publish) unless body.present?
+    self.errors.add(:body, :blank) unless body.present?
 
     return false
   end
@@ -159,7 +159,7 @@ class Post < ApplicationRecord
 
     clear_publish_on_from_database
 
-    self.errors.add(:body, :blank_during_publish) unless body.present?
+    self.errors.add(:body, :blank) unless body.present?
 
     return false
   end

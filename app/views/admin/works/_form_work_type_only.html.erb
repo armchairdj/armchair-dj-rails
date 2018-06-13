@@ -1,4 +1,4 @@
-<%= simple_form_for([:admin, work], html: { class: "admin", "data-controller": "auto-submittable" }) do |f| %>
+<%= simple_form_for([:admin, @work], html: { class: "admin", "data-controller": "auto-submittable" }) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>

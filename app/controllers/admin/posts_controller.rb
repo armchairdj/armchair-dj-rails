@@ -87,11 +87,30 @@ private
   end
 
   def create_params
-    update_params.reject!{ |k, v| k.to_sym == :publish_on }.merge(author: current_user)
+    sanitized = update_params.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
+    sanitized.merge(author: current_user)
   end
 
   def update_params
-    raise NotImplementedError
+    fetched = params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
+  end
+
+  def permitted_keys
+    [
+      :body,
+      :summary,
+      :publish_on,
+      :clear_slug,
+      {
+        :tag_ids => [],
+        :links_attributes => [
+          :id,
+          :_destroy,
+          :url,
+          :description
+        ]
+      }
+    ]
   end
 
   def prepare_form

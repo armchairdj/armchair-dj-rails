@@ -508,7 +508,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
               is_expected.to define_only_the_standalone_tab
 
               is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:  :blank_during_publish,
+                body:  :blank,
                 title: :blank
               })
 
@@ -573,7 +573,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
               is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
 
               is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:    :blank_during_publish,
+                body:    :blank,
                 work_id: :blank
               })
 
@@ -717,7 +717,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
               is_expected.to define_only_the_standalone_tab
 
               is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:  :blank_during_publish,
+                body:  :blank,
                 title: :blank
               })
 
@@ -782,7 +782,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
               is_expected.to define_only_the_review_tabs.and_select("review-choose-work")
 
               is_expected.to assign(review, :review).with_attributes(bad_params).with_errors({
-                body:    :blank_during_publish,
+                body:    :blank,
                 work_id: :blank
               })
 
@@ -914,6 +914,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
           "Default",
+          "ID",
           "Title",
           "Author",
           "Type",

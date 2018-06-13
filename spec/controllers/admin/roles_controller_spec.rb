@@ -192,6 +192,7 @@ RSpec.describe Admin::RolesController, type: :controller do
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
           "Default",
+          "ID",
           "Name",
           "Medium",
         ])

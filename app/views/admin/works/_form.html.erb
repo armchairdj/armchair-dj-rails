@@ -6,7 +6,7 @@
   end
 %>
 
-<%= simple_form_for([:admin, work], html: form_attrs) do |f| %>
+<%= simple_form_for([:admin, @work], html: form_attrs) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>

@@ -4,7 +4,7 @@ RSpec.shared_examples "a_public_index" do
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
 
-  let(         :ids) { 21.times.map { |i| create_minimal_instance(:with_published_post).id } }
+  let(         :ids) { 3.times.map { |i| create_minimal_instance(:with_published_post).id } }
   let(   :paginated) { model_class.where(id: ids).for_site }
   let(        :none) { model_class.none.for_site }
 
@@ -30,7 +30,7 @@ RSpec.shared_examples "a_public_index" do
 
       it { is_expected.to successfully_render("#{param_key}/index") }
 
-      specify { expect(assigns(param_key)).to paginate(20).of_total_records(21) }
+      specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
 
     describe "paginates" do
@@ -38,7 +38,7 @@ RSpec.shared_examples "a_public_index" do
 
       it { is_expected.to successfully_render("#{param_key}/index") }
 
-      specify { expect(assigns(param_key)).to paginate(1).of_total_records(21) }
+      specify { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
     end
   end
 end

@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "an_admin_index" do
-  allowed_scopes = described_class.new.send(:allowed_scopes)
-  allowed_sorts  = described_class.new.send(:allowed_sorts).keys
-
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
-
+  let(         :ids) { 3.times.map { |i| create_minimal_instance.id } }
   let(   :paginated) { model_class.where(id: ids).for_admin }
   let(        :none) { model_class.none.for_admin }
 
-  let(         :ids) { 21.times.map { |i| create_minimal_instance.to_param } }
-
+  allowed_scopes = described_class.new.send(:allowed_scopes)
+  allowed_sorts  = described_class.new.send(:allowed_sorts).keys
 
   allowed_scopes.each do |scope, method|
     context "for #{scope} scope" do
@@ -37,7 +34,7 @@ RSpec.shared_examples "an_admin_index" do
 
           it { is_expected.to successfully_render("admin/#{param_key}/index") }
 
-          specify { expect(assigns(param_key)).to paginate(20).of_total_records(21) }
+          specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
         end
 
         describe "paginates" do
@@ -45,7 +42,7 @@ RSpec.shared_examples "an_admin_index" do
 
           it { is_expected.to successfully_render("admin/#{param_key}/index") }
 
-          specify { expect(assigns(param_key)).to paginate(1).of_total_records(21) }
+          specify { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
         end
       end
     end
@@ -60,7 +57,7 @@ RSpec.shared_examples "an_admin_index" do
 
         it { is_expected.to successfully_render("admin/#{param_key}/index") }
 
-        specify { expect(assigns(param_key)).to paginate(20).of_total_records(21) }
+        specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
       end
     end
   end

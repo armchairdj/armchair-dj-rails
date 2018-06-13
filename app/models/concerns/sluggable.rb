@@ -15,10 +15,23 @@ module Sluggable
       super.gsub("-", "_")
     end
 
+    attr_accessor :clear_slug
+
+    def clear_slug?
+      !!clear_slug
+    end
+
+    before_save :handle_cleared_slug
+
   private
 
-    def should_generate_new_friendly_id?
-      slug.blank?
+    def handle_cleared_slug
+      ap "handle_cleared_slug"
+      ap clear_slug?
+
+      self.slug = nil if persisted? && clear_slug?
+
+      valid?
     end
 
     def slug_candidates

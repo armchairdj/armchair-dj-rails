@@ -8,20 +8,8 @@ en:
       tv_show: "TV Show"
       video_game: "Video Game"
     attributes:
-      contribution:
-      creator:
-      creator/primary:
-        'true':  "This is a primary creator. It can have pseudonyms."
-        'false': "This is a secondary creator. It can be a pseudonym."
-      creator/individual:
-        'true': "This is an individual creator. It can belong to a group."
-        'false':  "This is a group creator. It can have members."
-      credit:
-      identity:
-        pseudynym_id: "Pseudonym"
-      membership:
-        pseudynym_id: "Pseudonym"
       post: &post_attributes
+        clear_slug: "Generate new slug?"
         published_at: "Publish Date"
         publish_on: "Publish On"
         statuses:
@@ -35,17 +23,20 @@ en:
         <<: *post_attributes
       review:
         <<: *post_attributes
-      milestone:
-        actions:
-          released:   "Released in"
-          published:  "Published in"
-          aired:      "Aired in"
-          created:    "Created in"
-          reissued:   "Reissued in"
-          remastered: "Remastered in"
-          rereleased: "Re-released in"
-          recut:      "Re-edited in"
-          remixed:    "Remixed in"
+      contribution:
+      creator:
+        clear_slug: "Generate new slug?"
+      creator/primary:
+        'true':  "This is a primary creator. It can have pseudonyms."
+        'false': "This is a secondary creator. It can be a pseudonym."
+      creator/individual:
+        'true': "This is an individual creator. It can belong to a group."
+        'false':  "This is a group creator. It can have members."
+      credit:
+      identity:
+        pseudynym_id: "Pseudonym"
+      membership:
+        pseudynym_id: "Pseudonym"
       aspect:
         characteristics:
           album_type:         "Type"
@@ -74,7 +65,21 @@ en:
 
           game_mechanic:      "Mechanic"
           game_studio:        "Studio"
+        clear_slug: "Generate new slug?"
+      milestone:
+        actions:
+          released:   "Released In"
+          published:  "Published In"
+          aired:      "Aired In"
+          created:    "Created In"
+          reissued:   "Reissued In"
+          remastered: "Remastered In"
+          rereleased: "Re-released In"
+          recut:      "Re-edited In"
+          remixed:    "Remixed In"
+        clear_slug: "Generate new slug?"
       user:
+        clear_slug: "Generate new slug?"
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
         email: "Email Address"
@@ -90,23 +95,18 @@ en:
           root:   "Root"
         username: "Handle"
       work:
+        clear_slug: "Generate new slug?"
         subtitle: "Subtitle or Version"
     errors:
       models:
         contribution:
           attributes:
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
             creator_id:
               taken: "This contributor cannot appear twice in the same role."
         creator:
           attributes:
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
         credit:
           attributes:
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
             creator_id:
               taken: "This creator cannot appear twice."
         identity:
@@ -127,54 +127,33 @@ en:
             author:
               blank: "Please choose an author."
               invalid_author: "This user is not an author."
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
             playlistings:
               too_short: "Please choose at least two works."
+        post:
+          attributes: &post_errors
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This user is not an author."
+            body:
+              blank_during_publish: "You cannot publish a post without a body."
+            publish_on:
+              blank: "Please choose a publication date to schedule this post."
         article:
           attributes:
-            author:
-              blank: "Please choose an author."
-              invalid_author: "This user is not an author."
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
-            body:
-              blank_during_publish: "You cannot publish an article without a body."
-            publish_on:
-              blank: "Please choose a publication date to schedule this article."
-        mixtape:
-          attributes:
-            author:
-              blank: "Please choose an author."
-              invalid_author: "This user is not an author."
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
-            body:
-              blank_during_publish: "You cannot publish a mixtape without a body."
-            publish_on:
-              blank: "Please choose a publication date to schedule this mixtape."
+            <<: *post_errors
         review:
           attributes:
-            author:
-              blank: "Please choose an author."
-              invalid_author: "This user is not an author."
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
-            body:
-              blank_during_publish: "You cannot publish a review without a body."
-            publish_on:
-              blank: "Please choose a publication date to schedule this review."
+            <<: *post_errors
+        mixtape:
+          attributes:
+            <<: *post_errors
         tag:
           attributes:
         work:
           attributes:
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
             credits:
               too_short: "Please choose at least one creator."
         user:
           attributes:
-            base:
-              missing_alpha: "Cannot calculate alphabetical sort value."
             role:
               invalid_assignment: "You cannot create users with this role."

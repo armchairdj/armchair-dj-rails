@@ -5,19 +5,7 @@ class Admin::ReviewsController < Admin::PostsController
 private
 
   def update_params
-    params.fetch(:review, {}).permit(
-      :work_id,
-      :body,
-      :summary,
-      :publish_on,
-      :tag_ids => [],
-      :links_attributes => [
-        :id,
-        :_destroy,
-        :url,
-        :description
-      ]
-    )
+    super.permit(:work_id)
   end
 
   def prepare_form
@@ -29,7 +17,7 @@ private
   def allowed_sorts
     title_sort  = "posts.alpha ASC"
     status_sort = "posts.status ASC"
-    author_sort = "users.alpha ASC"
+    author_sort = "users.username ASC"
     type_sort   = "LOWER(works.type) ASC"
 
     super(title_sort).merge({

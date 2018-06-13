@@ -91,8 +91,12 @@ private
   def allowed_sorts(extra = nil)
     default_sort  = "#{model_class.table_name}.updated_at DESC"
     viewable_sort = "#{model_class.table_name}.viewable ASC"
+    id_sort       = "#{model_class.table_name}.id ASC"
 
-    base = { "Default" => default_sort }
+    base = {
+      "Default" => default_sort,
+      "ID"      => id_sort
+    }
 
     return base unless model_class.include? Viewable
 

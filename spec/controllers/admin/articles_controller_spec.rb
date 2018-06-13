@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Admin::ArticlesController, type: :controller do
-  let(:summary) { "summary summary summary summary summary." }
   let(:article) { create(:minimal_article, :draft) }
 
   context "concerns" do
@@ -123,8 +122,6 @@ RSpec.describe Admin::ArticlesController, type: :controller do
     end
 
     describe "PUT #update" do
-      pending "replacing slug"
-
       let(:min_params) { { "body" => "New body.", "title" => "New title." } }
       let(:bad_params) { { "body" => ""         , "title" => ""           } }
 
@@ -196,7 +193,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           it { is_expected.to prepare_the_article_form }
 
           it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
-            body:  :blank_during_publish,
+            body:  :blank,
             title: :blank
           }) }
 
@@ -285,7 +282,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           it { is_expected.to prepare_the_article_form }
 
           it { is_expected.to assign(article, :article).with_attributes(bad_params).with_errors({
-            body:  :blank_during_publish,
+            body:  :blank,
             title: :blank
           }) }
 
@@ -324,6 +321,18 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           }) }
 
           it { expect(assigns(:article)).to be_draft }
+        end
+      end
+
+      context "replacing slug" do
+        before(:each) { article.update_column(:slug, "old") }
+
+        let(:params) { { "clear_slug" => "1" } }
+
+        it "sets the flag" do
+          put :update, params: { id: article.to_param, article: params }
+
+          expect(assigns(:article).slug).to_not eq("old")
         end
       end
     end
@@ -367,6 +376,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
           "Default",
+          "ID",
           "Title",
           "Author",
           "Status",

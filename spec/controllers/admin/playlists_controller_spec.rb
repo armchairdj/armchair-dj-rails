@@ -219,6 +219,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
           "Default",
+          "ID",
           "Title",
           "Author",
           "Viewable",

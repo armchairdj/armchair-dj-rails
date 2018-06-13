@@ -42,6 +42,7 @@ en:
     hints:
       defaults:
         _destroy: "&nbsp;"
+        clear_slug: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
         links: "For display on the public permalink page for this %{model_name}."
       article:

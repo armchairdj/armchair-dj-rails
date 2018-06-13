@@ -551,7 +551,7 @@ RSpec.describe Post, type: :model do
           it "manually adds errors on empty body" do
             subject.update_and_publish(params)
 
-            is_expected.to have_error(body: :blank_during_publish)
+            is_expected.to have_error(body: :blank)
           end
         end
       end
@@ -643,7 +643,7 @@ RSpec.describe Post, type: :model do
           it "manually adds errors on empty body" do
             subject.update_and_schedule(params)
 
-            expect(subject.errors.details[:body].first).to eq({ error: :blank_during_publish })
+            expect(subject.errors.details[:body].first).to eq({ error: :blank })
           end
         end
       end

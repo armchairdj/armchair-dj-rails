@@ -22,6 +22,8 @@ RSpec.configure do |config|
     driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
   end
 
+#  config.filter_run_including focus: true
+
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.example_status_persistence_file_path = "tmp/examples.txt"
