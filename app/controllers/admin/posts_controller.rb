@@ -87,7 +87,7 @@ private
   end
 
   def create_params
-    update_params.except!(:publish_on).merge(author: current_user)
+    update_params.reject!{ |k, v| k.to_sym == :publish_on }.merge(author: current_user)
   end
 
   def update_params
@@ -118,7 +118,7 @@ private
   def update_state_and_respond
     respond_to do |format|
       if @instance.send(@update_method, update_params)
-        format.html { redirect_to instance_path, success: success_flash(@flash_key) }
+        format.html { redirect_to instance_path, success: success_flash }
         format.json { render :show, status: :ok, location: instance_path(full: true) }
       else
         format.html { prepare_form; set_publication_flash; render :edit }
@@ -128,19 +128,23 @@ private
   end
 
   def set_publication_flash
-    if @instance.send(@success_test)
-      # admin.flash.posts.success.publish
-      # admin.flash.posts.success.unpublish
-      # admin.flash.posts.success.schedule
-      # admin.flash.posts.success.unschedule
-      flash.now[:success] = I18n.t("admin.flash.posts.success.#{@flash_key}")
-    else
-      # admin.flash.posts.error.publish
-      # admin.flash.posts.error.unpublish
-      # admin.flash.posts.error.schedule
-      # admin.flash.posts.error.unschedule
-      flash.now[:error] = I18n.t("admin.flash.posts.error.#{@flash_key}")
-    end
+    @instance.send(@success_test) ? success_flash : error_flash
+  end
+
+  def success_flash
+    # admin.flash.posts.success.publish
+    # admin.flash.posts.success.unpublish
+    # admin.flash.posts.success.schedule
+    # admin.flash.posts.success.unschedule
+    flash.now[:success] = I18n.t("admin.flash.posts.success.#{@flash_key}")
+  end
+
+  def error_flash
+    # admin.flash.posts.error.publish
+    # admin.flash.posts.error.unpublish
+    # admin.flash.posts.error.schedule
+    # admin.flash.posts.error.unschedule
+    flash.now[:error] = I18n.t("admin.flash.posts.error.#{@flash_key}")
   end
 
   def allowed_scopes

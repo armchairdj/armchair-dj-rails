@@ -243,7 +243,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: article.to_param, article: min_params }
+            put :update, params: { step: "schedule", id: article.to_param, article: min_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to assign(article, :article).with_attributes(min_params).and_be_valid }
@@ -259,7 +259,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           before(:each) do
             allow_any_instance_of(Article).to receive(:ready_to_publish?).and_return(false)
 
-            put :update, params: { step: "schedule", id: article.to_param, article: min_params }
+            put :update, params: { step: "schedule", id: article.to_param, article: min_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -275,7 +275,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: article.to_param, article: bad_params }
+            put :update, params: { step: "schedule", id: article.to_param, article: bad_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/articles/edit").with_flash(
@@ -353,6 +353,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
+          "All",
           "Draft",
           "Scheduled",
           "Published",
@@ -368,7 +369,6 @@ RSpec.describe Admin::ArticlesController, type: :controller do
           "Default",
           "Title",
           "Author",
-          "Type",
           "Status",
         ])
       end

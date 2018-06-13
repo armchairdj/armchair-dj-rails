@@ -4,8 +4,7 @@ require "rspec/expectations"
 
 RSpec::Matchers.define :be_a_populated_new_article do
   match do |actual|
-    expect(actual     ).to be_a_new(Article)
-    expect(actual.work).to be_a_populated_new_work
+    expect(actual).to be_a_new(Post)
 
     expect(actual).to_not be_valid
   end
