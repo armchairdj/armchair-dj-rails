@@ -11,9 +11,6 @@
 
     <%= content_tag(:div, legend_hint, class: "legend-hint") %>
 
-    <%= render partial: "admin/shared/forms/playlisting_field", collection: records, as: :playlisting, locals: {
-      f:     f,
-      works: works
-    } %>
+    <%= render partial: "playlisting", collection: records, locals: { f: f } %>
   <% end %>
 <% end %>

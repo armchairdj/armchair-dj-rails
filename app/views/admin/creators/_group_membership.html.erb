@@ -1,15 +1,15 @@
-<%= f.simple_fields_for :member_memberships, member_membership do |ff| %>
+<%= f.simple_fields_for :group_memberships, group_membership do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
-    <%= ff.input :member_id,
+    <%= ff.input :group_id,
       as:            :select,
       label:         false,
-      collection:    creators,
+      collection:    @available_groups,
       required:      false,
       include_blank: :translate,
-      input_html:    js_selectabe_create_creator_attrs("creator[member]")
+      input_html:    js_selectabe_create_creator_attrs("creator[group]")
     %>
 
-    <%= ff.error :group_id %>
+    <%= ff.error :member_id %>
 
     <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>

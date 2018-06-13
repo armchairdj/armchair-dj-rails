@@ -10,8 +10,6 @@
 
     <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-    <%= render partial: "admin/shared/forms/role_field", collection: records, as: :role, locals: {
-      f: f
-    } %>
+    <%= render partial: "admin/shared/forms/role", collection: records, locals: { f: f } %>
   <% end %>
 <% end %>

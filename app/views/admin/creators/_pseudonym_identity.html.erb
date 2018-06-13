@@ -3,7 +3,7 @@
     <%= ff.input :pseudonym_id,
       as:            :select,
       label:         false,
-      collection:    creators,
+      collection:    @available_pseudonyms,
       required:      false,
       include_blank: :translate,
       input_html:    js_selectabe_create_creator_attrs("creator[psuedonym]")

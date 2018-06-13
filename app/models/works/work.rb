@@ -20,6 +20,10 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.model_name
+    ActiveModel::Name.new(self, nil, "Work")
+  end
+
   def self.grouped_options
     order(:type, :alpha).group_by{ |x| x.model_name.human }.to_a
   end

@@ -1,15 +1,15 @@
-<%= f.simple_fields_for :real_name_identities, real_name_identity do |ff| %>
+<%= f.simple_fields_for :member_memberships, member_membership do |ff| %>
   <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
-    <%= ff.input :real_name_id,
+    <%= ff.input :member_id,
       as:            :select,
       label:         false,
-      collection:    creators,
+      collection:    @available_members,
       required:      false,
       include_blank: :translate,
-      input_html:    js_selectabe_create_creator_attrs("creator[real_name]")
+      input_html:    js_selectabe_create_creator_attrs("creator[member]")
     %>
 
-    <%= ff.error :pseudonym_id %>
+    <%= ff.error :group_id %>
 
     <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>

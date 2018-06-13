@@ -2,13 +2,49 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/creators/form_fields", locals: {
-      f:                    f,
-      available_pseudonyms: available_pseudonyms,
-      available_real_names: available_real_names,
-      available_members:    available_members,
-      available_groups:     available_groups
-    } %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
+        <%= f.input :name %>
+      <% end %>
+    <% end %>
+
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+        <%= content_tag(:legend, "Primary or Pseudonym") %>
+
+        <%= render partial: "shared/custom_radio_group", locals: {
+          name:       :primary,
+          f:          f,
+          collection: Creator.primary_options,
+          invert:     true
+        } %>
+
+        <%= render partial: "pseudonym_identity_fieldset", locals: { f: f } %>
+
+        <%= render partial: "real_name_identity_fieldset", locals: { f: f } %>
+      <% end %>
+    <% end %>
+
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+        <%= content_tag(:legend, "Individual or Group") %>
+
+        <%= render partial: "shared/custom_radio_group", locals: {
+          f:          f,
+          name:       :individual,
+          collection: Creator.individual_options,
+          invert:     true
+        } %>
+
+        <%= render partial: "member_membership_fieldset", locals: { f: f } %>
+
+        <%= render partial: "group_membership_fieldset", locals: { f: f } %>
+      <% end %>
+    <% end %>
+
+    <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
+
+    <%= render partial: "admin/shared/forms/displayable_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

@@ -11,8 +11,6 @@
 
     <%= content_tag(:div, legend_hint, class: "legend-hint") %>
 
-    <%= render partial: "admin/shared/forms/link_field", collection: records, as: :link, locals: {
-      f: f
-    } %>
+    <%= render partial: "admin/shared/forms/link", collection: records, locals: { f: f } %>
   <% end %>
 <% end %>

@@ -11,9 +11,6 @@
 
     <%= content_tag(:div, legend_hint, class: "legend-hint") %>
 
-    <%= render partial: "admin/shared/forms/credit_field", collection: records, as: :credit, locals: {
-      f:        f,
-      creators: creators
-    } %>
+    <%= render partial: "admin/shared/forms/credit", collection: records, locals: { f: f } %>
   <% end %>
 <% end %>

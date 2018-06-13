@@ -9,8 +9,5 @@
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: "admin/shared/forms/pseudonym_identity_field", collection: records, as: :pseudonym_identity, locals: {
-    f:        f,
-    creators: creators
-  } %>
+  <%= render partial: "pseudonym_identity", collection: records, locals: { f: f } %>
 <% end %>
