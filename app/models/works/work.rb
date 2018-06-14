@@ -20,10 +20,6 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.model_name
-    ActiveModel::Name.new(self, nil, "Work")
-  end
-
   def self.grouped_options
     order(:type, :alpha).group_by{ |x| x.model_name.human }.to_a
   end
@@ -43,7 +39,13 @@ class Work < ApplicationRecord
   def self.type_options
     load_descendants
 
-    descendants.map { |s| [s.model_name.name, s.model_name.human] }.sort_by(&:last)
+    types = descendants.map do |klass|
+      model_name = ActiveModel::Name.new(klass.name.constantize)
+
+     [model_name.human, model_name.name]
+    end
+
+    types.sort_by(&:last)
   end
 
   def self.load_descendants

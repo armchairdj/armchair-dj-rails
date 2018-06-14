@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "a_workable_model" do
+RSpec.shared_examples "a_contributable_model" do
   context "included" do
     context "scope-related" do
       let!(:with_published) { create_minimal_instance }

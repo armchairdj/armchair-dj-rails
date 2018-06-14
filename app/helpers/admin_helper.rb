@@ -38,7 +38,7 @@ module AdminHelper
   end
 
   def admin_list_link(model)
-    path  = polymorphic_path([:admin, model])
+    path  = admin_list_permalink_for(model)
     title = "back to #{model.model_name.plural} list"
     desc  = "list icon"
     icon  = "list"
@@ -47,7 +47,7 @@ module AdminHelper
   end
 
   def admin_view_link(instance)
-    path  = polymorphic_path([:admin, instance])
+    path  = admin_permalink_for(instance)
     title = "view #{instance.model_name.singular}"
     desc  = "view icon"
     icon  = "eye"
@@ -56,7 +56,7 @@ module AdminHelper
   end
 
   def admin_create_link(model)
-    path  = new_polymorphic_path([:admin, model])
+    path  = admin_new_permalink_for(model)
     title = "create #{model.model_name.singular}"
     desc  = "create icon"
     icon  = "plus"
@@ -65,7 +65,7 @@ module AdminHelper
   end
 
   def admin_update_link(instance)
-    path  = edit_polymorphic_path([:admin, instance])
+    path  = admin_edit_permalink_for(instance)
     title = "update #{instance.model_name.singular}"
     desc  = "update icon"
     icon  = "pencil"
@@ -74,9 +74,11 @@ module AdminHelper
   end
 
   def admin_destroy_link(instance)
-    return unless Pundit.policy!(current_user, [:admin, instance.class]).destroy?
+    klass = instance.is_a?(Work) ? Work : instance.class
 
-    path  = polymorphic_path([:admin, instance])
+    return unless Pundit.policy!(current_user, [:admin, klass]).destroy?
+
+    path  = admin_permalink_for(instance)
     title = "destroy #{instance.model_name.singular}"
     desc  = "trash icon"
     icon  = "trash"

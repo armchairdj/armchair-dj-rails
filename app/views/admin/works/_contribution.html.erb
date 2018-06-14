@@ -3,14 +3,14 @@
     <%= content_tag(:div, class: "creator-role") do %>
       <%= ff.input :creator_id,
         as:            :select,
-        collection:    creators,
+        collection:    @creators,
         required:      false,
         include_blank: :translate,
         input_html:    js_selectabe_create_creator_attrs
       %>
 
       <%= ff.input :role_id, as: :select,
-        collection:    roles,
+        collection:    @roles,
         required:      false,
         include_blank: :translate,
         input_html:    js_selectable_create_role_attrs

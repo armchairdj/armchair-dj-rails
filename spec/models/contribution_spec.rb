@@ -8,7 +8,7 @@ RSpec.describe Contribution, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "a_workable_model"
+    it_behaves_like "a_contributable_model"
   end
 
   context "validations" do

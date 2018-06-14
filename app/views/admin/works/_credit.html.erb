@@ -3,7 +3,7 @@
     <%= ff.input :creator_id,
       as:            :select,
       label:         false,
-      collection:    creators,
+      collection:    @creators,
       required:      false,
       include_blank: :translate,
       input_html:    js_selectabe_create_creator_attrs

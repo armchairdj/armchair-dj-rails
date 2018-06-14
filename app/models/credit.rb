@@ -11,7 +11,7 @@ class Credit < ApplicationRecord
   #############################################################################
 
   include Alphabetizable
-  include Workable
+  include Contributable
 
   #############################################################################
   # CLASS.

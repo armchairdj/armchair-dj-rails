@@ -5,7 +5,7 @@
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
         <%= f.input :type, as: :select,
-          collection: types,
+          collection: @types,
           hint:       "First, choose a type.",
           input_html: {
             "data-controller": "selectable",

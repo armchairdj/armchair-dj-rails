@@ -1,22 +1,52 @@
 <%
   form_attrs = { class: "admin" }
 
-  if work.new_record?
+  if @work.new_record?
     form_attrs.merge!({ "data-controller": "auto-submittable" })
   end
 %>
 
-<%= simple_form_for([:admin, @work], html: form_attrs) do |f| %>
+<%= simple_form_for([:admin, @work.becomes(Work)], html: form_attrs) do |f| %>
+  <% f.object = @work.becomes(@work.class) %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/works/form_fields", locals: {
-      f:          f,
-      creators:   creators,
-      types:      types,
-      roles:      roles,
-      works:      works,
-    } %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
+        <% if f.object.persisted? %>
+          <%= f.input :type, as: :select, collection: @types, disabled: true %>
+        <% else %>
+          <%= f.input :type, as: :select, collection: @types, input_html: {
+            "data-controller": "selectable",
+            "data-target":     "auto-submittable.field"
+          } %>
+        <% end %>
+
+        <%= f.input :title %>
+
+        <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
+
+        <%= f.input :parent_id, as: :grouped_select,
+          collection:         @works,
+          selected:           f.object.parent_id,
+          required:           false,
+          group_label_method: :first,
+          group_method:       :last,
+          label_method:       :full_display_title,
+          value_method:       :id,
+          include_blank:      :translate,
+          input_html:         { "data-controller": "selectable" }
+        %>
+      <% end %>
+
+      <%= render partial: "credit_fieldset", locals: { f: f } %>
+
+      <%= render partial: "contribution_fieldset", locals: { f: f } %>
+
+      <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
+
+      <%= render partial: "admin/shared/forms/displayable_fieldset", locals: { f: f } %>
+    <% end %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
