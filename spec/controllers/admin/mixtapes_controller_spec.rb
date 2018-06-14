@@ -59,7 +59,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
         it "mixtape belongs to current_user" do
           post :create, params: { mixtape: max_params }
 
-          is_expected.to assign(Post.last, :mixtape).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to mixtape" do
@@ -87,7 +87,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
         it "mixtape belongs to current_user" do
           post :create, params: { mixtape: min_params }
 
-          is_expected.to assign(Post.last, :mixtape).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to mixtape" do

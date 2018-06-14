@@ -105,7 +105,7 @@ private
 
   def allowed_sorts
     title_sort  = "playlists.alpha ASC"
-    author_sort = "users.alpha ASC"
+    author_sort = "users.username ASC"
 
     super(title_sort).merge({
       "Title"   => title_sort,

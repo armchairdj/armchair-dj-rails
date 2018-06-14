@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::PlaylistsController, type: :controller do
+  let(:playlist) { create(:minimal_playlist) }
+
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
@@ -19,8 +21,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "GET #show" do
-      let(:playlist) { create(:minimal_playlist) }
-
       it "renders" do
         get :show, params: { id: playlist.to_param }
 
@@ -41,9 +41,9 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_playlist) }
-      let(:min_params) { attributes_for(:minimal_playlist) }
-      let(  :bad_params) { attributes_for(:minimal_playlist).except(:title) }
+      let(:max_params) { attributes_for(:complete_playlist).except(:author_id) }
+      let(:min_params) { attributes_for(:minimal_playlist ).except(:author_id) }
+      let(:bad_params) { attributes_for(:minimal_playlist ).except(:author_id, :title) }
 
       context "with min valid params" do
         it "creates a new Playlist" do
@@ -56,6 +56,12 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
           post :create, params: { playlist: min_params }
 
           is_expected.to assign(Playlist.last, :playlist).with_attributes(min_params).and_be_valid
+        end
+
+        it "playlist belongs to current_user" do
+          post :create, params: { playlist: min_params }
+
+          expect(Playlist.last.author).to eq(controller.current_user)
         end
 
         it "redirects to index" do
@@ -78,6 +84,12 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
           post :create, params: { playlist: max_params }
 
           is_expected.to assign(Playlist.last, :playlist).with_attributes(max_params).and_be_valid
+        end
+
+        it "playlist belongs to current_user" do
+          post :create, params: { playlist: max_params }
+
+          expect(Playlist.last.author).to eq(controller.current_user)
         end
 
         it "redirects to index" do
@@ -104,8 +116,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "GET #edit" do
-      let(:playlist) { create(:minimal_playlist) }
-
       it "renders" do
         get :edit, params: { id: playlist.to_param }
 
@@ -115,20 +125,18 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "PUT #update" do
-      let(:playlist) { create(:minimal_playlist) }
-
-      let(:min_params) { { title: "New Title" } }
-      let(  :bad_params) { { title: ""         } }
+      let(:update_params) { { title: "New Title" } }
+      let(:bad_update_params) { { title: ""         } }
 
       context "with valid params" do
         it "updates the requested playlist" do
-          put :update, params: { id: playlist.to_param, playlist: min_params }
+          put :update, params: { id: playlist.to_param, playlist: update_params }
 
-          is_expected.to assign(playlist, :playlist).with_attributes(min_params).and_be_valid
+          is_expected.to assign(playlist, :playlist).with_attributes(update_params).and_be_valid
         end
 
         it "redirects to index" do
-          put :update, params: { id: playlist.to_param, playlist: min_params }
+          put :update, params: { id: playlist.to_param, playlist: update_params }
 
           is_expected.to send_user_to(
             admin_playlist_path(assigns(:playlist))
@@ -138,11 +146,11 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: playlist.to_param, playlist: bad_params }
+          put :update, params: { id: playlist.to_param, playlist: bad_update_params }
 
           is_expected.to successfully_render("admin/playlists/edit")
 
-          is_expected.to assign(playlist, :playlist).with_attributes(bad_params).and_be_invalid
+          is_expected.to assign(playlist, :playlist).with_attributes(bad_update_params).and_be_invalid
 
           expect(assigns(:works)).to be_a_kind_of(Array)
         end

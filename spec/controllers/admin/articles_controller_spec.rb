@@ -58,7 +58,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         it "article belongs to current_user" do
           post :create, params: { article: max_params }
 
-          is_expected.to assign(Post.last, :article).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to article" do
@@ -86,7 +86,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
         it "article belongs to current_user" do
           post :create, params: { article: min_params }
 
-          is_expected.to assign(Post.last, :article).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to article" do

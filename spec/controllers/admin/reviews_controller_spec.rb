@@ -59,7 +59,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
         it "review belongs to current_user" do
           post :create, params: { review: max_params }
 
-          is_expected.to assign(Post.last, :review).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to review" do
@@ -87,7 +87,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
         it "review belongs to current_user" do
           post :create, params: { review: min_params }
 
-          is_expected.to assign(Post.last, :review).with_attributes(author: controller.current_user)
+          expect(Post.last.author).to eq(controller.current_user)
         end
 
         it "redirects to review" do
