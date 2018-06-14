@@ -1,32 +1,35 @@
 <%= simple_form_for([:admin, @review], html: { class: "admin"}) do |f| %>
   <%= f.error_notification %>
 
-  <% render partial: "tab_choose_work", locals: {
-    f:     f,
-    works: works,
-  } %>
+  <%= content_tag(:div, class: "form-inputs") do %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
+        <%= f.input :work_id, as: :grouped_select,
+          collection:         @works,
+          required:           false,
+          group_label_method: :first,
+          group_method:       :last,
+          label_method:       :full_display_title,
+          value_method:       :id,
+          include_blank:      :translate,
+          input_html:         js_selectable_prepare_work_attrs
+        %>
 
-  <% render partial: "tab_new_work", locals: {
-    f:        f,
-    creators: creators,
-    types:    types,
-  } %>
+        <%= f.input :body, input_html: { class: "x-large" } %>
 
-  <%= content_tag(:div, js_tabbable_attrs(selected_tab)) do %>
-    <%= content_tag(:p, "data-target": "tabbable.remove") do %>
-      Choose a work to review or create a new work.
+        <%= summary_field(f) %>
+
+        <%#= f.input :tag_ids,
+          as:         :select,
+          collection: tags,
+          input_html: js_selectable_create_tag_attrs
+        %>
+      <% end %>
     <% end %>
 
-    <%= content_tag(:ul, content_for(:tab_triggers), class: "tabs") %>
+    <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
 
-    <%= content_for(:tabs) %>
-  <% end %>
-
-  <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/reviews/form_fields", locals: {
-      f:    f,
-      tags: tags
-    } %>
+    <%= render partial: "admin/posts/publication_details", locals: { f: f } %>
   <% end %>
 
   <%= render partial: "admin/posts/buttons", locals: { f: f } %>

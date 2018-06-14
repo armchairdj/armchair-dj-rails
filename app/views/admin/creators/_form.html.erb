@@ -5,6 +5,10 @@
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
         <%= f.input :name %>
+
+        <%= summary_field(f) %>
+
+        <%= slug_field(f) %>
       <% end %>
     <% end %>
 
@@ -43,8 +47,6 @@
     <% end %>
 
     <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
-
-    <%= render partial: "admin/shared/forms/displayable_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

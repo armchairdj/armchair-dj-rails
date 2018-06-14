@@ -21,11 +21,11 @@ class Work < ApplicationRecord
   #############################################################################
 
   def self.grouped_options
-    order(:type, :alpha).group_by{ |x| x.model_name.human }.to_a
+    order(:type, :alpha).group_by{ |x| x.class.true_model_name.human }.to_a
   end
 
   def self.available_roles
-    Role.where(work_type: self.model_name.name)
+    Role.where(work_type: self.true_model_name.name)
   end
 
   def self.available_parents
@@ -40,16 +40,16 @@ class Work < ApplicationRecord
     load_descendants
 
     types = descendants.map do |klass|
-      model_name = ActiveModel::Name.new(klass.name.constantize)
+      model_name = klass.true_model_name
 
-     [model_name.human, model_name.name]
+      [model_name.human, model_name.name]
     end
 
     types.sort_by(&:last)
   end
 
   def self.load_descendants
-    return if descendants.any?
+    # return if descendants.any?
 
     Dir["#{Rails.root}/app/models/works/*.rb"].each do |file|
       next if File.basename(file, ".rb") == File.basename(__FILE__, ".rb")

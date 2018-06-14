@@ -1,14 +1,14 @@
 <%= content_tag(:section, class: "adj-module") do %>
   <%= content_tag(:fieldset) do %>
     <%= f.input :title, required: true %>
+
+    <%= summary_field(f) %>
+
+    <%= slug_field(f) %>
   <% end %>
 <% end %>
 
 <%= render partial: "admin/shared/forms/playlisting_fieldset", locals: {
   f:     f,
   works: works
-} %>
-
-<%= render partial: "admin/shared/forms/displayable_fieldset", locals: {
-  f: f
 } %>

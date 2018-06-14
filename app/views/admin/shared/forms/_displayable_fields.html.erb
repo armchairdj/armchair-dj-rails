@@ -1,6 +1,0 @@
-<%= f.input :summary, required: false, hint: true, input_html: { class: "small" } %>
-
-<% if f.object.persisted? %>
-  <%= f.input(:slug, readonly: true) %>
-  <%= f.input(:clear_slug, as: :boolean) %>
-<% end %>

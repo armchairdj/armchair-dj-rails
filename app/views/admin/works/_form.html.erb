@@ -6,8 +6,7 @@
   end
 %>
 
-<%= simple_form_for([:admin, @work.becomes(Work)], html: form_attrs) do |f| %>
-  <% f.object = @work.becomes(@work.class) %>
+<%= simple_form_for([:admin, @work], html: form_attrs) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
@@ -37,16 +36,18 @@
           include_blank:      :translate,
           input_html:         { "data-controller": "selectable" }
         %>
+
+        <%= summary_field(f) %>
+
+        <%= slug_field(f) %>
       <% end %>
-
-      <%= render partial: "credit_fieldset", locals: { f: f } %>
-
-      <%= render partial: "contribution_fieldset", locals: { f: f } %>
-
-      <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
-
-      <%= render partial: "admin/shared/forms/displayable_fieldset", locals: { f: f } %>
     <% end %>
+
+    <%= render partial: "credit_fieldset", locals: { f: f } %>
+
+    <%= render partial: "contribution_fieldset", locals: { f: f } %>
+
+    <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

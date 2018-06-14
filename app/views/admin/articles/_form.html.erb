@@ -8,6 +8,8 @@
 
         <%= f.input :body, input_html: { class: "x-large" } %>
 
+        <%= summary_field(f) %>
+
         <%#= f.input :tag_ids,
           as:         :select,
           collection: @tags,
