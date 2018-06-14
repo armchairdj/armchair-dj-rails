@@ -74,7 +74,13 @@ private
   end
 
   def scoped_instance(id)
-    policy_scope(model_class).friendly.find(id)
+    scope = policy_scope(model_class)
+
+    if model_class.respond_to?(:friendly)
+      scope.friendly.find(id)
+    else
+      scope.find(id)
+    end
   end
 
   def allowed_scopes

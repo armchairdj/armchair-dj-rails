@@ -1,5 +1,5 @@
 <%
-  @title = ["View #{@work.model_name.human}", @work.credited_artists, @work.title]
+  @title = ["View #{@work.true_human_model_name}", @work.credited_artists, @work.title]
 %>
 
 <%= admin_header(@model_class, :show,
@@ -16,7 +16,7 @@
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @work.model_name.human) %>
+        <%= content_tag(:td, @work.true_human_model_name) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

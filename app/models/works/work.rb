@@ -21,7 +21,7 @@ class Work < ApplicationRecord
   #############################################################################
 
   def self.grouped_options
-    order(:type, :alpha).group_by{ |x| x.class.true_model_name.human }.to_a
+    order(:type, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
   end
 
   def self.available_roles
@@ -36,13 +36,15 @@ class Work < ApplicationRecord
     [self]
   end
 
-  def self.type_options
+  def self.type_options(only_values: false)
     load_descendants
 
     types = descendants.map do |klass|
-      model_name = klass.true_model_name
-
-      [model_name.human, model_name.name]
+      if only_values
+        klass.true_model_name.name
+      else
+        [klass.true_human_model_name, klass.true_model_name.name]
+      end
     end
 
     types.sort_by(&:last)
@@ -179,7 +181,7 @@ class Work < ApplicationRecord
 
   def sluggable_parts
     [
-      model_name.human.pluralize,
+      true_human_model_name.pluralize,
       credited_artists(connector: " and "),
       title,
       subtitle

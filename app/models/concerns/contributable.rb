@@ -35,6 +35,6 @@ module Contributable
   delegate :unviewable?, to: :work
 
   def display_type
-    work.model_name.human
+    work.true_human_model_name
   end
 end

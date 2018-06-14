@@ -18,7 +18,7 @@ RSpec.describe "admin/works/new", type: :view do
       @work        = assign(:work, build(:work))
     end
 
-    it "renders form with only the media dropdown" do
+    it "renders form with only the type dropdown" do
       render
 
       assert_select "form[action=?][method=?]", admin_works_path, "post" do
@@ -27,14 +27,14 @@ RSpec.describe "admin/works/new", type: :view do
     end
   end
 
-  context "with populated medium" do
+  context "with populated type" do
     before(:each) do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:song))
 
-      @creators    = assign(:creators,   Creator.all.alpha)
-      @roles       = assign(:roles,      Role.where(work_type: @work.model_name.name))
-      @works       = assign(:works,      @work.grouped_parent_dropdown_options)
+      @creators    = assign(:creators, Creator.all.alpha)
+      @roles       = assign(:roles,    Role.where(work_type: @work.true_model_name.name))
+      @works       = assign(:works,     @work.grouped_parent_dropdown_options)
     end
 
     xit "renders fully populated form" do

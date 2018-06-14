@@ -26,23 +26,26 @@ module FactoryHelpers
   end
 
   def key_for_minimal
-    :"minimal_#{get_constant.model_name.param_key}"
+    :"minimal_#{find_model_name.param_key}"
   end
 
   def key_for_complete
-    :"complete_#{get_constant.model_name.param_key}"
+    :"complete_#{find_model_name.param_key}"
   end
 
-  def get_constant
-    if described_class.respond_to? :model_name
+  def find_model_name
+    if described_class.respond_to? :true_model_name
+      # STI models
+      described_class.true_model_name
+    elsif described_class.respond_to? :model_name
       # Models
-      described_class
+      described_class.model_name
     elsif described_class.respond_to? :controller_name
       # Controllers
-      described_class.controller_name.classify.constantize
+      described_class.controller_name.classify.constantize.model_name
     elsif described_class.to_s.match(/Policy$/)
       # Policies
-      described_class.to_s.demodulize.gsub(/Policy$/, "").constantize
+      described_class.to_s.demodulize.gsub(/Policy$/, "").constantize.model_name
     else
       raise NotImplementedError.new "cannot find model name in this context"
     end

@@ -28,7 +28,7 @@
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, work.model_name.human) %>
+              <%= content_tag(:td, work.true_human_model_name) %>
               <%= content_tag(:td, work.title           ) %>
               <%= content_tag(:td, work.credited_artists) %>
 

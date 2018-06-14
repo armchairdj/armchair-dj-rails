@@ -279,8 +279,6 @@ publication_writer         = FactoryBot.create(:role, work_type: "Publication", 
 publication_editor         = FactoryBot.create(:role, work_type: "Publication", name: "Editor")
 publication_publisher      = FactoryBot.create(:role, work_type: "Publication", name: "Publisher")
 
-artwork_artist             = FactoryBot.create(:role, work_type: "Artwork", name: "Artist")
-
 software_programmer        = FactoryBot.create(:role, work_type: "Software", name: "Programmer")
 software_designer          = FactoryBot.create(:role, work_type: "Software", name: "Designer")
 

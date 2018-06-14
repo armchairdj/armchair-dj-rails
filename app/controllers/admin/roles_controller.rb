@@ -83,12 +83,12 @@ private
   end
 
   def allowed_sorts
-    name_sort = "LOWER(roles.name) ASC"
-    type_sort = "LOWER(roles.work_type) ASC"
+    name_sort   = "LOWER(roles.name) ASC"
+    medium_sort = "LOWER(roles.work_type) ASC"
 
     super(name_sort).merge({
-      "Name" => [name_sort, type_sort].join(", "),
-      "Type" => [type_sort, name_sort].join(", "),
+      "Name"   => [name_sort, medium_sort].join(", "),
+      "Medium" => [medium_sort, name_sort].join(", "),
     })
   end
 end

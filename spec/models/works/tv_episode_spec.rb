@@ -5,8 +5,21 @@ RSpec.describe TvEpisode, type: :model do
     # Nothing so far.
   end
 
-  context "sti" do
-    specify { expect(described_class.superclass).to eq(Work) }
+  context "STI" do
+    context "class" do
+      specify { expect(described_class.superclass).to eq(Work) }
+
+      specify { expect(described_class.true_model_name.name ).to eq("TvEpisode") }
+      specify { expect(described_class.true_human_model_name).to eq("TV Episode") }
+    end
+
+    context "instance" do
+      let(:instance) { create_minimal_instance }
+
+      specify { expect(instance.type                 ).to eq("TvEpisode") }
+      specify { expect(instance.true_model_name.name ).to eq("TvEpisode") }
+      specify { expect(instance.true_human_model_name).to eq("TV Episode") }
+    end
   end
 
   context "class" do

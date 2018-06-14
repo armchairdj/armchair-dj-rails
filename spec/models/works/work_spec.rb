@@ -22,7 +22,25 @@ RSpec.describe VideoGame, type: :model do
   end
 
   context "class" do
-    # Nothing so far.
+    describe "self#grouped_options" do
+      pending "works"
+    end
+
+    describe "self#available_roles" do
+      pending "works"
+    end
+
+    describe "self#available_parents" do
+      pending "works"
+    end
+
+    describe "self#type_options(only_values: false)" do
+      pending "works"
+    end
+
+    describe "self#load_descendants" do
+      pending "works"
+    end
   end
 
   context "scope-related" do
@@ -219,8 +237,8 @@ RSpec.describe VideoGame, type: :model do
 
         describe "contributions" do
           let(   :creator) { create(:minimal_creator) }
-          let( :dupe_role) { create(:minimal_role, work_type: described_class.model_name.human) }
-          let(:other_role) { create(:minimal_role, work_type: described_class.model_name.human) }
+          let( :dupe_role) { create(:minimal_role, work_type: described_class.true_model_name.name) }
+          let(:other_role) { create(:minimal_role, work_type: described_class.true_model_name.name) }
 
           let(:good_attributes) { {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id:  dupe_role.id),
@@ -338,8 +356,8 @@ RSpec.describe VideoGame, type: :model do
             "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
           },
           contributions_attributes: {
-            "0" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: described_class.model_name.name), creator_id: contributor_1.id),
-            "1" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: described_class.model_name.name), creator_id: contributor_2.id),
+            "0" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: "Song"), creator_id: contributor_1.id),
+            "1" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: "Song"), creator_id: contributor_2.id),
           }
         )
       end
@@ -393,7 +411,7 @@ RSpec.describe VideoGame, type: :model do
       subject { instance.sluggable_parts }
 
       it { is_expected.to eq([
-        instance.model_name.human.pluralize,
+        instance.true_human_model_name.pluralize,
         instance.credited_artists(connector: " and "),
         instance.title,
         instance.subtitle

@@ -37,10 +37,11 @@ class Role < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :work_type, presence: true
-  validates :name,      presence: true
-
+  validates :name, presence: true
   validates :name, uniqueness: { scope: [:work_type] }
+
+  validates :work_type, presence: true
+  validates :work_type, inclusion: { in: Work.type_options(only_values: true) }
 
   #############################################################################
   # HOOKS.
@@ -55,6 +56,12 @@ class Role < ApplicationRecord
   end
 
   def display_name(full: false)
-    full ? [work_type, name].join(": ") : name
+    full ? [display_medium, name].join(": ") : name
+  end
+
+  def display_medium
+    return unless work_type
+
+    work_type.constantize.true_human_model_name
   end
 end

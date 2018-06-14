@@ -43,9 +43,9 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:initial_params) { attributes_for(:work, :with_existing_medium) }
+      let(:initial_params) { attributes_for(:work, type: "Song") }
       let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, :with_summary) }
-      let(:bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
+      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do

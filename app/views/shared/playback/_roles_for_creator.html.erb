@@ -6,8 +6,8 @@
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <% roles.each do |medium_name, role_array| %>
-      <%= content_tag(:dt, medium_name     ) %>
+    <% roles.each do |work_type, role_array| %>
+      <%= content_tag(:dt, work_type            ) %>
       <%= content_tag(:dd, role_array.join(", ")) %>
     <% end %>
   <% end %>

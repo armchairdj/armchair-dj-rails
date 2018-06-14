@@ -1,12 +1,25 @@
 en:
   activerecord:
+    subclasses:
+      work: &work_subclasses
+        album:         "Album"
+        book:          "Book"
+        comic_book:    "Comic Book"
+        graphic_novel: "Graphic Novel"
+        hardware:      "Hardware"
+        movie:         "Movie"
+        podcast:       "Podcast"
+        product:       "Product"
+        publication:   "Publication"
+        radio_show:    "Radio Show"
+        software:      "Software"
+        song:          "Song"
+        tv_episode:    "TV Episode"
+        tv_season:     "TV Season"
+        tv_show:       "TV Show"
+        video_game:    "Video Game"
     models:
-      graphic_novel: "Graphic Novel"
-      radio_show: "Radio Show"
-      tv_episode: "TV Episode"
-      tv_season: "TV Season"
-      tv_show: "TV Show"
-      video_game: "Video Game"
+      <<: *work_subclasses
     attributes:
       post: &post_attributes
         clear_slug: "Generate new slug?"
@@ -23,20 +36,6 @@ en:
         <<: *post_attributes
       review:
         <<: *post_attributes
-      contribution:
-      creator:
-        clear_slug: "Generate new slug?"
-      creator/primary:
-        'true':  "This is a primary creator. It can have pseudonyms."
-        'false': "This is a secondary creator. It can be a pseudonym."
-      creator/individual:
-        'true': "This is an individual creator. It can belong to a group."
-        'false':  "This is a group creator. It can have members."
-      credit:
-      identity:
-        pseudynym_id: "Pseudonym"
-      membership:
-        pseudynym_id: "Pseudonym"
       aspect:
         characteristics:
           album_type:         "Type"
@@ -66,6 +65,20 @@ en:
           game_mechanic:      "Mechanic"
           game_studio:        "Studio"
         clear_slug: "Generate new slug?"
+      contribution:
+      creator:
+        clear_slug: "Generate new slug?"
+      creator/primary:
+        'true':  "This is a primary creator. It can have pseudonyms."
+        'false': "This is a secondary creator. It can be a pseudonym."
+      creator/individual:
+        'true': "This is an individual creator. It can belong to a group."
+        'false':  "This is a group creator. It can have members."
+      credit:
+      identity:
+        pseudynym_id: "Pseudonym"
+      membership:
+        pseudynym_id: "Pseudonym"
       milestone:
         actions:
           released:   "Released In"
@@ -78,6 +91,8 @@ en:
           recut:      "Re-edited In"
           remixed:    "Remixed In"
         clear_slug: "Generate new slug?"
+      role:
+        work_type: "Medium"
       user:
         clear_slug: "Generate new slug?"
         current_password: "Current Password"
@@ -99,6 +114,25 @@ en:
         subtitle: "Subtitle or Version"
     errors:
       models:
+        post:
+          attributes: &post_errors
+            author:
+              blank: "Please choose an author."
+              invalid_author: "This user is not an author."
+            body:
+              blank_during_publish: "You cannot publish a post without a body."
+            publish_on:
+              blank: "Please choose a publication date to schedule this post."
+        article:
+          attributes:
+            <<: *post_errors
+        review:
+          attributes:
+            <<: *post_errors
+        mixtape:
+          attributes:
+            <<: *post_errors
+        aspect:
         contribution:
           attributes:
             creator_id:
@@ -129,24 +163,10 @@ en:
               invalid_author: "This user is not an author."
             playlistings:
               too_short: "Please choose at least two works."
-        post:
-          attributes: &post_errors
-            author:
-              blank: "Please choose an author."
-              invalid_author: "This user is not an author."
-            body:
-              blank_during_publish: "You cannot publish a post without a body."
-            publish_on:
-              blank: "Please choose a publication date to schedule this post."
-        article:
+        role:
           attributes:
-            <<: *post_errors
-        review:
-          attributes:
-            <<: *post_errors
-        mixtape:
-          attributes:
-            <<: *post_errors
+            work_type:
+              inclusion: "Please choose a valid medium."
         tag:
           attributes:
         work:
