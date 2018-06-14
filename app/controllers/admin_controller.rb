@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AdminController < ApplicationController
-  include SeoPaginatable
+  include Paginatable
 
   before_action :authorize_model, only: [
     :index,

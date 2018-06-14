@@ -28,12 +28,12 @@ brian.skip_confirmation!
 
 ##### ASPECTS
 
-album_types        = [
-  FactoryBot.create(:aspect, characteristic: :album_type, name: "LP"),
-  FactoryBot.create(:aspect, characteristic: :album_type, name: "EP"),
-  FactoryBot.create(:aspect, characteristic: :album_type, name: "Single"),
-  FactoryBot.create(:aspect, characteristic: :album_type, name: "Boxed Set"),
-  FactoryBot.create(:aspect, characteristic: :album_type, name: "Download"),
+album_formats        = [
+  FactoryBot.create(:aspect, characteristic: :album_format, name: "LP"),
+  FactoryBot.create(:aspect, characteristic: :album_format, name: "EP"),
+  FactoryBot.create(:aspect, characteristic: :album_format, name: "Single"),
+  FactoryBot.create(:aspect, characteristic: :album_format, name: "Boxed Set"),
+  FactoryBot.create(:aspect, characteristic: :album_format, name: "Download"),
 ]
 
 audio_show_formats = [

@@ -6,9 +6,7 @@ RSpec.describe WorksController, type: :controller do
   context "concerns" do
     it_behaves_like "a_public_controller"
 
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { works_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   describe "GET #index" do

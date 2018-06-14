@@ -18,11 +18,11 @@ private
     title_sort  = "posts.alpha ASC"
     status_sort = "posts.status ASC"
     author_sort = "users.username ASC"
-    type_sort   = "LOWER(works.type) ASC"
+    medium_sort = "LOWER(works.type) ASC"
 
     super(title_sort).merge({
       "Title"   => title_sort,
-      "Type"    => [type_sort,   title_sort].join(", "),
+      "Medium"  => [medium_sort, title_sort].join(", "),
       "Status"  => [status_sort, title_sort].join(", "),
       "Author"  => [author_sort, title_sort].join(", "),
     })

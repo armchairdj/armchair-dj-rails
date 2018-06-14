@@ -14,20 +14,27 @@ en:
         created_at: "Created"
         updated_at: "Updated"
         _destroy: "Remove this association"
+        clear_slug: "Generate new slug?"
+      post:
       article:
-      contribution:
+      review:
+      mixtape:
+      tag:
       creator:
-      credit:
       identity:
         real_name_id: "Real Name"
         pseudonym_id: "Pseudonym"
       membership:
         group_id: "Group"
         member_id: "Member"
-      mixtape:
+      work:
+        contributions:
+          creator_id: "Contributor"
+      credit:
+      contribution:
+      milestone:
+      aspect:
       playlist:
-      review:
-      tag:
       user:
         first_name: "First"
         middle_name: "Middle"
@@ -36,88 +43,78 @@ en:
           password: "New Password"
         edit_password:
           password: "New Password"
-      work:
-        contributions:
-          creator_id: "Contributor"
     hints:
       defaults:
         _destroy: "&nbsp;"
         clear_slug: "&nbsp;"
         summary: "For use in the meta description tag and RSS."
         links: "For display on the public permalink page for this %{model_name}."
+        publish_on: "Leave blank unless scheduling this post for future publication."
+      post:
       article:
-        publish_on: "Leave blank unless scheduling an article for future publication."
-        summary: "For use in the meta description tag."
-      contribution:
+      review:
+      mixtape:
+      tag:
       creator:
-      credit:
       identity:
       membership:
-      mixtape:
       playlist:
         playlistings: "Select at least two."
-      review:
-      tag:
+      work:
+        subtitle: "Song remix, book subtitle, TV episode title, movie cut, etc."
+        parent_id: "Original version of song, TV season, TV show, etc."
+        credits: "Select at least one."
+      credit:
+      contribution:
+      milestone:
+      aspect:
       user:
         bio: "For display on your public author profile."
         current_password: "We need your current password to confirm your changes"
         password: "Please use 12-128 characters"
         remember_me: "&nbsp;"
-      work:
-        subtitle: "Song remix, book subtitle, TV episode title, movie cut, etc."
-        parent_id: "Original version of song, TV season, TV show, etc."
-        credits: "Select at least one."
     placeholders:
       defaults:
         email: "name@domain.com"
+      post:
       article:
+      review:
+      mixtape:
       contribution:
       creator:
       credit:
       identity:
       membership:
-      mixtape:
       playlist:
-      review:
       tag:
       user:
       work:
         subtitle: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\""
     include_blanks:
-      defaults:
-      article:
-      contribution:
-        creator_id: "Please choose"
-        role_id: "Please choose"
-      creator:
-      credit:
-        creator_id: "Please choose"
-      identity:
-        pseudonym_id: "Please choose"
-        real_name_id: "Please choose"
-      membership:
-        group_id: "Please choose"
-        member_id: "Please choose"
-      mixtape:
-        playlist_id: "Please choose"
-      playlist:
-      review:
-        work_id: "Please choose"
-      tag:
-      user:
-        role: "Please choose"
-      work:
+      creator_id: "Please choose"
+      group_id: "Please choose"
+      member_id: "Please choose"
+      pseudonym_id: "Please choose"
+      real_name_id: "Please choose"
+      playlist_id: "Please choose"
+      role: "Please choose"
+      role_id: "Please choose"
+      work_id: "Please choose"
+      type: "Please choose"
     prompts:
       defaults:
+      post:
       article:
-      contribution:
-      creator:
-      credit:
-      identity:
-      membership:
-      mixtape:
-      playlist:
       review:
       tag:
-      user:
+      mixtape:
+      creator:
+      identity:
+      membership:
       work:
+      credit:
+      contribution:
+      milestone:
+      aspect:
+      playlist:
+      user:

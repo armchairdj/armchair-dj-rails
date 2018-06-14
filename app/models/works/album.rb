@@ -15,7 +15,7 @@ class Album < Work
   #############################################################################
 
   def self.characteristics
-    [:album_type, :music_label, :musical_genre]
+    [:album_format, :music_label, :musical_genre]
   end
 
   #############################################################################

@@ -8,9 +8,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     it_behaves_like "a_linkable_controller"
 
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { admin_works_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   context "as root" do
@@ -44,8 +42,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "POST #create" do
       let(:initial_params) { attributes_for(:work, type: "Song") }
-      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, :with_summary) }
-      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix).except(:title) }
+      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
+      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do
@@ -95,38 +93,19 @@ RSpec.describe Admin::WorksController, type: :controller do
         end
       end
 
-      pending "with tags"
+      pending "max_params (aspects, milestones)"
     end
 
     describe "GET #edit" do
-      context "plain jane" do
-        let(:work) { create(:minimal_song) }
+      let(:work) { create(:minimal_song) }
 
-        it "renders" do
-          get :edit, params: { id: work.to_param }
+      it "renders" do
+        get :edit, params: { id: work.to_param }
 
-          is_expected.to successfully_render("admin/works/edit")
-          is_expected.to assign(work, :work)
-
-          expect(assigns(:work).credits).to have(4).items
-
-          is_expected.to prepare_the_work_dropdowns
-        end
+        is_expected.to successfully_render("admin/works/edit")
+        is_expected.to assign(work, :work)
+        is_expected.to prepare_the_work_dropdowns
       end
-
-      context "with contribution" do
-        let(:work) { create(:minimal_song, :with_one_contribution) }
-
-        it "renders" do
-          get :edit, params: { id: work.to_param }
-
-          is_expected.to successfully_render("admin/works/edit")
-          is_expected.to assign(work, :work)
-          expect(assigns(:work).contributions).to have(11).items
-        end
-      end
-
-      pending "with tags"
     end
 
     describe "PUT #update" do
@@ -165,8 +144,6 @@ RSpec.describe Admin::WorksController, type: :controller do
           is_expected.to prepare_the_work_dropdowns
         end
       end
-
-      pending "with tags"
     end
 
     describe "DELETE #destroy" do

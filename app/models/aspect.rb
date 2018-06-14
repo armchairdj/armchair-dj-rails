@@ -40,7 +40,7 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   enum characteristic: {
-    album_type:           0,
+    album_format:           0,
     song_type:            1,
     music_label:          2,
     musical_genre:        3,

@@ -10,9 +10,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
     it_behaves_like "a_linkable_controller"
 
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { admin_mixtapes_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   context "as root" do

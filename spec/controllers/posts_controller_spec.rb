@@ -4,9 +4,7 @@ require "rails_helper"
 
 RSpec.describe PostsController, type: :controller do
   context "concerns" do
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { posts_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   describe "GET #index" do

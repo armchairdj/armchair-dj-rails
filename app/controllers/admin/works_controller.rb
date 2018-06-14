@@ -133,12 +133,12 @@ private
   def allowed_sorts
     title_sort   = "LOWER(works.title) ASC"
     creator_sort = "LOWER(creators.name) ASC"
-    type_sort    = "LOWER(works.type) ASC"
+    medium_sort  = "LOWER(works.type) ASC"
 
     super(title_sort).merge({
       "Title"   => title_sort,
       "Creator" => [creator_sort, title_sort].join(", "),
-      "Type"    => [type_sort,    title_sort].join(", "),
+      "Medium"  => [medium_sort,  title_sort].join(", "),
     })
   end
 end

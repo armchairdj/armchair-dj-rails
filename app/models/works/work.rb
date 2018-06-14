@@ -62,7 +62,11 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
+  scope :eager,     -> { includes(
+                           :aspects, :credits, :creators,
+                           :contributions, :contributors,
+                           :playlists, :reviews, :mixtapes
+                         ).references(:creators) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.viewable.alpha }
 
@@ -178,12 +182,7 @@ class Work < ApplicationRecord
   end
 
   def sluggable_parts
-    [
-      true_human_model_name.pluralize,
-      credited_artists(connector: " and "),
-      title,
-      subtitle
-    ]
+    [credited_artists(connector: " and "), title, subtitle]
   end
 
   def alpha_parts

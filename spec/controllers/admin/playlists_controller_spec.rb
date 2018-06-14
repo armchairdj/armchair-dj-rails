@@ -8,9 +8,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { admin_playlists_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   context "as root" do

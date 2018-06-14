@@ -4,13 +4,12 @@ require "rails_helper"
 
 RSpec.describe Admin::RolesController, type: :controller do
   let(:type_options) { Work.type_options }
+  let(        :role) { create(:minimal_role, work_type: type_options.first.last) }
 
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
-    it_behaves_like "an_seo_paginatable_controller" do
-      let(:expected_redirect) { admin_roles_path }
-    end
+    it_behaves_like "a_paginatable_controller"
   end
 
   context "as root" do
@@ -21,8 +20,6 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "GET #show" do
-      let(:role) { create(:minimal_role) }
-
       it "renders" do
         get :show, params: { id: role.to_param }
 
@@ -45,9 +42,9 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_role, work_type: type_options.first) }
-      let(:min_params) { attributes_for(:minimal_role,  work_type: type_options.first) }
-      let(  :bad_params) { attributes_for(:minimal_role).except(:name) }
+      let(:max_params) { attributes_for(:complete_role, work_type: type_options.first.last) }
+      let(:min_params) { attributes_for(:minimal_role,  work_type: type_options.first.last) }
+      let(:bad_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
         it "creates a new Role" do
@@ -108,8 +105,6 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "GET #edit" do
-      let(:role) { create(:minimal_role, work_type: type_options.first) }
-
       it "renders" do
         get :edit, params: { id: role.to_param }
 
@@ -122,20 +117,18 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "PUT #update" do
-      let(:role) { create(:minimal_role, work_type: type_options.first) }
-
-      let(:min_params) { { name: "New Name" } }
-      let(  :bad_params) { { name: ""         } }
+      let(    :update_params) { { name: "New Name" } }
+      let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do
         it "updates the requested role" do
-          put :update, params: { id: role.to_param, role: min_params }
+          put :update, params: { id: role.to_param, role: update_params }
 
-          is_expected.to assign(role, :role).with_attributes(min_params).and_be_valid
+          is_expected.to assign(role, :role).with_attributes(update_params).and_be_valid
         end
 
         it "redirects to index" do
-          put :update, params: { id: role.to_param, role: min_params }
+          put :update, params: { id: role.to_param, role: update_params }
 
           is_expected.to send_user_to(
             admin_role_path(assigns(:role))
@@ -145,11 +138,11 @@ RSpec.describe Admin::RolesController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: role.to_param, role: bad_params }
+          put :update, params: { id: role.to_param, role: bad_update_params }
 
           is_expected.to successfully_render("admin/roles/edit")
 
-          is_expected.to assign(role, :role).with_attributes(bad_params).and_be_invalid
+          is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid
 
           expect(assigns(:work_types)).to match_array(type_options)
         end

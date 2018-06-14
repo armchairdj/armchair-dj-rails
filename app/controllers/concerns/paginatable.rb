@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SeoPaginatable
+module Paginatable
   extend ActiveSupport::Concern
 
   included do

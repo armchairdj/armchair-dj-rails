@@ -22,7 +22,6 @@ en:
       <<: *work_subclasses
     attributes:
       post: &post_attributes
-        clear_slug: "Generate new slug?"
         published_at: "Publish Date"
         publish_on: "Publish On"
         statuses:
@@ -38,7 +37,7 @@ en:
         <<: *post_attributes
       aspect:
         characteristics:
-          album_type:         "Type"
+          album_format:       "Format"
           song_type:          "Type"
           music_label:        "Label"
           musical_genre:      "Genre"
@@ -64,10 +63,8 @@ en:
 
           game_mechanic:      "Mechanic"
           game_studio:        "Studio"
-        clear_slug: "Generate new slug?"
       contribution:
       creator:
-        clear_slug: "Generate new slug?"
       creator/primary:
         'true':  "This is a primary creator. It can have pseudonyms."
         'false': "This is a secondary creator. It can be a pseudonym."
@@ -90,11 +87,9 @@ en:
           rereleased: "Re-released In"
           recut:      "Re-edited In"
           remixed:    "Remixed In"
-        clear_slug: "Generate new slug?"
       role:
         work_type: "Medium"
       user:
-        clear_slug: "Generate new slug?"
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
         email: "Email Address"
@@ -110,7 +105,6 @@ en:
           root:   "Root"
         username: "Handle"
       work:
-        clear_slug: "Generate new slug?"
         subtitle: "Subtitle or Version"
     errors:
       models:
