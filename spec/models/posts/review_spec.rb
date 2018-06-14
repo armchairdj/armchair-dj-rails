@@ -66,9 +66,12 @@ RSpec.describe Review, type: :model do
 
     describe "#type" do
       let(:instance) { create(:never_for_ever_album_review) }
+      let( :unsaved) { Review.new }
 
       specify { expect(instance.type              ).to eq("Album Review" ) }
       specify { expect(instance.type(plural: true)).to eq("Album Reviews") }
+      specify { expect(unsaved.type               ).to eq("Review") }
+      specify { expect(unsaved.type(plural: true )).to eq("Reviews") }
     end
 
     describe "#cascade_viewable" do

@@ -49,7 +49,7 @@ class Review < Post
   #############################################################################
 
   def type(plural: false)
-    base = [work.try(:model_name).try(:human), "Review"].join(" ")
+    base = [work.try(:true_human_model_name), "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
   end
