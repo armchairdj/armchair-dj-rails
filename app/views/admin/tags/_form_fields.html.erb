@@ -1,9 +1,0 @@
-<%= content_tag(:section, class: "adj-module") do %>
-  <%= f.input :name %>
-
-  <%= summary_field(f) %>
-
-  <%= slug_field(f) %>
-<% end %>
-
-<%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>

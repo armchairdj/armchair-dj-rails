@@ -2,7 +2,15 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/tags/form_fields", locals: { f: f } %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= f.input :name %>
+
+      <%= summary_field(f) %>
+
+      <%= slug_field(f) %>
+    <% end %>
+
+    <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

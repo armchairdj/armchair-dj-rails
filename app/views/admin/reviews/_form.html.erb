@@ -21,7 +21,7 @@
 
         <%#= f.input :tag_ids,
           as:         :select,
-          collection: tags,
+          collection: @tags,
           input_html: js_selectable_create_tag_attrs
         %>
       <% end %>
@@ -29,8 +29,8 @@
 
     <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
 
-    <%= render partial: "admin/posts/publication_details", locals: { f: f } %>
+    <%= render partial: "admin/shared/forms/publication_details", locals: { f: f } %>
   <% end %>
 
-  <%= render partial: "admin/posts/buttons", locals: { f: f } %>
+  <%= render partial: "admin/shared/forms/publication_buttons", locals: { f: f } %>
 <% end %>

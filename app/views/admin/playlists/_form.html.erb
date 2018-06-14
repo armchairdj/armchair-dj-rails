@@ -2,10 +2,17 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/playlists/form_fields", locals: {
-      f:     f,
-      works: works
-    } %>
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
+        <%= f.input :title, required: true %>
+
+        <%= summary_field(f) %>
+
+        <%= slug_field(f) %>
+      <% end %>
+    <% end %>
+
+    <%= render partial: "playlisting_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
