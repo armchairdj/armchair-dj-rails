@@ -379,7 +379,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
           "Title",
           "Author",
           "Status",
-          "Type",
+          "Medium",
         ])
       end
     end
