@@ -43,6 +43,7 @@ RSpec.describe Role, type: :model do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:work_type) }
+    it { is_expected.to validate_inclusion_of(:work_type).in_array(Work.valid_types) }
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:work_type) }
@@ -54,7 +55,7 @@ RSpec.describe Role, type: :model do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
 
-      it { is_expected.to eq([instance.work_type, instance.name]) }
+      it { is_expected.to eq([instance.display_medium, instance.name]) }
     end
 
     describe "#display_name" do
@@ -67,7 +68,15 @@ RSpec.describe Role, type: :model do
       describe "full" do
         subject { instance.display_name(full: true) }
 
-        it { is_expected.to eq("#{instance.work_type}: #{instance.name}") }
+        it { is_expected.to eq("#{instance.display_medium}: #{instance.name}") }
+      end
+    end
+
+    describe "#display_medium" do
+      describe "basic" do
+        subject { create_minimal_instance(work_type: "TvEpisode").display_medium }
+
+        it { is_expected.to eq("TV Episode") }
       end
     end
   end

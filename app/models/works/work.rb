@@ -36,18 +36,16 @@ class Work < ApplicationRecord
     [self]
   end
 
-  def self.type_options(only_values: false)
+  def self.type_options
     load_descendants
 
-    types = descendants.map do |klass|
-      if only_values
-        klass.true_model_name.name
-      else
-        [klass.true_human_model_name, klass.true_model_name.name]
-      end
-    end
+    descendants.map { |d| [d.true_human_model_name, d.true_model_name.name] }.sort_by(&:last)
+  end
 
-    types.sort_by(&:last)
+  def self.valid_types
+    load_descendants
+
+    descendants.map { |d| d.true_model_name.name }.sort
   end
 
   def self.load_descendants

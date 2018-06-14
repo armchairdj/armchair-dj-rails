@@ -26,15 +26,19 @@ RSpec.describe VideoGame, type: :model do
       pending "works"
     end
 
-    describe "self#available_roles" do
-      pending "works"
-    end
-
     describe "self#available_parents" do
       pending "works"
     end
 
-    describe "self#type_options(only_values: false)" do
+    describe "self#available_roles" do
+      pending "works"
+    end
+
+    describe "self#type_options" do
+      pending "works"
+    end
+
+    describe "self#valid_types" do
       pending "works"
     end
 

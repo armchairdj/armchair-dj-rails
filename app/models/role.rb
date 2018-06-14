@@ -37,11 +37,11 @@ class Role < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
+  validates :work_type, presence: true
+  validates :work_type, inclusion: { in: Work.valid_types }
+
   validates :name, presence: true
   validates :name, uniqueness: { scope: [:work_type] }
-
-  validates :work_type, presence: true
-  validates :work_type, inclusion: { in: Work.type_options(only_values: true) }
 
   #############################################################################
   # HOOKS.
@@ -52,7 +52,7 @@ class Role < ApplicationRecord
   #############################################################################
 
   def alpha_parts
-    [work_type, name]
+    [display_medium, name]
   end
 
   def display_name(full: false)
