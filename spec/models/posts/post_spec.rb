@@ -12,13 +12,9 @@ RSpec.describe Post, type: :model do
 
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_authorable_model"
-
     it_behaves_like "a_linkable_model"
 
     it_behaves_like "a_sluggable_model"
-
-    it_behaves_like "a_summarizable_model"
   end
 
   context "class" do
@@ -153,6 +149,11 @@ RSpec.describe Post, type: :model do
   end
 
   context "validations" do
+    describe "summary" do
+      it { is_expected.to validate_length_of(:summary).is_at_least(40).is_at_most(320) }
+      it { is_expected.to allow_value("", nil).for(:summary) }
+    end
+
     describe "validates type presence" do
       subject { described_class.new }
 

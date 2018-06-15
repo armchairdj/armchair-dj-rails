@@ -1,1 +1,0 @@
-class PlaylistsController < PublicController; end

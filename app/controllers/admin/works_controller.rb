@@ -99,8 +99,6 @@ private
       :parent_id,
       :title,
       :subtitle,
-      :summary,
-      :clear_slug,
       aspect_ids: [],
       links_attributes: [
         :id,

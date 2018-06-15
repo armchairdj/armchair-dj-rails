@@ -77,8 +77,6 @@ private
       :name,
       :primary,
       :individual,
-      :summary,
-      :clear_slug,
       :links_attributes => [
         :id,
         :_destroy,

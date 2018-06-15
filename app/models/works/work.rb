@@ -14,7 +14,8 @@ class Work < ApplicationRecord
   #############################################################################
 
   include Parentable
-  include Displayable
+  include Alphabetizable
+  include Linkable
 
   #############################################################################
   # CLASS.

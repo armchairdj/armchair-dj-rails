@@ -74,8 +74,6 @@ private
   def instance_params
     params.fetch(:tag, {}).permit(
       :name,
-      :summary,
-      :clear_slug,
     )
   end
 

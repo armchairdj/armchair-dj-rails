@@ -11,7 +11,7 @@ class Playlist < ApplicationRecord
   #############################################################################
 
   include Authorable
-  include Displayable
+  include Alphabetizable
 
   #############################################################################
   # CLASS.

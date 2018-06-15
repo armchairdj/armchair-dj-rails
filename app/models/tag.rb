@@ -8,7 +8,7 @@ class Tag < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Displayable
+  include Alphabetizable
 
   #############################################################################
   # CLASS.

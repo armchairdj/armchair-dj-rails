@@ -5,16 +5,6 @@ RSpec.describe Aspect, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_application_record"
-
-    it_behaves_like "a_displayable_model"
-
-    it_behaves_like "a_linkable_model"
-
-    it_behaves_like "a_sluggable_model"
-
-    it_behaves_like "a_summarizable_model"
-
-    it_behaves_like "a_viewable_model"
   end
 
   context "class" do

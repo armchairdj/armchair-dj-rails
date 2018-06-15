@@ -18,7 +18,7 @@ class Creator < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Displayable
+  include Alphabetizable
 
   include Booletania
 

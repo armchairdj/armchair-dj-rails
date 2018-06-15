@@ -11,7 +11,6 @@ class Post < ApplicationRecord
   include Authorable
   include Linkable
   include Sluggable
-  include Summarizable
 
   #############################################################################
   # CLASS.
@@ -76,6 +75,8 @@ class Post < ApplicationRecord
   validates :type, presence: true
 
   validates :body, presence: true, unless: :draft?
+
+  validates :summary, length: { in: 40..320 }, allow_blank: true
 
   validates :status, presence: true
 
