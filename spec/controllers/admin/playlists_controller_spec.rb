@@ -39,8 +39,8 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_playlist).except(:author_id) }
       let(:min_params) { attributes_for(:minimal_playlist ).except(:author_id) }
+      let(:max_params) { attributes_for(:complete_playlist).except(:author_id) }
       let(:bad_params) { attributes_for(:minimal_playlist ).except(:author_id, :title) }
 
       context "with min valid params" do

@@ -100,7 +100,8 @@ private
       :title,
       :subtitle,
       :summary,
-      :aspect_ids,
+      :clear_slug,
+      aspect_ids: [],
       links_attributes: [
         :id,
         :_destroy,

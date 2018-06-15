@@ -44,7 +44,7 @@ FactoryBot.define do
 
     trait :with_draft_post do
       after(:create) do |playlist|
-        create(:mixtape, :draft, author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:minimal_mixtape, :draft, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -52,7 +52,7 @@ FactoryBot.define do
 
     trait :with_scheduled_post do
       after(:create) do |playlist|
-        create(:mixtape, :scheduled, author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:minimal_mixtape, :scheduled, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -60,7 +60,7 @@ FactoryBot.define do
 
     trait :with_published_post do
       after(:create) do |playlist|
-        create(:mixtape, :published, author_id: playlist.author.id, playlist_id: playlist.id)
+        create(:minimal_mixtape, :published, author_id: playlist.author.id, playlist_id: playlist.id)
 
         playlist.reload
       end
@@ -84,6 +84,7 @@ FactoryBot.define do
 
     factory :complete_playlist, parent: :minimal_playlist do
       with_10_viewable_tracks
+      with_summary
     end
   end
 end

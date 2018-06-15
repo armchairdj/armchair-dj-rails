@@ -16,7 +16,7 @@ RSpec.describe ReviewsHelper, type: :helper do
     describe "truncated" do
       subject { helper.review_title(instance, length: 15) }
 
-      it { is_expected.to eq("Kate Bush: Hou…") }
+      it { is_expected.to eq("Kate Bush: Nev…") }
     end
 
     describe "full: false" do
@@ -45,7 +45,7 @@ RSpec.describe ReviewsHelper, type: :helper do
         subject { helper.link_to_review(instance, length: 15, class: "test") }
 
         it { is_expected.to have_tag("a[href='/reviews/#{instance.slug}'][class='test']",
-          text:  "Kate Bush: Hou…",
+          text:  "Kate Bush: Nev…",
           count: 1
         ) }
       end

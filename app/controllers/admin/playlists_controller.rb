@@ -86,6 +86,8 @@ private
       :name,
       :title,
       :author_id,
+      :summary,
+      :clear_slug,
       playlistings_attributes: [
         :id,
         :_destroy,

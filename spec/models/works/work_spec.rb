@@ -415,7 +415,6 @@ RSpec.describe VideoGame, type: :model do
       subject { instance.sluggable_parts }
 
       it { is_expected.to eq([
-        instance.true_human_model_name.pluralize,
         instance.credited_artists(connector: " and "),
         instance.title,
         instance.subtitle

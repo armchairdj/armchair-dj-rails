@@ -66,7 +66,7 @@ Rails.application.routes.draw do
     resources :mixtapes,   concerns: :paginatable
     resources :reviews,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
-    # resources :tags,       concerns: :paginatable
+    resources :tags,       concerns: :paginatable
     resources :users,      concerns: :paginatable
     resources :works,      concerns: :paginatable
 

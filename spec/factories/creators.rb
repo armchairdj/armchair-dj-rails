@@ -197,6 +197,10 @@ FactoryBot.define do
       name { generate(:creator_name) }
     end
 
+    factory :complete_creator, parent: :minimal_creator do
+      with_summary
+    end
+
     factory :primary_creator, parent: :minimal_creator do
       primary
     end

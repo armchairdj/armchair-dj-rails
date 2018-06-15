@@ -98,8 +98,8 @@ private
   def permitted_keys
     [
       :body,
-      :summary,
       :publish_on,
+      :summary,
       :clear_slug,
       {
         :tag_ids => [],

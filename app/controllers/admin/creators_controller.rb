@@ -75,9 +75,10 @@ private
   def instance_params
     params.fetch(:creator, {}).permit(
       :name,
-      :summary,
       :primary,
       :individual,
+      :summary,
+      :clear_slug,
       :links_attributes => [
         :id,
         :_destroy,
