@@ -213,8 +213,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
           "All",
-          "Visible",
-          "Hidden",
         ])
       end
     end
@@ -228,7 +226,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
           "ID",
           "Title",
           "Author",
-          "Viewable",
         ])
       end
     end

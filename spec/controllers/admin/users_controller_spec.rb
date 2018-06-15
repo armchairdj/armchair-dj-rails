@@ -144,8 +144,6 @@ RSpec.describe Admin::UsersController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
           "All",
-          "Visible",
-          "Hidden",
           "Member",
           "Writer",
           "Editor",
@@ -166,7 +164,6 @@ RSpec.describe Admin::UsersController, type: :controller do
           "Username",
           "Email",
           "Role",
-          "Viewable",
         ])
       end
     end

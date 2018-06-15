@@ -44,7 +44,7 @@ class Mixtape < Post
   #############################################################################
 
   def sluggable_parts
-    playlist.try(:sluggable_parts) || []
+    playlist.try(:title)
   end
 
   #############################################################################
@@ -61,11 +61,5 @@ class Mixtape < Post
 
   def alpha_parts
     playlist.try(:alpha_parts) || []
-  end
-
-  def cascade_viewable
-    super
-
-    playlist.cascade_viewable
   end
 end

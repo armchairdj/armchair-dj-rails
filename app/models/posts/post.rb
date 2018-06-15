@@ -89,8 +89,6 @@ class Post < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  after_save :cascade_viewable
-
   #############################################################################
   # AASM LIFECYCLE.
   #############################################################################
@@ -107,29 +105,24 @@ class Post < ApplicationRecord
     state :scheduled
     state :published
 
-    event(:schedule,
-      after: [:cascade_viewable]
-    ) do
+    event(:schedule) do
       transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
     end
 
     event(:unschedule,
-      before: :clear_publish_on,
-      after:  [:cascade_viewable]
+      before: :clear_publish_on
     ) do
       transitions from: :scheduled, to: :draft
     end
 
     event(:publish,
-      before: :set_published_at,
-      after:  [:cascade_viewable]
+      before: :set_published_at
     ) do
       transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
     end
 
     event(:unpublish,
-      before: :clear_published_at,
-      after:  [:cascade_viewable]
+      before: :clear_published_at
     ) do
       transitions from: :published, to: :draft
     end
@@ -177,18 +170,8 @@ class Post < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def viewable?
-    published?
-  end
-
   def unpublished?
     draft? || scheduled?
-  end
-
-  def cascade_viewable
-    author.update_viewable
-
-    tags.each { |t| t.update_viewable }
   end
 
 private

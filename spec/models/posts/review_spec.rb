@@ -74,19 +74,6 @@ RSpec.describe Review, type: :model do
       specify { expect(unsaved.display_type(plural: true )).to eq("Reviews") }
     end
 
-    describe "#cascade_viewable" do
-      subject { create_minimal_instance }
-
-      before(:each) do
-         allow(subject.work).to receive(:cascade_viewable)
-        expect(subject.work).to receive(:cascade_viewable)
-      end
-
-      it "updates viewable for descendents" do
-        subject.cascade_viewable
-      end
-    end
-
     describe "#sluggable_parts" do
       let(:review) { create(:never_for_ever_album_review) }
       let(:collab) { create(:unity_album_review         ) }

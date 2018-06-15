@@ -167,21 +167,6 @@ RSpec.describe Playlist, type: :model do
       end
     end
 
-    describe "#cascade_viewable" do
-      subject { create_minimal_instance }
-
-      before(:each) do
-        subject.works.each do |work|
-           allow(work).to receive(:cascade_viewable)
-          expect(work).to receive(:cascade_viewable)
-        end
-      end
-
-      it "updates viewable for descendents" do
-        subject.cascade_viewable
-      end
-    end
-
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }

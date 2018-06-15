@@ -180,8 +180,6 @@ RSpec.describe Admin::WorksController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
           "All",
-          "Visible",
-          "Hidden",
         ])
       end
     end
@@ -196,7 +194,6 @@ RSpec.describe Admin::WorksController, type: :controller do
           "Title",
           "Creator",
           "Medium",
-          "Viewable",
         ])
       end
     end

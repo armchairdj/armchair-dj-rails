@@ -47,8 +47,4 @@ class Article < Post
   def alpha_parts
     [ title ]
   end
-
-  def cascade_viewable
-    super
-  end
 end

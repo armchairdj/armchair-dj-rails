@@ -336,40 +336,6 @@ RSpec.describe Work, type: :model do
 
     pending "#grouped_parent_dropdown_options"
  
-    describe "#cascade_viewable" do
-      let(    :creator_1) { create(:minimal_creator) }
-      let(    :creator_2) { create(:minimal_creator) }
-      let(:contributor_1) { create(:minimal_creator) }
-      let(:contributor_2) { create(:minimal_creator) }
-      let(       :aspect) { create(:minimal_aspect, characteristic: described_class.characteristics.first) }
-
-      let(:work) do
-        create_minimal_instance(aspect_ids: [aspect.id],
-          credits_attributes: {
-            "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
-          },
-          contributions_attributes: {
-            "0" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: "Song"), creator_id: contributor_1.id),
-            "1" => attributes_for(:minimal_contribution, role: create(:minimal_role, work_type: "Song"), creator_id: contributor_2.id),
-          }
-        )
-      end
-
-      let(:review) { create(:minimal_review, :draft, work_id: work.id) }
-
-      it "updates viewable for descendents" do
-        review.publish!
-
-        expect(         work.reload.viewable?).to eq(true)
-        expect(       aspect.reload.viewable?).to eq(true)
-        expect(    creator_1.reload.viewable?).to eq(true)
-        expect(    creator_1.reload.viewable?).to eq(true)
-        expect(contributor_1.reload.viewable?).to eq(true)
-        expect(contributor_2.reload.viewable?).to eq(true)
-      end
-    end
-
     describe "all-creator methods" do
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }

@@ -61,10 +61,6 @@ RSpec.describe Article, type: :model do
       specify { expect(instance.display_type(plural: true)).to eq("Articles") }
     end
 
-    describe "#cascade_viewable" do
-      # Empty method
-    end
-
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
 

@@ -57,10 +57,4 @@ class Review < Post
   def alpha_parts
     work.try(:alpha_parts) || []
   end
-
-  def cascade_viewable
-    super
-
-    work.cascade_viewable
-  end
 end

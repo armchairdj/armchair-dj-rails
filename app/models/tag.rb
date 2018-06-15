@@ -49,10 +49,6 @@ class Tag < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def sluggable_parts
-    [name]
-  end
-
   def alpha_parts
     [name]
   end

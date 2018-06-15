@@ -207,8 +207,6 @@ RSpec.describe Post, type: :model do
       :set_published_at,
       :clear_published_at,
       :clear_publish_on,
-      :cascade_viewable,
-      :cascade_viewable,
     ] }
 
     describe "states" do
@@ -230,8 +228,6 @@ RSpec.describe Post, type: :model do
       describe "schedule" do
         before(:each) do
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:cascade_viewable)
-          expect(draft).to receive(:cascade_viewable)
         end
 
         specify do
@@ -244,8 +240,6 @@ RSpec.describe Post, type: :model do
       describe "unschedule" do
         before(:each) do
           expect(scheduled).to receive(:clear_publish_on)
-          expect(scheduled).to receive(:cascade_viewable)
-          expect(scheduled).to receive(:cascade_viewable)
         end
 
         specify do
@@ -257,8 +251,6 @@ RSpec.describe Post, type: :model do
         before(:each) do
           expect(draft).to receive(:set_published_at)
           expect(draft).to receive(:ready_to_publish?)
-          expect(draft).to receive(:cascade_viewable)
-          expect(draft).to receive(:cascade_viewable)
         end
 
         specify do
@@ -269,8 +261,6 @@ RSpec.describe Post, type: :model do
       describe "unpublish" do
         before(:each) do
           expect(published).to receive(:clear_published_at)
-          expect(published).to receive(:cascade_viewable)
-          expect(published).to receive(:cascade_viewable)
         end
 
         specify do
@@ -441,29 +431,6 @@ RSpec.describe Post, type: :model do
           instance.send(:clear_publish_on)
 
           expect(instance.publish_on).to eq(nil)
-        end
-      end
-
-      describe "#cascade_viewable" do
-        let(:instance) { create_minimal_instance }
-        let(  :author) { double }
-        let(    :tags) { [double, double] }
-
-        before(:each) do
-          allow(instance  ).to receive(:author).and_return(author)
-          allow(instance  ).to receive(:tags  ).and_return(tags  )
-
-          allow(author    ).to receive(:update_viewable)
-          allow(tags.first).to receive(:update_viewable)
-          allow(tags.last ).to receive(:update_viewable)
-        end
-
-        it "updates counts for author and tags" do
-          expect(author    ).to receive(:update_viewable).once
-          expect(tags.first).to receive(:update_viewable).once
-          expect(tags.last ).to receive(:update_viewable).once
-
-          instance.send(:cascade_viewable)
         end
       end
     end

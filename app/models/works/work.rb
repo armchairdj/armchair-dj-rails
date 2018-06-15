@@ -174,14 +174,6 @@ class Work < ApplicationRecord
     ungrouped.group_by(&:type).to_a.sort_by(&:first)
   end
 
-  def cascade_viewable
-    self.update_viewable
-
-        creators.each(&:update_viewable)
-    contributors.each(&:update_viewable)
-         aspects.each(&:update_viewable)
-  end
-
   def sluggable_parts
     [credited_artists(connector: " and "), title, subtitle]
   end

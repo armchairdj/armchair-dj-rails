@@ -87,16 +87,6 @@ class Playlist < ApplicationRecord
     end
   end
 
-  def cascade_viewable
-    self.update_viewable
-
-    works.each(&:cascade_viewable)
-  end
-
-  def sluggable_parts
-    [title]
-  end
-
   def alpha_parts
     [title]
   end

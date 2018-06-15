@@ -269,10 +269,6 @@ class Creator < ApplicationRecord
     all.transform_values! { |v| v.map(&:name).uniq.sort }
   end
 
-  def sluggable_parts
-    [name]
-  end
-
   def alpha_parts
     [name]
   end

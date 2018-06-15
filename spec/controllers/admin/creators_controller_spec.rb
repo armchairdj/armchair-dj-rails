@@ -319,8 +319,6 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
           "All",
-          "Visible",
-          "Hidden",
         ])
       end
     end
@@ -335,7 +333,6 @@ RSpec.describe Admin::CreatorsController, type: :controller do
           "Name",
           "Primary",
           "Individual",
-          "Viewable",
         ])
       end
     end

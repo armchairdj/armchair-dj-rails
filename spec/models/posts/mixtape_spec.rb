@@ -72,19 +72,6 @@ RSpec.describe Mixtape, type: :model do
       specify { expect(instance.display_type(plural: true)).to eq("Mixtapes") }
     end
 
-    describe "#cascade_viewable" do
-      subject { create_minimal_instance }
-
-      before(:each) do
-         allow(subject.playlist).to receive(:cascade_viewable)
-        expect(subject.playlist).to receive(:cascade_viewable)
-      end
-
-      it "updates viewable for descendents" do
-        subject.cascade_viewable
-      end
-    end
-
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
 

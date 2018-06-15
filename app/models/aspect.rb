@@ -91,10 +91,6 @@ class Aspect < ApplicationRecord
     [human_characteristic, name].compact.join(connector)
   end
 
-  def sluggable_parts
-    [human_characteristic, name]
-  end
-
   def alpha_parts
     [human_characteristic, name]
   end

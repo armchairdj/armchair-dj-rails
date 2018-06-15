@@ -84,31 +84,17 @@ private
   end
 
   def allowed_scopes
-    base = { "All" => :for_admin }
-
-    return base unless model_class.include? Viewable
-
-    base.merge({
-      "Visible" => :viewable,
-      "Hidden"  => :unviewable,
-    })
+    { "All" => :for_admin }
   end
 
   def allowed_sorts(extra = nil)
     default_sort  = "#{model_class.table_name}.updated_at DESC"
-    viewable_sort = "#{model_class.table_name}.viewable ASC"
     id_sort       = "#{model_class.table_name}.id ASC"
 
-    base = {
+    {
       "Default" => default_sort,
       "ID"      => id_sort
     }
-
-    return base unless model_class.include? Viewable
-
-    base.merge({
-      "Viewable" => [viewable_sort, extra].compact.join(", "),
-    })
   end
 
   def scopes_for_view(scope)
