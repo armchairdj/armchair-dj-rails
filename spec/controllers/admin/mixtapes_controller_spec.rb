@@ -328,7 +328,7 @@ RSpec.describe Admin::MixtapesController, type: :controller do
 
         let(:params) { { "clear_slug" => "1" } }
 
-        it "sets the flag" do
+        it "forces model to update slug" do
           put :update, params: { id: mixtape.to_param, mixtape: params }
 
           expect(assigns(:mixtape).slug).to_not eq("old")

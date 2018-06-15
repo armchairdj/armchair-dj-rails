@@ -1,11 +1,11 @@
-<% return if mixtapes.empty? %>
+<% return if posts.empty? %>
 
 <%= content_tag(:section) do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Mixtapes") %>
+    <%= content_tag(:h4, "Posts") %>
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <%= render partial: "shared/playback/mixtape", collection: mixtapes %>
+    <%= render partial: "shared/playback/post", collection: posts %>
   <% end %>
 <% end %>

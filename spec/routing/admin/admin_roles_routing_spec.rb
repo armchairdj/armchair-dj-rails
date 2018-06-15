@@ -11,11 +11,11 @@ RSpec.describe Admin::RolesController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/roles/friendly_id").to route_to("admin/roles#show", id: "friendly_id")
+      expect(get: "/admin/roles/1").to route_to("admin/roles#show", id: "1")
     end
 
     it "#edit" do
-      expect(get: "/admin/roles/friendly_id/edit").to route_to("admin/roles#edit", id: "friendly_id")
+      expect(get: "/admin/roles/1/edit").to route_to("admin/roles#edit", id: "1")
     end
 
     it "#create" do
@@ -23,15 +23,15 @@ RSpec.describe Admin::RolesController, type: :routing do
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/roles/friendly_id").to route_to("admin/roles#update", id: "friendly_id")
+      expect(put: "/admin/roles/1").to route_to("admin/roles#update", id: "1")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/roles/friendly_id").to route_to("admin/roles#update", id: "friendly_id")
+      expect(patch: "/admin/roles/1").to route_to("admin/roles#update", id: "1")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/roles/friendly_id").to route_to("admin/roles#destroy", id: "friendly_id")
+      expect(delete: "/admin/roles/1").to route_to("admin/roles#destroy", id: "1")
     end
 
   end

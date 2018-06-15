@@ -327,7 +327,7 @@ RSpec.describe Admin::ArticlesController, type: :controller do
 
         let(:params) { { "clear_slug" => "1" } }
 
-        it "sets the flag" do
+        it "forces model to update slug" do
           put :update, params: { id: article.to_param, article: params }
 
           expect(assigns(:article).slug).to_not eq("old")

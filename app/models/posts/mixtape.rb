@@ -51,7 +51,7 @@ class Mixtape < Post
   # INSTANCE: TYPE METHODS.
   #############################################################################
 
-  def type(plural: false)
+  def display_type(plural: false)
     plural ? "Mixtapes" : "Mixtape"
   end
 

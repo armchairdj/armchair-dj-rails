@@ -45,18 +45,14 @@ class Review < Post
   end
 
   #############################################################################
-  # INSTANCE: TYPE METHODS.
+  # INSTANCE.
   #############################################################################
 
-  def type(plural: false)
+  def display_type(plural: false)
     base = [work.try(:true_human_model_name), "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
   end
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 
   def alpha_parts
     work.try(:alpha_parts) || []

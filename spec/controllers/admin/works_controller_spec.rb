@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::WorksController, type: :controller do
+  let(:work) { create(:minimal_song) }
+
   context "concerns" do
     it_behaves_like "an_admin_controller"
 
@@ -19,8 +21,6 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #show" do
-      let(:work) { create(:minimal_song) }
-
       it "renders" do
         get :show, params: { id: work.to_param }
 
@@ -42,8 +42,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "POST #create" do
       let(:initial_params) { attributes_for(:work, type: "Song") }
-      let(  :valid_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
-      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
+      let(  :update_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
+      let(    :bad_update_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do
@@ -61,18 +61,18 @@ RSpec.describe Admin::WorksController, type: :controller do
       context "with valid params" do
         it "creates a new Work" do
           expect {
-            post :create, params: { work: valid_params }
+            post :create, params: { work: update_params }
           }.to change(Work, :count).by(1)
         end
 
         it "creates the right attributes" do
-          post :create, params: { work: valid_params }
+          post :create, params: { work: update_params }
 
-          is_expected.to assign(Work.last, :work).with_attributes(valid_params).and_be_valid
+          is_expected.to assign(Work.last, :work).with_attributes(update_params).and_be_valid
         end
 
         it "redirects to index" do
-          post :create, params: { work: valid_params }
+          post :create, params: { work: update_params }
 
           is_expected.to send_user_to(
             admin_work_path(assigns(:work))
@@ -82,11 +82,11 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders new" do
-          post :create, params: { work: bad_params }
+          post :create, params: { work: bad_update_params }
 
           is_expected.to successfully_render("admin/works/new")
 
-          expect(assigns(:work)).to have_coerced_attributes(bad_params)
+          expect(assigns(:work)).to have_coerced_attributes(bad_update_params)
           expect(assigns(:work)).to be_invalid
 
           is_expected.to prepare_the_work_dropdowns
@@ -97,8 +97,6 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #edit" do
-      let(:work) { create(:minimal_song) }
-
       it "renders" do
         get :edit, params: { id: work.to_param }
 
@@ -109,22 +107,20 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "PUT #update" do
-      let(:work) { create(:minimal_song) }
-
-      let(  :valid_params) { { title: "New Title" } }
-      let(:bad_params) { { title: ""          } }
+      let(    :update_params) { { title: "New Title" } }
+      let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do
         it "updates the requested work" do
-          put :update, params: { id: work.to_param, work: valid_params }
+          put :update, params: { id: work.to_param, work: update_params }
 
           work.reload
 
-          expect(work.title).to eq(valid_params[:title])
+          expect(work.title).to eq(update_params[:title])
         end
 
         it "redirects to index" do
-          put :update, params: { id: work.to_param, work: valid_params }
+          put :update, params: { id: work.to_param, work: update_params }
 
           is_expected.to send_user_to(
             admin_work_path(assigns(:work))
@@ -134,7 +130,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: work.to_param, work: bad_params }
+          put :update, params: { id: work.to_param, work: bad_update_params }
 
           is_expected.to successfully_render("admin/works/edit")
 
@@ -142,6 +138,18 @@ RSpec.describe Admin::WorksController, type: :controller do
           expect(assigns(:work).valid?).to eq(false)
 
           is_expected.to prepare_the_work_dropdowns
+        end
+      end
+
+      context "replacing slug" do
+        before(:each) { work.update_column(:slug, "old") }
+
+        let(:params) { { "clear_slug" => "1" } }
+
+        it "forces model to update slug" do
+          put :update, params: { id: work.to_param, work: params }
+
+          expect(assigns(:work).slug).to_not eq("old")
         end
       end
     end

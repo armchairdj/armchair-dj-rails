@@ -69,4 +69,10 @@ module PostsHelper
 
     content_tag(:address, link, class: "author")
   end
+
+  def link_to_post(post, **opts)
+    return link_to_article(post, **opts) if post.is_a?(Article)
+    return link_to_review( post, **opts) if post.is_a?(Review)
+    return link_to_mixtape(post, **opts) if post.is_a?(Mixtape)
+  end
 end

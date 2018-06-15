@@ -2,20 +2,8 @@
   @headline = @title = @tag.display_name
 %>
 
-<%= render partial: "shared/playback/works", locals: {
-  works: @tag.works.for_site
-} %>
-
-<%= render partial: "shared/playback/articles", locals: {
-  articles: @tag.articles.for_site
-} %>
-
-<%= render partial: "shared/playback/reviews", locals: {
-  reviews: @tag.reviews.for_site
-} %>
-
-<%= render partial: "shared/playback/mixtapes", locals: {
-  mixtapes: @tag.mixtapes.for_site
+<%= render partial: "shared/playback/posts", locals: {
+  posts: @tag.posts.for_site
 } %>
 
 <%= render partial: "shared/playback/links", locals: {

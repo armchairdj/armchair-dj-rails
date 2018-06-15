@@ -6,7 +6,7 @@
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
   <%= content_tag(:dl) do %>
-    <%= render partial: "post", collection: @posts %>
+    <%= render partial: "shared/playback/post", collection: @posts %>
   <% end %>
 
   <%= paginate @posts %>

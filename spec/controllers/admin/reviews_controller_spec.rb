@@ -328,7 +328,7 @@ RSpec.describe Admin::ReviewsController, type: :controller do
 
         let(:params) { { "clear_slug" => "1" } }
 
-        it "sets the flag" do
+        it "forces model to update slug" do
           put :update, params: { id: review.to_param, review: params }
 
           expect(assigns(:review).slug).to_not eq("old")

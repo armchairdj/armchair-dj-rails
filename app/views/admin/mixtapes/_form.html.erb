@@ -17,7 +17,7 @@
 
         <%= summary_field(f) %>
 
-        <%#= f.input :tag_ids,
+        <%= f.input :tag_ids,
           as:         :select,
           collection: @tags,
           input_html: js_selectable_create_tag_attrs
