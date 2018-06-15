@@ -9,13 +9,6 @@
       <% end %>
 
       <%= content_tag(:ul, class: "arrowed") do %>
-        <%= content_tag(:li, link_to("Works",     works_path   )) %>
-        <%= content_tag(:li, link_to("Creators",  creators_path)) %>
-        <%#= content_tag(:li, link_to("Tags",      tags_path    )) %>
-        <%#= content_tag(:li, link_to("Aspects",   aspects_path )) %>
-      <% end %>
-
-      <%= content_tag(:ul, class: "arrowed") do %>
         <% if user_signed_in? %>
           <% if current_user.can_write? %>
             <%= content_tag(:li, link_to("Admin",  admin_articles_path       )) %>
