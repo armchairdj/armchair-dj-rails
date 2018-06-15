@@ -167,7 +167,6 @@ class Work < ApplicationRecord
   end
 
   def grouped_parent_dropdown_options
-    # TODO FIX ORDERING
     scope     = self.class.available_parents
     ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
 
