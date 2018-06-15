@@ -14,7 +14,7 @@ RSpec.describe UsersHelper, type: :helper do
       context "public" do
         subject { helper.link_to_user(instance, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/profile/ArmchairDJ'][class='test']",
+        it { is_expected.to have_tag("a[href='/profile/#{instance.to_param}'][class='test']",
           text:  "ArmchairDJ",
           count: 1
         ) }

@@ -64,14 +64,14 @@ RSpec.describe Review, type: :model do
   context "instance" do
     let(:instance) { create_minimal_instance }
 
-    describe "#type" do
+    describe "#display_type" do
       let(:instance) { create(:never_for_ever_album_review) }
       let( :unsaved) { Review.new }
 
-      specify { expect(instance.type              ).to eq("Album Review" ) }
-      specify { expect(instance.type(plural: true)).to eq("Album Reviews") }
-      specify { expect(unsaved.type               ).to eq("Review") }
-      specify { expect(unsaved.type(plural: true )).to eq("Reviews") }
+      specify { expect(instance.display_type              ).to eq("Album Review" ) }
+      specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
+      specify { expect(unsaved.display_type               ).to eq("Review") }
+      specify { expect(unsaved.display_type(plural: true )).to eq("Reviews") }
     end
 
     describe "#cascade_viewable" do

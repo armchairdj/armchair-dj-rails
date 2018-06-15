@@ -67,9 +67,9 @@ RSpec.describe Mixtape, type: :model do
   context "instance" do
     let(:instance) { create_minimal_instance }
 
-    describe "#type" do
-      specify { expect(instance.type              ).to eq("Mixtape" ) }
-      specify { expect(instance.type(plural: true)).to eq("Mixtapes") }
+    describe "#display_type" do
+      specify { expect(instance.display_type              ).to eq("Mixtape" ) }
+      specify { expect(instance.display_type(plural: true)).to eq("Mixtapes") }
     end
 
     describe "#cascade_viewable" do

@@ -14,7 +14,7 @@ RSpec.describe TagsHelper, type: :helper do
       context "public" do
         subject { helper.link_to_tag(instance, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/tags/#{instance.slug}'][class='test']",
+        it { is_expected.to have_tag("a[href='/tags/#{instance.to_param}'][class='test']",
           text:  "Tag",
           count: 1
         ) }

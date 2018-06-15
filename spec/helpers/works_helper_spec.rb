@@ -16,7 +16,7 @@ RSpec.describe WorksHelper, type: :helper do
       context "public" do
         subject { helper.link_to_work(instance, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/works/#{instance.slug}'][class='test']",
+        it { is_expected.to have_tag("a[href='/works/#{instance.to_param}'][class='test']",
           text:  "Michael Swanwick: Vacuum Flowers",
           count: 1
         ) }
@@ -25,7 +25,7 @@ RSpec.describe WorksHelper, type: :helper do
       context "full: false" do
         subject { helper.link_to_work(instance, full: false) }
 
-        it { is_expected.to have_tag("a[href='/works/#{instance.slug}']",
+        it { is_expected.to have_tag("a[href='/works/#{instance.to_param}']",
           text:  "Vacuum Flowers",
           count: 1
         ) }

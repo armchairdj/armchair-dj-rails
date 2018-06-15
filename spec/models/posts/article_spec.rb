@@ -56,9 +56,9 @@ RSpec.describe Article, type: :model do
   context "instance" do
     let(:instance) { create_minimal_instance }
 
-    describe "#type" do
-      specify { expect(instance.type              ).to eq("Article" ) }
-      specify { expect(instance.type(plural: true)).to eq("Articles") }
+    describe "#display_type" do
+      specify { expect(instance.display_type              ).to eq("Article" ) }
+      specify { expect(instance.display_type(plural: true)).to eq("Articles") }
     end
 
     describe "#cascade_viewable" do
