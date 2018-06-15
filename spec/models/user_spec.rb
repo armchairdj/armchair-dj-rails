@@ -87,6 +87,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(  :username) }
     it { is_expected.to validate_uniqueness_of(:username) }
 
+    pending "username format"
+
     context "conditional" do
       context "as member" do
         subject { create(:member) }
@@ -97,19 +99,19 @@ RSpec.describe User, type: :model do
       context "as writer" do
         subject { create(:writer) }
 
-        it { is_expected.to_not  validate_absence_of(:bio) }
+        it { is_expected.to_not validate_absence_of(:bio) }
       end
 
       context "as editor" do
         subject { create(:editor) }
 
-        it { is_expected.to_not  validate_absence_of(:bio) }
+        it { is_expected.to_not validate_absence_of(:bio) }
       end
 
       context "as admin" do
         subject { create(:admin) }
 
-        it { is_expected.to_not  validate_absence_of(:bio) }
+        it { is_expected.to_not validate_absence_of(:bio) }
       end
 
       context "as root" do

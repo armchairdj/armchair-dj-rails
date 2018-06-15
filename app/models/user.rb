@@ -68,6 +68,11 @@ class User < ApplicationRecord
 
   enumable_attributes :role
 
+
+  def to_param
+    username
+  end
+
   #############################################################################
   # VALIDATIONS.
   #############################################################################
@@ -79,6 +84,7 @@ class User < ApplicationRecord
 
   validates :username,   presence:   true
   validates :username,   uniqueness: true
+  validates :username,   format: { with: /\A[a-zA-Z]+\z/ }
 
   validates :bio, absence: true, unless: :can_write?
 
@@ -126,10 +132,6 @@ class User < ApplicationRecord
     instance.errors.add(:role, :invalid_assignment)
 
     false
-  end
-
-  def sluggable_parts
-    [username]
   end
 
   def alpha_parts

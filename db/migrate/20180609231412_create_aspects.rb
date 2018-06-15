@@ -2,11 +2,8 @@ class CreateAspects < ActiveRecord::Migration[5.2]
   def change
     create_table :aspects do |t|
       t.string :name
-      t.text :summary
-      t.string :alpha, index: true
-      t.string :slug
-      t.boolean :viewable, default: false, null: false
       t.integer :characteristic, null: false, index: true
+      t.string :alpha, index: true
 
       t.timestamps
     end

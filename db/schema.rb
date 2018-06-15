@@ -10,23 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_12_174940) do
+ActiveRecord::Schema.define(version: 2018_06_15_235418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "aspects", force: :cascade do |t|
     t.string "name"
-    t.text "summary"
     t.string "alpha"
-    t.string "slug"
-    t.boolean "viewable", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "characteristic", null: false
     t.index ["alpha"], name: "index_aspects_on_alpha"
     t.index ["characteristic"], name: "index_aspects_on_characteristic"
-    t.index ["slug"], name: "index_aspects_on_slug", unique: true
   end
 
   create_table "aspects_works", id: false, force: :cascade do |t|
@@ -53,16 +49,12 @@ ActiveRecord::Schema.define(version: 2018_06_12_174940) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "summary"
     t.boolean "primary", default: true, null: false
     t.boolean "individual", default: true, null: false
     t.string "alpha"
-    t.string "slug"
-    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["primary"], name: "index_creators_on_primary"
-    t.index ["slug"], name: "index_creators_on_slug", unique: true
   end
 
   create_table "credits", force: :cascade do |t|
@@ -140,13 +132,9 @@ ActiveRecord::Schema.define(version: 2018_06_12_174940) do
     t.string "title"
     t.bigint "author_id"
     t.string "alpha"
-    t.string "slug"
-    t.text "summary"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "viewable", default: false, null: false
     t.index ["alpha"], name: "index_playlists_on_alpha"
-    t.index ["slug"], name: "index_playlists_on_slug", unique: true
   end
 
   create_table "posts", force: :cascade do |t|
@@ -192,10 +180,7 @@ ActiveRecord::Schema.define(version: 2018_06_12_174940) do
 
   create_table "tags", force: :cascade do |t|
     t.string "name"
-    t.text "summary"
     t.string "alpha"
-    t.string "slug"
-    t.boolean "viewable", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["alpha"], name: "index_tags_on_alpha"
@@ -228,13 +213,10 @@ ActiveRecord::Schema.define(version: 2018_06_12_174940) do
     t.string "username", null: false
     t.text "bio"
     t.string "alpha"
-    t.boolean "viewable", default: false, null: false
-    t.string "slug"
     t.index ["alpha"], name: "index_users_on_alpha"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["slug"], name: "index_users_on_slug", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
@@ -244,16 +226,12 @@ ActiveRecord::Schema.define(version: 2018_06_12_174940) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "subtitle"
-    t.text "summary"
     t.string "alpha"
     t.string "ancestry"
     t.integer "ancestry_depth", default: 0
-    t.string "slug"
-    t.boolean "viewable", default: false, null: false
     t.string "type"
     t.index ["alpha"], name: "index_works_on_alpha"
     t.index ["ancestry"], name: "index_works_on_ancestry"
-    t.index ["slug"], name: "index_works_on_slug", unique: true
     t.index ["type"], name: "index_works_on_type"
   end
 
