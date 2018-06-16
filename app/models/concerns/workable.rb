@@ -25,5 +25,13 @@ module Workable
     def true_human_model_name
       self.class.true_human_model_name
     end
+
+    def available_roles
+      Role.where(work_type: self.type)
+    end
+
+    def available_role_ids
+      available_roles.map(&:id)
+    end
   end
 end

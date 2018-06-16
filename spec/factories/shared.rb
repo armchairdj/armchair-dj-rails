@@ -54,12 +54,16 @@ FactoryBot.define do
     end
   end
 
-  trait :with_existing_work do
-    transient do
-      title_for_work { FFaker::Music.song }
-    end
+  trait :with_creator do
+    association :creator, factory: :minimal_creator
+  end
 
-    work_id { create(:minimal_song, title: title_for_work).id }
+  trait :with_work do
+    association :work, factory: :minimal_song
+  end
+
+  trait :with_existing_work do
+    work_id { create(:minimal_song).id }
   end
 
   trait :with_tags do

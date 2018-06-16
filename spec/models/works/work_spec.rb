@@ -20,7 +20,7 @@ RSpec.describe Work, type: :model do
       pending "works"
     end
 
-    describe "self#available_roles" do
+    describe "#available_roles" do
       pending "works"
     end
 
@@ -129,10 +129,12 @@ RSpec.describe Work, type: :model do
         it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
+          let(:role) { create(:minimal_role, work_type: "Song") }
+
           subject do
             build(:minimal_song, contributions_attributes: {
-              "0" => attributes_for(:contribution, :with_role, creator_id: create(:minimal_creator).id),
-              "1" => attributes_for(:contribution, :with_role, creator_id: nil                        )
+              "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
+              "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil                        )
             })
           end
 
@@ -223,18 +225,20 @@ RSpec.describe Work, type: :model do
         end
 
         describe "contributions" do
-          let(   :creator) { create(:minimal_creator) }
-          let( :dupe_role) { create(:minimal_role, work_type: described_class.true_model_name.name) }
-          let(:other_role) { create(:minimal_role, work_type: described_class.true_model_name.name) }
+          subject { build(:minimal_song) }
+
+          let(:creator) { create(:minimal_creator) }
+          let( :role_1) { create(:minimal_role, work_type: "Song") }
+          let( :role_2) { create(:minimal_role, work_type: "Song") }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id:  dupe_role.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: other_role.id)
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_2.id)
           }}
 
           let(:bad_attributes) { {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: dupe_role.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: dupe_role.id)
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
+            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id)
           }}
 
           it "accepts non-dupes" do
@@ -247,7 +251,6 @@ RSpec.describe Work, type: :model do
             subject.contributions_attributes = bad_attributes
 
             is_expected.to be_invalid
-
             is_expected.to have_error(:contributions, :nested_taken)
           end
         end
@@ -330,6 +333,7 @@ RSpec.describe Work, type: :model do
     pending "#grouped_parent_dropdown_options"
  
     describe "all-creator methods" do
+      let(     :role) { create(:minimal_role, work_type: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }
@@ -339,8 +343,8 @@ RSpec.describe Work, type: :model do
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
           "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
         }, contributions_attributes: {
-          "0" => attributes_for(:minimal_contribution, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, creator_id: creator_2.id),
+          "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
+          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id),
         })
       end
 

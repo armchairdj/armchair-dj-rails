@@ -565,13 +565,11 @@ RSpec.describe Creator, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    describe "name" do
-      it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
-      # it { is_expected.to validate_inclusion_of(:primary).in_array([true, false]) }
-      #
-      # it { is_expected.to validate_inclusion_of(:collective).in_array([true, false]) }
-    end
+    # it { is_expected.to validate_presence_of(:primary) }
+    #
+    # it { is_expected.to validate_presence_of(:collective) }
   end
 
   context "instance" do

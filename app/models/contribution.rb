@@ -38,6 +38,7 @@ class Contribution < ApplicationRecord
   #############################################################################
 
   validates :role_id, presence: true
+  validates :role_id, inclusion: { allow_blank: true, in: proc { |record| record.work.try(:available_role_ids) || [] } }
 
   validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
 

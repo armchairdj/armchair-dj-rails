@@ -14,9 +14,17 @@ RSpec.describe Contribution, type: :model do
   context "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:role_id) }
-
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
+
+    describe "role" do
+      subject { create_minimal_instance(work_id: create(:minimal_song).id) }
+
+      let!(:song_role_ids) { 3.times.map { |i| create(:minimal_role, work_type: "Song").id } }
+
+      it { is_expected.to validate_presence_of(:role_id) }
+
+      it { is_expected.to validate_inclusion_of(:role_id).in_array(song_role_ids) }
+    end
   end
 
   context "instance" do

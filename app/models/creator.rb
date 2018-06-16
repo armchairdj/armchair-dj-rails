@@ -222,10 +222,9 @@ class Creator < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :name, presence: true
-
-  validates :primary,    inclusion: { in: [true, false] }
-  validates :individual, inclusion: { in: [true, false] }
+  validates :name,       presence: true
+  # validates :primary,    presence: true
+  # validates :individual, presence: true
 
   #############################################################################
   # HOOKS.

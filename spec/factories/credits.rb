@@ -9,14 +9,6 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_work do
-      association :work, factory: :minimal_song
-    end
-
-    trait :with_creator do
-      association :creator, factory: :minimal_creator
-    end
-
     ###########################################################################
     # FACTORIES.
     ###########################################################################

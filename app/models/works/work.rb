@@ -25,10 +25,6 @@ class Work < ApplicationRecord
     order(:type, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
   end
 
-  def self.available_roles
-    Role.where(work_type: self.true_model_name.name)
-  end
-
   def self.available_parents
     self.superclass.where(type: available_parent_types.map{ |x| x.model_name.name })
   end

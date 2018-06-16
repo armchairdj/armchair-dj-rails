@@ -41,12 +41,13 @@ FactoryBot.define do
         contributor_count 1
       end
 
-      contributions_attributes do
-        contributor_count.times.inject({}) do |memo, (i)|
-          name    = contributor_names[i] || generate(:creator_name)
-          creator = create(:minimal_creator, name: name)
+      after(:create) do |work, evaluator|
+        evaluator.contributor_count.times do |i|
+          creator = create(:minimal_creator, name: evaluator.contributor_names[i] || generate(:creator_name))
+          role    = create(:minimal_role, work_type: work.type)
+          contrib = create(:minimal_contribution, work_id: work.id, creator_id: creator.id, role_id: role.id)
 
-          memo[i.to_s] = attributes_for(:minimal_contribution, creator_id: creator.id); memo
+          work.reload
         end
       end
     end

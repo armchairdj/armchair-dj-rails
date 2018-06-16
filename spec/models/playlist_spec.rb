@@ -161,6 +161,7 @@ RSpec.describe Playlist, type: :model do
     end
 
     describe "all-creator methods" do
+      let(:role     ) { create(:minimal_role, work_type: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }
@@ -171,8 +172,8 @@ RSpec.describe Playlist, type: :model do
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
           "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
         }, contributions_attributes: {
-          "0" => attributes_for(:minimal_contribution, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, creator_id: creator_2.id),
+          "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
+          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id),
         })
       end
 

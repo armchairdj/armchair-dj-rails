@@ -13,8 +13,9 @@ FactoryBot.define do
     # SPECIFIC FACTORIES.
     ###########################################################################
 
-    factory :global_communications_76_14, parent: :complete_album do
+    factory :global_communications_76_14, parent: :minimal_album do
       title "76:14"
+      with_contributions
 
       transient do
         creator_count     1
@@ -24,7 +25,7 @@ FactoryBot.define do
       end
     end
 
-    factory :carl_craig_and_green_velvet_unity, parent: :complete_album do
+    factory :carl_craig_and_green_velvet_unity, parent: :minimal_album do
       title  "Unity"
       subtitle nil
 

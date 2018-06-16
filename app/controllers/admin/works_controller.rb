@@ -88,7 +88,7 @@ private
       @work.prepare_contributions
 
       @creators = Creator.all.alpha
-      @roles    = Role.where(work_type: @work.model_name.name)
+      @roles    = @work.available_roles
       @works    = @work.grouped_parent_dropdown_options
     end
   end
