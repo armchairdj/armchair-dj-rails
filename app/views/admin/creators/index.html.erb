@@ -17,6 +17,7 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "ID"         %> 
             <%= sortable_th @sorts, "Name"       %>
             <%= sortable_th @sorts, "Primary"    %>
             <%= sortable_th @sorts, "Individual" %>
@@ -28,15 +29,15 @@
         <%= content_tag(:tbody) do %>
           <% @creators.each do |creator| %>
             <%= content_tag(:tr) do %>
+              <%= content_tag(:td, creator.id         ) %>
               <%= content_tag(:td, creator.name       ) %>
               <%= content_tag(:td, creator.primary?   ) %>
               <%= content_tag(:td, creator.individual?) %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_link(creator) %>
-                <%= admin_view_link(      creator) %>
-                <%= admin_update_link(    creator) %>
-                <%= admin_destroy_link(   creator) %>
+                <%= admin_view_link(   creator) %>
+                <%= admin_update_link( creator) %>
+                <%= admin_destroy_link(creator) %>
               <% end %>
             <% end %>
           <% end %>

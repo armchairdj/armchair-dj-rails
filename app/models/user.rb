@@ -68,7 +68,6 @@ class User < ApplicationRecord
 
   enumable_attributes :role
 
-
   def to_param
     username
   end

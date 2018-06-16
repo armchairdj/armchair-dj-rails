@@ -1,8 +1,14 @@
-<%= simple_form_for([:admin, @tag], html: { class: "admin"}) do |f| %>
+<%= simple_form_for([:admin, @aspect], html: { class: "admin"}) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= content_tag(:section, class: "adj-module") do %>
+      <%= f.input(:characteristic,
+        as:            :select,
+        collection:    characteristics,
+        include_blank: :translate
+      ) %>
+
       <%= f.input :name %>
     <% end %>
 

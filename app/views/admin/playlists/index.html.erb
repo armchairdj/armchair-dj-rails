@@ -17,6 +17,7 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
+            <%= sortable_th @sorts, "ID"     %>
             <%= sortable_th @sorts, "Title"  %>
             <%= sortable_th @sorts, "Author" %>
 
@@ -27,7 +28,8 @@
         <%= content_tag(:tbody) do %>
           <% @playlists.each do |playlist| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, playlist.title          ) %>
+              <%= content_tag(:td, playlist.id            ) %>
+              <%= content_tag(:td, playlist.title         ) %>
               <%= content_tag(:td, playlist.display_author) %>
 
               <%= admin_actions_cell(playlist) %>

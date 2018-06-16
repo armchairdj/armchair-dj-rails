@@ -1,0 +1,10 @@
+<%
+  @title = ["Update Aspect", @aspect.name]
+%>
+
+<%= admin_header(@model_class, :edit,
+  h1:       @title.first,
+  instance: @aspect,
+) %>
+
+<%= render partial: "form" %>

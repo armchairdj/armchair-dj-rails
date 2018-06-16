@@ -17,7 +17,8 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "Type"  %>
+            <%= sortable_th @sorts, "ID"      %>
+            <%= sortable_th @sorts, "Medium"  %>
             <%= sortable_th @sorts, "Title"   %>
             <%= sortable_th @sorts, "Creator" %>
 
@@ -28,9 +29,10 @@
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
+              <%= content_tag(:td, work.id                   ) %>
               <%= content_tag(:td, work.true_human_model_name) %>
-              <%= content_tag(:td, work.title           ) %>
-              <%= content_tag(:td, work.credited_artists) %>
+              <%= content_tag(:td, work.title                ) %>
+              <%= content_tag(:td, work.credited_artists     ) %>
 
               <%= admin_actions_cell(work) %>
             <% end %>

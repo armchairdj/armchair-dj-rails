@@ -1,9 +1,9 @@
 <%
-  @title = "Roles"
+  @title = "Aspects"
 %>
 
 <%= admin_header(@model_class, :index,
-  h4: total_count_for(@roles),
+  h4: total_count_for(@aspects),
   h1: @title
 ) %>
 
@@ -11,38 +11,38 @@
   <%= admin_index_tabs(@scopes) %>
 
   <%= content_tag(:div, class: "tab") do %>
-    <% if @roles.empty? %>
+    <% if @aspects.empty? %>
       <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
     <% else %>
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "ID"     %>
-            <%= sortable_th @sorts, "Medium" %>
-            <%= sortable_th @sorts, "Name"   %>
+            <%= sortable_th @sorts, "ID"             %> 
+            <%= sortable_th @sorts, "Characteristic" %>
+            <%= sortable_th @sorts, "Name"           %>
 
             <%= actions_th %>
           <% end %>
         <% end %>
 
         <%= content_tag(:tbody) do %>
-          <% @roles.each do |role| %>
+          <% @aspects.each do |aspect| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, role.id            ) %>
-              <%= content_tag(:td, role.display_medium) %>
-              <%= content_tag(:td, role.name          ) %>
+              <%= content_tag(:td, aspect.id                  ) %>
+              <%= content_tag(:td, aspect.human_characteristic) %>
+              <%= content_tag(:td, aspect.name                ) %>
 
               <%= content_tag(:td, class: "actions") do %>
-                <%= admin_view_link(   role) %>
-                <%= admin_update_link( role) %>
-                <%= admin_destroy_link(role) %>
+                <%= admin_view_link(   aspect) %>
+                <%= admin_update_link( aspect) %>
+                <%= admin_destroy_link(aspect) %>
               <% end %>
             <% end %>
           <% end %>
         <% end %>
       <% end %>
 
-      <%= paginate @roles %>
+      <%= paginate @aspects %>
     <% end %>
   <% end %>
 <% end %>

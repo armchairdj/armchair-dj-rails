@@ -1,0 +1,46 @@
+<%
+  @title = ["View Aspect", @aspect.name]
+%>
+
+<%= admin_header(@model_class, :show,
+  h1:       @title.first,
+  instance: @aspect,
+) %>
+
+<%= content_tag(:section, class: "admin-section tabled") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Attributes") %>
+  <% end %>
+
+  <%= content_tag(:table, class: "admin admin-view") do %>
+    <%= content_tag(:tbody) do %>
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Name") %>
+        <%= content_tag(:td, @aspect.name) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Created") %>
+        <%= content_tag(:td, admin_date(@aspect.created_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Updated") %>
+        <%= content_tag(:td, admin_date(@aspect.updated_at)) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Alpha") %>
+        <%= content_tag(:td, @aspect.alpha) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts: @aspect.posts.for_admin.reverse_cron
+} %>
+
+<%= render partial: "admin/shared/playback/links", locals: {
+  links: @aspect.links
+} %>
