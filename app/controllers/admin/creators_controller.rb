@@ -115,7 +115,6 @@ private
     @creator.prepare_real_name_identities
     @creator.prepare_member_memberships
     @creator.prepare_group_memberships
-    @creator.prepare_links
 
     @available_pseudonyms = @creator.available_pseudonyms
     @available_real_names = Creator.available_real_names

@@ -140,18 +140,6 @@ RSpec.describe Admin::WorksController, type: :controller do
           is_expected.to prepare_the_work_dropdowns
         end
       end
-
-      context "replacing slug" do
-        before(:each) { work.update_column(:slug, "old") }
-
-        let(:params) { { "clear_slug" => "1" } }
-
-        it "forces model to update slug" do
-          put :update, params: { id: work.to_param, work: params }
-
-          expect(assigns(:work).slug).to_not eq("old")
-        end
-      end
     end
 
     describe "DELETE #destroy" do

@@ -81,8 +81,6 @@ private
   def prepare_form
     @types = Work.type_options
 
-    @work.prepare_links
-
     if @work.type.present?
       @work.prepare_credits
       @work.prepare_contributions
