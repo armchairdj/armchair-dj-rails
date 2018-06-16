@@ -9,12 +9,7 @@ module Contributable
     ###########################################################################
 
     scope :eager,      -> { includes(:work, :creator) }
-
-    scope :viewable,   -> { eager.where(works: { viewable: true  }) }
-    scope :unviewable, -> { eager.where(works: { viewable: false }) }
-
     scope :for_admin,  -> { eager }
-    scope :for_site,   -> { eager.viewable.alpha }
 
     ###########################################################################
     # ASSOCIATIONS.
@@ -30,9 +25,6 @@ module Contributable
     validates :work,    presence: true
     validates :creator, presence: true
   end
-
-  delegate :viewable?,   to: :work
-  delegate :unviewable?, to: :work
 
   def display_type
     work.true_human_model_name

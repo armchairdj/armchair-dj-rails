@@ -2,7 +2,7 @@
 
 module UsersHelper
   def link_to_user(user, admin: false, **opts)
-    return unless admin || user.viewable?
+    return unless admin
 
     text = user.username
     url  = admin ? admin_user_path(user) : user_path(user)

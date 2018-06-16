@@ -51,7 +51,6 @@ class Creator < ApplicationRecord
   ) }
 
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -260,9 +259,9 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def display_roles(for_site: false)
-    cred =       credits.includes(:work).send(for_site ? :for_site : :itself)
-    cont = contributions.includes(:work).send(for_site ? :for_site : :itself)
+  def display_roles
+    cred =       credits.includes(:work)
+    cont = contributions.includes(:work)
 
     all = (cred.to_a + cont.to_a).group_by(&:display_type)
 

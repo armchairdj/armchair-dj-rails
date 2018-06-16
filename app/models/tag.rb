@@ -20,7 +20,6 @@ class Tag < ApplicationRecord
 
   scope     :eager, -> { includes(:posts) }
   scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

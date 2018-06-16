@@ -34,13 +34,6 @@ RSpec.describe Aspect, type: :model do
         it { is_expected.to eager_load(eager_loads) }
         it { is_expected.to contain_exactly(draft, published_1, published_2) }
       end
-
-      describe "self#for_site" do
-        subject { collection.for_site }
-
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to eq([published_2, published_1]) }
-      end
     end
   end
 
@@ -73,12 +66,6 @@ RSpec.describe Aspect, type: :model do
 
   context "instance" do
     let(:instance) { create_minimal_instance }
-
-    describe "#sluggable_parts" do
-      subject { instance.sluggable_parts }
-
-      it { is_expected.to eq([instance.human_characteristic, instance.name]) }
-    end
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }

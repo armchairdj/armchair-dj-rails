@@ -59,13 +59,6 @@ RSpec.describe Work, type: :model do
       it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
     end
 
-    describe "self#for_site" do
-      subject { collection.for_site }
-
-      it { is_expected.to eq([published_2, published_1]) }
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
-    end
-
     pending "self#grouped_options"
   end
 

@@ -27,21 +27,6 @@ FactoryBot.define do
       } }
     end
 
-    trait :with_10_viewable_tracks do
-      playlistings_attributes { {
-        "0" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "1" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "2" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "3" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "4" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "5" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "6" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "7" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "8" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-        "9" => attributes_for(:playlisting, :with_existing_work, :with_published_post),
-      } }
-    end
-
     trait :with_draft_post do
       after(:create) do |playlist|
         create(:minimal_mixtape, :draft, author_id: playlist.author.id, playlist_id: playlist.id)
@@ -83,7 +68,7 @@ FactoryBot.define do
     end
 
     factory :complete_playlist, parent: :minimal_playlist do
-      with_10_viewable_tracks
+      with_10_tracks
       with_summary
     end
   end

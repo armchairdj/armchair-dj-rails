@@ -32,13 +32,6 @@ RSpec.describe Tag, type: :model do
         it { is_expected.to eager_load(:posts) }
         it { is_expected.to match_array(collection.to_a) }
       end
-
-      describe "self#for_site" do
-        subject { collection.for_site }
-
-        it { is_expected.to eq([published_2, published_1]) }
-        it { is_expected.to eager_load(:posts) }
-      end
     end
   end
 
@@ -54,12 +47,6 @@ RSpec.describe Tag, type: :model do
 
   context "instance" do
     let(:instance) { create_minimal_instance }
-
-    describe "#sluggable_parts" do
-      subject { instance.sluggable_parts }
-
-      it { is_expected.to eq([instance.name]) }
-    end
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }

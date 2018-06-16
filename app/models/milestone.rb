@@ -19,7 +19,6 @@ class Milestone < ApplicationRecord
   scope :sorted,    -> { order(:year) }
   scope :eager,     -> { includes(:work) }
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.sorted }
 
   #############################################################################
   # ASSOCIATIONS.

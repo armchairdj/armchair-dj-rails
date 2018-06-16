@@ -2,7 +2,7 @@
 
 module TagsHelper
   def link_to_tag(tag, admin: false, **opts)
-    return unless admin || tag.viewable?
+    return unless admin
 
     text = tag.name
     url  = admin ? admin_tag_path(tag) : tag_path(tag)

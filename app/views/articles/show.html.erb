@@ -16,7 +16,7 @@
 
 <%= content_tag(:aside, class: "post-tags") do %>
   <%= render partial: "shared/playback/tags", locals: {
-    tags: @article.tags.for_site
+    tags: @article.tags
   } %>
 <% end %>
 

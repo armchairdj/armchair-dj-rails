@@ -34,13 +34,6 @@ RSpec.describe Milestone, type: :model do
         it { is_expected.to eager_load(:work) }
         it { is_expected.to match_array(collection.to_a) }
       end
-
-      describe "self#for_site" do
-        subject { collection.for_site.where(id: ids) }
-
-        it { is_expected.to eager_load(:work) }
-        it { is_expected.to eq([released, remastered, reissued]) }
-      end
     end
   end
 

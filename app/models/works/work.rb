@@ -69,7 +69,6 @@ class Work < ApplicationRecord
                            :playlists, :reviews, :mixtapes
                          ).references(:creators) }
   scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

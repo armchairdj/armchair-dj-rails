@@ -20,7 +20,6 @@ class Aspect < ApplicationRecord
 
   scope     :eager, -> { includes(:works, :creators, :contributors, :playlists, :mixtapes, :reviews) }
   scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.viewable.alpha }
 
   #############################################################################
   # ASSOCIATIONS.

@@ -44,17 +44,6 @@ RSpec.describe Creator, type: :model do
           :reviews, :contributions, :contributed_works, :contributed_reviews
         ) }
       end
-
-      describe "self#for_site" do
-        subject { described_class.for_site }
-
-        it { is_expected.to eq([carl, derrick, richie]) }
-
-        it { is_expected.to eager_load(
-          :pseudonyms, :real_names, :members, :groups, :credits, :works,
-          :reviews, :contributions, :contributed_works, :contributed_reviews
-        ) }
-      end
     end
 
     context "identities" do
@@ -778,28 +767,12 @@ RSpec.describe Creator, type: :model do
       let!(:contrib_3) { subject.contributions.create(work: book, role: editor) }
       let!(:contrib_4) { subject.contributions.create(work: book, role: author) }
 
-      let!(:review) { create(:minimal_review, :published, work_id: book.id) }
-
       it "returns hash of credits and contributions sorted alphabetically and grouped by work_type" do
         expect(subject.display_roles).to eq({
           "Book"    => ["Author",  "Creator",  "Editor"    ],
           "TV Show" => ["Creator", "Director", "Showrunner"]
         })
       end
-
-      it "takes a for_site option that excludes unviewable roles" do
-        expect(subject.display_roles(for_site: true)).to eq({
-          "Book"    => ["Author", "Creator", "Editor"]
-        })
-      end
-    end
-
-    describe "#sluggable_parts" do
-      let(:instance) { create_minimal_instance }
-
-      subject { instance.sluggable_parts }
-
-      it { is_expected.to eq([instance.name]) }
     end
 
     describe "#alpha_parts" do

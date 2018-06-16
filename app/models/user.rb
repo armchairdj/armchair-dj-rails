@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   scope     :eager, -> { includes(:articles, :reviews, :mixtapes, :works, :creators) }
   scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.viewable.alpha }
+  scope  :for_site, -> { joins(:posts).eager.alpha }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -84,7 +84,7 @@ class User < ApplicationRecord
 
   validates :username,   presence:   true
   validates :username,   uniqueness: true
-  validates :username,   format: { with: /\A[a-zA-Z]+\z/ }
+  validates :username,   format: { with: /\A[a-zA-Z0-9]+\z/ }
 
   validates :bio, absence: true, unless: :can_write?
 

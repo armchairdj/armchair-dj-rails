@@ -50,19 +50,6 @@ RSpec.describe Playlisting, type: :model do
 
         it { is_expected.to eager_load(:playlist, :work) }
       end
-
-      describe "self#for_site" do
-        subject { collection.for_site }
-
-        specify "includes all, sorted" do
-          expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = collection.map(&:id)
-
-          expect(actual).to eq(expected)
-        end
-
-        it { is_expected.to eager_load(:playlist, :work) }
-      end
     end
   end
 

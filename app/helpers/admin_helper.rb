@@ -201,16 +201,16 @@ module AdminHelper
     svg_icon(icon, title: title, desc: desc, wrapper_class: "admin-column-header")
   end
 
-  def viewable_status_icon
-    admin_column_icon("eye", "Article Status", "eye icon")
+  def published_status_icon
+    admin_column_icon("eye", "Post Status", "eye icon")
   end
 
-  def viewable_icon
-    admin_column_icon("lock-unlocked", "Viewable", "unlocked icon")
+  def published_icon
+    admin_column_icon("lock-unlocked", "Published", "unlocked icon")
   end
 
-  def unviewable_icon
-    admin_column_icon("lock-locked", "Unviewable", "locked icon")
+  def unpublished_icon
+    admin_column_icon("lock-locked", "Unpublished", "locked icon")
   end
 
   #############################################################################

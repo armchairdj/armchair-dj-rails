@@ -44,16 +44,6 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Summary") %>
-        <%= content_tag(:td, paragraphs(@work.summary)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Viewable?") %>
-        <%= content_tag(:td, @work.viewable?) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@work.created_at)) %>
       <% end %>

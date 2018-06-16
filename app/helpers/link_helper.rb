@@ -2,6 +2,7 @@
 
 module LinkHelper
   def permalink_for(instance, url: false)
+    # TODO
     return unless instance.respond_to?(:viewable?) && instance.viewable?
 
     url ? polymorphic_url(instance) : polymorphic_path(instance)

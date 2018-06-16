@@ -21,7 +21,6 @@ class Playlisting < ApplicationRecord
   scope :sorted,    -> { joins(:playlist, :work).order("playlists.title, playlistings.position") }
   scope :eager,     -> { includes(:playlist, :work) }
   scope :for_admin, -> { eager.sorted }
-  scope :for_site,  -> { eager.sorted }
 
   #############################################################################
   # ASSOCIATIONS.
