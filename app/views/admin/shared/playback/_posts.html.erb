@@ -1,8 +1,10 @@
 <% return if posts.empty? %>
 
+<% headline = "Posts" if local_assigns[:headline].nil? %>
+
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Posts") %>
+    <%= content_tag(:h4, headline) %>
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>

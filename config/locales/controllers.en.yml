@@ -57,6 +57,12 @@ en:
           create:  "Work created."
           destroy: "Work destroyed."
           update:  "Work updated."
+      apsects:
+        success:
+          create:       "Aspect created."
+          create_multi: "Aspects created."
+          destroy:      "Aspect destroyed."
+          update:       "Aspect updated."
   public:
     flash:
       sessions:

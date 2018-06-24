@@ -15,6 +15,11 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Characteristic") %>
+        <%= content_tag(:td, @aspect.human_characteristic) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Name") %>
         <%= content_tag(:td, @aspect.name) %>
       <% end %>
@@ -38,9 +43,11 @@
 <% end %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @aspect.posts.for_admin.reverse_cron
+  posts:    @aspect.reviews.for_admin.reverse_cron,
+  headline: "Reviews",
 } %>
 
-<%= render partial: "admin/shared/playback/links", locals: {
-  links: @aspect.links
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts:    @aspect.mixtapes.for_admin.reverse_cron,
+  headline: "Mixtapes",
 } %>

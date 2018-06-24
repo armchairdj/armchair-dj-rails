@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::AspectsController, type: :routing do
+RSpec.describe Admin::TagsController, type: :routing do
   it "#index" do
     expect(get: "/admin/aspects").to route_to("admin/aspects#index")
   end

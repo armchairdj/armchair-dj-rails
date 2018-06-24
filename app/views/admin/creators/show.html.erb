@@ -90,7 +90,3 @@
 <%= render partial: "admin/shared/playback/reviews", locals: {
   reviews: @creator.reviews.includes(:work).reverse_cron
 } %>
-
-<%= render partial: "admin/shared/playback/links", locals: {
-  links: @creator.links
-} %>

@@ -5,14 +5,12 @@
     <%= content_tag(:section, class: "adj-module") do %>
       <%= f.input(:characteristic,
         as:            :select,
-        collection:    characteristics,
+        collection:    @characteristics,
         include_blank: :translate
       ) %>
 
       <%= f.input :name %>
     <% end %>
-
-    <%= render partial: "admin/shared/forms/link_fieldset", locals: { f: f } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

@@ -52,10 +52,6 @@
   creators: @playlist.all_creators.for_admin.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/links", locals: {
-  links: @playlist.links
-} %>
-
 <%= render partial: "admin/shared/playback/mixtapes", locals: {
   mixtapes: @playlist.mixtapes.for_admin.reverse_cron
 } %>

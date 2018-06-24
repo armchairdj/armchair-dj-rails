@@ -66,10 +66,6 @@
   context:       :work
 } %>
 
-<%= render partial: "admin/shared/playback/links", locals: {
-  links: @work.links
-} %>
-
 <%= render partial: "admin/shared/playback/reviews", locals: {
   reviews: @work.reviews.for_admin.reverse_cron
 } %>

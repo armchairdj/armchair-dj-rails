@@ -16,7 +16,7 @@ class UsersController < ApplicationController
 private
 
   def find_instance
-    @user = @instance = policy_scope(User).friendly.find(params[:id])
+    @user = @instance = policy_scope(User).friendly.find_by(username: params[:id])
   end
 
   def authorize_instance
