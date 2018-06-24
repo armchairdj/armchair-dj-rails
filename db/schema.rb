@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_15_235418) do
+ActiveRecord::Schema.define(version: 2018_06_24_193017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,9 @@ ActiveRecord::Schema.define(version: 2018_06_15_235418) do
     t.string "alpha"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "characteristic", null: false
+    t.integer "facet", null: false
     t.index ["alpha"], name: "index_aspects_on_alpha"
-    t.index ["characteristic"], name: "index_aspects_on_characteristic"
+    t.index ["facet"], name: "index_aspects_on_facet"
   end
 
   create_table "aspects_works", id: false, force: :cascade do |t|

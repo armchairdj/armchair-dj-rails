@@ -12,7 +12,6 @@ class User < ApplicationRecord
 
   include Alphabetizable
   include Linkable
-  include Sluggable
 
   #############################################################################
   # PLUGINS.

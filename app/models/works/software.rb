@@ -14,7 +14,7 @@ class Software < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:tech_company, :tech_platform]
   end
 

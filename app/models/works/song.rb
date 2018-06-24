@@ -14,7 +14,7 @@ class Song < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:song_type, :musical_genre, :music_label]
   end
 

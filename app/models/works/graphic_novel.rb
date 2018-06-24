@@ -14,7 +14,7 @@ class GraphicNovel < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:publisher, :narrative_genre]
   end
 

@@ -14,7 +14,7 @@ class RadioShow < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:audio_show_format, :narrative_genre, :radio_network]
   end
 

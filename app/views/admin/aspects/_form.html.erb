@@ -3,9 +3,9 @@
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= content_tag(:section, class: "adj-module") do %>
-      <%= f.input(:characteristic,
+      <%= f.input(:facet,
         as:            :select,
-        collection:    @characteristics,
+        collection:    @facets,
         include_blank: :translate
       ) %>
 

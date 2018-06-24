@@ -14,7 +14,7 @@ class Publication < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:publication_type, :publisher]
   end
 

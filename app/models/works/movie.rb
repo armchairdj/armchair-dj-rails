@@ -14,7 +14,7 @@ class Movie < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:hollywood_studio, :narrative_genre]
   end
 

@@ -14,7 +14,7 @@ class VideoGame < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:tech_platform, :game_studio, :game_mechanic]
   end
 

@@ -5,8 +5,8 @@ FactoryBot.define do
     # TRAITS.
     ###########################################################################
 
-    trait :with_characteristic do
-      characteristic :song_type
+    trait :with_facet do
+      facet :song_type
     end
 
     trait :with_name do
@@ -62,7 +62,7 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_aspect do
-      with_characteristic
+      with_facet
       with_name
     end
 

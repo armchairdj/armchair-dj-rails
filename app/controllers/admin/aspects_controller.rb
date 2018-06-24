@@ -74,21 +74,21 @@ private
   def instance_params
     params.fetch(:aspect, {}).permit(
       :name,
-      :characteristic
+      :facet
     )
   end
 
   def prepare_form
-    @characteristics = Aspect.human_characteristics
+    @facets = Aspect.human_facets
   end
 
   def allowed_sorts
-    characteristic_sort = Aspect.alpha_order_clause_for(:characteristic)
-    name_sort           = "LOWER(aspects.name) ASC"
+    facet_sort = Aspect.alpha_order_clause_for(:facet)
+    name_sort  = "LOWER(aspects.name) ASC"
 
-    super(characteristic_sort).merge({
-      "Characteristic" => [characteristic_sort, name_sort].join(", "),
-      "Name"           => [name_sort, characteristic_sort].join(", "),
+    super(facet_sort).merge({
+      "Facet" => [facet_sort, name_sort].join(", "),
+      "Name"  => [name_sort, facet_sort].join(", "),
     })
   end
 end

@@ -36,7 +36,7 @@ en:
       review:
         <<: *post_attributes
       aspect:
-        characteristics:
+        facets:
           album_format:       "Album Format"
           song_type:          "Song Type"
           music_label:        "Music Label"

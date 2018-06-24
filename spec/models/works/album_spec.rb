@@ -23,7 +23,7 @@ RSpec.describe Album, type: :model do
   end
 
   context "class" do
-    pending "self#characteristics"
+    pending "self#facets"
   end
 
   context "scope-related" do

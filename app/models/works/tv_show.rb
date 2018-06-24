@@ -18,7 +18,7 @@ class TvShow < Work
   # SCOPES.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:narrative_genre, :tv_network, :hollywood_studio]
   end
 

@@ -14,7 +14,7 @@ class Podcast < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:audio_show_format, :narrative_genre]
   end
 

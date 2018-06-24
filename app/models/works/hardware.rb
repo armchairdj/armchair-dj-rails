@@ -14,7 +14,7 @@ class Hardware < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:tech_company, :tech_platform, :device_type]
   end
 

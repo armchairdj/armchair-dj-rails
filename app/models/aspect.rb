@@ -38,7 +38,7 @@ class Aspect < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
-  enum characteristic: {
+  enum facet: {
     album_format:           0,
     song_type:            1,
     music_label:          2,
@@ -67,16 +67,16 @@ class Aspect < ApplicationRecord
     game_studio:        602,
   }
 
-  enumable_attributes :characteristic
+  enumable_attributes :facet
 
   #############################################################################
   # VALIDATIONS.
   #############################################################################
 
-  validates :characteristic, presence: true
+  validates :facet, presence: true
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: [:characteristic] }
+  validates :name, uniqueness: { scope: [:facet] }
 
   #############################################################################
   # HOOKS.
@@ -87,10 +87,10 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   def display_name(connector: ": ")
-    [human_characteristic, name].compact.join(connector)
+    [human_facet, name].compact.join(connector)
   end
 
   def alpha_parts
-    [human_characteristic, name]
+    [human_facet, name]
   end
 end

@@ -14,7 +14,7 @@ class TvEpisode < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:narrative_genre, :tv_network, :hollywood_studio]
   end
 

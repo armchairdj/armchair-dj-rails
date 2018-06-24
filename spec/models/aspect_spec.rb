@@ -13,9 +13,9 @@ RSpec.describe Aspect, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let(      :draft) { create(:minimal_aspect,                       characteristic: :musical_genre, name: "Trip-Hop" ) }
-      let(:published_1) { create(:minimal_aspect, :with_published_post, characteristic: :musical_mood,  name: "Paranoid" ) }
-      let(:published_2) { create(:minimal_aspect, :with_published_post, characteristic: :musical_genre, name: "Downtempo") }
+      let(      :draft) { create(:minimal_aspect,                       facet: :musical_genre, name: "Trip-Hop" ) }
+      let(:published_1) { create(:minimal_aspect, :with_published_post, facet: :musical_mood,  name: "Paranoid" ) }
+      let(:published_2) { create(:minimal_aspect, :with_published_post, facet: :musical_genre, name: "Downtempo") }
 
       let(        :ids) { [draft, published_1, published_2].map(&:id) }
       let( :collection) { described_class.where(id: ids) }
@@ -49,19 +49,19 @@ RSpec.describe Aspect, type: :model do
 
   context "attributes" do
     context "enums" do
-      it { is_expected.to define_enum_for(:characteristic) }
+      it { is_expected.to define_enum_for(:facet) }
 
-      it_behaves_like "an_enumable_model", [:characteristic]
+      it_behaves_like "an_enumable_model", [:facet]
     end
   end
 
   context "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:characteristic) }
+    it { is_expected.to validate_presence_of(:facet) }
 
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:characteristic) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:facet) }
   end
 
   context "instance" do
@@ -70,11 +70,11 @@ RSpec.describe Aspect, type: :model do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
 
-      it { is_expected.to eq([instance.human_characteristic, instance.name]) }
+      it { is_expected.to eq([instance.human_facet, instance.name]) }
     end
 
     describe "#display_name" do
-      subject { create_minimal_instance(characteristic: :musical_genre, name: "Trip-Hop") }
+      subject { create_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
       specify { expect(subject.display_name                ).to eq("Genre: Trip-Hop") }
       specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop" ) }

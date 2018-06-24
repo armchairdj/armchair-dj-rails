@@ -14,7 +14,7 @@ class Product < Work
   # CLASS.
   #############################################################################
 
-  def self.characteristics
+  def self.facets
     [:manufacturer, :product_type]
   end
 
