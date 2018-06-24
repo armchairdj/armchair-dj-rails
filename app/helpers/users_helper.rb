@@ -2,10 +2,10 @@
 
 module UsersHelper
   def link_to_user(user, admin: false, **opts)
-    return unless admin
+    return unless admin || user.posts.published.any?
 
     text = user.username
-    url  = admin ? admin_user_path(user) : user_path(user)
+    url  = admin ? admin_user_path(user.to_param) : user_path(user)
 
     link_to(text, url, **opts)
   end

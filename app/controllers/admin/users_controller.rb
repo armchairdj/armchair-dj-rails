@@ -68,7 +68,7 @@ private
   end
 
   def find_instance
-    @user = scoped_instance(params[:id])
+    @user = policy_scope(User).find_by(username: params[:id])
   end
 
   def authorize_instance
