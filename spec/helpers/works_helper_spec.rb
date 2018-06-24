@@ -8,58 +8,22 @@ RSpec.describe WorksHelper, type: :helper do
       "0" => { creator_id: create(:minimal_creator, name: "Michael Swanwick").id }
     }) }
 
-    context "viewable" do
-      before(:each) do
-        allow(instance).to receive(:viewable?).and_return(true)
-      end
+    context "default" do
+      subject { helper.link_to_work(instance) }
 
-      context "public" do
-        subject { helper.link_to_work(instance, class: "test") }
-
-        it { is_expected.to have_tag("a[href='/works/#{instance.to_param}'][class='test']",
-          text:  "Michael Swanwick: Vacuum Flowers",
-          count: 1
-        ) }
-      end
-
-      context "full: false" do
-        subject { helper.link_to_work(instance, full: false) }
-
-        it { is_expected.to have_tag("a[href='/works/#{instance.to_param}']",
-          text:  "Vacuum Flowers",
-          count: 1
-        ) }
-      end
-
-      context "admin" do
-        subject { helper.link_to_work(instance, admin: true) }
-
-        it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
-          text:  "Michael Swanwick: Vacuum Flowers",
-          count: 1
-        ) }
-      end
+      it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
+        text:  "Michael Swanwick: Vacuum Flowers",
+        count: 1
+      ) }
     end
 
-    context "non-viewable" do
-      before(:each) do
-        allow(instance).to receive(:viewable?).and_return(false)
-      end
+    context "full: false" do
+      subject { helper.link_to_work(instance, full: false) }
 
-      context "public" do
-        subject { helper.link_to_work(instance) }
-
-        it { is_expected.to eq(nil) }
-      end
-
-      context "admin" do
-        subject { helper.link_to_work(instance, admin: true) }
-
-        it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
-          text:  "Michael Swanwick: Vacuum Flowers",
-          count: 1
-        ) }
-      end
+      it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
+        text:  "Vacuum Flowers",
+        count: 1
+      ) }
     end
   end
 end

@@ -111,6 +111,10 @@ class User < ApplicationRecord
     root?
   end
 
+  def published?
+    posts.published.count > 0
+  end
+
   def display_name
     [first_name, middle_name, last_name].compact.join(" ")
   end

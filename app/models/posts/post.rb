@@ -50,6 +50,13 @@ class Post < ApplicationRecord
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
+  # TODO BJD create scopes to list posts by creator, work, year, tag or aspect
+  # scope :for_creator
+  # scope :for_year
+  # scope :for_work
+  # scope :for_tag
+  # scope :for_aspect
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################

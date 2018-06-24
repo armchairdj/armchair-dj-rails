@@ -6,9 +6,9 @@ RSpec.describe UsersHelper, type: :helper do
   describe "#link_to_user" do
     let(:instance) { create(:minimal_user, username: "ArmchairDJ") }
 
-    context "viewable" do
+    context "published" do
       before(:each) do
-        allow(instance).to receive(:viewable?).and_return(true)
+        allow(instance).to receive(:published?).and_return(true)
       end
 
       context "public" do
@@ -30,9 +30,9 @@ RSpec.describe UsersHelper, type: :helper do
       end
     end
 
-    context "non-viewable" do
+    context "non-published" do
       before(:each) do
-        allow(instance).to receive(:viewable?).and_return(false)
+        allow(instance).to receive(:published?).and_return(false)
       end
 
       context "public" do

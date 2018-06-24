@@ -16,41 +16,51 @@ RSpec.describe User, type: :model do
   end
 
   context "scope-related" do
-    let!(  :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
-    let!(:charlie) { create(:member,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-    let!(  :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
-    let!( :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
+    let(     :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
+    let(     :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+    let(   :charlie) { create(:admin,   first_name: "Charlie", last_name: "Smith",   username: "charlie") }
+    let(    :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
+    let(       :ids) { [jenny, charlie, brian, gruber].map(&:id) }
+    let(:collection) { described_class.where(id: ids) }
 
     before(:each) do
-      create(:minimal_article, :published, author: jenny )
-      create(:minimal_article, :published, author: brian )
-      create(:minimal_article, :draft,     author: gruber)
+      create(:minimal_article, :published, author: jenny  )
+      create(:minimal_article, :published, author: brian  )
+      create(:minimal_article, :scheduled, author: charlie)
+      create(:minimal_article, :draft,     author: gruber )
     end
 
     describe "self#eager" do
-      subject { described_class.eager }
+      subject { collection.eager }
+
+      it { is_expected.to match_array(collection) }
 
       it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
     end
 
     describe "self#for_admin" do
-      subject { described_class.for_admin }
+      subject { collection.for_admin }
 
-      it "includes everyone, unsorted" do
-        is_expected.to contain_exactly(jenny, charlie, brian, gruber)
-      end
+      it { is_expected.to match_array(collection) }
 
       it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
     end
 
     describe "self#for_site" do
-      subject { described_class.for_site }
+      subject { collection.for_site }
 
       it "includes only published writers, sorted" do
         is_expected.to eq([brian, jenny])
       end
 
       it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
+    end
+
+    describe "#published?" do
+      specify { expect(  jenny.published?).to eq(true ) }
+      specify { expect(  brian.published?).to eq(true ) }
+      specify { expect(charlie.published?).to eq(false) }
+      specify { expect( gruber.published?).to eq(false) }
     end
   end
 

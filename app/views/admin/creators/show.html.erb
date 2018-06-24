@@ -32,7 +32,7 @@
       <% if @creator.secondary? && @creator.real_name.present? %>
         <%= content_tag(:tr) do %>
           <%= content_tag(:th, "Primary Identity") %>
-          <%= content_tag(:td, link_to_creator(@creator.real_name, admin: true)) %>
+          <%= content_tag(:td, link_to_creator(@creator.real_name)) %>
         <% end %>
       <% end %>
 
