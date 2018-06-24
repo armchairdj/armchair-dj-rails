@@ -42,8 +42,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_creator, :with_new_member, :with_new_pseudonym) }
-      let(:alt_params) { attributes_for(:complete_creator, :with_new_group,  :with_new_real_name) }
+      let(:max_params) { attributes_for(:minimal_creator, :with_new_member, :with_new_pseudonym) }
+      let(:alt_params) { attributes_for(:minimal_creator, :with_new_group,  :with_new_real_name) }
       let(:min_params) { attributes_for(:minimal_creator) }
       let(:bad_params) { attributes_for(:minimal_creator).except(:name) }
 
@@ -167,8 +167,8 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       let(    :bad_params) { { name: ""         } }
       let(    :min_params) { { name: "New Name" } }
-      let(    :max_params) { attributes_for(:complete_creator, :with_new_member, :with_new_pseudonym) }
-      let(:ignored_params) { attributes_for(:complete_creator, :with_new_group,  :with_new_real_name) }
+      let(    :max_params) { attributes_for(:minimal_creator, :with_new_member, :with_new_pseudonym) }
+      let(:ignored_params) { attributes_for(:minimal_creator, :with_new_group,  :with_new_real_name) }
 
 
       context "with min valid params" do
@@ -278,7 +278,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       describe "with related creators" do
         it "destroys the requested creator but not real names" do
-          creator = create(:complete_creator, :with_new_real_name)
+          creator = create(:minimal_creator, :with_new_real_name)
 
           expect {
             delete :destroy, params: { id: creator.to_param }
@@ -286,7 +286,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
 
         it "destroys the requested creator but not pseudonums" do
-          creator = create(:complete_creator, :with_new_pseudonym)
+          creator = create(:minimal_creator, :with_new_pseudonym)
 
           expect {
             delete :destroy, params: { id: creator.to_param }
@@ -294,7 +294,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
 
         it "destroys the requested creator but not members" do
-          creator = create(:complete_creator, :with_new_member)
+          creator = create(:minimal_creator, :with_new_member)
 
           expect {
             delete :destroy, params: { id: creator.to_param }
@@ -302,7 +302,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         end
 
         it "destroys the requested creator but not groups" do
-          creator = create(:complete_creator, :with_new_group)
+          creator = create(:minimal_creator, :with_new_group)
 
           expect {
             delete :destroy, params: { id: creator.to_param }

@@ -69,7 +69,6 @@ FactoryBot.define do
 
     factory :complete_playlist, parent: :minimal_playlist do
       with_10_tracks
-      with_summary
     end
   end
 end

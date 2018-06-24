@@ -46,9 +46,5 @@ FactoryBot.define do
     factory :minimal_tag do
       with_name
     end
-
-    factory :complete_tag, parent: :minimal_tag do
-      with_summary
-    end
   end
 end

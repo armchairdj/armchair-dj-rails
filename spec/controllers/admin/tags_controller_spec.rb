@@ -39,7 +39,6 @@ RSpec.describe Admin::TagsController, type: :controller do
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_tag) }
       let(:min_params) { attributes_for(:minimal_tag) }
       let(:bad_params) { attributes_for(:minimal_tag).except(:name) }
 
@@ -58,28 +57,6 @@ RSpec.describe Admin::TagsController, type: :controller do
 
         it "redirects to index" do
           post :create, params: { tag: min_params }
-
-          is_expected.to send_user_to(
-            admin_tag_path(assigns(:tag))
-          ).with_flash(:success, "admin.flash.tags.success.create")
-        end
-      end
-
-      context "with max valid params" do
-        it "creates a new Tag" do
-          expect {
-            post :create, params: { tag: max_params }
-          }.to change(Tag, :count).by(1)
-        end
-
-        it "creates the right attributes" do
-          post :create, params: { tag: max_params }
-
-          is_expected.to assign(Tag.last, :tag).with_attributes(max_params).and_be_valid
-        end
-
-        it "redirects to index" do
-          post :create, params: { tag: max_params }
 
           is_expected.to send_user_to(
             admin_tag_path(assigns(:tag))

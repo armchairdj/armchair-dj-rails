@@ -65,10 +65,5 @@ FactoryBot.define do
       with_facet
       with_name
     end
-
-    factory :complete_aspect, parent: :minimal_aspect do
-      with_work
-      with_summary
-    end
   end
 end
