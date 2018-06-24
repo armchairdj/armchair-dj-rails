@@ -25,13 +25,18 @@ RSpec.describe Creator, type: :model do
       let(       :ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
+      let(:eager_loads) { [
+        :pseudonyms, :real_names, :members, :groups,
+        :credits, :contributed_roles,
+        :works, :contributed_works,
+        :reviews, :contributed_reviews,
+        :mixtapes, :contributed_mixtapes,
+      ] }
+
       describe "self#eager" do
         subject { described_class.eager }
 
-        it { is_expected.to eager_load(
-          :pseudonyms, :real_names, :members, :groups, :credits, :works,
-          :reviews, :contributions, :contributed_works, :contributed_reviews
-        ) }
+        it { is_expected.to eager_load(*eager_loads) }
       end
 
       describe "self#for_admin" do
@@ -39,10 +44,7 @@ RSpec.describe Creator, type: :model do
 
         it { is_expected.to match_array([richie, amy, kate, carl, feist, derrick]) }
 
-        it { is_expected.to eager_load(
-          :pseudonyms, :real_names, :members, :groups, :credits, :works,
-          :reviews, :contributions, :contributed_works, :contributed_reviews
-        ) }
+        it { is_expected.to eager_load(*eager_loads) }
       end
     end
 
@@ -153,21 +155,28 @@ RSpec.describe Creator, type: :model do
     it { is_expected.to have_many(:works  ).through(:credits) }
     it { is_expected.to have_many(:reviews).through(:works  ) }
 
+    it { is_expected.to have_many(:playlistings).through(:works         ) }
+    it { is_expected.to have_many(:playlists   ).through(:playlistings  ) }
+    it { is_expected.to have_many(:mixtapes    ).through(:playlists     ) }
+
     it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:contributed_roles  ).through(:contributions    ) }
     it { is_expected.to have_many(:contributed_works  ).through(:contributions    ) }
     it { is_expected.to have_many(:contributed_reviews).through(:contributed_works) }
 
+    it { is_expected.to have_many(:contributed_playlistings).through(:contributed_works         ) }
+    it { is_expected.to have_many(:contributed_playlists   ).through(:contributed_playlistings  ) }
+    it { is_expected.to have_many(:contributed_mixtapes    ).through(:contributed_playlists     ) }
+
     it { is_expected.to have_many(:pseudonym_identities) }
     it { is_expected.to have_many(:real_name_identities) }
+    it { is_expected.to have_many(:member_memberships  ) }
+    it { is_expected.to have_many( :group_memberships  ) }
 
     it { is_expected.to have_many(:pseudonyms).through(:pseudonym_identities).order("creators.name") }
     it { is_expected.to have_many(:real_names).through(:real_name_identities).order("creators.name") }
-
-    it { is_expected.to have_many(:member_memberships) }
-    it { is_expected.to have_many( :group_memberships) }
-
-    it { is_expected.to have_many(:members).through(:member_memberships).order("creators.name") }
-    it { is_expected.to have_many( :groups).through( :group_memberships).order("creators.name") }
+    it { is_expected.to have_many(:members   ).through(  :member_memberships).order("creators.name") }
+    it { is_expected.to have_many(:groups    ).through(   :group_memberships).order("creators.name") }
   end
 
   context "attributes" do
@@ -567,9 +576,9 @@ RSpec.describe Creator, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
 
-    # it { is_expected.to validate_presence_of(:primary) }
-    #
-    # it { is_expected.to validate_presence_of(:collective) }
+    xit { is_expected.to validate_presence_of(:primary) }
+
+    xit { is_expected.to validate_presence_of(:collective) }
   end
 
   context "instance" do
@@ -743,6 +752,38 @@ RSpec.describe Creator, type: :model do
             expect(   stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick        ])
           end
         end
+      end
+    end
+
+    context "composite methods" do
+      let!(   :instance) { create_minimal_instance }
+      let!(    :created) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
+      let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }
+      let!(       :both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
+
+      describe "#all_works" do
+        subject { instance.all_works }
+
+        it { is_expected.to match_array([created, contributed, both]) }
+      end
+
+      describe "#all_posts" do
+        let!(:playlist) do
+          create(:playlist, :with_existing_author, title: "Title", playlistings_attributes: {
+            "0" => attributes_for(:playlisting, work_id:     created.id),
+            "1" => attributes_for(:playlisting, work_id: contributed.id),
+            "2" => attributes_for(:playlisting, work_id:        both.id),
+          })
+        end
+
+        let!(    :created_review) { create(:minimal_review,  work_id:      created.id) }
+        let!(:contributed_review) { create(:minimal_review,  work_id:  contributed.id) }
+        let!(       :both_review) { create(:minimal_review,  work_id:         both.id) }
+        let!(           :mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
+
+        subject { instance.all_posts }
+
+        it { is_expected.to eq([mixtape, both_review, contributed_review, created_review]) }
       end
     end
 

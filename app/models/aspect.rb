@@ -86,6 +86,10 @@ class Aspect < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def all_posts
+    reviews.union(mixtapes).reverse_cron
+  end
+
   def display_name(connector: ": ")
     [human_facet, name].compact.join(connector)
   end

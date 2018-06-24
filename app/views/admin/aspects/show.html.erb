@@ -43,11 +43,5 @@
 <% end %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
-  posts:    @aspect.reviews.for_admin.reverse_cron,
-  headline: "Reviews",
-} %>
-
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts:    @aspect.mixtapes.for_admin.reverse_cron,
-  headline: "Mixtapes",
+  posts:  @aspect.all_posts.for_admin
 } %>

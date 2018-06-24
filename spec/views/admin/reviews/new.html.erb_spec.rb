@@ -17,7 +17,6 @@ RSpec.describe "admin/reviews/new", type: :view do
     @works        = assign(:works,        Work.grouped_options)
     @tags         = assign(:tags,         Tag.for_admin.alpha)
     @review       = assign(:review,       build(:review))
-    @selected_tab = assign(:selected_tab, "review-choose-work")
   end
 
   context "pristine" do
@@ -26,9 +25,6 @@ RSpec.describe "admin/reviews/new", type: :view do
 
       assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
         assert_select("div.error-notification", { count: 0 })
-
-        assert_select(".tab#review-choose-work", { count: 1 })
-        assert_select(".tab#review-new-work",    { count: 1 })
 
         assert_select("textarea[name=?]", "review[body]")
         assert_select("textarea[name=?]", "review[summary]")
@@ -47,52 +43,6 @@ RSpec.describe "admin/reviews/new", type: :view do
 
         assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
           assert_select("div.error-notification")
-
-          assert_select(".tab#review-choose-work", { count: 1 })
-          assert_select(".tab#review-new-work",    { count: 1 })
-
-          assert_select("textarea[name=?]", "review[body]")
-          assert_select("textarea[name=?]", "review[summary]")
-        end
-      end
-    end
-
-    context "review of existing work" do
-      before(:each) do
-        @review.work_id = create(:minimal_song).id
-        @review.summary = "too short"
-        @review.valid?
-      end
-
-      it "renders form" do
-        render
-
-        assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
-          assert_select("div.error-notification")
-
-          assert_select(".tab#review-choose-work", { count: 1 })
-          assert_select(".tab#review-new-work",    { count: 1 })
-
-          assert_select("textarea[name=?]", "review[body]")
-          assert_select("textarea[name=?]", "review[summary]")
-        end
-      end
-    end
-
-    context "review of new work" do
-      before(:each) do
-        @review.work_attributes = attributes_for(:work, :with_title)
-        @review.valid?
-      end
-
-      it "renders form" do
-        render
-
-        assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
-          assert_select("div.error-notification")
-
-          assert_select(".tab#review-choose-work", { count: 1 })
-          assert_select(".tab#review-new-work",    { count: 1 })
 
           assert_select("textarea[name=?]", "review[body]")
           assert_select("textarea[name=?]", "review[summary]")

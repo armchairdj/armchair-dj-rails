@@ -13,11 +13,10 @@ RSpec.describe "admin/reviews/edit", type: :view do
     end
 
     @model_class  = assign(:model_name, Review)
-    @creators     = assign(:creators,     Creator.all.alpha   )
-    @works        = assign(:works,        Work.grouped_options)
-    @tags         = assign(:tags,         Tag.for_admin.alpha)
-    @review       = assign(:review,       create(:minimal_review))
-    @selected_tab = assign(:selected_tab, "review-choose-work")
+    @creators     = assign(:creators,   Creator.all.alpha   )
+    @works        = assign(:works,      Work.grouped_options)
+    @tags         = assign(:tags,       Tag.for_admin.alpha)
+    @review       = assign(:review,     create(:minimal_review))
   end
 
   context "pristine" do
@@ -26,9 +25,6 @@ RSpec.describe "admin/reviews/edit", type: :view do
 
       assert_select "form[action=?][method=?]", admin_review_path(@review), "post" do
         assert_select("div.error-notification", { count: 0 })
-
-        assert_select(".tab#review-choose-work", { count: 1 })
-        assert_select(".tab#review-new-work",    { count: 1 })
 
         assert_select("textarea[name=?]", "review[body]")
         assert_select("textarea[name=?]", "review[summary]")
@@ -49,9 +45,6 @@ RSpec.describe "admin/reviews/edit", type: :view do
 
       assert_select "form[action=?][method=?]", admin_review_path(@review), "post" do
         assert_select("div.error-notification", { count: 1 })
-
-        assert_select(".tab#review-choose-work", { count: 1 })
-        assert_select(".tab#review-new-work",    { count: 1 })
 
         assert_select("textarea[name=?]", "review[body]")
         assert_select("textarea[name=?]", "review[summary]")

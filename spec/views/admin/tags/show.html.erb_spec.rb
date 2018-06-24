@@ -5,25 +5,10 @@ RSpec.describe "admin/tags/show", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Tag)
+    @tag         = assign(:tag, create(:minimal_tag, :with_published_post))
   end
 
-  context "with work" do
-    before(:each) do
-      @tag = assign(:tag, create(:minimal_tag, :with_published_post))
-    end
-
-    it "renders" do
-      render
-    end
-  end
-
-  context "with article" do
-    before(:each) do
-      @tag = assign(:tag, create(:minimal_tag, :with_published_post))
-    end
-
-    it "renders" do
-      render
-    end
+  it "renders" do
+    render
   end
 end

@@ -4,10 +4,6 @@ RSpec.describe "admin/tags/new", type: :view do
   login_root
 
   before(:each) do
-    5.times do
-      create(:minimal_category)
-    end
-
     @model_class = assign(:model_name, Tag)
     @tag         = assign(:tag, build(:tag))
   end

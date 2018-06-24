@@ -76,8 +76,8 @@ RSpec.describe Aspect, type: :model do
     describe "#display_name" do
       subject { create_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
-      specify { expect(subject.display_name                ).to eq("Genre: Trip-Hop") }
-      specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop" ) }
+      specify { expect(subject.display_name                ).to eq("Musical Genre: Trip-Hop") }
+      specify { expect(subject.display_name(connector: "/")).to eq("Musical Genre/Trip-Hop" ) }
     end
   end
 end

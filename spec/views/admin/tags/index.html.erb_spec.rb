@@ -6,13 +6,7 @@ RSpec.describe "admin/tags/index", type: :view do
   let(:dummy) { Admin::TagsController.new }
 
   before(:each) do
-    11.times do
-      create(:minimal_tag, :with_published_post)
-    end
-
-    10.times do
-      create(:minimal_tag, :with_published_post)
-    end
+    3.times { create(:minimal_tag) }
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")
 

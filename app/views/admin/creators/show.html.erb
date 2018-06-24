@@ -87,6 +87,12 @@
   context:       :creator
 } %>
 
-<%= render partial: "admin/shared/playback/reviews", locals: {
-  reviews: @creator.reviews.includes(:work).reverse_cron
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts:    @creator.reviews.includes(:work).reverse_cron,
+  headline: "Reviews",
+} %>
+
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts:    @creator.mixtapes.includes(:work).reverse_cron,
+  headline: "Mixtapes",
 } %>

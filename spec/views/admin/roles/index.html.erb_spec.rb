@@ -6,13 +6,7 @@ RSpec.describe "admin/roles/index", type: :view do
   let(:dummy) { Admin::RolesController.new }
 
   before(:each) do
-    11.times do
-      create(:minimal_role)
-    end
-
-    10.times do
-      create(:minimal_role)
-    end
+    3.times { create(:minimal_role) }
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")
 

@@ -104,6 +104,26 @@ FactoryBot.define do
       end
     end
 
+    trait :with_specific_creator do
+      transient do
+        specific_creator nil
+      end
+
+      credits_attributes { {
+        "0" => attributes_for(:credit, creator_id: specific_creator.id)
+      } }
+    end
+
+    trait :with_specific_contributor do
+      transient do
+        specific_contributor nil
+      end
+
+      contributions_attributes { {
+        "0" => attributes_for(:contribution, role_id: create(:minimal_role).id, creator_id: specific_contributor.id)
+      } }
+    end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################
@@ -118,7 +138,7 @@ FactoryBot.define do
       with_contributions
     end
 
-    factory :stuffed_work_parent, parent: :stuffed_work_parent do
+    factory :stuffed_work_parent, parent: :complete_work_parent do
       transient do
         creator_count 3
         contributor_count 3

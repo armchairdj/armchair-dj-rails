@@ -66,8 +66,8 @@
   context:       :work
 } %>
 
-<%= render partial: "admin/shared/playback/reviews", locals: {
-  reviews: @work.reviews.for_admin.reverse_cron
+<%= render partial: "admin/shared/playback/posts", locals: {
+  posts: @work.reviews.for_admin.reverse_cron
 } %>
 
 <%= render partial: "admin/shared/playback/playlists", locals: {

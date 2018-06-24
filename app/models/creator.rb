@@ -46,8 +46,10 @@ class Creator < ApplicationRecord
 
   scope :eager, -> { includes(
     :pseudonyms, :real_names, :members, :groups,
-    :credits, :works, :reviews,
-    :contributions, :contributed_works, :contributed_reviews
+    :credits, :contributed_roles,
+    :works, :contributed_works,
+    :reviews, :contributed_reviews,
+    :mixtapes, :contributed_mixtapes,
   ) }
 
   scope :for_admin, -> { eager }
@@ -59,19 +61,38 @@ class Creator < ApplicationRecord
   # Credits.
 
   has_many :credits, inverse_of: :creator, dependent: :destroy
-  has_many :works, through: :credits
-  has_many :reviews, through: :works
+
+  has_many :works,        through: :credits
+
+  has_many :reviews,      through: :works
+
+  has_many :playlistings, -> { distinct }, through: :works
+
+  has_many :playlists,    -> { distinct }, through: :playlistings
+
+  has_many :mixtapes,     -> { distinct }, through: :playlists
 
   # Contributions.
 
   has_many :contributions, inverse_of: :creator, dependent: :destroy
 
-  has_many :contributed_works,   through: :contributions,     class_name: "Work",   source: :work
-  has_many :contributed_reviews, through: :contributed_works, class_name: "Review", source: :reviews
+  has_many :contributed_roles, -> { includes(contributions: :work) },
+    through: :contributions, class_name: "Role", source: :role
 
-  has_many :contributed_roles, -> {
-    includes(contributions: :work)
-  }, through: :contributions, class_name: "Role", source: :role
+  has_many :contributed_works, -> { distinct }, through: :contributions,
+    class_name: "Work", source: :work
+
+  has_many :contributed_reviews, through: :contributed_works,
+    class_name: "Review", source: :reviews
+
+  has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
+    class_name: "Playlisting", source: :playlistings
+
+  has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
+    class_name: "Playlist", source: :playlist
+
+  has_many :contributed_mixtapes, -> { distinct }, through: :contributed_playlists,
+    class_name: "Mixtape", source: :mixtapes
 
   # Identities.
 
@@ -122,7 +143,7 @@ class Creator < ApplicationRecord
   end
 
   def available_pseudonyms
-    self.class.available_pseudonyms.union_all(self.pseudonyms).alpha
+    self.class.available_pseudonyms.union(self.pseudonyms).alpha
   end
 
   #############################################################################
@@ -257,6 +278,19 @@ class Creator < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def all_works
+    works.union(contributed_works).alpha
+  end
+
+  def all_posts
+    ids = [
+       reviews.select(:id), contributed_reviews.select(:id),
+      mixtapes.select(:id), contributed_mixtapes.select(:id)
+    ].flatten.uniq.map(&:id)
+
+    Post.where(id: ids).reverse_cron
+  end
 
   def display_roles
     cred =       credits.includes(:work)
