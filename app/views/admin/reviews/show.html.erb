@@ -23,6 +23,11 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "ID") %>
+        <%= content_tag(:td, @review.id) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Status") %>
         <%= content_tag(:td) do %>
           <%= @review.human_status %>

@@ -15,6 +15,11 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "ID") %>
+        <%= content_tag(:td, @role.id) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Medium") %>
         <%= content_tag(:td, @role.work_type) %>
       <% end %>

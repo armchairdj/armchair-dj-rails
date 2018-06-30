@@ -15,6 +15,11 @@
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "ID") %>
+        <%= content_tag(:td, @aspect.id) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Facet") %>
         <%= content_tag(:td, @aspect.human_facet) %>
       <% end %>
