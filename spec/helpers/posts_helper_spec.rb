@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+include UsersHelper
+
 RSpec.describe PostsHelper, type: :helper do
   context "display methods" do
     describe "#formatted_post_body" do
