@@ -3,7 +3,7 @@
 # Table name: milestones
 #
 #  id         :bigint(8)        not null, primary key
-#  action     :integer          default("released"), not null
+#  activity   :integer          not null
 #  year       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_milestones_on_action   (action)
-#  index_milestones_on_work_id  (work_id)
+#  index_milestones_on_activity  (activity)
+#  index_milestones_on_work_id   (work_id)
 #
 # Foreign Keys
 #
@@ -36,9 +36,9 @@ RSpec.describe Milestone, type: :model do
 
   context "scope-related" do
     context "basics" do
-      let(:remastered) { create(:minimal_milestone, action: :remastered, year: 2005) }
-      let(  :released) { create(:minimal_milestone, action: :released,   year: 1977) }
-      let(  :reissued) { create(:minimal_milestone, action: :reissued,   year: 2017) }
+      let(:remastered) { create(:minimal_milestone, activity: :remastered, year: 2005) }
+      let(  :released) { create(:minimal_milestone, activity: :released,   year: 1977) }
+      let(  :reissued) { create(:minimal_milestone, activity: :reissued,   year: 2017) }
       let(       :ids) { [remastered, released, reissued].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
@@ -64,9 +64,9 @@ RSpec.describe Milestone, type: :model do
 
   context "attributes" do
     context "enums" do
-      it { is_expected.to define_enum_for(:action) }
+      it { is_expected.to define_enum_for(:activity) }
 
-      it_behaves_like "an_enumable_model", [:action]
+      it_behaves_like "an_enumable_model", [:activity]
     end
   end
 
@@ -78,30 +78,14 @@ RSpec.describe Milestone, type: :model do
     it { is_expected.to validate_presence_of(:year) }
     it { is_expected.to validate_yearness_of(:year) }
 
-    it { is_expected.to validate_presence_of(:action) }
-
-    context "conditional" do
-      # Nothing so far.
-    end
-
-    context "custom" do
-      # Nothing so far.
-    end
+    it { is_expected.to validate_presence_of(:activity) }
   end
 
   context "hooks" do
     # Nothing so far.
-
-    context "callbacks" do
-      # Nothing so far.
-    end
   end
 
   context "instance" do
     # Nothing so far.
-
-    describe "private" do
-      # Nothing so far.
-    end
   end
 end

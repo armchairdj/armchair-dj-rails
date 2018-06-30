@@ -110,5 +110,21 @@ fieldset {
         }
       }
     }
+
+    .activity-year {
+      @include clearfix();
+      @include bottom-margin-only(.5rem);
+
+      .form-field {
+        float: left;
+        width: 65%;
+        margin-bottom: 0;
+
+        &:last-child {
+          width: 35%;
+          padding-left: 1rem;
+        }
+      }
+    }
   }
 }

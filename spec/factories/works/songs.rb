@@ -21,13 +21,21 @@ FactoryBot.define do
     # SPECIFIC FACTORIES.
     ###########################################################################
 
-    factory :junior_boys_like_a_child_c2_remix, parent: :complete_song do
+    factory :junior_boys_like_a_child_c2_remix, parent: :minimal_song do
       title "Like a Child"
       subtitle "C2 Remix"
+      with_contributions
+
+      milestones_attributes { {
+        "0" => attributes_for(:milestone_for_work, year: "2006")
+      } }
 
       transient do
+        creator_count     1
         creator_names     ["Junior Boys"]
+        contributor_count 1
         contributor_names ["Carl Craig"]
+        work_type         "Song"
       end
     end
   end

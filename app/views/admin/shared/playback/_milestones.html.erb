@@ -1,0 +1,13 @@
+<% return if milestones.empty? %>
+
+<%= content_tag(:section, class: "admin-section") do %>
+  <%= content_tag(:header) do %>
+    <%= content_tag(:h4, "Milestones") %>
+  <% end %>
+
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= render partial: "admin/shared/playback/milestone",
+      collection: milestones
+    %>
+  <% end %>
+<% end %>

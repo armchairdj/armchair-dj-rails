@@ -77,9 +77,7 @@ private
     )
   end
 
-  def prepare_form
-    @work_types = Work.type_options
-  end
+  def prepare_form; end
 
   def allowed_sorts
     name_sort   = "LOWER(tags.name) ASC"

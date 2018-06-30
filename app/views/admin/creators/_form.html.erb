@@ -19,9 +19,21 @@
           invert:     true
         } %>
 
-        <%= render partial: "pseudonym_identity_fieldset", locals: { f: f } %>
+        <%= render partial: "mapping_fieldset", locals: {
+          f:           f,
+          association: :pseudonym_identities,
+          bool:        true,
+          expandable:  true,
+          headline:    "Pseudonyms",
+        } %>
 
-        <%= render partial: "real_name_identity_fieldset", locals: { f: f } %>
+        <%= render partial: "mapping_fieldset", locals: {
+          f:           f,
+          association: :real_name_identities,
+          bool:        false,
+          expandable:  false,
+          headline:    "Real Name",
+        } %>
       <% end %>
     <% end %>
 
@@ -36,9 +48,21 @@
           invert:     true
         } %>
 
-        <%= render partial: "member_membership_fieldset", locals: { f: f } %>
+        <%= render partial: "mapping_fieldset", locals: {
+          f:           f,
+          association: :member_memberships,
+          bool:        false,
+          expandable:  true,
+          headline:    "Members",
+        } %>
 
-        <%= render partial: "group_membership_fieldset", locals: { f: f } %>
+        <%= render partial: "mapping_fieldset", locals: {
+          f:           f,
+          association: :group_memberships,
+          bool:        true,
+          expandable:  true,
+          headline:    "Groups",
+        } %>
       <% end %>
     <% end %>
   <% end %>

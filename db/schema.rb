@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_24_193017) do
+ActiveRecord::Schema.define(version: 2018_06_30_175747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,11 +110,11 @@ ActiveRecord::Schema.define(version: 2018_06_24_193017) do
 
   create_table "milestones", force: :cascade do |t|
     t.bigint "work_id"
-    t.integer "action", default: 0, null: false
+    t.integer "activity", null: false
     t.integer "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["action"], name: "index_milestones_on_action"
+    t.index ["activity"], name: "index_milestones_on_activity"
     t.index ["work_id"], name: "index_milestones_on_work_id"
   end
 

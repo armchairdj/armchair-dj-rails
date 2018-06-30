@@ -42,8 +42,8 @@ RSpec.describe Admin::WorksController, type: :controller do
 
     describe "POST #create" do
       let(:initial_params) { attributes_for(:work, type: "Song") }
-      let(  :update_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
-      let(    :bad_update_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
+      let(    :max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
+      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do
@@ -59,37 +59,34 @@ RSpec.describe Admin::WorksController, type: :controller do
       end
 
       context "with valid params" do
-        it "creates a new Work" do
-          expect {
-            post :create, params: { work: update_params }
-          }.to change(Work, :count).by(1)
-        end
+        subject { post :create, params: { work: max_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { work: update_params }
+        it { expect { subject }.to change(Work, :count).by(1) }
 
-          is_expected.to assign(Work.last, :work).with_attributes(update_params).and_be_valid
-        end
+        it { is_expected.to assign(Work.last, :work).with_attributes(max_params).and_be_valid }
 
-        it "redirects to index" do
-          post :create, params: { work: update_params }
-
-          is_expected.to send_user_to(
-            admin_work_path(assigns(:work))
-          ).with_flash(:success, "admin.flash.works.success.create")
-        end
+        it { is_expected.to send_user_to(admin_work_path(assigns(:work))).with_flash(
+          :success, "admin.flash.works.success.create"
+        ) }
       end
 
       context "with invalid params" do
-        it "renders new" do
-          post :create, params: { work: bad_update_params }
+        let(:operation) { post :create, params: { work: bad_params } }
 
-          is_expected.to successfully_render("admin/works/new")
+        it { expect { operation }.to_not change(Work, :count) }
 
-          expect(assigns(:work)).to have_coerced_attributes(bad_update_params)
-          expect(assigns(:work)).to be_invalid
+        describe "response" do
+          subject { operation }
 
-          is_expected.to prepare_the_work_dropdowns
+          it { is_expected.to successfully_render("admin/works/new") }
+          it { is_expected.to prepare_the_work_dropdowns }
+
+          describe "instance" do
+            subject { operation; assigns(:work) }
+
+            it { is_expected.to have_coerced_attributes(bad_params) }
+            it { is_expected.to be_invalid }
+          end
         end
       end
 

@@ -22,7 +22,23 @@
         <% end %>
 
         <%= f.input :title %>
+      <% end %>
+    <% end %>
 
+    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+      f:           f,
+      association: :credits,
+      required:    true,
+      headline:    "Creators",
+    } %>
+
+    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+      f:           f,
+      association: :milestones,
+    } %>
+
+    <%= content_tag(:section, class: "adj-module") do %>
+      <%= content_tag(:fieldset) do %>
         <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
 
         <%= f.input :parent_id, as: :grouped_select,
@@ -39,9 +55,11 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "credit_fieldset", locals: { f: f } %>
-
-    <%= render partial: "contribution_fieldset", locals: { f: f } %>
+    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+      f:           f,
+      association: :contributions,
+      headline:    "Contributors",
+    } %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

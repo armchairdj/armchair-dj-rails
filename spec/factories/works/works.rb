@@ -39,15 +39,17 @@ FactoryBot.define do
         contributor_names { [generate(:creator_name)] }
 
         contributor_count 1
+
+        work_type "Song"
       end
 
-      after(:create) do |work, evaluator|
-        evaluator.contributor_count.times do |i|
-          creator = create(:minimal_creator, name: evaluator.contributor_names[i] || generate(:creator_name))
-          role    = create(:minimal_role, work_type: work.type)
-          contrib = create(:minimal_contribution, work_id: work.id, creator_id: creator.id, role_id: role.id)
+      contributions_attributes do
+        contributor_count.times.inject({}) do |memo, (i)|
+          name    = creator_names[i] || generate(:creator_name)
+          role    = create(:minimal_role, work_type: work_type)
+          creator = create(:minimal_creator, name: name)
 
-          work.reload
+          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); memo
         end
       end
     end

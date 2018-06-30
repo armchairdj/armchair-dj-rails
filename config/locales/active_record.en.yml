@@ -67,7 +67,7 @@ en:
       creator:
       creator/primary:
         'true':  "This is a primary creator. It can have pseudonyms."
-        'false': "This is a secondary creator. It can be a pseudonym."
+        'false': "This is a secondary creator. It can point to a primary identity."
       creator/individual:
         'true': "This is an individual creator. It can belong to a group."
         'false':  "This is a group creator. It can have members."
@@ -77,7 +77,7 @@ en:
       membership:
         pseudynym_id: "Pseudonym"
       milestone:
-        actions:
+        activities:
           released:   "Released In"
           published:  "Published In"
           aired:      "Aired In"

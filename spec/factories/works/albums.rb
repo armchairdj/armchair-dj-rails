@@ -22,6 +22,7 @@ FactoryBot.define do
         creator_names     ["Global Communication"]
         contributor_count 2
         contributor_names ["Tom Middleton", "Mark Pritchard"]
+        work_type         "Album"
       end
     end
 

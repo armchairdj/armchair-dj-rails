@@ -84,6 +84,7 @@ private
     if @work.type.present?
       @work.prepare_credits
       @work.prepare_contributions
+      @work.prepare_milestones
 
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
@@ -116,7 +117,14 @@ private
         :work_id,
         :creator_id,
         :role_id,
-      ]
+      ],
+      milestones_attributes: [
+        :id,
+        :_destroy,
+        :work_id,
+        :activity,
+        :year,
+      ],
     ])
   end
 

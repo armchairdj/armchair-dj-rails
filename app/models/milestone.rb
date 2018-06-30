@@ -3,7 +3,7 @@
 # Table name: milestones
 #
 #  id         :bigint(8)        not null, primary key
-#  action     :integer          default("released"), not null
+#  activity   :integer          not null
 #  year       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_milestones_on_action   (action)
-#  index_milestones_on_work_id  (work_id)
+#  index_milestones_on_activity  (activity)
+#  index_milestones_on_work_id   (work_id)
 #
 # Foreign Keys
 #
@@ -58,7 +58,7 @@ class Milestone < ApplicationRecord
   # ATTRIBUTES.
   #############################################################################
 
-  enum action: {
+  enum activity: {
     released:    0,
     published:   1,
     aired:       2,
@@ -72,7 +72,7 @@ class Milestone < ApplicationRecord
     remixed:    24
   }
 
-  enumable_attributes :action
+  enumable_attributes :activity
 
   #############################################################################
   # VALIDATIONS.
@@ -80,7 +80,7 @@ class Milestone < ApplicationRecord
 
   validates :work, presence: true
 
-  validates :action, presence: true
+  validates :activity, presence: true
 
   validates :year, presence: true, yearness: true
 

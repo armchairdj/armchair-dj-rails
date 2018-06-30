@@ -28,6 +28,7 @@ class Work < ApplicationRecord
   # CONSTANTS.
   #############################################################################
 
+  MAX_MILESTONES_AT_ONCE    =  5.freeze
   MAX_CREDITS_AT_ONCE       =  3.freeze
   MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
 
@@ -127,6 +128,15 @@ class Work < ApplicationRecord
 
   def prepare_contributions
     MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
+  end
+
+  # Milestones.
+
+  accepts_nested_attributes_for :milestones, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["year"].blank? }
+
+  def prepare_milestones
+    MAX_MILESTONES_AT_ONCE.times { self.milestones.build }
   end
 
   #############################################################################

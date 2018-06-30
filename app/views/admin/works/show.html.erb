@@ -66,6 +66,10 @@
   <% end %>
 <% end %>
 
+<%= render partial: "admin/shared/playback/milestones", locals: {
+  milestones: @work.milestones.for_admin.sorted
+} %>
+
 <%= render partial: "admin/shared/playback/contributions", locals: {
   contributions: @work.contributions.for_admin.alpha,
   context:       :work
