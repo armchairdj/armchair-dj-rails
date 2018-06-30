@@ -65,7 +65,7 @@ RSpec.describe User, type: :model do
     let(     :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
     let(        :ids) { [jenny, charlie, brian, gruber].map(&:id) }
     let( :collection) { described_class.where(id: ids) }
-    let(:eager_loads) { [:posts, :playlists, :works, :creators] }
+    let(:eager_loads) { [:links, :posts, :playlists, :works, :creators] }
 
     before(:each) do
       create(:minimal_article, :published, author: jenny  )

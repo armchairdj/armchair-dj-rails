@@ -17,7 +17,7 @@ RSpec.describe Review, type: :model do
     let!(  :published) { create_minimal_instance(:published) }
     let!(        :ids) { [draft, scheduled, published].map(&:id) }
     let!( :collection) { described_class.where(id: ids) }
-    let!(:eager_loads) { [:author, :tags, :work, :creators] }
+    let!(:eager_loads) { [:links, :author, :tags, :work, :creators] }
 
     context "basics" do
       describe "self#eager" do

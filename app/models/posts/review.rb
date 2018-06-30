@@ -48,7 +48,7 @@ class Review < Post
   # SCOPES.
   #############################################################################
 
-  scope :eager, -> { includes(:author, :tags, :work, :creators).references(:author) }
+  scope :eager, -> { includes(:links, :author, :tags, :work, :creators).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.
