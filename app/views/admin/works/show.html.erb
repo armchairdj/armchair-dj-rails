@@ -34,11 +34,6 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Parent") %>
-        <%= content_tag(:td, @work.parent.try(:display_title)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Title") %>
         <%= content_tag(:td, @work.title) %>
       <% end %>
