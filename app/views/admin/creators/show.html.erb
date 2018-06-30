@@ -88,11 +88,5 @@
 } %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
-  posts:    @creator.reviews.includes(:work).reverse_cron,
-  headline: "Reviews",
-} %>
-
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts:    @creator.mixtapes.includes(:work).reverse_cron,
-  headline: "Mixtapes",
+  posts:    @creator.posts.for_admin.reverse_cron,
 } %>

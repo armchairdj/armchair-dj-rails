@@ -86,8 +86,8 @@ class Aspect < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def all_posts
-    reviews.union(mixtapes).reverse_cron
+  def posts
+    reviews.union(mixtapes)
   end
 
   def display_name(connector: ": ")

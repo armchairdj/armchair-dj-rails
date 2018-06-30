@@ -767,7 +767,7 @@ RSpec.describe Creator, type: :model do
         it { is_expected.to match_array([created, contributed, both]) }
       end
 
-      describe "#all_posts" do
+      describe "#posts" do
         let!(:playlist) do
           create(:playlist, :with_existing_author, title: "Title", playlistings_attributes: {
             "0" => attributes_for(:playlisting, work_id:     created.id),
@@ -781,9 +781,9 @@ RSpec.describe Creator, type: :model do
         let!(       :both_review) { create(:minimal_review,  work_id:         both.id) }
         let!(           :mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
-        subject { instance.all_posts }
+        subject { instance.posts }
 
-        it { is_expected.to eq([mixtape, both_review, contributed_review, created_review]) }
+        it { is_expected.to match_array([mixtape, both_review, contributed_review, created_review]) }
       end
     end
 

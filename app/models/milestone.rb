@@ -26,6 +26,13 @@ class Milestone < ApplicationRecord
 
   belongs_to :work
 
+  has_many :creators,     -> { distinct }, through: :work
+  has_many :contributors, -> { distinct }, through: :work
+
+  has_many :playlists, through: :work
+  has_many :mixtapes,  through: :work
+  has_many :reviews,   through: :work
+
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
@@ -64,4 +71,7 @@ class Milestone < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def posts
+    reviews.union(mixtapes)
+  end
 end

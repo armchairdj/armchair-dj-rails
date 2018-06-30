@@ -117,13 +117,13 @@ RSpec.describe PostsHelper, type: :helper do
       end
 
       context "scheduled" do
-        let(:instance) { create(:minimal_mixtape, :scheduled, author: author) }
+        let(:instance) { create(:minimal_article, :scheduled, author: author) }
 
         it { is_expected.to eq(nil) }
       end
 
       context "draft" do
-        let(:instance) { create(:minimal_review, :draft, author: author) }
+        let(:instance) { create(:minimal_article, :draft, author: author) }
 
         it { is_expected.to eq(nil) }
       end

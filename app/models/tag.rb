@@ -26,9 +26,6 @@ class Tag < ApplicationRecord
   #############################################################################
 
   has_and_belongs_to_many :posts
-  has_and_belongs_to_many :articles, association_foreign_key: "tag_id", join_table: "posts_tags"
-  has_and_belongs_to_many :reviews,  association_foreign_key: "tag_id", join_table: "posts_tags"
-  has_and_belongs_to_many :mixtapes, association_foreign_key: "tag_id", join_table: "posts_tags"
 
   #############################################################################
   # ATTRIBUTES.

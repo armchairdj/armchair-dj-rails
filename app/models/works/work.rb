@@ -58,11 +58,11 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(
-                           :aspects, :credits, :creators,
-                           :contributions, :contributors,
-                           :playlists, :reviews, :mixtapes
-                         ).references(:creators) }
+  scope :eager, ->  { includes(
+                        :aspects, :credits, :creators,
+                        :contributions, :contributors,
+                        :playlists, :reviews, :mixtapes
+                      ).references(:creators) }
   scope :for_admin, -> { eager }
 
   #############################################################################
@@ -126,6 +126,10 @@ class Work < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def posts
+    reviews.union(mixtapes)
+  end
 
   def display_title(full: false)
     return unless persisted?

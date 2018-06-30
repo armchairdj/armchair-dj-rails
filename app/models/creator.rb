@@ -283,13 +283,13 @@ class Creator < ApplicationRecord
     works.union(contributed_works).alpha
   end
 
-  def all_posts
+  def posts
     ids = [
-       reviews.select(:id), contributed_reviews.select(:id),
-      mixtapes.select(:id), contributed_mixtapes.select(:id)
-    ].flatten.uniq.map(&:id)
+       reviews.pluck(:id), contributed_reviews.pluck(:id),
+      mixtapes.pluck(:id), contributed_mixtapes.pluck(:id)
+    ].flatten.uniq
 
-    Post.where(id: ids).reverse_cron
+    Post.where(id: ids)
   end
 
   def display_roles

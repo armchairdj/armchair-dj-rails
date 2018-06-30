@@ -16,12 +16,13 @@ RSpec.describe User, type: :model do
   end
 
   context "scope-related" do
-    let(     :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
-    let(     :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
-    let(   :charlie) { create(:admin,   first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-    let(    :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
-    let(       :ids) { [jenny, charlie, brian, gruber].map(&:id) }
-    let(:collection) { described_class.where(id: ids) }
+    let(      :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
+    let(      :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+    let(    :charlie) { create(:admin,   first_name: "Charlie", last_name: "Smith",   username: "charlie") }
+    let(     :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
+    let(        :ids) { [jenny, charlie, brian, gruber].map(&:id) }
+    let( :collection) { described_class.where(id: ids) }
+    let(:eager_loads) { [:posts, :playlists, :works, :creators] }
 
     before(:each) do
       create(:minimal_article, :published, author: jenny  )
@@ -35,7 +36,7 @@ RSpec.describe User, type: :model do
 
       it { is_expected.to match_array(collection) }
 
-      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
+      it { is_expected.to eager_load(eager_loads) }
     end
 
     describe "self#for_admin" do
@@ -43,7 +44,7 @@ RSpec.describe User, type: :model do
 
       it { is_expected.to match_array(collection) }
 
-      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
+      it { is_expected.to eager_load(eager_loads) }
     end
 
     describe "self#for_site" do
@@ -53,7 +54,7 @@ RSpec.describe User, type: :model do
         is_expected.to eq([brian, jenny])
       end
 
-      it { is_expected.to eager_load(:articles, :reviews, :mixtapes, :works, :creators) }
+      it { is_expected.to eager_load(eager_loads) }
     end
 
     describe "#published?" do

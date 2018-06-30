@@ -37,6 +37,8 @@ class Playlist < ApplicationRecord
 
   has_many :mixtapes, dependent: :destroy
 
+  has_many :reviews, through: :works
+
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
@@ -63,6 +65,10 @@ class Playlist < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
+
+  def posts
+    reviews.union(mixtapes)
+  end
 
   def all_creators
     Creator.where(id: all_creator_ids)

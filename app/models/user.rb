@@ -36,7 +36,7 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:articles, :reviews, :mixtapes, :works, :creators) }
+  scope     :eager, -> { includes(:posts, :playlists, :works, :creators) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { joins(:posts).references(:posts).where.not(posts: { published_at: nil }).eager.alpha }
 
@@ -48,6 +48,7 @@ class User < ApplicationRecord
   has_many :articles,  dependent: :destroy, foreign_key: "author_id"
   has_many :reviews,   dependent: :destroy, foreign_key: "author_id"
   has_many :mixtapes,  dependent: :destroy, foreign_key: "author_id"
+
   has_many :playlists, dependent: :destroy, foreign_key: "author_id"
 
   has_many :works, through: :reviews
@@ -112,7 +113,7 @@ class User < ApplicationRecord
   end
 
   def published?
-    posts.published.count > 0
+    can_write? && posts.published.count > 0
   end
 
   def display_name
