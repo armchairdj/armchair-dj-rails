@@ -38,9 +38,8 @@ RSpec.describe "admin/works/new", type: :view do
       @work.prepare_contributions
       @work.prepare_milestones
 
-      @creators    = assign(:creators, Creator.all.alpha)
-      @roles       = assign(:roles,    Role.where(work_type: @work.true_model_name.name))
-      @works       = assign(:works,     @work.grouped_parent_dropdown_options)
+      @creators = assign(:creators, Creator.all.alpha)
+      @roles    = assign(:roles,    @work.available_roles)
     end
 
     it "renders fully populated form" do

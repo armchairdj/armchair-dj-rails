@@ -19,9 +19,8 @@ RSpec.describe "admin/works/edit", type: :view do
     @work.prepare_contributions
     @work.prepare_milestones
 
-    @creators    = assign(:creators,   Creator.all.alpha                    )
-    @roles       = assign(:roles,      Role.all.alpha                       )
-    @works       = assign(:works,      @work.grouped_parent_dropdown_options)
+    @creators = assign(:creators, Creator.all.alpha)
+    @roles    = assign(:roles,    @work.available_roles)
   end
 
   it "renders the edit work form" do

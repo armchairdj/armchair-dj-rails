@@ -8,7 +8,6 @@ en:
       default_message: "Please fix the problems below:"
     labels:
       defaults:
-        parent_id: "Parent"
         url: "URL"
         id: "ID"
         created_at: "Created"
@@ -61,8 +60,6 @@ en:
       playlist:
         playlistings: "Select at least two."
       work:
-        subtitle: "Song remix, book subtitle, TV episode title, movie cut, etc."
-        parent_id: "Original version of song, TV season, TV show, etc."
         credits: "Select at least one."
       credit:
       contribution:
@@ -89,7 +86,23 @@ en:
       tag:
       user:
       work:
-        subtitle: "Ex: \"Director's Cut\", \"C2 Remix\", \"A Memoir\""
+        subtitle:
+          album: "e.g. Remastered Version"
+          book: "e.g. A Memoir"
+          comic_book: "e.g. Vol. 4, Issue 20"
+          graphic_novel: "e.g. The Death of Jean Grey"
+          hardware: ""
+          movie: ""
+          podcast: ""
+          product: ""
+          publication: ""
+          radio_show: ""
+          software: ""
+          song: "e.g. C2 Remix, Live at The Badlands"
+          tv_episode: "Conversations With Dead People"
+          tv_season: "Season 7"
+          tv_show: "A Documentary"
+          video_game: ""
     include_blanks:
       creator_id: "Please choose"
       group_id: "Please choose"

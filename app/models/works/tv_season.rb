@@ -2,21 +2,18 @@
 #
 # Table name: works
 #
-#  id             :bigint(8)        not null, primary key
-#  alpha          :string
-#  ancestry       :string
-#  ancestry_depth :integer          default(0)
-#  subtitle       :string
-#  title          :string           not null
-#  type           :string
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  subtitle   :string
+#  title      :string           not null
+#  type       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_works_on_alpha     (alpha)
-#  index_works_on_ancestry  (ancestry)
-#  index_works_on_type      (type)
+#  index_works_on_alpha  (alpha)
+#  index_works_on_type   (type)
 #
 
 class TvSeason < Work
@@ -37,10 +34,6 @@ class TvSeason < Work
 
   def self.facets
     [:narrative_genre, :tv_network, :hollywood_studio]
-  end
-
-  def self.available_parent_types
-    [TvShow]
   end
 
   #############################################################################

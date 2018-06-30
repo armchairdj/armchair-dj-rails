@@ -11,7 +11,9 @@
 
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= content_tag(:section, class: "adj-module") do %>
-      <%= content_tag(:fieldset) do %>
+      <%= content_tag(:fieldset, class: "lengendary") do %>
+        <%= content_tag(:legend, "Basics") %>
+
         <% if f.object.persisted? %>
           <%= f.input :type, as: :select, collection: @types, disabled: true %>
         <% else %>
@@ -22,6 +24,10 @@
         <% end %>
 
         <%= f.input :title %>
+
+        <%= f.input :subtitle, required: false,
+          placeholder: I18n.t("simple_form.placeholders.work.subtitle.#{@work.true_model_name.param_key}")
+        %>
       <% end %>
     <% end %>
 
@@ -38,20 +44,18 @@
     } %>
 
     <%= content_tag(:section, class: "adj-module") do %>
-      <%= content_tag(:fieldset) do %>
-        <%= f.input :subtitle, required: false, hint: true, placeholder: true %>
+      <%= content_tag(:fieldset, class: "legendary") do %>
+        <%= content_tag(:legend, "Aspects") %>
 
-        <%= f.input :parent_id, as: :grouped_select,
-          collection:         @works,
-          selected:           f.object.parent_id,
-          required:           false,
-          group_label_method: :first,
-          group_method:       :last,
-          label_method:       :full_display_title,
-          value_method:       :id,
-          include_blank:      :translate,
-          input_html:         { "data-controller": "selectable" }
-        %>
+        <% @work.class.facets.each do |facet| %>
+          <%= f.input :aspect_ids,
+            label:         Aspect.human_enum_value(:facet, facet),
+            include_blank: :translate,
+            as:            :select,
+            collection:    Aspect.for_facet(facet),
+            input_html:    js_selectable_create_aspect_attrs(facet)
+          %>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -68,6 +72,6 @@
     <%= f.button(:button, "Update Medium", type: :submit,
       name: "step", value: "select_work_type", class: "secondary",
       "data-target": "auto-submittable.button"
-    ) if f.object.new_record? %>
+    ) if @work.new_record? %>
   <% end %>
 <% end %>

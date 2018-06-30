@@ -5,6 +5,10 @@ RSpec.describe Book, type: :model do
     # Nothing so far.
   end
 
+  context "concerns" do
+    it_behaves_like "a_workable_model"
+  end
+
   context "STI" do
     context "class" do
       specify { expect(described_class.superclass).to eq(Work) }

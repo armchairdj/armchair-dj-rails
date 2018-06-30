@@ -7,16 +7,10 @@ RSpec.describe Work, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_application_record"
-
-    it_behaves_like "a_parentable_model"
   end
 
   context "class" do
     describe "self#grouped_options" do
-      pending "works"
-    end
-
-    describe "self#available_parents" do
       pending "works"
     end
 
@@ -330,8 +324,6 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    pending "#grouped_parent_dropdown_options"
- 
     describe "all-creator methods" do
       let(     :role) { create(:minimal_role, work_type: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }

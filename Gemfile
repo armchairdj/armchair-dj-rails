@@ -120,7 +120,7 @@ gem "nilify_blanks"
 gem "acts_as_list"
 
 # Tree models.
-gem "ancestry"
+# gem "ancestry"
 
 # Soft deletes.
 gem "discard"

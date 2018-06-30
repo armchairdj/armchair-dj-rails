@@ -88,14 +88,12 @@ private
 
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
-      @works    = @work.grouped_parent_dropdown_options
     end
   end
 
   def instance_params
     params.fetch(:work, {}).permit([
       :type,
-      :parent_id,
       :title,
       :subtitle,
       aspect_ids: [],

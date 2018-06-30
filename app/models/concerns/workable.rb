@@ -15,6 +15,10 @@ module Workable
     def true_human_model_name
       I18n.t("activerecord.subclasses.work.#{true_model_name.i18n_key}")
     end
+
+    def facets
+      nil
+    end
   end
 
   included do
@@ -31,7 +35,7 @@ module Workable
     end
 
     def available_role_ids
-      available_roles.map(&:id)
+      available_roles.ids
     end
   end
 end

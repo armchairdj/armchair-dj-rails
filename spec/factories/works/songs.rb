@@ -30,6 +30,13 @@ FactoryBot.define do
         "0" => attributes_for(:milestone_for_work, year: "2006")
       } }
 
+      aspect_ids { [
+        create(:aspect, facet: :song_type,     name: "Remix"     ).id,
+        create(:aspect, facet: :musical_genre, name: "Techno"    ).id,
+        create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
+        create(:aspect, facet: :music_label  , name: "Domino"    ).id,
+      ] }
+
       transient do
         creator_count     1
         creator_names     ["Junior Boys"]

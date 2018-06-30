@@ -35,6 +35,8 @@ class Aspect < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :for_facet, -> (*facets) { where(facet: facets.flatten.compact) }
+
   scope     :eager, -> { includes(:works, :creators, :contributors, :playlists, :mixtapes, :reviews) }
   scope :for_admin, -> { eager }
 
@@ -56,7 +58,7 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   enum facet: {
-    album_format:           0,
+    album_format:         0,
     song_type:            1,
     music_label:          2,
     musical_genre:        3,

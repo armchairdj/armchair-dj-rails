@@ -175,7 +175,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
     describe "POST #reorder_playlistings" do
       let(       :playlist) { create(:complete_playlist) }
-      let(:playlisting_ids) { playlist.playlistings.map(&:id) }
+      let(:playlisting_ids) { playlist.playlistings.ids }
       let(       :shuffled) { playlisting_ids.shuffle }
 
       before(:each) do
@@ -200,7 +200,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
           expect(response).to have_http_status(204)
 
-          expect(playlist.reload.playlistings.map(&:id)).to eq(shuffled)
+          expect(playlist.reload.playlistings.ids).to eq(shuffled)
         end
       end
     end

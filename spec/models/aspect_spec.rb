@@ -52,6 +52,31 @@ RSpec.describe Aspect, type: :model do
         it { is_expected.to contain_exactly(draft, published_1, published_2) }
       end
     end
+
+    describe "#for_facet" do
+      let!( :mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
+      let!( :mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
+      let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop" ) }
+      let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
+
+      context "single facet" do
+        subject { described_class.for_facet(:musical_mood) }
+
+        it { is_expected.to contain_exactly(mood_a, mood_b) }
+      end
+
+      context "multiple facets" do
+        subject { described_class.for_facet(:musical_mood, :musical_genre) }
+
+        it { is_expected.to contain_exactly(mood_a, mood_b, genre_a, genre_b) }
+      end
+
+      context "no facets" do
+        subject { described_class.for_facet(nil) }
+
+        it { is_expected.to be_empty }
+      end
+    end
   end
 
   context "associations" do

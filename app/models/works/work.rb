@@ -1,26 +1,21 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: works
 #
-#  id             :bigint(8)        not null, primary key
-#  alpha          :string
-#  ancestry       :string
-#  ancestry_depth :integer          default(0)
-#  subtitle       :string
-#  title          :string           not null
-#  type           :string
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  subtitle   :string
+#  title      :string           not null
+#  type       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_works_on_alpha     (alpha)
-#  index_works_on_ancestry  (ancestry)
-#  index_works_on_type      (type)
+#  index_works_on_alpha  (alpha)
+#  index_works_on_type   (type)
 #
-
 
 class Work < ApplicationRecord
 
@@ -36,7 +31,6 @@ class Work < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Parentable
   include Alphabetizable
 
   #############################################################################
@@ -45,14 +39,6 @@ class Work < ApplicationRecord
 
   def self.grouped_options
     order(:type, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
-  end
-
-  def self.available_parents
-    self.superclass.where(type: available_parent_types.map{ |x| x.model_name.name })
-  end
-
-  def self.available_parent_types
-    [self]
   end
 
   def self.type_options
@@ -193,14 +179,7 @@ class Work < ApplicationRecord
   end
 
   def all_creator_ids
-    (creators.map(&:id) + contributors.map(&:id)).uniq
-  end
-
-  def grouped_parent_dropdown_options
-    scope     = self.class.available_parents
-    ungrouped = parent_dropdown_options(scope: scope, order: :alpha)
-
-    ungrouped.group_by(&:type).to_a.sort_by(&:first)
+    (creators.ids + contributors.ids).uniq
   end
 
   def sluggable_parts

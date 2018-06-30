@@ -2,21 +2,18 @@
 #
 # Table name: works
 #
-#  id             :bigint(8)        not null, primary key
-#  alpha          :string
-#  ancestry       :string
-#  ancestry_depth :integer          default(0)
-#  subtitle       :string
-#  title          :string           not null
-#  type           :string
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  subtitle   :string
+#  title      :string           not null
+#  type       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_works_on_alpha     (alpha)
-#  index_works_on_ancestry  (ancestry)
-#  index_works_on_type      (type)
+#  index_works_on_alpha  (alpha)
+#  index_works_on_type   (type)
 #
 
 class Song < Work
@@ -36,11 +33,7 @@ class Song < Work
   #############################################################################
 
   def self.facets
-    [:song_type, :musical_genre, :music_label]
-  end
-
-  def self.available_parent_types
-    super + [Album]
+    [:song_type, :musical_genre, :musical_mood, :music_label]
   end
 
   #############################################################################
