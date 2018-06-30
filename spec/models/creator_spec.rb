@@ -535,15 +535,15 @@ RSpec.describe Creator, type: :model do
         context "class" do
           specify "self#individual_options" do
             expect(described_class.individual_options).to eq([
-              ["This is an individual creator. It can belong to a group.", true],
-              ["This is a group creator. It can have members.",           false]
+              ["This is an individual creator. It can belong to a group.", true ],
+              ["This is a group creator. It can have members.",            false]
             ])
           end
 
           specify "self#collective_options" do
             expect(described_class.primary_options).to eq([
-              ["This is a primary creator. It can have pseudonyms.",   true],
-              ["This is a secondary creator. It can be a pseudonym.", false]
+              ["This is a primary creator. It can have pseudonyms.",               true ],
+              ["This is a secondary creator. It can point to a primary identity.", false]
             ])
           end
         end
@@ -582,7 +582,7 @@ RSpec.describe Creator, type: :model do
               subject.primary = false
 
               expect(subject.primary_text).to eq(
-                "This is a secondary creator. It can be a pseudonym."
+                "This is a secondary creator. It can point to a primary identity."
               )
             end
           end
