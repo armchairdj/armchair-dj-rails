@@ -1,5 +1,25 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: creators
+#
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  individual :boolean          default(TRUE), not null
+#  name       :string           not null
+#  primary    :boolean          default(TRUE), not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_creators_on_alpha       (alpha)
+#  index_creators_on_individual  (individual)
+#  index_creators_on_primary     (primary)
+#
+
+
 require "wannabe_bool"
 
 class Creator < ApplicationRecord

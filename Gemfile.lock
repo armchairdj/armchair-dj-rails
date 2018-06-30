@@ -71,6 +71,9 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     ancestry (3.0.2)
       activerecord (>= 3.2.0)
+    annotate (2.7.4)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 13.0)
     arel (9.0.0)
     ast (2.4.0)
     awesome_print (1.8.0)
@@ -372,6 +375,7 @@ DEPENDENCIES
   active_record_union
   acts_as_list
   ancestry
+  annotate
   awesome_print
   bcrypt
   bitters

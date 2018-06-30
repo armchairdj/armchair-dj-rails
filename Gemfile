@@ -189,9 +189,13 @@ group :development do
   # Query optimizer.
   gem "bullet"
 
+  # Static code analysis.
   gem "rubocop", require: false
   gem "rubocop-rails"
   gem "mry"
+
+  # Automatic route and schema comments in model files.
+  gem "annotate"
 end
 
 group :development, :test do

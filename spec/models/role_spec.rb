@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: roles
+#
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  name       :string
+#  work_type  :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_roles_on_alpha      (alpha)
+#  index_roles_on_work_type  (work_type)
+#
+
 require "rails_helper"
 
 RSpec.describe Role, type: :model do

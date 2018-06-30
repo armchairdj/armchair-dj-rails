@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: playlists
+#
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  title      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  author_id  :bigint(8)
+#
+# Indexes
+#
+#  index_playlists_on_alpha  (alpha)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (author_id => users.id)
+#
+
 require "rails_helper"
 
 RSpec.describe Playlist, type: :model do

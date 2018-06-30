@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: milestones
+#
+#  id         :bigint(8)        not null, primary key
+#  action     :integer          default("released"), not null
+#  year       :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  work_id    :bigint(8)
+#
+# Indexes
+#
+#  index_milestones_on_action   (action)
+#  index_milestones_on_work_id  (work_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (work_id => works.id)
+#
+
 class Milestone < ApplicationRecord
 
   #############################################################################

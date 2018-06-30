@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: aspects
+#
+#  id         :bigint(8)        not null, primary key
+#  alpha      :string
+#  facet      :integer          not null
+#  name       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_aspects_on_alpha  (alpha)
+#  index_aspects_on_facet  (facet)
+#
+
 class Aspect < ApplicationRecord
 
   #############################################################################
