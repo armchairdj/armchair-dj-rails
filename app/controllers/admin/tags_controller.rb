@@ -1,4 +1,4 @@
-class Admin::TagsController < AdminController
+class Admin::TagsController < Admin::BaseController
 
   # GET /admin/tags
   # GET /admin/tags.json

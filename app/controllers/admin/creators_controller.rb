@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::CreatorsController < AdminController
+class Admin::CreatorsController < Admin::BaseController
   # GET /creators
   # GET /creators.json
   def index; end

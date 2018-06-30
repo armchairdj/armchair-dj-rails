@@ -1,4 +1,4 @@
-class Admin::PlaylistsController < AdminController
+class Admin::PlaylistsController < Admin::BaseController
 
   # GET /admin/playlists
   # GET /admin/playlists.json

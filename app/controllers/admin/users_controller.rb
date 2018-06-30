@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < AdminController
+class Admin::UsersController < Admin::BaseController
 
   # GET /users
   # GET /users.json

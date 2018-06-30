@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::WorksController < AdminController
+class Admin::WorksController < Admin::BaseController
   # GET /works
   # GET /works.json
   def index; end

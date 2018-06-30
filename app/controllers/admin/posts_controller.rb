@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::PostsController < AdminController
+class Admin::PostsController < Admin::BaseController
   # GET /posts
   # GET /posts.json
   def index; end
@@ -59,6 +59,10 @@ class Admin::PostsController < AdminController
   end
 
 private
+
+  def scoped_instance(id)
+    policy_scope(model_class).friendly.find(id)
+  end
 
   def find_collection
     @collection = scoped_and_sorted_collection

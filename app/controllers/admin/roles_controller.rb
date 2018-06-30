@@ -1,4 +1,4 @@
-class Admin::RolesController < AdminController
+class Admin::RolesController < Admin::BaseController
 
   # GET /admin/roles
   # GET /admin/roles.json

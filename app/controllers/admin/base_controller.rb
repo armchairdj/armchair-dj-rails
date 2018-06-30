@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdminController < ApplicationController
+class Admin::BaseController < ApplicationController
   include Paginatable
 
   before_action :authorize_model, only: [
@@ -74,13 +74,7 @@ private
   end
 
   def scoped_instance(id)
-    scope = policy_scope(model_class)
-
-    if model_class.respond_to?(:friendly)
-      scope.friendly.find(id)
-    else
-      scope.find(id)
-    end
+    policy_scope(model_class).find(id)
   end
 
   def allowed_scopes

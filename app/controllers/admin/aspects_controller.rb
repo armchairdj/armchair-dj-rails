@@ -1,4 +1,4 @@
-class Admin::AspectsController < AdminController
+class Admin::AspectsController < Admin::BaseController
 
   # GET /admin/aspects
   # GET /admin/aspects.json
