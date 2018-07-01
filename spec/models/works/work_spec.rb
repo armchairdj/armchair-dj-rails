@@ -14,10 +14,6 @@ RSpec.describe Work, type: :model do
       pending "works"
     end
 
-    describe "#available_roles" do
-      pending "works"
-    end
-
     describe "self#type_options" do
       pending "works"
     end
@@ -32,36 +28,37 @@ RSpec.describe Work, type: :model do
   end
 
   context "scope-related" do
-    let(      :draft) { create_minimal_instance(                      title: "D", creator_names: ["Kate Bush"  ]) }
-    let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", creator_names: ["Prince"     ]) }
-    let(:published_2) { create_minimal_instance(:with_published_post, title: "A", creator_names: ["David Bowie"]) }
+    context "basics" do
+      let(      :draft) { create_minimal_instance(                      title: "D", creator_names: ["Kate Bush"  ]) }
+      let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", creator_names: ["Prince"     ]) }
+      let(:published_2) { create_minimal_instance(:with_published_post, title: "A", creator_names: ["David Bowie"]) }
 
-    let(        :ids) { [draft, published_1, published_2].map(&:id) }
-    let( :collection) { described_class.where(id: ids) }
+      let(        :ids) { [draft, published_1, published_2].map(&:id) }
+      let( :collection) { described_class.where(id: ids) }
+      let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :creators, :contributions, :contributors ] }
 
-    describe "self#eager" do
-      subject { collection.eager }
+      describe "self#eager" do
+        subject { collection.eager }
 
-      it { is_expected.to contain_exactly(draft, published_1, published_2) }
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
+        it { is_expected.to contain_exactly(draft, published_1, published_2) }
+        it { is_expected.to eager_load(eager_loads) }
+      end
+
+      describe "self#for_admin" do
+        subject { collection.for_admin }
+
+        it { is_expected.to contain_exactly(draft, published_1, published_2) }
+        it { is_expected.to eager_load(eager_loads) }
+      end
     end
-
-    describe "self#for_admin" do
-      subject { collection.for_admin }
-
-      it { is_expected.to contain_exactly(draft, published_1, published_2) }
-      it { is_expected.to eager_load(:aspects, :credits, :creators, :contributions, :contributors, :playlists, :reviews, :mixtapes) }
-    end
-
-    pending "self#grouped_options"
   end
 
   context "associations" do
-    it { is_expected.to have_many(:milestones) }
-
     it { is_expected.to have_and_belong_to_many(:aspects) }
 
-    it { is_expected.to have_many(:credits) }
+    it { is_expected.to have_many(:milestones) }
+
+    it { is_expected.to have_many(:credits      ) }
     it { is_expected.to have_many(:contributions) }
 
     it { is_expected.to have_many(:creators    ).through(:credits) }
@@ -70,8 +67,8 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:reviews) }
 
     it { is_expected.to have_many(:playlistings) }
-    it { is_expected.to have_many(:playlists).through(:playlistings) }
-    it { is_expected.to have_many(:mixtapes ).through(:playlists) }
+    it { is_expected.to have_many(:playlists   ).through(:playlistings) }
+    it { is_expected.to have_many(:mixtapes    ).through(:playlists) }
   end
 
   context "attributes" do
@@ -159,6 +156,8 @@ RSpec.describe Work, type: :model do
           end
         end
       end
+
+      pending "milestones"
     end
   end
 
@@ -258,6 +257,8 @@ RSpec.describe Work, type: :model do
 
   context "instance" do
     let(:instance) { create_minimal_instance }
+
+    pending "#posts"
 
     describe "#display_title" do
       it "displays with just title" do

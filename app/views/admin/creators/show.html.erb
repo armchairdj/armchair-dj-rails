@@ -1,5 +1,9 @@
 <%
   @title = ["View Creator", @creator.name]
+
+  works         = @creator.works.for_admin.alpha
+  roles         = @creator.display_roles
+  contributions = @creator.contributions.for_admin.alpha
 %>
 
 <%= admin_header(@model_class, :show,
@@ -79,18 +83,50 @@
   headline: "Personae"
 } %>
 
-<%= render partial: "admin/shared/playback/roles_for_creator", locals: {
-  roles: @creator.display_roles
-} %>
+<% if roles.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Roles") %>
+    <% end %>
 
-<%= render partial: "admin/shared/playback/works", locals: {
-  works: @creator.works.for_admin.alpha
-} %>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% roles.each do |work_type, role_array| %>
+        <%= content_tag(:dt, work_type     ) %>
+        <%= content_tag(:dd, role_array.join(", ")) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
-<%= render partial: "admin/shared/playback/contributions", locals: {
-  contributions: @creator.contributions.for_admin.alpha,
-  context:       :creator
-} %>
+<% if works.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Works") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% works.each do |work| %>
+        <%= content_tag(:dt, work.true_human_model_name) %>
+        <%= content_tag(:dd, link_to_work(work, full: false)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if contributions.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Contributions") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% contributions.each do |contribution| %>
+        <%= content_tag(:dt, contribution.name) %>
+        <%= content_tag(:dd, link_to_work(contribution.work)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
   posts:    @creator.posts.for_admin.reverse_cron,

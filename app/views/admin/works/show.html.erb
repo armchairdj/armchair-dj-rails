@@ -1,5 +1,9 @@
 <%
   @title = ["View #{@work.true_human_model_name}", @work.credited_artists, @work.title]
+
+  aspects       = @work.aspects.for_admin.group_by(&:human_facet).to_a
+  milestones    = @work.milestones.for_admin.sorted
+  contributions = @work.contributions.for_admin.alpha
 %>
 
 <%= admin_header(@model_class, :show,
@@ -25,15 +29,6 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Creators") %>
-        <%= content_tag(:td) do %>
-          <%= content_tag(:ul) do %>
-            <%= render partial: "admin/shared/playback/creator", collection: @work.creators %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Title") %>
         <%= content_tag(:td, @work.title) %>
       <% end %>
@@ -41,6 +36,15 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Subtitle") %>
         <%= content_tag(:td, @work.subtitle) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Creators") %>
+        <%= content_tag(:td) do %>
+          <%= content_tag(:ul) do %>
+            <%= render partial: "admin/shared/playback/creator", collection: @work.creators %>
+          <% end %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -61,14 +65,50 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/milestones", locals: {
-  milestones: @work.milestones.for_admin.sorted
-} %>
+<% if milestones.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Milestones") %>
+    <% end %>
 
-<%= render partial: "admin/shared/playback/contributions", locals: {
-  contributions: @work.contributions.for_admin.alpha,
-  context:       :work
-} %>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% milestones.each do |milestone| %>
+        <%= content_tag(:dt, milestone.human_activity) %>
+        <%= content_tag(:dd, milestone.year) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if aspects.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, "Aspects") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% aspects.each do |facet_name, val_array| %>
+        <%= content_tag(:dt, facet_name          ) %>
+        <%= content_tag(:dd, val_array.map(&:name).join(", ")) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if contributions.any? %>
+  <%= content_tag(:section, class: "admin-section") do %>
+    <%= content_tag(:header) do %>
+      <%= content_tag(:h4, context == :work ? "Contributors" : "Contributions") %>
+    <% end %>
+
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% contributions.each do |contribution| %>
+        <%= content_tag(:dt, contribution.name                    ) %>
+        <%= content_tag(:dd, link_to_creator(contribution.creator)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <%= render partial: "admin/shared/playback/posts", locals: {
   posts: @work.reviews.for_admin.reverse_cron

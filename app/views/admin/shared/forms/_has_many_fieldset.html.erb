@@ -2,10 +2,11 @@
   headline = association.to_s.capitalize if local_assigns[:headline].nil?
   required = false                       if local_assigns[:required].nil?
 
-  records = f.object.send(association)
-  error   = f.error(association)
-  classes = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
-  partial = "admin/#{f.object.model_name.plural}/#{association.to_s.singularize}"
+  singular = association.to_s.singularize
+  records  = f.object.send(association)
+  error    = f.error(association)
+  classes  = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+  partial  = "admin/#{f.object.model_name.plural}/fieldset_#{singular}"
 %>
 
 <%= content_tag(:section, class: "adj-module") do %>
@@ -17,6 +18,6 @@
 
     <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-    <%= render partial: partial, collection: records, locals: { f: f } %>
+    <%= render partial: partial, collection: records, as: singular, locals: { f: f } %>
   <% end %>
 <% end %>

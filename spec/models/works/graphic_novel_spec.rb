@@ -6,13 +6,13 @@ RSpec.describe GraphicNovel, type: :model do
   end
 
   context "concerns" do
-    it_behaves_like "a_workable_model"
+    it_behaves_like "a_medium"
   end
 
   context "STI" do
     context "class" do
-      specify { expect(described_class.superclass).to eq(Work) }
-
+      specify { expect(described_class.superclass           ).to eq(Medium) }
+      specify { expect(described_class.model_name.name      ).to eq("Work") }
       specify { expect(described_class.true_model_name.name ).to eq("GraphicNovel") }
       specify { expect(described_class.true_human_model_name).to eq("Graphic Novel") }
     end
@@ -20,6 +20,7 @@ RSpec.describe GraphicNovel, type: :model do
     context "instance" do
       let(:instance) { create_minimal_instance }
 
+      specify { expect(instance.model_name.name      ).to eq("Work") }
       specify { expect(instance.type                 ).to eq("GraphicNovel") }
       specify { expect(instance.true_model_name.name ).to eq("GraphicNovel") }
       specify { expect(instance.true_human_model_name).to eq("Graphic Novel") }

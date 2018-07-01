@@ -67,20 +67,20 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager, ->  { includes(
-                        :aspects, :credits, :creators,
-                        :contributions, :contributors,
-                        :playlists, :reviews, :mixtapes
-                      ).references(:creators) }
+  scope :eager, -> { includes(
+    :aspects, :milestones, :playlists, :reviews, :mixtapes,
+    :credits, :creators, :contributions, :contributors
+  ).references(:creators) }
+
   scope :for_admin, -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :milestones
-
   has_and_belongs_to_many :aspects
+
+  has_many :milestones
 
   has_many :credits,       inverse_of: :work, dependent: :destroy
   has_many :contributions, inverse_of: :work, dependent: :destroy
@@ -92,7 +92,7 @@ class Work < ApplicationRecord
 
   has_many :playlistings, inverse_of: :work, dependent: :destroy
   has_many :playlists, through: :playlistings
-  has_many :mixtapes, through: :playlists
+  has_many :mixtapes,  through: :playlists
 
   #############################################################################
   # ATTRIBUTES.

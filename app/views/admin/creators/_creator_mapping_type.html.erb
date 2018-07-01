@@ -1,9 +1,10 @@
 <%
+  singular = association.to_s.singularize
   records = f.object.send(association)
   error   = f.error(association)
   classes = join_attr("fields-for", "toggle", ("fieldset-with-errors" if error))
   attrs   = js_togglable_attrs(bool, classes, expandable: expandable)
-  partial = association.to_s.singularize
+  partial = "fieldset_#{singular}"
 %>
 
 <%= content_tag(:fieldset, attrs) do %>
@@ -11,5 +12,5 @@
 
   <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-  <%= render partial: partial, collection: records, locals: { f: f } %>
+  <%= render partial: partial, collection: records, as: singular, locals: { f: f } %>
 <% end %>
