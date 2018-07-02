@@ -63,22 +63,22 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/creators", locals: {
+<%= render partial: "list", locals: {
   creators: @creator.groups,
   headline: "Groups"
 } %>
 
-<%= render partial: "admin/shared/playback/creators", locals: {
+<%= render partial: "list", locals: {
   creators: @creator.members,
   headline: "Members"
 } %>
 
-<%= render partial: "admin/shared/playback/creators", locals: {
+<%= render partial: "list", locals: {
   creators: @creator.colleagues,
   headline: "Colleagues"
 } %>
 
-<%= render partial: "admin/shared/playback/creators", locals: {
+<%= render partial: "list", locals: {
   creators: @creator.personae,
   headline: "Personae"
 } %>

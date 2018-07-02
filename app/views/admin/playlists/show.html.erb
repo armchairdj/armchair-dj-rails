@@ -7,10 +7,6 @@
   instance: @playlist,
 ) %>
 
-<%= render partial: "admin/shared/playback/playlistings", locals: {
-  playlistings: @playlist.playlistings.for_admin
-} %>
-
 <%= content_tag(:section, class: "admin-section tabled") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h4, "Attributes") %>
@@ -53,7 +49,11 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/creators", locals: {
+<%= render partial: "admin/shared/playback/playlistings", locals: {
+  playlistings: @playlist.playlistings.for_admin
+} %>
+
+<%= render partial: "admin/creators/list", locals: {
   creators: @playlist.all_creators.for_admin.alpha
 } %>
 
