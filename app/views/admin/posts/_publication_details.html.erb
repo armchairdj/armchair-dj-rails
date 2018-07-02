@@ -1,0 +1,17 @@
+<% return unless f.object.persisted? %>
+
+<%= content_tag(:section, class: "adj-module") do %>
+  <%= content_tag(:fieldset, class: "legendary") do %>
+    <%= content_tag(:legend, "Publication Details") %>
+
+    <% if f.object.persisted? %>
+      <%= f.input(:slug, readonly: true) + f.input(:clear_slug, as: :boolean) %>
+    <% end %>
+
+    <% if f.object.published? %>
+      <%= f.input :published_at, as: :date, html5: true, readonly: true %>
+    <% elsif f.object.persisted? %>
+      <%= f.input :publish_on,   as: :date, html5: true, hint: true %>
+    <% end %>
+  <% end %>
+<% end %>

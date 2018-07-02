@@ -1,4 +1,4 @@
-<%= simple_form_for([:admin, @article], html: { class: "admin"} ) do |f| %>
+<%= simple_form_for([:admin, @article], html: { class: "admin"}) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
@@ -6,22 +6,15 @@
       <%= content_tag(:fieldset) do %>
         <%= f.input :title, required: true %>
 
-        <%= f.input :body, input_html: { class: "x-large" } %>
-
-        <%= summary_field(f) %>
-
-        <%= f.input :tag_ids,
-          as:         :select,
-          collection: @tags,
-          input_html: js_selectable_create_tag_attrs
-        %>
+        <%= render partial: "admin/posts/body_field",    locals: { f: f } %>
+        <%= render partial: "admin/posts/summary_field", locals: { f: f } %>
+        <%= render partial: "admin/posts/tags_field",    locals: { f: f } %>
       <% end %>
     <% end %>
 
-    <%= render partial: "shared/forms/has_many_links_fieldset", locals: { f: f } %>
-
-    <%= render partial: "shared/forms/publication_details", locals: { f: f } %>
+    <%= render partial: "admin/posts/publication_details",      locals: { f: f } %>
+    <%= render partial: "admin/links/has_many_links_fieldset", locals: { f: f } %>
   <% end %>
 
-  <%= render partial: "shared/forms/publication_buttons", locals: { f: f } %>
+  <%= render partial: "admin/posts/publication_buttons", locals: { f: f } %>
 <% end %>
