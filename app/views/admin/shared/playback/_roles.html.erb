@@ -6,6 +6,8 @@
   <% end %>
 
   <%= content_tag(:ul, class: "square") do %>
-    <%= render partial: "admin/shared/playback/role", collection: roles %>
+    <% roles.each do |role| %>
+      <%= content_tag(:li, role.name) %>
+    <% end %>
   <% end %>
 <% end %>

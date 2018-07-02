@@ -7,6 +7,8 @@
   <% end %>
 
   <%= content_tag(:ol, js_sortable_playlistings_attrs(@playlist)) do %>
-    <%= render partial: "admin/shared/playback/playlisting", collection: playlistings %>
+    <% playlistings.each do |playlisting| %>
+      <%= content_tag(:li, playlisting.work.full_display_title, "data-id": playlisting.id) %>
+    <% end %>
   <% end %>
 <% end %>

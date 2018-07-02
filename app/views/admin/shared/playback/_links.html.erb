@@ -6,6 +6,8 @@
   <% end %>
 
   <%= content_tag(:ul, class: "square") do %>
-    <%= render partial: "admin/shared/playback/link", collection: links %>
+    <% links.each do |link| %>
+      <%= content_tag(:li, link_to(link.description, link.url)) %>
+    <% end %>
   <% end %>
 <% end %>

@@ -1,13 +1,14 @@
 <% return if posts.empty? %>
 
-<% headline = "Posts" if local_assigns[:headline].nil? %>
-
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, headline) %>
+    <%= content_tag(:h4, local_assigns[:headline] || "Posts") %>
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <%= render partial: "admin/shared/playback/post", collection: posts %>
+    <% posts.each do |post| %>
+      <%= content_tag(:dt, post.display_type) %>
+      <%= content_tag(:dd, link_to_post(post, full: true, admin: true)) %>
+    <% end %>
   <% end %>
 <% end %>
