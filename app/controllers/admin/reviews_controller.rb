@@ -15,16 +15,6 @@ private
   end
 
   def allowed_sorts
-    title_sort  = "posts.alpha ASC"
-    status_sort = "posts.status ASC"
-    author_sort = "users.username ASC"
-    medium_sort = "LOWER(works.type) ASC"
-
-    super(title_sort).merge({
-      "Title"   => title_sort,
-      "Medium"  => [medium_sort, title_sort].join(", "),
-      "Status"  => [status_sort, title_sort].join(", "),
-      "Author"  => [author_sort, title_sort].join(", "),
-    })
+    super.merge({ "Medium" => [work_medium_sort, alpha_sort] })
   end
 end

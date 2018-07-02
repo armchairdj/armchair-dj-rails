@@ -123,14 +123,10 @@ private
   end
 
   def allowed_sorts
-    name_sort       = "LOWER(creators.name) ASC"
-    primary_sort    = "creators.primary ASC"
-    individual_sort = "creators.individual ASC"
-
-    super(name_sort).merge({
+    super.merge({
       "Name"       => name_sort,
-      "Primary"    => [primary_sort,    name_sort].join(", "),
-      "Individual" => [individual_sort, name_sort].join(", "),
+      "Primary"    => [creator_primary_sort,    name_sort],
+      "Individual" => [creator_individual_sort, name_sort],
     })
   end
 end

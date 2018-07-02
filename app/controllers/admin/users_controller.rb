@@ -111,16 +111,11 @@ private
   end
 
   def allowed_sorts
-    name_sort     = "users.alpha ASC"
-    username_sort = "LOWER(users.username) ASC"
-    email_sort    = "LOWER(users.email) ASC"
-    role_sort     = "users.role ASC"
-
-    super(name_sort).merge({
-      "Name"     => name_sort,
-      "Username" => username_sort,
-      "Email"    => email_sort,
-      "Role"     => [role_sort, name_sort].join(", "),
+    super.merge({
+      "Name"     => alpha_sort,
+      "Username" => user_username_sort,
+      "Email"    => user_email_sort,
+      "Role"     => [user_role_sort, alpha_sort],
     })
   end
 end

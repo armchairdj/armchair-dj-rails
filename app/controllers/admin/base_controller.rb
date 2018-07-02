@@ -77,20 +77,6 @@ private
     policy_scope(model_class).find(id)
   end
 
-  def allowed_scopes
-    { "All" => :for_admin }
-  end
-
-  def allowed_sorts(extra = nil)
-    default_sort  = "#{model_class.table_name}.updated_at DESC"
-    id_sort       = "#{model_class.table_name}.id ASC"
-
-    {
-      "Default" => default_sort,
-      "ID"      => id_sort
-    }
-  end
-
   def scopes_for_view(scope)
     allowed_scopes.keys.each.inject({}) do |memo, (key)|
       memo[key] = {
@@ -119,7 +105,8 @@ private
   end
 
   def current_sort_value
-    clause = allowed_sorts[@sort]
+    clause = [allowed_sorts[@sort]].flatten.join(", ")
+
     clause = @dir == "DESC" ? reverse_sort(clause) : clause
 
     Arel.sql(clause)
@@ -137,5 +124,84 @@ private
     end
 
     parts.join(", ")
+  end
+
+  def allowed_scopes
+    { "All" => :for_admin }
+  end
+
+  def allowed_sorts
+    {
+      "Default" => default_sort,
+      "ID"      => id_sort
+    }
+  end
+
+  #############################################################################
+  # GENERAL SORT CLAUSES (applied to current model).
+  #############################################################################
+
+  def alpha_sort
+    "#{model_class.table_name}.alpha ASC"
+  end
+
+  def default_sort
+    "#{model_class.table_name}.updated_at DESC"
+  end
+
+  def id_sort
+    "#{model_class.table_name}.id ASC"
+  end
+
+  def name_sort
+    "LOWER(#{model_class.table_name}.name) ASC"
+  end
+
+  def title_sort
+    "LOWER(#{model_class.table_name}.title) ASC"
+  end
+
+  #############################################################################
+  # SPECIFIC SORT CLAUSES (for individual models or join models).
+  #############################################################################
+
+  def aspect_facet_sort
+    Aspect.alpha_order_clause_for(:facet)
+  end
+
+  def creator_individual_sort
+    "creators.individual ASC"
+  end
+
+  def creator_name_sort
+    "LOWER(creators.name) ASC"
+  end
+
+  def creator_primary_sort
+    "creators.primary ASC"
+  end
+
+  def post_status_sort
+    "posts.status ASC"
+  end
+
+  def role_medium_sort
+    "LOWER(roles.work_type) ASC"
+  end
+
+  def user_email_sort
+    "LOWER(users.email) ASC"
+  end
+
+  def user_role_sort
+    "users.role ASC"
+  end
+
+  def user_username_sort
+    "users.username ASC"
+  end
+
+  def work_medium_sort
+    "LOWER(works.type) ASC"
   end
 end

@@ -83,12 +83,9 @@ private
   end
 
   def allowed_sorts
-    facet_sort = Aspect.alpha_order_clause_for(:facet)
-    name_sort  = "LOWER(aspects.name) ASC"
-
-    super(facet_sort).merge({
-      "Facet" => [facet_sort, name_sort].join(", "),
-      "Name"  => [name_sort, facet_sort].join(", "),
+    super.merge({
+      "Facet" => [aspect_facet_sort, name_sort],
+      "Name"  => [name_sort, aspect_facet_sort],
     })
   end
 end

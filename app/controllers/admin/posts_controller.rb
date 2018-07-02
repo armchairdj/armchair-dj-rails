@@ -178,6 +178,14 @@ private
     })
   end
 
+  def allowed_sorts
+    super.merge({
+      "Title"   => alpha_sort,
+      "Status"  => [post_status_sort, alpha_sort],
+      "Author"  => [user_username_sort, alpha_sort],
+    })
+  end
+
   def collection_path(url: false)
     case url
     when true;  polymorphic_url( [:admin, model_class])

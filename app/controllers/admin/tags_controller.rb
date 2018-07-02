@@ -80,10 +80,6 @@ private
   def prepare_form; end
 
   def allowed_sorts
-    name_sort   = "LOWER(tags.name) ASC"
-
-    super(name_sort).merge({
-      "Name" => [name_sort].join(", "),
-    })
+    super.merge({ "Name" => [name_sort] })
   end
 end
