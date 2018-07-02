@@ -1,10 +1,8 @@
 <% return if creators.empty? %>
 
-<% headline = "Creators" if local_assigns[:headline].nil? %>
-
 <%= content_tag(:section, class: "admin-section") do %>
   <%= content_tag(:header) do %>
-    <%= content_tag(:h4, headline) %>
+    <%= content_tag(:h4, local_assigns[:headline] || "Creators") %>
   <% end %>
 
   <%= content_tag(:ul, class: "square") do %>
