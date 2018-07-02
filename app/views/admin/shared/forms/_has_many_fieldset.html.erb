@@ -1,12 +1,15 @@
 <%
-  headline = association.to_s.capitalize if local_assigns[:headline].nil?
-  required = false                       if local_assigns[:required].nil?
+  headline  = association.to_s.capitalize if local_assigns[:headline ].nil?
+  view_path = f.object.model_name.plural  if local_assigns[:view_path].nil?
+  required  = false                       if local_assigns[:required ].nil?
+  hint      = nil                         if local_assigns[:hint     ].nil?
 
-  singular = association.to_s.singularize
-  records  = f.object.send(association)
-  error    = f.error(association)
-  classes  = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
-  partial  = "admin/#{f.object.model_name.plural}/fieldset_#{singular}"
+  singular  = association.to_s.singularize
+  records   = f.object.send(association)
+  error     = f.error(association)
+  hint_text = error || hint
+  classes   = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+  partial   = "admin/#{view_path}/fieldset_#{singular}"
 %>
 
 <%= content_tag(:section, class: "adj-module") do %>
@@ -16,7 +19,7 @@
       <%= required_indicator if required %>
     <% end %>
 
-    <%= content_tag(:div, error, class: "legend-hint") if error %>
+    <%= content_tag(:div, error, class: "legend-hint") if hint_text %>
 
     <%= render partial: partial, collection: records, as: singular, locals: { f: f } %>
   <% end %>

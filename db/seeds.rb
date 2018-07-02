@@ -22,9 +22,9 @@ brian = User.create_with(
   middle_name: "J.",
   last_name:   "Dillard",
   password:    "password1234"
-).find_or_create_by(email: "armchairdj@gmail.com")
-
-brian.skip_confirmation!
+).find_or_create_by(email: "armchairdj@gmail.com") do |user|
+  user.skip_confirmation!
+end
 
 ##### ASPECTS
 
