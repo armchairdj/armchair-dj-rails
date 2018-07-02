@@ -7,19 +7,11 @@
   instance: @article,
 ) %>
 
-<%= content_tag(:section, class: "admin-section") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, article_title(@article)) %>
-  <% end %>
-
+<%= admin_section(article_title(@article)) do %>
   <%= content_tag(:div, formatted_post_body(@article)) %>
 <% end %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Attributes") %>
-  <% end %>
-
+<%= admin_section("Attributes", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>

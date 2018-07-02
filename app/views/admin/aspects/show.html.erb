@@ -7,11 +7,7 @@
   instance: @aspect,
 ) %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Attributes") %>
-  <% end %>
-
+<%= admin_section("Attributes", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>

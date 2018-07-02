@@ -7,11 +7,7 @@
   instance: @user,
 ) %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Attributes") %>
-  <% end %>
-
+<%= admin_section("Attributes", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -64,11 +60,7 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Account Status") %>
-  <% end %>
-
+<%= admin_section("Account Status") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -99,11 +91,7 @@
   <% end %>
 <% end %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Logins") %>
-  <% end %>
-
+<%= admin_section("Logins") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -144,10 +132,6 @@
   <% end %>
 <% end %>
 
-<% if @user.can_write? %>
-  <%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.for_admin.reverse_cron %>
-
-  <%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.for_admin.alpha %>
-<% end %>
-
-<%= render partial: "admin/links/list",       as: "links",     object: @user.links %>
+<%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.for_admin.reverse_cron %>
+<%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.for_admin.alpha %>
+<%= render partial: "admin/links/list",     as: "links",     object: @user.links %>

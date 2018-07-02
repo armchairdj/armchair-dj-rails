@@ -11,11 +11,7 @@
   instance: @creator,
 ) %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Attributes") %>
-  <% end %>
-
+<%= admin_section("Attributes", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -84,11 +80,7 @@
 } %>
 
 <% if roles.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Roles") %>
-    <% end %>
-
+  <%= admin_section("Roles") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% roles.each do |work_type, role_array| %>
         <%= content_tag(:dt, work_type     ) %>
@@ -99,11 +91,7 @@
 <% end %>
 
 <% if works.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Works") %>
-    <% end %>
-
+  <%= admin_section("Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
         <%= content_tag(:dt, work.true_human_model_name) %>
@@ -114,11 +102,7 @@
 <% end %>
 
 <% if contributions.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Contributions") %>
-    <% end %>
-
+  <%= admin_section("Contributions") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
         <%= content_tag(:dt, contribution.name) %>

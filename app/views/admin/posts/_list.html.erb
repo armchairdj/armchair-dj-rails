@@ -1,10 +1,6 @@
 <% return if posts.empty? %>
 
-<%= content_tag(:section, class: "admin-section") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, local_assigns[:headline] || "Posts") %>
-  <% end %>
-
+<%= admin_section(local_assigns[:headline] || "Posts") do %>
   <%= content_tag(:dl, class: "horizontal right") do %>
     <% posts.each do |post| %>
       <%= content_tag(:dt, post.display_type) %>

@@ -11,11 +11,7 @@
   instance: @work,
 ) %>
 
-<%= content_tag(:section, class: "admin-section tabled") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Attributes") %>
-  <% end %>
-
+<%= admin_section("Attributes", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -68,11 +64,7 @@
 <% end %>
 
 <% if milestones.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Milestones") %>
-    <% end %>
-
+  <%= admin_section("Milestones") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% milestones.each do |milestone| %>
         <%= content_tag(:dt, milestone.human_activity) %>
@@ -83,11 +75,7 @@
 <% end %>
 
 <% if aspects.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Aspects") %>
-    <% end %>
-
+  <%= admin_section("Aspects") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% aspects.each do |facet_name, val_array| %>
         <%= content_tag(:dt, facet_name          ) %>
@@ -98,11 +86,7 @@
 <% end %>
 
 <% if contributions.any? %>
-  <%= content_tag(:section, class: "admin-section") do %>
-    <%= content_tag(:header) do %>
-      <%= content_tag(:h4, "Contributors") %>
-    <% end %>
-
+  <%= admin_section("Contributors") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
         <%= content_tag(:dt, contribution.name                    ) %>
@@ -112,10 +96,5 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list",
-  object: @work.reviews.for_admin.reverse_cron, as: "posts"
-%>
-
-<%= render partial: "admin/playlists/list",
-  object: @work.playlists.for_admin.alpha, as: "playlists"
-%>
+<%= render partial: "admin/posts/list",     as: "posts"      object: @work.reviews.for_admin.reverse_cron %>
+<%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.for_admin.alpha %>

@@ -1,10 +1,6 @@
 <% return if links.empty? %>
 
-<%= content_tag(:section, class: "admin-section") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Links") %>
-  <% end %>
-
+<%= admin_section("Links") do %>
   <%= content_tag(:ul, class: "square") do %>
     <% links.each do |link| %>
       <%= content_tag(:li, link_to(link.description, link.url)) %>

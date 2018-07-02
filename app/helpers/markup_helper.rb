@@ -37,6 +37,12 @@ module MarkupHelper
     content_tag(wrapper.to_sym, content, options)
   end
 
+  def content_tag_unless_empty(tag, content, **opts)
+    return if content.blank?
+
+    content_tag(tag, content, **opts)
+  end
+
   def paragraphs(str)
     return if str.blank?
 
