@@ -6,7 +6,7 @@
   <% end %>
 
   <%= content_tag(:ul, class: "square") do %>
-    <% tags.each do |tag|
+    <% tags.each do |tag| %>
       <%= content_tag(:li, link_to_tag(tag)) %>
     <% end %>
   <% end %>

@@ -42,7 +42,7 @@
         <%= content_tag(:th, "Creators") %>
         <%= content_tag(:td) do %>
           <%= content_tag(:ul) do %>
-            <% @work.creators.each do |creator|
+            <% @work.creators.each do |creator| %>
               <%= content_tag(:li, link_to_creator(creator)) %>
             <% end %>
           <% end %>
