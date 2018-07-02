@@ -31,14 +31,14 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+    <%= render partial: "shared/forms/has_many_fieldset", locals: {
       f:           f,
       association: :credits,
       required:    true,
       headline:    "Creators",
     } %>
 
-    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+    <%= render partial: "shared/forms/has_many_fieldset", locals: {
       f:           f,
       association: :milestones,
     } %>
@@ -59,7 +59,7 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "admin/shared/forms/has_many_fieldset", locals: {
+    <%= render partial: "shared/forms/has_many_fieldset", locals: {
       f:           f,
       association: :contributions,
       headline:    "Contributors",

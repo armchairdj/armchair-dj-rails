@@ -23,7 +23,7 @@
         <%= content_tag(:div, "Error message for string.", class: "error") %>
       <% end %>
 
-      <%= render partial: "shared/custom_radio_group", locals: {
+      <%= render partial: "shared/forms/custom_radio_group", locals: {
         f:          f,
         name:       :radios_with_error,
         legend:     "Radios",

@@ -12,14 +12,14 @@
       <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Primary or Pseudonym") %>
 
-        <%= render partial: "shared/custom_radio_group", locals: {
+        <%= render partial: "shared/forms/custom_radio_group", locals: {
           name:       :primary,
           f:          f,
           collection: Creator.primary_options,
           invert:     true
         } %>
 
-        <%= render partial: "admin/shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
           f:           f,
           association: :pseudonym_identities,
           bool:        true,
@@ -27,7 +27,7 @@
           headline:    "Pseudonyms",
         } %>
 
-        <%= render partial: "admin/shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
           f:           f,
           association: :real_name_identities,
           bool:        false,
@@ -41,14 +41,14 @@
       <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Individual or Group") %>
 
-        <%= render partial: "shared/custom_radio_group", locals: {
+        <%= render partial: "shared/forms/custom_radio_group", locals: {
           f:          f,
           name:       :individual,
           collection: Creator.individual_options,
           invert:     true
         } %>
 
-        <%= render partial: "admin/shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
           f:           f,
           association: :member_memberships,
           bool:        false,
@@ -56,7 +56,7 @@
           headline:    "Members",
         } %>
 
-        <%= render partial: "admin/shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
           f:           f,
           association: :group_memberships,
           bool:        true,
