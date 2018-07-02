@@ -42,6 +42,6 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
+<%= render partial: "admin/posts/list", locals: {
   posts: @tag.posts.for_admin.reverse_cron
 } %>

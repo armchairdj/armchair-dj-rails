@@ -79,10 +79,10 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/tags", locals: {
+<%= render partial: "admin/tags/list", locals: {
   tags: @mixtape.tags.alpha
 } %>
 
-<%= render partial: "admin/shared/playback/links", locals: {
+<%= render partial: "admin/links/list", locals: {
   links: @mixtape.links
 } %>

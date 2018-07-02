@@ -145,12 +145,9 @@
 <% end %>
 
 <% if @user.can_write? %>
-  <%= render partial: "admin/shared/playback/posts", locals: {
-    posts: @user.posts.for_admin.reverse_cron
-  } %>
+  <%= render partial: "admin/posts/list",     as: "posts",    object: @user.posts.for_admin.reverse_cron %>
+
+  <%= render partial: "admin/playlists/list", as: "playlists" object: @user.playlists.for_admin.alpha %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/links", locals: {
-  links: @user.links
-} %>
-
+<%= render partial: "admin/links/list",       as: "links",    object: @user.links %>

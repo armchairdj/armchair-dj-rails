@@ -42,7 +42,9 @@
         <%= content_tag(:th, "Creators") %>
         <%= content_tag(:td) do %>
           <%= content_tag(:ul) do %>
-            <%= render partial: "admin/shared/playback/creator", collection: @work.creators %>
+            <% @work.creators.each do |creator|
+              <%= content_tag(:li, link_to_creator(creator)) %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
@@ -110,10 +112,10 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/shared/playback/posts", locals: {
-  posts: @work.reviews.for_admin.reverse_cron
-} %>
+<%= render partial: "admin/posts/list",
+  object: @work.reviews.for_admin.reverse_cron, as: "posts"
+%>
 
-<%= render partial: "admin/shared/playback/playlists", locals: {
-  playlists: @work.playlists.for_admin.alpha
-} %>
+<%= render partial: "admin/playlists/list",
+  object: @work.playlists.for_admin.alpha, as: "playlists"
+%>
