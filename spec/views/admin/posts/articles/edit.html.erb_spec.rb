@@ -6,9 +6,7 @@ RSpec.describe "admin/posts/articles/edit", type: :view do
   login_root
 
   before(:each) do
-    3.times do
-      create(:minimal_tag)
-    end
+    3.times { create(:minimal_tag) }
 
     @model_class = assign(:model_name, Article)
     @creators    = assign(:creators,   Creator.all.alpha)

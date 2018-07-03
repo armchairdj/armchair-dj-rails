@@ -38,6 +38,8 @@ Rails.application.routes.draw do
     match  "settings/password", to: "users/registrations#update_password", via: [:patch, :put]
   end
 
+  get "profile/:id", to: "users#show", as: :user
+
   #############################################################################
   # PAGES.
   #############################################################################
@@ -57,15 +59,30 @@ Rails.application.routes.draw do
   get "500", to: "errors#internal_server_error"
 
   #############################################################################
+  # POSTS.
+  #############################################################################
+
+  scope module: :posts do
+    resources :posts, only: [:index], concerns: :paginatable, path: "/"
+
+    scope format: true, constraints: { format: "rss" } do
+      get "feed", to: "posts#feed"
+    end
+
+    resources :articles, only: [:index, :show], concerns: :paginatable
+    resources :reviews,  only: [:index, :show], concerns: :paginatable
+    resources :mixtapes, only: [:index, :show], concerns: :paginatable
+  end
+
+  #############################################################################
   # ADMIN.
   #############################################################################
 
   namespace :admin do
-
     scope module: :posts do
-      resources :articles,   concerns: :paginatable
-      resources :reviews,    concerns: :paginatable
-      resources :mixtapes,   concerns: :paginatable
+      resources :articles, concerns: :paginatable
+      resources :reviews,  concerns: :paginatable
+      resources :mixtapes, concerns: :paginatable
     end
 
     resources :users,      concerns: :paginatable
@@ -88,73 +105,12 @@ Rails.application.routes.draw do
 
   get "style_guide", to: "style_guides#index", as: "style_guides"
 
-  get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
-    template: /button|form|form_error|headline|list|post|quotation|tabs|svg|text/
-  }
+  get "style_guide/:template", to: "style_guides#show",
+    as: "style_guides_item", constraints: { template: /button|form|form_error|headline|list|post|quotation|tabs|svg|text/ }
 
-  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash", constraints: {
-    flash_type: /alert|error|info|notice|success/
-  }
+  get "style_guide/flash/:flash_type", to: "style_guides#flash_message",
+    as: "style_guides_flash", constraints: { flash_type: /alert|error|info|notice|success/ }
 
-  get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error", constraints: {
-    error_type: /bad_request|internal_server_error|not_found|permission_denied/
-  }
-
-  #############################################################################
-  # POSTS.
-  #############################################################################
-
-  resources :posts, only: [:index], concerns: :paginatable, path: "/"
-
-  scope format: true, constraints: { format: "rss" } do
-    get "/feed", to: "posts#feed"
-  end
-
-  #############################################################################
-  # ARTICLES.
-  #############################################################################
-
-  resources :articles, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # REVIEWS.
-  #############################################################################
-
-  resources :reviews, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # MIXTAPES.
-  #############################################################################
-
-  resources :mixtapes, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # PLAYLISTS.
-  #############################################################################
-
-  resources :playlists, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # CREATORS.
-  #############################################################################
-
-  resources :creators, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # WORKS.
-  #############################################################################
-
-  resources :works, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # TAGS.
-  #############################################################################
-
-  # resources :tags, only: [:index, :show], concerns: :paginatable
-
-  #############################################################################
-  # USERS.
-  #############################################################################
-
-  get "profile/:id", to: "users#show", as: :user
+  get "style_guide/error/:error_type", to: "style_guides#error_page",
+    as: "style_guides_error", constraints: { error_type: /bad_request|internal_server_error|not_found|permission_denied/ }
 end

@@ -8,9 +8,7 @@ RSpec.describe "admin/posts/articles/index", type: :view do
   let(:dummy) { Admin::Posts::ArticlesController.new }
 
   before(:each) do
-    21.times do
-      create(:minimal_article, :published)
-    end
+    3.times { create(:minimal_article, :published) }
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")
 

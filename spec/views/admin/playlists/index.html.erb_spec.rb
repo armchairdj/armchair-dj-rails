@@ -6,9 +6,7 @@ RSpec.describe "admin/playlists/index", type: :view do
   let(:dummy) { Admin::PlaylistsController.new }
 
   before(:each) do
-    21.times do
-      create(:minimal_playlist, :with_published_post)
-    end
+    3.times { create(:minimal_playlist, :with_published_post) }
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")
 

@@ -8,9 +8,7 @@ RSpec.describe "admin/posts/mixtapes/index", type: :view do
   let(:dummy) { Admin::Posts::MixtapesController.new }
 
   before(:each) do
-    21.times do
-      create(:minimal_mixtape, :published)
-    end
+    3.times { create(:minimal_mixtape, :published) }
 
     allow(dummy).to receive(:polymorphic_path).and_return("/")
 

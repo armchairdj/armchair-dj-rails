@@ -2,6 +2,7 @@
 
 RSpec.shared_examples "a_public_index" do
   let!(  :param_key) { described_class.controller_name.to_sym }
+  let!(   :template) { "posts/#{param_key}/index" }
   let!(:model_class) { described_class.new.send(:model_class) }
 
   let(         :ids) { 3.times.map { |i| create_minimal_instance(:with_published_post).id } }
@@ -16,7 +17,7 @@ RSpec.shared_examples "a_public_index" do
     end
 
     describe "renders" do
-      it { is_expected.to successfully_render("#{param_key}/index") }
+      it { is_expected.to successfully_render(template) }
 
       specify { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
     end
@@ -28,7 +29,7 @@ RSpec.shared_examples "a_public_index" do
     describe "renders" do
       before(:each) { get :index }
 
-      it { is_expected.to successfully_render("#{param_key}/index") }
+      it { is_expected.to successfully_render(template) }
 
       specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
@@ -36,7 +37,7 @@ RSpec.shared_examples "a_public_index" do
     describe "paginates" do
       before(:each) { get :index, params: { page: "2" } }
 
-      it { is_expected.to successfully_render("#{param_key}/index") }
+      it { is_expected.to successfully_render(template) }
 
       specify { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
     end
