@@ -61,10 +61,14 @@ Rails.application.routes.draw do
   #############################################################################
 
   namespace :admin do
+
+    scope module: :posts do
+      resources :articles,   concerns: :paginatable
+      resources :reviews,    concerns: :paginatable
+      resources :mixtapes,   concerns: :paginatable
+    end
+
     resources :users,      concerns: :paginatable
-    resources :articles,   concerns: :paginatable
-    resources :reviews,    concerns: :paginatable
-    resources :mixtapes,   concerns: :paginatable
     resources :tags,       concerns: :paginatable
     resources :creators,   concerns: :paginatable
     resources :works,      concerns: :paginatable

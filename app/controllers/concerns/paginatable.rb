@@ -13,7 +13,9 @@ private
     return unless (params[:page] || "").to_s == "1"
 
     namespace   = self.class.parent.name.downcase.to_sym
-    url_options = namespace == :object ? model_class : [namespace, model_class]
+    # This is a hack because we Admin::Posts is namespaces 2 levels but the
+    # routes are only nested on level (to /admin)
+    url_options = namespace == :object ? model_class : [:admin, model_class]
 
     redirect_to polymorphic_path(url_options), status: 301
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "an_admin_index" do
+  let!(   :template) { "#{described_class.controller_path}/index" }
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
   let(         :ids) { 3.times.map { |i| create_minimal_instance.id } }
@@ -20,7 +21,7 @@ RSpec.shared_examples "an_admin_index" do
         end
 
         describe "renders" do
-          it { is_expected.to successfully_render("admin/#{param_key}/index") }
+          it { is_expected.to successfully_render(template) }
 
           specify { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
         end
@@ -32,7 +33,7 @@ RSpec.shared_examples "an_admin_index" do
         describe "renders with default sorting" do
           before(:each) { get :index, params: { scope: scope } }
 
-          it { is_expected.to successfully_render("admin/#{param_key}/index") }
+          it { is_expected.to successfully_render(template) }
 
           specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
         end
@@ -40,7 +41,7 @@ RSpec.shared_examples "an_admin_index" do
         describe "paginates" do
           before(:each) { get :index, params: { scope: scope, page: "2" } }
 
-          it { is_expected.to successfully_render("admin/#{param_key}/index") }
+          it { is_expected.to successfully_render(template) }
 
           specify { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
         end
@@ -55,7 +56,7 @@ RSpec.shared_examples "an_admin_index" do
       describe "renders" do
         before(:each) { get :index, params: { sort: sort } }
 
-        it { is_expected.to successfully_render("admin/#{param_key}/index") }
+        it { is_expected.to successfully_render(template) }
 
         specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
       end

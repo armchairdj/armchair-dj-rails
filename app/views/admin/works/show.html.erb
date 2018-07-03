@@ -73,7 +73,7 @@
   <% end %>
 <% end %>
 
-<% if (contributions = ).any? %>
+<% if (contributions = @work.contributions.for_admin.alpha).any? %>
   <%= admin_section("Contributors") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
@@ -84,5 +84,5 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list",     as: "posts"      object: @work.reviews.for_admin.reverse_cron %>
+<%= render partial: "admin/posts/list",     as: "posts",     object: @work.reviews.for_admin.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.for_admin.alpha %>
