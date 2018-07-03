@@ -163,6 +163,14 @@ class Work < ApplicationRecord
     display_title(full: true)
   end
 
+  def display_aspects
+    aspects.group_by(&:human_facet).to_a
+  end
+
+  def display_milestones
+    milestones.sorted
+  end
+
   def credited_artists(connector: " & ")
     return creators.alpha.to_a.map(&:name).join(connector) if persisted?
 

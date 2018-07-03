@@ -49,13 +49,22 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Summary") %>
-        <%= content_tag(:td, paragraphs(@review.summary)) %>
+        <%= content_tag(:th, "Tags") %>
+        <%= content_tag(:td) do %>
+          <%= tag_list(@review.tags.alpha, admin: true) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td, @review.slug) %>
+        <%= content_tag(:th, "Links") %>
+        <%= content_tag(:td) do %>
+          <%= link_list(@review.links) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@review.summary)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -69,17 +78,14 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td, @review.slug) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Alpha") %>
         <%= content_tag(:td, @review.alpha) %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
-
-<%= render partial: "admin/tags/list", locals: {
-  tags: @review.tags.alpha
-} %>
-
-<%= render partial: "admin/links/list", locals: {
-  links: @review.links
-} %>

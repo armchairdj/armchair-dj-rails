@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module LinkHelper
+module PermalinkHelper
   def permalink_for(instance, url: false)
     # TODO
     return unless instance.respond_to?(:viewable?) && instance.viewable?

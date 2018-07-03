@@ -43,6 +43,4 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list", locals: {
-  posts:  @aspect.posts.for_admin
-} %>
+<%= render partial: "admin/posts/list", as: "posts", object: @aspect.posts.for_admin.reverse_cron %>

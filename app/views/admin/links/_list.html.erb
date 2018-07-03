@@ -1,9 +1,0 @@
-<% return if links.empty? %>
-
-<%= admin_section("Links") do %>
-  <%= content_tag(:ul, class: "square") do %>
-    <% links.each do |link| %>
-      <%= content_tag(:li, link_to(link.description, link.url)) %>
-    <% end %>
-  <% end %>
-<% end %>

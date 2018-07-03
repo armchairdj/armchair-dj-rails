@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe LinkHelper, type: :helper do
+RSpec.describe PermalinkHelper, type: :helper do
   pending "#permalink_for"
 end

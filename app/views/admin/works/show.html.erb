@@ -1,9 +1,5 @@
 <%
   @title = ["View #{@work.true_human_model_name}", @work.credited_artists, @work.title]
-
-  aspects       = @work.aspects.for_admin.group_by(&:human_facet).to_a
-  milestones    = @work.milestones.for_admin.sorted
-  contributions = @work.contributions.for_admin.alpha
 %>
 
 <%= admin_header(@model_class, :show,
@@ -45,6 +41,20 @@
         <% end %>
       <% end %>
 
+      <% @work.display_milestones.each do |milestone| %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, milestone.human_activity) %>
+          <%= content_tag(:td, milestone.year) %>
+        <% end %>
+      <% end %>
+
+      <% @work.display_aspects.each do |facet_name, val_array| %>
+        <%= content_tag(:tr) do %>
+          <%= content_tag(:th, facet_name          ) %>
+          <%= content_tag(:td, val_array.map(&:name).join(", ")) %>
+        <% end %>
+      <% end %>
+
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@work.created_at)) %>
@@ -63,29 +73,7 @@
   <% end %>
 <% end %>
 
-<% if milestones.any? %>
-  <%= admin_section("Milestones") do %>
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <% milestones.each do |milestone| %>
-        <%= content_tag(:dt, milestone.human_activity) %>
-        <%= content_tag(:dd, milestone.year) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if aspects.any? %>
-  <%= admin_section("Aspects") do %>
-    <%= content_tag(:dl, class: "horizontal right") do %>
-      <% aspects.each do |facet_name, val_array| %>
-        <%= content_tag(:dt, facet_name          ) %>
-        <%= content_tag(:dd, val_array.map(&:name).join(", ")) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% if contributions.any? %>
+<% if (contributions = ).any? %>
   <%= admin_section("Contributors") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>

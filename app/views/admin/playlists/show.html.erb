@@ -45,14 +45,6 @@
   <% end %>
 <% end %>
 
-<%= render partial: "playlistings", locals: {
-  playlistings: @playlist.playlistings.for_admin
-} %>
-
-<%= render partial: "admin/creators/list", locals: {
-  creators: @playlist.all_creators.for_admin.alpha
-} %>
-
-<%= render partial: "admin/posts/list", locals: {
-  posts: @playlist.mixtapes.for_admin.reverse_cron
-} %>
+<%= render partial: "playlistings",        as: "playlistings", object: @playlist.playlistings.for_admin %>
+<%= render partial: "admin/creators/list", as: "creators",     object: @playlist.all_creators.for_admin.alpha %>
+<%= render partial: "admin/posts/list",    as: "posts",        object: @playlist.mixtapes.for_admin.reverse_cron %>

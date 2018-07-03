@@ -7,4 +7,14 @@ module TagsHelper
 
     link_to(text, url, **opts)
   end
+
+  def tag_list(tags, admin: false, **opts)
+    return if tags.empty?
+
+    list = tags.map do |tag|
+      content_tag(:li, admin ? link_to_tag(tag) : tag.name)
+    end
+
+    content_tag(:ul, list.join.html_safe, **opts)
+  end
 end

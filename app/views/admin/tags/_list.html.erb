@@ -1,9 +1,0 @@
-<% return if tags.empty? %>
-
-<%= admin_section("Tags") do %>
-  <%= content_tag(:ul, class: "square") do %>
-    <% tags.each do |tag| %>
-      <%= content_tag(:li, link_to_tag(tag)) %>
-    <% end %>
-  <% end %>
-<% end %>

@@ -44,13 +44,22 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Summary") %>
-        <%= content_tag(:td, paragraphs(@mixtape.summary)) %>
+        <%= content_tag(:th, "Tags") %>
+        <%= content_tag(:td) do %>
+          <%= tag_list(@mixtape.tags.alpha, admin: true) %>
+        <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td, @mixtape.slug) %>
+        <%= content_tag(:th, "Links") %>
+        <%= content_tag(:td) do %>
+          <%= link_list(@mixtape.links) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Summary") %>
+        <%= content_tag(:td, paragraphs(@mixtape.summary)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
@@ -64,17 +73,14 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Slug") %>
+        <%= content_tag(:td, @mixtape.slug) %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Alpha") %>
         <%= content_tag(:td, @mixtape.alpha) %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
-
-<%= render partial: "admin/tags/list", locals: {
-  tags: @mixtape.tags.alpha
-} %>
-
-<%= render partial: "admin/links/list", locals: {
-  links: @mixtape.links
-} %>

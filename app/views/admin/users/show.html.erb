@@ -43,6 +43,13 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Links") %>
+        <%= content_tag(:td) do %>
+          <%= link_list(@user.links) %>
+        <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Created") %>
         <%= content_tag(:td, admin_date(@user.created_at)) %>
       <% end %>
@@ -60,7 +67,7 @@
   <% end %>
 <% end %>
 
-<%= admin_section("Account Status") do %>
+<%= admin_section("Account Status", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -91,7 +98,7 @@
   <% end %>
 <% end %>
 
-<%= admin_section("Logins") do %>
+<%= admin_section("Logins", class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
       <%= content_tag(:tr) do %>
@@ -134,4 +141,3 @@
 
 <%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.for_admin.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.for_admin.alpha %>
-<%= render partial: "admin/links/list",     as: "links",     object: @user.links %>
