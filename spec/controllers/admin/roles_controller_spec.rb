@@ -6,7 +6,7 @@ RSpec.describe Admin::RolesController, type: :controller do
   let(:type_options) { Work.type_options }
   let(        :role) { create(:minimal_role, work_type: type_options.first.last) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_paginatable_controller"
@@ -168,7 +168,7 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

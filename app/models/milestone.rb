@@ -81,6 +81,7 @@ class Milestone < ApplicationRecord
   validates :work, presence: true
 
   validates :activity, presence: true
+  validates :activity, uniqueness: { scope: [:work_id] }
 
   validates :year, presence: true, yearness: true
 

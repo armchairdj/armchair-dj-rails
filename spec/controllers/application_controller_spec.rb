@@ -3,29 +3,29 @@
 require "rails_helper"
 
 RSpec.describe ApplicationController, type: :controller do
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_errorable_controller"
 
     pending "pundit"
   end
 
-  context "included" do
+  describe "included" do
     pending "protect_from_forgery"
     pending "add_flash_types"
 
-    context "callbacks" do
+    describe "callbacks" do
       pending "determine_layout"
     end
   end
 
-  context "instance" do
-    context "protected" do
+  describe "instance" do
+    describe "protected" do
       pending "#after_sign_in_path_for"
       pending "#after_sign_out_path_for"
       pending "#model_class"
     end
 
-    context "private" do
+    describe "private" do
       describe "#determine_layout" do
         specify { expect(controller.send(:determine_layout)).to eq("public") }
       end

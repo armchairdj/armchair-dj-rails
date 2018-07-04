@@ -2,29 +2,29 @@
 
 RSpec.shared_examples "a_linkable_controller" do
   describe "POST #create" do
-    context "valid" do
+    describe "valid" do
       pending "works"
     end
 
-    context "blank" do
+    describe "blank" do
       pending "works"
     end
 
-    context "invalid" do
+    describe "invalid" do
       pending "works"
     end
   end
 
   describe "POST #update" do
-    context "valid" do
+    describe "valid" do
       pending "works"
     end
 
-    context "blank" do
+    describe "blank" do
       pending "works"
     end
 
-    context "invalid" do
+    describe "invalid" do
       pending "works"
     end
   end

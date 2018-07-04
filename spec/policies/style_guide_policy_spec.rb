@@ -16,7 +16,7 @@ RSpec.describe StyleGuidePolicy do
     it { is_expected.to raise_not_authorized_for(:error_page   ) }
   end
 
-  context "as member" do
+  describe "as member" do
     let(:user) { create(:member) }
 
     it { is_expected.to raise_not_authorized_for(:index        ) }
@@ -25,7 +25,7 @@ RSpec.describe StyleGuidePolicy do
     it { is_expected.to raise_not_authorized_for(:error_page   ) }
   end
 
-  context "as writer" do
+  describe "as writer" do
     let(:user) { create(:writer) }
 
     it { is_expected.to permit_action(:index        ) }
@@ -34,7 +34,7 @@ RSpec.describe StyleGuidePolicy do
     it { is_expected.to permit_action(:error_page   ) }
   end
 
-  context "as editor" do
+  describe "as editor" do
     let(:user) { create(:editor) }
 
     it { is_expected.to permit_action(:index        ) }
@@ -43,7 +43,7 @@ RSpec.describe StyleGuidePolicy do
     it { is_expected.to permit_action(:error_page   ) }
   end
 
-  context "as admin" do
+  describe "as admin" do
     let(:user) { create(:admin) }
 
     it { is_expected.to permit_action(:index        ) }

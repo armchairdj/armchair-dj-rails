@@ -25,12 +25,12 @@
 require "rails_helper"
 
 RSpec.describe Identity, type: :model do
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:real_name).class_name("Creator") }
     it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:real_name) }
@@ -38,7 +38,7 @@ RSpec.describe Identity, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
-    context "custom" do
+    describe "custom" do
       subject { create_minimal_instance }
 
       describe "#real_name_is_primary" do

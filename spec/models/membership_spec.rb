@@ -25,12 +25,12 @@
 require "rails_helper"
 
 RSpec.describe Membership, type: :model do
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:group ).class_name("Creator") }
     it { is_expected.to belong_to(:member).class_name("Creator") }
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:group ) }
@@ -38,7 +38,7 @@ RSpec.describe Membership, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:group_id).scoped_to(:member_id) }
 
-    context "custom" do
+    describe "custom" do
       subject { create_minimal_instance }
 
       describe "#group_is_collective" do

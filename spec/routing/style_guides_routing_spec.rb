@@ -8,7 +8,7 @@ RSpec.describe StyleGuidesController, type: :routing do
       expect(get: "/style_guide").to route_to("style_guides#index")
     end
 
-    context "template" do
+    describe "template" do
       it "#button" do
         expect(get: "/style_guide/button").to route_to("style_guides#show", template: "button")
       end
@@ -50,7 +50,7 @@ RSpec.describe StyleGuidesController, type: :routing do
       end
     end
 
-    context "#flash_message" do
+    describe "#flash_message" do
       it "#alert" do
         expect(get: "/style_guide/flash/alert").to route_to("style_guides#flash_message", flash_type: "alert")
       end
@@ -72,7 +72,7 @@ RSpec.describe StyleGuidesController, type: :routing do
       end
     end
 
-    context "#error_page" do
+    describe "#error_page" do
       it "#bad_request" do
         expect(get: "/style_guide/error/bad_request").to route_to("style_guides#error_page", error_type: "bad_request")
       end

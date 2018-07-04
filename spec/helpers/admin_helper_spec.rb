@@ -7,11 +7,11 @@ RSpec.describe AdminHelper, type: :helper do
     allow(helper).to receive(:current_user).and_return(create(:root))
   end
 
-  context "form methods" do
+  describe "form methods" do
     pending "#admin_submit_button"
   end
 
-  context "formatting methods" do
+  describe "formatting methods" do
     describe "#admin_date" do
       it "formats dates consistently" do
         Timecop.freeze(2050, 3, 3) do
@@ -25,7 +25,7 @@ RSpec.describe AdminHelper, type: :helper do
     pending "#total_count_for"
   end
 
-  context "link methods" do
+  describe "link methods" do
     before do
       allow(helper).to receive(     :polymorphic_path).and_return("path")
       allow(helper).to receive( :new_polymorphic_path).and_return("path")
@@ -95,7 +95,7 @@ RSpec.describe AdminHelper, type: :helper do
     describe "#admin_public_link" do
       subject { helper.admin_public_link(instance) }
 
-      context "creators" do
+      describe "creators" do
         xit "links for viewable" do
           allow(instance).to receive(:viewable?).and_return(true )
 
@@ -111,7 +111,7 @@ RSpec.describe AdminHelper, type: :helper do
     end
   end
 
-  context "markup generators" do
+  describe "markup generators" do
     pending "#admin_header"
     pending "#admin_actions_cell"
     pending "#admin_index_tabs"

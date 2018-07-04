@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_30_234046) do
+ActiveRecord::Schema.define(version: 2018_07_04_193005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2018_06_30_234046) do
     t.bigint "work_id", null: false
     t.bigint "aspect_id", null: false
     t.index ["aspect_id", "work_id"], name: "index_aspects_works_on_aspect_id_and_work_id"
+    t.index ["work_id", "aspect_id"], name: "by_work_and_aspect", unique: true
     t.index ["work_id", "aspect_id"], name: "index_aspects_works_on_work_id_and_aspect_id"
   end
 
@@ -164,6 +165,7 @@ ActiveRecord::Schema.define(version: 2018_06_30_234046) do
   create_table "posts_tags", id: false, force: :cascade do |t|
     t.bigint "post_id", null: false
     t.bigint "tag_id", null: false
+    t.index ["post_id", "tag_id"], name: "by_post_and_tag", unique: true
     t.index ["post_id", "tag_id"], name: "index_posts_tags_on_post_id_and_tag_id"
     t.index ["tag_id", "post_id"], name: "index_posts_tags_on_tag_id_and_post_id"
   end

@@ -12,7 +12,7 @@ RSpec.describe "admin/works/new", type: :view do
     end
   end
 
-  context "initial state" do
+  describe "initial state" do
     before(:each) do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work))

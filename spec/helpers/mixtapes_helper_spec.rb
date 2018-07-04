@@ -21,7 +21,7 @@ RSpec.describe MixtapesHelper, type: :helper do
   end
 
   describe "#link_to_mixtape" do
-    context "published" do
+    describe "published" do
       before(:each) do
         allow(instance).to receive(:published?).and_return(true)
       end
@@ -44,7 +44,7 @@ RSpec.describe MixtapesHelper, type: :helper do
         ) }
       end
 
-      context "admin" do
+      describe "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
         it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",
@@ -54,18 +54,18 @@ RSpec.describe MixtapesHelper, type: :helper do
       end
     end
 
-    context "unpublished" do
+    describe "unpublished" do
       before(:each) do
         allow(instance).to receive(:published?).and_return(false)
       end
 
-      context "public" do
+      describe "public" do
         subject { helper.link_to_mixtape(instance) }
 
         it { is_expected.to eq(nil) }
       end
 
-      context "admin" do
+      describe "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
         it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",

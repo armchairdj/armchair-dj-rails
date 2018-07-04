@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::WorksController, type: :controller do
   let(:work) { create(:minimal_song) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_linkable_controller"
@@ -158,7 +158,7 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

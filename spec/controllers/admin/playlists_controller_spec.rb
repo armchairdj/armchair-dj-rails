@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::PlaylistsController, type: :controller do
   let(:playlist) { create(:minimal_playlist) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_paginatable_controller"
@@ -182,7 +182,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
         allow(playlist).to receive(:reorder_playlistings!).and_call_original
       end
 
-      context "non-xhr" do
+      describe "non-xhr" do
         it "errors" do
           post :reorder_playlistings, params: {
             id: playlist.to_param, playlisting_ids: shuffled
@@ -192,7 +192,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
         end
       end
 
-      context "xhr" do
+      describe "xhr" do
         it "reorders playlistings" do
           post :reorder_playlistings, xhr: true, params: {
             id: playlist.to_param, playlisting_ids: shuffled
@@ -206,7 +206,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

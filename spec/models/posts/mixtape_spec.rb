@@ -3,22 +3,22 @@
 require "rails_helper"
 
 RSpec.describe Mixtape, type: :model do
-  context "concerns" do
+  describe "concerns" do
     specify { expect(described_class.superclass).to eq(Post) }
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let!(      :draft) { create_minimal_instance(:draft    ) }
       let!(  :scheduled) { create_minimal_instance(:scheduled) }
       let!(  :published) { create_minimal_instance(:published) }
       let!(        :ids) { [draft, scheduled, published].map(&:id) }
       let!( :collection) { described_class.where(id: ids) }
-      let!(:eager_loads) { [:links, :author, :tags, :playlist, :playlistings, :works, :creators, :contributors, :aspects] }
+      let!(:eager_loads) { [:links, :author, :tags, :playlist, :playlistings, :works, :creators, :contributions, :aspects, :milestones] }
 
       describe "self#eager" do
         subject { collection.eager }
@@ -43,28 +43,30 @@ RSpec.describe Mixtape, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:playlist) }
 
     it { is_expected.to have_many(:playlistings).through(:playlist) }
     it { is_expected.to have_many(:works       ).through(:playlistings) }
 
-    it { is_expected.to have_many(:creators    ).through(:works) }
-    it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:aspects     ).through(:works) }
+    it { is_expected.to have_many(:creators     ).through(:works) }
+    it { is_expected.to have_many(:contributions).through(:works) }
+    it { is_expected.to have_many(:contributors ).through(:works) }
+    it { is_expected.to have_many(:aspects      ).through(:works) }
+    it { is_expected.to have_many(:milestones   ).through(:works) }
   end
 
-  context "attributes" do
+  describe "attributes" do
     # Nothing so far.
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:playlist) }
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#display_type" do

@@ -8,7 +8,7 @@ RSpec.describe WorksHelper, type: :helper do
       "0" => { creator_id: create(:minimal_creator, name: "Michael Swanwick").id }
     }) }
 
-    context "default" do
+    describe "default" do
       subject { helper.link_to_work(instance) }
 
       it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",
@@ -17,7 +17,7 @@ RSpec.describe WorksHelper, type: :helper do
       ) }
     end
 
-    context "full: false" do
+    describe "full: false" do
       subject { helper.link_to_work(instance, full: false) }
 
       it { is_expected.to have_tag("a[href='/admin/works/#{instance.to_param}']",

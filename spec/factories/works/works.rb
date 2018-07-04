@@ -17,6 +17,12 @@ FactoryBot.define do
       subtitle "Subtitle"
     end
 
+    trait :with_milestone do
+      milestones_attributes { {
+        "0" => attributes_for(:milestone_for_work, year: "1972")
+      } }
+    end
+
     trait :with_credits do
       transient do
         creator_names { [generate(:creator_name)] }
@@ -133,6 +139,7 @@ FactoryBot.define do
     factory :minimal_work_parent do
       with_title
       with_credits
+      with_milestone
     end
 
     factory :complete_work_parent, parent: :minimal_work_parent do

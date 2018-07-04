@@ -3,7 +3,7 @@
 RSpec.shared_examples "an_enumable_model" do |attributes|
   let(:instance) { create_minimal_instance }
 
-  context "class" do
+  describe "class" do
     subject { described_class }
 
     describe "self#human_enum_collection" do
@@ -36,8 +36,10 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
     plural_attr = single_attr.pluralize
     i18n_key    = "activerecord.attributes.#{described_class.model_name.i18n_key}.#{plural_attr}"
 
-    context "i18n for #{single_attr}" do
-      context "singular" do
+    it { is_expected.to define_enum_for(attribute) }
+
+    describe "i18n for #{single_attr}" do
+      describe "singular" do
         described_class.send(plural_attr).keys.each do |val|
           it "has a localized string for #{val}" do
             expect(described_class.send(:"human_#{single_attr}", val)).to_not match(/translation missing/i)
@@ -46,9 +48,9 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
       end
     end
 
-    context "for #{single_attr}" do
-      context "class" do
-        context "basic behavior" do
+    describe "for #{single_attr}" do
+      describe "class" do
+        describe "basic behavior" do
           before(:each) do
             allow(described_class).to receive(plural_attr).and_return({
               "b" => 0,
@@ -101,7 +103,7 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
         end
 
-        context "translations" do
+        describe "translations" do
           specify "are not missing" do
             described_class.send(:"human_#{plural_attr}").each do |translation|
               expect(translation.first).to_not match(/translation missing/)
@@ -110,7 +112,7 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
         end
       end
 
-      context "instance" do
+      describe "instance" do
         describe "#human_#{single_attr}" do
           it "calls class method" do
              allow(described_class).to receive("human_#{single_attr}")

@@ -33,7 +33,7 @@ RSpec.describe "admin/posts/reviews/new", type: :view do
   end
 
   context "with errors" do
-    context "blank form submitted" do
+    describe "blank form submitted" do
       before(:each) do
         @review.valid?
       end

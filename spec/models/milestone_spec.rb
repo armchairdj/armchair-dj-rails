@@ -22,20 +22,20 @@
 require "rails_helper"
 
 RSpec.describe Milestone, type: :model do
-  context "constants" do
+  describe "constants" do
     # Nothing so far.
   end
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_application_record"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let(:remastered) { create(:minimal_milestone, activity: :remastered, year: 2005) }
       let(  :released) { create(:minimal_milestone, activity: :released,   year: 1977) }
       let(  :reissued) { create(:minimal_milestone, activity: :reissued,   year: 2017) }
@@ -58,19 +58,17 @@ RSpec.describe Milestone, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:work) }
   end
 
-  context "attributes" do
-    context "enums" do
-      it { is_expected.to define_enum_for(:activity) }
-
+  describe "attributes" do
+    describe "enums" do
       it_behaves_like "an_enumable_model", [:activity]
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:work) }
@@ -81,11 +79,11 @@ RSpec.describe Milestone, type: :model do
     it { is_expected.to validate_presence_of(:activity) }
   end
 
-  context "hooks" do
+  describe "hooks" do
     # Nothing so far.
   end
 
-  context "instance" do
+  describe "instance" do
     # Nothing so far.
   end
 end

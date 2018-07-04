@@ -10,7 +10,7 @@ RSpec.describe YearnessValidator do
     validates :year, yearness: true
   end)
 
-  context "valid" do
+  describe "valid" do
     context "with a one-digit year" do
       subject { ClassWithYear.new(year: "9") }
 
@@ -48,7 +48,7 @@ RSpec.describe YearnessValidator do
     end
   end
 
-  context "invalid" do
+  describe "invalid" do
     context "with a negative year" do
       subject { ClassWithYear.new(year: "-911") }
 

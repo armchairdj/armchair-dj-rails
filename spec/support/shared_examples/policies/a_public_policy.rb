@@ -20,7 +20,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as member" do
+  describe "as member" do
     let(:user) { create(:member) }
 
     it { is_expected.to permit_action(:index  ) }
@@ -33,7 +33,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as writer" do
+  describe "as writer" do
     let(:user) { create(:writer) }
 
     it { is_expected.to permit_action(:index  ) }
@@ -46,7 +46,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as editor" do
+  describe "as editor" do
     let(:user) { create(:editor) }
 
     it { is_expected.to permit_action(:index  ) }
@@ -59,7 +59,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as admin" do
+  describe "as admin" do
     let(:user) { create(:admin) }
 
     it { is_expected.to permit_action(:index  ) }
@@ -85,7 +85,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "scope" do
+  describe "scope" do
     subject { described_class::Scope.new(user, model_class.all).resolve }
 
     let(:model_class) { record.class }

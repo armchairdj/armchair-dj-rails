@@ -41,14 +41,12 @@
 class Review < Post
 
   #############################################################################
-  # CONCERNS.
+  # CLASS.
   #############################################################################
 
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :eager, -> { includes(:links, :author, :tags, :work, :creators).references(:author) }
+  def self.eager
+    super.includes(:work, :creators, :contributions, :aspects, :milestones)
+  end
 
   #############################################################################
   # ASSOCIATIONS.
@@ -56,9 +54,11 @@ class Review < Post
 
   belongs_to :work
 
-  has_many :creators,     through: :work
-  has_many :contributors, through: :work
-  has_many :aspects,      through: :work
+  has_many :creators,      through: :work
+  has_many :contributions, through: :work
+  has_many :contributors,  through: :work
+  has_many :aspects,       through: :work
+  has_many :milestones,    through: :work
 
   #############################################################################
   # ATTRIBUTES.

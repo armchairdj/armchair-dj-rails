@@ -18,14 +18,14 @@
 require "rails_helper"
 
 RSpec.describe Role, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let!(    :first) { create(:minimal_role, name: "First" ) }
       let!(   :middle) { create(:minimal_role, name: "Middle") }
       let!(     :last) { create(:minimal_role, name: "Last"  ) }
@@ -50,13 +50,13 @@ RSpec.describe Role, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_many(:contributions) }
 
     it { is_expected.to have_many(:works).through(:contributions) }
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:work_type) }
@@ -66,7 +66,7 @@ RSpec.describe Role, type: :model do
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:work_type) }
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#alpha_parts" do

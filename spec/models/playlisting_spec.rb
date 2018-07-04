@@ -18,19 +18,19 @@
 require "rails_helper"
 
 RSpec.describe Playlisting, type: :model do
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_acts_as_list_model", 1, :playlist do
       let(:one) { create(:complete_playlist).playlistings }
       let(:two) { create(:complete_playlist).playlistings }
     end
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
       let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
       let(       :ids) { Playlisting.where(playlist_id: [playlist_1.id, playlist_2.id]).map(&:id).shuffle }
@@ -70,23 +70,23 @@ RSpec.describe Playlisting, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:playlist) }
     it { is_expected.to belong_to(:work    ) }
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:playlist) }
     it { is_expected.to validate_presence_of(:work) }
   end
 
-  context "hooks" do
+  describe "hooks" do
     # Nothing so far.
   end
 
-  context "instance" do
+  describe "instance" do
     # Nothing so far.
   end
 end

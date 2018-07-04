@@ -3,14 +3,14 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_authorable_model" do
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:author) }
   end
 
-  context "validations" do
+  describe "validations" do
     it { is_expected.to validate_presence_of(:author) }
 
-    context "custom" do
+    describe "custom" do
       describe "#author_can_write" do
         subject { build_minimal_instance }
 

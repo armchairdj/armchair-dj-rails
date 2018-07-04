@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_alphabetizable_model" do
-  context "included" do
-    context "scopes" do
+  describe "included" do
+    describe "scopes" do
       let!(:alphas) { ["AA", "A", "Z D C", "0 723", "!", "a", "Z a", "0 Alright", "0723"] }
 
       let!(:collection) do
@@ -28,7 +28,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
         expect(actual).to eq(expected)
       end
 
-      context "hooks" do
+      describe "hooks" do
         subject { build_minimal_instance }
 
         describe "before_save" do
@@ -91,7 +91,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
         end
       end
 
-      context "validations" do
+      describe "validations" do
         subject { create_minimal_instance }
 
         describe "#ensure_alpha" do
@@ -111,7 +111,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
     end
   end
 
-  context "instance" do
+  describe "instance" do
     subject { build_minimal_instance }
 
     it { is_expected.to respond_to(:alpha_parts) }

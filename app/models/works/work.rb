@@ -44,17 +44,17 @@ class Work < ApplicationRecord
   def self.type_options
     load_descendants
 
-    descendants.map { |d| [d.true_human_model_name, d.true_model_name.name] }.sort_by(&:last)
+    classes = descendants.reject { |x| x == Medium }
+
+    classes.map { |x| [x.true_human_model_name, x.true_model_name.name] }.sort_by(&:last)
   end
 
   def self.valid_types
-    load_descendants
-
-    descendants.map { |d| d.true_model_name.name }.sort
+    type_options.map(&:last)
   end
 
   def self.load_descendants
-    # return if descendants.any?
+    return unless Rails.env.development? || Rails.env.test?
 
     Dir["#{Rails.root}/app/models/works/*.rb"].each do |file|
       next if File.basename(file, ".rb") == File.basename(__FILE__, ".rb")
@@ -78,7 +78,13 @@ class Work < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :aspects
+  has_and_belongs_to_many :aspects, -> { distinct } do
+    def << (aspect)
+      aspect -= self if aspect.respond_to?(:to_a)
+
+      super aspect unless include?(aspect)
+    end
+  end
 
   has_many :milestones
 
@@ -123,6 +129,10 @@ class Work < ApplicationRecord
 
   def prepare_milestones
     MAX_MILESTONES_AT_ONCE.times { self.milestones.build }
+
+    if milestones.first.new_record?
+      milestones.first.activity = :released
+    end
   end
 
   #############################################################################
@@ -136,6 +146,17 @@ class Work < ApplicationRecord
 
   validate_nested_uniqueness_of :credits,       uniq_attr: :creator_id
   validate_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
+  validate_nested_uniqueness_of :milestones,    uniq_attr: :activity
+
+  validate { has_released_milestone }
+
+  def has_released_milestone
+    return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
+
+    self.errors.add(:milestones, :blank)
+  end
+
+  private :has_released_milestone
 
   #############################################################################
   # HOOKS.

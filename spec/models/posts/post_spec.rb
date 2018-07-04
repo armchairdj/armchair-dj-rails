@@ -5,27 +5,27 @@ require "rails_helper"
 RSpec.describe Post, type: :model do
   subject { create_minimal_instance }
 
-  context "concerns" do
+  describe "concerns" do
+    it_behaves_like "an_application_record"
+
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "an_authorable_model"
-
-    it_behaves_like "an_application_record"
 
     it_behaves_like "a_linkable_model"
 
     it_behaves_like "a_sluggable_model"
   end
 
-  context "class" do
+  describe "class" do
     describe "self#publish_scheduled" do
       let!(:current) { create_minimal_instance(:scheduled, publish_on: 1.day.from_now) }
       let!( :future) { create_minimal_instance(:scheduled) }
 
-      context "scope :scheduled_ready" do
+      describe "scope :scheduled_due" do
         it "includes only scheduled that have come due" do
           Timecop.freeze(Date.today + 3) do
-            expect(described_class.scheduled_ready).to match_array([current])
+            expect(described_class.scheduled_due).to match_array([current])
           end
         end
       end
@@ -66,7 +66,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  context "scope-related" do
+  describe "scope-related" do
     let!(     :draft) { create_minimal_instance(:draft    ) }
     let!( :scheduled) { create_minimal_instance(:scheduled) }
     let!( :published) { create_minimal_instance(:published) }
@@ -81,7 +81,7 @@ RSpec.describe Post, type: :model do
       end
     end
 
-    context "for status" do
+    describe "for status" do
       describe "self#draft" do
         subject { collection.draft }
 
@@ -125,7 +125,7 @@ RSpec.describe Post, type: :model do
           specify { expect(published.published?).to eq(true ) }
         end
 
-        describe "#unpublished" do
+        describe "#unpublished?" do
           specify { expect(    draft.unpublished?).to eq(true ) }
           specify { expect(scheduled.unpublished?).to eq(true ) }
           specify { expect(published.unpublished?).to eq(false) }
@@ -134,27 +134,20 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_and_belong_to_many(:tags) }
   end
 
-  context "attributes" do
-    context "enums" do
+  describe "attributes" do
+    describe "enums" do
       describe "status" do
-        it { is_expected.to define_enum_for(:status) }
-
         it_behaves_like "an_enumable_model", [:status]
       end
     end
   end
 
-  context "validations" do
-    describe "summary" do
-      it { is_expected.to validate_length_of(:summary).is_at_least(40).is_at_most(320) }
-      it { is_expected.to allow_value("", nil).for(:summary) }
-    end
-
-    describe "validates type presence" do
+  describe "validations" do
+    describe "type" do
       subject { described_class.new }
 
       before(:each) { subject.valid? }
@@ -162,8 +155,21 @@ RSpec.describe Post, type: :model do
       it { is_expected.to have_error(type: :blank) }
     end
 
-    context "conditional" do
-      context "draft" do
+    describe "status" do
+      let(:instance) { described_class.new }
+
+      subject { instance.status }
+
+      it { is_expected.to_not eq(nil) }
+    end
+
+    describe "summary" do
+      it { is_expected.to validate_length_of(:summary).is_at_least(40).is_at_most(320) }
+      it { is_expected.to allow_value("", nil).for(:summary) }
+    end
+
+    describe "conditional" do
+      describe "draft" do
         subject { create_minimal_instance(:draft) }
 
         it { is_expected.to_not validate_presence_of(:body        ) }
@@ -171,23 +177,21 @@ RSpec.describe Post, type: :model do
         it { is_expected.to_not validate_presence_of(:publish_on  ) }
       end
 
-      context "scheduled" do
+      describe "scheduled" do
         subject { create_minimal_instance(:scheduled) }
 
         it { is_expected.to     validate_presence_of(:body        ) }
         it { is_expected.to_not validate_presence_of(:published_at) }
         it { is_expected.to     validate_presence_of(:publish_on  ) }
 
-        specify "publish_on is future" do
-          is_expected.to be_valid
+        describe "publish_on is future" do
+          before(:each) { subject.publish_on = Date.today; subject.valid? }
 
-          subject.publish_on = Date.today
-
-          is_expected.to_not be_valid
+          it { is_expected.to have_error(:publish_on, :after) }
         end
       end
 
-      context "published" do
+      describe "published" do
         subject { create_minimal_instance(:published) }
 
         it { is_expected.to     validate_presence_of(:body        ) }
@@ -197,7 +201,7 @@ RSpec.describe Post, type: :model do
     end
   end
 
-  context "aasm" do
+  describe "aasm" do
     let!(    :draft) { create_minimal_instance(:draft    ) }
     let!(:scheduled) { create_minimal_instance(:scheduled) }
     let!(:published) { create_minimal_instance(:published) }
@@ -464,7 +468,7 @@ RSpec.describe Post, type: :model do
           allow(subject).to receive(:publish!).and_call_original
         end
 
-        context "valid" do
+        describe "valid" do
           let(:params) { { "body" => "New body" } }
 
           it "publishes" do
@@ -489,7 +493,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        context "invalid" do
+        describe "invalid" do
           let(:params) { { "body" => "" } }
 
           before(:each) do
@@ -532,7 +536,7 @@ RSpec.describe Post, type: :model do
           allow(subject).to receive(:unpublish!).and_call_original
         end
 
-        context "valid" do
+        describe "valid" do
           let(:params) { { "body" => "New body" } }
 
           it "unpublishes, updates, and returns true" do
@@ -549,7 +553,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        context "invalid" do
+        describe "invalid" do
           let(:params) { { "author_id" => nil, "body" => "" } }
 
           it "unpublishes, does not update and returns false" do
@@ -574,7 +578,7 @@ RSpec.describe Post, type: :model do
           allow(subject).to receive(:schedule!).and_call_original
         end
 
-        context "valid" do
+        describe "valid" do
           let(:params) { { "body" => "New body", "publish_on" => 3.weeks.from_now } }
 
           it "updates, schedules and returns true" do
@@ -591,7 +595,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        context "invalid" do
+        describe "invalid" do
           let(:params) { { "author_id" => nil, "body" => "", "publish_on" => 3.weeks.from_now } }
 
           it "does not update, does not attempt schedule and returns false" do
@@ -624,7 +628,7 @@ RSpec.describe Post, type: :model do
           allow(subject).to receive(:unschedule!).and_call_original
         end
 
-        context "valid" do
+        describe "valid" do
           let(:params) { { "body" => "" } }
 
           it "unschedules, updates, and returns true" do
@@ -639,7 +643,7 @@ RSpec.describe Post, type: :model do
           end
         end
 
-        context "invalid" do
+        describe "invalid" do
           let(:params) { { "author_id" => nil, "body" => "" } }
 
           it "unschedules, fails update and returns false" do

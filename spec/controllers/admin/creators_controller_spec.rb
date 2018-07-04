@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::CreatorsController, type: :controller do
   let(:creator) { create(:minimal_creator) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_linkable_controller"
@@ -276,7 +276,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
         ).with_flash(:success, "admin.flash.creators.success.destroy")
       end
 
-      describe "with related creators" do
+      context "with related creators" do
         it "destroys the requested creator but not real names" do
           creator = create(:minimal_creator, :with_new_real_name)
 
@@ -312,7 +312,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

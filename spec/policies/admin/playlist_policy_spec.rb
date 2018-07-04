@@ -16,25 +16,25 @@ RSpec.describe Admin::PlaylistPolicy do
       it { is_expected.to raise_not_authorized_for(:reorder_playlistings) }
     end
 
-    context "as member" do
+    describe "as member" do
       let(:user) { create(:member) }
 
       it { is_expected.to raise_not_authorized_for(:reorder_playlistings) }
     end
 
-    context "as writer" do
+    describe "as writer" do
       let(:user) { create(:writer) }
 
       it { is_expected.to permit_action(:reorder_playlistings) }
     end
 
-    context "as editor" do
+    describe "as editor" do
       let(:user) { create(:editor) }
 
       it { is_expected.to permit_action(:reorder_playlistings) }
     end
 
-    context "as admin" do
+    describe "as admin" do
       let(:user) { create(:editor) }
 
       it { is_expected.to permit_action(:reorder_playlistings) }

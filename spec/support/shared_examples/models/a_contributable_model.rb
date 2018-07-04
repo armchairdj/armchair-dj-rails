@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_contributable_model" do
-  context "included" do
-    context "scope-related" do
+  describe "included" do
+    describe "scope-related" do
       let!(:with_published) { create_minimal_instance }
       let!(:with_scheduled) { create_minimal_instance }
       let!(:with_draft    ) { create_minimal_instance }
@@ -31,12 +31,12 @@ RSpec.shared_examples "a_contributable_model" do
       end
     end
 
-    context "associations" do
+    describe "associations" do
       it { is_expected.to belong_to(:creator) }
       it { is_expected.to belong_to(:work   ) }
     end
 
-    context "validations" do
+    describe "validations" do
       subject { create_minimal_instance }
 
       it { is_expected.to validate_presence_of(:creator) }
@@ -44,7 +44,7 @@ RSpec.shared_examples "a_contributable_model" do
     end
   end
 
-  context "instance" do
+  describe "instance" do
     # Nothing so far.
   end
 end

@@ -10,22 +10,22 @@ RSpec.describe UrlnessValidator do
     validates :url, urlness: true
   end)
 
-  context "valid" do
-    describe "with a valid http url" do
+  describe "valid" do
+    context "with a valid http url" do
       subject { ClassWithUrl.new(url: "http://www.example.com") }
 
       it { is_expected.to be_valid }
     end
 
-    describe "with a valid https url" do
+    context "with a valid https url" do
       subject { ClassWithUrl.new(url: "https://www.example.com") }
 
       it { is_expected.to be_valid }
     end
   end
 
-  context "invalid" do
-    describe "with a non-URI" do
+  describe "invalid" do
+    context "with a non-URI" do
       subject { ClassWithUrl.new(url: "not a url") }
 
       it { is_expected.to_not  be_valid }
@@ -37,7 +37,7 @@ RSpec.describe UrlnessValidator do
       end
     end
 
-    describe "with a non-URL URI" do
+    context "with a non-URL URI" do
       subject { ClassWithUrl.new(url: "protocol://foo/bar/bat") }
 
       it { is_expected.to_not  be_valid }

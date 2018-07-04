@@ -3,14 +3,14 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_medium" do
-  context "class" do
+  describe "class" do
     pending "#model_name"
     pending "#true_model_name"
     pending "#true_human_model_name"
     pending "#facets"
   end
 
-  context "instance" do
+  describe "instance" do
     pending "#true_model_name"
     pending "#true_human_model_name"
 

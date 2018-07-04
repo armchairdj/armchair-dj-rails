@@ -5,7 +5,7 @@ require "rails_helper"
 include UsersHelper
 
 RSpec.describe PostsHelper, type: :helper do
-  context "display methods" do
+  describe "display methods" do
     describe "#formatted_post_body" do
       subject { create(:minimal_article) }
 
@@ -58,19 +58,19 @@ RSpec.describe PostsHelper, type: :helper do
     describe "#truncated_title" do
       let(:title) { "abcdefghijklmnopqrstuvwxyz" }
 
-      context "will truncate" do
+      describe "will truncate" do
         subject { helper.truncated_title(title, length: 20) }
 
         it { is_expected.to eq("abcdefghijklmnopqrs…") }
       end
 
-      context "will truncate but too short" do
+      describe "will truncate but too short" do
         subject { helper.truncated_title(title, length: 30) }
 
         it { is_expected.to eq(title) }
       end
 
-      context "will not truncate" do
+      describe "will not truncate" do
         subject { helper.truncated_title(title) }
 
         it { is_expected.to eq(title) }
@@ -78,7 +78,7 @@ RSpec.describe PostsHelper, type: :helper do
     end
   end
 
-  context "icon methods" do
+  describe "icon methods" do
     describe "#post_status_icon" do
       before(:each) do
         allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-locked.svg",   anything).and_return("locked")
@@ -106,25 +106,25 @@ RSpec.describe PostsHelper, type: :helper do
     end
   end
 
-  context "link methods" do
+  describe "link methods" do
     describe "#link_to_post_author" do
       let(:author) { create(:writer, username: "armchairdj") }
 
       subject { link_to_post_author(instance) }
 
-      context "published" do
+      describe "published" do
         let(:instance) { create(:minimal_article, :published, author: author) }
 
         it { is_expected.to eq('<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>') }
       end
 
-      context "scheduled" do
+      describe "scheduled" do
         let(:instance) { create(:minimal_article, :scheduled, author: author) }
 
         it { is_expected.to eq(nil) }
       end
 
-      context "draft" do
+      describe "draft" do
         let(:instance) { create(:minimal_article, :draft, author: author) }
 
         it { is_expected.to eq(nil) }

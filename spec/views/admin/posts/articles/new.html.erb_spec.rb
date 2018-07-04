@@ -27,7 +27,7 @@ RSpec.describe "admin/posts/articles/new", type: :view do
   end
 
   context "with errors" do
-    context "blank form submitted" do
+    describe "blank form submitted" do
       before(:each) do
         @article.valid?
       end

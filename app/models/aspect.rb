@@ -44,7 +44,7 @@ class Aspect < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :works
+  has_and_belongs_to_many :works, -> { distinct }
 
   has_many :creators,     -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works

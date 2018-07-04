@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.shared_examples "a_sluggable_model" do
   let(:instance) { create_minimal_instance }
 
-  context "included" do
+  describe "included" do
     pending "includes friendly_id"
     pending "#normalize_friendly_id"
     pending "#slug_candidates"
@@ -16,13 +16,13 @@ RSpec.shared_examples "a_sluggable_model" do
 
     describe "generates new slug" do
       describe "#clear_slug?" do
-        context "false" do
+        describe "false" do
           subject { build_minimal_instance.clear_slug? }
 
           it { is_expected.to eq(false) }
         end
 
-        context "true" do
+        describe "true" do
           subject { build_minimal_instance(clear_slug: true).clear_slug? }
 
           it { is_expected.to eq(true) }
@@ -34,7 +34,7 @@ RSpec.shared_examples "a_sluggable_model" do
           allow(subject).to receive(:slug_candidates).and_call_original
         end
 
-        context "false" do
+        describe "false" do
           subject { create_minimal_instance }
 
           before(:each) { expect(subject).to_not receive(:slug_candidates) }
@@ -42,7 +42,7 @@ RSpec.shared_examples "a_sluggable_model" do
           it { subject.save }
         end
 
-        context "true" do
+        describe "true" do
           subject do
             instance            = create_minimal_instance
             instance.clear_slug = "1"

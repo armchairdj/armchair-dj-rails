@@ -6,12 +6,12 @@ RSpec.describe UsersHelper, type: :helper do
   describe "#link_to_user" do
     let(:instance) { create(:minimal_user, username: "ArmchairDJ") }
 
-    context "published" do
+    describe "published" do
       before(:each) do
         allow(instance).to receive(:published?).and_return(true)
       end
 
-      context "public" do
+      describe "public" do
         subject { helper.link_to_user(instance, class: "test") }
 
         it { is_expected.to have_tag("a[href='/profile/#{instance.to_param}'][class='test']",
@@ -20,7 +20,7 @@ RSpec.describe UsersHelper, type: :helper do
         ) }
       end
 
-      context "admin" do
+      describe "admin" do
         subject { helper.link_to_user(instance, admin: true) }
 
         it { is_expected.to have_tag("a[href='/admin/users/#{instance.to_param}']",
@@ -30,18 +30,18 @@ RSpec.describe UsersHelper, type: :helper do
       end
     end
 
-    context "non-published" do
+    describe "non-published" do
       before(:each) do
         allow(instance).to receive(:published?).and_return(false)
       end
 
-      context "public" do
+      describe "public" do
         subject { helper.link_to_user(instance) }
 
         it { is_expected.to eq(nil) }
       end
 
-      context "admin" do
+      describe "admin" do
         subject { helper.link_to_user(instance, admin: true) }
 
         it { is_expected.to have_tag("a[href='/admin/users/#{instance.to_param}']",

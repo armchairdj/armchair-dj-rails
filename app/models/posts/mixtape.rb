@@ -41,14 +41,12 @@
 class Mixtape < Post
 
   #############################################################################
-  # CONCERNS.
+  # CLASS.
   #############################################################################
 
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :eager, -> { includes(:links, :author, :tags, :playlist, :playlistings, :works, :creators, :contributors, :aspects).references(:author) }
+  def self.eager
+    super.includes(:playlist, :playlistings, :works, :creators, :contributions, :aspects, :milestones)
+  end
 
   #############################################################################
   # ASSOCIATIONS.
@@ -60,8 +58,10 @@ class Mixtape < Post
   has_many :works,        through: :playlistings
 
   has_many :creators,      through: :works
+  has_many :contributions, through: :works
   has_many :contributors,  through: :works
   has_many :aspects,       through: :works
+  has_many :milestones,    through: :works
 
   #############################################################################
   # ATTRIBUTES.

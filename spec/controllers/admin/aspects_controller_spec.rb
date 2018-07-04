@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::AspectsController, type: :controller do
   let(:aspect) { create(:minimal_aspect) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_paginatable_controller"
@@ -136,7 +136,7 @@ RSpec.describe Admin::AspectsController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

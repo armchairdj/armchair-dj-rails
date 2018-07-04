@@ -16,18 +16,18 @@
 require "rails_helper"
 
 RSpec.describe Tag, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let(      :draft) { create(:minimal_tag,                       name: "D") }
       let(:published_1) { create(:minimal_tag, :with_published_post, name: "Z") }
       let(:published_2) { create(:minimal_tag, :with_published_post, name: "A") }
@@ -50,17 +50,17 @@ RSpec.describe Tag, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_and_belong_to_many(:posts) }
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:name) }
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#alpha_parts" do

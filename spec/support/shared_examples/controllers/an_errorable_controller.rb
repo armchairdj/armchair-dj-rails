@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "an_errorable_controller" do
-  context "protected" do
+  describe "protected" do
     before(:each) do
       allow(Rails.logger).to receive(:error)
     end
@@ -19,8 +19,8 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "behavior" do
-        context "html" do
+      describe "behavior" do
+        describe "html" do
           it "sets session variable" do
             expect(controller).to receive(:set_user_return_to)
 
@@ -34,7 +34,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "xhr" do
+        describe "xhr" do
           it "does not session variable" do
             expect(controller).to_not receive(:set_user_return_to)
 
@@ -49,7 +49,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "json" do
+        describe "json" do
           before(:each) do
             request.headers.merge! json_headers
           end
@@ -69,7 +69,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "rescue_from" do
+      describe "rescue_from" do
         before(:each) do
           allow(controller).to receive(:handle_403_recoverable)
           expect(controller).to receive(:handle_403_recoverable)
@@ -90,12 +90,12 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "behavior" do
+      describe "behavior" do
         before(:each) do
           expect(Rails.logger).to receive(:error)
         end
 
-        context "html" do
+        describe "html" do
           it "renders error page" do
             get :index
 
@@ -103,7 +103,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "xhr" do
+        describe "xhr" do
           it "renders json" do
             get :index, { xhr: true }
 
@@ -112,7 +112,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "json" do
+        describe "json" do
           before(:each) do
             request.headers.merge! json_headers
           end
@@ -126,7 +126,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "rescue_from" do
+      describe "rescue_from" do
         before(:each) do
           allow(controller).to receive(:handle_403)
           expect(controller).to receive(:handle_403)
@@ -147,12 +147,12 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "behavior" do
+      describe "behavior" do
         before(:each) do
           expect(Rails.logger).to receive(:error)
         end
 
-        context "html" do
+        describe "html" do
           it "renders error page" do
             get :index
 
@@ -160,7 +160,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "xhr" do
+        describe "xhr" do
           it "renders json" do
             get :index, { xhr: true }
 
@@ -169,7 +169,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "json" do
+        describe "json" do
           before(:each) do
             request.headers.merge! json_headers
           end
@@ -183,7 +183,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "rescue_from" do
+      describe "rescue_from" do
         before(:each) do
           allow(controller).to receive(:handle_404)
           expect(controller).to receive(:handle_404)
@@ -240,12 +240,12 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "behavior" do
+      describe "behavior" do
         before(:each) do
           expect(Rails.logger).to receive(:error)
         end
 
-        context "html" do
+        describe "html" do
           it "renders error page" do
             get :index
 
@@ -253,7 +253,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "xhr" do
+        describe "xhr" do
           it "renders json" do
             get :index, { xhr: true }
 
@@ -262,7 +262,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "json" do
+        describe "json" do
           before(:each) do
             request.headers.merge! json_headers
           end
@@ -276,7 +276,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "rescue_from" do
+      describe "rescue_from" do
         before(:each) do
           allow(controller).to receive(:handle_422)
           expect(controller).to receive(:handle_422)
@@ -299,12 +299,12 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "behavior" do
+      describe "behavior" do
         before(:each) do
           expect(Rails.logger).to receive(:error)
         end
 
-        context "html" do
+        describe "html" do
           it "renders error page" do
             get :index
 
@@ -312,7 +312,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "xhr" do
+        describe "xhr" do
           it "renders json" do
             get :index, { xhr: true }
 
@@ -321,7 +321,7 @@ RSpec.shared_examples "an_errorable_controller" do
           end
         end
 
-        context "json" do
+        describe "json" do
           before(:each) do
             request.headers.merge! json_headers
           end
@@ -335,7 +335,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
       end
 
-      context "rescue_from" do
+      describe "rescue_from" do
         before(:each) do
           allow(controller).to  receive(:handle_500)
           expect(controller).to receive(:handle_500)
@@ -350,7 +350,7 @@ RSpec.shared_examples "an_errorable_controller" do
     end
   end
 
-  context "private" do
+  describe "private" do
     describe "#set_user_return_to" do
       it "sets session variable on get" do
         allow(request).to receive(:url).and_return("remembered")

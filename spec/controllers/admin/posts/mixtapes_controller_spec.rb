@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::Posts::MixtapesController, type: :controller do
   let(:mixtape) { create_minimal_instance(:draft) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_linkable_controller"
@@ -124,7 +124,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
       let(    :update_params) { { "body" => "New body.", "playlist_id" => create(:minimal_playlist).id } }
       let(:bad_update_params) { { "body" => ""         , "playlist_id" => ""                       } }
 
-      context "draft" do
+      describe "draft" do
         context "with valid params" do
           before(:each) do
             put :update, params: { id: mixtape.to_param, mixtape: update_params }
@@ -147,7 +147,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
         end
       end
 
-      context "publishing" do
+      describe "publishing" do
         context "with valid params" do
           before(:each) do
             put :update, params: { step: "publish", id: mixtape.to_param, mixtape: update_params }
@@ -200,7 +200,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
         end
       end
 
-      context "unpublishing" do
+      describe "unpublishing" do
         let(:mixtape) { create(:minimal_mixtape, :published) }
 
         context "with valid params" do
@@ -234,7 +234,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
         end
       end
 
-      context "scheduling" do
+      describe "scheduling" do
         let(:mixtape) { create(:minimal_mixtape, :draft) }
 
         context "with valid params" do
@@ -289,7 +289,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
         end
       end
 
-      context "unscheduling" do
+      describe "unscheduling" do
         let(:mixtape) { create(:minimal_mixtape, :scheduled) }
 
         context "with valid params" do
@@ -323,7 +323,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
         end
       end
 
-      context "replacing slug" do
+      describe "replacing slug" do
         before(:each) { mixtape.update_column(:slug, "old") }
 
         let(:params) { { "clear_slug" => "1" } }
@@ -355,7 +355,7 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_acts_as_list_model" do |top_of_list, scope|
-  context "configuration" do
+  describe "configuration" do
     # :one and :two defined by caller as scoped acts_as_list_collections
 
     it "respects scope" do
@@ -17,13 +17,13 @@ RSpec.shared_examples "an_acts_as_list_model" do |top_of_list, scope|
     end
   end
 
-  context "class" do
+  describe "class" do
     subject { described_class }
 
     it { is_expected.to respond_to(:acts_as_list_no_update) }
   end
 
-  context "instance" do
+  describe "instance" do
     subject { create_minimal_instance }
 
     it { is_expected.to respond_to(:insert_at) }

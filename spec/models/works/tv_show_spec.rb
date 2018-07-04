@@ -1,23 +1,23 @@
 require "rails_helper"
 
 RSpec.describe TvShow, type: :model do
-  context "constants" do
+  describe "constants" do
     # Nothing so far.
   end
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "a_medium"
   end
 
-  context "STI" do
-    context "class" do
+  describe "STI" do
+    describe "class" do
       specify { expect(described_class.superclass           ).to eq(Medium) }
       specify { expect(described_class.model_name.name      ).to eq("Work") }
       specify { expect(described_class.true_model_name.name ).to eq("TvShow") }
       specify { expect(described_class.true_human_model_name).to eq("TV Show") }
     end
 
-    context "instance" do
+    describe "instance" do
       let(:instance) { create_minimal_instance }
 
       specify { expect(instance.model_name.name      ).to eq("Work") }
@@ -27,49 +27,49 @@ RSpec.describe TvShow, type: :model do
     end
   end
 
-  context "class" do
+  describe "class" do
     pending "self#facets"
   end
 
-  context "scope-related" do
+  describe "scope-related" do
     # Nothing so far.
   end
 
-  context "associations" do
+  describe "associations" do
     # Nothing so far.
   end
 
-  context "attributes" do
-    context "nested" do
+  describe "attributes" do
+    describe "nested" do
       # Nothing so far.
     end
 
-    context "enums" do
+    describe "enums" do
       # Nothing so far.
     end
   end
 
-  context "validations" do
+  describe "validations" do
     # Nothing so far.
 
-    context "conditional" do
+    describe "conditional" do
       # Nothing so far.
     end
 
-    context "custom" do
+    describe "custom" do
       # Nothing so far.
     end
   end
 
-  context "hooks" do
+  describe "hooks" do
     # Nothing so far.
 
-    context "callbacks" do
+    describe "callbacks" do
       # Nothing so far.
     end
   end
 
-  context "instance" do
+  describe "instance" do
     # Nothing so far.
 
     describe "private" do

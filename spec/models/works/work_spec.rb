@@ -3,32 +3,93 @@
 require "rails_helper"
 
 RSpec.describe Work, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
   end
 
-  context "class" do
+  describe "class" do
     describe "self#grouped_options" do
-      pending "works"
+      let( :song_1) { create(:minimal_song, creator_names: ["Wilco"]) }
+      let( :song_2) { create(:minimal_song, creator_names: ["Annie"]) }
+      let(:tv_show) { create(:minimal_tv_show         ) }
+      let(:podcast) { create(:minimal_podcast         ) }
+
+      let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
+
+      subject { described_class.where(id: ids).grouped_options }
+
+      it "groups by type and alphabetizes" do
+        is_expected.to eq([
+          [ "Podcast", [podcast       ] ],
+          [ "Song",    [song_2, song_1] ],
+          [ "TV Show", [tv_show       ] ],
+        ])
+      end
     end
 
     describe "self#type_options" do
-      pending "works"
+      subject { described_class.type_options }
+
+      let(:expected) do
+        [
+          ["Album",         "Album"       ],
+          ["Book",          "Book"        ],
+          ["Comic Book",    "ComicBook"   ],
+          ["Graphic Novel", "GraphicNovel"],
+          ["Hardware",      "Hardware"    ],
+          ["Movie",         "Movie"       ],
+          ["Podcast",       "Podcast"     ],
+          ["Product",       "Product"     ],
+          ["Publication",   "Publication" ],
+          ["Radio Show",    "RadioShow"   ],
+          ["Software",      "Software"    ],
+          ["Song",          "Song"        ],
+          ["TV Episode",    "TvEpisode"   ],
+          ["TV Season",     "TvSeason"    ],
+          ["TV Show",       "TvShow"      ],
+          ["Video Game",    "VideoGame"   ],
+        ]
+      end
+
+      it { is_expected.to eq(expected) }
     end
 
     describe "self#valid_types" do
-      pending "works"
+      subject { described_class.valid_types }
+
+      let(:expected) do
+        [
+          "Album",
+          "Book",
+          "ComicBook",
+          "GraphicNovel",
+          "Hardware",
+          "Movie",
+          "Podcast",
+          "Product",
+          "Publication",
+          "RadioShow",
+          "Software",
+          "Song",
+          "TvEpisode",
+          "TvSeason",
+          "TvShow",
+          "VideoGame",
+        ]
+      end
+
+      it { is_expected.to eq(expected) }
     end
 
     describe "self#load_descendants" do
-      pending "works"
+      pending "requires subclass files in development mode only"
     end
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let(      :draft) { create_minimal_instance(                      title: "D", creator_names: ["Kate Bush"  ]) }
       let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", creator_names: ["Prince"     ]) }
       let(:published_2) { create_minimal_instance(:with_published_post, title: "A", creator_names: ["David Bowie"]) }
@@ -53,27 +114,27 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_and_belong_to_many(:aspects) }
 
     it { is_expected.to have_many(:milestones) }
 
-    it { is_expected.to have_many(:credits      ) }
-    it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:credits) }
+    it { is_expected.to have_many(:creators).through(:credits) }
 
-    it { is_expected.to have_many(:creators    ).through(:credits) }
+    it { is_expected.to have_many(:contributions) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
 
     it { is_expected.to have_many(:reviews) }
 
     it { is_expected.to have_many(:playlistings) }
-    it { is_expected.to have_many(:playlists   ).through(:playlistings) }
-    it { is_expected.to have_many(:mixtapes    ).through(:playlists) }
+    it { is_expected.to have_many(:playlists).through(:playlistings) }
+    it { is_expected.to have_many(:mixtapes).through(:playlists) }
   end
 
-  context "attributes" do
-    context "nested" do
-      context "credits" do
+  describe "attributes" do
+    describe "nested" do
+      describe "credits" do
         it { is_expected.to accept_nested_attributes_for(:credits).allow_destroy(true) }
 
         describe "reject_if" do
@@ -90,33 +151,25 @@ RSpec.describe Work, type: :model do
         end
 
         describe "#prepare_credits" do
-          context "new" do
-            subject { described_class.new }
+          subject { instance.credits }
 
-            it "builds 3" do
-              expect(subject.credits).to have(0).items
+          before(:each) { instance.prepare_credits }
 
-              subject.prepare_credits
+          describe "new instance" do
+            let(:instance) { described_class.new }
 
-              expect(subject.credits).to have(3).items
-            end
+            it { is_expected.to have(3).items }
           end
 
-          context "saved" do
-            subject { create(:carl_craig_and_green_velvet_unity) }
+          describe "saved instance" do
+            let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
-            it "builds 3 more" do
-              expect(subject.credits).to have(2).items
-
-              subject.prepare_credits
-
-              expect(subject.credits).to have(5).items
-            end
+            it { is_expected.to have(5).items }
           end
         end
       end
 
-      context "contributions" do
+      describe "contributions" do
         it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
@@ -135,40 +188,71 @@ RSpec.describe Work, type: :model do
         end
 
         describe "#prepare_contributions" do
-          it "new instance" do
-            instance = described_class.new
+          subject { instance.contributions }
 
-            expect(instance.contributions).to have(0).items
+          before(:each) { instance.prepare_contributions }
 
-            instance.prepare_contributions
+          describe "new instance" do
+            let(:instance) { described_class.new }
 
-            expect(instance.contributions).to have(10).items
+            it { is_expected.to have(10).items }
           end
 
-          it "saved instance" do
-            instance = create(:global_communications_76_14)
+          describe "saved instance" do
+            let(:instance) { create(:global_communications_76_14) }
 
-            expect(instance.contributions).to have(2).items
-
-            instance.prepare_contributions
-
-            expect(instance.contributions).to have(12).items
+            it { is_expected.to have(12).items }
           end
         end
       end
 
-      pending "milestones"
+      describe "milestones" do
+        it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
+
+        describe "reject_if" do
+          subject do
+            build(:minimal_song, milestones_attributes: {
+              "0" => attributes_for(:milestone_for_work, year: "1981"),
+              "1" => attributes_for(:milestone_for_work, year: ""    )
+            })
+          end
+
+          specify { expect { subject.save }.to change { Milestone.count }.by(1) }
+
+          specify { expect(subject.milestones).to have(1).items }
+        end
+
+        describe "#prepare_milestones" do
+          subject { instance.milestones }
+
+          before(:each) { instance.prepare_milestones }
+
+          describe "new instance" do
+            let(:instance) { described_class.new }
+
+            it { is_expected.to have(5).items }
+
+            specify { expect(subject.map(&:activity)).to eq(["released", nil, nil, nil, nil]) }
+          end
+
+          describe "saved instance" do
+            let(:instance) { create(:global_communications_76_14) }
+
+            it { is_expected.to have(6).items }
+          end
+        end
+      end
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:type) }
 
     it { is_expected.to validate_presence_of(:title) }
 
-    describe "is_expected.to validate_length_of(:credits).is_at_least(1)" do
+    describe "credits" do
       subject { build(:minimal_song) }
 
       specify "valid" do
@@ -184,11 +268,25 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    context "custom" do
-      context "validate_nested_uniqueness_of" do
+    describe "custom" do
+      describe "#has_released_milestone" do
+        subject do
+          build_minimal_instance(milestones_attributes: {
+            "0" => attributes_for(:milestone_for_work, activity: :remixed, year: "1972")
+          })
+        end
+
+        before(:each) { subject.valid? }
+
+        it { is_expected.to have_error(milestones: :blank) }
+      end
+
+      describe "validate_nested_uniqueness_of" do
         subject { build_minimal_instance }
 
         describe "credits" do
+          before(:each) { subject.credits = [] }
+
           let(      :creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
@@ -218,6 +316,8 @@ RSpec.describe Work, type: :model do
         end
 
         describe "contributions" do
+          before(:each) { subject.contributions = [] }
+
           subject { build(:minimal_song) }
 
           let(:creator) { create(:minimal_creator) }
@@ -247,15 +347,43 @@ RSpec.describe Work, type: :model do
             is_expected.to have_error(:contributions, :nested_taken)
           end
         end
+
+        describe "milestones" do
+          before(:each) { subject.milestones = [] }
+
+          let(:good_attributes) { {
+            "0" => attributes_for(:milestone, activity: :released,   year: "1977"),
+            "1" => attributes_for(:milestone, activity: :remastered, year: "2005"),
+          }}
+
+          let(:bad_attributes) { {
+            "0" => attributes_for(:milestone, activity: :released, year: "1977"),
+            "1" => attributes_for(:milestone, activity: :released, year: "2005"),
+          }}
+
+          it "accepts non-dupes" do
+            subject.milestones_attributes = good_attributes
+
+            is_expected.to be_valid
+          end
+
+          it "rejects dupes" do
+            subject.milestones_attributes = bad_attributes
+
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:milestones, :nested_taken)
+          end
+        end
       end
     end
   end
 
-  context "hooks" do
+  describe "hooks" do
     # Nothing so far.
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     pending "#posts"

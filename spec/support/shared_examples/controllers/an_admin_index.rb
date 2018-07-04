@@ -12,7 +12,7 @@ RSpec.shared_examples "an_admin_index" do
   allowed_sorts  = described_class.new.send(:allowed_sorts).keys
 
   allowed_scopes.each do |scope, method|
-    context "for #{scope} scope" do
+    describe "for #{scope} scope" do
       context "without records" do
         before(:each) do
           allow(model_class).to receive(method).and_return(none)
@@ -50,7 +50,7 @@ RSpec.shared_examples "an_admin_index" do
   end
 
   allowed_sorts.each do |sort|
-    context "for #{sort} sorting" do
+    describe "for #{sort} sorting" do
       before(:each) { allow(model_class).to receive(allowed_scopes.values.first).and_return(paginated) }
 
       describe "renders" do

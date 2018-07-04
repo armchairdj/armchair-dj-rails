@@ -23,18 +23,18 @@
 require "rails_helper"
 
 RSpec.describe Creator, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let!( :richie) { create(:creator, :with_published_post, name: "Richie Hawtin") }
       let!(    :amy) { create(:creator,                       name: "Amy Winehouse") }
       let!(   :kate) { create(:creator,                       name: "Kate Bush"    ) }
@@ -68,8 +68,8 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    context "identities" do
-      context "scopes and booleans" do
+    describe "identities" do
+      describe "scopes and booleans" do
         let!(  :primary) { create(  :primary_creator) }
         let!(:secondary) { create(:secondary_creator) }
 
@@ -96,7 +96,7 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "collections" do
+      describe "collections" do
         let!(    :richie) { create(:richie_hawtin) }
         let!(  :robotman) { create(:robotman     ) }
         let!(:plastikman) { create(:plastikman   ) }
@@ -122,8 +122,8 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    context "memberships" do
-      context "scopes and booleans" do
+    describe "memberships" do
+      describe "scopes and booleans" do
         let!(:individual) { create(:individual_creator) }
         let!(:collective) { create(:collective_creator) }
 
@@ -150,7 +150,7 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "collections" do
+      describe "collections" do
         describe "self#available_members" do
           subject { described_class.available_members }
 
@@ -170,7 +170,7 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_many(:credits) }
     it { is_expected.to have_many(:works  ).through(:credits) }
     it { is_expected.to have_many(:reviews).through(:works  ) }
@@ -199,9 +199,9 @@ RSpec.describe Creator, type: :model do
     it { is_expected.to have_many(:groups    ).through(   :group_memberships).order("creators.name") }
   end
 
-  context "attributes" do
-    context "nested" do
-      context "pseudonym_identities" do
+  describe "attributes" do
+    describe "nested" do
+      describe "pseudonym_identities" do
         subject { create(:primary_creator) }
 
         let(  :valid) { create(:secondary_creator) }
@@ -288,7 +288,7 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "real_name_identities" do
+      describe "real_name_identities" do
         subject { create(:secondary_creator) }
 
         let(  :valid) { create(:primary_creator  ) }
@@ -374,7 +374,7 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "member_memberships" do
+      describe "member_memberships" do
         subject { create(:collective_creator) }
 
         let(  :valid) { create(:individual_creator) }
@@ -461,7 +461,7 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "group_memberships" do
+      describe "group_memberships" do
         subject { create(:individual_creator) }
 
         let(  :valid) { create(:collective_creator) }
@@ -531,8 +531,8 @@ RSpec.describe Creator, type: :model do
         end
       end
 
-      context "booletania" do
-        context "class" do
+      describe "booletania" do
+        describe "class" do
           specify "self#individual_options" do
             expect(described_class.individual_options).to eq([
               ["This is an individual creator. It can belong to a group.", true ],
@@ -548,7 +548,7 @@ RSpec.describe Creator, type: :model do
           end
         end
 
-        context "instance" do
+        describe "instance" do
           subject { create_minimal_instance }
 
           describe "#individual_text" do
@@ -591,7 +591,7 @@ RSpec.describe Creator, type: :model do
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:name) }
@@ -601,8 +601,8 @@ RSpec.describe Creator, type: :model do
     xit { is_expected.to validate_presence_of(:collective) }
   end
 
-  context "instance" do
-    context "identities" do
+  describe "instance" do
+    describe "identities" do
       describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do
         context "without identities" do
           let!(:kate_bush) { create(:kate_bush) }
@@ -665,7 +665,7 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    context "memberships" do
+    describe "memberships" do
       describe "#member_memberships, #members, #group_memberships, #groups, #colleagues" do
         context "without members" do
           let!(:band) { create(:spawn         ) }
@@ -775,7 +775,7 @@ RSpec.describe Creator, type: :model do
       end
     end
 
-    context "composite methods" do
+    describe "composite methods" do
       let!(   :instance) { create_minimal_instance }
       let!(    :created) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
       let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }

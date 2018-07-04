@@ -21,18 +21,18 @@
 require "rails_helper"
 
 RSpec.describe Playlist, type: :model do
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_authorable_model"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let!(     :first) { create(:complete_playlist,                       title: "First" ) }
       let!(    :middle) { create(:complete_playlist, :with_published_post, title: "Middle") }
       let!(      :last) { create(:complete_playlist, :with_published_post, title: "Last"  ) }
@@ -56,7 +56,7 @@ RSpec.describe Playlist, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     describe "playlistings" do
       let(:instance) { create_complete_instance }
 
@@ -77,8 +77,8 @@ RSpec.describe Playlist, type: :model do
     it { is_expected.to have_many(:mixtapes) }
   end
 
-  context "attributes" do
-    context "nested" do
+  describe "attributes" do
+    describe "nested" do
       describe "playlistings" do
         it { is_expected.to accept_nested_attributes_for(:playlistings).allow_destroy(true) }
 
@@ -99,7 +99,7 @@ RSpec.describe Playlist, type: :model do
         end
 
         describe "#prepare_playlistings" do
-          context "new instance" do
+          describe "new instance" do
             subject { described_class.new }
 
             it "builds 20 playlistings" do
@@ -111,7 +111,7 @@ RSpec.describe Playlist, type: :model do
             end
           end
 
-          context "saved instance with saved playlistings" do
+          describe "saved instance with saved playlistings" do
             subject { create(:minimal_playlist) }
 
             it "builds 20 more playlistings" do
@@ -127,7 +127,7 @@ RSpec.describe Playlist, type: :model do
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
@@ -146,7 +146,7 @@ RSpec.describe Playlist, type: :model do
     end
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#reorder_playlistings!" do

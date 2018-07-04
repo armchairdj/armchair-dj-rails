@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::Posts::ArticlesController, type: :controller do
   let(:article) { create_minimal_instance(:draft) }
 
-  context "concerns" do
+  describe "concerns" do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "a_linkable_controller"
@@ -123,7 +123,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
       let(    :update_params) { { "body" => "New body.", "title" => "New title." } }
       let(:bad_update_params) { { "body" => ""         , "title" => ""           } }
 
-      context "draft" do
+      describe "draft" do
         context "with valid params" do
           before(:each) do
             put :update, params: { id: article.to_param, article: update_params }
@@ -146,7 +146,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
         end
       end
 
-      context "publishing" do
+      describe "publishing" do
         context "with valid params" do
           before(:each) do
             put :update, params: { step: "publish", id: article.to_param, article: update_params }
@@ -199,7 +199,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
         end
       end
 
-      context "unpublishing" do
+      describe "unpublishing" do
         let(:article) { create(:minimal_article, :published) }
 
         context "with valid params" do
@@ -233,7 +233,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
         end
       end
 
-      context "scheduling" do
+      describe "scheduling" do
         let(:article) { create(:minimal_article, :draft) }
 
         context "with valid params" do
@@ -288,7 +288,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
         end
       end
 
-      context "unscheduling" do
+      describe "unscheduling" do
         let(:article) { create(:minimal_article, :scheduled) }
 
         context "with valid params" do
@@ -322,7 +322,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
         end
       end
 
-      context "replacing slug" do
+      describe "replacing slug" do
         before(:each) { article.update_column(:slug, "old") }
 
         let(:params) { { "clear_slug" => "1" } }
@@ -354,7 +354,7 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
     end
   end
 
-  context "helpers" do
+  describe "helpers" do
     describe "#allowed_scopes" do
       subject { described_class.new.send(:allowed_scopes) }
 

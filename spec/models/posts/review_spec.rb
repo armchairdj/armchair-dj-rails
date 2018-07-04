@@ -3,23 +3,23 @@
 require "rails_helper"
 
 RSpec.describe Review, type: :model do
-  context "concerns" do
+  describe "concerns" do
     specify { expect(described_class.superclass).to eq(Post) }
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
+  describe "scope-related" do
     let!(      :draft) { create_minimal_instance(:draft    ) }
     let!(  :scheduled) { create_minimal_instance(:scheduled) }
     let!(  :published) { create_minimal_instance(:published) }
     let!(        :ids) { [draft, scheduled, published].map(&:id) }
     let!( :collection) { described_class.where(id: ids) }
-    let!(:eager_loads) { [:links, :author, :tags, :work, :creators] }
+    let!(:eager_loads) { [:links, :author, :tags, :work, :creators, :contributions, :aspects, :milestones] }
 
-    context "basics" do
+    describe "basics" do
       describe "self#eager" do
         subject { collection.eager }
 
@@ -43,25 +43,27 @@ RSpec.describe Review, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to belong_to(:work) }
 
-    it { is_expected.to have_many(:creators    ).through(:work) }
-    it { is_expected.to have_many(:contributors).through(:work) }
-    it { is_expected.to have_many(:aspects     ).through(:work) }
+    it { is_expected.to have_many(:creators     ).through(:work) }
+    it { is_expected.to have_many(:contributions).through(:work) }
+    it { is_expected.to have_many(:contributors ).through(:work) }
+    it { is_expected.to have_many(:aspects      ).through(:work) }
+    it { is_expected.to have_many(:milestones   ).through(:work) }
   end
 
-  context "attributes" do
+  describe "attributes" do
     # Nothing so far.
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:work) }
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#display_type" do

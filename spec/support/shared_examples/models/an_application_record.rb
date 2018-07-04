@@ -3,13 +3,13 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_application_record" do
-  context "concerns" do
+  describe "concerns" do
     # Most concerns are tested in the models that actually use them.
 
     it_behaves_like "an_atomically_validatable_model"
   end
 
-  context "class" do
+  describe "class" do
     describe "self#find_by_sorted_ids" do
       let(:instances) { [
         create_minimal_instance,
@@ -51,7 +51,7 @@ RSpec.shared_examples "an_application_record" do
     end
   end
 
-  context "included" do
+  describe "included" do
     subject { create_minimal_instance }
 
     describe "nilify_blanks" do

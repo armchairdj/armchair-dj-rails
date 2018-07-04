@@ -18,18 +18,18 @@
 require "rails_helper"
 
 RSpec.describe Aspect, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
-    context "basics" do
+  describe "scope-related" do
+    describe "basics" do
       let(      :draft) { create(:minimal_aspect,                       facet: :musical_genre, name: "Trip-Hop" ) }
       let(:published_1) { create(:minimal_aspect, :with_published_post, facet: :musical_mood,  name: "Paranoid" ) }
       let(:published_2) { create(:minimal_aspect, :with_published_post, facet: :musical_genre, name: "Downtempo") }
@@ -59,19 +59,19 @@ RSpec.describe Aspect, type: :model do
       let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop" ) }
       let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
 
-      context "single facet" do
+      describe "single facet" do
         subject { described_class.for_facet(:musical_mood) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b) }
       end
 
-      context "multiple facets" do
+      describe "multiple facets" do
         subject { described_class.for_facet(:musical_mood, :musical_genre) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b, genre_a, genre_b) }
       end
 
-      context "no facets" do
+      describe "no facets" do
         subject { described_class.for_facet(nil) }
 
         it { is_expected.to be_empty }
@@ -79,7 +79,7 @@ RSpec.describe Aspect, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
     it { is_expected.to have_and_belong_to_many(:works) }
 
     it { is_expected.to have_many(:creators    ).through(:works) }
@@ -89,15 +89,13 @@ RSpec.describe Aspect, type: :model do
     it { is_expected.to have_many(:reviews     ).through(:works) }
   end
 
-  context "attributes" do
-    context "enums" do
-      it { is_expected.to define_enum_for(:facet) }
-
+  describe "attributes" do
+    describe "enums" do
       it_behaves_like "an_enumable_model", [:facet]
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:facet) }
@@ -106,7 +104,7 @@ RSpec.describe Aspect, type: :model do
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:facet) }
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "#alpha_parts" do

@@ -46,19 +46,19 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  context "concerns" do
-    it_behaves_like "an_alphabetizable_model"
-
+  describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "a_linkable_model"
   end
 
-  context "class" do
+  describe "class" do
     # Nothing so far.
   end
 
-  context "scope-related" do
+  describe "scope-related" do
     let(      :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
     let(      :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
     let(    :charlie) { create(:admin,   first_name: "Charlie", last_name: "Smith",   username: "charlie") }
@@ -108,7 +108,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "associations" do
+  describe "associations" do
    it { is_expected.to have_many(:articles) }
    it { is_expected.to have_many(:reviews ) }
    it { is_expected.to have_many(:mixtapes) }
@@ -118,17 +118,15 @@ RSpec.describe User, type: :model do
    it { is_expected.to have_many(:creators).through(:works) }
   end
 
-  context "attributes" do
-    context "enums" do
+  describe "attributes" do
+    describe "enums" do
       describe "role" do
-        it { is_expected.to define_enum_for(:role) }
-
         it_behaves_like "an_enumable_model", [:role]
       end
     end
   end
 
-  context "validations" do
+  describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_presence_of(:first_name) }
@@ -141,26 +139,26 @@ RSpec.describe User, type: :model do
 
     pending "username format"
 
-    context "conditional" do
-      context "as member" do
+    describe "conditional" do
+      describe "as member" do
         subject { create(:member) }
 
         it { is_expected.to validate_absence_of(:bio) }
       end
 
-      context "as writer" do
+      describe "as writer" do
         subject { create(:writer) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      context "as editor" do
+      describe "as editor" do
         subject { create(:editor) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      context "as admin" do
+      describe "as admin" do
         subject { create(:admin) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
@@ -174,8 +172,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "hooks" do
-    context "after_initialize" do
+  describe "hooks" do
+    describe "after_initialize" do
       let(:instance) { build_minimal_instance }
 
       subject { instance.role }
@@ -184,7 +182,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  context "instance" do
+  describe "instance" do
     let(:instance) { create_minimal_instance }
 
     describe "role" do
@@ -417,7 +415,7 @@ RSpec.describe User, type: :model do
         it { is_expected.to eq("Derrick May") }
       end
 
-      describe "with middle name" do
+      context "with middle name" do
         let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
 
         it { is_expected.to eq("Brian J Dillard") }

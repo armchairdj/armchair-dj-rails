@@ -167,6 +167,8 @@ en:
           attributes:
             credits:
               too_short: "Please choose at least one creator."
+            milestones:
+              blank: "Please choose a release date."
         user:
           attributes:
             role:

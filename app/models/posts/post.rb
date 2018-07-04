@@ -55,7 +55,7 @@ class Post < ApplicationRecord
   #############################################################################
 
   def self.publish_scheduled
-    ready = self.scheduled_ready
+    ready = self.scheduled_due
 
     memo = {
       total:   ready.length,
@@ -76,15 +76,18 @@ class Post < ApplicationRecord
     memo
   end
 
+  def self.eager
+    includes(:links, :author, :tags).references(:author)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :unpublished,     -> { where.not(status: :published) }
-  scope :scheduled_ready, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
-  scope :reverse_cron,    -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+  scope :unpublished,   -> { where.not(status: :published) }
+  scope :scheduled_due, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
+  scope :reverse_cron,  -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
-  scope :eager,     -> { includes(:links, :author, :tags).references(:author) }
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }
 
@@ -99,7 +102,13 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :tags, -> { distinct } do
+    def << (tag)
+      tag -= self if tag.respond_to?(:to_a)
+
+      super tag unless include?(tag)
+    end
+  end
 
   #############################################################################
   # ATTRIBUTES.
@@ -119,20 +128,15 @@ class Post < ApplicationRecord
 
   validates :type, presence: true
 
-  validates :body, presence: true, unless: :draft?
+  validates :status, presence: true
 
   validates :summary, length: { in: 40..320 }, allow_blank: true
 
-  validates :status, presence: true
-
+  validates :body,         presence: true, unless: :draft?
   validates :published_at, presence: true, if: :published?
   validates :publish_on,   presence: true, if: :scheduled?
 
   validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
 
   #############################################################################
   # AASM LIFECYCLE.

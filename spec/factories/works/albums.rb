@@ -17,6 +17,10 @@ FactoryBot.define do
       title "76:14"
       with_contributions
 
+      milestones_attributes { {
+        "0" => attributes_for(:milestone_for_work, year: "1994")
+      } }
+
       transient do
         creator_count     1
         creator_names     ["Global Communication"]
