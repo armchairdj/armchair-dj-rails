@@ -45,7 +45,7 @@ class Review < Post
   #############################################################################
 
   def self.eager
-    super.includes(:work, :creators, :contributions, :aspects, :milestones)
+    super.includes(:work, :makers, :contributions, :aspects, :milestones)
   end
 
   #############################################################################
@@ -54,7 +54,7 @@ class Review < Post
 
   belongs_to :work
 
-  has_many :creators,      through: :work
+  has_many :makers,        through: :work
   has_many :contributions, through: :work
   has_many :contributors,  through: :work
   has_many :aspects,       through: :work

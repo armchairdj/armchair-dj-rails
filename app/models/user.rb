@@ -79,7 +79,7 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:links, :posts, :playlists, :works, :creators) }
+  scope     :eager, -> { includes(:links, :posts, :playlists, :works, :makers) }
   scope :for_admin, -> { eager }
   scope  :for_site, -> { joins(:posts).references(:posts).where.not(posts: { published_at: nil }).eager.alpha }
 
@@ -95,7 +95,7 @@ class User < ApplicationRecord
   has_many :playlists, dependent: :destroy, foreign_key: "author_id"
 
   has_many :works, through: :reviews
-  has_many :creators, -> { distinct }, through: :works
+  has_many :makers, -> { distinct }, through: :works
 
   #############################################################################
   # ATTRIBUTES.

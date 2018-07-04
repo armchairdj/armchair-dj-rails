@@ -11,8 +11,8 @@ RSpec.describe Work, type: :model do
 
   describe "class" do
     describe "self#grouped_options" do
-      let( :song_1) { create(:minimal_song, creator_names: ["Wilco"]) }
-      let( :song_2) { create(:minimal_song, creator_names: ["Annie"]) }
+      let( :song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
+      let( :song_2) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show         ) }
       let(:podcast) { create(:minimal_podcast         ) }
 
@@ -90,13 +90,13 @@ RSpec.describe Work, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let(      :draft) { create_minimal_instance(                      title: "D", creator_names: ["Kate Bush"  ]) }
-      let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", creator_names: ["Prince"     ]) }
-      let(:published_2) { create_minimal_instance(:with_published_post, title: "A", creator_names: ["David Bowie"]) }
+      let(      :draft) { create_minimal_instance(                      title: "D", maker_names: ["Kate Bush"  ]) }
+      let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", maker_names: ["Prince"     ]) }
+      let(:published_2) { create_minimal_instance(:with_published_post, title: "A", maker_names: ["David Bowie"]) }
 
       let(        :ids) { [draft, published_1, published_2].map(&:id) }
       let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :creators, :contributions, :contributors ] }
+      let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
 
       describe "self#eager" do
         subject { collection.eager }
@@ -120,7 +120,7 @@ RSpec.describe Work, type: :model do
     it { is_expected.to have_many(:milestones) }
 
     it { is_expected.to have_many(:credits) }
-    it { is_expected.to have_many(:creators).through(:credits) }
+    it { is_expected.to have_many(:makers).through(:credits) }
 
     it { is_expected.to have_many(:contributions) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
@@ -413,7 +413,7 @@ RSpec.describe Work, type: :model do
         )
       end
 
-      it "displays with multiple creators" do
+      it "displays with multiple makers" do
         expect(create(:carl_craig_and_green_velvet_unity).full_display_title).to eq(
           "Carl Craig & Green Velvet: Unity"
         )
@@ -424,30 +424,30 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "#credited_artists" do
+    describe "#display_makers" do
       let(:invalid) {  build(:work, :with_title                ) }
       let(:unsaved) {  build(:kate_bush_never_for_ever         ) }
       let(  :saved) { create(:kate_bush_never_for_ever         ) }
       let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
 
       it "nils without error on missing creator" do
-        expect(invalid.credited_artists).to eq(nil)
+        expect(invalid.display_makers).to eq(nil)
       end
 
       it "gives single creator on unsaved" do
-        expect(unsaved.credited_artists).to eq("Kate Bush")
+        expect(unsaved.display_makers).to eq("Kate Bush")
       end
 
       it "gives single creator on saved" do
-        expect(saved.credited_artists).to eq("Kate Bush")
+        expect(saved.display_makers).to eq("Kate Bush")
       end
 
-      it "gives mutiple creators alphabetically" do
-        expect(multi.credited_artists).to eq("Carl Craig & Green Velvet")
+      it "gives mutiple makers alphabetically" do
+        expect(multi.display_makers).to eq("Carl Craig & Green Velvet")
       end
 
       it "overrides connector" do
-        expect(multi.credited_artists(connector: " x ")).to eq(
+        expect(multi.display_makers(connector: " x ")).to eq(
           "Carl Craig x Green Velvet"
         )
       end
@@ -469,14 +469,14 @@ RSpec.describe Work, type: :model do
         })
       end
 
-      describe "#all_creator_ids" do
-        subject { instance.all_creator_ids }
+      describe "#creator_ids" do
+        subject { instance.creator_ids }
 
         it { is_expected.to match_array([ creator_1.id, creator_2.id, creator_3.id ]) }
       end
 
-      describe "#all_creators" do
-        subject { instance.all_creators }
+      describe "#creators" do
+        subject { instance.creators }
 
         it { is_expected.to match_array([ creator_1, creator_2, creator_3 ]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
@@ -489,7 +489,7 @@ RSpec.describe Work, type: :model do
       subject { instance.sluggable_parts }
 
       it { is_expected.to eq([
-        instance.credited_artists(connector: " and "),
+        instance.display_makers(connector: " and "),
         instance.title,
         instance.subtitle
       ]) }
@@ -500,7 +500,7 @@ RSpec.describe Work, type: :model do
 
       subject { instance.alpha_parts }
 
-      it { is_expected.to eq([instance.credited_artists, instance.title, instance.subtitle]) }
+      it { is_expected.to eq([instance.display_makers, instance.title, instance.subtitle]) }
     end
   end
 end

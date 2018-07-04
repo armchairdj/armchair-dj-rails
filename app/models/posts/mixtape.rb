@@ -45,7 +45,7 @@ class Mixtape < Post
   #############################################################################
 
   def self.eager
-    super.includes(:playlist, :playlistings, :works, :creators, :contributions, :aspects, :milestones)
+    super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
   end
 
   #############################################################################
@@ -57,7 +57,7 @@ class Mixtape < Post
   has_many :playlistings, through: :playlist
   has_many :works,        through: :playlistings
 
-  has_many :creators,      through: :works
+  has_many :makers,        through: :works
   has_many :contributions, through: :works
   has_many :contributors,  through: :works
   has_many :aspects,       through: :works

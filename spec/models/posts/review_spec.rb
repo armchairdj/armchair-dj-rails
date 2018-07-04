@@ -17,7 +17,7 @@ RSpec.describe Review, type: :model do
     let!(  :published) { create_minimal_instance(:published) }
     let!(        :ids) { [draft, scheduled, published].map(&:id) }
     let!( :collection) { described_class.where(id: ids) }
-    let!(:eager_loads) { [:links, :author, :tags, :work, :creators, :contributions, :aspects, :milestones] }
+    let!(:eager_loads) { [:links, :author, :tags, :work, :makers, :contributions, :aspects, :milestones] }
 
     describe "basics" do
       describe "self#eager" do
@@ -46,7 +46,7 @@ RSpec.describe Review, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:work) }
 
-    it { is_expected.to have_many(:creators     ).through(:work) }
+    it { is_expected.to have_many(:makers       ).through(:work) }
     it { is_expected.to have_many(:contributions).through(:work) }
     it { is_expected.to have_many(:contributors ).through(:work) }
     it { is_expected.to have_many(:aspects      ).through(:work) }

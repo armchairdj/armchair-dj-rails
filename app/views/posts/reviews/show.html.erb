@@ -6,7 +6,7 @@
   <%= content_tag(:header, class: "post-header") do %>
     <%= content_tag(:h3, @review.type) %>
     <%= content_tag(:h1) do %>
-      <%= content_tag(:span, @review.work.credited_artists, class: "creators") %>
+      <%= content_tag(:span, @review.work.display_makers, class: "creators") %>
       <%= content_tag(:span, @review.work.title,            class: "title"   ) %>
       <%= content_tag(:span, @review.work.subtitle,         class: "subtitle") %>
     <% end %>

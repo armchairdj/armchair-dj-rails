@@ -22,8 +22,8 @@ FactoryBot.define do
       } }
 
       transient do
-        creator_count     1
-        creator_names     ["Global Communication"]
+        maker_count     1
+        maker_names     ["Global Communication"]
         contributor_count 2
         contributor_names ["Tom Middleton", "Mark Pritchard"]
         work_type         "Album"
@@ -35,26 +35,26 @@ FactoryBot.define do
       subtitle nil
 
       transient do
-        creator_count 2
-        creator_names ["Green Velvet", "Carl Craig"]
+        maker_count 2
+        maker_names ["Green Velvet", "Carl Craig"]
       end
     end
 
     factory :kate_bush_never_for_ever, parent: :minimal_album do
       title "Never for Ever"
-      transient { creator_names ["Kate Bush"] }
+      transient { maker_names ["Kate Bush"] }
     end
 
     factory :kate_bush_directors_cut, parent: :minimal_album do
       title "Director's Cut"
-      transient { creator_names ["Kate Bush"] }
+      transient { maker_names ["Kate Bush"] }
     end
 
     factory :madonna_ray_of_light, parent: :complete_album do
       title  "Ray of Light"
 
       transient do
-        creator_names     ["Madonna"]
+        maker_names     ["Madonna"]
         contributor_names ["William Orbit"]
       end
     end

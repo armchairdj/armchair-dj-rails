@@ -18,7 +18,7 @@ RSpec.describe Mixtape, type: :model do
       let!(  :published) { create_minimal_instance(:published) }
       let!(        :ids) { [draft, scheduled, published].map(&:id) }
       let!( :collection) { described_class.where(id: ids) }
-      let!(:eager_loads) { [:links, :author, :tags, :playlist, :playlistings, :works, :creators, :contributions, :aspects, :milestones] }
+      let!(:eager_loads) { [:links, :author, :tags, :playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones] }
 
       describe "self#eager" do
         subject { collection.eager }
@@ -49,7 +49,7 @@ RSpec.describe Mixtape, type: :model do
     it { is_expected.to have_many(:playlistings).through(:playlist) }
     it { is_expected.to have_many(:works       ).through(:playlistings) }
 
-    it { is_expected.to have_many(:creators     ).through(:works) }
+    it { is_expected.to have_many(:makers       ).through(:works) }
     it { is_expected.to have_many(:contributions).through(:works) }
     it { is_expected.to have_many(:contributors ).through(:works) }
     it { is_expected.to have_many(:aspects      ).through(:works) }

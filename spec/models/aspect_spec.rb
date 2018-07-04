@@ -36,7 +36,7 @@ RSpec.describe Aspect, type: :model do
 
       let(        :ids) { [draft, published_1, published_2].map(&:id) }
       let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [:works, :creators, :contributors, :playlists, :mixtapes, :reviews] }
+      let(:eager_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
 
       describe "self#eager" do
         subject { collection.eager }
@@ -82,7 +82,7 @@ RSpec.describe Aspect, type: :model do
   describe "associations" do
     it { is_expected.to have_and_belong_to_many(:works) }
 
-    it { is_expected.to have_many(:creators    ).through(:works) }
+    it { is_expected.to have_many(:makers      ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
     it { is_expected.to have_many(:playlists   ).through(:works) }
     it { is_expected.to have_many(:mixtapes    ).through(:works) }

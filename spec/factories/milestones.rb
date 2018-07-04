@@ -30,7 +30,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_activity do
-      activity :released
+      activity :created
     end
 
     trait :with_year do
@@ -42,12 +42,12 @@ FactoryBot.define do
     ###########################################################################
 
     factory :milestone_for_work do
-      with_activity
+      activity :released
       with_year
     end
 
     factory :minimal_milestone do
-      with_existing_work
+      with_work
       with_activity
       with_year
     end

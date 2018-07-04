@@ -52,7 +52,7 @@ class Playlist < ApplicationRecord
 
   has_many :works, through: :playlistings
 
-  has_many :creators,     -> { distinct }, through: :works
+  has_many :makers,       -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
   has_many :mixtapes, dependent: :destroy
@@ -90,12 +90,12 @@ class Playlist < ApplicationRecord
     reviews.union(mixtapes)
   end
 
-  def all_creators
-    Creator.where(id: all_creator_ids)
+  def creators
+    Creator.where(id: creator_ids)
   end
 
-  def all_creator_ids
-    works.map(&:all_creator_ids).flatten.uniq
+  def creator_ids
+    works.map(&:creator_ids).flatten.uniq
   end
 
   def reorder_playlistings!(sorted_playlisting_ids)

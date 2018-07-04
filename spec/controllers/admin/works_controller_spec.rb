@@ -140,12 +140,30 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "DELETE #destroy" do
-      let!(:work) { create(:minimal_song) }
+      let!(:work) { create(:junior_boys_like_a_child_c2_remix) }
 
       it "destroys the requested work" do
         expect {
           delete :destroy, params: { id: work.to_param }
         }.to change(Work, :count).by(-1)
+      end
+
+      it "destroys associated credits" do
+        expect {
+          delete :destroy, params: { id: work.to_param }
+        }.to change(Credit, :count).by(-1)
+      end
+
+      it "destroys associated contributions" do
+        expect {
+          delete :destroy, params: { id: work.to_param }
+        }.to change(Contribution, :count).by(-1)
+      end
+
+      it "destroys associated milestones" do
+        expect {
+          delete :destroy, params: { id: work.to_param }
+        }.to change(Milestone, :count).by(-1)
       end
 
       it "redirects to index" do

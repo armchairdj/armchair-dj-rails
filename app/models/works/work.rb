@@ -69,8 +69,8 @@ class Work < ApplicationRecord
 
   scope :eager, -> { includes(
     :aspects, :milestones, :playlists, :reviews, :mixtapes,
-    :credits, :creators, :contributions, :contributors
-  ).references(:creators) }
+    :credits, :makers, :contributions, :contributors
+  ).references(:makers) }
 
   scope :for_admin, -> { eager }
 
@@ -86,12 +86,12 @@ class Work < ApplicationRecord
     end
   end
 
-  has_many :milestones
+  has_many :milestones, dependent: :destroy
 
   has_many :credits,       inverse_of: :work, dependent: :destroy
   has_many :contributions, inverse_of: :work, dependent: :destroy
 
-  has_many :creators,     through: :credits,       source: :creator, class_name: "Creator"
+  has_many :makers,       through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
   has_many :reviews, dependent: :destroy
@@ -175,7 +175,7 @@ class Work < ApplicationRecord
 
     parts = [title, subtitle]
 
-    parts.unshift(credited_artists) if full
+    parts.unshift(display_makers) if full
 
     parts.compact.join(": ")
   end
@@ -192,8 +192,8 @@ class Work < ApplicationRecord
     milestones.sorted
   end
 
-  def credited_artists(connector: " & ")
-    return creators.alpha.to_a.map(&:name).join(connector) if persisted?
+  def display_makers(connector: " & ")
+    return makers.alpha.to_a.map(&:name).join(connector) if persisted?
 
     # So we can correctly calculate memoized alpha value for review during
     # nested object creation.
@@ -203,19 +203,19 @@ class Work < ApplicationRecord
     unsaved.any? ? unsaved.sort.join(connector) : nil
   end
 
-  def all_creators
-    Creator.where(id: all_creator_ids)
+  def creators
+    Creator.where(id: creator_ids)
   end
 
-  def all_creator_ids
-    (creators.ids + contributors.ids).uniq
+  def creator_ids
+    (makers.ids + contributors.ids).uniq
   end
 
   def sluggable_parts
-    [credited_artists(connector: " and "), title, subtitle]
+    [display_makers(connector: " and "), title, subtitle]
   end
 
   def alpha_parts
-    [credited_artists, title, subtitle]
+    [display_makers, title, subtitle]
   end
 end

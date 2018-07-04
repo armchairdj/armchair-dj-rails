@@ -46,5 +46,5 @@
 <% end %>
 
 <%= render partial: "playlistings",        as: "playlistings", object: @playlist.playlistings.for_admin %>
-<%= render partial: "admin/creators/list", as: "creators",     object: @playlist.all_creators.for_admin.alpha %>
+<%= render partial: "admin/creators/list", as: "creators",     object: @playlist.creators.for_admin.alpha %>
 <%= render partial: "admin/posts/list",    as: "posts",        object: @playlist.mixtapes.for_admin.reverse_cron %>

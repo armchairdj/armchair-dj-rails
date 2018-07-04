@@ -37,9 +37,9 @@ RSpec.describe Milestone, type: :model do
   describe "scope-related" do
     describe "basics" do
       let(:remastered) { create(:minimal_milestone, activity: :remastered, year: 2005) }
-      let(  :released) { create(:minimal_milestone, activity: :released,   year: 1977) }
+      let(   :remixed) { create(:minimal_milestone, activity: :remixed,    year: 1977) }
       let(  :reissued) { create(:minimal_milestone, activity: :reissued,   year: 2017) }
-      let(       :ids) { [remastered, released, reissued].map(&:id) }
+      let(       :ids) { [remastered, remixed, reissued].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       describe "self#eager" do

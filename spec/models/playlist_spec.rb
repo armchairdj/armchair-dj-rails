@@ -71,7 +71,7 @@ RSpec.describe Playlist, type: :model do
 
     it { is_expected.to have_many(:works).through(:playlistings) }
 
-    it { is_expected.to have_many(:creators    ).through(:works) }
+    it { is_expected.to have_many(:makers      ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
     it { is_expected.to have_many(:mixtapes) }
@@ -210,14 +210,14 @@ RSpec.describe Playlist, type: :model do
         })
       end
 
-      describe "#all_creator_ids" do
-        subject { instance.all_creator_ids }
+      describe "#creator_ids" do
+        subject { instance.creator_ids }
 
         it { is_expected.to match_array([ creator_1.id, creator_2.id, creator_3.id, creator_4.id ]) }
       end
 
-      describe "#all_creators" do
-        subject { instance.all_creators }
+      describe "#creators" do
+        subject { instance.creators }
 
         it { is_expected.to match_array([ creator_1, creator_2, creator_3, creator_4 ]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }

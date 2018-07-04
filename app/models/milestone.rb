@@ -47,7 +47,7 @@ class Milestone < ApplicationRecord
 
   belongs_to :work
 
-  has_many :creators,     -> { distinct }, through: :work
+  has_many :makers,       -> { distinct }, through: :work
   has_many :contributors, -> { distinct }, through: :work
 
   has_many :playlists, through: :work

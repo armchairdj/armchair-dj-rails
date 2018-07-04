@@ -38,8 +38,8 @@ FactoryBot.define do
       ] }
 
       transient do
-        creator_count     1
-        creator_names     ["Junior Boys"]
+        maker_count     1
+        maker_names     ["Junior Boys"]
         contributor_count 1
         contributor_names ["Carl Craig"]
         work_type         "Song"

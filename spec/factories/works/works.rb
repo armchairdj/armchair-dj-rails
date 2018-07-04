@@ -19,20 +19,20 @@ FactoryBot.define do
 
     trait :with_milestone do
       milestones_attributes { {
-        "0" => attributes_for(:milestone_for_work, year: "1972")
+        "0" => attributes_for(:milestone, activity: :released, year: "1972")
       } }
     end
 
     trait :with_credits do
       transient do
-        creator_names { [generate(:creator_name)] }
+        maker_names { [generate(:creator_name)] }
 
-        creator_count 1
+        maker_count 1
       end
 
       credits_attributes do
-        creator_count.times.inject({}) do |memo, (i)|
-          name    = creator_names[i] || generate(:creator_name)
+        maker_count.times.inject({}) do |memo, (i)|
+          name    = maker_names[i] || generate(:creator_name)
           creator = create(:minimal_creator, name: name)
 
           memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); memo
@@ -51,7 +51,7 @@ FactoryBot.define do
 
       contributions_attributes do
         contributor_count.times.inject({}) do |memo, (i)|
-          name    = creator_names[i] || generate(:creator_name)
+          name    = maker_names[i] || generate(:creator_name)
           role    = create(:minimal_role, work_type: work_type)
           creator = create(:minimal_creator, name: name)
 
@@ -149,7 +149,7 @@ FactoryBot.define do
 
     factory :stuffed_work_parent, parent: :complete_work_parent do
       transient do
-        creator_count 3
+        maker_count 3
         contributor_count 3
       end
     end

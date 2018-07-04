@@ -37,7 +37,7 @@ class Aspect < ApplicationRecord
 
   scope :for_facet, -> (*facets) { where(facet: facets.flatten.compact) }
 
-  scope     :eager, -> { includes(:works, :creators, :contributors, :playlists, :mixtapes, :reviews) }
+  scope     :eager, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
   scope :for_admin, -> { eager }
 
   #############################################################################
@@ -46,7 +46,7 @@ class Aspect < ApplicationRecord
 
   has_and_belongs_to_many :works, -> { distinct }
 
-  has_many :creators,     -> { distinct }, through: :works
+  has_many :makers,       -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
   has_many :playlists, through: :works
