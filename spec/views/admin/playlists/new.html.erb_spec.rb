@@ -13,6 +13,7 @@ RSpec.describe "admin/playlists/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", admin_playlists_path, "post" do
+      # TODO
     end
   end
 end

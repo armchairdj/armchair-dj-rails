@@ -1,15 +1,34 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-# Specs in this file have access to a helper object that includes
-# the LinksHelper. For example:
-#
-# describe LinksHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
+require "rails_helper"
+
 RSpec.describe LinksHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#link_list" do
+    subject { helper.link_list(links, opts) }
+
+    let(:opts) { {} }
+
+    context "empty" do
+      let(:links) { Link.none }
+
+      it { is_expected.to eq(nil) }
+    end
+
+    context "full" do
+      let(:links) { Link.where(id: 3.times.map { |i| create(:minimal_link).id }) }
+
+      it { is_expected.to have_tag(:ul, count: 1) }
+      it { is_expected.to have_tag(:li, count: 3) }
+      it { is_expected.to have_tag(:a,  count: 3) }
+      it { is_expected.to have_tag(:a, text: links[0].description) }
+      it { is_expected.to have_tag(:a, text: links[1].description) }
+      it { is_expected.to have_tag(:a, text: links[2].description) }
+
+      context "with options" do
+        let(:opts) { { class: "foo", id: "bar" } }
+
+        it { is_expected.to have_tag("ul.foo#bar", count: 1) }
+      end
+    end
+  end
 end

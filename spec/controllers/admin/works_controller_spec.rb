@@ -89,8 +89,6 @@ RSpec.describe Admin::WorksController, type: :controller do
           end
         end
       end
-
-      pending "max_params (aspects, milestones)"
     end
 
     describe "GET #edit" do
