@@ -186,7 +186,7 @@ private
   end
 
   def role_medium_sort
-    "LOWER(roles.work_type) ASC"
+    "LOWER(roles.medium) ASC"
   end
 
   def user_email_sort
@@ -202,6 +202,6 @@ private
   end
 
   def work_medium_sort
-    "LOWER(works.type) ASC"
+    "LOWER(works.medium) ASC"
   end
 end

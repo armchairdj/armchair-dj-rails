@@ -14,7 +14,7 @@ RSpec.describe "admin/posts/reviews/new", type: :view do
 
     @model_class  = assign(:model_name, Review)
     @creators     = assign(:creators,     Creator.all.alpha   )
-    @works        = assign(:works,        Work.grouped_options)
+    @works        = assign(:works,        Work.grouped_by_medium)
     @tags         = assign(:tags,         Tag.for_admin.alpha)
     @review       = assign(:review,       build(:review))
   end

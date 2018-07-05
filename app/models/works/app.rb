@@ -16,8 +16,8 @@
 #  index_works_on_medium  (medium)
 #
 
-class TvEpisode < Medium
+class App < Medium
   def available_facets
-    [:narrative_genre, :tv_network, :hollywood_studio]
+    [:tech_company, :tech_platform]
   end
 end

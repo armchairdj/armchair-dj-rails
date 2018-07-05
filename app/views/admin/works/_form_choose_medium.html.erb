@@ -6,8 +6,8 @@
       <%= content_tag(:fieldset, class: "lengendary") do %>
         <%= content_tag(:legend, "Basics") %>
 
-        <%= f.input :type, as: :select,
-          collection: @types,
+        <%= f.input :medium, as: :select,
+          collection: @media,
           hint:       "First, choose a type.",
           input_html: {
             "data-controller": "selectable",
@@ -20,7 +20,7 @@
 
   <%= content_tag(:div, class: "button-group") do %>
     <%= f.button(:button, "Continue", type: :submit,
-      name: "step", value: "select_work_type",
+      name: "step", value: "select_medium",
       "data-target": "auto-submittable.button"
     ) %>
   <% end %>

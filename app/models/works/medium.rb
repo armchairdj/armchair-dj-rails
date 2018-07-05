@@ -19,12 +19,8 @@ class Medium < Work
     I18n.t("activerecord.subclasses.work.#{true_model_name.i18n_key}")
   end
 
-  def self.facets
-    nil
-  end
-
   #############################################################################
-  # CLASS.
+  # INSTANCE.
   #############################################################################
 
   def true_model_name
@@ -36,10 +32,14 @@ class Medium < Work
   end
 
   def available_roles
-    Role.where(work_type: self.type)
+    Role.for_medium(self.medium).alpha
   end
 
   def available_role_ids
     available_roles.ids
+  end
+
+  def available_facets
+    nil
   end
 end

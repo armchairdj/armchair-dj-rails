@@ -44,7 +44,7 @@ RSpec.describe Contribution, type: :model do
     describe "role" do
       subject { create_minimal_instance(work_id: create(:minimal_song).id) }
 
-      let!(:song_role_ids) { 3.times.map { |i| create(:minimal_role, work_type: "Song").id } }
+      let!(:song_role_ids) { 3.times.map { |i| create(:minimal_role, medium: "Song").id } }
 
       it { is_expected.to validate_presence_of(:role_id) }
 

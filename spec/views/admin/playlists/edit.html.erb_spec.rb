@@ -6,7 +6,7 @@ RSpec.describe "admin/playlists/edit", type: :view do
   before(:each) do
     @model_class = assign(:model_name, Playlist)
     @playlist    = assign(:playlist, create(:minimal_playlist, :with_published_post))
-    @works       = assign(:works, Work.grouped_options)
+    @works       = assign(:works, Work.grouped_by_medium)
   end
 
   it "renders the edit playlist form" do

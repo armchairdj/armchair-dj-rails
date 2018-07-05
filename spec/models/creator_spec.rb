@@ -810,10 +810,10 @@ RSpec.describe Creator, type: :model do
     describe "#display_roles" do
       subject { create_minimal_instance }
 
-      let(    :editor) { create(:minimal_role, work_type: "Book",   name: "Editor"    ) }
-      let(    :author) { create(:minimal_role, work_type: "Book",   name: "Author"    ) }
-      let(:showrunner) { create(:minimal_role, work_type: "TvShow", name: "Showrunner") }
-      let(  :director) { create(:minimal_role, work_type: "TvShow", name: "Director"  ) }
+      let(    :editor) { create(:minimal_role, medium: "Book",   name: "Editor"    ) }
+      let(    :author) { create(:minimal_role, medium: "Book",   name: "Author"    ) }
+      let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
+      let(  :director) { create(:minimal_role, medium: "TvShow", name: "Director"  ) }
 
       let(:tv_show) { create(:minimal_tv_show) }
       let(   :book) { create(:minimal_book) }
@@ -826,7 +826,7 @@ RSpec.describe Creator, type: :model do
       let!(:contrib_3) { subject.contributions.create(work: book, role: editor) }
       let!(:contrib_4) { subject.contributions.create(work: book, role: author) }
 
-      it "returns hash of credits and contributions sorted alphabetically and grouped by work_type" do
+      it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
         expect(subject.display_roles).to eq({
           "Book"    => ["Author",  "Creator",  "Editor"    ],
           "TV Show" => ["Creator", "Director", "Showrunner"]

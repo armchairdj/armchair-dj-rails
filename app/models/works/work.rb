@@ -5,19 +5,21 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  medium     :string
 #  subtitle   :string
 #  title      :string           not null
-#  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_works_on_alpha  (alpha)
-#  index_works_on_type   (type)
+#  index_works_on_alpha   (alpha)
+#  index_works_on_medium  (medium)
 #
 
 class Work < ApplicationRecord
+
+  self.inheritance_column = :medium
 
   #############################################################################
   # CONSTANTS.
@@ -37,11 +39,11 @@ class Work < ApplicationRecord
   # CLASS.
   #############################################################################
 
-  def self.grouped_options
-    order(:type, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
+  def self.grouped_by_medium
+    order(:medium, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
   end
 
-  def self.type_options
+  def self.media
     load_descendants
 
     classes = descendants.reject { |x| x == Medium }
@@ -49,8 +51,8 @@ class Work < ApplicationRecord
     classes.map { |x| [x.true_human_model_name, x.true_model_name.name] }.sort_by(&:last)
   end
 
-  def self.valid_types
-    type_options.map(&:last)
+  def self.valid_media
+    media.map(&:last)
   end
 
   def self.load_descendants
@@ -78,13 +80,7 @@ class Work < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :aspects, -> { distinct } do
-    def << (aspect)
-      aspect -= self if aspect.respond_to?(:to_a)
-
-      super aspect unless include?(aspect)
-    end
-  end
+  has_and_belongs_to_many :aspects, -> { distinct }
 
   has_many :milestones, dependent: :destroy
 
@@ -139,7 +135,7 @@ class Work < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :type, presence: true
+  validates :medium, presence: true
   validates :title, presence: true
 
   validates :credits, length: { minimum: 1 }
@@ -157,10 +153,6 @@ class Work < ApplicationRecord
   end
 
   private :has_released_milestone
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
 
   #############################################################################
   # INSTANCE.

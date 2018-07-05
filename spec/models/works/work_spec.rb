@@ -10,7 +10,7 @@ RSpec.describe Work, type: :model do
   end
 
   describe "class" do
-    describe "self#grouped_options" do
+    describe "self#grouped_by_medium" do
       let( :song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
       let( :song_2) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show         ) }
@@ -18,7 +18,7 @@ RSpec.describe Work, type: :model do
 
       let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
 
-      subject { described_class.where(id: ids).grouped_options }
+      subject { described_class.where(id: ids).grouped_by_medium }
 
       it "groups by type and alphabetizes" do
         is_expected.to eq([
@@ -29,22 +29,22 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "self#type_options" do
-      subject { described_class.type_options }
+    describe "self#media" do
+      subject { described_class.media }
 
       let(:expected) do
         [
           ["Album",         "Album"       ],
+          ["App",           "App"         ],
           ["Book",          "Book"        ],
           ["Comic Book",    "ComicBook"   ],
+          ["Gadget",        "Gadget"      ],
           ["Graphic Novel", "GraphicNovel"],
-          ["Hardware",      "Hardware"    ],
           ["Movie",         "Movie"       ],
           ["Podcast",       "Podcast"     ],
           ["Product",       "Product"     ],
           ["Publication",   "Publication" ],
           ["Radio Show",    "RadioShow"   ],
-          ["Software",      "Software"    ],
           ["Song",          "Song"        ],
           ["TV Episode",    "TvEpisode"   ],
           ["TV Season",     "TvSeason"    ],
@@ -56,22 +56,22 @@ RSpec.describe Work, type: :model do
       it { is_expected.to eq(expected) }
     end
 
-    describe "self#valid_types" do
-      subject { described_class.valid_types }
+    describe "self#valid_media" do
+      subject { described_class.valid_media }
 
       let(:expected) do
         [
           "Album",
+          "App",
           "Book",
           "ComicBook",
+          "Gadget",
           "GraphicNovel",
-          "Hardware",
           "Movie",
           "Podcast",
           "Product",
           "Publication",
           "RadioShow",
-          "Software",
           "Song",
           "TvEpisode",
           "TvSeason",
@@ -173,7 +173,7 @@ RSpec.describe Work, type: :model do
         it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
-          let(:role) { create(:minimal_role, work_type: "Song") }
+          let(:role) { create(:minimal_role, medium: "Song") }
 
           subject do
             build(:minimal_song, contributions_attributes: {
@@ -248,7 +248,7 @@ RSpec.describe Work, type: :model do
   describe "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:type) }
+    it { is_expected.to validate_presence_of(:medium) }
 
     it { is_expected.to validate_presence_of(:title) }
 
@@ -321,8 +321,8 @@ RSpec.describe Work, type: :model do
           subject { build(:minimal_song) }
 
           let(:creator) { create(:minimal_creator) }
-          let( :role_1) { create(:minimal_role, work_type: "Song") }
-          let( :role_2) { create(:minimal_role, work_type: "Song") }
+          let( :role_1) { create(:minimal_role, medium: "Song") }
+          let( :role_2) { create(:minimal_role, medium: "Song") }
 
           let(:good_attributes) { {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
@@ -454,7 +454,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "all-creator methods" do
-      let(     :role) { create(:minimal_role, work_type: "Song") }
+      let(     :role) { create(:minimal_role, medium: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }

@@ -181,7 +181,7 @@ RSpec.describe Playlist, type: :model do
     end
 
     describe "all-creator methods" do
-      let(:role     ) { create(:minimal_role, work_type: "Song") }
+      let(:role     ) { create(:minimal_role, medium: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }

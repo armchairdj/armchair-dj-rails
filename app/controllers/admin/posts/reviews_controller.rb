@@ -11,7 +11,7 @@ private
   def prepare_form
     super
 
-    @works = Work.grouped_options
+    @works = Work.grouped_by_medium
   end
 
   def allowed_sorts

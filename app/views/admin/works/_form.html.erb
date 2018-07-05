@@ -15,9 +15,9 @@
         <%= content_tag(:legend, "Basics") %>
 
         <% if f.object.persisted? %>
-          <%= f.input :type, as: :select, collection: @types, disabled: true %>
+          <%= f.input :medium, as: :select, collection: @media, disabled: true %>
         <% else %>
-          <%= f.input :type, as: :select, collection: @types, input_html: {
+          <%= f.input :medium, as: :select, collection: @media, input_html: {
             "data-controller": "selectable",
             "data-target":     "auto-submittable.field"
           } %>
@@ -47,7 +47,7 @@
       <%= content_tag(:fieldset, class: "legendary") do %>
         <%= content_tag(:legend, "Aspects") %>
 
-        <% @work.class.facets.each do |facet| %>
+        <% @work.available_facets.each do |facet| %>
           <%= f.input :aspect_ids,
             label:         Aspect.human_enum_value(:facet, facet),
             include_blank: :translate,
@@ -70,7 +70,7 @@
     <%= admin_submit_button(f) %>
 
     <%= f.button(:button, "Update Medium", type: :submit,
-      name: "step", value: "select_work_type", class: "secondary",
+      name: "step", value: "select_medium", class: "secondary",
       "data-target": "auto-submittable.button"
     ) if @work.new_record? %>
   <% end %>

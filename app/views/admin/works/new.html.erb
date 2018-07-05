@@ -6,7 +6,7 @@
   h1: @title
 ) %>
 
-<% if @work.type.blank? %>
+<% if @work.medium.blank? %>
   <%= render partial: "form_choose_medium" %>
 <% else %>
   <%= render partial: "form" %>

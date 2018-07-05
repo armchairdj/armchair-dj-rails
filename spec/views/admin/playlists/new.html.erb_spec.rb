@@ -6,7 +6,7 @@ RSpec.describe "admin/playlists/new", type: :view do
   before(:each) do
     @model_class = assign(:model_name, Playlist)
     @playlist    = assign(:playlist, build(:playlist))
-    @works       = assign(:works, Work.grouped_options)
+    @works       = assign(:works, Work.grouped_by_medium)
   end
 
   it "renders new playlist form" do

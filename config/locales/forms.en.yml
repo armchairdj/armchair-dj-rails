@@ -88,16 +88,16 @@ en:
       work:
         subtitle:
           album: "e.g. Remastered Version"
+          app: ""
           book: "e.g. A Memoir"
           comic_book: "e.g. Vol. 4, Issue 20"
+          gadget: ""
           graphic_novel: "e.g. The Death of Jean Grey"
-          hardware: ""
           movie: ""
           podcast: ""
           product: ""
           publication: ""
           radio_show: ""
-          software: ""
           song: "e.g. C2 Remix, Live at The Badlands"
           tv_episode: "Conversations With Dead People"
           tv_season: "Season 7"

@@ -30,31 +30,31 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #new" do
-      it "renders only the type dropdown" do
+      it "renders only the media dropdown" do
         get :new
 
         is_expected.to successfully_render("admin/works/new")
         expect(assigns(:work)).to be_a_new(Work)
 
-        is_expected.to prepare_only_the_type_dropdown
+        is_expected.to prepare_the_initial_form
       end
     end
 
     describe "POST #create" do
-      let(:initial_params) { attributes_for(:work, type: "Song") }
-      let(    :max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song") }
-      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, type: "Song").except(:title) }
+      let(:initial_params) { attributes_for(:work, medium: "Song") }
+      let(    :max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song") }
+      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
 
       context "with initial params" do
         it "renders new with full form but no errors" do
-          post :create, params: { step: "select_work_type", work: initial_params }
+          post :create, params: { step: "select_medium", work: initial_params }
 
           is_expected.to successfully_render("admin/works/new")
 
           expect(assigns(:work)       ).to have_coerced_attributes(initial_params)
           expect(assigns(:work).errors).to match_array([])
 
-          is_expected.to prepare_the_work_dropdowns
+          is_expected.to prepare_the_complete_form
         end
       end
 
@@ -79,7 +79,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           subject { operation }
 
           it { is_expected.to successfully_render("admin/works/new") }
-          it { is_expected.to prepare_the_work_dropdowns }
+          it { is_expected.to prepare_the_complete_form }
 
           describe "instance" do
             subject { operation; assigns(:work) }
@@ -99,7 +99,7 @@ RSpec.describe Admin::WorksController, type: :controller do
 
         is_expected.to successfully_render("admin/works/edit")
         is_expected.to assign(work, :work)
-        is_expected.to prepare_the_work_dropdowns
+        is_expected.to prepare_the_complete_form
       end
     end
 
@@ -134,7 +134,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           expect(assigns(:work)       ).to eq(work)
           expect(assigns(:work).valid?).to eq(false)
 
-          is_expected.to prepare_the_work_dropdowns
+          is_expected.to prepare_the_complete_form
         end
       end
     end

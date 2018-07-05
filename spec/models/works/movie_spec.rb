@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Movie, type: :model do
-  describe "constants" do
-    # Nothing so far.
-  end
-
   describe "concerns" do
     it_behaves_like "a_medium"
   end
@@ -21,59 +17,20 @@ RSpec.describe Movie, type: :model do
       let(:instance) { create_minimal_instance }
 
       specify { expect(instance.model_name.name      ).to eq("Work") }
-      specify { expect(instance.type                 ).to eq("Movie") }
+      specify { expect(instance.medium               ).to eq("Movie") }
       specify { expect(instance.true_model_name.name ).to eq("Movie") }
       specify { expect(instance.true_human_model_name).to eq("Movie") }
     end
   end
 
   describe "class" do
-    pending "self#facets"
-  end
-
-  describe "scope-related" do
-    # Nothing so far.
-  end
-
-  describe "associations" do
-    # Nothing so far.
-  end
-
-  describe "attributes" do
-    describe "nested" do
-      # Nothing so far.
-    end
-
-    describe "enums" do
-      # Nothing so far.
-    end
-  end
-
-  describe "validations" do
-    # Nothing so far.
-
-    describe "conditional" do
-      # Nothing so far.
-    end
-
-    describe "custom" do
-      # Nothing so far.
-    end
-  end
-
-  describe "hooks" do
-    # Nothing so far.
-
-    describe "callbacks" do
-      # Nothing so far.
-    end
+    pending "self#available_facets"
   end
 
   describe "instance" do
-    # Nothing so far.
-
-    describe "private" do
-      # Nothing so far.
+    describe "role methods" do
+      pending "#available_roles"
+      pending "#available_role_ids"
     end
   end
 end

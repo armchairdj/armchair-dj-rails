@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Admin::RolesController, type: :controller do
-  let(:type_options) { Work.type_options }
-  let(        :role) { create(:minimal_role, work_type: type_options.first.last) }
+  let(:media) { Work.media }
+  let(        :role) { create(:minimal_role, medium: media.first.last) }
 
   describe "concerns" do
     it_behaves_like "an_admin_controller"
@@ -37,13 +37,13 @@ RSpec.describe Admin::RolesController, type: :controller do
 
         expect(assigns(:role)).to be_a_new(Role)
 
-        expect(assigns(:work_types)).to match_array(type_options)
+        expect(assigns(:media)).to match_array(media)
       end
     end
 
     describe "POST #create" do
-      let(:max_params) { attributes_for(:complete_role, work_type: type_options.first.last) }
-      let(:min_params) { attributes_for(:minimal_role,  work_type: type_options.first.last) }
+      let(:max_params) { attributes_for(:complete_role, medium: media.first.last) }
+      let(:min_params) { attributes_for(:minimal_role,  medium: media.first.last) }
       let(:bad_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
@@ -99,7 +99,7 @@ RSpec.describe Admin::RolesController, type: :controller do
           expect(assigns(:role)).to have_coerced_attributes(bad_params)
           expect(assigns(:role)).to be_invalid
 
-          expect(assigns(:work_types)).to match_array(type_options)
+          expect(assigns(:media)).to match_array(media)
         end
       end
     end
@@ -112,7 +112,7 @@ RSpec.describe Admin::RolesController, type: :controller do
 
         is_expected.to assign(role, :role)
 
-        expect(assigns(:work_types)).to match_array(type_options)
+        expect(assigns(:media)).to match_array(media)
       end
     end
 
@@ -144,7 +144,7 @@ RSpec.describe Admin::RolesController, type: :controller do
 
           is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid
 
-          expect(assigns(:work_types)).to match_array(type_options)
+          expect(assigns(:media)).to match_array(media)
         end
       end
     end

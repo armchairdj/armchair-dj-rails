@@ -3,6 +3,12 @@
 require "ffaker"
 
 FactoryBot.define do
+  trait :with_milestone do
+    milestones_attributes { {
+      "0" => attributes_for(:milestone, activity: :released, year: "1972")
+    } }
+  end
+
   factory :work do
 
     ###########################################################################
@@ -15,12 +21,6 @@ FactoryBot.define do
 
     trait :with_subtitle do
       subtitle "Subtitle"
-    end
-
-    trait :with_milestone do
-      milestones_attributes { {
-        "0" => attributes_for(:milestone, activity: :released, year: "1972")
-      } }
     end
 
     trait :with_credits do
@@ -46,13 +46,13 @@ FactoryBot.define do
 
         contributor_count 1
 
-        work_type "Song"
+        role_medium "Song"
       end
 
       contributions_attributes do
         contributor_count.times.inject({}) do |memo, (i)|
           name    = maker_names[i] || generate(:creator_name)
-          role    = create(:minimal_role, work_type: work_type)
+          role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)
 
           memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); memo

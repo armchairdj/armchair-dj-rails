@@ -4,15 +4,15 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  medium     :string           not null
 #  name       :string
-#  work_type  :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_roles_on_alpha      (alpha)
-#  index_roles_on_work_type  (work_type)
+#  index_roles_on_alpha   (alpha)
+#  index_roles_on_medium  (medium)
 #
 
 require "rails_helper"
@@ -59,11 +59,11 @@ RSpec.describe Role, type: :model do
   describe "validations" do
     subject { create_minimal_instance }
 
-    it { is_expected.to validate_presence_of(:work_type) }
-    it { is_expected.to validate_inclusion_of(:work_type).in_array(Work.valid_types) }
+    it { is_expected.to validate_presence_of(:medium) }
+    it { is_expected.to validate_inclusion_of(:medium).in_array(Work.valid_media) }
 
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:work_type) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:medium) }
   end
 
   describe "instance" do
@@ -91,7 +91,7 @@ RSpec.describe Role, type: :model do
 
     describe "#display_medium" do
       describe "basic" do
-        subject { create_minimal_instance(work_type: "TvEpisode").display_medium }
+        subject { create_minimal_instance(medium: "TvEpisode").display_medium }
 
         it { is_expected.to eq("TV Episode") }
       end

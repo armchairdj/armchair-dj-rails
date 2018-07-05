@@ -74,12 +74,12 @@ private
   def instance_params
     params.fetch(:role, {}).permit(
       :name,
-      :work_type
+      :medium
     )
   end
 
   def prepare_form
-    @work_types = Work.type_options
+    @media = Work.media
   end
 
   def allowed_sorts

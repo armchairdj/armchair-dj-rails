@@ -2,9 +2,9 @@
 
 require "rspec/expectations"
 
-RSpec::Matchers.define :prepare_the_work_dropdowns do
+RSpec::Matchers.define :prepare_the_complete_form do
   match do
-    expect(assigns(:types   )).to be_a_kind_of(Array)
+    expect(assigns(:media   )).to be_a_kind_of(Array)
     expect(assigns(:creators)).to be_a_kind_of(ActiveRecord::Relation)
     expect(assigns(:roles   )).to be_a_kind_of(ActiveRecord::Relation)
   end
@@ -14,9 +14,9 @@ RSpec::Matchers.define :prepare_the_work_dropdowns do
   end
 end
 
-RSpec::Matchers.define :prepare_only_the_type_dropdown do
+RSpec::Matchers.define :prepare_the_initial_form do
   match do
-    expect(assigns(:types   )).to be_a_kind_of(Array)
+    expect(assigns(:media   )).to be_a_kind_of(Array)
     expect(assigns(:creators)).to eq(nil)
     expect(assigns(:roles   )).to eq(nil)
   end

@@ -100,7 +100,7 @@ private
   def prepare_form
     @playlist.prepare_playlistings
 
-    @works = Work.grouped_options
+    @works = Work.grouped_by_medium
   end
 
   def allowed_sorts

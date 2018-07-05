@@ -15,7 +15,7 @@ class Admin::WorksController < Admin::BaseController
   # POST /works
   # POST /works.json
   def create
-    return handle_work_type if params[:step] == "select_work_type"
+    return handle_medium if params[:step] == "select_medium"
 
     respond_to do |format|
       if @work.save
@@ -65,7 +65,7 @@ private
   end
 
   def build_new_instance
-    @work = Work.new(type: params[:work].try(:[], :type))
+    @work = Work.new(medium: params[:work].try(:[], :medium))
 
     @work.attributes = instance_params
   end
@@ -79,9 +79,9 @@ private
   end
 
   def prepare_form
-    @types = Work.type_options
+    @media = Work.media
 
-    if @work.type.present?
+    if @work.medium.present?
       @work.prepare_credits
       @work.prepare_contributions
       @work.prepare_milestones
@@ -93,7 +93,7 @@ private
 
   def instance_params
     params.fetch(:work, {}).permit([
-      :type,
+      :medium,
       :title,
       :subtitle,
       aspect_ids: [],
@@ -126,7 +126,7 @@ private
     ])
   end
 
-  def handle_work_type
+  def handle_medium
     respond_to do |format|
       format.html { prepare_form; render :new }
       format.json { render json: @work.errors, status: :unprocessable_entity }

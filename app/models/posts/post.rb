@@ -102,13 +102,7 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :tags, -> { distinct } do
-    def << (tag)
-      tag -= self if tag.respond_to?(:to_a)
-
-      super tag unless include?(tag)
-    end
-  end
+  has_and_belongs_to_many :tags, -> { distinct }
 
   #############################################################################
   # ATTRIBUTES.
@@ -137,6 +131,10 @@ class Post < ApplicationRecord
   validates :publish_on,   presence: true, if: :scheduled?
 
   validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
+
+  #############################################################################
+  # HOOKS.
+  #############################################################################
 
   #############################################################################
   # AASM LIFECYCLE.

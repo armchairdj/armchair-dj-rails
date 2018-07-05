@@ -3,16 +3,16 @@ en:
     subclasses:
       work: &work_subclasses
         album:         "Album"
+        app:           "App"
         book:          "Book"
         comic_book:    "Comic Book"
+        gadget:        "Gadget"
         graphic_novel: "Graphic Novel"
-        hardware:      "Hardware"
         movie:         "Movie"
         podcast:       "Podcast"
         product:       "Product"
         publication:   "Publication"
         radio_show:    "Radio Show"
-        software:      "Software"
         song:          "Song"
         tv_episode:    "TV Episode"
         tv_season:     "TV Season"
@@ -88,7 +88,7 @@ en:
           recut:      "Re-edited In"
           remixed:    "Remixed In"
       role:
-        work_type: "Medium"
+        medium: "Medium"
       user:
         current_password: "Current Password"
         current_sign_in_at: "Last Login At"
@@ -159,7 +159,7 @@ en:
               too_short: "Please choose at least two works."
         role:
           attributes:
-            work_type:
+            medium:
               inclusion: "Please choose a valid medium."
         tag:
           attributes:

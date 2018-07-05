@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_04_193005) do
+ActiveRecord::Schema.define(version: 2018_07_04_231025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,9 +175,9 @@ ActiveRecord::Schema.define(version: 2018_07_04_193005) do
     t.string "alpha"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "work_type", null: false
+    t.string "medium", null: false
     t.index ["alpha"], name: "index_roles_on_alpha"
-    t.index ["work_type"], name: "index_roles_on_work_type"
+    t.index ["medium"], name: "index_roles_on_medium"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -229,9 +229,9 @@ ActiveRecord::Schema.define(version: 2018_07_04_193005) do
     t.datetime "updated_at", null: false
     t.string "subtitle"
     t.string "alpha"
-    t.string "type"
+    t.string "medium"
     t.index ["alpha"], name: "index_works_on_alpha"
-    t.index ["type"], name: "index_works_on_type"
+    t.index ["medium"], name: "index_works_on_medium"
   end
 
   add_foreign_key "contributions", "roles"

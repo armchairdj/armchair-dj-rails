@@ -22,11 +22,11 @@ FactoryBot.define do
       } }
 
       transient do
-        maker_count     1
-        maker_names     ["Global Communication"]
+        maker_count       1
+        maker_names       ["Global Communication"]
         contributor_count 2
         contributor_names ["Tom Middleton", "Mark Pritchard"]
-        work_type         "Album"
+        role_medium       "Album"
       end
     end
 

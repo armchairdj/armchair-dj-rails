@@ -4,15 +4,15 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  medium     :string           not null
 #  name       :string
-#  work_type  :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_roles_on_alpha      (alpha)
-#  index_roles_on_work_type  (work_type)
+#  index_roles_on_alpha   (alpha)
+#  index_roles_on_medium  (medium)
 #
 
 class Role < ApplicationRecord
@@ -35,8 +35,9 @@ class Role < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:contributions, :works) }
-  scope :for_admin, -> { eager }
+  scope :for_medium, -> (medium) { where(medium: medium) }
+  scope :eager,      -> { includes(:contributions, :works) }
+  scope :for_admin,  -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -54,11 +55,11 @@ class Role < ApplicationRecord
   # VALIDATIONS.
   #############################################################################
 
-  validates :work_type, presence: true
-  validates :work_type, inclusion: { in: Work.valid_types }
+  validates :medium, presence: true
+  validates :medium, inclusion: { in: Work.valid_media }
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: [:work_type] }
+  validates :name, uniqueness: { scope: [:medium] }
 
   #############################################################################
   # HOOKS.
@@ -77,8 +78,8 @@ class Role < ApplicationRecord
   end
 
   def display_medium
-    return unless work_type
+    return unless medium
 
-    work_type.constantize.true_human_model_name
+    medium.constantize.true_human_model_name
   end
 end
