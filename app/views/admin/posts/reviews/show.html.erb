@@ -58,7 +58,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
         <%= content_tag(:td) do %>
-          <%= link_list(@review.links) %>
+          <%= @review.links.decorate.list %>
         <% end %>
       <% end %>
 

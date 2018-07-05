@@ -53,7 +53,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
         <%= content_tag(:td) do %>
-          <%= link_list(@article.links) %>
+          <%= @article.links.decorate.list %>
         <% end %>
       <% end %>
 
