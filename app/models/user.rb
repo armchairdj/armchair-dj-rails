@@ -81,7 +81,7 @@ class User < ApplicationRecord
 
   scope     :eager, -> { includes(:links, :posts, :playlists, :works, :makers) }
   scope :for_admin, -> { eager }
-  scope  :for_site, -> { joins(:posts).references(:posts).where.not(posts: { published_at: nil }).eager.alpha }
+  scope  :for_site, -> { eager.alpha.joins(:posts).merge(Post.published) }
 
   #############################################################################
   # ASSOCIATIONS.
