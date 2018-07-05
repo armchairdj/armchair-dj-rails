@@ -324,10 +324,4 @@ class Creator < ApplicationRecord
   def alpha_parts
     [name]
   end
-
-private
-
-  def has_published_content?
-    has_published_posts? || contributed_reviews.published.count > 0
-  end
 end

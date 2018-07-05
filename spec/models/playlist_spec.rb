@@ -180,7 +180,9 @@ RSpec.describe Playlist, type: :model do
       end
     end
 
-    describe "all-creator methods" do
+    pending "#posts"
+
+    describe "creator methods" do
       let(:role     ) { create(:minimal_role, medium: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }

@@ -84,6 +84,6 @@ RSpec.describe Milestone, type: :model do
   end
 
   describe "instance" do
-    # Nothing so far.
+    pending "#posts"
   end
 end
