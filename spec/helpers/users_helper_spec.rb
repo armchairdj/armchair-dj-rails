@@ -2,11 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe UserDecorator do
-  let(:decorator) { UserDecorator.new(user) }
-
+RSpec.describe UsersHelper do
   describe "#link" do
-    subject { decorator.link(opts) }
+    subject { helper.link_to_user(user, opts) }
 
     let(:user) { create(:writer, username: "ArmchairDJ") }
 
@@ -16,13 +14,13 @@ RSpec.describe UserDecorator do
       before(:each) { create(:minimal_review, :published, author: user); user.reload }
 
       describe "public" do
-        it { is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text:  "ArmchairDJ", count: 1) }
+        it { is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1) }
       end
 
       describe "admin" do
         let(:opts) { { admin: true } }
 
-        it { is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text:  "ArmchairDJ", count: 1) }
+        it { is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1) }
       end
 
       describe "with options" do

@@ -2,7 +2,7 @@
 
 module ReviewsHelper
   def review_title(review, full: true, length: nil)
-    truncated_title(review.work.display_title(full: full), length: length)
+    smart_truncate(review.work.display_title(full: full), length: length)
   end
 
   def link_to_review(review, admin: false, full: true, length: nil, **opts)

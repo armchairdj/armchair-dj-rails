@@ -2,7 +2,7 @@
 
 module ArticlesHelper
   def article_title(article, length: nil, **args)
-    truncated_title(article.title, length: length)
+    smart_truncate(article.title, length: length)
   end
 
   def link_to_article(article, admin: false, length: nil, **opts)

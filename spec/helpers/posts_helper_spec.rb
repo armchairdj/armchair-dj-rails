@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+include UsersHelper
+
 RSpec.describe PostsHelper, type: :helper do
   describe "display methods" do
     describe "#formatted_post_body" do
@@ -53,23 +55,23 @@ RSpec.describe PostsHelper, type: :helper do
       specify { expect(helper.post_scheduled_date(published)).to eq(nil) }
     end
 
-    describe "#truncated_title" do
+    describe "#smart_truncate" do
       let(:title) { "abcdefghijklmnopqrstuvwxyz" }
 
       describe "will truncate" do
-        subject { helper.truncated_title(title, length: 20) }
+        subject { helper.smart_truncate(title, length: 20) }
 
         it { is_expected.to eq("abcdefghijklmnopqrs…") }
       end
 
       describe "will truncate but too short" do
-        subject { helper.truncated_title(title, length: 30) }
+        subject { helper.smart_truncate(title, length: 30) }
 
         it { is_expected.to eq(title) }
       end
 
       describe "will not truncate" do
-        subject { helper.truncated_title(title) }
+        subject { helper.smart_truncate(title) }
 
         it { is_expected.to eq(title) }
       end

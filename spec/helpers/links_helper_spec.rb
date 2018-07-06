@@ -2,11 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe LinksDecorator do
-  let(:decorator) { LinksDecorator.new(links) }
-
-  describe "#list" do
-    subject { decorator.list(opts) }
+RSpec.describe LinksHelper do
+  describe "#link_list" do
+    subject { helper.link_list(links, opts) }
 
     let(:opts) { {} }
 

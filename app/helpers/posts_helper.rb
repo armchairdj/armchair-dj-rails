@@ -33,7 +33,7 @@ module PostsHelper
     time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
   end
 
-  def truncated_title(title, length: nil)
+  def smart_truncate(title, length: nil)
     length.nil? ? title : truncate(title, length: length, omission: "…")
   end
 
@@ -64,7 +64,7 @@ module PostsHelper
   #############################################################################
 
   def link_to_post_author(post)
-    return unless link = UserDecorator.new(post.author).link(rel: "author")
+    return unless link = link_to_user(post.author, rel: "author")
 
     content_tag(:address, link, class: "author")
   end

@@ -2,7 +2,7 @@
 
 module MixtapesHelper
   def mixtape_title(mixtape, length: nil)
-    truncated_title(mixtape.playlist.title, length: length)
+    smart_truncate(mixtape.playlist.title, length: length)
   end
 
   def link_to_mixtape(mixtape, admin: false, length: nil, **opts)

@@ -50,4 +50,10 @@ module MarkupHelper
 
     ps.map { |p| content_tag(:p, p) }.join("\n").html_safe
   end
+
+  def smart_truncate(str, length: nil)
+    return str if length.nil?
+
+    truncate(str, length: length, omission: "…", separator: " ")
+  end
 end
