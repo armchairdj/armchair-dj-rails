@@ -3,14 +3,14 @@
 require "rails_helper"
 
 RSpec.describe TagsDecorator do
-  include Draper::ViewHelpers
+  let(:decorator) { TagsDecorator.new(tags) }
 
   describe "#list" do
     before(:each) do
       allow(helpers).to receive(:admin_tag_path).and_return("/admin_tag_path")
     end
 
-    subject { tags.decorate.list(opts) }
+    subject { decorator.list(opts) }
 
     let( :opts) { {} }
 

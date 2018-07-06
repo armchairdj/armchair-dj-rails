@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe UsersDecorator do
+RSpec.describe ReviewsDecorator do
   pending "works"
 end

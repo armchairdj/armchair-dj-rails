@@ -124,8 +124,8 @@ private
   end
 
   def prepare_show
-    @tags   = @instance.tags.alpha.decorate
-    @links  = @instance.links.decorate
+    @tags   = TagsDecorator.new(@instance.tags.alpha)
+    @links  = LinksDecorator.new(@instance.links)
   end
 
   def handle_step

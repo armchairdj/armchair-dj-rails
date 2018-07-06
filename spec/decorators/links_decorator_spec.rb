@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe LinksDecorator do
-  include Draper::ViewHelpers
+  let(:decorator) { LinksDecorator.new(links) }
 
   describe "#list" do
-    subject { links.decorate.list(opts) }
+    subject { decorator.list(opts) }
 
     let(:opts) { {} }
 

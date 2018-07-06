@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe UserDecorator do
-  include Draper::ViewHelpers
+  let(:decorator) { UserDecorator.new(user) }
 
   describe "#link" do
-    subject { user.decorate.link(opts) }
+    subject { decorator.link(opts) }
 
     let(:user) { create(:writer, username: "ArmchairDJ") }
 

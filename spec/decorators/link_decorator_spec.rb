@@ -3,6 +3,4 @@
 require "rails_helper"
 
 RSpec.describe LinkDecorator do
-  include Draper::ViewHelpers
-
 end

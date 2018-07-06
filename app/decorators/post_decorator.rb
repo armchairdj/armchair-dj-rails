@@ -1,16 +1,11 @@
 # frozen_string_literal: true
 
-module PostsHelper
-
-  #############################################################################
-  # DISPLAY METHODS.
-  #############################################################################
-
-  def formatted_post_body(post)
-    paragraphs(post.body)
+class PostDecorator < InstanceDecorator
+  def formatted_body
+    h.paragraphs(object.body)
   end
 
-  def post_title(post, **args)
+  def title(**args)
     case
     when post.is_a?(Article)
       article_title(post, **args)

@@ -101,7 +101,7 @@ private
   end
 
   def prepare_show
-    @links = @user.links.decorate
+    @links = LinksDecorator.new(@user.links)
   end
 
   def allowed_scopes
