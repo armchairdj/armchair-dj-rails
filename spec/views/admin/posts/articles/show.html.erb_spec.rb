@@ -7,7 +7,9 @@ RSpec.describe "admin/posts/articles/show", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Article)
-    @article     = assign(:article, create(:minimal_article))
+    @article     = assign(:article, create(:complete_article))
+    @tags        = assign(:tags, @article.tags.alpha.decorate)
+    @links       = assign(:links, @article.links.decorate)
   end
 
   it "renders" do

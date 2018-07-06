@@ -46,14 +46,14 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Tags") %>
         <%= content_tag(:td) do %>
-          <%= tag_list(@article.tags.alpha, admin: true) %>
+          <%= @tags.list(admin: true) %>
         <% end %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
         <%= content_tag(:td) do %>
-          <%= @article.links.decorate.list %>
+          <%= @links.list %>
         <% end %>
       <% end %>
 

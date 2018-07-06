@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CollectionDecorator < Draper::CollectionDecorator
   include Draper::LazyHelpers
 

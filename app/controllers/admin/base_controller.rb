@@ -37,6 +37,10 @@ class Admin::BaseController < ApplicationController
     :edit
   ]
 
+  before_action :prepare_show, only: [
+    :show
+  ]
+
   after_action :verify_authorized
 
 private
@@ -52,6 +56,13 @@ private
   def determine_layout
     "admin"
   end
+
+  def prepare_form; end
+  def prepare_show; end
+
+  #############################################################################
+  # SCOPING AND SORTING.
+  #############################################################################
 
   def scoped_and_sorted_collection
     @scope = params[:scope] || allowed_scopes.keys.first

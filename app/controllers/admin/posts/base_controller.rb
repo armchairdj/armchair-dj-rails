@@ -123,6 +123,11 @@ private
     @tags = Tag.for_admin.alpha
   end
 
+  def prepare_show
+    @tags  = @instance.tags.alpha.decorate
+    @links = @instance.links.decorate
+  end
+
   def handle_step
     @update_method, @flash_key, @success_test = case params[:step]
     when "publish"

@@ -30,28 +30,31 @@ FactoryBot.define do
       description "link description"
     end
 
-    trait :with_creator do
-      association :linkable, factory: :minimal_creator
-    end
-
     trait :with_article do
       association :linkable, factory: :minimal_article
     end
 
-    trait :with_work do
-      association :linkable, factory: :minimal_song
+    trait :with_review do
+      association :linkable, factory: :minimal_review
+    end
+
+    trait :with_mixtape do
+      association :linkable, factory: :minimal_mixtape
+    end
+
+    trait :with_user do
+      association :linkable, factory: :writer
     end
 
     ###########################################################################
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_link, parent: :creator_link
+    factory :minimal_link, parent: :article_link
 
-    factory :creator_link do
+    factory :link_for_linkable do
       with_url
       with_description
-      with_creator
     end
 
     factory :article_link do
@@ -60,10 +63,22 @@ FactoryBot.define do
       with_article
     end
 
-    factory :work_link do
+    factory :review_link do
       with_url
       with_description
-      with_work
+      with_review
+    end
+
+    factory :mixtape_link do
+      with_url
+      with_description
+      with_mixtape
+    end
+
+    factory :user_link do
+      with_url
+      with_description
+      with_user
     end
   end
 end

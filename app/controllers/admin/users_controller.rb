@@ -100,6 +100,10 @@ private
     @roles = current_user.assignable_role_options
   end
 
+  def prepare_show
+    @links = @user.links.decorate
+  end
+
   def allowed_scopes
     super.merge({
       "Member" => :member,

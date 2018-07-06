@@ -75,4 +75,12 @@ FactoryBot.define do
       tag_count.times.inject([]) { |memo, (i)| memo << create(:minimal_tag).id; memo }
     end
   end
+
+  trait :with_links do
+    links_attributes { {
+      "0" => attributes_for(:link_for_linkable),
+      "1" => attributes_for(:link_for_linkable),
+      "2" => attributes_for(:link_for_linkable),
+    } }
+  end
 end

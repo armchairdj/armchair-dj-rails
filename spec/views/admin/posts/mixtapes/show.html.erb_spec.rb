@@ -7,7 +7,9 @@ RSpec.describe "admin/posts/mixtapes/show", type: :view do
 
   before(:each) do
     @model_class = assign(:model_name, Mixtape)
-    @mixtape     = assign(:mixtape, create(:minimal_mixtape))
+    @mixtape     = assign(:mixtape, create(:complete_mixtape))
+    @tags        = assign(:tags, @mixtape.tags.alpha.decorate)
+    @links       = assign(:links, @mixtape.links.decorate)
   end
 
   it "renders" do

@@ -28,6 +28,8 @@ FactoryBot.define do
     factory :complete_post_parent, parent: :minimal_post_parent do
       with_body
       with_summary
+      with_links
+      with_tags
     end
   end
 end
