@@ -38,9 +38,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
-        <%= content_tag(:td) do %>
-          <%= link_to(@mixtape.display_author, admin_user_path(@mixtape.author)) %>
-        <% end %>
+        <%= content_tag(:td, link_to_post_author(@mixtape, admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

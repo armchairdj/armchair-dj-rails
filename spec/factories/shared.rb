@@ -25,8 +25,8 @@ FactoryBot.define do
     summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
   end
 
-  trait :with_existing_author do
-    author_id { create(:admin).id }
+  trait :with_author do
+    association :author, factory: :writer
   end
 
   trait :draft do

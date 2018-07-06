@@ -124,8 +124,8 @@ private
   end
 
   def prepare_show
-    @tags  = @instance.tags.alpha.decorate
-    @links = @instance.links.decorate
+    @tags   = @instance.tags.alpha.decorate
+    @links  = @instance.links.decorate
   end
 
   def handle_step

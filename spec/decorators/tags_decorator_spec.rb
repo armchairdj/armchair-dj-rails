@@ -6,7 +6,9 @@ RSpec.describe TagsDecorator do
   include Draper::ViewHelpers
 
   describe "#list" do
-    before(:each) { allow(helpers).to receive(:admin_tag_path).and_return("/admin_tag_path") }
+    before(:each) do
+      allow(helpers).to receive(:admin_tag_path).and_return("/admin_tag_path")
+    end
 
     subject { tags.decorate.list(opts) }
 

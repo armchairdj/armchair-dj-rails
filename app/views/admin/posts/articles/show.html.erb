@@ -39,7 +39,7 @@
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
         <%= content_tag(:td) do %>
-          <%= link_to(@article.display_author, admin_user_path(@article.author)) %>
+        <%= content_tag(:td, link_to_post_author(@article, admin: true)) %>
         <% end %>
       <% end %>
 

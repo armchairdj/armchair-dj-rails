@@ -22,7 +22,7 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_post_parent do
-      with_existing_author
+      with_author
     end
 
     factory :complete_post_parent, parent: :minimal_post_parent do

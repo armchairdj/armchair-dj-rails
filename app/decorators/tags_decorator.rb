@@ -5,9 +5,9 @@ class TagsDecorator < CollectionDecorator
     return if object.empty?
 
     list = object.map do |tag|
-      content_tag(:li, admin ? tag.decorate.link : tag.name)
+      h.content_tag(:li, admin ? tag.decorate.link : tag.name)
     end
 
-    content_tag(:ul, list.join.html_safe, **opts)
+    h.content_tag(:ul, list.join.html_safe, **opts)
   end
 end

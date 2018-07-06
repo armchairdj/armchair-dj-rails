@@ -64,7 +64,7 @@ module PostsHelper
   #############################################################################
 
   def link_to_post_author(post)
-    return unless link = link_to_user(post.author, rel: "author")
+    return unless link = post.author.decorate.link(rel: "author")
 
     content_tag(:address, link, class: "author")
   end

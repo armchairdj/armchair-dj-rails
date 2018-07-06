@@ -3,8 +3,8 @@
 class TagDecorator < InstanceDecorator
   def link(**opts)
     text = object.name
-    url  = admin_tag_path(object)
+    url  = h.admin_tag_path(object)
 
-    link_to(text, url, **opts)
+    h.link_to(text, url, **opts)
   end
 end

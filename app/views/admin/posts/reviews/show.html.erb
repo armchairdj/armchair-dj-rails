@@ -43,23 +43,17 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
-        <%= content_tag(:td) do %>
-          <%= link_to(@review.display_author, admin_user_path(@review.author)) %>
-        <% end %>
+        <%= content_tag(:td, link_to_post_author(@review, admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Tags") %>
-        <%= content_tag(:td) do %>
-          <%= @tags.list(admin: true) %>
-        <% end %>
+        <%= content_tag(:td, @tags.list(admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
-        <%= content_tag(:td) do %>
-          <%= @links.list %>
-        <% end %>
+        <%= content_tag(:td, @links.list) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

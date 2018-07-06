@@ -83,7 +83,7 @@ FactoryBot.define do
 
     factory :minimal_playlist do
       with_title
-      with_existing_author
+      with_author
       with_2_tracks
     end
 
