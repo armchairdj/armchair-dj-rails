@@ -149,37 +149,6 @@ RSpec.describe Playlist, type: :model do
   describe "instance" do
     let(:instance) { create_minimal_instance }
 
-    describe "#reorder_playlistings!" do
-      let( :instance) { create_complete_instance }
-      let(      :ids) { instance.playlistings.map(&:id) }
-      let( :shuffled) { ids.shuffle }
-      let(    :other) { create_complete_instance }
-      let(:other_ids) { other.playlistings.map(&:id) }
-
-      it "reorders" do
-        instance.reorder_playlistings!(shuffled)
-
-        actual = instance.reload.playlistings
-
-        expect(actual.map(&:id)).to eq(shuffled)
-        expect(actual.map(&:position)).to eq((1..10).to_a)
-      end
-
-      it "raises if bad ids" do
-        expect {
-          instance.reorder_playlistings!(other_ids)
-        }.to raise_exception(ArgumentError)
-      end
-
-      it "raises if not enough ids" do
-        shuffled.shift
-
-        expect {
-          instance.reorder_playlistings!(shuffled)
-        }.to raise_exception(ArgumentError)
-      end
-    end
-
     pending "#posts"
 
     describe "creator methods" do

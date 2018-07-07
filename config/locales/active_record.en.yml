@@ -165,6 +165,8 @@ en:
           attributes:
         work:
           attributes:
+            aspects:
+              invalid: "Please choose only aspects appropriate for this medium."
             credits:
               too_short: "Please choose at least one creator."
             milestones:

@@ -19,9 +19,9 @@ require "rails_helper"
 
 RSpec.describe Playlisting, type: :model do
   describe "concerns" do
-    it_behaves_like "an_acts_as_list_model", 1, :playlist do
-      let(:one) { create(:complete_playlist).playlistings }
-      let(:two) { create(:complete_playlist).playlistings }
+    it_behaves_like "a_listable_model", :playlist do
+      let(:primary) { create(:complete_playlist).playlistings.sorted }
+      let(  :other) { create(:complete_playlist).playlistings.sorted }
     end
   end
 

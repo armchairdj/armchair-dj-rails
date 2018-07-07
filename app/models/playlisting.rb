@@ -25,7 +25,9 @@ class Playlisting < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  acts_as_list scope: :playlist, top_of_list: 1
+  include Listable
+
+  scoped_list(:playlist)
 
   #############################################################################
   # CLASS.
@@ -35,7 +37,6 @@ class Playlisting < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :sorted,    -> { joins(:playlist, :work).order("playlists.title, playlistings.position") }
   scope :eager,     -> { includes(:playlist, :work) }
   scope :for_admin, -> { eager.sorted }
 

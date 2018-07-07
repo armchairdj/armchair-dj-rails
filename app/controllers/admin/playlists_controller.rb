@@ -60,7 +60,7 @@ class Admin::PlaylistsController < Admin::BaseController
     find_instance
     authorize_instance
 
-    @playlist.reorder_playlistings!(params[:playlisting_ids])
+    Playlisting.reorder_for!(@playlist, params[:playlisting_ids])
   end
 
 private

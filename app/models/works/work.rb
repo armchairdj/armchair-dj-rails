@@ -3,13 +3,14 @@
 #
 # Table name: works
 #
-#  id         :bigint(8)        not null, primary key
-#  alpha      :string
-#  medium     :string
-#  subtitle   :string
-#  title      :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :bigint(8)        not null, primary key
+#  alpha          :string
+#  display_makers :string
+#  medium         :string
+#  subtitle       :string
+#  title          :string           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #
@@ -84,8 +85,8 @@ class Work < ApplicationRecord
 
   has_many :milestones, dependent: :destroy
 
-  has_many :credits,       inverse_of: :work, dependent: :destroy
-  has_many :contributions, inverse_of: :work, dependent: :destroy
+  has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
+  has_many :contributions,                    inverse_of: :work, dependent: :destroy
 
   has_many :makers,       through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
@@ -155,11 +156,31 @@ class Work < ApplicationRecord
   private :has_released_milestone
 
   #############################################################################
+  # HOOKS.
+  #############################################################################
+
+  before_save :memoize_display_makers, prepend: true
+
+  def memoize_display_makers
+    self.display_makers = collect_makers
+  end
+
+  private :memoize_display_makers
+
+  #############################################################################
   # INSTANCE.
   #############################################################################
 
   def posts
     reviews.union(mixtapes)
+  end
+
+  def creators
+    Creator.where(id: creator_ids)
+  end
+
+  def creator_ids
+    (makers.ids + contributors.ids).uniq
   end
 
   def display_title(full: false)
@@ -184,27 +205,14 @@ class Work < ApplicationRecord
     milestones.sorted
   end
 
-  def display_makers(connector: " & ")
-    return makers.alpha.to_a.map(&:name).join(connector) if persisted?
+  def collect_makers(connector: " & ")
+    arr = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
 
-    # So we can correctly calculate memoized alpha value for review during
-    # nested object creation.
-
-    unsaved = credits.map { |c| c.creator.try(:name) }.compact
-
-    unsaved.any? ? unsaved.sort.join(connector) : nil
-  end
-
-  def creators
-    Creator.where(id: creator_ids)
-  end
-
-  def creator_ids
-    (makers.ids + contributors.ids).uniq
+    arr.empty? ? nil : arr.join(connector)
   end
 
   def sluggable_parts
-    [display_makers(connector: " and "), title, subtitle]
+    [collect_makers(connector: " and "), title, subtitle]
   end
 
   def alpha_parts

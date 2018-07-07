@@ -22,9 +22,7 @@ FactoryBot.define do
       } }
 
       transient do
-        maker_count       1
         maker_names       ["Global Communication"]
-        contributor_count 2
         contributor_names ["Tom Middleton", "Mark Pritchard"]
         role_medium       "Album"
       end
@@ -35,8 +33,7 @@ FactoryBot.define do
       subtitle nil
 
       transient do
-        maker_count 2
-        maker_names ["Green Velvet", "Carl Craig"]
+        maker_names ["Carl Craig", "Green Velvet"]
       end
     end
 

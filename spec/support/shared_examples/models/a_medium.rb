@@ -4,6 +4,38 @@ require "rails_helper"
 
 RSpec.shared_examples "a_medium" do
   describe "class" do
+    # Nothing so far.
+  end
+
+  describe "validation" do
+    describe "custom" do
+      describe "#only_available_facets" do
+        subject { create_minimal_instance }
+
+        let!(  :all_facets) { Aspect.facets.keys.map(&:to_sym) }
+        let!(:avail_facets) { subject.available_facets }
+        let!(  :good_facet) { avail_facets.first }
+        let!(   :bad_facet) { (all_facets - avail_facets).first }
+        let!( :good_aspect) { create(:minimal_aspect, facet: good_facet) }
+        let!(  :bad_aspect) { create(:minimal_aspect, facet:  bad_facet) }
+
+        context "valid" do
+          before(:each) { subject.aspect_ids = [good_aspect.id]; subject.valid? }
+
+          specify { expect(subject).to be_valid }
+        end
+
+        context "invalid" do
+          before(:each) { subject.aspect_ids = [bad_aspect.id] }
+
+          it "has the right error" do
+            expect(subject).to_not be_valid
+
+            expect(subject).to have_error(:aspects, :invalid)
+          end
+        end
+      end
+    end
   end
 
   describe "instance" do

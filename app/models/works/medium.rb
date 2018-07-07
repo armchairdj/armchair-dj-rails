@@ -20,6 +20,21 @@ class Medium < Work
   end
 
   #############################################################################
+  # VALIDATIONS.
+  #############################################################################
+
+  validate { only_available_facets }
+
+  def only_available_facets
+    candidates = aspects.reject(&:marked_for_destruction?)
+    disallowed = candidates.reject { |x| available_facets.include?(x.facet.to_sym) }
+
+    self.errors.add(:aspects, :invalid) if disallowed.any?
+  end
+
+  private :only_available_facets
+
+  #############################################################################
   # INSTANCE.
   #############################################################################
 
@@ -40,6 +55,6 @@ class Medium < Work
   end
 
   def available_facets
-    nil
+    []
   end
 end

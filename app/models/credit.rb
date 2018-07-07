@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: credits
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  creator_id :bigint(8)
@@ -23,7 +23,6 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Credit < ApplicationRecord
 
   #############################################################################
@@ -36,6 +35,9 @@ class Credit < ApplicationRecord
 
   include Alphabetizable
   include Contributable
+  include Listable
+
+  scoped_list(:work)
 
   #############################################################################
   # CLASS.

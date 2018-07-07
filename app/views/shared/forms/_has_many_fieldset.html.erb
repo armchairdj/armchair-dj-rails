@@ -19,7 +19,7 @@
       <%= required_indicator if required %>
     <% end %>
 
-    <%= content_tag(:div, error, class: "legend-hint") if hint_text %>
+    <%= content_tag(:div, hint_text, class: "legend-hint") if hint_text %>
 
     <%= render partial: partial, collection: records, as: singular, locals: { f: f } %>
   <% end %>

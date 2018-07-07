@@ -98,20 +98,6 @@ class Playlist < ApplicationRecord
     works.map(&:creator_ids).flatten.uniq
   end
 
-  def reorder_playlistings!(sorted_playlisting_ids)
-    return unless sorted_playlisting_ids.any?
-
-    playlistings = Playlisting.find_by_sorted_ids(sorted_playlisting_ids).where(playlist_id: self.id)
-
-    unless playlistings.length == sorted_playlisting_ids.length && playlistings.length == self.playlistings.count
-      raise ArgumentError.new("Bad playlisting reorder; ids don't match.")
-    end
-
-    Playlisting.acts_as_list_no_update do
-      playlistings.each.with_index(0) { |playlisting, i| playlisting.update!(position: i + 1) }
-    end
-  end
-
   def alpha_parts
     [title]
   end

@@ -25,13 +25,13 @@ FactoryBot.define do
 
     trait :with_credits do
       transient do
-        maker_names { [generate(:creator_name)] }
+        maker_names []
 
         maker_count 1
       end
 
       credits_attributes do
-        maker_count.times.inject({}) do |memo, (i)|
+        [maker_count, maker_names.length].max.times.inject({}) do |memo, (i)|
           name    = maker_names[i] || generate(:creator_name)
           creator = create(:minimal_creator, name: name)
 
@@ -42,7 +42,7 @@ FactoryBot.define do
 
     trait :with_contributions do
       transient do
-        contributor_names { [generate(:creator_name)] }
+        contributor_names []
 
         contributor_count 1
 
@@ -50,7 +50,7 @@ FactoryBot.define do
       end
 
       contributions_attributes do
-        contributor_count.times.inject({}) do |memo, (i)|
+        [contributor_count, contributor_names.length].max.times.inject({}) do |memo, (i)|
           name    = maker_names[i] || generate(:creator_name)
           role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)

@@ -4,6 +4,7 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  position   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  creator_id :bigint(8)
@@ -30,6 +31,11 @@ RSpec.describe Credit, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "a_contributable_model"
+
+    it_behaves_like "a_listable_model", :work do
+      let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
+      let(  :other) { create(:minimal_work, maker_count: 5).credits.sorted }
+    end
   end
 
   describe "validations" do

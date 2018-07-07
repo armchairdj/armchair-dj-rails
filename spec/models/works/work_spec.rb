@@ -380,7 +380,23 @@ RSpec.describe Work, type: :model do
   end
 
   describe "hooks" do
-    # Nothing so far.
+    describe "#before_save" do
+      describe "#memoize_display_makers" do
+        let(:instance) { build_minimal_instance }
+
+        subject { instance.display_makers }
+
+        before(:each) do
+           allow(instance).to receive(:collect_makers).and_return("collected")
+           allow(instance).to receive(:memoize_display_makers).and_call_original
+          expect(instance).to receive(:memoize_display_makers)
+
+          instance.save
+        end
+
+        it { is_expected.to eq("collected") }
+      end
+    end
   end
 
   describe "instance" do
@@ -424,32 +440,55 @@ RSpec.describe Work, type: :model do
       end
     end
 
-    describe "#display_makers" do
-      let(:invalid) {  build(:work, :with_title                ) }
-      let(:unsaved) {  build(:kate_bush_never_for_ever         ) }
-      let(  :saved) { create(:kate_bush_never_for_ever         ) }
-      let(  :multi) { create(:carl_craig_and_green_velvet_unity) }
+    describe "#collect_makers" do
+      subject { instance.collect_makers(opts) }
 
-      it "nils without error on missing creator" do
-        expect(invalid.display_makers).to eq(nil)
+      let(:opts) { {} }
+
+      context "unsaved" do
+        context "no credits" do
+          let(:instance) { build(:work) }
+
+          it { is_expected.to eq(nil) }
+        end
+
+        context "one credit" do
+          let(:instance) { build(:kate_bush_never_for_ever) }
+
+          it { is_expected.to eq("Kate Bush") }
+        end
+
+        context "multiple credits" do
+          let(:instance) { create(:carl_craig_and_green_velvet_unity) }
+
+          it { is_expected.to eq("Carl Craig & Green Velvet") }
+
+          context "custom connector" do
+            let(:opts) { { connector: " and " } }
+
+            it { is_expected.to eq("Carl Craig and Green Velvet") }
+          end
+        end
       end
 
-      it "gives single creator on unsaved" do
-        expect(unsaved.display_makers).to eq("Kate Bush")
-      end
+      context "saved" do
+        context "one credit" do
+          let(:instance) { create(:kate_bush_never_for_ever) }
 
-      it "gives single creator on saved" do
-        expect(saved.display_makers).to eq("Kate Bush")
-      end
+          it { is_expected.to eq("Kate Bush") }
+        end
 
-      it "gives mutiple makers alphabetically" do
-        expect(multi.display_makers).to eq("Carl Craig & Green Velvet")
-      end
+        context "multiple credits" do
+          let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
-      it "overrides connector" do
-        expect(multi.display_makers(connector: " x ")).to eq(
-          "Carl Craig x Green Velvet"
-        )
+          it { is_expected.to eq("Carl Craig & Green Velvet") }
+
+          context "custom connector" do
+            let(:opts) { { connector: " and " } }
+
+            it { is_expected.to eq("Carl Craig and Green Velvet") }
+          end
+        end
       end
     end
 
@@ -484,15 +523,13 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#sluggable_parts" do
-      let(:instance) { create_complete_instance }
+      let(:instance) do
+        create_minimal_instance(title: "Title", subtitle: "Subtitle", maker_names: ["Kate Bush", "Peter Gabriel"])
+      end
 
       subject { instance.sluggable_parts }
 
-      it { is_expected.to eq([
-        instance.display_makers(connector: " and "),
-        instance.title,
-        instance.subtitle
-      ]) }
+      it { is_expected.to eq(["Kate Bush and Peter Gabriel", "Title", "Subtitle"]) }
     end
 
     describe "#alpha_parts" do

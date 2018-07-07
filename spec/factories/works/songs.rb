@@ -38,9 +38,7 @@ FactoryBot.define do
       ] }
 
       transient do
-        maker_count       1
         maker_names       ["Junior Boys"]
-        contributor_count 1
         contributor_names ["Carl Craig"]
         role_medium       "Song"
       end

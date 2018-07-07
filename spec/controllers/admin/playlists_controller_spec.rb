@@ -174,13 +174,8 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "POST #reorder_playlistings" do
-      let(       :playlist) { create(:complete_playlist) }
-      let(:playlisting_ids) { playlist.playlistings.ids }
-      let(       :shuffled) { playlisting_ids.shuffle }
-
-      before(:each) do
-        allow(playlist).to receive(:reorder_playlistings!).and_call_original
-      end
+      let( :playlist) { create(:complete_playlist) }
+      let( :shuffled) { playlist.playlistings.ids.shuffle }
 
       describe "non-xhr" do
         it "errors" do
