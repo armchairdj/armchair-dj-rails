@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::PlaylistsController, type: :controller do
-  let(:playlist) { create(:minimal_playlist) }
+  let(:instance) { create(:minimal_playlist) }
 
   describe "concerns" do
     it_behaves_like "an_admin_controller"
@@ -20,11 +20,11 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
     describe "GET #show" do
       it "renders" do
-        get :show, params: { id: playlist.to_param }
+        get :show, params: { id: instance.to_param }
 
         is_expected.to successfully_render("admin/playlists/show")
 
-        is_expected.to assign(playlist, :playlist)
+        is_expected.to assign(instance, :playlist)
       end
     end
 
@@ -115,10 +115,10 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
     describe "GET #edit" do
       it "renders" do
-        get :edit, params: { id: playlist.to_param }
+        get :edit, params: { id: instance.to_param }
 
         is_expected.to successfully_render("admin/playlists/edit")
-        is_expected.to assign(playlist, :playlist)
+        is_expected.to assign(instance, :playlist)
       end
     end
 
@@ -128,13 +128,13 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
       context "with valid params" do
         it "updates the requested playlist" do
-          put :update, params: { id: playlist.to_param, playlist: update_params }
+          put :update, params: { id: instance.to_param, playlist: update_params }
 
-          is_expected.to assign(playlist, :playlist).with_attributes(update_params).and_be_valid
+          is_expected.to assign(instance, :playlist).with_attributes(update_params).and_be_valid
         end
 
         it "redirects to index" do
-          put :update, params: { id: playlist.to_param, playlist: update_params }
+          put :update, params: { id: instance.to_param, playlist: update_params }
 
           is_expected.to send_user_to(
             admin_playlist_path(assigns(:playlist))
@@ -144,11 +144,11 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
       context "with invalid params" do
         it "renders edit" do
-          put :update, params: { id: playlist.to_param, playlist: bad_update_params }
+          put :update, params: { id: instance.to_param, playlist: bad_update_params }
 
           is_expected.to successfully_render("admin/playlists/edit")
 
-          is_expected.to assign(playlist, :playlist).with_attributes(bad_update_params).and_be_invalid
+          is_expected.to assign(instance, :playlist).with_attributes(bad_update_params).and_be_invalid
 
           expect(assigns(:works)).to be_a_kind_of(Array)
         end
@@ -156,16 +156,16 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "DELETE #destroy" do
-      let!(:playlist) { create(:minimal_playlist) }
+      let!(:instance) { create(:minimal_playlist) }
 
       it "destroys the requested playlist" do
         expect {
-          delete :destroy, params: { id: playlist.to_param }
+          delete :destroy, params: { id: instance.to_param }
         }.to change(Playlist, :count).by(-1)
       end
 
       it "redirects to index" do
-        delete :destroy, params: { id: playlist.to_param }
+        delete :destroy, params: { id: instance.to_param }
 
         is_expected.to send_user_to(admin_playlists_path).with_flash(
           :success, "admin.flash.playlists.success.destroy"
@@ -174,13 +174,13 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "POST #reorder_playlistings" do
-      let( :playlist) { create(:complete_playlist) }
-      let( :shuffled) { playlist.playlistings.ids.shuffle }
+      let(:instance) { create(:complete_playlist) }
+      let(:shuffled) { instance.playlistings.ids.shuffle }
 
       describe "non-xhr" do
         it "errors" do
           post :reorder_playlistings, params: {
-            id: playlist.to_param, playlisting_ids: shuffled
+            id: instance.to_param, playlisting_ids: shuffled
           }
 
           is_expected.to render_bad_request
@@ -190,12 +190,12 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       describe "xhr" do
         it "reorders playlistings" do
           post :reorder_playlistings, xhr: true, params: {
-            id: playlist.to_param, playlisting_ids: shuffled
+            id: instance.to_param, playlisting_ids: shuffled
           }
 
           expect(response).to have_http_status(204)
 
-          expect(playlist.reload.playlistings.ids).to eq(shuffled)
+          expect(instance.reload.playlistings.ids).to eq(shuffled)
         end
       end
     end

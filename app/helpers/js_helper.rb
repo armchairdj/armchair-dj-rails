@@ -68,6 +68,14 @@ module JsHelper
     )
   end
 
+  def js_sortable_credits_attrs(work)
+    js_attrs("sortable",
+      class: "numbered sortable",
+      param: "credit_ids",
+      url:   reorder_credits_admin_work_path(work)
+    )
+  end
+
   def js_tabbable_attrs(selected_tab)
     js_attrs("tabbable", "selected-tab": selected_tab, class: "tabgroup same-page")
   end

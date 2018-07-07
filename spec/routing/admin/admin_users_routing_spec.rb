@@ -13,7 +13,7 @@ RSpec.describe Admin::UsersController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/users/friendly_id").to route_to("admin/users#show", id: "friendly_id")
+      expect(get: "/admin/users/username").to route_to("admin/users#show", id: "username")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::UsersController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/users/friendly_id/edit").to route_to("admin/users#edit", id: "friendly_id")
+      expect(get: "/admin/users/username/edit").to route_to("admin/users#edit", id: "username")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/users/friendly_id").to route_to("admin/users#update", id: "friendly_id")
+      expect(put: "/admin/users/username").to route_to("admin/users#update", id: "username")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/users/friendly_id").to route_to("admin/users#update", id: "friendly_id")
+      expect(patch: "/admin/users/username").to route_to("admin/users#update", id: "username")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/users/friendly_id").to route_to("admin/users#destroy", id: "friendly_id")
+      expect(delete: "/admin/users/username").to route_to("admin/users#destroy", id: "username")
     end
   end
 end

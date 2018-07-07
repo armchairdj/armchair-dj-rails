@@ -1,0 +1,9 @@
+<% return if credits.empty? %>
+
+<%= admin_section("Credited Creators", "Drag to Reorder") do %>
+  <%= content_tag(:ol, js_sortable_credits_attrs(@work)) do %>
+    <% credits.each do |credit| %>
+      <%= content_tag(:li, credit.creator.name, "data-id": credit.id) %>
+    <% end %>
+  <% end %>
+<% end %>

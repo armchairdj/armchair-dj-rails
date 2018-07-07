@@ -88,13 +88,18 @@ Rails.application.routes.draw do
     resources :users,      concerns: :paginatable
     resources :tags,       concerns: :paginatable
     resources :creators,   concerns: :paginatable
-    resources :works,      concerns: :paginatable
     resources :aspects,    concerns: :paginatable
     resources :roles,      concerns: :paginatable
 
     resources :playlists, concerns: :paginatable do
       member do
         post :reorder_playlistings
+      end
+    end
+
+    resources :works, concerns: :paginatable do
+      member do
+        post :reorder_credits
       end
     end
   end

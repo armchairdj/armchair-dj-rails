@@ -58,6 +58,16 @@ class Admin::WorksController < Admin::BaseController
     end
   end
 
+  # POST /admin/works/1/reorder_credits
+  def reorder_credits
+    raise ActionController::UnknownFormat unless request.xhr?
+
+    find_instance
+    authorize @work, :update?
+
+    Credit.reorder_for!(@work, params[:credit_ids])
+  end
+
 private
 
   def find_collection

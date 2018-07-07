@@ -13,7 +13,7 @@ RSpec.describe Admin::TagsController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/admin/tags/friendly_id").to route_to("admin/tags#show", id: "friendly_id")
+      expect(get: "/admin/tags/1").to route_to("admin/tags#show", id: "1")
     end
 
     it "#new" do
@@ -25,19 +25,19 @@ RSpec.describe Admin::TagsController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/admin/tags/friendly_id/edit").to route_to("admin/tags#edit", id: "friendly_id")
+      expect(get: "/admin/tags/1/edit").to route_to("admin/tags#edit", id: "1")
     end
 
     it "#update via PUT" do
-      expect(put: "/admin/tags/friendly_id").to route_to("admin/tags#update", id: "friendly_id")
+      expect(put: "/admin/tags/1").to route_to("admin/tags#update", id: "1")
     end
 
     it "#update via PATCH" do
-      expect(patch: "/admin/tags/friendly_id").to route_to("admin/tags#update", id: "friendly_id")
+      expect(patch: "/admin/tags/1").to route_to("admin/tags#update", id: "1")
     end
 
     it "#destroy" do
-      expect(delete: "/admin/tags/friendly_id").to route_to("admin/tags#destroy", id: "friendly_id")
+      expect(delete: "/admin/tags/1").to route_to("admin/tags#destroy", id: "1")
     end
   end
 end

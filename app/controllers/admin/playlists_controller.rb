@@ -58,7 +58,7 @@ class Admin::PlaylistsController < Admin::BaseController
     raise ActionController::UnknownFormat unless request.xhr?
 
     find_instance
-    authorize_instance
+    authorize @playlist, :update?
 
     Playlisting.reorder_for!(@playlist, params[:playlisting_ids])
   end

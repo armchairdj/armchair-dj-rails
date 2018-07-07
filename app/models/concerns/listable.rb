@@ -10,10 +10,10 @@ module Listable
       scope :sorted, -> { joins(acts_as_list_scope).order(:"#{acts_as_list_scope}_id", :position) }
     end
 
-    def reorder_for!(parent, params)
-      sorted_ids = params.map(&:to_i)
+    def reorder_for!(parent, sorted_ids)
+      sorted_ids = sorted_ids.map(&:to_i)
 
-      return unless sorted_ids.try(:any?)
+      return unless sorted_ids.any?
 
       to_sort        = find_by_sorted_ids(sorted_ids)
       all_for_parent = parent.send(model_name.collection).ids
@@ -28,6 +28,9 @@ module Listable
       acts_as_list_no_update do
         to_sort.each.with_index(1) { |item, i| item.update!(position: i) }
       end
+
+      # Trigger any logic in parent the relies on position of association
+      parent.reload.save
     end
   end
 end

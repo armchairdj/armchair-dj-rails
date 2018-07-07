@@ -31,14 +31,19 @@
       <% end %>
 
       <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Creators") %>
+        <%= content_tag(:th, "Credited Artists") %>
         <%= content_tag(:td) do %>
           <%= content_tag(:ul) do %>
-            <% @work.creators.each do |creator| %>
-              <%= content_tag(:li, link_to_creator(creator)) %>
+            <% @work.credits.each do |credit| %>
+              <%= content_tag(:li, link_to_creator(credit.creator)) %>
             <% end %>
           <% end %>
         <% end %>
+      <% end %>
+
+      <%= content_tag(:tr) do %>
+        <%= content_tag(:th, "Memoized Credited Artists") %>
+        <%= content_tag(:td, @work.display_makers) %>
       <% end %>
 
       <% @work.display_milestones.each do |milestone| %>
@@ -84,5 +89,6 @@
   <% end %>
 <% end %>
 
+<%= render partial: "credits",              as: "credits",   object: @work.credits.for_admin %>
 <%= render partial: "admin/posts/list",     as: "posts",     object: @work.reviews.for_admin.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.for_admin.alpha %>
