@@ -11,7 +11,7 @@
 <%= formatted_post_body(@mixtape) %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_post_author(@mixtape) %> on <%= post_published_date(@mixtape) %>
+  Posted by <%= link_to_author_of(@mixtape) %> on <%= post_published_date(@mixtape) %>
 <% end %>
 
 <%= content_tag(:aside, class: "post-tags") do %>

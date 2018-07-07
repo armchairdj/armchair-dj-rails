@@ -9,4 +9,10 @@ module UsersHelper
 
     link_to(text, url, **opts)
   end
+
+  def link_to_author_of(obj, **opts)
+    return unless link = link_to_user(obj.author, admin: !!opts.delete(:admin), rel: "author")
+
+    content_tag(:address, link, **combine_attrs(opts, class: "author"))
+  end
 end

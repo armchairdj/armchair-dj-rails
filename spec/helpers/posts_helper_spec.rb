@@ -2,8 +2,6 @@
 
 require "rails_helper"
 
-include UsersHelper
-
 RSpec.describe PostsHelper, type: :helper do
   describe "display methods" do
     describe "#formatted_post_body" do
@@ -102,32 +100,6 @@ RSpec.describe PostsHelper, type: :helper do
         expect(helper.post_status_icon(create(:minimal_review, :published))).to eq(
           '<span class="svg-icon post-published">unlocked</span>'
         )
-      end
-    end
-  end
-
-  describe "link methods" do
-    describe "#link_to_post_author" do
-      let(:author) { create(:writer, username: "armchairdj") }
-
-      subject { link_to_post_author(instance) }
-
-      describe "published" do
-        let(:instance) { create(:minimal_article, :published, author: author) }
-
-        it { is_expected.to eq('<address class="author"><a rel="author" href="/profile/armchairdj">armchairdj</a></address>') }
-      end
-
-      describe "scheduled" do
-        let(:instance) { create(:minimal_article, :scheduled, author: author) }
-
-        it { is_expected.to eq(nil) }
-      end
-
-      describe "draft" do
-        let(:instance) { create(:minimal_article, :draft, author: author) }
-
-        it { is_expected.to eq(nil) }
       end
     end
   end

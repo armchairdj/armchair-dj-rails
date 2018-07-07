@@ -22,9 +22,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
-        <%= content_tag(:td) do %>
-          <%= link_to(@playlist.display_author, admin_user_path(@playlist.author)) %>
-        <% end %>
+        <%= content_tag(:td, link_to_author_of(@playlist, admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

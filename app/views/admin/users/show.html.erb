@@ -44,9 +44,7 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
-        <%= content_tag(:td) do %>
-          <%= @links.list %>
-        <% end %>
+        <%= content_tag(:td, link_list(@links)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

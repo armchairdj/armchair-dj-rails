@@ -16,7 +16,7 @@
 <%= formatted_post_body(@review) %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_post_author(@review) %> on <%= post_published_date(@review) %>
+  Posted by <%= link_to_author_of(@review) %> on <%= post_published_date(@review) %>
 <% end %>
 
 <%= content_tag(:aside, class: "post-tags") do %>

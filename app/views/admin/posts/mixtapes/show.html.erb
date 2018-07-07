@@ -38,21 +38,17 @@
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Author") %>
-        <%= content_tag(:td, link_to_post_author(@mixtape, admin: true)) %>
+        <%= content_tag(:td, link_to_author_of(@mixtape, admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Tags") %>
-        <%= content_tag(:td) do %>
-          <%= @tags.list(admin: true) %>
-        <% end %>
+        <%= content_tag(:td, tag_list(@tags, admin: true)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>
         <%= content_tag(:th, "Links") %>
-        <%= content_tag(:td) do %>
-          <%= @links.list %>
-        <% end %>
+        <%= content_tag(:td, link_list(@links)) %>
       <% end %>
 
       <%= content_tag(:tr) do %>

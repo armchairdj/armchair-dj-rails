@@ -63,12 +63,6 @@ module PostsHelper
   # LINK METHODS.
   #############################################################################
 
-  def link_to_post_author(post)
-    return unless link = link_to_user(post.author, rel: "author")
-
-    content_tag(:address, link, class: "author")
-  end
-
   def link_to_post(post, **opts)
     return link_to_article(post, **opts) if post.is_a?(Article)
     return link_to_review( post, **opts) if post.is_a?(Review)
