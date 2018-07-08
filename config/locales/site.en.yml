@@ -2,7 +2,7 @@ en:
   site:
     name: "Armchair DJ"
     name_html: "Armchair <span>DJ</span>"
-    name_with_tagline: "Armchair DJ | a monologue about music, with occasional mixtapes"
+    name_with_tagline: "Armchair DJ | A catalog of popular culture, plus the occasional mixtape."
     owner: "Brian J. Dillard"
-    tagline: "A monologue about music, with occasional mixtapes"
-    tagline_html: "<span>A monologue about music,</span> <span>with occasional mixtapes<span>"
+    tagline: "A catalog of popular culture, plus the occasional mixtape."
+    tagline_html: "<span>A catalog of popular culture,</span> <span>plus the occasional mixtape.<span>"

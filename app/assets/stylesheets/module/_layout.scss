@@ -21,10 +21,6 @@
   &.admin {}
 
   &.public {
-    @include breakpoint(large) {
-      @include fixed-widthable();
-    }
-
     .constrain {
       @include breakpoint(medium) {
         max-width: 800px;

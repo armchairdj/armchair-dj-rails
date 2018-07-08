@@ -4,14 +4,11 @@ nav#masthead {
   padding: .5rem 0;
 
   header {
-    float: left;
     @include clearfix();
 
     .headlines {
-      float: left;
-
       h1 {
-        font-size: 2rem;
+        font-size: 3rem;
         color: $white;
         white-space: nowrap;
         @include compact();
@@ -28,7 +25,7 @@ nav#masthead {
       }
 
       h2 {
-        font-size: .75rem;
+        font-size: 1.2rem;
         line-height: $readable;
         margin-top: -.8rem;
         color: $tagline-color;
@@ -44,45 +41,11 @@ nav#masthead {
     .logo {
       display: block;
       float: left;
-      width: 3.75rem;
+      width: 5.25rem;
 
       img {
         display: block;
       }
-    }
-  }
-
-  .menu {
-    float: right;
-  }
-
-  @include breakpoint(large) {
-    @include fixed-widthable($fixed-element: true);
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100%;
-
-    header {
-      float: none;
-      @include center-horizontal();
-
-      .headlines {
-        float: right;
-        text-align: right;
-      }
-
-      .logo {
-        float: right;
-
-        img {
-          @include flip-foreground-image();
-        }
-      }
-    }
-
-    .menu {
-      display: none;
     }
   }
 }

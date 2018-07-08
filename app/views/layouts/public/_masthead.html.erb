@@ -1,6 +1,5 @@
 <%= content_tag(:nav, id: "masthead") do %>
   <%= content_tag(:div, class: "constrain-narrow") do %>
-
     <%= content_tag(:header) do %>
       <% if @homepage %>
         <%= content_tag(:span, site_logo, class: "logo") %>
@@ -17,7 +16,5 @@
         <%= content_tag(:h2, t("site.tagline_html")) %>
       <% end %>
     <% end %>
-
-    <%= content_tag(:div, "menu", class: "menu") %>
   <% end %>
 <% end %>

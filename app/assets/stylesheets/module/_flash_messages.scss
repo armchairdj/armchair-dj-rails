@@ -41,10 +41,4 @@ aside.flash-messages {
       }
     }
   }
-
-  @include breakpoint(large) {
-    body.public & {
-      @include fixed-widthable();
-    }
-  }
 }
