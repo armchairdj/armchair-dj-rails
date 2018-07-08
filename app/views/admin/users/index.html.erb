@@ -17,11 +17,11 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "ID"       %>
-            <%= sortable_th @sorts, "Name"     %>
-            <%= sortable_th @sorts, "Username" %>
-            <%= sortable_th @sorts, "Email"    %>
-            <%= sortable_th @sorts, "Role"     %>
+            <%= sortable_link @sorts, "ID"       %>
+            <%= sortable_link @sorts, "Name"     %>
+            <%= sortable_link @sorts, "Username" %>
+            <%= sortable_link @sorts, "Email"    %>
+            <%= sortable_link @sorts, "Role"     %>
 
             <%= actions_th %>
           <% end %>

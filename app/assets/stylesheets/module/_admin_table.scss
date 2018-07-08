@@ -1,0 +1,117 @@
+table.admin {
+  @include bottom-margin();
+  font-size: $admin-table-font-size;
+
+  th,
+  td {
+    line-height: $spacious;
+  }
+}
+
+@media (max-width: 800px) {
+  table.admin {
+    thead,
+    th {
+      display: none;
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tr {
+      display: block;
+      @include admin-rule-line();
+      padding: .5rem;
+    }
+
+    td {
+      display: block;
+      line-height: 1.5rem;
+
+      .identifier {
+        text-align: right;
+        width: 30%;
+        display: inline-block;
+        color: $light-grey;
+        margin-right: .5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 801px) {
+  table.admin {
+    &.admin-view {
+      th {
+        text-align: right;
+        width: $dt-width;
+      }
+
+      td {
+        width: $dd-width;
+      }
+    }
+
+    tbody {
+      vertical-align: middle;
+    }
+
+    tr {
+      @include admin-rule-line();
+    }
+
+    td {
+      .identifier {
+        display: none;
+      }
+    }
+
+    th,
+    td {
+      padding: .25rem .5rem;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &.actions {
+        text-align: right;
+        white-space: nowrap;
+        padding-left: 1rem;
+      }
+
+      &.icon {
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      &.actions {
+        white-space: nowrap;
+      }
+    }
+
+    th {
+      text-transform: uppercase;
+      color: $armchair-smoke;
+
+      a {
+        @include underline-on-hover();
+
+        &.active {
+          &.asc {
+            @include up-arrow($color: $armchair-smoke);
+          }
+
+          &.desc {
+            @include down-arrow($color: $armchair-smoke);
+          }
+        }
+      }
+    }
+  }
+}

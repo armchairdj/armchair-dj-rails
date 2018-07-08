@@ -1,0 +1,15 @@
+a.admin {
+  display: inline-block;
+  @include underline-never();
+  @include left-margin-only(.5rem);
+  @include standard-svg-icon();
+  @include colored-svg-link();
+
+  &.destroy {
+    @include colored-svg-link($svg-link-color-danger, $svg-link-color-danger-hover);
+  }
+
+  &.public-view {
+    @include colored-svg-link($svg-link-color-tertiary, $svg-link-color-tertiary-hover);
+  }
+}

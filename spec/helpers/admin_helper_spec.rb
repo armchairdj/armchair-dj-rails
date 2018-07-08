@@ -120,6 +120,6 @@ RSpec.describe AdminHelper, type: :helper do
     pending "#unpublished_icon"
     pending "#post_status_icon"
     pending "#actions_th"
-    pending "#sortable_th"
+    pending "#sortable_link"
   end
 end

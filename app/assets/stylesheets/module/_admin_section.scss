@@ -1,0 +1,7 @@
+.admin-section {
+  @include admin-border();
+
+  &.tabled {
+    @include no-border-bottom();
+  }
+}

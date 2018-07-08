@@ -17,11 +17,11 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "Status", text: published_status_icon, class: "icon" %>
-            <%= sortable_th @sorts, "ID"     %>
-            <%= sortable_th @sorts, "Medium" %>
-            <%= sortable_th @sorts, "Title"  %>
-            <%= sortable_th @sorts, "Author" %>
+            <%= sortable_link @sorts, "Status", text: published_status_icon, class: "icon" %>
+            <%= sortable_link @sorts, "ID"     %>
+            <%= sortable_link @sorts, "Medium" %>
+            <%= sortable_link @sorts, "Title"  %>
+            <%= sortable_link @sorts, "Author" %>
 
             <%= actions_th %>
           <% end %>

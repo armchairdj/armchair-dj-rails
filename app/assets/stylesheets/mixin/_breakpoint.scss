@@ -1,6 +1,8 @@
 @mixin breakpoint($breakpoint) {
          @if $breakpoint == "x-small-only"  {
     @media (max-width: $breakpoint-x-small) { @content ; }
+  } @else if $breakpoint == "non-desktop-only"    {
+    @media (max-width: $breakpoint-large) { @content ; }
   } @else if $breakpoint == "small-only"    {
     @media (max-width: $breakpoint-small  ) { @content ; }
   } @else if $breakpoint == "small"         {

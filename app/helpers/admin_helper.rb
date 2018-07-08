@@ -167,6 +167,7 @@ module AdminHelper
 
   def admin_actions_cell(instance)
     links = [
+      content_tag(:span, "Actions", class: "identifier"),
       admin_public_link( instance),
       admin_view_link(   instance),
       admin_update_link( instance),
@@ -220,11 +221,12 @@ module AdminHelper
     content_tag(:th, "Actions", class: "actions")
   end
 
-  def sortable_th(sorts, name, text: nil, **opts)
+  def sortable_link(sorts, name, text: nil, **opts)
+    tag     = opts.delete(:tag) || :th
     props   = sorts[name]
     text    = text || content_tag(:span, name)
     classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
 
-    content_tag(:th, link_to(text, props[:url], class: classes), opts)
+    content_tag(tag, link_to(text, props[:url], class: classes), opts)
   end
 end

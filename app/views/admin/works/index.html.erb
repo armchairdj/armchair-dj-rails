@@ -17,10 +17,10 @@
       <%= content_tag(:table, class: "admin admin-index") do %>
         <%= content_tag(:thead) do %>
           <%= content_tag(:tr) do %>
-            <%= sortable_th @sorts, "ID"      %>
-            <%= sortable_th @sorts, "Medium"  %>
-            <%= sortable_th @sorts, "Title"   %>
-            <%= sortable_th @sorts, "Creator" %>
+            <%= sortable_link @sorts, "ID"      %>
+            <%= sortable_link @sorts, "Medium"  %>
+            <%= sortable_link @sorts, "Title"   %>
+            <%= sortable_link @sorts, "Creator" %>
 
             <%= actions_th %>
           <% end %>
@@ -29,10 +29,25 @@
         <%= content_tag(:tbody) do %>
           <% @works.each do |work| %>
             <%= content_tag(:tr) do %>
-              <%= content_tag(:td, work.id                   ) %>
-              <%= content_tag(:td, work.true_human_model_name) %>
-              <%= content_tag(:td, work.title                ) %>
-              <%= content_tag(:td, work.display_makers       ) %>
+              <%= content_tag(:td) do %>
+                <%= sortable_link @sorts, "ID", tag: :span, class: "identifier" %>
+                <%= work.id %>
+              <% end %>
+
+              <%= content_tag(:td) do %>
+                <%= sortable_link @sorts, "Medium", tag: :span, class: "identifier" %>
+                <%= work.true_human_model_name %>
+              <% end %>
+
+              <%= content_tag(:td) do %>
+                <%= sortable_link @sorts, "Title", tag: :span, class: "identifier" %>
+                <%= work.title %>
+              <% end %>
+
+              <%= content_tag(:td) do %>
+                <%= sortable_link @sorts, "Creator", tag: :span, class: "identifier" %>
+                <%= work.display_makers %>
+              <% end %>
 
               <%= admin_actions_cell(work) %>
             <% end %>

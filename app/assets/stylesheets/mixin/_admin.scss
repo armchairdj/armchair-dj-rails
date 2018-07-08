@@ -1,0 +1,7 @@
+@mixin admin-rule-line() {
+  @include border-bottom($padding: 0, $color: $armchair-smoke, $all: true)
+}
+
+@mixin admin-border() {
+  @include border-bottom($color: $armchair-smoke)
+}

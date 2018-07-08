@@ -1,0 +1,33 @@
+header.admin {
+  @include bottom-margin();
+  @include admin-rule-line();
+  @include clearfix();
+  position: relative;
+  padding-right: 3rem;
+
+  h4 {
+    font-size: 14px;
+    line-height: $readable;
+    text-transform: uppercase;
+    @include right-margin-only(.25rem);
+    color: $trolley-grey;
+  }
+
+  h1 {
+    font-size: $admin-headline-size;
+    line-height: $readable;
+    text-transform: uppercase;
+    @include right-margin-only(.25rem);
+  }
+
+  .actions {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    a.admin {
+      display: inline-block;
+      margin-bottom: .5rem;
+    }
+  }
+}

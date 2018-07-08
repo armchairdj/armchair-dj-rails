@@ -10,6 +10,7 @@
   <% end %>
 
   <%= content_tag(:ul, class: "bulleted") do %>
+    <%= content_tag(:li, link_to("Grid",            style_guides_item_path(template: :grid     ))) %>
     <%= content_tag(:li, link_to("Headlines",       style_guides_item_path(template: :headline ))) %>
     <%= content_tag(:li, link_to("Text Treatments", style_guides_item_path(template: :text     ))) %>
     <%= content_tag(:li, link_to("Quotations",      style_guides_item_path(template: :quotation))) %>
