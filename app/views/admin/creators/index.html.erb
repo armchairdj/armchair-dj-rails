@@ -7,44 +7,14 @@
   h1: @title
 ) %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scopes) %>
-
-  <%= content_tag(:div, class: "tab") do %>
-    <% if @creators.empty? %>
-      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
-    <% else %>
-      <%= content_tag(:table, class: "admin admin-index") do %>
-        <%= content_tag(:thead) do %>
-          <%= content_tag(:tr) do %>
-            <%= sortable_link @sorts, "ID"         %> 
-            <%= sortable_link @sorts, "Name"       %>
-            <%= sortable_link @sorts, "Primary"    %>
-            <%= sortable_link @sorts, "Individual" %>
-
-            <%= actions_th %>
-          <% end %>
-        <% end %>
-
-        <%= content_tag(:tbody) do %>
-          <% @creators.each do |creator| %>
-            <%= content_tag(:tr) do %>
-              <%= content_tag(:td, creator.id         ) %>
-              <%= content_tag(:td, creator.name       ) %>
-              <%= content_tag(:td, creator.primary?   ) %>
-              <%= content_tag(:td, creator.individual?) %>
-
-              <%= content_tag(:td, class: "actions") do %>
-                <%= admin_view_link(   creator) %>
-                <%= admin_update_link( creator) %>
-                <%= admin_destroy_link(creator) %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= paginate @creators %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "shared/admin/index",
+  scopes:  @scopes,
+  sorts:   @sorts,
+  records: @creators,
+  columns: [
+    { name: "ID",         method: :id          },
+    { name: "Name",       method: :name        },
+    { name: "Primary",    method: :primary?    },
+    { name: "Individual", method: :individual? },
+  ]
+%>

@@ -7,45 +7,14 @@
   h1: @title
 ) %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scopes) %>
-
-  <%= content_tag(:div, class: "tab") do %>
-    <% if @articles.empty? %>
-      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
-    <% else %>
-      <%= content_tag(:table, class: "admin admin-index") do %>
-        <%= content_tag(:thead) do %>
-          <%= content_tag(:tr) do %>
-            <%= sortable_link @sorts, "Status", text: published_status_icon, class: "icon" %>
-            <%= sortable_link @sorts, "ID"     %> 
-            <%= sortable_link @sorts, "Title"  %>
-            <%= sortable_link @sorts, "Author" %>
-
-            <%= actions_th %>
-          <% end %>
-        <% end %>
-
-        <%= content_tag(:tbody) do %>
-          <% @articles.each do |article| %>
-            <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post_status_icon(article), class: "icon") %>
-              <%= content_tag(:td, article.id                              ) %>
-              <%= content_tag(:td, article_title(article, length: 40)      ) %>
-              <%= content_tag(:td, article.display_author                  ) %>
-
-              <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_link( article) %>
-                <%= admin_view_link(   article) %>
-                <%= admin_update_link( article) %>
-                <%= admin_destroy_link(article) %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= paginate @articles %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "shared/admin/index",
+  scopes:  @scopes,
+  sorts:   @sorts,
+  records: @articles,
+  columns: [
+    { name: "Status", method: -> (x) { post_status_icon(x) }, text: published_status_icon, class: "icon" },
+    { name: "ID",     method: :id                                     },
+    { name: "Title",  method: -> (x) { article_title(x, length: 40) } },
+    { name: "Author", method: :display_author                         },
+  ]
+%>

@@ -113,7 +113,7 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "markup generators" do
     pending "#admin_header"
-    pending "#admin_actions_cell"
+    pending "#actions_td"
     pending "#admin_index_tabs"
     pending "#admin_column_icon"
     pending "#published_icon"

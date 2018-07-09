@@ -217,7 +217,7 @@ RSpec.describe Admin::WorksController, type: :controller do
           "Default",
           "ID",
           "Title",
-          "Creator",
+          "Makers",
           "Medium",
         ])
       end

@@ -165,18 +165,6 @@ module AdminHelper
     links.compact.join.html_safe
   end
 
-  def admin_actions_cell(instance)
-    links = [
-      content_tag(:span, "Actions", class: "identifier"),
-      admin_public_link( instance),
-      admin_view_link(   instance),
-      admin_update_link( instance),
-      admin_destroy_link(instance)
-    ].compact.join.html_safe
-
-    content_tag(:td, links, class: "actions")
-  end
-
   #############################################################################
   # INDEX TABS.
   #############################################################################
@@ -217,16 +205,11 @@ module AdminHelper
   # TABLES.
   #############################################################################
 
-  def actions_th
-    content_tag(:th, "Actions", class: "actions")
-  end
-
-  def sortable_link(sorts, name, text: nil, **opts)
-    tag     = opts.delete(:tag) || :th
-    props   = sorts[name]
+  def sortable_link(sorts, name, text: nil)
     text    = text || content_tag(:span, name)
+    props   = sorts[name]
     classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
 
-    content_tag(tag, link_to(text, props[:url], class: classes), opts)
+    link_to(text, props[:url], class: classes)
   end
 end

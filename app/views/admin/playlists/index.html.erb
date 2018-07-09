@@ -7,38 +7,13 @@
   h1: @title
 ) %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scopes) %>
-
-  <%= content_tag(:div, class: "tab") do %>
-    <% if @playlists.empty? %>
-      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
-    <% else %>
-      <%= content_tag(:table, class: "admin admin-index") do %>
-        <%= content_tag(:thead) do %>
-          <%= content_tag(:tr) do %>
-            <%= sortable_link @sorts, "ID"     %>
-            <%= sortable_link @sorts, "Title"  %>
-            <%= sortable_link @sorts, "Author" %>
-
-            <%= actions_th %>
-          <% end %>
-        <% end %>
-
-        <%= content_tag(:tbody) do %>
-          <% @playlists.each do |playlist| %>
-            <%= content_tag(:tr) do %>
-              <%= content_tag(:td, playlist.id            ) %>
-              <%= content_tag(:td, playlist.title         ) %>
-              <%= content_tag(:td, playlist.display_author) %>
-
-              <%= admin_actions_cell(playlist) %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <%= paginate @playlists %>
-  <% end %>
-<% end %>
+<%= render "shared/admin/index",
+  scopes:  @scopes,
+  sorts:   @sorts,
+  records: @playlists,
+  columns: [
+    { name: "ID",      method: :id             },
+    { name: "Title",   method: :title          },
+    { name: "Author",  method: :display_author },
+  ]
+%>

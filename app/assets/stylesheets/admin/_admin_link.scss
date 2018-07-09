@@ -1,7 +1,7 @@
 a.admin {
   display: inline-block;
   @include underline-never();
-  @include left-margin-only(.5rem);
+  @include right-margin-only(.5rem);
   @include standard-svg-icon();
   @include colored-svg-link();
 

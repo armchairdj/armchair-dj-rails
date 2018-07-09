@@ -86,8 +86,12 @@ class Review < Post
   # INSTANCE.
   #############################################################################
 
+  def medium
+    work.try(:true_human_model_name)
+  end
+
   def display_type(plural: false)
-    base = [work.try(:true_human_model_name), "Review"].compact.join(" ")
+    base = [medium, "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
   end

@@ -1,0 +1,61 @@
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= content_tag(:ul, class: "tabs") do %>
+    <% scopes.each do |scope_name, props| %>
+      <% if props[:active?] %>
+        <%= content_tag :li, content_tag(:span, scope_name, class: "tab-active") %>
+      <% else %>
+        <%= content_tag :li, link_to(scope_name, props[:url]) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <% if records.empty? %>
+      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
+    <% else %>
+      <%= content_tag(:table, class: "admin admin-index") do %>
+        <%= content_tag(:thead) do %>
+          <%= content_tag(:tr) do %>
+            <% columns.each do |column| %>
+              <%= content_tag(:th, sortable_link(sorts, column[:name], text: column[:text]), class: column[:class]) %>
+            <% end %>
+
+            <%= content_tag(:th, "Actions", class: "actions") %>
+          <% end %>
+        <% end %>
+
+        <%= content_tag(:tbody) do %>
+          <% records.each do |record| %>
+            <%= content_tag(:tr) do %>
+              <% columns.each do |column| %>
+                <%= content_tag(:td, class: column[:class]) do %>
+                  <%= content_tag(:span, class: "identifier") do %>
+                    <%= sortable_link(sorts, column[:name]) %>
+                  <% end %>
+
+                  <%= content_tag(:span, class: "playback") do %>
+                    <% if column[:method].is_a?(Proc) %>
+                      <%= column[:method].call(record) %>
+                    <% else %>
+                      <%= record.send(column[:method]) %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+
+              <%= content_tag(:td, class: "actions") do %>
+                <%= content_tag(:span, "Actions", class: "identifier") %>
+                <%= admin_public_link( record) %>
+                <%= admin_view_link(   record) %>
+                <%= admin_update_link( record) %>
+                <%= admin_destroy_link(record) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= paginate records %>
+  <% end %>
+<% end %>

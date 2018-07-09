@@ -7,42 +7,13 @@
   h1: @title
 ) %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scopes) %>
-
-  <%= content_tag(:div, class: "tab") do %>
-    <% if @aspects.empty? %>
-      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
-    <% else %>
-      <%= content_tag(:table, class: "admin admin-index") do %>
-        <%= content_tag(:thead) do %>
-          <%= content_tag(:tr) do %>
-            <%= sortable_link @sorts, "ID"    %> 
-            <%= sortable_link @sorts, "Facet" %>
-            <%= sortable_link @sorts, "Name"  %>
-
-            <%= actions_th %>
-          <% end %>
-        <% end %>
-
-        <%= content_tag(:tbody) do %>
-          <% @aspects.each do |aspect| %>
-            <%= content_tag(:tr) do %>
-              <%= content_tag(:td, aspect.id                  ) %>
-              <%= content_tag(:td, aspect.human_facet) %>
-              <%= content_tag(:td, aspect.name                ) %>
-
-              <%= content_tag(:td, class: "actions") do %>
-                <%= admin_view_link(   aspect) %>
-                <%= admin_update_link( aspect) %>
-                <%= admin_destroy_link(aspect) %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= paginate @aspects %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "shared/admin/index",
+  scopes:  @scopes,
+  sorts:   @sorts,
+  records: @aspects,
+  columns: [
+    { name: "ID",        method: :id          },
+    { name: "Facet",     method: :human_facet },
+    { name: "Name",      method: :name        },
+  ]
+%>

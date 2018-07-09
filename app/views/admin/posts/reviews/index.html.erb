@@ -7,47 +7,15 @@
   h1: @title
 ) %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= admin_index_tabs(@scopes) %>
-
-  <%= content_tag(:div, class: "tab") do %>
-    <% if @reviews.empty? %>
-      <%= content_tag(:p, I18n.t("admin.content.no_records")) %>
-    <% else %>
-      <%= content_tag(:table, class: "admin admin-index") do %>
-        <%= content_tag(:thead) do %>
-          <%= content_tag(:tr) do %>
-            <%= sortable_link @sorts, "Status", text: published_status_icon, class: "icon" %>
-            <%= sortable_link @sorts, "ID"     %>
-            <%= sortable_link @sorts, "Medium" %>
-            <%= sortable_link @sorts, "Title"  %>
-            <%= sortable_link @sorts, "Author" %>
-
-            <%= actions_th %>
-          <% end %>
-        <% end %>
-
-        <%= content_tag(:tbody) do %>
-          <% @reviews.each do |review| %>
-            <%= content_tag(:tr) do %>
-              <%= content_tag(:td, post_status_icon(review), class: "icon") %>
-              <%= content_tag(:td, review.id                        ) %>
-              <%= content_tag(:td, review.work.true_human_model_name) %>
-              <%= content_tag(:td, review_title(review, length: 40) ) %>
-              <%= content_tag(:td, review.display_author            ) %>
-
-              <%= content_tag(:td, class: "actions") do %>
-                <%= admin_public_link( review) %>
-                <%= admin_view_link(   review) %>
-                <%= admin_update_link( review) %>
-                <%= admin_destroy_link(review) %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= paginate @reviews %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "shared/admin/index",
+  scopes:  @scopes,
+  sorts:   @sorts,
+  records: @reviews,
+  columns: [
+    { name: "Status", method: -> (x) { post_status_icon(x) }, text: published_status_icon, class: "icon" },
+    { name: "ID",     method: :id                                    },
+    { name: "Title",  method: -> (x) { review_title(x, length: 40) } },
+    { name: "Author", method: :display_author                        },
+    { name: "Medium", method: :medium                                },
+  ]
+%>
