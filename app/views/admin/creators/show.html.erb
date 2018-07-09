@@ -7,53 +7,19 @@
   instance: @creator,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @creator.id) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Name") %>
-        <%= content_tag(:td, @creator.name) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Individual?") %>
-        <%= content_tag(:td, @creator.individual?) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Primary?") %>
-        <%= content_tag(:td, @creator.primary?) %>
-      <% end %>
-
-      <% if @creator.secondary? && @creator.real_name.present? %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Primary Identity") %>
-          <%= content_tag(:td, link_to_creator(@creator.real_name)) %>
-        <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@creator.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@creator.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @creator.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "admin/shared/show",
+  record: @creator,
+  rows: [
+    { name: "ID",        method: :id },
+    { name: "Name",      method: :name },
+    { name: "Group?",    method: :group? },
+    { name: "Alias?",    method: :alias? },
+    { name: "Real Name", method: -> (x) { link_to_creator(x.real_name) if x.real_name.present? }, },
+    { name: "Created",   date: true, method: :created_at },
+    { name: "Updated",   date: true, method: :updated_at },
+    { name: "Alpha",     method: :alpha },
+  ]
+%>
 
 <%= render partial: "list", as: "creators", object: @creator.groups,     headline: "Groups"     %>
 <%= render partial: "list", as: "creators", object: @creator.members,    headline: "Members"    %>
@@ -61,7 +27,7 @@
 <%= render partial: "list", as: "creators", object: @creator.personae,   headline: "Personae"   %>
 
 <% if (roles = @creator.display_roles).any? %>
-  <%= admin_section("Roles") do %>
+  <%= admin_section(headline: "Roles") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% roles.each do |medium, role_array| %>
         <%= content_tag(:dt, medium     ) %>
@@ -72,7 +38,7 @@
 <% end %>
 
 <% if (works = @creator.works.for_admin.alpha).any? %>
-  <%= admin_section("Works") do %>
+  <%= admin_section(headline: "Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
         <%= content_tag(:dt, work.true_human_model_name) %>
@@ -83,7 +49,7 @@
 <% end %>
 
 <% if (contributions = @creator.contributions.for_admin.alpha).any? %>
-  <%= admin_section("Contributions") do %>
+  <%= admin_section(headline: "Contributions") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
         <%= content_tag(:dt, contribution.name) %>

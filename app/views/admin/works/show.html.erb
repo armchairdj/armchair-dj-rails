@@ -7,79 +7,58 @@
   instance: @work,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @work.id) %>
-      <% end %>
+<%= render "admin/shared/show",
+  record: @work,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Medium",   method: :true_human_model_name },
+    { name: "Title",    method: :title },
+    { name: "Subtitle", method: :subtitle },
+    { name: "Makers",   method: :display_makers },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+  ]
+%>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @work.true_human_model_name) %>
+<% if (credits = @work.credits.for_admin).any? %>
+  <%= admin_section(headline: "Makers", subhead: "Drag to Reorder") do %>
+    <%= content_tag(:ol, js_sortable_credits_attrs(@work)) do %>
+      <% credits.each do |credit| %>
+        <%= content_tag(:li, link_to_creator(credit.creator), "data-id": credit.id) %>
       <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Title") %>
-        <%= content_tag(:td, @work.title) %>
+<% if (milestones = @work.display_milestones).any? %>
+  <%= admin_section(headline: "Milestones") do %>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% milestones.each do |milestone| %>
+        <%= content_tag(:dt, milestone.human_activity) %>
+        <%= content_tag(:dd, milestone.year) %>
       <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Subtitle") %>
-        <%= content_tag(:td, @work.subtitle) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Credited Artists") %>
-        <%= content_tag(:td) do %>
-          <%= content_tag(:ul) do %>
-            <% @work.credits.each do |credit| %>
-              <%= content_tag(:li, link_to_creator(credit.creator)) %>
-            <% end %>
+<% if (facets = @work.display_facets).any? %>
+  <%= admin_section(headline: "Aspects") do %>
+    <%= content_tag(:dl, class: "horizontal right") do %>
+      <% facets.each do |facet_name, aspects| %>
+        <%= content_tag(:dt, facet_name) %>
+        <% aspects.each do |aspect| %>
+          <%= content_tag(:dd) do %>
+            <%= link_to_aspect(aspect) %>
           <% end %>
         <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Memoized Credited Artists") %>
-        <%= content_tag(:td, @work.display_makers) %>
-      <% end %>
-
-      <% @work.display_milestones.each do |milestone| %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, milestone.human_activity) %>
-          <%= content_tag(:td, milestone.year) %>
-        <% end %>
-      <% end %>
-
-      <% @work.display_aspects.each do |facet_name, val_array| %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, facet_name          ) %>
-          <%= content_tag(:td, val_array.map(&:name).join(", ")) %>
-        <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@work.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@work.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @work.alpha) %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
 
 <% if (contributions = @work.contributions.for_admin.alpha).any? %>
-  <%= admin_section("Contributors") do %>
+  <%= admin_section(headline: "Contributors") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
         <%= content_tag(:dt, contribution.name                    ) %>
@@ -89,6 +68,5 @@
   <% end %>
 <% end %>
 
-<%= render partial: "credits",              as: "credits",   object: @work.credits.for_admin %>
 <%= render partial: "admin/posts/list",     as: "posts",     object: @work.reviews.for_admin.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.for_admin.alpha %>

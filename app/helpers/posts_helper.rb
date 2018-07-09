@@ -21,16 +21,19 @@ module PostsHelper
     end
   end
 
+  def post_status_and_date(post)
+    return post.human_status if post.draft?
+
+    date = admin_date(post.publish_date, pubdate: "pubdate")
+    conn = post.scheduled? ? "for" : "on"
+
+    "#{post.human_status} #{conn} #{date}".html_safe
+  end
+
   def post_published_date(post)
     return unless post.published?
 
-    time_tag(post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate")
-  end
-
-  def post_scheduled_date(post)
-    return unless post.scheduled?
-
-    time_tag post.publish_on, post.publish_on.strftime("%m/%d/%Y at %I:%M%p")
+    time_tag post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate"
   end
 
   def smart_truncate(title, length: nil)

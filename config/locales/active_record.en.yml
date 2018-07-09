@@ -78,15 +78,15 @@ en:
         pseudynym_id: "Pseudonym"
       milestone:
         activities:
-          released:   "Released In"
-          published:  "Published In"
-          aired:      "Aired In"
-          created:    "Created In"
-          reissued:   "Reissued In"
-          remastered: "Remastered In"
-          rereleased: "Re-released In"
-          recut:      "Re-edited In"
-          remixed:    "Remixed In"
+          released:   "Released in"
+          published:  "Published in"
+          aired:      "Aired in"
+          created:    "Created in"
+          reissued:   "Reissued in"
+          remastered: "Remastered in"
+          rereleased: "Re-released in"
+          recut:      "Re-edited in"
+          remixed:    "Remixed in"
       role:
         medium: "Medium"
       user:

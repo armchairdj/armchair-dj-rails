@@ -7,135 +7,47 @@
   instance: @user,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @user.id) %>
-      <% end %>
+<%= render "admin/shared/show",
+  record: @user,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Role",     method: :human_role },
+    { name: "Name",     method: :display_name },
+    { name: "Username", method: :username },
+    { name: "Email",    method: :email },
+    { name: "Bio",      method: -> (x) { paragraphs(x.bio) } },
+    { name: "Links",    method: -> (x) { link_list(x.links) } },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+  ]
+%>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Role") %>
-        <%= content_tag(:td, @user.human_role) %>
-      <% end %>
+<%= render "admin/shared/show",
+  headline: "Account Status",
+  record: @user,
+  rows: [
+    { name: "Confirmed",    date: true, method: :confirmed_at },
+    { name: "Confirm Sent", date: true, method: :confirmation_sent_at },
+    { name: "Reset Sent",   date: true, method: :reset_password_sent_at },
+    { name: "Locked",       date: true, method: :locked_at },
+    { name: "Unconfirmed",  method: :unconfirmed_email },
+  ]
+%>
 
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Name") %>
-        <%= content_tag(:td, @user.display_name) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Username") %>
-        <%= content_tag(:td, @user.username) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Email") %>
-        <%= content_tag(:td, @user.email) %>
-      <% end %>
-
-      <% if @user.can_write? %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, "Bio") %>
-          <%= content_tag(:td, paragraphs(@user.bio)) %>
-        <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Links") %>
-        <%= content_tag(:td, link_list(@links)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@user.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@user.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @user.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<%= admin_section("Account Status", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Confirmed") %>
-        <%= content_tag(:td, admin_date(@user.confirmed_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Confirmation Sent") %>
-        <%= content_tag(:td, admin_date(@user.confirmation_sent_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Password Reset Sent") %>
-        <%= content_tag(:td, admin_date(@user.reset_password_sent_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Locked") %>
-        <%= content_tag(:td, admin_date(@user.locked_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Unconfirmed Email") %>
-        <%= content_tag(:td, @user.unconfirmed_email) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<%= admin_section("Logins", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Logins") %>
-        <%= content_tag(:td, @user.sign_in_count) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Failed Attempts") %>
-        <%= content_tag(:td, @user.failed_attempts) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Current Login") %>
-        <%= content_tag(:td, admin_date(@user.current_sign_in_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Current Login IP") %>
-        <%= content_tag(:td, @user.current_sign_in_ip) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Last Login") %>
-        <%= content_tag(:td, admin_date(@user.last_sign_in_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Last Login IP") %>
-        <%= content_tag(:td, @user.last_sign_in_ip) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Remember Me") %>
-        <%= content_tag(:td, admin_date(@user.remember_created_at)) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "admin/shared/show",
+  headline: "Logins",
+  record: @user,
+  rows: [
+    { name: "Logins",      method: :sign_in_count },
+    { name: "Failed",      method: :failed_attempts },
+    { name: "Current",     date: true, method: :current_sign_in_at },
+    { name: "Current IP",  method: :current_sign_in_ip },
+    { name: "Last",        method: :last_sign_in_at },
+    { name: "Last IP",     method: :last_sign_in_ip },
+    { name: "Remember Me", date: true, method: :remember_created_at },
+  ]
+%>
 
 <%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.for_admin.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.for_admin.alpha %>

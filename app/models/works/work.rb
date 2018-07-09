@@ -197,7 +197,7 @@ class Work < ApplicationRecord
     display_title(full: true)
   end
 
-  def display_aspects
+  def display_facets
     aspects.group_by(&:human_facet).to_a
   end
 

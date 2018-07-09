@@ -7,40 +7,16 @@
   instance: @aspect,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @aspect.id) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Facet") %>
-        <%= content_tag(:td, @aspect.human_facet) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Name") %>
-        <%= content_tag(:td, @aspect.name) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@aspect.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@aspect.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @aspect.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "admin/shared/show",
+  record: @aspect,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Facet",    method: :human_facet },
+    { name: "Name",     method: :name },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+  ]
+%>
 
 <%= render partial: "admin/posts/list", as: "posts", object: @aspect.posts.for_admin.reverse_cron %>

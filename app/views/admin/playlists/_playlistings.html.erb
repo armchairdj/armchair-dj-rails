@@ -1,6 +1,6 @@
 <% return if playlistings.empty? %>
 
-<%= admin_section("Tracks", "Drag to Reorder") do %>
+<%= admin_section(headline: "Tracks", subhead: "Drag to Reorder") do %>
   <%= content_tag(:ol, js_sortable_playlistings_attrs(@playlist)) do %>
     <% playlistings.each do |playlisting| %>
       <%= content_tag(:li, playlisting.work.full_display_title, "data-id": playlisting.id) %>

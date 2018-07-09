@@ -1,6 +1,6 @@
 module ModuleHelper
-  def admin_section(headline = nil, subhead = nil, **opts, &block)
-    content = capture(&block)
+  def admin_section(content = nil, headline: nil, subhead: nil, **opts, &block)
+    content = content || capture(&block)
 
     return if content.blank?
 
@@ -16,6 +16,8 @@ module ModuleHelper
     headlines << content_tag(:h4, headline) unless headline.blank?
     headlines << content_tag(:h6, subhead ) unless subhead.blank?
 
-    content_tag_unless_empty(:header, headlines.join.html_safe)
+    return "" unless headlines.any?
+
+    content_tag(:header, headlines.join.html_safe)
   end
 end

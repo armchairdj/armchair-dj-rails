@@ -7,38 +7,14 @@
   instance: @role,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @role.id) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Medium") %>
-        <%= content_tag(:td, @role.medium) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Name") %>
-        <%= content_tag(:td, @role.name) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@role.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@role.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @role.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "admin/shared/show",
+  record: @role,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Medium",   method: :medium },
+    { name: "Name",     method: :name },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+  ]
+%>

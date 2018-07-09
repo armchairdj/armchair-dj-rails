@@ -1,6 +1,6 @@
 <% return if playlists.empty? %>
 
-<%= admin_section("Playlists") do %>
+<%= admin_section(headline: "Playlists") do %>
   <%= content_tag(:ul, class: "square") do %>
     <% playlists.each do |playlist| %>
       <%= content_tag(:li, link_to_playlist(playlist)) %>

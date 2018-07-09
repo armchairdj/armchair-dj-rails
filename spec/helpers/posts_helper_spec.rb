@@ -34,25 +34,6 @@ RSpec.describe PostsHelper, type: :helper do
       specify { expect(helper.post_published_date(scheduled)).to eq(nil) }
     end
 
-    describe "#post_scheduled_date" do
-      let!(:draft    ) { create(:minimal_article, :draft    ) }
-      let!(:scheduled) { create(:minimal_article, :scheduled) }
-      let!(:published) { create(:minimal_article, :published) }
-
-      specify do
-        Timecop.freeze(2050, 3, 3) do
-          scheduled.update_column(:publish_on, 3.weeks.from_now)
-
-          expect(helper.post_scheduled_date(scheduled)).to eq(
-            '<time datetime="2050-03-24T00:00:00Z">03/24/2050 at 12:00AM</time>'
-          )
-        end
-      end
-
-      specify { expect(helper.post_scheduled_date(draft    )).to eq(nil) }
-      specify { expect(helper.post_scheduled_date(published)).to eq(nil) }
-    end
-
     describe "#smart_truncate" do
       let(:title) { "abcdefghijklmnopqrstuvwxyz" }
 

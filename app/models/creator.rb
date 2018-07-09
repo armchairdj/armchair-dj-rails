@@ -188,9 +188,15 @@ class Creator < ApplicationRecord
     count_needed.times { self.real_name_identities.build }
   end
 
+  def group?
+    !individual?
+  end
+
   def secondary?
     !primary?
   end
+
+  alias_method :alias?, :secondary?
 
   def real_name
     real_names.first

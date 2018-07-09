@@ -1,6 +1,6 @@
 <% return if creators.empty? %>
 
-<%= admin_section(local_assigns[:headline] || "Creators") do %>
+<%= admin_section(headline: local_assigns[:headline] || "Creators") do %>
   <%= content_tag(:ul, class: "square") do %>
     <% creators.each do |creator| %>
       <%= content_tag(:li, link_to_creator(creator)) %>

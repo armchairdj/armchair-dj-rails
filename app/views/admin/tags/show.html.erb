@@ -7,35 +7,15 @@
   instance: @tag,
 ) %>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @tag.id) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Name") %>
-        <%= content_tag(:td, @tag.name) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@tag.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@tag.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @tag.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render "admin/shared/show",
+  record: @tag,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Name",     method: :name },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+  ]
+%>
 
 <%= render partial: "admin/posts/list", as: "posts", object: @tag.posts.for_admin.reverse_cron %>

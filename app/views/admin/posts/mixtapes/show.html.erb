@@ -7,74 +7,21 @@
   instance: @mixtape,
 ) %>
 
-<%= admin_section(mixtape_title(@mixtape)) do %>
-  <%= content_tag(:div, formatted_post_body(@mixtape)) %>
-<% end %>
+<%= render "admin/shared/show",
+  record: @mixtape,
+  rows: [
+    { name: "ID",       method: :id },
+    { name: "Playlist", method: -> (x) { link_to_playlist(x.playlist) } },
+    { name: "Author",   method: -> (x) { link_to_author_of(x, admin: true) } },
+    { name: "Status",   method: -> (x) { post_status_and_date(x) } },
+    { name: "Tags",     method: -> (x) { tag_list(x.tags, admin: true) } },
+    { name: "Links",    method: -> (x) { link_list(x.links) } },
+    { name: "Created",  date: true, method: :created_at },
+    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Alpha",    method: :alpha },
+    { name: "Slug",     method: :slug, class: "break-long-words" },
+    { name: "Summary",  method: -> (x) { paragraphs(x.summary) } },
+  ]
+%>
 
-<%= admin_section("Attributes", class: "tabled") do %>
-  <%= content_tag(:table, class: "admin admin-view") do %>
-    <%= content_tag(:tbody) do %>
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "ID") %>
-        <%= content_tag(:td, @mixtape.id) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Status") %>
-        <%= content_tag(:td) do %>
-          <%= @mixtape.human_status %>
-          <% if @mixtape.published? %>
-            on <%= admin_date(@mixtape.published_at, pubdate: "pubdate") %>
-          <% elsif @mixtape.scheduled? %>
-            for <%= admin_date(@mixtape.publish_on) %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Playlist") %>
-        <%= content_tag(:td, link_to_playlist(@mixtape.playlist)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Author") %>
-        <%= content_tag(:td, link_to_author_of(@mixtape, admin: true)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Tags") %>
-        <%= content_tag(:td, tag_list(@tags, admin: true)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Links") %>
-        <%= content_tag(:td, link_list(@links)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Summary") %>
-        <%= content_tag(:td, paragraphs(@mixtape.summary)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Created") %>
-        <%= content_tag(:td, admin_date(@mixtape.created_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Updated") %>
-        <%= content_tag(:td, admin_date(@mixtape.updated_at)) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Slug") %>
-        <%= content_tag(:td, @mixtape.slug) %>
-      <% end %>
-
-      <%= content_tag(:tr) do %>
-        <%= content_tag(:th, "Alpha") %>
-        <%= content_tag(:td, @mixtape.alpha) %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= admin_section formatted_post_body(@mixtape) %>
