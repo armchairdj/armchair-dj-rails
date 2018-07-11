@@ -310,12 +310,11 @@ class Creator < ApplicationRecord
   end
 
   def posts
-    ids = [
-       reviews.pluck(:id), contributed_reviews.pluck(:id),
-      mixtapes.pluck(:id), contributed_mixtapes.pluck(:id)
-    ].flatten.uniq
+    Post.where(id: post_ids)
+  end
 
-    Post.where(id: ids)
+  def post_ids
+    (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
   end
 
   def display_roles

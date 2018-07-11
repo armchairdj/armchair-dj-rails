@@ -106,7 +106,11 @@ class Aspect < ApplicationRecord
   #############################################################################
 
   def posts
-    reviews.union(mixtapes)
+    Post.where(id: post_ids)
+  end
+
+  def post_ids
+    reviews.ids + mixtapes.ids
   end
 
   def display_name(connector: ": ")
