@@ -1,10 +1,12 @@
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= content_tag(:ul, class: "tabs") do %>
-    <% scopes.each do |scope_name, props| %>
-      <% if props[:active?] %>
-        <%= content_tag :li, content_tag(:span, scope_name, class: "tab-active") %>
-      <% else %>
-        <%= content_tag :li, link_to(scope_name, props[:url]) %>
+  <% if scopes.length > 1 %>
+    <%= content_tag(:ul, class: "tabs") do %>
+      <% scopes.each do |scope_name, props| %>
+        <% if props[:active?] %>
+          <%= content_tag :li, content_tag(:span, scope_name, class: "tab-active") %>
+        <% else %>
+          <%= content_tag :li, link_to(scope_name, props[:url]) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

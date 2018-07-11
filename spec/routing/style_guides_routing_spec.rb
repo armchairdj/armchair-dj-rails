@@ -21,10 +21,6 @@ RSpec.describe StyleGuidesController, type: :routing do
         expect(get: "/style_guide/form_error").to route_to("style_guides#show", template: "form_error")
       end
 
-      it "#grid" do
-        expect(get: "/style_guide/grid").to route_to("style_guides#show", template: "grid")
-      end
-
       it "#headline" do
         expect(get: "/style_guide/headline").to route_to("style_guides#show", template: "headline")
       end
@@ -33,7 +29,7 @@ RSpec.describe StyleGuidesController, type: :routing do
         expect(get: "/style_guide/list").to route_to("style_guides#show", template: "list")
       end
 
-      it "#article" do
+      it "#post" do
         expect(get: "/style_guide/post").to route_to("style_guides#show", template: "post")
       end
 
@@ -47,6 +43,10 @@ RSpec.describe StyleGuidesController, type: :routing do
 
       it "#tabs" do
         expect(get: "/style_guide/tabs").to route_to("style_guides#show", template: "tabs")
+      end
+
+      it "#tables" do
+        expect(get: "/style_guide/tables").to route_to("style_guides#show", template: "tables")
       end
 
       it "#text" do
