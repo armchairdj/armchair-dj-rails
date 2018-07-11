@@ -6,15 +6,15 @@
 
     li {
       display: inline-block;
-      margin-left: .5rem;
+      margin-left: .2rem;
 
-      span,
-      a {
+      a,
+      span {
         @include top-border-radius();
         display: inline-block;
-        padding: .2rem .75rem;
+        padding: .2rem .4rem;
         margin-bottom: -1px;
-        font-size: $tab-font-size;
+        font-size: $tab-font-size-xs;
       }
 
       a {
@@ -40,6 +40,38 @@
         &:hover {
           border-bottom-color: $armchair-blacktop;
           background-color: $armchair-blacktop;
+        }
+      }
+    }
+
+    li {
+      margin-left: .25rem;
+
+      a,
+      span {
+        padding: .2rem .35rem;
+        font-size: $tab-font-size-xs;
+      }
+    }
+
+    @include breakpoint(medium) {
+      li {
+        margin-left: .5rem;
+
+        a,
+        span {
+          padding: .2rem .5rem;
+          font-size: $tab-font-size-m;
+        }
+      }
+    }
+
+    @include breakpoint(large) {
+      li {
+        a,
+        span {
+          padding: .2rem .75rem;
+          font-size: $tab-font-size-l;
         }
       }
     }
