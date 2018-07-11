@@ -402,7 +402,7 @@ RSpec.describe Post, type: :model do
             subject.send(:set_published_at)
 
             expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-            expect(subject.published_at).to eq(DateTime.parse("2020-03-03"))
+            expect(subject.published_at).to eq("Tue, 03 Mar 2020 00:00:00 PST -08:00")
           end
         end
 
@@ -413,7 +413,7 @@ RSpec.describe Post, type: :model do
             subject.send(:set_published_at)
 
             expect(subject.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-            expect(subject.published_at).to eq(DateTime.parse("2020-03-03"))
+            expect(subject.published_at).to eq("Tue, 03 Mar 2020 00:00:00 PST -08:00")
           end
         end
       end
