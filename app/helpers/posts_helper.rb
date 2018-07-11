@@ -33,7 +33,10 @@ module PostsHelper
   def post_published_date(post)
     return unless post.published?
 
-    time_tag post.published_at, post.published_at.strftime("%m/%d/%Y at %I:%M%p"), pubdate: "pubdate"
+    date      = post.published_at
+    formatted = l(date)
+
+    time_tag(date, formatted, pubdate: "pubdate")
   end
 
   def smart_truncate(title, length: nil)

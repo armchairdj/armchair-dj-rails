@@ -47,6 +47,12 @@ dl {
   line-height: $spacious;
   font-size: $admin-table-font-size;
 
+  &.no-capitalize {
+    dt {
+      text-transform: none;
+    }
+  }
+
   dt {
     text-transform: uppercase;
     color: $armchair-smoke;

@@ -18,7 +18,7 @@ module AdminHelper
   def admin_date(date, **opts)
     return unless date
 
-    time_tag(date, date.strftime("%m/%d/%Y at %I:%M%p"), **opts)
+    time_tag(date, l(date), **opts)
   end
 
   def total_count_for(association)
