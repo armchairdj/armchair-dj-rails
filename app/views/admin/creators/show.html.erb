@@ -41,7 +41,7 @@
   <%= admin_section(headline: "Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
-        <%= content_tag(:dt, work.true_human_model_name) %>
+        <%= content_tag(:dt, work.display_medium) %>
         <%= content_tag(:dd, link_to_work(work, full: false)) %>
       <% end %>
     <% end %>

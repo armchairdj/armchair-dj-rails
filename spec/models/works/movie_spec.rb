@@ -7,19 +7,19 @@ RSpec.describe Movie, type: :model do
 
   describe "STI" do
     describe "class" do
-      specify { expect(described_class.superclass           ).to eq(Medium) }
-      specify { expect(described_class.model_name.name      ).to eq("Work") }
-      specify { expect(described_class.true_model_name.name ).to eq("Movie") }
-      specify { expect(described_class.true_human_model_name).to eq("Movie") }
+      specify { expect(described_class.superclass          ).to eq(Medium) }
+      specify { expect(described_class.model_name.name     ).to eq("Work") }
+      specify { expect(described_class.true_model_name.name).to eq("Movie") }
+      specify { expect(described_class.display_medium      ).to eq("Movie") }
     end
 
     describe "instance" do
       let(:instance) { create_minimal_instance }
 
-      specify { expect(instance.model_name.name      ).to eq("Work") }
-      specify { expect(instance.medium               ).to eq("Movie") }
-      specify { expect(instance.true_model_name.name ).to eq("Movie") }
-      specify { expect(instance.true_human_model_name).to eq("Movie") }
+      specify { expect(instance.model_name.name     ).to eq("Work") }
+      specify { expect(instance.true_model_name.name).to eq("Movie") }
+      specify { expect(instance.medium              ).to eq("Movie") }
+      specify { expect(instance.display_medium      ).to eq("Movie") }
     end
   end
 
@@ -28,9 +28,6 @@ RSpec.describe Movie, type: :model do
   end
 
   describe "instance" do
-    describe "role methods" do
-      pending "#available_roles"
-      pending "#available_role_ids"
-    end
+    # Nothing so far.
   end
 end

@@ -15,7 +15,7 @@ class Medium < Work
     ActiveModel::Name.new(self.name.constantize)
   end
 
-  def self.true_human_model_name
+  def self.display_medium
     I18n.t("activerecord.subclasses.work.#{true_model_name.i18n_key}")
   end
 
@@ -42,8 +42,8 @@ class Medium < Work
     self.class.true_model_name
   end
 
-  def true_human_model_name
-    self.class.true_human_model_name
+  def display_medium
+    self.class.display_medium
   end
 
   def available_roles

@@ -68,12 +68,9 @@ RSpec.describe Review, type: :model do
 
     describe "#display_type" do
       let(:instance) { create(:never_for_ever_album_review) }
-      let( :unsaved) { Review.new }
 
       specify { expect(instance.display_type              ).to eq("Album Review" ) }
       specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
-      specify { expect(unsaved.display_type               ).to eq("Review") }
-      specify { expect(unsaved.display_type(plural: true )).to eq("Reviews") }
     end
 
     describe "#sluggable_parts" do

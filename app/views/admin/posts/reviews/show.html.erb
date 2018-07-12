@@ -11,6 +11,7 @@
   record: @review,
   rows: [
     { name: "ID",       method: :id },
+    { name: "Medium",   method: -> (x) { x.work.display_medium } },
     { name: "Work",     method: -> (x) { link_to_work(x.work) } },
     { name: "Author",   method: -> (x) { link_to_author_of(x, admin: true) } },
     { name: "Status",   method: -> (x) { post_status_and_date(x) } },

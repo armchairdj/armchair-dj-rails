@@ -80,6 +80,6 @@ class Role < ApplicationRecord
   def display_medium
     return unless medium
 
-    medium.constantize.true_human_model_name
+    medium.constantize.display_medium
   end
 end

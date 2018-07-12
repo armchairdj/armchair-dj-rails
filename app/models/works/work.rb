@@ -41,7 +41,7 @@ class Work < ApplicationRecord
   #############################################################################
 
   def self.grouped_by_medium
-    order(:medium, :alpha).group_by{ |x| x.class.true_human_model_name }.to_a
+    order(:medium, :alpha).group_by(&:display_medium).to_a
   end
 
   def self.media
@@ -49,7 +49,7 @@ class Work < ApplicationRecord
 
     classes = descendants.reject { |x| x == Medium }
 
-    classes.map { |x| [x.true_human_model_name, x.true_model_name.name] }.sort_by(&:last)
+    classes.map { |x| [x.display_medium, x.true_model_name.name] }.sort_by(&:last)
   end
 
   def self.valid_media

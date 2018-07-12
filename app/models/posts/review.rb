@@ -86,12 +86,10 @@ class Review < Post
   # INSTANCE.
   #############################################################################
 
-  def medium
-    work.try(:true_human_model_name)
-  end
+  delegate :display_medium, to: :work
 
   def display_type(plural: false)
-    base = [medium, "Review"].compact.join(" ")
+    base = [display_medium, "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
   end

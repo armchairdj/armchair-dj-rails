@@ -7,19 +7,19 @@ RSpec.describe Album, type: :model do
 
   describe "STI" do
     describe "class" do
-      specify { expect(described_class.superclass           ).to eq(Medium) }
-      specify { expect(described_class.model_name.name      ).to eq("Work") }
-      specify { expect(described_class.true_model_name.name ).to eq("Album") }
-      specify { expect(described_class.true_human_model_name).to eq("Album") }
+      specify { expect(described_class.superclass          ).to eq(Medium) }
+      specify { expect(described_class.model_name.name     ).to eq("Work") }
+      specify { expect(described_class.true_model_name.name).to eq("Album") }
+      specify { expect(described_class.display_medium      ).to eq("Album") }
     end
 
     describe "instance" do
       let(:instance) { create_minimal_instance }
 
-      specify { expect(instance.model_name.name      ).to eq("Work") }
-      specify { expect(instance.medium               ).to eq("Album") }
-      specify { expect(instance.true_model_name.name ).to eq("Album") }
-      specify { expect(instance.true_human_model_name).to eq("Album") }
+      specify { expect(instance.model_name.name     ).to eq("Work") }
+      specify { expect(instance.true_model_name.name).to eq("Album") }
+      specify { expect(instance.medium              ).to eq("Album") }
+      specify { expect(instance.display_medium      ).to eq("Album") }
     end
   end
 end

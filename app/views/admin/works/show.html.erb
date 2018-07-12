@@ -1,5 +1,5 @@
 <%
-  @title = ["View #{@work.true_human_model_name}", @work.display_makers, @work.title]
+  @title = ["View #{@work.display_medium}", @work.display_makers, @work.title]
 %>
 
 <%= admin_header(@model_class, :show,
@@ -11,7 +11,7 @@
   record: @work,
   rows: [
     { name: "ID",       method: :id },
-    { name: "Medium",   method: :true_human_model_name },
+    { name: "Medium",   method: :display_medium },
     { name: "Title",    method: :title },
     { name: "Subtitle", method: :subtitle },
     { name: "Makers",   method: :display_makers },

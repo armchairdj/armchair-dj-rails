@@ -27,6 +27,6 @@ module Contributable
   end
 
   def display_type
-    work.true_human_model_name
+    work.display_medium
   end
 end
