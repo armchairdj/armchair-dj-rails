@@ -22,13 +22,13 @@ RSpec.shared_examples "a_sluggable_model" do
       describe "blankable parts" do
         let(:parts) { ["Talk Talk", "?", nil] }
 
-        it { is_expected.to eq(["talk_talk"]) }
+        it { is_expected.to eq(["talk_talk", "!"]) }
       end
 
       describe "blankable parts redux" do
         let(:parts) { ["Glass Candy", "///", nil] }
 
-        it { is_expected.to eq(["glass_candy"]) }
+        it { is_expected.to eq(["glass_candy", "!"]) }
       end
     end
 
@@ -128,24 +128,24 @@ RSpec.shared_examples "a_sluggable_model" do
   end
 
   describe "included" do
-    pending "includes friendly_id"
-    pending "#normalize_friendly_id"
-    pending "#slug_candidates"
-    pending "#base_slug"
-    pending "#sequenced_slug"
-    pending "#sluggable_parts"
-    pending "#generate_slug_from_parts"
-
-    describe "generates new slug" do
+    describe "generating new slug" do
       describe "#clear_slug?" do
+        subject { instance.clear_slug? }
+
         describe "false by default" do
-          subject { build_minimal_instance.clear_slug? }
+          let(:instance) { build_minimal_instance }
 
           it { is_expected.to eq(false) }
         end
 
         describe "true" do
-          subject { build_minimal_instance(clear_slug: true).clear_slug? }
+          let(:instance) { build_minimal_instance(clear_slug: true) }
+
+          it { is_expected.to eq(true) }
+        end
+
+        describe "1" do
+          let(:instance) { build_minimal_instance(clear_slug: "1") }
 
           it { is_expected.to eq(true) }
         end
@@ -153,29 +153,91 @@ RSpec.shared_examples "a_sluggable_model" do
 
       describe "#handle_cleared_slug" do
         before(:each) do
-          allow(subject).to receive(:slug_candidates).and_call_original
+          allow(instance).to receive(:slug_candidates).and_call_original
         end
 
         describe "false" do
-          subject { create_minimal_instance }
+          let(:instance) { create_minimal_instance }
 
-          before(:each) { expect(subject).to_not receive(:slug_candidates) }
+          it "does not regenerate slug" do
+            expect(instance).to_not receive(:slug_candidates)
 
-          it { subject.save }
+            instance.save
+          end
         end
 
         describe "true" do
-          subject do
+          let(:instance) do
             instance            = create_minimal_instance
             instance.clear_slug = "1"
             instance
           end
 
-          before(:each) do
-            expect(subject).to receive(:slug_candidates)
+          it "regenerates slug" do
+            expect(instance).to receive(:slug_candidates)
+
+            instance.save
+          end
+        end
+      end
+    end
+  end
+
+  describe "instance" do
+    let(:instance) { create_minimal_instance }
+
+    describe "#sluggable_parts" do
+      subject { instance.sluggable_parts }
+
+      it { is_expected.to be_a_kind_of(Array) }
+    end
+
+    context "private" do
+      describe "#slug_candidates" do
+        subject { instance.send(:slug_candidates) }
+
+        it { is_expected.to eq([:base_slug, :sequenced_slug]) }
+
+        describe "calling #base_slug, #sequenced_slug & #normalize_friendly_id" do
+          describe "basic characters" do
+            let(  :one) { build_minimal_instance }
+            let(  :two) { build_minimal_instance }
+            let(:three) { build_minimal_instance }
+
+            let!(:instances) { [one, two, three] }
+
+            before(:each) do
+              instances.each do |instance|
+                allow(instance).to receive(:sluggable_parts).and_return(["foo", "bar", "bat"])
+
+                instance.save
+              end
+            end
+
+            it { expect(  one.slug).to eq("foo/bar/bat"  ) }
+            it { expect(  two.slug).to eq("foo/bar/bat~2") }
+            it { expect(three.slug).to eq("foo/bar/bat~3") }
           end
 
-          it { subject.save }
+          describe "special characters" do
+            let(  :one) { build_minimal_instance }
+            let(  :two) { build_minimal_instance }
+            let(:three) { build_minimal_instance }
+
+            let!(:instances) { [one, two, three] }
+
+            before(:each) do
+              instances.each do |instance|
+                allow(instance).to receive(:sluggable_parts).and_return(["Salt-n-Pepa", "Blacks' Magic", "???"])
+
+                instance.save
+              end
+            end
+
+            it { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/!"  ) }
+            it { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/!~2") }
+            it { expect(three.slug).to eq("salt_n_pepa/blacks_magic/!~3") }
+          end
         end
       end
     end

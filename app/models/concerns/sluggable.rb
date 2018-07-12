@@ -3,8 +3,9 @@
 module Sluggable
   extend ActiveSupport::Concern
 
-  PART_SEPARATOR    = "_".freeze
-  VERSION_SEPARATOR = "_".freeze 
+  PART_SEPARATOR    = "/".freeze
+  VERSION_SEPARATOR = "~".freeze
+  EMPTY_PART        = "!".freeze
 
   class_methods do
     def prepare_parts(parts)
@@ -19,7 +20,7 @@ module Sluggable
       str = str.gsub(/[^[:word:]]/, "")
       str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
 
-      str.blank? ? nil : str
+      str.blank? ? EMPTY_PART : str
     end
   end
 
@@ -31,14 +32,19 @@ module Sluggable
     attr_accessor :clear_slug
 
     before_save :handle_cleared_slug
-  end
 
-  def normalize_friendly_id(string)
-    super.gsub("-", "_")
+    # Must be in included block to work.
+    def normalize_friendly_id(input)
+      input.gsub("-", "_")
+    end
   end
 
   def clear_slug?
     !!clear_slug
+  end
+
+  def sluggable_parts
+    []
   end
 
 private
@@ -54,7 +60,7 @@ private
   end
 
   def base_slug
-    generate_slug_from_parts(self.class.prepare_parts(sluggable_parts))
+    self.class.prepare_parts(sluggable_parts).join(PART_SEPARATOR)
   end
 
   def sequenced_slug
@@ -62,13 +68,5 @@ private
     sequence = self.class.where("slug like '#{base}#{VERSION_SEPARATOR}%'").count + 2
 
     [base, sequence].join(VERSION_SEPARATOR)
-  end
-
-  def sluggable_parts
-    []
-  end
-
-  def generate_slug_from_parts(parts)
-    parts.join(PART_SEPARATOR)
   end
 end
