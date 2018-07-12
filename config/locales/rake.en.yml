@@ -1,0 +1,8 @@
+en:
+  rake:
+    publish:
+      scheduled:
+        ready: "Ready to publish scheduled posts using `rake publish:scheduled`.\n"
+        none: "No posts scheduled to publish."
+        success: "Published all %{total} scheduled post(s):\n%{success_slugs}"
+        failure: "Could only publish %{success} of %{total} scheduled post(s):\n%{success_slugs}\n\nFailed posts set to draft:\n%{failure_slugs}"

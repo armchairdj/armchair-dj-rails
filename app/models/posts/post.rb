@@ -55,10 +55,10 @@ class Post < ApplicationRecord
   #############################################################################
 
   def self.publish_scheduled
-    ready = self.scheduled_due
+    ready = self.scheduled_for_publication
 
     memo = {
-      total:   ready.length,
+      all:     ready.to_a,
       success: [],
       failure: []
     }
@@ -84,9 +84,12 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :unpublished,   -> { where.not(status: :published) }
-  scope :scheduled_due, -> { scheduled.where("posts.publish_on <= ?", DateTime.now) }
-  scope :reverse_cron,  -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+  scope :scheduled_for_publication, -> {
+    scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
+  }
+
+  scope :unpublished,  -> { where.not(status: :published) }
+  scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
   scope :for_admin, -> { eager }
   scope :for_site,  -> { eager.published.reverse_cron }

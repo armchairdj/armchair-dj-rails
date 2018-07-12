@@ -18,49 +18,57 @@ RSpec.describe Post, type: :model do
   end
 
   describe "class" do
-    describe "self#publish_scheduled" do
-      let!(:current) { create_minimal_instance(:scheduled, publish_on: 1.day.from_now) }
-      let!( :future) { create_minimal_instance(:scheduled) }
+    describe "scheduled publication" do
+      let!(  :future) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
+      let!( :current) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
+      let!(:past_due) { create_minimal_instance(:scheduled, publish_on: 1.days.from_now) }
 
-      describe "scope :scheduled_due" do
-        it "includes only scheduled that have come due" do
+      describe "self#scheduled_for_publication" do
+        it "includes only scheduled that have come due, ordered by schedule date" do
           Timecop.freeze(Date.today + 3) do
-            expect(described_class.scheduled_due).to match_array([current])
+            expect(described_class.scheduled_for_publication).to eq([
+              past_due,
+              current
+            ])
           end
         end
       end
 
-      it "publishes scheduled if publish_on is past" do
-        Timecop.freeze(Date.today + 3) do
-          expect(described_class.publish_scheduled).to eq({
-            total:   1,
-            success: [current],
-            failure: []
-          })
+      describe "self#publish_scheduled" do
+        it "publishes scheduled if publish_on is past" do
+          Timecop.freeze(Date.today + 3) do
+            expect(described_class.publish_scheduled).to eq({
+              all:     [past_due, current],
+              success: [past_due, current],
+              failure: []
+            })
 
-          expect(current.reload).to be_published
+            expect(past_due.reload).to be_published
+            expect( current.reload).to be_published
+          end
         end
-      end
 
-      it "unschedules on failed publish" do
-        Timecop.freeze(Date.today + 3) do
-          current.update_column(:body, nil)
+        it "unschedules on failed publish" do
+          Timecop.freeze(Date.today + 3) do
+            current.update_column(:body, nil)
 
-          expect(described_class.publish_scheduled).to eq({
-            total:   1,
-            success: [],
-            failure: [current]
-          })
+            expect(described_class.publish_scheduled).to eq({
+              all:     [past_due, current],
+              success: [past_due],
+              failure: [current]
+            })
 
-          expect(current.reload).to be_draft
+            expect(past_due.reload).to be_published
+            expect( current.reload).to be_draft
+          end
         end
-      end
 
-      it "does not pubish if publish_on is future" do
-        Timecop.freeze(Date.today + 3) do
-          described_class.publish_scheduled
+        it "does not pubish if publish_on is future" do
+          Timecop.freeze(Date.today + 3) do
+            described_class.publish_scheduled
 
-          expect(future.reload).to be_scheduled
+            expect(future.reload).to be_scheduled
+          end
         end
       end
     end
