@@ -441,9 +441,7 @@ RSpec.describe Work, type: :model do
     end
 
     describe "#collect_makers" do
-      subject { instance.collect_makers(opts) }
-
-      let(:opts) { {} }
+      subject { instance.collect_makers }
 
       context "unsaved" do
         context "no credits" do
@@ -462,12 +460,6 @@ RSpec.describe Work, type: :model do
           let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
           it { is_expected.to eq("Carl Craig & Green Velvet") }
-
-          context "custom connector" do
-            let(:opts) { { connector: " and " } }
-
-            it { is_expected.to eq("Carl Craig and Green Velvet") }
-          end
         end
       end
 
@@ -482,12 +474,6 @@ RSpec.describe Work, type: :model do
           let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
           it { is_expected.to eq("Carl Craig & Green Velvet") }
-
-          context "custom connector" do
-            let(:opts) { { connector: " and " } }
-
-            it { is_expected.to eq("Carl Craig and Green Velvet") }
-          end
         end
       end
     end
@@ -524,12 +510,12 @@ RSpec.describe Work, type: :model do
 
     describe "#sluggable_parts" do
       let(:instance) do
-        create_minimal_instance(title: "Title", subtitle: "Subtitle", maker_names: ["Kate Bush", "Peter Gabriel"])
+        create_minimal_instance(title: "Don't Give Up", subtitle: "Single Edit", maker_names: ["Kate Bush", "Peter Gabriel"])
       end
 
       subject { instance.sluggable_parts }
 
-      it { is_expected.to eq(["Kate Bush and Peter Gabriel", "Title", "Subtitle"]) }
+      it { is_expected.to eq(["Songs", "Kate Bush & Peter Gabriel", "Don't Give Up", "Single Edit"]) }
     end
 
     describe "#alpha_parts" do

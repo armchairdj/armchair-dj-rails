@@ -61,7 +61,7 @@ class Admin::Posts::BaseController < Admin::BaseController
 private
 
   def scoped_instance(id)
-    policy_scope(model_class).friendly.find(id)
+    policy_scope(model_class).find(id)
   end
 
   def find_collection

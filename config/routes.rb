@@ -63,15 +63,19 @@ Rails.application.routes.draw do
   #############################################################################
 
   scope module: :posts do
-    resources :posts, only: [:index], concerns: :paginatable, path: "/"
+    resources :posts,    only: [:index], concerns: :paginatable, path: "/"
+    resources :articles, only: [:index], concerns: :paginatable
+    resources :reviews,  only: [:index], concerns: :paginatable
+    resources :mixtapes, only: [:index], concerns: :paginatable
 
     scope format: true, constraints: { format: "rss" } do
       get "feed", to: "posts#feed"
     end
 
-    resources :articles, only: [:index, :show], concerns: :paginatable
-    resources :reviews,  only: [:index, :show], concerns: :paginatable
-    resources :mixtapes, only: [:index, :show], concerns: :paginatable
+    # Permalinks
+    get "articles/*slug", to: "articles#show", as: "article_permalink"
+    get "reviews/*slug",  to: "reviews#show",  as: "review_permalink"
+    get "mixtapes/*slug", to: "mixtapes#show", as: "mixtape_permalink"
   end
 
   #############################################################################

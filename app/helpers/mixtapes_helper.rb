@@ -9,7 +9,7 @@ module MixtapesHelper
     return unless admin || mixtape.published?
 
     text = mixtape_title(mixtape, length: length)
-    url  = admin ? admin_mixtape_path(mixtape) : mixtape_path(mixtape)
+    url  = admin ? admin_mixtape_path(mixtape) : mixtape_permalink_path(slug: mixtape.slug)
 
     link_to(text, url, **opts)
   end

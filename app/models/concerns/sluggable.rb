@@ -4,7 +4,7 @@ module Sluggable
   extend ActiveSupport::Concern
 
   PART_SEPARATOR    = "/".freeze
-  VERSION_SEPARATOR = "~".freeze
+  VERSION_SEPARATOR = "-".freeze
   EMPTY_PART        = "!".freeze
 
   class_methods do
@@ -35,7 +35,14 @@ module Sluggable
 
     # Must be in included block to work.
     def normalize_friendly_id(input)
-      input.gsub("-", "_")
+      input
+    end
+
+    # Must be in included block to work.
+    # Override default friendly_id behavior to use ID instead of slug.
+    # This allows IDs in admin and custom routes with slugs for public.
+    def to_param
+      id.to_s
     end
   end
 

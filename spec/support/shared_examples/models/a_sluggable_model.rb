@@ -215,8 +215,8 @@ RSpec.shared_examples "a_sluggable_model" do
             end
 
             it { expect(  one.slug).to eq("foo/bar/bat"  ) }
-            it { expect(  two.slug).to eq("foo/bar/bat~2") }
-            it { expect(three.slug).to eq("foo/bar/bat~3") }
+            it { expect(  two.slug).to eq("foo/bar/bat-2") }
+            it { expect(three.slug).to eq("foo/bar/bat-3") }
           end
 
           describe "special characters" do
@@ -235,8 +235,8 @@ RSpec.shared_examples "a_sluggable_model" do
             end
 
             it { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/!"  ) }
-            it { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/!~2") }
-            it { expect(three.slug).to eq("salt_n_pepa/blacks_magic/!~3") }
+            it { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/!-2") }
+            it { expect(three.slug).to eq("salt_n_pepa/blacks_magic/!-3") }
           end
         end
       end

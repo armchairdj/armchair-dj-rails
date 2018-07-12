@@ -78,17 +78,17 @@ RSpec.describe Review, type: :model do
       let(:collab) { create(:unity_album_review         ) }
 
       specify "for review" do
-        expect(review.sluggable_parts) .to eq(["Kate Bush", "Never for Ever", nil])
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Never for Ever", nil])
       end
 
       specify "for review of work with subtitle" do
         review.work.subtitle = "Remastered"
 
-        expect(review.sluggable_parts) .to eq(["Kate Bush", "Never for Ever", "Remastered"])
+        expect(review.sluggable_parts) .to eq(["Albums", "Kate Bush", "Never for Ever", "Remastered"])
       end
 
       specify "for review of collaborative work" do
-        expect(collab.sluggable_parts).to eq(["Carl Craig and Green Velvet", "Unity", nil])
+        expect(collab.sluggable_parts).to eq(["Albums", "Carl Craig & Green Velvet", "Unity", nil])
       end
     end
 

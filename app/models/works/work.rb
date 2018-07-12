@@ -209,14 +209,14 @@ class Work < ApplicationRecord
     milestones.sorted
   end
 
-  def collect_makers(connector: " & ")
+  def collect_makers
     arr = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
 
-    arr.empty? ? nil : arr.join(connector)
+    arr.empty? ? nil : arr.join(" & ")
   end
 
   def sluggable_parts
-    [collect_makers(connector: " and "), title, subtitle]
+    [display_medium.pluralize, display_makers, title, subtitle]
   end
 
   def alpha_parts

@@ -9,7 +9,7 @@ module ArticlesHelper
     return unless admin || article.published?
 
     text = article_title(article, length: length)
-    url  = admin ? admin_article_path(article) : article_path(article)
+    url  = admin ? admin_article_path(article) : article_permalink_path(slug: article.slug)
 
     link_to(text, url, **opts)
   end

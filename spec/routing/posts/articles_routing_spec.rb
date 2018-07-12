@@ -13,13 +13,13 @@ RSpec.describe Posts::ArticlesController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/articles/friendly_id").to route_to("posts/articles#show", id: "friendly_id")
+      expect(get: "/articles/friendly_id").to route_to("posts/articles#show", slug: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/articles/new").to route_to("posts/articles#show", id: "new")
+      expect(get: "/articles/new").to route_to("posts/articles#show", slug: "new")
     end
 
     it "#create" do
@@ -27,7 +27,7 @@ RSpec.describe Posts::ArticlesController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/articles/friendly_id/edit").to_not be_routable
+      expect(get: "/articles/friendly_id/edit").to route_to("posts/articles#show", slug: "friendly_id/edit")
     end
 
     it "#update via PUT" do

@@ -15,7 +15,7 @@ RSpec.describe Posts::ArticlesController, type: :controller do
     let(:article) { create(:minimal_article, :published) }
 
     it "renders" do
-      get :show, params: { id: article.to_param }
+      get :show, params: { slug: article.slug }
 
       is_expected.to successfully_render("posts/articles/show")
 

@@ -40,7 +40,7 @@ private
   end
 
   def find_instance
-    @instance = policy_scope(model_class).friendly.find(params[:id])
+    @instance = policy_scope(model_class).find_by(slug: params[:slug])
 
     instance_variable_set(:"@#{controller_name.singularize}", @instance)
   end

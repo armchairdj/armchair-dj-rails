@@ -13,13 +13,13 @@ RSpec.describe Posts::ReviewsController, type: :routing do
     end
 
     it "#show" do
-      expect(get: "/reviews/friendly_id").to route_to("posts/reviews#show", id: "friendly_id")
+      expect(get: "/reviews/friendly_id").to route_to("posts/reviews#show", slug: "friendly_id")
     end
   end
 
   describe "does not route to RESTful" do
     it "#new" do
-      expect(get: "/reviews/new").to route_to("posts/reviews#show", id: "new")
+      expect(get: "/reviews/new").to route_to("posts/reviews#show", slug: "new")
     end
 
     it "#create" do
@@ -27,7 +27,7 @@ RSpec.describe Posts::ReviewsController, type: :routing do
     end
 
     it "#edit" do
-      expect(get: "/reviews/friendly_id/edit").to_not be_routable
+      expect(get: "/reviews/friendly_id/edit").to route_to("posts/reviews#show", slug: "friendly_id/edit")
     end
 
     it "#update via PUT" do
