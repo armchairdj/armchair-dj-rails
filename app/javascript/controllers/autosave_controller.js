@@ -4,7 +4,6 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   static intervalLength = 60000; /* one minute */
-  // static intervalLength = 10000; /* 10 seconds for testing */
 
   initialize() {
     this.url            = this.data.get("url");

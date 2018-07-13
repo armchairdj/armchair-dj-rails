@@ -76,11 +76,11 @@ Rails.application.routes.draw do
     resources :mixtapes, only: [:index], concerns: :paginatable
 
     # Permalinks.
-    get "articles/*slug", to: "articles#show", as: "article_permalink"
-    get "reviews/*slug",  to: "reviews#show",  as: "review_permalink"
-    get "mixtapes/*slug", to: "mixtapes#show", as: "mixtape_permalink"
+    get "articles/*slug", to: "articles#show", as: :article
+    get "reviews/*slug",  to: "reviews#show",  as: :review
+    get "mixtapes/*slug", to: "mixtapes#show", as: :mixtape
 
-    # RSS.
+    # Syndication.
     scope format: true, constraints: { format: "rss" } do
       get "feed", to: "posts#feed"
     end

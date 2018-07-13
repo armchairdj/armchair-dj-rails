@@ -35,7 +35,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "xhr" do
-          it "does not session variable" do
+          it "does not set session variable" do
             expect(controller).to_not receive(:set_user_return_to)
 
             get :index, { xhr: true }

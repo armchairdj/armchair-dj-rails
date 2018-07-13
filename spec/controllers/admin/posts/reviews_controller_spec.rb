@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::Posts::ReviewsController, type: :controller do
-  let(:review) { create_minimal_instance(:draft) }
+  let(:instance) { create_minimal_instance(:draft) }
 
   describe "concerns" do
     it_behaves_like "an_admin_controller"
@@ -21,10 +21,10 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
     end
 
     describe "GET #show" do
-      before(:each) { get :show, params: { id: review.to_param } }
+      before(:each) { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/posts/reviews/show") }
-      it { is_expected.to assign(review, :review) }
+      it { is_expected.to assign(instance, :review) }
     end
 
     describe "GET #new" do
@@ -113,10 +113,10 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
     end
 
     describe "GET #edit" do
-      before(:each) { get :edit, params: { id: review.to_param } }
+      before(:each) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/posts/reviews/edit") }
-      it { is_expected.to assign(review, :review) }
+      it { is_expected.to assign(instance, :review) }
       it { is_expected.to prepare_the_review_form }
     end
 
@@ -127,22 +127,22 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
       describe "draft" do
         context "with valid params" do
           before(:each) do
-            put :update, params: { id: review.to_param, review: update_params }
+            put :update, params: { id: instance.to_param, review: update_params }
           end
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to send_user_to(admin_review_path(instance)).with_flash(
             :success, "admin.flash.posts.success.update"
           ) }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { id: review.to_param, review: bad_update_params }
+            put :update, params: { id: instance.to_param, review: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit") }
-          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).and_be_invalid }
+          it { is_expected.to assign(instance, :review).with_attributes(bad_update_params).and_be_invalid }
           it { is_expected.to prepare_the_review_form }
         end
       end
@@ -150,14 +150,14 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
       describe "publishing" do
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "publish", id: review.to_param, review: update_params }
+            put :update, params: { step: "publish", id: instance.to_param, review: update_params }
           end
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:review)).to be_published }
 
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+          it { is_expected.to send_user_to(admin_review_path(instance)).with_flash(
             :success, "admin.flash.posts.success.publish"
           ) }
         end
@@ -166,7 +166,7 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
           before(:each) do
             allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
 
-            put :update, params: { step: "publish", id: review.to_param, review: update_params }
+            put :update, params: { step: "publish", id: instance.to_param, review: update_params }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(
@@ -175,14 +175,14 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
-          it { expect(review.reload).to_not be_published }
+          it { expect(instance.reload).to_not be_published }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "publish", id: review.to_param, review: bad_update_params }
+            put :update, params: { step: "publish", id: instance.to_param, review: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(
@@ -191,42 +191,42 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+          it { is_expected.to assign(instance, :review).with_attributes(bad_update_params).with_errors({
             body: :blank,
             work: :blank
           }) }
 
-          it { expect(review.reload).to_not be_published }
+          it { expect(instance.reload).to_not be_published }
         end
       end
 
       describe "unpublishing" do
-        let(:review) { create(:minimal_review, :published) }
+        let(:instance) { create(:minimal_review, :published) }
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "unpublish", id: review.to_param, review: update_params }
+            put :update, params: { step: "unpublish", id: instance.to_param, review: update_params }
           end
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:review)).to be_draft }
 
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+          it { is_expected.to send_user_to(admin_review_path(instance)).with_flash(
             :success, "admin.flash.posts.success.unpublish"
           ) }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "unpublish", id: review.to_param, review: bad_update_params }
+            put :update, params: { step: "unpublish", id: instance.to_param, review: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(:error, nil) }
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+          it { is_expected.to assign(instance, :review).with_attributes(bad_update_params).with_errors({
             work: :blank
           }) }
 
@@ -235,18 +235,18 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
       end
 
       describe "scheduling" do
-        let(:review) { create(:minimal_review, :draft) }
+        let(:instance) { create(:minimal_review, :draft) }
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: review.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: instance.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:review)).to be_scheduled }
 
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+          it { is_expected.to send_user_to(admin_review_path(instance)).with_flash(
             :success, "admin.flash.posts.success.schedule"
           ) }
         end
@@ -255,7 +255,7 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
           before(:each) do
             allow_any_instance_of(Review).to receive(:ready_to_publish?).and_return(false)
 
-            put :update, params: { step: "schedule", id: review.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: instance.to_param, review: update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(
@@ -264,14 +264,14 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
-          it { expect(review.reload).to_not be_scheduled }
+          it { expect(instance.reload).to_not be_scheduled }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "schedule", id: review.to_param, review: bad_update_params.merge(publish_on: 3.weeks.from_now) }
+            put :update, params: { step: "schedule", id: instance.to_param, review: bad_update_params.merge(publish_on: 3.weeks.from_now) }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(
@@ -280,42 +280,42 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+          it { is_expected.to assign(instance, :review).with_attributes(bad_update_params).with_errors({
             body: :blank,
             work: :blank
           }) }
 
-          it { expect(review.reload).to_not be_scheduled }
+          it { expect(instance.reload).to_not be_scheduled }
         end
       end
 
       describe "unscheduling" do
-        let(:review) { create(:minimal_review, :scheduled) }
+        let(:instance) { create(:minimal_review, :scheduled) }
 
         context "with valid params" do
           before(:each) do
-            put :update, params: { step: "unschedule", id: review.to_param, review: update_params }
+            put :update, params: { step: "unschedule", id: instance.to_param, review: update_params }
           end
 
-          it { is_expected.to assign(review, :review).with_attributes(update_params).and_be_valid }
+          it { is_expected.to assign(instance, :review).with_attributes(update_params).and_be_valid }
 
           it { expect(assigns(:review)).to be_draft }
 
-          it { is_expected.to send_user_to(admin_review_path(review)).with_flash(
+          it { is_expected.to send_user_to(admin_review_path(instance)).with_flash(
             :success, "admin.flash.posts.success.unschedule"
           ) }
         end
 
         context "with invalid params" do
           before(:each) do
-            put :update, params: { step: "unschedule", id: review.to_param, review: bad_update_params }
+            put :update, params: { step: "unschedule", id: instance.to_param, review: bad_update_params }
           end
 
           it { is_expected.to successfully_render("admin/posts/reviews/edit").with_flash(:error, nil) }
 
           it { is_expected.to prepare_the_review_form }
 
-          it { is_expected.to assign(review, :review).with_attributes(bad_update_params).with_errors({
+          it { is_expected.to assign(instance, :review).with_attributes(bad_update_params).with_errors({
             work: :blank
           }) }
 
@@ -324,12 +324,12 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
       end
 
       describe "replacing slug" do
-        before(:each) { review.update_column(:slug, "old") }
+        before(:each) { instance.update_column(:slug, "old") }
 
         let(:params) { { "clear_slug" => "1" } }
 
         it "forces model to update slug" do
-          put :update, params: { id: review.to_param, review: params }
+          put :update, params: { id: instance.to_param, review: params }
 
           expect(assigns(:review).slug).to_not eq("old")
         end
@@ -337,35 +337,77 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
     end
 
     describe "PATCH #autosave" do
+      let!(:instance) { create(:minimal_review) }
+      let(:params) { { "body" => "autosaved", "summary" => "autosaved" } }
+
       context "success" do
-
-        it "saves without validation" do
-
+        before(:each) do
+          put :autosave, { xhr: true, params: { id: instance.to_param, review: params } }
         end
 
-        it "returns an empty json 200 response" do
+        describe "with valid params" do
+          it { is_expected.to render_empty_json_200 }
 
+          it { is_expected.to assign(instance, :review).with_attributes(params) }
+        end
+
+        describe "with invalid params" do
+          let(:params) { { "body" => "" } }
+
+          it { is_expected.to render_empty_json_200 }
+
+          it { is_expected.to assign(instance, :review).with_attributes(params) }
+        end
+
+        describe "with blacklisted params" do
+          let(:params) { { "clear_slug" => "1", "publish_on" => 3.weeks.from_now } }
+
+          it { is_expected.to render_empty_json_200 }
+
+          it "does not regenerate slug" do
+
+          end
+
+          it "does not schedule" do
+            expect(instance.reload).to_not be_scheduled
+          end
         end
       end
 
       context "failure" do
-        it "returns an empty json 500 error" do
+        describe "non-xhr" do
+          before(:each) do
+            put :autosave, params: { id: instance.to_param, review: params }
+          end
 
+          it { is_expected.to render_bad_request }
+        end
+
+        context "failed save" do
+          before(:each) do
+            allow_any_instance_of(Review).to receive(:save!).and_raise(StandardError)
+
+            put :autosave, { xhr: true, params: { id: instance.to_param, review: params } }
+          end
+
+          it "errors" do
+            is_expected.to render_empty_json_500
+          end
         end
       end
     end
 
     describe "DELETE #destroy" do
-      let!(:review) { create(:minimal_review) }
+      let!(:instance) { create(:minimal_review) }
 
       it "destroys the requested review" do
         expect {
-          delete :destroy, params: { id: review.to_param }
+          delete :destroy, params: { id: instance.to_param }
         }.to change(Review, :count).by(-1)
       end
 
       it "redirects to index" do
-        delete :destroy, params: { id: review.to_param }
+        delete :destroy, params: { id: instance.to_param }
 
         is_expected.to send_user_to(admin_reviews_path).with_flash(
           :success, "admin.flash.posts.success.destroy"

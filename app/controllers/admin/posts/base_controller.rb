@@ -53,11 +53,15 @@ class Admin::Posts::BaseController < Admin::BaseController
     find_instance
     authorize @instance, :update?
 
-    @instance.attributes = autosave_params
+    begin
+      @instance.attributes = autosave_params
 
-    @instance.save!(validate: false)
+      @instance.save!(validate: false)
 
-    render json: {}, status: :ok
+      render json: {}, status: :ok
+    rescue => err
+      handle_500(err)
+    end
   end
 
   # DELETE /posts/1
@@ -116,13 +120,13 @@ private
   end
 
   def post_params(allow_publishing:)
-    fetched = params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
-
-    if allow_publishing
-      fetched
+    permitted = if allow_publishing
+      permitted_keys
     else
-      fetched.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
+      permitted_keys - [:publish_on, :clear_slug]
     end
+
+    params.fetch(controller_name.singularize.to_sym, {}).permit(permitted)
   end
 
   def permitted_keys

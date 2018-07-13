@@ -9,6 +9,6 @@ RSpec::Matchers.define :render_bad_request do
   end
 
   failure_message do
-    "expected to render bad_request, but did not"
+    "expected to render bad_request, but did not (status was #{response.status})"
   end
 end
