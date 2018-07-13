@@ -22,8 +22,8 @@ en:
       <<: *work_subclasses
     attributes:
       post: &post_attributes
-        published_at: "Publish Date"
-        publish_on: "Publish On"
+        published_at: "Published On"
+        publish_on: "Automatically Publish On"
         statuses:
           draft:     "Draft"
           scheduled: "Scheduled"

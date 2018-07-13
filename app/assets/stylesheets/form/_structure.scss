@@ -16,6 +16,12 @@
       color: $error-color;
     }
   }
+
+  &.article_clear_slug,
+  &.review_clear_slug,
+  &.mixtape_clear_slug {
+    margin-top: -1rem;
+  }
 }
 
 legend {
@@ -61,7 +67,7 @@ fieldset {
   @include bottom-margin-only(1.5rem);
 
   &.toggle {
-    margin: 0;
+    @include top-margin-only(1.5rem);
   }
 
   &.compact {
@@ -91,38 +97,45 @@ fieldset {
     @include bottom-margin-only(.5rem);
     @include border-bottom($padding: .5rem, $color: $armchair-blue-lightest, $style: solid);
 
+    &.no-border {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
     .form-field {
       @include bottom-margin-only(.5rem);
     }
 
-    .creator-role {
+    .row {
       @include clearfix();
       @include bottom-margin-only(.5rem);
 
       .form-field {
         float: left;
-        width: 55%;
         margin-bottom: 0;
 
         &:last-child {
-          width: 45%;
           padding-left: 1rem;
         }
       }
-    }
 
-    .activity-year {
-      @include clearfix();
-      @include bottom-margin-only(.5rem);
+      &.creator-role {
+        .form-field:first-child {
+          width: 55%;
+        }
 
-      .form-field {
-        float: left;
-        width: 65%;
-        margin-bottom: 0;
+        .form-field:last-child {
+          width: 45%;
+        }
+      }
 
-        &:last-child {
+      &.activity-year {
+        .form-field:first-child {
+          width: 65%;
+        }
+
+        .form-field:last-child {
           width: 35%;
-          padding-left: 1rem;
         }
       }
     }

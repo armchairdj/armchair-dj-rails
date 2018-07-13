@@ -9,7 +9,7 @@
     <% end %>
 
     <%= content_tag(:section, class: "adj-module") do %>
-      <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+      <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Primary or Pseudonym") %>
 
         <%= render partial: "shared/forms/custom_radio_group", locals: {
@@ -38,7 +38,7 @@
     <% end %>
 
     <%= content_tag(:section, class: "adj-module") do %>
-      <%= content_tag(:fieldset, class: "legendary", "data-controller": "togglable-fieldset") do %>
+      <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Individual or Group") %>
 
         <%= render partial: "shared/forms/custom_radio_group", locals: {
@@ -50,18 +50,18 @@
 
         <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
           f:           f,
-          association: :member_memberships,
-          bool:        false,
-          expandable:  true,
-          headline:    "Members",
-        } %>
-
-        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
-          f:           f,
           association: :group_memberships,
           bool:        true,
           expandable:  true,
           headline:    "Groups",
+        } %>
+
+        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
+          f:           f,
+          association: :member_memberships,
+          bool:        false,
+          expandable:  true,
+          headline:    "Members",
         } %>
       <% end %>
     <% end %>

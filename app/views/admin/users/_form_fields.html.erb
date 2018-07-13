@@ -1,5 +1,5 @@
 <%= content_tag(:section, class: "adj-module") do %>
-  <%= content_tag(:fieldset, class: "name legendary") do %>
+  <%= content_tag(:fieldset, class: "name") do %>
     <%= content_tag(:legend, "Name") %>
 
     <%= f.input(:first_name) %>
@@ -9,7 +9,7 @@
 <% end %>
 
 <%= content_tag(:section, class: "adj-module") do %>
-  <%= content_tag(:fieldset, class: "legendary") do %>
+  <%= content_tag(:fieldset) do %>
     <%= content_tag(:legend, "Account") %>
 
     <% if show_role && f.object != current_user %>

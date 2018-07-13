@@ -22,12 +22,15 @@ export default class extends BaseController {
   }
 
   toggle(evt) {
+    const $true  = $(this.trueFieldsetTarget);
+    const $false = $(this.falseFieldsetTarget);
+
     if (this.findRadio().filter(":checked").val() === "true") {
-      $(this.trueFieldsetTarget).show();
-      $(this.falseFieldsetTarget).hide();
+      $false.hide();
+      $true.show();
     } else {
-      $(this.trueFieldsetTarget ).hide();
-      $(this.falseFieldsetTarget).show();
+      $true.hide();
+      $false.show();
     }
   }
 }

@@ -7,7 +7,7 @@
 
 <%= simple_form_for(:user, method: :get, url: "/") do |f| %>
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= content_tag(:fieldset, class: "legendary") do %>
+    <%= content_tag(:fieldset) do %>
       <%= content_tag(:legend, "Plain Fields") %>
 
       <%= f.input :string, as: :string %>
@@ -29,7 +29,7 @@
       <%= f.input :textarea, as: :text %>
     <% end %>
 
-    <%= content_tag(:fieldset, class: "legendary") do %>
+    <%= content_tag(:fieldset) do %>
       <%= content_tag(:legend, "Optional Fields") %>
 
       <%= f.input :optional_string, as: :string, required: false %>
@@ -41,7 +41,7 @@
       <%= f.input :optional_textarea, as: :text, required: false %>
     <% end %>
 
-    <%= content_tag(:fieldset, class: "legendary") do %>
+    <%= content_tag(:fieldset) do %>
       <%= content_tag(:legend, "Tricked-Out Fields") %>
 
       <%= f.input :string_with_extras, as: :string,

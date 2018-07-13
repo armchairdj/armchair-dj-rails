@@ -8,7 +8,7 @@
   records   = f.object.send(association)
   error     = f.error(association)
   hint_text = error || hint
-  classes   = join_attr("legendary", "fields-for", ("fieldset-with-errors" if error))
+  classes   = join_attr("fields-for", ("fieldset-with-errors" if error))
   partial   = "admin/#{view_path}/fieldset_#{singular}"
 %>
 

@@ -13,7 +13,7 @@ en:
         created_at: "Created"
         updated_at: "Updated"
         _destroy: "Remove this association"
-        clear_slug: "Generate new slug?"
+        clear_slug: "Generate new slug"
       post:
       article:
       review:
@@ -51,8 +51,11 @@ en:
         publish_on: "Leave blank unless scheduling this post for future publication."
       post:
       article:
+        slug: "URL slugs are automatically generated on first save. If you've changed the title, you can generate a new slug by checking the box below."
       review:
+        slug: "URL slugs are automatically generated on first save. If you've made changes to the title, subtitle or makers of the reviewed item, you can generate a new slug by checking the box below."
       mixtape:
+        slug: "URL slugs are automatically generated on first save. If you've changed the playlist's title, you can generate a new slug by checking the box below."
       tag:
       creator:
       identity:
@@ -73,6 +76,7 @@ en:
     placeholders:
       defaults:
         email: "name@domain.com"
+        url: "https://www.domain.com"
       post:
       article:
       review:

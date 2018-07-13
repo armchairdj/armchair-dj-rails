@@ -1,17 +1,57 @@
 <% return unless f.object.persisted? %>
 
 <%= content_tag(:section, class: "adj-module") do %>
-  <%= content_tag(:fieldset, class: "legendary") do %>
+  <%= content_tag(:fieldset) do %>
     <%= content_tag(:legend, "Publication Details") %>
 
-    <% if f.object.persisted? %>
-      <%= f.input(:slug, disabled: true) + f.input(:clear_slug, as: :boolean) %>
-    <% end %>
+    <%= f.input(:slug, disabled: true) + f.input(:clear_slug, as: :boolean) %>
+
+    <%= f.input(:status, as: :string, disabled: true, required: false, input_html: {
+      value: f.object.human_status
+    } ) %>
 
     <% if f.object.published? %>
       <%= f.input :published_at, as: :date, html5: true, disabled: true %>
-    <% elsif f.object.persisted? %>
+    <% else %>
       <%= f.input :publish_on,   as: :date, html5: true, hint: true %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "button-group") do %>
+    <% if f.object.published? %>
+      <%= f.button :button, "Unpublish",
+        type:           :submit,
+        name:           "step",
+        value:          "unpublish",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% else %>
+      <%= f.button :button, "Publish",
+        type:           :submit,
+        name:           "step",
+        value:          "publish",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% end %>
+
+    <% if f.object.scheduled? %>
+      <%= f.button :button, "Unschedule",
+        type:           :submit,
+        name:           "step",
+        value:          "unschedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
+    <% else %>
+      <%= f.button :button, "Schedule",
+        type:           :submit,
+        name:           "step",
+        value:          "schedule",
+        class:          "danger",
+        "data-confirm": "Are you sure?"
+      %>
     <% end %>
   <% end %>
 <% end %>

@@ -125,6 +125,6 @@ module JsHelper
     target = "togglable-fieldset.#{bool ? 'trueFieldset' : 'falseFieldset'}"
     attrs  = { class: css_class, "data-target": target }
 
-    expandable ? attrs.merge(js_attrs("expandable-fieldset")) : attrs
+    expandable ? js_attrs("expandable-fieldset").merge(attrs) : attrs
   end
 end
