@@ -103,16 +103,26 @@ private
     %w(edit update).include?(action_name) && params[:step].present?
   end
 
+  def create_params
+    post_params(allow_publishing: false).merge(author: current_user)
+  end
+
   def update_params
-    params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
+    post_params(allow_publishing: true)
   end
 
   def autosave_params
-    update_params.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
+    post_params(allow_publishing: false)
   end
 
-  def create_params
-    autosave_params.merge(author: current_user)
+  def post_params(allow_publishing:)
+    fetched = params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
+
+    if allow_publishing
+      fetched
+    else
+      fetched.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
+    end
   end
 
   def permitted_keys
