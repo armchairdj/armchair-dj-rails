@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Posts::BaseController < Admin::BaseController
+  before_action :require_ajax, only: :autosave
+
   # GET /posts
   # GET /posts.json
   def index; end
@@ -47,6 +49,17 @@ class Admin::Posts::BaseController < Admin::BaseController
     end
   end
 
+  def autosave
+    find_instance
+    authorize @instance, :update?
+
+    @instance.attributes = autosave_params
+
+    @instance.save!(validate: false)
+
+    render json: {}, status: :ok
+  end
+
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
@@ -90,13 +103,16 @@ private
     %w(edit update).include?(action_name) && params[:step].present?
   end
 
-  def create_params
-    sanitized = update_params.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
-    sanitized.merge(author: current_user)
+  def update_params
+    params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
   end
 
-  def update_params
-    fetched = params.fetch(controller_name.singularize.to_sym, {}).permit(permitted_keys)
+  def autosave_params
+    update_params.reject!{ |k, v| %w(publish_on clear_slug).include? k.to_s }
+  end
+
+  def create_params
+    autosave_params.merge(author: current_user)
   end
 
   def permitted_keys

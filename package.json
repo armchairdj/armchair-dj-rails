@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "^3.4.1",
+    "form-to-object": "^5.1.0",
     "jquery": "^3.3.1",
     "rails-ujs": "^5.1.5",
     "selectize": "^0.12.4",

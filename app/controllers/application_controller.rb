@@ -43,4 +43,8 @@ private
   def determine_layout
     "public"
   end
+
+  def require_ajax
+    raise ActionController::UnknownFormat unless request.xhr?
+  end
 end

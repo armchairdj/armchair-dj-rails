@@ -1,6 +1,6 @@
 /* Modernizr. */
 
-import modernizr from 'modernizr';
+import modernizr from "modernizr";
 
 /* Underscore. */
 
@@ -22,10 +22,6 @@ $(document).on("turbolinks:load", function () {
     dataType: "json"
   });
 })
-
-$(document).ajaxError(function () {
-  alert("Something went wrong. Please reload the page and start again.");
-});
 
 /* jQuery plugins. */
 

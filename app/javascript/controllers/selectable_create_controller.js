@@ -14,6 +14,8 @@ export default class extends SelectableController {
   initialize() {
     this.addOptionEventName = `selectable-create:option-add:${this.data.get("scope")}`;
     this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
+    this.successHandler     = _.bind(this.ajaxSuccess, this);
+    this.errorHandler       = _.bind(this.ajaxError,   this);
   }
 
   setup() {
@@ -58,8 +60,8 @@ export default class extends SelectableController {
       method:   "POST",
       url:      this.data.get("url"),
       data:     this.createItemParams(userInput),
-      success:  _.bind(this.ajaxSuccess, this, callback),
-      error:    _.bind(this.ajaxError,   this, callback)
+      success:  this.successHandler(),
+      error:    this.errorHandler()
     });
   }
 
@@ -118,6 +120,8 @@ export default class extends SelectableController {
   }
 
   ajaxError(callback, xhr, status, error) {
+    alert("Something went wrong. Please reload the page and try again.");
+
     callback();
   }
 

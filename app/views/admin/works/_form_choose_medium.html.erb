@@ -1,4 +1,4 @@
-<%= simple_form_for([:admin, @work], html: { class: "admin", "data-controller": "auto-submittable" }) do |f| %>
+<%= simple_form_for([:admin, @work], html: { class: "admin", "data-controller": "autosubmit" }) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
@@ -8,7 +8,7 @@
           collection: @media,
           input_html: {
             "data-controller": "selectable",
-            "data-target":     "auto-submittable.field"
+            "data-target":     "autosubmit.field"
           }
         %>
       <% end %>
@@ -18,7 +18,7 @@
   <%= content_tag(:div, class: "button-group") do %>
     <%= f.button(:button, "Continue", type: :submit,
       name: "step", value: "select_medium",
-      "data-target": "auto-submittable.button"
+      "data-target": "autosubmit.button"
     ) %>
   <% end %>
 <% end %>

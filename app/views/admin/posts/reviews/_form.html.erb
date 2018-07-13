@@ -1,4 +1,6 @@
-<%= simple_form_for([:admin, @review], html: { class: "admin"}) do |f| %>
+<% html_opts = js_autosave_attrs(@review).merge(class: "admin") %>
+
+<%= simple_form_for([:admin, @review], html: html_opts) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>

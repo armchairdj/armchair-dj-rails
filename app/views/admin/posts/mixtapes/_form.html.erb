@@ -1,4 +1,6 @@
-<%= simple_form_for([:admin, @mixtape], html: { class: "admin"}) do |f| %>
+<% html_opts = js_autosave_attrs(@mixtape).merge(class: "admin") %>
+
+<%= simple_form_for([:admin, @mixtape], html: html_opts) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>

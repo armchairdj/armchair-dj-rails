@@ -2,7 +2,7 @@
   form_attrs = { class: "admin" }
 
   if @work.new_record?
-    form_attrs.merge!({ "data-controller": "auto-submittable" })
+    form_attrs.merge!({ "data-controller": "autosubmit" })
   end
 %>
 
@@ -17,7 +17,7 @@
         <% else %>
           <%= f.input :medium, as: :select, collection: @media, input_html: {
             "data-controller": "selectable",
-            "data-target":     "auto-submittable.field"
+            "data-target":     "autosubmit.field"
           } %>
         <% end %>
 
@@ -55,7 +55,7 @@
 
     <%= f.button(:button, "Update Medium", type: :submit,
       name: "step", value: "select_medium", class: "secondary",
-      "data-target": "auto-submittable.button"
+      "data-target": "autosubmit.button"
     ) if @work.new_record? %>
   <% end %>
 <% end %>

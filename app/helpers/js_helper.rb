@@ -11,6 +11,20 @@ module JsHelper
     attrs
   end
 
+  def js_autosave_attrs(post)
+    return {} unless post.persisted? && post.unpublished?
+
+    opts = {}
+
+    opts[:url] = case post.class.name
+      when "Article"; autosave_admin_article_path(post)
+      when "Review";  autosave_admin_review_path( post)
+      when "Mixtape"; autosave_admin_mixtape_path(post)
+    end
+
+    js_attrs("autosave", opts)
+  end
+
   def js_selectabe_create_creator_attrs(scope = "creator")
     opts = { scope: scope, url: admin_creators_path, param: "creator[name]" }
 

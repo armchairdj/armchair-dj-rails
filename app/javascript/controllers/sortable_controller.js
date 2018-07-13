@@ -4,17 +4,25 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   initialize() {
-    this.url   = this.data.get("url");
-    this.param = this.data.get("param");
+    this.url          = this.data.get("url");
+    this.param        = this.data.get("param");
+    this.errorHandler = _.bind(this.ajaxError,    this);
+    this.updater      = _.bind(this.handleUpdate, this);
   }
 
   setup() {
-    this.sortable = Sortable.create(this.element, {
-      onUpdate: _.bind(this.handleUpdate, this)
-    });
+    this.createSortable();
   }
 
   teardown() {
+    this.destroySortable();
+  }
+
+  createSortable() {
+    this.sortable = Sortable.create(this.element, { onUpdate: this.updater });
+  }
+
+  destroySortable() {
     this.sortable.destroy();
   }
 
@@ -26,7 +34,8 @@ export default class extends BaseController {
     $.ajax({
       method: "POST",
       url:    this.url,
-      data:   this.params()
+      data:   this.params(),
+      error:  this.errorHandler
     });
   }
 
@@ -36,5 +45,11 @@ export default class extends BaseController {
     params[this.param] = this.sortable.toArray();
 
     return params;
+  }
+
+  ajaxError(xhr, status, error) {
+    this.destroySortable();
+
+    alert("Something went wrong reordering these elements. Please reload the page and try again.");
   }
 }

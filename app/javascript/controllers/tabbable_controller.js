@@ -4,7 +4,7 @@ export default class extends BaseController {
   static targets = [ "all", "remove" ];
 
   initialize() {
-    this.handler = _.bind(this.activateFromAfar, this);
+    this.activator = _.bind(this.activateFromAfar, this);
   }
 
   setup() {
@@ -14,11 +14,11 @@ export default class extends BaseController {
 
     this.showTab(this.data.get("selected-tab"));
 
-    $(document).on("tabbable:activate", this.handler);
+    $(document).on("tabbable:activate", this.activator);
   }
 
   teardown(evt) {
-    $(document).off("tabbable:activate", this.handler);
+    $(document).off("tabbable:activate", this.activator);
 
     $(this.allTargets).removeClass("tab-active tab-inactive");
 

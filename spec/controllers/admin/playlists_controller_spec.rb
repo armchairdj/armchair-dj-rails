@@ -193,7 +193,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
             id: instance.to_param, playlisting_ids: shuffled
           }
 
-          expect(response).to have_http_status(204)
+          expect(response).to have_http_status(200)
 
           expect(instance.reload.playlistings.ids).to eq(shuffled)
         end

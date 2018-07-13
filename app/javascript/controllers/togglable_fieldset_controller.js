@@ -4,17 +4,17 @@ export default class extends BaseController {
   static targets = [ "trueFieldset", "falseFieldset" ];
 
   initialize() {
-    this.handler = _.bind(this.toggle, this);
+    this.toggler = _.bind(this.toggle, this);
   }
 
   setup() {
-    this.findRadio().on("change", this.handler);
+    this.findRadio().on("change", this.toggler);
 
     this.toggle();
   }
 
   teardown(evt) {
-    this.findRadio().off("change", this.handler);
+    this.findRadio().off("change", this.toggler);
   }
 
   findRadio() {

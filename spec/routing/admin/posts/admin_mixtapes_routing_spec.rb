@@ -36,6 +36,14 @@ RSpec.describe Admin::Posts::MixtapesController, type: :routing do
       expect(patch: "/admin/mixtapes/1").to route_to("admin/posts/mixtapes#update", id: "1")
     end
 
+    it "#autosave via PUT" do
+      expect(put: "/admin/mixtapes/1/autosave").to route_to("admin/posts/mixtapes#autosave", id: "1")
+    end
+
+    it "#autosave via PATCH" do
+      expect(patch: "/admin/mixtapes/1/autosave").to route_to("admin/posts/mixtapes#autosave", id: "1")
+    end
+
     it "#destroy" do
       expect(delete: "/admin/mixtapes/1").to route_to("admin/posts/mixtapes#destroy", id: "1")
     end

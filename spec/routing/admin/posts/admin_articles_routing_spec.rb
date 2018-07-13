@@ -36,6 +36,14 @@ RSpec.describe Admin::Posts::ArticlesController, type: :routing do
       expect(patch: "/admin/articles/1").to route_to("admin/posts/articles#update", id: "1")
     end
 
+    it "#autosave via PUT" do
+      expect(put: "/admin/articles/1/autosave").to route_to("admin/posts/articles#autosave", id: "1")
+    end
+
+    it "#autosave via PATCH" do
+      expect(patch: "/admin/articles/1/autosave").to route_to("admin/posts/articles#autosave", id: "1")
+    end
+
     it "#destroy" do
       expect(delete: "/admin/articles/1").to route_to("admin/posts/articles#destroy", id: "1")
     end

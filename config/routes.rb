@@ -84,9 +84,23 @@ Rails.application.routes.draw do
 
   namespace :admin do
     scope module: :posts do
-      resources :articles, concerns: :paginatable
-      resources :reviews,  concerns: :paginatable
-      resources :mixtapes, concerns: :paginatable
+      resources :articles, concerns: :paginatable do
+        member do
+          match "autosave", to: "articles#autosave", via: [:patch, :put]
+        end
+      end
+
+      resources :reviews,  concerns: :paginatable do
+        member do
+          match "autosave", to: "reviews#autosave", via: [:patch, :put]
+        end
+      end
+
+      resources :mixtapes, concerns: :paginatable do
+        member do
+          match "autosave", to: "mixtapes#autosave", via: [:patch, :put]
+        end
+      end
     end
 
     resources :users,      concerns: :paginatable

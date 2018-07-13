@@ -1,4 +1,6 @@
-<%= simple_form_for([:admin, @article], html: { class: "admin"}) do |f| %>
+<% html_opts = js_autosave_attrs(@article).merge(class: "admin") %>
+
+<%= simple_form_for([:admin, @article], html: html_opts) do |f| %>
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
@@ -12,7 +14,7 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "admin/posts/publication_details",      locals: { f: f } %>
+    <%= render partial: "admin/posts/publication_details",     locals: { f: f } %>
     <%= render partial: "admin/links/has_many_links_fieldset", locals: { f: f } %>
   <% end %>
 

@@ -5,11 +5,11 @@
     <%= content_tag(:legend, "Publication Details") %>
 
     <% if f.object.persisted? %>
-      <%= f.input(:slug, readonly: true) + f.input(:clear_slug, as: :boolean) %>
+      <%= f.input(:slug, disabled: true) + f.input(:clear_slug, as: :boolean) %>
     <% end %>
 
     <% if f.object.published? %>
-      <%= f.input :published_at, as: :date, html5: true, readonly: true %>
+      <%= f.input :published_at, as: :date, html5: true, disabled: true %>
     <% elsif f.object.persisted? %>
       <%= f.input :publish_on,   as: :date, html5: true, hint: true %>
     <% end %>

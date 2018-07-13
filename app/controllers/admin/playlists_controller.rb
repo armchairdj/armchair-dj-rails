@@ -1,4 +1,5 @@
 class Admin::PlaylistsController < Admin::BaseController
+  before_action :require_ajax, only: :reorder_playlistings
 
   # GET /admin/playlists
   # GET /admin/playlists.json
@@ -55,12 +56,12 @@ class Admin::PlaylistsController < Admin::BaseController
 
   # POST /admin/playlists/1/reorder_playlistings
   def reorder_playlistings
-    raise ActionController::UnknownFormat unless request.xhr?
-
     find_instance
     authorize @playlist, :update?
 
     Playlisting.reorder_for!(@playlist, params[:playlisting_ids])
+
+    render json: {}, status: :ok
   end
 
 private

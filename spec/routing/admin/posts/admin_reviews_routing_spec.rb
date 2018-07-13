@@ -36,6 +36,14 @@ RSpec.describe Admin::Posts::ReviewsController, type: :routing do
       expect(patch: "/admin/reviews/1").to route_to("admin/posts/reviews#update", id: "1")
     end
 
+    it "#autosave via PUT" do
+      expect(put: "/admin/reviews/1/autosave").to route_to("admin/posts/reviews#autosave", id: "1")
+    end
+
+    it "#autosave via PATCH" do
+      expect(patch: "/admin/reviews/1/autosave").to route_to("admin/posts/reviews#autosave", id: "1")
+    end
+
     it "#destroy" do
       expect(delete: "/admin/reviews/1").to route_to("admin/posts/reviews#destroy", id: "1")
     end

@@ -190,7 +190,7 @@ RSpec.describe Admin::WorksController, type: :controller do
             id: instance.to_param, credit_ids: shuffled
           }
 
-          expect(response).to have_http_status(204)
+          expect(response).to have_http_status(200)
 
           expect(instance.reload.credits.ids).to eq(shuffled)
         end

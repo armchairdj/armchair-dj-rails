@@ -336,6 +336,25 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
       end
     end
 
+    describe "PATCH #autosave" do
+      context "success" do
+
+        it "saves without validation" do
+
+        end
+
+        it "returns an empty json 200 response" do
+
+        end
+      end
+
+      context "failure" do
+        it "returns an empty json 500 error" do
+
+        end
+      end
+    end
+
     describe "DELETE #destroy" do
       let!(:review) { create(:minimal_review) }
 

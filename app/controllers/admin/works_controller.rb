@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::WorksController < Admin::BaseController
+  before_action :require_ajax, only: :reorder_credits
+
   # GET /works
   # GET /works.json
   def index; end
@@ -60,12 +62,12 @@ class Admin::WorksController < Admin::BaseController
 
   # POST /admin/works/1/reorder_credits
   def reorder_credits
-    raise ActionController::UnknownFormat unless request.xhr?
-
     find_instance
     authorize @work, :update?
 
     Credit.reorder_for!(@work, params[:credit_ids])
+
+    render json: {}, status: :ok
   end
 
 private
