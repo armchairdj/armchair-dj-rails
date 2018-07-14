@@ -4,10 +4,10 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   initialize() {
-    this.url          = this.data.get("url");
-    this.param        = this.data.get("param");
-    this.errorHandler = _.bind(this.ajaxError,    this);
-    this.updater      = _.bind(this.handleUpdate, this);
+    this.url     = this.data.get("url");
+    this.param   = this.data.get("param");
+    this.onError = _.bind(this.ajaxError,    this);
+    this.updater = _.bind(this.handleUpdate, this);
   }
 
   setup() {
@@ -35,7 +35,7 @@ export default class extends BaseController {
       method: "POST",
       url:    this.url,
       data:   this.params(),
-      error:  this.errorHandler
+      error:  this.onError
     });
   }
 
@@ -50,6 +50,6 @@ export default class extends BaseController {
   ajaxError(xhr, status, error) {
     this.destroySortable();
 
-    alert("Something went wrong reordering these elements. Please reload the page and try again.");
+    alert("Something went wrong reordering these items. Please reload the page and try again.");
   }
 }
