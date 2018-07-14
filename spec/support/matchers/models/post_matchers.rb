@@ -2,6 +2,20 @@
 
 require "rspec/expectations"
 
+RSpec::Matchers.define :be_a_populated_new_post do |param_key|
+  match do |actual|
+    case param_key
+    when :article; expect(actual).to be_a_populated_new_article
+    when :review;  expect(actual).to be_a_populated_new_review
+    when :mixtape; expect(actual).to be_a_populated_new_mixtape
+    end
+  end
+
+  failure_message do |actual|
+    "expected #{actual} to be a populated new #{param_key}, but was not"
+  end
+end
+
 RSpec::Matchers.define :be_a_populated_new_article do
   match do |actual|
     expect(actual).to be_a_new(Post)
@@ -38,30 +52,6 @@ RSpec::Matchers.define :be_a_populated_new_mixtape do
 
   failure_message do |actual|
     "expected #{actual} to be a populated new mixtape, but was not"
-  end
-end
-
-RSpec::Matchers.define :be_a_populated_new_article do
-  match do |actual|
-    expect(actual).to be_a_new(Post)
-
-    expect(actual).to_not be_valid
-  end
-
-  failure_message do |actual|
-    "expected #{actual} to be a populated new post, but was not"
-  end
-end
-
-RSpec::Matchers.define :be_a_populated_new_article do
-  match do |actual|
-    expect(actual).to be_a_new(Post)
-
-    expect(actual).to_not be_valid
-  end
-
-  failure_message do |actual|
-    "expected #{actual} to be a populated new post, but was not"
   end
 end
 
