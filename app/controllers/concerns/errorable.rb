@@ -9,37 +9,33 @@ module Errorable
   extend ActiveSupport::Concern
 
   included do
+    # 500
+    # Rules for rescue_from are evaluated in reverse source order, so
+    # this fallback must come first.
+    unless Rails.application.config.consider_all_requests_local
+      rescue_from StandardError, with: :handle_500
+    end
+
     # 403
-    rescue_from Pundit::NotAuthenticatedError,       with: :handle_403_recoverable
-    rescue_from Pundit::NotAuthorizedError,          with: :handle_403
+    rescue_from Pundit::NotAuthenticatedError, with: :handle_403_recoverable
+    rescue_from Pundit::NotAuthorizedError,    with: :handle_403
 
     # 404
     rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
     rescue_from ActionController::RoutingError,      with: :handle_404
-    # rescue_from ActionController::UnknownController, with: :handle_404
     rescue_from AbstractController::ActionNotFound,  with: :handle_404
 
     # 422
-    rescue_from ActionController::UnknownFormat,     with: :handle_422
-
-    # 500
-    unless Rails.application.config.consider_all_requests_local
-      rescue_from StandardError,                     with: :handle_500
-    end
+    rescue_from ActionController::UnknownFormat, with: :handle_422
 
   protected
 
     def handle_403_recoverable(exception = nil)
-      if request.xhr?
-        return render json: {}, status: 403
-      end
+      return render_error_json(403) if request.xhr?
 
       respond_to do |format|
-        format.html {
-          set_user_return_to
-          redirect_to(new_user_session_path, success: I18n.t("public.flash.sessions.error.missing"))
-        }
-        format.json { render json: {}, status: 403 }
+        format.html { set_user_return_to; require_login }
+        format.json { render_error_json(403) }
       end
     end
 
@@ -61,22 +57,29 @@ module Errorable
 
     def respond_with_error(code, template, exception = nil)
       render_error_response(code, template)
+
       log_error(code, exception)
     end
 
     def render_error_response(code, template)
-      if request.xhr?
-        return render json: {}, status: code
-      end
+      return render_error_json(code) if request.xhr?
 
+      respond_to do |format|
+        format.html { render_error_template(code, template) }
+        format.json { render_error_json(code) }
+      end
+    end
+
+    def render_error_template(code, template)
       # errors/bad_request
       # errors/internal_server_error
       # errors/not_found
       # errors/permission_denied
-      respond_to do |format|
-        format.html { render template: "errors/#{template}", status: code, layout: "error" }
-        format.json { render json: {}, status: code }
-      end
+      render template: "errors/#{template}", status: code, layout: "error"
+    end
+
+    def render_error_json(code)
+      render json: {}, status: code
     end
 
   private
@@ -85,6 +88,12 @@ module Errorable
       if request.get? && !request.xhr?
         session["user_return_to"] = request.url
       end
+    end
+
+    def require_login
+      notice = I18n.t("public.flash.sessions.error.missing")
+
+      redirect_to(new_user_session_path, notice: notice)
     end
 
     def log_error(code, exception = nil)

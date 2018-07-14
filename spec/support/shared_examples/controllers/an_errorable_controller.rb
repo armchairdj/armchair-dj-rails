@@ -38,11 +38,11 @@ RSpec.shared_examples "an_errorable_controller" do
           it "does not set session variable" do
             expect(controller).to_not receive(:set_user_return_to)
 
-            get :index, { xhr: true }
+            get :index, xhr: true
           end
 
           it "renders json" do
-            get :index, { xhr: true }
+            get :index, xhr: true
 
             expect(response     ).to have_http_status(403)
             expect(response.body).to eq("{}")
@@ -71,7 +71,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-          allow(controller).to receive(:handle_403_recoverable)
+           allow(controller).to receive(:handle_403_recoverable)
           expect(controller).to receive(:handle_403_recoverable)
         end
 
@@ -105,7 +105,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
         describe "xhr" do
           it "renders json" do
-            get :index, { xhr: true }
+            get :index, xhr: true
 
             expect(response     ).to have_http_status(403)
             expect(response.body).to eq("{}")
@@ -128,7 +128,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-          allow(controller).to receive(:handle_403)
+           allow(controller).to receive(:handle_403)
           expect(controller).to receive(:handle_403)
         end
 
@@ -162,7 +162,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
         describe "xhr" do
           it "renders json" do
-            get :index, { xhr: true }
+            get :index, xhr: true
 
             expect(response     ).to have_http_status(404)
             expect(response.body).to eq("{}")
@@ -185,7 +185,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-          allow(controller).to receive(:handle_404)
+           allow(controller).to receive(:handle_404)
           expect(controller).to receive(:handle_404)
         end
 
@@ -206,18 +206,6 @@ RSpec.shared_examples "an_errorable_controller" do
             get :index
           end
         end
-
-        # describe "ActionController::UnknownController" do
-        #   controller do
-        #     def index
-        #       raise ActionController::UnknownController.new "error"
-        #     end
-        #   end
-        #
-        #   it "handles error" do
-        #     get :index
-        #   end
-        # end
 
         describe "AbstractController::ActionNotFound" do
           controller do
@@ -255,7 +243,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
         describe "xhr" do
           it "renders json" do
-            get :index, { xhr: true }
+            get :index, xhr: true
 
             expect(response     ).to have_http_status(422)
             expect(response.body).to eq("{}")
@@ -278,7 +266,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-          allow(controller).to receive(:handle_422)
+           allow(controller).to receive(:handle_422)
           expect(controller).to receive(:handle_422)
         end
 
@@ -314,7 +302,7 @@ RSpec.shared_examples "an_errorable_controller" do
 
         describe "xhr" do
           it "renders json" do
-            get :index, { xhr: true }
+            get :index, xhr: true
 
             expect(response     ).to have_http_status(500)
             expect(response.body).to eq("{}")

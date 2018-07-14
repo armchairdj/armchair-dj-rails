@@ -9,6 +9,6 @@ RSpec::Matchers.define :render_internal_server_error do
   end
 
   failure_message do
-    "expected to render internal_server_error, but did not"
+    "expected to render internal_server_error, but did not (status was #{response.status})"
   end
 end

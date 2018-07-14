@@ -3,7 +3,7 @@ const toObject = require("form-to-object");
 import BaseController from "./base_controller";
 
 export default class extends BaseController {
-  static intervalLength = 60000; /* one minute */
+  static intervalLength = 60 * 1000; /* one minute */
 
   initialize() {
     this.url            = this.data.get("url");

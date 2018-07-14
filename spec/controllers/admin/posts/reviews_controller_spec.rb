@@ -342,7 +342,7 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
       context "success" do
         before(:each) do
-          put :autosave, { xhr: true, params: { id: instance.to_param, review: params } }
+          put :autosave, xhr: true, params: { id: instance.to_param, review: params }
         end
 
         describe "with valid params" do
@@ -364,9 +364,7 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
           it { is_expected.to render_empty_json_200 }
 
-          it "does not regenerate slug" do
-
-          end
+          pending "does not regenerate slug"
 
           it "does not schedule" do
             expect(instance.reload).to_not be_scheduled
@@ -387,7 +385,7 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
           before(:each) do
             allow_any_instance_of(Review).to receive(:save!).and_raise(StandardError)
 
-            put :autosave, { xhr: true, params: { id: instance.to_param, review: params } }
+            put :autosave, xhr: true, params: { id: instance.to_param, review: params }
           end
 
           it "errors" do

@@ -9,6 +9,6 @@ RSpec::Matchers.define :render_not_found do
   end
 
   failure_message do
-    "expected to render not_found, but did not"
+    "expected to render not_found, but did not (status was #{response.status})"
   end
 end

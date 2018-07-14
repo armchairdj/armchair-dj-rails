@@ -9,6 +9,6 @@ RSpec::Matchers.define :render_permission_denied do
   end
 
   failure_message do
-    "expected to render permission_denied, but did not"
+    "expected to render permission_denied, but did not (status was #{response.status})"
   end
 end

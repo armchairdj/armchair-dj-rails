@@ -121,9 +121,9 @@ private
 
   def post_params(allow_publishing:)
     permitted = if allow_publishing
-      permitted_keys
+      permitted_keys.unshift(:publish_on, :clear_slug)
     else
-      permitted_keys - [:publish_on, :clear_slug]
+      permitted_keys
     end
 
     params.fetch(controller_name.singularize.to_sym, {}).permit(permitted)
@@ -132,9 +132,7 @@ private
   def permitted_keys
     [
       :body,
-      :publish_on,
       :summary,
-      :clear_slug,
       {
         :tag_ids => [],
         :links_attributes => [

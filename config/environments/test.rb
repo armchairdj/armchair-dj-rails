@@ -20,10 +20,10 @@ Rails.application.configure do
     'Cache-Control' => "public, max-age=#{1.hour.to_i}"
   }
 
-  # Full error reports are disabled.
+  # Dev error reports are disabled.
   config.consider_all_requests_local = false
 
-  # Caching is turned off.
+  # Caching is disabled.
   config.action_controller.perform_caching = false
 
   # Raise exceptions instead of rendering exception templates.
