@@ -4,8 +4,8 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   initialize() {
-    this.duration  = 120 * 1000; /* 120 seconds  */
-    this.wait      =  30 * 1000; /*  30 seconds  */
+    this.duration  = 60 * 1000;
+    this.wait      = 30 * 1000;
 
     this.url       = this.data.get("url");
 
@@ -29,7 +29,8 @@ export default class extends BaseController {
 
   startInterval() {
     this.failureCount = 0;
-    this.lastUpdated  = this.lastSaved = new Date();
+
+    this.lastUpdated = this.lastSaved = new Date();
 
     this.interval = window.setInterval(this.saver, this.duration);
   }
@@ -45,8 +46,6 @@ export default class extends BaseController {
   saveIfNecessary() {
     if (this.lastUpdated > this.lastSaved) {
       this.submitRequest();
-
-      this.lastSaved = new Date();
     }
   }
 
@@ -61,24 +60,32 @@ export default class extends BaseController {
   }
 
   ajaxSuccess(response, status, xhr) {
-    this.alertUserOfSave();
+    console.log("autosaved");
+
+    this.lastSaved = new Date();
+
+    this.alertUserOfSuccess();
+  }
+
+  alertUserOfSuccess() {
+    var $body = $("body");
+
+    $body.fadeTo(400, 0.5, function () {
+      $body.fadeTo(400, 1)
+    });
   }
 
   ajaxError(xhr, status, error) {
     this.failureCount += 1;
 
     if (this.failureCount >= 3) {
-      alert("Something went wrong auto-saving this post. You may want to manually save your changes and reload the page.");
-
-      this.endInterval();
+      this.alertUserOfError();
     }
   }
 
-  alertUserOfSave() {
-    var $body = $("body");
+  alertUserOfError() {
+    alert("Something went wrong auto-saving this post. You may want to manually save your changes and reload the page.");
 
-    $body.fadeTo(400, 0.5, function () {
-      $body.fadeTo(400, 1)
-    });
+    this.endInterval();
   }
 }
