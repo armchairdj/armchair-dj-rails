@@ -23,9 +23,6 @@ gem "bootsnap", require: false
 # Ruby utilities.
 gem "facets", require: false
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem "therubyracer", platforms: :ruby
-
 ###############################################################################
 # SERVER.
 ###############################################################################
@@ -49,19 +46,19 @@ gem "devise"
 
 # Authorization.
 # gem "pundit", path: "/Users/armchairdj/Dropbox/Git/pundit"
-gem "pundit", git: "https://github.com/armchairdj/pundit", ref: "22b96acfcd06f48c3267abd03f4d841803f73bb3"
+gem "pundit", github: "armchairdj/pundit", ref: "22b96acfcd06f48c3267abd03f4d841803f73bb3"
 
 ###############################################################################
 # MODELS.
 ###############################################################################
 
-# Use ActiveModel has_secure_password.
+# ActiveModel has_secure_password.
 gem "bcrypt"
 
-# Don't allow empty strings into the database.
+# Ban-hammer for empty strings in the database.
 gem "nilify_blanks"
 
-# Ordinal ranking.
+# Ordered collections.
 gem "acts_as_list"
 
 # Tree models.
@@ -70,16 +67,13 @@ gem "acts_as_list"
 # Soft deletes.
 gem "discard"
 
-# Acts As State Machine.
-gem "aasm"
-
 # Date validation.
-gem "validates_timeliness", '~> 4.0'
+gem "validates_timeliness", "~> 4.0"
 
 # Join scopes into one query.
 gem "active_record_union"
 
-# Friendly URLs.
+# Friendly URL slugs.
 gem "friendly_id"
 
 ###############################################################################
@@ -92,12 +86,18 @@ gem "decent_exposure"
 # DRY format responders.
 gem "responders"
 
+# State machines.
+gem "aasm"
+
 # Pagination.
 gem "kaminari"
 
 ###############################################################################
 # VIEWS.
 ###############################################################################
+
+# International character translator.
+gem "unidecoder"
 
 # Form renderer.
 gem "simple_form"
@@ -107,9 +107,6 @@ gem "booletania"
 
 # Markdown parser.
 gem "redcarpet"
-
-# International character translator.
-gem "unidecoder"
 
 # JSON response builder.
 gem "jbuilder", "~> 2.5"
@@ -141,6 +138,9 @@ gem "turbolinks", "~> 5"
 
 # jQuery.
 gem "jquery-rails"
+
+# Run JavaScript from within Ruby.
+# gem "therubyracer", platforms: :ruby
 
 ###############################################################################
 # IMAGES.
@@ -222,7 +222,7 @@ group :development, :test do
   gem "db-query-matchers"
   gem "rspec-collection_matchers"
   gem "rspec-html-matchers"
-  gem "shoulda-matchers", git: "https://github.com/thoughtbot/shoulda-matchers", branch: "master"
+  gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "master"
   gem "pundit-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
 

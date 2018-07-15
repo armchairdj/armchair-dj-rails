@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/armchairdj/pundit
+  remote: https://github.com/armchairdj/pundit.git
   revision: 22b96acfcd06f48c3267abd03f4d841803f73bb3
   ref: 22b96acfcd06f48c3267abd03f4d841803f73bb3
   specs:
@@ -7,7 +7,7 @@ GIT
       activesupport (>= 3.0.0)
 
 GIT
-  remote: https://github.com/thoughtbot/shoulda-matchers
+  remote: https://github.com/thoughtbot/shoulda-matchers.git
   revision: c0960bd72dd41c4e9bd8b4375254f539776bfe95
   branch: master
   specs:
