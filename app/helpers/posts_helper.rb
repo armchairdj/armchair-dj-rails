@@ -7,7 +7,9 @@ module PostsHelper
   #############################################################################
 
   def formatted_post_body(post)
-    paragraphs(post.body)
+    markdown = Redcarpet::Markdown.new(SmartRender)
+
+    markdown.render(post.body)
   end
 
   def post_title(post, **args)
