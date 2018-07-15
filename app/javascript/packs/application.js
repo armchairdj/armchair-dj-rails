@@ -34,11 +34,17 @@ const Turbolinks = require("turbolinks");
 
 Turbolinks.start();
 
-/* UJS */
+/* Unobtrusive JavaScript driver. */
 
 const Rails = require("rails-ujs");
 
 Rails.start();
+
+/* Markdown Editor. */
+
+const InscrybMDE = require("inscrybmde");
+
+window.InscrybMDE = InscrybMDE;
 
 /* Stimulus */
 
