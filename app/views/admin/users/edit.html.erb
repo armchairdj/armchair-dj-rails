@@ -2,9 +2,8 @@
   @title = ["Update User", @user.display_name]
 %>
 
-<%= admin_header(@model_class, :edit,
-  h1:       @title.first,
-  instance: @user,
-) %>
+<%= render "admin/shared/header", action: :edit, instance: @user,
+  headline: @title.first
+%>
 
-<%= render partial: "form" %>
+<%= render "form" %>

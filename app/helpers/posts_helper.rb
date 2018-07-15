@@ -19,14 +19,9 @@ module PostsHelper
   #############################################################################
 
   def post_title(post, **args)
-    case
-    when post.is_a?(Article)
-      article_title(post, **args)
-    when post.is_a?(Review)
-      review_title(post, **args)
-    when post.is_a?(Mixtape)
-      mixtape_title(post, **args)
-    end
+    return article_title(post, **args) if post.is_a?(Article)
+    return review_title( post, **args) if post.is_a?(Review)
+    return mixtape_title(post, **args) if post.is_a?(Mixtape)
   end
 
   def post_body(post)
@@ -34,9 +29,7 @@ module PostsHelper
   end
 
   def post_published_date(post)
-    return unless post.published?
-
-    time_tag(post.published_at, l(post.published_at), pubdate: "pubdate")
+    date_tag(post.published_at, pubdate: "pubdate") if post.published?
   end
 
   #############################################################################

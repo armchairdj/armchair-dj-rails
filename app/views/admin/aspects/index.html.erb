@@ -2,10 +2,10 @@
   @title = "Aspects"
 %>
 
-<%= admin_header(@model_class, :index,
-  h4: total_count_for(@aspects),
-  h1: @title
-) %>
+<%= render "admin/shared/header", action: :index,
+  prehead:   total_count_for(@aspects),
+  headline: @title
+%>
 
 <%= render "admin/shared/index",
   scopes:  @scopes,

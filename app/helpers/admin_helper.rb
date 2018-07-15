@@ -15,16 +15,10 @@ module AdminHelper
   # FORMATTING.
   #############################################################################
 
-  def admin_date(date, **opts)
-    return unless date
-
-    time_tag(date, l(date), **opts)
-  end
-
   def admin_post_status(post)
     return post.human_status if post.draft?
 
-    date = admin_date(post.publish_date, pubdate: "pubdate")
+    date = date_tag(post.publish_date, pubdate: "pubdate")
     prep = post.scheduled? ? "for" : "on"
 
     "#{post.human_status} #{prep} #{date}".html_safe
@@ -38,20 +32,28 @@ module AdminHelper
   # POLYMORPHIC WRAPPERS.
   #############################################################################
 
-  def admin_link_for(instance, url: false)
-    url ? polymorphic_url([:admin, instance]) : polymorphic_path([:admin, instance])
+  def admin_link_for(instance, full_url: false)
+    opts = [:admin, instance]
+
+    full_url ? polymorphic_url(opts) : polymorphic_path(opts)
   end
 
-  def admin_edit_link_for(instance, url: false)
-    url ? edit_polymorphic_url([:admin, instance]) : edit_polymorphic_path([:admin, instance])
+  def admin_link_for_edit(instance, full_url: false)
+    opts = [:admin, instance]
+
+    full_url ? edit_polymorphic_url(opts) : edit_polymorphic_path(opts)
   end
 
-  def admin_new_link_for(model, url: false)
-    url ? new_polymorphic_url([:admin, model]) : new_polymorphic_path([:admin, model])
+  def admin_link_for_new(model, full_url: false)
+    opts = [:admin, model]
+
+    full_url ? new_polymorphic_url(opts) : new_polymorphic_path(opts)
   end
 
-  def admin_list_link_for(model, url: false)
-    url ? polymorphic_url([:admin, model]) : polymorphic_path([:admin, model])
+  def admin_link_for_list(model, full_url: false)
+    opts = [:admin, model]
+
+    full_url ? polymorphic_url(opts) : polymorphic_path(opts)
   end
 
   #############################################################################
@@ -65,7 +67,7 @@ module AdminHelper
   end
 
   def admin_list_link(model)
-    path  = admin_list_link_for(model)
+    path  = admin_link_for_list(model)
     title = "back to #{model.model_name.plural} list"
     desc  = "list icon"
     icon  = "list"
@@ -83,7 +85,7 @@ module AdminHelper
   end
 
   def admin_create_link(model)
-    path  = admin_new_link_for(model)
+    path  = admin_link_for_new(model)
     title = "create #{model.model_name.singular}"
     desc  = "create icon"
     icon  = "plus"
@@ -92,7 +94,7 @@ module AdminHelper
   end
 
   def admin_update_link(instance)
-    path  = admin_edit_link_for(instance)
+    path  = admin_link_for_edit(instance)
     title = "update #{instance.model_name.singular}"
     desc  = "update icon"
     icon  = "pencil"
@@ -130,16 +132,6 @@ module AdminHelper
   #############################################################################
   # ACTION LINKS.
   #############################################################################
-
-  def admin_header(model_class, action, instance: nil, **opts)
-    decks   = opts.slice(:h4, :h1, :h2, :h3)
-    decks   = decks.map { |k, v| content_tag(k, v) }
-    links   = admin_header_links(model_class, action, instance)
-    actions = content_tag(:div, links, class: "actions")
-    opts    = combine_attrs(opts, class: "admin")
-
-    content_tag(:header, [*decks, actions].compact.join.html_safe, **opts)
-  end
 
   def admin_nav_links
     links = [

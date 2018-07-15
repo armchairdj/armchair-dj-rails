@@ -6,9 +6,8 @@
   ]
 %>
 
-<%= admin_header(@model_class, :edit,
-  h1:       @title.first,
-  instance: @playlist,
-) %>
+<%= render "admin/shared/header", action: :edit, instance: @playlist,
+  headline: @title.first
+%>
 
-<%= render partial: "form" %>
+<%= render "form" %>

@@ -1,0 +1,14 @@
+<%
+  prehead  = nil if local_assigns[:prehead ].nil?
+  instance = nil if local_assigns[:instance].nil?
+%>
+
+<%= content_tag(:header, class: "admin") do %>
+  <%= content_tag_unless_empty(:h4, prehead) %>
+
+  <%= content_tag(:h1, headline) %>
+
+  <%= content_tag(:div, class: "actions") do %>
+    <%= admin_header_links(@model_class, action, instance) %>
+  <% end %>
+<% end %>

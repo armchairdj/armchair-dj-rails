@@ -2,10 +2,10 @@
   @title = "Playlists"
 %>
 
-<%= admin_header(@model_class, :index,
-  h4: total_count_for(@playlists),
-  h1: @title
-) %>
+<%= render "admin/shared/header", action: :index,
+  prehead:  total_count_for(@playlists),
+  headline: @title
+%>
 
 <%= render "admin/shared/index",
   scopes:  @scopes,

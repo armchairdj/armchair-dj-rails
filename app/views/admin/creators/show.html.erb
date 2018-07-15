@@ -2,10 +2,9 @@
   @title = ["View Creator", @creator.name]
 %>
 
-<%= admin_header(@model_class, :show,
-  h1:       @title.first,
-  instance: @creator,
-) %>
+<%= render "admin/shared/header", action: :show, instance: @creator,
+  headline: @title.first
+%>
 
 <%= render "admin/shared/show",
   record: @creator,

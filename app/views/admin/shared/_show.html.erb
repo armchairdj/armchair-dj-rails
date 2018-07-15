@@ -8,7 +8,7 @@
             <% if row[:method].is_a?(Proc) %>
               <%= row[:method].call(record) %>
             <% elsif row[:date] %>
-              <%= admin_date record.send(row[:method]) %>
+              <%= date_tag record.send(row[:method]) %>
             <% else %>
               <%= record.send(row[:method]) %>
             <% end %>

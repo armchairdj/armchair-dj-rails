@@ -2,9 +2,8 @@
   @title = ["Update Review", review_title(@review)]
 %>
 
-<%= admin_header(@model_class, :edit,
-  h1:       @title.first,
-  instance: @review,
-) %>
+<%= render "admin/shared/header", action: :edit, instance: @review,
+  headline: @title.first
+%>
 
-<%= render partial: "form" %>
+<%= render "form" %>

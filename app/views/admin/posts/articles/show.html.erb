@@ -2,10 +2,9 @@
   @title = ["View Article", @article.display_author, article_title(@article)]
 %>
 
-<%= admin_header(@model_class, :show,
-  h1:       @title.first,
-  instance: @article,
-) %>
+<%= render "admin/shared/header", action: :show, instance: @article,
+  headline: @title.first
+%>
 
 <%= render "admin/shared/show",
   record: @article,

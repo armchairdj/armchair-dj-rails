@@ -2,12 +2,12 @@
   @title = "Create Work"
 %>
 
-<%= admin_header(@model_class, :new,
-  h1: @title
-) %>
+<%= render "admin/shared/header", action: :new,
+  headline: @title
+%>
 
 <% if @work.medium.blank? %>
   <%= render partial: "form_choose_medium" %>
 <% else %>
-  <%= render partial: "form" %>
+  <%= render "form" %>
 <% end %>

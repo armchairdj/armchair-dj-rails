@@ -22,7 +22,7 @@ class Admin::Posts::BaseController < Admin::BaseController
     respond_to do |format|
       if @instance.save
         format.html { redirect_to instance_path, success: I18n.t("admin.flash.posts.success.create") }
-        format.json { render :show, status: :created, location: instance_path(url: true) }
+        format.json { render :show, status: :created, location: instance_path(full_url: true) }
       else
         format.html { prepare_form; render :new }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -41,7 +41,7 @@ class Admin::Posts::BaseController < Admin::BaseController
     respond_to do |format|
       if @instance.update(update_params)
         format.html { redirect_to instance_path, success: I18n.t("admin.flash.posts.success.update") }
-        format.json { render :show, status: :created, location: instance_path(url: true) }
+        format.json { render :show, status: :created, location: instance_path(full_url: true) }
       else
         format.html { prepare_form; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -175,7 +175,7 @@ private
     respond_to do |format|
       if @instance.send(@update_method, update_params)
         format.html { redirect_to instance_path, success: success_flash }
-        format.json { render :show, status: :ok, location: instance_path(url: true) }
+        format.json { render :show, status: :ok, location: instance_path(full_url: true) }
       else
         format.html { prepare_form; set_publication_flash; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -219,15 +219,15 @@ private
     })
   end
 
-  def collection_path(url: false)
-    case url
+  def collection_path(full_url: false)
+    case full_url
     when true;  polymorphic_url( [:admin, model_class])
     when false; polymorphic_path([:admin, model_class])
     end
   end
 
-  def instance_path(url: false)
-    case url
+  def instance_path(full_url: false)
+    case full_url
     when true;  polymorphic_url( [:admin, @instance])
     when false; polymorphic_path([:admin, @instance])
     end

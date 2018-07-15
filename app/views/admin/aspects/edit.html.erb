@@ -2,9 +2,8 @@
   @title = ["Update Aspect", @aspect.name]
 %>
 
-<%= admin_header(@model_class, :edit,
-  h1:       @title.first,
-  instance: @aspect,
-) %>
+<%= render "admin/shared/header", action: :edit, instance: @aspect,
+  headline: @title.first
+%>
 
-<%= render partial: "form" %>
+<%= render "form" %>

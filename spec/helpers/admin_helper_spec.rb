@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe AdminHelper, type: :helper do
   before(:each) do
-   allow(helper).to receive(:current_user).and_return(create(:root))
+    allow(helper).to receive(:current_user).and_return(create(:root))
   end
 
   describe "form methods" do
@@ -12,16 +12,6 @@ RSpec.describe AdminHelper, type: :helper do
   end
 
   describe "formatting methods" do
-    describe "#admin_date" do
-      it "formats dates consistently" do
-        Timecop.freeze(2050, 3, 3) do
-          expect(helper.admin_date DateTime.now).to eq(
-            '<time datetime="2050-03-03T00:00:00-08:00">03/03/2050 at 12:00AM</time>'
-          )
-        end
-      end
-    end
-
     pending "#admin_post_status"
 
     pending "#total_count_for"

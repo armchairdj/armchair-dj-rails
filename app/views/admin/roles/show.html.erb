@@ -2,10 +2,9 @@
   @title = ["View Role", @role.display_medium, @role.name]
 %>
 
-<%= admin_header(@model_class, :show,
-  h1:       @title.first,
-  instance: @role,
-) %>
+<%= render "admin/shared/header", action: :show, instance: @role,
+  headline: @title.first
+%>
 
 <%= render "admin/shared/show",
   record: @role,

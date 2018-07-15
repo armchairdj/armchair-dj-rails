@@ -2,10 +2,9 @@
   @title = ["View Playlist", @playlist.display_author, @playlist.title]
 %>
 
-<%= admin_header(@model_class, :show,
-  h1:       @title.first,
-  instance: @playlist,
-) %>
+<%= render "admin/shared/header", action: :show, instance: @playlist,
+  headline: @title.first
+%>
 
 <%= render "admin/shared/show",
   record: @playlist,

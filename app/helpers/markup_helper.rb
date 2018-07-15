@@ -43,6 +43,12 @@ module MarkupHelper
     content_tag(tag, content, **opts)
   end
 
+  def date_tag(date, **opts)
+    return unless date
+
+    time_tag(date, l(date), **opts)
+  end
+
   def paragraphs(str)
     return if str.blank?
 

@@ -2,8 +2,8 @@
   @title = "Create Aspect"
 %>
 
-<%= admin_header(@model_class, :new,
-  h1: @title
-) %>
+<%= render "admin/shared/header", action: :new,
+  headline: @title
+%>
 
-<%= render partial: "form" %>
+<%= render "form" %>
