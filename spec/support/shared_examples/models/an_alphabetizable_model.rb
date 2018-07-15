@@ -33,16 +33,16 @@ RSpec.shared_examples "an_alphabetizable_model" do
 
         describe "before_save" do
           specify "calls #set_alpha" do
-             allow(subject).to receive(:set_alpha).and_call_original
-            is_expected.to receive(:set_alpha)
+            allow( subject).to receive(:set_alpha).and_call_original
+            expect(subject).to receive(:set_alpha)
 
             subject.save!
           end
 
           describe "#set_alpha" do
             before(:each) do
-               allow(subject).to receive(:calculate_alpha_string).and_call_original
-              is_expected.to receive(:calculate_alpha_string)
+              allow( subject).to receive(:calculate_alpha_string).and_call_original
+              expect(subject).to receive(:calculate_alpha_string)
             end
 
             specify "one part" do

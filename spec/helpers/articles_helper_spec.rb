@@ -15,7 +15,7 @@ RSpec.describe ArticlesHelper, type: :helper do
     describe "truncated" do
       subject { helper.article_title(instance, length: 15) }
 
-      it { is_expected.to eq("This Is the Ti…") }
+      it { is_expected.to eq("This Is the…") }
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe ArticlesHelper, type: :helper do
         subject { helper.link_to_article(instance, length: 15, class: "test") }
 
         it { is_expected.to have_tag("a[href='/articles/#{instance.slug}'][class='test']",
-          text:  "This Is the Ti…",
+          text:  "This Is the…",
           count: 1
         ) }
       end
@@ -74,4 +74,6 @@ RSpec.describe ArticlesHelper, type: :helper do
       end
     end
   end
+
+  pending "#url_for_article"
 end

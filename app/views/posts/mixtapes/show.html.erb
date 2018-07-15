@@ -8,7 +8,7 @@
   <% end %>
 <% end %>
 
-<%= formatted_post_body(@mixtape) %>
+<%= post_body @mixtape %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
   Posted by <%= link_to_author_of(@mixtape) %> on <%= post_published_date(@mixtape) %>

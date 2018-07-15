@@ -3,19 +3,16 @@
 require "rails_helper"
 
 RSpec.describe PostsHelper, type: :helper do
+  describe "link methods" do
+    pending "#link_to_post"
+
+    pending "#url_for_post"
+  end
+
   describe "display methods" do
-    describe "#formatted_post_body" do
-      subject { create(:minimal_article) }
+    pending "#post_title"
 
-      it "creates paragraphs" do
-        expected = "<p>one</p>\n<p>two</p>"
-
-         allow(helper).to receive(:paragraphs).and_return(expected)
-        expect(helper).to receive(:paragraphs).with(subject.body)
-
-        expect(helper.formatted_post_body(subject)).to eq(expected)
-      end
-    end
+    pending "#post_body"
 
     describe "#post_published_date" do
       let(:draft    ) { create(:minimal_article, :draft    ) }
@@ -33,28 +30,6 @@ RSpec.describe PostsHelper, type: :helper do
       specify { expect(helper.post_published_date(draft    )).to eq(nil) }
       specify { expect(helper.post_published_date(scheduled)).to eq(nil) }
     end
-
-    describe "#smart_truncate" do
-      let(:title) { "abcdefghijklmnopqrstuvwxyz" }
-
-      describe "will truncate" do
-        subject { helper.smart_truncate(title, length: 20) }
-
-        it { is_expected.to eq("abcdefghijklmnopqrs…") }
-      end
-
-      describe "will truncate but too short" do
-        subject { helper.smart_truncate(title, length: 30) }
-
-        it { is_expected.to eq(title) }
-      end
-
-      describe "will not truncate" do
-        subject { helper.smart_truncate(title) }
-
-        it { is_expected.to eq(title) }
-      end
-    end
   end
 
   describe "icon methods" do
@@ -71,13 +46,13 @@ RSpec.describe PostsHelper, type: :helper do
         )
       end
 
-      specify "calls #article_scheduled_icon" do
+      specify "calls #post_status_icon" do
         expect(helper.post_status_icon(create(:minimal_mixtape, :scheduled))).to eq(
           '<span class="svg-icon post-scheduled">clock</span>'
         )
       end
 
-      specify "calls #article_published_icon" do
+      specify "calls #post_status_icon" do
         expect(helper.post_status_icon(create(:minimal_review, :published))).to eq(
           '<span class="svg-icon post-published">unlocked</span>'
         )

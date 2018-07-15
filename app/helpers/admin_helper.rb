@@ -21,8 +21,37 @@ module AdminHelper
     time_tag(date, l(date), **opts)
   end
 
+  def admin_post_status(post)
+    return post.human_status if post.draft?
+
+    date = admin_date(post.publish_date, pubdate: "pubdate")
+    prep = post.scheduled? ? "for" : "on"
+
+    "#{post.human_status} #{prep} #{date}".html_safe
+  end
+
   def total_count_for(association)
     pluralize(association.total_count, "Total Record")
+  end
+
+  #############################################################################
+  # POLYMORPHIC WRAPPERS.
+  #############################################################################
+
+  def admin_link_for(instance, url: false)
+    url ? polymorphic_url([:admin, instance]) : polymorphic_path([:admin, instance])
+  end
+
+  def admin_edit_link_for(instance, url: false)
+    url ? edit_polymorphic_url([:admin, instance]) : edit_polymorphic_path([:admin, instance])
+  end
+
+  def admin_new_link_for(model, url: false)
+    url ? new_polymorphic_url([:admin, model]) : new_polymorphic_path([:admin, model])
+  end
+
+  def admin_list_link_for(model, url: false)
+    url ? polymorphic_url([:admin, model]) : polymorphic_path([:admin, model])
   end
 
   #############################################################################
@@ -36,7 +65,7 @@ module AdminHelper
   end
 
   def admin_list_link(model)
-    path  = admin_list_permalink_for(model)
+    path  = admin_list_link_for(model)
     title = "back to #{model.model_name.plural} list"
     desc  = "list icon"
     icon  = "list"
@@ -45,7 +74,7 @@ module AdminHelper
   end
 
   def admin_view_link(instance)
-    path  = admin_permalink_for(instance)
+    path  = admin_link_for(instance)
     title = "view #{instance.model_name.singular}"
     desc  = "view icon"
     icon  = "eye"
@@ -54,7 +83,7 @@ module AdminHelper
   end
 
   def admin_create_link(model)
-    path  = admin_new_permalink_for(model)
+    path  = admin_new_link_for(model)
     title = "create #{model.model_name.singular}"
     desc  = "create icon"
     icon  = "plus"
@@ -63,7 +92,7 @@ module AdminHelper
   end
 
   def admin_update_link(instance)
-    path  = admin_edit_permalink_for(instance)
+    path  = admin_edit_link_for(instance)
     title = "update #{instance.model_name.singular}"
     desc  = "update icon"
     icon  = "pencil"
@@ -76,7 +105,7 @@ module AdminHelper
 
     return unless Pundit.policy!(current_user, [:admin, klass]).destroy?
 
-    path  = admin_permalink_for(instance)
+    path  = admin_link_for(instance)
     title = "destroy #{instance.model_name.singular}"
     desc  = "trash icon"
     icon  = "trash"
@@ -84,12 +113,12 @@ module AdminHelper
     admin_link_to(icon, path, title, desc, class: "admin destroy", method: :delete, "data-confirm": "Are you sure?")
   end
 
-  #############################################################################
-  # PUBLIC LINKS.
-  #############################################################################
-
   def admin_public_link(instance)
-    return unless path = permalink_for(instance)
+    path = nil
+    path = url_for_user(instance) if instance.is_a?(User)
+    path = url_for_post(instance) if instance.is_a?(Post)
+
+    return unless path
 
     title = "view #{instance.model_name.singular} on site"
     desc  = "public view icon"
@@ -163,22 +192,6 @@ module AdminHelper
     end
 
     links.compact.join.html_safe
-  end
-
-  #############################################################################
-  # INDEX TABS.
-  #############################################################################
-
-  def admin_index_tabs(scopes)
-    tabs = scopes.map do |scope_name, props|
-      if props[:active?]
-        content_tag :li, content_tag(:span, scope_name, class: "tab-active")
-      else
-        content_tag :li, link_to(scope_name, props[:url])
-      end
-    end
-
-    content_tag(:ul, tabs.join.html_safe, class: "tabs")
   end
 
   #############################################################################

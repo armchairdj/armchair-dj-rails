@@ -13,7 +13,7 @@
     { name: "ID",       method: :id },
     { name: "Playlist", method: -> (x) { link_to_playlist(x.playlist) } },
     { name: "Author",   method: -> (x) { link_to_author_of(x, admin: true) } },
-    { name: "Status",   method: -> (x) { post_status_and_date(x) } },
+    { name: "Status",   method: -> (x) { admin_post_status(x) } },
     { name: "Tags",     method: -> (x) { tag_list(x.tags, admin: true) } },
     { name: "Links",    method: -> (x) { link_list(x.links) } },
     { name: "Created",  date: true, method: :created_at },
@@ -24,4 +24,6 @@
   ]
 %>
 
-<%= admin_section formatted_post_body(@mixtape) %>
+<%= admin_section do %>
+  <%= post_body @mixtape %>
+<% end %>

@@ -13,7 +13,7 @@
   <% end %>
 <% end %>
 
-<%= formatted_post_body(@review) %>
+<%= post_body @review %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
   Posted by <%= link_to_author_of(@review) %> on <%= post_published_date(@review) %>

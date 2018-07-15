@@ -1,2 +1,2 @@
 json.extract! review, :id, :author_id, :tag_ids, :work_id, :body, :created_at, :updated_at
-json.url permalink_for(review, format: :json)
+json.url url_for_post(review, format: :json)

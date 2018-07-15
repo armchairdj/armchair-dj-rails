@@ -15,7 +15,7 @@ RSpec.shared_examples "an_authorable_model" do
         subject { build_minimal_instance }
 
         before(:each) do
-           allow(subject).to receive(:author_can_write).and_call_original
+          allow( subject).to receive(:author_can_write).and_call_original
           expect(subject).to receive(:author_can_write)
         end
 

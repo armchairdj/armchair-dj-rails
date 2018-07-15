@@ -669,4 +669,10 @@ RSpec.describe Post, type: :model do
       end
     end
   end
+
+  describe "instance" do
+    pending "#publish_date"
+
+    pending "#formatted_body"
+  end
 end

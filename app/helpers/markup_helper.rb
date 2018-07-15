@@ -52,8 +52,8 @@ module MarkupHelper
   end
 
   def smart_truncate(str, length: nil)
-    return str if length.nil?
+    return str.html_safe if length.nil?
 
-    truncate(str, length: length, omission: "…", separator: " ")
+    truncate(str.html_safe, length: length, omission: "…", separator: " ")
   end
 end

@@ -43,8 +43,8 @@ RSpec.describe Membership, type: :model do
 
       describe "#group_is_collective" do
         before(:each) do
-           allow(subject).to receive(:group_is_collective).and_call_original
-          is_expected.to receive(:group_is_collective)
+          allow( subject).to receive(:group_is_collective).and_call_original
+          expect(subject).to receive(:group_is_collective)
         end
 
         specify "valid" do
@@ -62,8 +62,8 @@ RSpec.describe Membership, type: :model do
 
       describe "#member_is_individual" do
         before(:each) do
-           allow(subject).to receive(:member_is_individual).and_call_original
-          is_expected.to receive(:member_is_individual)
+          allow( subject).to receive(:member_is_individual).and_call_original
+          expect(subject).to receive(:member_is_individual)
         end
 
         specify "valid" do

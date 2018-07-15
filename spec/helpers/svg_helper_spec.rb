@@ -102,7 +102,7 @@ RSpec.describe SvgHelper, type: :helper do
 
   describe "#svg_icon" do
     before(:each) do
-       allow(helper).to receive(:semantic_svg_image).and_call_original
+      allow( helper).to receive(:semantic_svg_image).and_call_original
       expect(helper).to receive(:semantic_svg_image).with("open_iconic/icon.svg", title: "title", desc: "desc").and_call_original
     end
 

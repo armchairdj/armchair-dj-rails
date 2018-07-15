@@ -8,7 +8,7 @@
   <% end %>
 <% end %>
 
-<%= formatted_post_body(@article) %>
+<%= post_body @article %>
 
 <%= content_tag(:footer, class: "post-byline") do %>
   Posted by <%= link_to_author_of(@article) %> on <%= post_published_date(@article) %>

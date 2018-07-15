@@ -93,4 +93,28 @@ RSpec.describe MarkupHelper, type: :helper do
       expect(actual).to eq(expected)
     end
   end
+
+  describe "#smart_truncate" do
+    subject { helper.smart_truncate(title, opts) }
+
+    let(:title) { "If I only could, I'd make a deal with God." }
+
+    describe "no length specified" do
+      let(:opts) { {} }
+
+      it { is_expected.to eq(title) }
+    end
+
+    describe "shorter than length" do
+      let(:opts) { { length: 50 } }
+
+      it { is_expected.to eq(title) }
+    end
+
+    describe "longer than length" do
+      let(:opts) { { length: 20 } }
+
+      it { is_expected.to eq("If I only could,…") }
+    end
+  end
 end

@@ -2,15 +2,21 @@
 
 module PostsHelper
 
+  def link_to_post(post, **opts)
+    return link_to_article(post, **opts) if post.is_a?(Article)
+    return link_to_review( post, **opts) if post.is_a?(Review)
+    return link_to_mixtape(post, **opts) if post.is_a?(Mixtape)
+  end
+
+  def url_for_post(post, **opts)
+    return url_for_article(post, **opts) if post.is_a?(Article)
+    return url_for_review( post, **opts) if post.is_a?(Review)
+    return url_for_mixtape(post, **opts) if post.is_a?(Mixtape)
+  end
+
   #############################################################################
   # DISPLAY METHODS.
   #############################################################################
-
-  def formatted_post_body(post)
-    markdown = Redcarpet::Markdown.new(SmartRender)
-
-    markdown.render(post.body)
-  end
 
   def post_title(post, **args)
     case
@@ -23,26 +29,14 @@ module PostsHelper
     end
   end
 
-  def post_status_and_date(post)
-    return post.human_status if post.draft?
-
-    date = admin_date(post.publish_date, pubdate: "pubdate")
-    conn = post.scheduled? ? "for" : "on"
-
-    "#{post.human_status} #{conn} #{date}".html_safe
+  def post_body(post)
+    content_tag_unless_empty(:div, post.formatted_body, class: "post-body")
   end
 
   def post_published_date(post)
     return unless post.published?
 
-    date      = post.published_at
-    formatted = l(date)
-
-    time_tag(date, formatted, pubdate: "pubdate")
-  end
-
-  def smart_truncate(title, length: nil)
-    length.nil? ? title : truncate(title, length: length, omission: "…")
+    time_tag(post.published_at, l(post.published_at), pubdate: "pubdate")
   end
 
   #############################################################################
@@ -65,15 +59,5 @@ module PostsHelper
 
   def post_scheduled_icon
     svg_icon("clock", title: "scheduled to be published", desc: "scheduled icon", wrapper_class: "post-scheduled")
-  end
-
-  #############################################################################
-  # LINK METHODS.
-  #############################################################################
-
-  def link_to_post(post, **opts)
-    return link_to_article(post, **opts) if post.is_a?(Article)
-    return link_to_review( post, **opts) if post.is_a?(Review)
-    return link_to_mixtape(post, **opts) if post.is_a?(Mixtape)
   end
 end

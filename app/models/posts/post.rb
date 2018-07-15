@@ -229,7 +229,15 @@ class Post < ApplicationRecord
     return publish_on   if scheduled?
   end
 
+  def formatted_body
+    renderer.render(body).html_safe
+  end
+
 private
+
+  def renderer
+    @renderer ||= Redcarpet::Markdown.new(PostRender)
+  end
 
   #############################################################################
   # AASM CALLBACKS.

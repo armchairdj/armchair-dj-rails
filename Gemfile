@@ -226,9 +226,9 @@ group :development, :test do
   gem "pundit-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
 
-  # JavaScript testing.
-  # gem "capybara"
-  # gem "selenium-webdriver"
+  # System and JS specs.
+  gem "capybara"
+  gem "selenium-webdriver"
 
   # Environment variable loader.
   gem "dotenv-rails"
