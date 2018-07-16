@@ -31,7 +31,9 @@ RSpec.describe AdminHelper, type: :helper do
 
       subject { helper.admin_list_link(model) }
 
-      it { is_expected.to eq('<a title="back to creators list" class="admin list" href="path">list</a>') }
+      let(:selector) { "a.admin-icon.list[title='back to creators list'][href='path']" }
+
+      it { is_expected.to have_tag(selector, text: "list", count: 1) }
     end
 
     describe "#admin_view_link" do
@@ -44,7 +46,9 @@ RSpec.describe AdminHelper, type: :helper do
 
       subject { helper.admin_view_link(instance) }
 
-      it { is_expected.to eq('<a title="view creator" class="admin view" href="path">view</a>') }
+      let(:selector) { "a.admin-icon.view[title='view creator'][href='path']" }
+
+      it { is_expected.to have_tag(selector, text: "view", count: 1) }
     end
 
     describe "#admin_create_link" do
@@ -57,7 +61,9 @@ RSpec.describe AdminHelper, type: :helper do
 
       subject { helper.admin_create_link(model) }
 
-      it { is_expected.to eq('<a title="create creator" class="admin create" href="path">create</a>') }
+      let(:selector) { "a.admin-icon.create[title='create creator'][href='path']" }
+
+      it { is_expected.to have_tag(selector, text: "create", count: 1) }
     end
 
     describe "#admin_update_link" do
@@ -70,7 +76,9 @@ RSpec.describe AdminHelper, type: :helper do
 
       subject { helper.admin_update_link(instance) }
 
-      it { is_expected.to eq('<a title="update creator" class="admin edit" href="path">update</a>') }
+      let(:selector) { "a.admin-icon.update[title='update creator'][href='path']" }
+
+      it { is_expected.to have_tag(selector, text: "update", count: 1) }
     end
 
     describe "#admin_destroy_link" do
@@ -83,7 +91,9 @@ RSpec.describe AdminHelper, type: :helper do
 
       subject { helper.admin_destroy_link(instance) }
 
-      it { is_expected.to eq('<a title="destroy creator" class="admin destroy" data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="path">destroy</a>') }
+      let(:selector) { "a.admin-icon.destroy[title='destroy creator'][href='path'][data-method='delete'][data-confirm][rel='nofollow']" }
+
+      it { is_expected.to have_tag(selector, text: "destroy", count: 1) }
     end
 
     describe "#admin_public_link" do
@@ -105,9 +115,9 @@ RSpec.describe AdminHelper, type: :helper do
           end
 
           let(:instance) { create(:writer, :with_published_post) }
-          let(:expected) { "a.admin.public-view[title='view user on site'][href='path']" }
+          let(:selector) { "a.admin-icon.public-view[title='view user on site'][href='path']" }
 
-          it { is_expected.to have_tag(expected, text: "public", count: 1) }
+          it { is_expected.to have_tag(selector, text: "public", count: 1) }
         end
 
         describe "unpublished" do
@@ -133,7 +143,7 @@ RSpec.describe AdminHelper, type: :helper do
           end
 
           let(:instance) { create(:minimal_article, :published) }
-          let(:expected) { "a.admin.public-view[title='view article on site'][href='path']" }
+          let(:expected) { "a.admin-icon.public-view[title='view article on site'][href='path']" }
 
           it { is_expected.to have_tag(expected, text: "public", count: 1) }
         end
@@ -155,10 +165,7 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "markup generators" do
     pending "#admin_header"
-    pending "#admin_column_icon"
-    pending "#published_icon"
-    pending "#unpublished_icon"
-    pending "#post_status_icon"
+    pending "#status_icon_header"
     pending "#sortable_link"
   end
 end

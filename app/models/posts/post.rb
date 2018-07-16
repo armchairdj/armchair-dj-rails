@@ -224,11 +224,6 @@ class Post < ApplicationRecord
     draft? || scheduled?
   end
 
-  def publish_date
-    return published_at if published?
-    return publish_on   if scheduled?
-  end
-
   def formatted_body
     return unless body.present?
 

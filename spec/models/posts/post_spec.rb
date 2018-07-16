@@ -685,8 +685,27 @@ RSpec.describe Post, type: :model do
   end
 
   describe "instance" do
-    pending "#publish_date"
+    describe "#formatted_body" do
+      subject { instance.formatted_body }
 
-    pending "#formatted_body"
+      let(:renderer) { double }
+
+      before(:each) do
+        allow(instance).to receive(:renderer).and_return(renderer)
+        allow(renderer).to receive(:render  ).and_return("rendered markdown")
+      end
+
+      context "happy path" do
+        let(:instance) { create_minimal_instance(body: "markdown") }
+
+        it { is_expected.to eq("rendered markdown".html_safe) }
+      end
+
+      context "nil body" do
+        let(:instance) { create_minimal_instance(body: nil) }
+
+        it { is_expected.to eq(nil) }
+      end
+    end
   end
 end
