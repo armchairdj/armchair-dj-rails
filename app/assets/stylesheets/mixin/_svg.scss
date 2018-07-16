@@ -55,24 +55,13 @@
 
 @mixin standard-svg-icon {
   @include square(1.3rem);
-  display: inline-block;
+  display: inline-flex;
   padding: .15rem .15rem 0;
 
-  @include block-svg() {
+  @include inline-block-svg() {
     @include square(1rem);
+    top: .125rem;
+    position: relative;
     @content;
   }
-}
-
-.svg-icon {
-  display: inline-flex;
-  align-self: center;
-}
-.svg-icon svg {
-  height:1em;
-  width:1em;
-}
-.svg-icon.svg-baseline svg {
-  top: .125em;
-  position: relative;
 }

@@ -19,7 +19,6 @@ a {
 
   &.admin-column-header {
     @include svg() {
-      margin-bottom: -5px;
       @include svg-path-fill($armchair-smoke);
     }
   }
