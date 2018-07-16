@@ -2,26 +2,22 @@
   @title = "Register"
 %>
 
-<%= content_tag(:div, class: "tabgroup") do %>
-  <%= render "users/shared/auth_tabs", selected_tab: :register %>
+<%= render "users/shared/auth_tabs", selected_tab: :register do %>
+  <%= simple_form_for(@user, url: register_path) do |f| %>
+    <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "tab") do %>
-    <%= simple_form_for(@user, url: register_path) do |f| %>
-      <%= f.error_notification %>
+    <%= content_tag(:div, class: "form-inputs") do %>
+      <%= render "admin/users/form_fields",
+        f:             f,
+        show_bio:      false,
+        show_links:    false,
+        show_password: true,
+        show_role:     false
+      %>
+    <% end %>
 
-      <%= content_tag(:div, class: "form-inputs") do %>
-        <%= render "admin/users/form_fields",
-          f:             f,
-          show_bio:      false,
-          show_links:    false,
-          show_password: true,
-          show_role:     false
-        %>
-      <% end %>
-
-      <%= content_tag(:div, class: "button-group") do %>
-        <%= f.button :button, "Register", type: :submit %>
-      <% end %>
+    <%= content_tag(:div, class: "button-group") do %>
+      <%= f.button :button, "Register", type: :submit %>
     <% end %>
   <% end %>
 <% end %>

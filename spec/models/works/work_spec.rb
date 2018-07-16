@@ -384,7 +384,6 @@ RSpec.describe Work, type: :model do
             subject.milestones_attributes = bad_attributes
 
             is_expected.to be_invalid
-
             is_expected.to have_error(:milestones, :nested_taken)
           end
         end

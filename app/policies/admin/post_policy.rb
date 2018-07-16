@@ -3,9 +3,15 @@
 class Admin::PostPolicy < AdminPolicy
   class Scope < Scope
     def resolve
-      return scope.for_admin if user.can_edit?
-
-      scope.for_admin.where(author_id: user.id)
+      if user
+        if user.can_edit?
+          scope.for_admin
+        else
+          scope.for_admin.where(author_id: user.id)
+        end
+      else
+        scope.none
+      end
     end
   end
 

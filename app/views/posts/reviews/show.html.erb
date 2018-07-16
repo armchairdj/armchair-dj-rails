@@ -7,8 +7,8 @@
     <%= content_tag(:h3, @review.type) %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @review.work.display_makers, class: "creators") %>
-      <%= content_tag(:span, @review.work.title,            class: "title"   ) %>
-      <%= content_tag(:span, @review.work.subtitle,         class: "subtitle") %>
+      <%= content_tag(:span, @review.work.title,          class: "title"   ) %>
+      <%= content_tag(:span, @review.work.subtitle,       class: "subtitle") %>
     <% end %>
   <% end %>
 <% end %>

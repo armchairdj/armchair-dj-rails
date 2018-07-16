@@ -230,6 +230,8 @@ class Post < ApplicationRecord
   end
 
   def formatted_body
+    return unless body.present?
+
     renderer.render(body).html_safe
   end
 
