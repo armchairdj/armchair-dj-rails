@@ -8,8 +8,8 @@ module Contributable
     # SCOPES.
     ###########################################################################
 
-    scope :eager,      -> { includes(:work, :creator) }
-    scope :for_admin,  -> { eager }
+    scope :for_list,  -> { }
+    scope :for_show,  -> { includes(:work, :creator) }
 
     ###########################################################################
     # ASSOCIATIONS.

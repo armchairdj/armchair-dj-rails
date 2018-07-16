@@ -44,7 +44,7 @@ class Review < Post
   # CLASS.
   #############################################################################
 
-  def self.eager
+  def self.for_show
     super.includes(:work, :makers, :contributions, :aspects, :milestones)
   end
 

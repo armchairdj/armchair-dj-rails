@@ -79,9 +79,10 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:links, :posts, :playlists, :works, :makers) }
-  scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.alpha.joins(:posts).merge(Post.published) }
+  scope :published, -> { joins(:posts).merge(Post.published) }
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:links, :posts, :playlists, :works, :makers) }
+  scope :for_site,  -> { published }
 
   #############################################################################
   # ASSOCIATIONS.

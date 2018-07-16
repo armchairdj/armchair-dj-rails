@@ -70,12 +70,11 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager, -> { includes(
+  scope :for_list, -> { }
+  scope :for_show, -> { includes(
     :aspects, :milestones, :playlists, :reviews, :mixtapes,
     :credits, :makers, :contributions, :contributors
   ).references(:makers) }
-
-  scope :for_admin, -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.

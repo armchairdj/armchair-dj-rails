@@ -83,16 +83,11 @@ RSpec.shared_examples "an_admin_policy" do
   end
 
   describe "scope" do
-    subject { described_class::Scope.new(user, model_class.all).resolve }
+    subject { described_class::Scope.new(user, model_class).resolve }
 
     let(:model_class) { record.class }
     let(       :user) { create(:writer) }
 
-    it "uses for_admin and resolves" do
-       allow(model_class).to receive(:for_admin).and_call_original
-      expect(model_class).to receive(:for_admin)
-
-      is_expected.to be_a_kind_of(ActiveRecord::Relation)
-    end
+    it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
   end
 end

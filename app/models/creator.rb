@@ -64,15 +64,14 @@ class Creator < ApplicationRecord
   scope :available_real_names, -> { alpha.primary            }
   scope :available_pseudonyms, -> { alpha.secondary.orphaned }
 
-  scope :eager, -> { includes(
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(
     :pseudonyms, :real_names, :members, :groups,
     :credits, :contributed_roles,
     :works, :contributed_works,
     :reviews, :contributed_reviews,
     :mixtapes, :contributed_mixtapes,
   ) }
-
-  scope :for_admin, -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.

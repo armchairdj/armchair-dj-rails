@@ -16,18 +16,18 @@ RSpec.shared_examples "a_contributable_model" do
         create(:minimal_review, :draft,     work:     with_draft.work)
       end
 
-      describe "self#eager" do
-        subject { described_class.eager.where(id: ids) }
+      describe "self#for_show" do
+        subject { described_class.for_show.where(id: ids) }
 
         it { is_expected.to eager_load(:work, :creator) }
       end
 
-      describe "self#for_admin" do
+      describe "self#for_list" do
         subject { described_class.for_admin.where(id: ids) }
 
-        it { is_expected.to contain_exactly(with_published, with_scheduled, with_draft, with_none) }
+        it { is_expected.to     contain_exactly(with_published, with_scheduled, with_draft, with_none) }
 
-        it { is_expected.to eager_load(:work, :creator) }
+        it { is_expected.to_not eager_load(:work, :creator) }
       end
     end
 

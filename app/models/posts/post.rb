@@ -76,8 +76,12 @@ class Post < ApplicationRecord
     memo
   end
 
-  def self.eager
-    includes(:links, :author, :tags).references(:author)
+  def self.for_list
+    includes(:author).references(:author)
+  end
+
+  def self.for_show
+    includes(:links, :author, :tags)
   end
 
   #############################################################################
@@ -90,9 +94,7 @@ class Post < ApplicationRecord
 
   scope :unpublished,  -> { where.not(status: :published) }
   scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-  scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.published.reverse_cron }
+  scope :for_site,     -> { published.reverse_cron }
 
   # TODO BJD create scopes to list posts by creator, work, year, tag or aspect
   # scope :for_creator

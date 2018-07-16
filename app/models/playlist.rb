@@ -41,8 +41,8 @@ class Playlist < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:author, :playlistings, :works).references(:author) }
-  scope :for_admin, -> { eager }
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:author, :playlistings, :works).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.

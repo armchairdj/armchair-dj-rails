@@ -11,6 +11,6 @@ private
   def prepare_form
     super
 
-    @playlists = Playlist.for_admin.alpha
+    @playlists = Playlist.alpha
   end
 end

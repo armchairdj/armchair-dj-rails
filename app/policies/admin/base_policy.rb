@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class AdminPolicy < ApplicationPolicy
+class Admin::BasePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.for_admin
+      scope
     end
   end
 

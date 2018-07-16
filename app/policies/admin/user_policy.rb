@@ -3,9 +3,9 @@
 class Admin::UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      return scope.for_admin if user.root?
+      return scope if user.root?
 
-      scope.where("users.role <= ?", user.raw_role).where.not(id: user.id).for_admin
+      scope.where("users.role <= ?", user.raw_role).where.not(id: user.id)
     end
   end
 

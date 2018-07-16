@@ -77,10 +77,6 @@ class Admin::Posts::BaseController < Admin::BaseController
 
 private
 
-  def scoped_instance(id)
-    policy_scope(model_class).find(id)
-  end
-
   def find_collection
     @collection = scoped_and_sorted_collection
 
@@ -148,7 +144,7 @@ private
   def prepare_form
     @instance.prepare_links
 
-    @tags = Tag.for_admin.alpha
+    @tags = Tag.alpha
   end
 
   def prepare_show

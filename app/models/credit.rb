@@ -37,7 +37,7 @@ class Credit < ApplicationRecord
   include Contributable
   include Listable
 
-  scoped_list(:work)
+  acts_as_listable(:work)
 
   #############################################################################
   # CLASS.

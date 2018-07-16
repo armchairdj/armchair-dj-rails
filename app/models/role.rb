@@ -36,8 +36,8 @@ class Role < ApplicationRecord
   #############################################################################
 
   scope :for_medium, -> (medium) { where(medium: medium) }
-  scope :eager,      -> { includes(:contributions, :works) }
-  scope :for_admin,  -> { eager }
+  scope :for_list,   -> { }
+  scope :for_show,   -> { includes(:contributions, :works) }
 
   #############################################################################
   # ASSOCIATIONS.

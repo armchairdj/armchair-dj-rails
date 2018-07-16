@@ -81,11 +81,13 @@ private
     @scopes = scopes_for_view(@scope)
     @sorts  = sorts_for_view(@scope, @sort, @dir)
 
-    policy_scope(model_class).send(current_scope_value).order(current_sort_value).page(@page)
+    scope = policy_scope(model_class).for_list.send(current_scope_value)
+
+    scope.order(current_sort_value).page(@page)
   end
 
   def scoped_instance(id)
-    policy_scope(model_class).find(id)
+    policy_scope(model_class).for_show.find(id)
   end
 
   def scopes_for_view(scope)
@@ -138,7 +140,7 @@ private
   end
 
   def allowed_scopes
-    { "All" => :for_admin }
+    { "All" => :all }
   end
 
   def allowed_sorts

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class Admin::PostPolicy < AdminPolicy
+class Admin::PostPolicy < Admin::BasePolicy
   class Scope < Scope
     def resolve
       if user
         if user.can_edit?
-          scope.for_admin
+          scope
         else
-          scope.for_admin.where(author_id: user.id)
+          scope.where(author_id: user.id)
         end
       else
         scope.none

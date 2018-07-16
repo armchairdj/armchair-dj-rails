@@ -44,7 +44,7 @@ class Mixtape < Post
   # CLASS.
   #############################################################################
 
-  def self.eager
+  def self.for_show
     super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
   end
 

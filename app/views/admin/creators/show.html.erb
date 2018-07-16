@@ -36,7 +36,7 @@
   <% end %>
 <% end %>
 
-<% if (works = @creator.works.for_admin.alpha).any? %>
+<% if (works = @creator.works.alpha).any? %>
   <%= admin_section(headline: "Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
@@ -47,7 +47,7 @@
   <% end %>
 <% end %>
 
-<% if (contributions = @creator.contributions.for_admin.alpha).any? %>
+<% if (contributions = @creator.contributions.alpha).any? %>
   <%= admin_section(headline: "Contributions") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
@@ -58,4 +58,4 @@
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list", as: "posts", object: @creator.posts.for_admin.reverse_cron %>
+<%= render partial: "admin/posts/list", as: "posts", object: @creator.posts.reverse_cron %>

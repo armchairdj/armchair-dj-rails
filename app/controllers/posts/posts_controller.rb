@@ -21,7 +21,7 @@ class Posts::PostsController < ApplicationController
 
   # GET /feed.rss
   def feed
-    @posts = policy_scope(Post).page(1).per(100)
+    @posts = policy_scope(Post).for_list.page(1).per(100)
 
     render layout: false
   end
@@ -33,6 +33,6 @@ private
   end
 
   def find_collection
-    @posts = @collection = policy_scope(Post).page(params[:page])
+    @posts = @collection = policy_scope(Post).for_list.page(params[:page])
   end
 end
