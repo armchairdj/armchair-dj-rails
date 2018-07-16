@@ -1,6 +1,6 @@
-<%= render partial: "shared/forms/has_many_fieldset", locals: {
+<%= render "shared/forms/has_many_fieldset",
   f:           f,
   association: :links,
   view_path:   "links",
-  hint:        t("simple_form.hints.defaults.links", model_name: controller_name.singularize),
-} %>
+  hint:        t("simple_form.hints.defaults.links", model_name: controller_name.singularize)
+%>

@@ -23,14 +23,14 @@
         <%= content_tag(:div, "Error message for string.", class: "error") %>
       <% end %>
 
-      <%= render partial: "shared/forms/custom_radio_group", locals: {
+      <%= render "shared/forms/custom_radio_group",
         f:          f,
         name:       :radios_with_error,
         legend:     "Radios",
         hint:       "Hint for radios.",
         collection: [[1, "one"], [2, "two"], [3, "three"]],
         error:      "Error message for radios."
-      } %>
+      %>
 
       <%= f.input(:select_with_error, as: :select,
         wrapper_html: { class: "with-error" },

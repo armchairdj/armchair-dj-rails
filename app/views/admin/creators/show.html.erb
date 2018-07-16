@@ -20,10 +20,10 @@
   ]
 %>
 
-<%= render partial: "list", as: "creators", object: @creator.groups,     headline: "Groups"     %>
-<%= render partial: "list", as: "creators", object: @creator.members,    headline: "Members"    %>
-<%= render partial: "list", as: "creators", object: @creator.colleagues, headline: "Colleagues" %>
-<%= render partial: "list", as: "creators", object: @creator.personae,   headline: "Personae"   %>
+<%= render partial: "list", as: "creators", object: @creator.groups,     locals: { headline: "Groups"     } %>
+<%= render partial: "list", as: "creators", object: @creator.members,    locals: { headline: "Members"    } %>
+<%= render partial: "list", as: "creators", object: @creator.colleagues, locals: { headline: "Colleagues" } %>
+<%= render partial: "list", as: "creators", object: @creator.personae,   locals: { headline: "Personae"   } %>
 
 <% if (roles = @creator.display_roles).any? %>
   <%= admin_section(headline: "Roles") do %>

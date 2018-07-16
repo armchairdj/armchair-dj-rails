@@ -14,14 +14,47 @@ RSpec.describe "admin/creators/edit", type: :view do
     end
 
     @model_class = assign(:model_name, Creator)
-    @creator     = assign(:creator, create(:minimal_creator))
+    @creator     = assign(:creator, creator)
+
+    @available_pseudonyms = assign(:available_pseudonyms, creator.available_pseudonyms)
+    @available_real_names = assign(:available_real_names, Creator.available_real_names)
+    @available_members    = assign(:available_members,    Creator.available_members)
+    @available_groups     = assign(:available_groups,     Creator.available_groups)
   end
 
-  it "renders edit creator form" do
-    render
+  context "primary individual creator" do
+    let(:creator) { create(:minimal_creator, :primary, :individual) }
 
-    assert_select "form[action=?][method=?]", admin_creator_path(@creator), "post" do
-      # TODO
+    it "renders edit creator form" do
+      render
+
+      assert_select "form[action=?][method=?]", admin_creator_path(@creator), "post" do
+        # TODO
+      end
+    end
+  end
+
+  context "secondary creator" do
+    let(:creator) { create(:minimal_creator, :secondary) }
+
+    it "renders edit creator form" do
+      render
+
+      assert_select "form[action=?][method=?]", admin_creator_path(@creator), "post" do
+        # TODO
+      end
+    end
+  end
+
+  context "collective creator" do
+    let(:creator) { create(:minimal_creator, :collective) }
+
+    it "renders edit creator form" do
+      render
+
+      assert_select "form[action=?][method=?]", admin_creator_path(@creator), "post" do
+        # TODO
+      end
     end
   end
 end

@@ -3,7 +3,7 @@
 %>
 
 <%= content_tag(:div, class: "tabgroup") do %>
-  <%= render partial: "users/shared/auth_tabs", locals: { selected_tab: :login } %>
+  <%= render "users/shared/auth_tabs", selected_tab: :login %>
 
   <%= content_tag(:div, class: "tab") do %>
     <%= simple_form_for(@user, url: user_session_path) do |f| %>

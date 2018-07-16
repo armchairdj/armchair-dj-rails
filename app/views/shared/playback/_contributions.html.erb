@@ -6,9 +6,9 @@
   <% end %>
 
   <%= content_tag(:dl, class: "horizontal right") do %>
-    <%= render partial: "shared/playback/contribution",
+    <%= render "shared/playback/contribution",
       collection: contributions,
-      locals:     { link_to: (context == :work ? :creator : :work) }
+      link_to: (context == :work ? :creator : :work)
     %>
   <% end %>
 <% end %>

@@ -20,11 +20,7 @@
 <% end %>
 
 <%= content_tag(:aside, class: "post-tags") do %>
-  <%= render partial: "shared/playback/tags", locals: {
-    tags: @review.tags
-  } %>
+  <%= render "shared/playback/tags", tags: @review.tags %>
 <% end %>
 
-<%= render partial: "shared/playback/links", locals: {
-  links: @review.links
-} %>
+<%= render "shared/playback/links", links: @review.links %>
