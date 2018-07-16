@@ -8,9 +8,14 @@ RSpec.describe "admin/posts/articles/new", type: :view do
   before(:each) do
     3.times { create(:minimal_tag) }
 
-    @model_class = assign(:model_name, Article        )
-    @tags        = assign(:tags,       Tag.for_admin.alpha   )
-    @article     = assign(:article,    build(:article))
+    @model_class = assign(:model_name, Article)
+
+    @tags = assign(:tags, Tag.for_admin.alpha)
+
+    @post = @article = build(:article)
+
+    assign(:review, @article)
+    assign(:post,   @article)
   end
 
   context "pristine" do

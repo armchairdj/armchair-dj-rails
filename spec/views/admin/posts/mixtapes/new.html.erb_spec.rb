@@ -11,10 +11,15 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       create(:minimal_tag)
     end
 
-    @model_class  = assign(:model_name, Mixtape)
-    @playlists    = assign(:playlists,  Playlist.for_admin.alpha)
-    @tags         = assign(:tags,       Tag.for_admin.alpha)
-    @mixtape      = assign(:mixtape,    build(:mixtape))
+    @model_class = assign(:model_name, Mixtape)
+
+    @tags      = assign(:tags,       Tag.for_admin.alpha)
+    @playlists = assign(:playlists,  Playlist.for_admin.alpha)
+
+    @post = @mixtape = build(:mixtape)
+
+    assign(:review, @mixtape)
+    assign(:post,   @mixtape)
   end
 
   context "pristine" do

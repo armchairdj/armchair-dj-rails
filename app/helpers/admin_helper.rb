@@ -6,7 +6,7 @@ module AdminHelper
   #############################################################################
 
   def admin_submit_button(f)
-    name = f.object.new_record? ? "Create" : "Update"
+    name = f.object.new_record? ? "Save" : "Save Changes"
 
     f.button :button, name, type: :submit
   end
