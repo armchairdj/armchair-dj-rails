@@ -36,6 +36,14 @@ RSpec.describe Credit, type: :model do
       let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
       let(  :other) { create(:minimal_work, maker_count: 5).credits.sorted }
     end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
   end
 
   describe "validations" do

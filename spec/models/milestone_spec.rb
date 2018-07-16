@@ -28,6 +28,14 @@ RSpec.describe Milestone, type: :model do
 
   describe "concerns" do
     it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
   end
 
   describe "class" do

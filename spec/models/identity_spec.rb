@@ -25,6 +25,10 @@
 require "rails_helper"
 
 RSpec.describe Identity, type: :model do
+  describe "concerns" do
+    it_behaves_like "an_application_record"
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:real_name).class_name("Creator") }
     it { is_expected.to belong_to(:pseudonym).class_name("Creator") }

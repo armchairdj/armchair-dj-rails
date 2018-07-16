@@ -52,6 +52,14 @@ RSpec.describe User, type: :model do
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "a_linkable_model"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
   end
 
   describe "class" do

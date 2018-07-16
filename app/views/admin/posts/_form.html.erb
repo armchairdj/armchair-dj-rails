@@ -1,6 +1,5 @@
 <%
   html_opts = js_autosave_attrs(@post).merge(class: "admin")
-  subclass  = @post.model_name.param_key
 %>
 
 <%= simple_form_for([:admin, @post], html: html_opts) do |f| %>
@@ -9,7 +8,7 @@
   <%= content_tag(:div, class: "form-inputs") do %>
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
-        <%= render "admin/posts/form/fields_for_#{subclass}", f: f %>
+        <%= yield f %>
 
         <%= f.input :body, input_html: {
           class: "x-large"
@@ -30,7 +29,7 @@
     <%= render "admin/links/has_many_links_fieldset", f: f %>
 
     <% if @post.persisted? %>
-      <%= render "admin/posts/form/publication_fieldset", f: f %>
+      <%= render "admin/posts/publication_fieldset", f: f %>
     <% end %>
   <% end %>
 

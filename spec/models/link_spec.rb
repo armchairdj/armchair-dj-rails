@@ -18,6 +18,18 @@
 require "rails_helper"
 
 RSpec.describe Link, type: :model do
+  describe "concerns" do
+    it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:linkable) }
   end

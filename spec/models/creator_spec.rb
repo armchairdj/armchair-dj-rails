@@ -27,6 +27,14 @@ RSpec.describe Creator, type: :model do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
   end
 
   describe "class" do
@@ -596,9 +604,8 @@ RSpec.describe Creator, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
 
-    xit { is_expected.to validate_presence_of(:primary) }
-
-    xit { is_expected.to validate_presence_of(:collective) }
+    it { is_expected.to be_primary    }
+    it { is_expected.to be_individual }
   end
 
   describe "instance" do

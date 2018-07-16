@@ -23,6 +23,14 @@ RSpec.describe Playlisting, type: :model do
       let(:primary) { create(:complete_playlist).playlistings.sorted }
       let(  :other) { create(:complete_playlist).playlistings.sorted }
     end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        it { is_expected.to nilify_blanks(before: :validation) }
+      end
+    end
   end
 
   describe "class" do

@@ -15,6 +15,20 @@ RSpec.describe Post, type: :model do
     it_behaves_like "a_linkable_model"
 
     it_behaves_like "a_sluggable_model"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        # Must specify individual fields for STI models.
+        it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
+        it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
+        it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
+        it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
+        it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
+        it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
+      end
+    end
   end
 
   describe "class" do

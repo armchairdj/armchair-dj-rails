@@ -25,6 +25,10 @@
 require "rails_helper"
 
 RSpec.describe Membership, type: :model do
+  describe "concerns" do
+    it_behaves_like "an_application_record"
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:group ).class_name("Creator") }
     it { is_expected.to belong_to(:member).class_name("Creator") }
