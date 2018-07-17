@@ -57,7 +57,7 @@ RSpec.describe Playlisting, type: :model do
 
         it "sorts by playlist name and position" do
           expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = collection.map(&:id)
+          actual   = subject.map(&:id)
 
           expect(actual).to eq(expected)
         end
