@@ -91,9 +91,9 @@ RSpec.shared_examples "a_public_policy" do
     let(:model_class) { record.class }
     let(       :user) { nil }
 
-    it "uses for_site and resolves" do
-       allow(model_class).to receive(:for_site).and_call_original
-      expect(model_class).to receive(:for_site)
+    it "uses for_public and resolves" do
+       allow(model_class).to receive(:for_public).and_call_original
+      expect(model_class).to receive(:for_public)
 
       is_expected.to be_a_kind_of(ActiveRecord::Relation)
     end

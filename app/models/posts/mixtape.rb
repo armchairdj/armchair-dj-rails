@@ -44,6 +44,10 @@ class Mixtape < Post
   # CLASS.
   #############################################################################
 
+  def self.for_list
+    super.includes(:playlist).references(:playlist)
+  end
+
   def self.for_show
     super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
   end

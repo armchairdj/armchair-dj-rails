@@ -6,7 +6,7 @@ RSpec.describe "posts/posts/index", type: :view do
     create(:complete_review,  :published)
     create(:complete_mixtape, :published)
 
-    @posts = assign(:posts, Post.for_site.page(1))
+    @posts = assign(:posts, Post.for_public.page(1))
   end
 
   it "renders a list of posts" do

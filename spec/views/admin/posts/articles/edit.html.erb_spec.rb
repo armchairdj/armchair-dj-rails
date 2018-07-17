@@ -10,7 +10,7 @@ RSpec.describe "admin/posts/articles/edit", type: :view do
 
     @model_class = assign(:model_name, Article)
 
-    @tags = assign(:tags, Tag.for_admin.alpha)
+    @tags = assign(:tags, Tag.all.alpha)
 
     @post = @article = create(:minimal_article)
 

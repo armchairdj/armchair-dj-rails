@@ -111,19 +111,14 @@ RSpec.describe Work, type: :model do
       let( :collection) { described_class.where(id: ids) }
       let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to contain_exactly(draft, published_1, published_2) }
         it { is_expected.to eager_load(eager_loads) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
+      pending "self#for_list"
     end
   end
 

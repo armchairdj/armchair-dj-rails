@@ -6,12 +6,12 @@ RSpec.shared_examples "a_public_index" do
   let!(:model_class) { described_class.new.send(:model_class) }
 
   let(         :ids) { 3.times.map { |i| create_minimal_instance(:with_published_post).id } }
-  let(   :paginated) { model_class.where(id: ids).for_site }
-  let(        :none) { model_class.none.for_site }
+  let(   :paginated) { model_class.where(id: ids).for_public }
+  let(        :none) { model_class.none.for_public }
 
   context "without records" do
     before(:each) do
-      allow(model_class).to receive(:for_site).and_return(none)
+      allow(model_class).to receive(:for_public).and_return(none)
 
       get :index
     end
@@ -24,7 +24,7 @@ RSpec.shared_examples "a_public_index" do
   end
 
   context "with records" do
-    before(:each) { allow(model_class).to receive(:for_site).and_return(paginated) }
+    before(:each) { allow(model_class).to receive(:for_public).and_return(paginated) }
 
     describe "renders" do
       before(:each) { get :index }

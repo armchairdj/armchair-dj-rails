@@ -50,19 +50,14 @@ RSpec.describe Milestone, type: :model do
       let(       :ids) { [remastered, remixed, reissued].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to eager_load(:work) }
         it { is_expected.to match_array(collection.to_a) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin.where(id: ids) }
-
-        it { is_expected.to eager_load(:work) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
+      pending "self#for_list"
     end
   end
 

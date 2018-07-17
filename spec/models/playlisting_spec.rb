@@ -44,8 +44,8 @@ RSpec.describe Playlisting, type: :model do
       let(       :ids) { Playlisting.where(playlist_id: [playlist_1.id, playlist_2.id]).map(&:id).shuffle }
       let(:collection) { Playlisting.where(id: ids) }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to eager_load(:playlist, :work) }
       end
@@ -63,18 +63,7 @@ RSpec.describe Playlisting, type: :model do
         end
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        specify "includes all, sorted" do
-          expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = collection.map(&:id)
-
-          expect(actual).to eq(expected)
-        end
-
-        it { is_expected.to eager_load(:playlist, :work) }
-      end
+      pending "self#for_list"
     end
   end
 

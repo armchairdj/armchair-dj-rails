@@ -186,10 +186,6 @@ private
     "creators.individual ASC"
   end
 
-  def creator_name_sort
-    "LOWER(creators.name) ASC"
-  end
-
   def creator_primary_sort
     "creators.primary ASC"
   end
@@ -212,6 +208,10 @@ private
 
   def user_username_sort
     "users.username ASC"
+  end
+
+  def work_makers_sort
+    "LOWER(works.display_makers) ASC"
   end
 
   def work_medium_sort

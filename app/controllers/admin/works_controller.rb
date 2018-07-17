@@ -148,8 +148,8 @@ private
   def allowed_sorts
     super.merge({
       "Title"   => title_sort,
-      "Makers" =>  [creator_name_sort, title_sort],
-      "Medium"  => [work_medium_sort,  title_sort],
+      "Makers" =>  [work_makers_sort, title_sort],
+      "Medium"  => [work_medium_sort, title_sort],
     })
   end
 end

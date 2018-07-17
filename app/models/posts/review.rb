@@ -44,6 +44,10 @@ class Review < Post
   # CLASS.
   #############################################################################
 
+  def self.for_list
+    super.includes(:work).references(:work)
+  end
+
   def self.for_show
     super.includes(:work, :makers, :contributions, :aspects, :milestones)
   end

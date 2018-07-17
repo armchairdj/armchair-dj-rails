@@ -5,17 +5,18 @@ RSpec.shared_examples "an_admin_index" do
   let!(  :param_key) { described_class.controller_name.to_sym }
   let!(:model_class) { described_class.new.send(:model_class) }
   let(         :ids) { 3.times.map { |i| create_minimal_instance.id } }
-  let(   :paginated) { model_class.where(id: ids) }
+  let(   :paginated) { model_class.for_list.where(id: ids) }
   let(        :none) { model_class.none }
 
   allowed_scopes = described_class.new.send(:allowed_scopes)
-  allowed_sorts  = described_class.new.send(:allowed_sorts).keys
+  allowed_sorts  = described_class.new.send(:allowed_sorts ).keys
 
   allowed_scopes.each do |scope, method|
     describe "for #{scope} scope" do
       context "without records" do
         before(:each) do
-          allow(model_class).to receive(method).and_return(none)
+          allow( model_class).to receive_message_chain(:for_list, method).and_return(none)
+          expect(model_class).to receive_message_chain(:for_list, method)
 
           get :index, params: { scope: scope }
         end
@@ -23,27 +24,34 @@ RSpec.shared_examples "an_admin_index" do
         describe "renders" do
           it { is_expected.to successfully_render(template) }
 
-          specify { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
+          it { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
         end
       end
 
       context "with records" do
-        before(:each) { allow(model_class).to receive(method).and_return(paginated) }
+        before(:each) do
+          allow( model_class).to receive_message_chain(:for_list, method).and_return(paginated)
+          expect(model_class).to receive_message_chain(:for_list, method)
+        end
 
         describe "renders with default sorting" do
-          before(:each) { get :index, params: { scope: scope } }
+          before(:each) do
+            get :index, params: { scope: scope }
+          end
 
           it { is_expected.to successfully_render(template) }
 
-          specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
+          it { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
         end
 
         describe "paginates" do
-          before(:each) { get :index, params: { scope: scope, page: "2" } }
+          before(:each) do
+            get :index, params: { scope: scope, page: "2" }
+          end
 
           it { is_expected.to successfully_render(template) }
 
-          specify { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
+          it { expect(assigns(param_key)).to paginate(1).of_total_records(3) }
         end
       end
     end
@@ -51,15 +59,16 @@ RSpec.shared_examples "an_admin_index" do
 
   allowed_sorts.each do |sort|
     describe "for #{sort} sorting" do
-      before(:each) { allow(model_class).to receive(allowed_scopes.values.first).and_return(paginated) }
+      before(:each) do
+        allow( model_class).to receive_message_chain(:for_list, allowed_scopes.values.first).and_return(paginated)
+        expect(model_class).to receive_message_chain(:for_list, allowed_scopes.values.first)
 
-      describe "renders" do
-        before(:each) { get :index, params: { sort: sort } }
-
-        it { is_expected.to successfully_render(template) }
-
-        specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
+        get :index, params: { sort: sort }
       end
+
+      it { is_expected.to successfully_render(template) }
+
+      it { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
   end
 end

@@ -95,6 +95,9 @@ RSpec.describe Post, type: :model do
     let!(       :ids) { [draft, scheduled, published].map(&:id) }
     let!(:collection) { described_class.where(id: ids) }
 
+    pending "self#for_user"
+    pending "self#for_author"
+
     describe "self#reverse_cron" do
       subject { collection.reverse_cron }
 

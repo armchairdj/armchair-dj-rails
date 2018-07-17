@@ -38,7 +38,7 @@ class Playlisting < ApplicationRecord
   #############################################################################
 
   scope :for_list,  -> { sorted }
-  scope :for_show,  -> { sorted.includes(:author, :playlistings, :works).references(:author) }
+  scope :for_show,  -> { sorted.includes(:playlist, :work).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.

@@ -92,9 +92,12 @@ class Post < ApplicationRecord
     scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
   }
 
+  scope :for_user,     -> (user) { user.can_edit? ? all : for_author(user) }
+  scope :for_author,   -> (user) { where(author_id: user.id) }
+
   scope :unpublished,  -> { where.not(status: :published) }
   scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-  scope :for_site,     -> { published.reverse_cron }
+  scope :for_public,   -> { published.reverse_cron }
 
   # TODO BJD create scopes to list posts by creator, work, year, tag or aspect
   # scope :for_creator

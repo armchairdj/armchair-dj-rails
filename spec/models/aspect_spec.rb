@@ -46,19 +46,14 @@ RSpec.describe Aspect, type: :model do
       let( :collection) { described_class.where(id: ids) }
       let(:eager_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to eager_load(eager_loads) }
         it { is_expected.to contain_exactly(draft, published_1, published_2) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
-      end
+      pending "self#for_list"
     end
 
     describe "#for_facet" do

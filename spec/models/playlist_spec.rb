@@ -48,19 +48,14 @@ RSpec.describe Playlist, type: :model do
       let( :collection) { described_class.where(id: ids) }
       let(:eager_loads) { [:author, :playlistings, :works] }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to eager_load(eager_loads) }
         it { is_expected.to match_array(collection.to_a) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
+      pending "self#for_list"
     end
   end
 

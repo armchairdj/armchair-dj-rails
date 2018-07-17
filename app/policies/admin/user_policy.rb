@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
+
 class Admin::UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      return scope if user.root?
-
-      scope.where("users.role <= ?", user.raw_role).where.not(id: user.id)
+      scope.editable_by(user)
     end
   end
 

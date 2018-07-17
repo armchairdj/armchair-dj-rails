@@ -61,19 +61,13 @@ RSpec.describe Creator, type: :model do
         :mixtapes, :contributed_mixtapes,
       ] }
 
-      describe "self#eager" do
-        subject { described_class.eager }
+      describe "self#for_show" do
+        subject { described_class.for_show }
 
         it { is_expected.to eager_load(*eager_loads) }
       end
 
-      describe "self#for_admin" do
-        subject { described_class.for_admin }
-
-        it { is_expected.to match_array([richie, amy, kate, carl, feist, derrick]) }
-
-        it { is_expected.to eager_load(*eager_loads) }
-      end
+      pending "self#for_list"
     end
 
     describe "identities" do

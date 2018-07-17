@@ -210,7 +210,7 @@ private
   def allowed_sorts
     super.merge({
       "Title"   => alpha_sort,
-      "Status"  => [post_status_sort, alpha_sort],
+      "Status"  => [post_status_sort,   alpha_sort],
       "Author"  => [user_username_sort, alpha_sort],
     })
   end

@@ -40,21 +40,13 @@ RSpec.describe Role, type: :model do
       let(       :ids) { [first, middle, last].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to eager_load(:contributions, :works) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        specify "includes all, unsorted" do
-          is_expected.to match_array([first, middle, last])
-        end
-
-        it { is_expected.to eager_load(:contributions, :works) }
-      end
+      pending "self#for_list"
     end
   end
 

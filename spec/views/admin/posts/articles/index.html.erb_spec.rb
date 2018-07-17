@@ -18,7 +18,7 @@ RSpec.describe "admin/posts/articles/index", type: :view do
     @dir         = assign(:dir, "ASC")
     @scopes      = dummy.send(:scopes_for_view, @scope)
     @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @articles    = assign(:articles, Article.for_admin.page(1))
+    @articles    = assign(:articles, Article.all.page(1))
   end
 
   it "renders a list of articles" do

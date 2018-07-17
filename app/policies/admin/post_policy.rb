@@ -3,15 +3,7 @@
 class Admin::PostPolicy < Admin::BasePolicy
   class Scope < Scope
     def resolve
-      if user
-        if user.can_edit?
-          scope
-        else
-          scope.where(author_id: user.id)
-        end
-      else
-        scope.none
-      end
+      user ? scope.for_user(user) : scope.none
     end
   end
 

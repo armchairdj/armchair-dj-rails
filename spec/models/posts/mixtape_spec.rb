@@ -18,27 +18,22 @@ RSpec.describe Mixtape, type: :model do
       let!(  :published) { create_minimal_instance(:published) }
       let!(        :ids) { [draft, scheduled, published].map(&:id) }
       let!( :collection) { described_class.where(id: ids) }
-      let!(:eager_loads) { [:links, :author, :tags, :playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones] }
+      let!(:eager_loads) { [:author, :links, :tags, :playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones] }
 
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to contain_exactly(*collection.to_a) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to contain_exactly(*collection.to_a) }
         it { is_expected.to eager_load(eager_loads) }
       end
 
-      describe "self#for_site" do
-        subject { collection.for_site }
+      pending "self#for_list"
+
+      describe "self#for_public" do
+        subject { collection.for_public }
 
         it { is_expected.to eq [published] }
-        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to_not eager_load(eager_loads) }
       end
     end
   end

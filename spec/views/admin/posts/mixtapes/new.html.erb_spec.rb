@@ -13,8 +13,8 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
 
     @model_class = assign(:model_name, Mixtape)
 
-    @tags      = assign(:tags,       Tag.for_admin.alpha)
-    @playlists = assign(:playlists,  Playlist.for_admin.alpha)
+    @tags      = assign(:tags,       Tag.all.alpha)
+    @playlists = assign(:playlists,  Playlist.all.alpha)
 
     @post = @mixtape = build(:mixtape)
 

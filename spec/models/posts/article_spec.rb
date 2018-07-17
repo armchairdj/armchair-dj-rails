@@ -17,28 +17,23 @@ RSpec.describe Article, type: :model do
     let!(  :published) { create_minimal_instance(:published) }
     let!(        :ids) { [draft, scheduled, published].map(&:id) }
     let!( :collection) { described_class.where(id: ids) }
-    let!(:eager_loads) { [:links, :author, :tags] }
+    let!(:eager_loads) { [:author, :links, :tags] }
 
     describe "basics" do
-      describe "self#eager" do
-        subject { collection.eager }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
         it { is_expected.to contain_exactly(*collection.to_a) }
         it { is_expected.to eager_load(eager_loads) }
       end
 
-      describe "self#for_admin" do
-        subject { collection.for_admin }
+      pending "self#for_list"
 
-        it { is_expected.to contain_exactly(*collection.to_a) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-
-      describe "self#for_site" do
-        subject { collection.for_site }
+      describe "self#for_public" do
+        subject { collection.for_public }
 
         it { is_expected.to eq [published] }
-        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to_not eager_load(eager_loads) }
       end
     end
   end

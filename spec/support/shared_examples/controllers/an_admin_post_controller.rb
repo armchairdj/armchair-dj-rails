@@ -344,7 +344,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
     end
 
-    describe "PATCH #autosave" do
+    describe "PUT #autosave" do
       let!(      :instance) { create_minimal_instance }
       let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
 
@@ -416,6 +416,21 @@ RSpec.shared_examples "an_admin_post_controller" do
         it { is_expected.to have_flash(:success, "admin.flash.posts.success.destroy") }
       end
     end
+  end
+
+  context "as admin" do
+    pending "cannot destroy"
+  end
+
+  context "as editor" do
+    pending "cannot destroy"
+    pending "cannot publish"
+  end
+
+  context "as writer" do
+    pending "cannot destroy"
+    pending "cannot publish"
+    pending "cannot access others' posts"
   end
 
   describe "helpers" do

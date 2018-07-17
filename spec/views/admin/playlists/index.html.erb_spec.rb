@@ -16,7 +16,7 @@ RSpec.describe "admin/playlists/index", type: :view do
     @dir         = assign(:dir, "ASC")
     @scopes      = dummy.send(:scopes_for_view, @scope)
     @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @playlists   = assign(:playlists, Playlist.for_admin.page(1))
+    @playlists   = assign(:playlists, Playlist.all.page(1))
   end
 
   it "renders a list of admin/playlists" do

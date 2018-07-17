@@ -79,10 +79,11 @@ class User < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :published, -> { joins(:posts).merge(Post.published) }
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(:links, :posts, :playlists, :works, :makers) }
-  scope :for_site,  -> { published }
+  scope :editable_by, -> (user) { user.root? ? all : where("users.role <= ?", user.raw_role).where.not(id: user.id) }
+  scope :published,   -> { joins(:posts).merge(Post.published) }
+  scope :for_list,    -> { }
+  scope :for_show,    -> { includes(:links, :posts, :playlists, :works, :makers) }
+  scope :for_public,  -> { published }
 
   #############################################################################
   # ASSOCIATIONS.

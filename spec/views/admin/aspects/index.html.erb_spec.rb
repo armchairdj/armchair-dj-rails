@@ -16,7 +16,7 @@ RSpec.describe "admin/aspects/index", type: :view do
     @dir         = assign(:dir, "ASC")
     @scopes      = dummy.send(:scopes_for_view, @scope)
     @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @aspects     = assign(:aspects, Aspect.for_admin.page(1))
+    @aspects     = assign(:aspects, Aspect.all.page(1))
   end
 
   it "renders a list of admin/aspects" do

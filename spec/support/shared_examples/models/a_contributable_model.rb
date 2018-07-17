@@ -22,13 +22,7 @@ RSpec.shared_examples "a_contributable_model" do
         it { is_expected.to eager_load(:work, :creator) }
       end
 
-      describe "self#for_list" do
-        subject { described_class.for_admin.where(id: ids) }
-
-        it { is_expected.to     contain_exactly(with_published, with_scheduled, with_draft, with_none) }
-
-        it { is_expected.to_not eager_load(:work, :creator) }
-      end
+      pending "self#for_list"
     end
 
     describe "associations" do

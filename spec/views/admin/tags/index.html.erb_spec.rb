@@ -16,7 +16,7 @@ RSpec.describe "admin/tags/index", type: :view do
     @dir         = assign(:dir, "ASC")
     @scopes      = dummy.send(:scopes_for_view, @scope)
     @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @tags        = assign(:tags, Tag.for_admin.page(1))
+    @tags        = assign(:tags, Tag.all.page(1))
   end
 
   it "renders a list of admin/tags" do

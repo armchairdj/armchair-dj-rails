@@ -82,30 +82,26 @@ RSpec.describe User, type: :model do
       create(:minimal_article, :draft,     author: gruber )
     end
 
-    describe "self#eager" do
-      subject { collection.eager }
+    pending "self#editable_by"
+
+    pending "self#for_list"
+
+    describe "self#for_show" do
+      subject { collection.for_show }
 
       it { is_expected.to match_array(collection) }
 
       it { is_expected.to eager_load(eager_loads) }
     end
 
-    describe "self#for_admin" do
-      subject { collection.for_admin }
+    describe "self#for_public" do
+      subject { collection.for_public }
 
-      it { is_expected.to match_array(collection) }
-
-      it { is_expected.to eager_load(eager_loads) }
-    end
-
-    describe "self#for_site" do
-      subject { collection.for_site }
-
-      it "includes only published writers, sorted" do
-        is_expected.to eq([brian, jenny])
+      it "includes only published writers" do
+        is_expected.to contain_exactly(brian, jenny)
       end
 
-      it { is_expected.to eager_load(eager_loads) }
+      it { is_expected.to_not eager_load(eager_loads) }
     end
 
     describe "#published?" do
