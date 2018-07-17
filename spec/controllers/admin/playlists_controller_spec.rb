@@ -48,9 +48,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       let(:bad_params) { attributes_for(:minimal_playlist ).except(:author_id, :title) }
 
       context "with min valid params" do
-        let(:operation) { post :create, params: { playlist: min_params } }
-
-        subject { operation }
+        subject { post :create, params: { playlist: min_params } }
 
         it { expect { subject }.to change { Playlist.count }.by(1) }
 
@@ -60,11 +58,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
         it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        describe "instance" do
-          subject { operation; Playlist.last_author }
-
-          it { is_expected.to eq(controller.current_user) }
-        end
+        it { subject; expect(Playlist.last_author).to eq(controller.current_user) }
       end
 
       context "with max valid params" do
@@ -78,11 +72,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
         it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        describe "instance" do
-          subject { operation; Playlist.last_author }
-
-          it { is_expected.to eq(controller.current_user) }
-        end
+        it { subject; expect(Playlist.last_author).to eq(controller.current_user) }
       end
 
       context "with invalid params" do
