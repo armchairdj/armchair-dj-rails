@@ -19,23 +19,19 @@ RSpec.describe Admin::AspectsController, type: :controller do
     end
 
     describe "GET #show" do
-      it "renders" do
-        get :show, params: { id: aspect.to_param }
+      before(:each) { get :show, params: { id: aspect.to_param } }
 
-        is_expected.to successfully_render("admin/aspects/show")
+      it { is_expected.to successfully_render("admin/aspects/show") }
 
-        is_expected.to assign(aspect, :aspect)
-      end
+      it { is_expected.to assign(aspect, :aspect) }
     end
 
     describe "GET #new" do
-      it "renders" do
-        get :new
+      before(:each) { get :new }
 
-        is_expected.to successfully_render("admin/aspects/new")
+      it { is_expected.to successfully_render("admin/aspects/new") }
 
-        expect(assigns(:aspect)).to be_a_new(Aspect)
-      end
+      it { expect(assigns(:aspect)).to be_a_new(Aspect) }
     end
 
     describe "POST #create" do
@@ -43,47 +39,40 @@ RSpec.describe Admin::AspectsController, type: :controller do
       let(:bad_params) { attributes_for(:minimal_aspect).except(:name) }
 
       context "with min valid params" do
-        it "creates a new Aspect" do
-          expect {
-            post :create, params: { aspect: min_params }
-          }.to change(Aspect, :count).by(1)
-        end
+        subject { post :create, params: { aspect: min_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { aspect: min_params }
+        it { expect { subject }.to change(Aspect, :count).by(1) }
 
-          is_expected.to assign(Aspect.last, :aspect).with_attributes(min_params).and_be_valid
-        end
+        it { is_expected.to assign(Aspect.last, :aspect).with_attributes(min_params).and_be_valid }
 
-        it "redirects to index" do
-          post :create, params: { aspect: min_params }
+        it { is_expected.to send_user_to(admin_aspect_path(assigns(:aspect))) }
 
-          is_expected.to send_user_to(
-            admin_aspect_path(assigns(:aspect))
-          ).with_flash(:success, "admin.flash.aspects.success.create")
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.aspects.success.create") }
       end
 
       context "with invalid params" do
-        it "renders new" do
-          post :create, params: { aspect: bad_params }
+        let(:operation) { post :create, params: { aspect: bad_params } }
 
-          is_expected.to successfully_render("admin/aspects/new")
+        subject { operation }
 
-          expect(assigns(:aspect)).to have_coerced_attributes(bad_params)
-          expect(assigns(:aspect)).to be_invalid
+        it { is_expected.to successfully_render("admin/aspects/new") }
+
+        describe "instance" do
+          subject { operation; assigns(:aspect) }
+
+          it { is_expected.to be_invalid }
+
+          it { is_expected.to have_coerced_attributes(bad_params) }
         end
       end
     end
 
     describe "GET #edit" do
-      it "renders" do
-        get :edit, params: { id: aspect.to_param }
+      before(:each) { get :edit, params: { id: aspect.to_param } }
 
-        is_expected.to successfully_render("admin/aspects/edit")
+      it { is_expected.to successfully_render("admin/aspects/edit") }
 
-        is_expected.to assign(aspect, :aspect)
-      end
+      it { is_expected.to assign(aspect, :aspect) }
     end
 
     describe "PUT #update" do
@@ -91,48 +80,38 @@ RSpec.describe Admin::AspectsController, type: :controller do
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do
-        it "updates the requested aspect" do
+        before(:each) do
           put :update, params: { id: aspect.to_param, aspect: update_params }
-
-          is_expected.to assign(aspect, :aspect).with_attributes(update_params).and_be_valid
         end
 
-        it "redirects to index" do
-          put :update, params: { id: aspect.to_param, aspect: update_params }
+        it { is_expected.to assign(aspect, :aspect).with_attributes(update_params).and_be_valid }
 
-          is_expected.to send_user_to(
-            admin_aspect_path(assigns(:aspect))
-          ).with_flash(:success, "admin.flash.aspects.success.update")
-        end
+        it { is_expected.to send_user_to(admin_aspect_path(assigns(:aspect))) }
+
+        it { is_expected.to have_flash(:success, "admin.flash.aspects.success.update") }
       end
 
       context "with invalid params" do
-        it "renders edit" do
+        before(:each) do
           put :update, params: { id: aspect.to_param, aspect: bad_update_params }
-
-          is_expected.to successfully_render("admin/aspects/edit")
-
-          is_expected.to assign(aspect, :aspect).with_attributes(bad_update_params).and_be_invalid
         end
+
+        it { is_expected.to successfully_render("admin/aspects/edit") }
+
+        it { is_expected.to assign(aspect, :aspect).with_attributes(bad_update_params).and_be_invalid }
       end
     end
 
     describe "DELETE #destroy" do
       let!(:aspect) { create(:minimal_aspect) }
 
-      it "destroys the requested aspect" do
-        expect {
-          delete :destroy, params: { id: aspect.to_param }
-        }.to change(Aspect, :count).by(-1)
-      end
+      subject { delete :destroy, params: { id: aspect.to_param } }
 
-      it "redirects to index" do
-        delete :destroy, params: { id: aspect.to_param }
+      it { expect { subject }.to change(Aspect, :count).by(-1) }
 
-        is_expected.to send_user_to(admin_aspects_path).with_flash(
-          :success, "admin.flash.aspects.success.destroy"
-        )
-      end
+      it { is_expected.to send_user_to(admin_aspects_path) }
+
+      it { is_expected.to have_flash(:success, "admin.flash.aspects.success.destroy") }
     end
   end
 

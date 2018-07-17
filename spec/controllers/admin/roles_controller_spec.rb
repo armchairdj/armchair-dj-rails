@@ -20,25 +20,21 @@ RSpec.describe Admin::RolesController, type: :controller do
     end
 
     describe "GET #show" do
-      it "renders" do
-        get :show, params: { id: role.to_param }
+      subject { get :show, params: { id: role.to_param } }
 
-        is_expected.to successfully_render("admin/roles/show")
+      it { is_expected.to successfully_render("admin/roles/show") }
 
-        is_expected.to assign(role, :role)
-      end
+      it { is_expected.to assign(role, :role) }
     end
 
     describe "GET #new" do
-      it "renders" do
-        get :new
+      subject { get :new }
 
-        is_expected.to successfully_render("admin/roles/new")
+      it { is_expected.to successfully_render("admin/roles/new") }
 
-        expect(assigns(:role)).to be_a_new(Role)
+      it { subject; expect(assigns(:role)).to be_a_new(Role) }
 
-        expect(assigns(:media)).to match_array(media)
-      end
+      it { subject; expect(assigns(:media)).to match_array(media) }
     end
 
     describe "POST #create" do
@@ -47,73 +43,49 @@ RSpec.describe Admin::RolesController, type: :controller do
       let(:bad_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
-        it "creates a new Role" do
-          expect {
-            post :create, params: { role: min_params }
-          }.to change(Role, :count).by(1)
-        end
+        subject { post :create, params: { role: min_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { role: min_params }
+        it { expect { subject }.to change(Role, :count).by(1) }
 
-          is_expected.to assign(Role.last, :role).with_attributes(min_params).and_be_valid
-        end
+        it { is_expected.to assign(Role.last, :role).with_attributes(min_params).and_be_valid }
 
-        it "redirects to index" do
-          post :create, params: { role: min_params }
+        it { is_expected.to send_user_to(admin_role_path(assigns(:role))) }
 
-          is_expected.to send_user_to(
-            admin_role_path(assigns(:role))
-          ).with_flash(:success, "admin.flash.roles.success.create")
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.roles.success.create") }
       end
 
       context "with max valid params" do
-        it "creates a new Role" do
-          expect {
-            post :create, params: { role: max_params }
-          }.to change(Role, :count).by(1)
-        end
+        subject { post :create, params: { role: max_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { role: max_params }
+        it { expect { subject }.to change(Role, :count).by(1) }
 
-          is_expected.to assign(Role.last, :role).with_attributes(max_params).and_be_valid
-        end
+        it { is_expected.to assign(Role.last, :role).with_attributes(max_params).and_be_valid }
 
-        it "redirects to index" do
-          post :create, params: { role: max_params }
+        it { is_expected.to send_user_to(admin_role_path(assigns(:role))) }
 
-          is_expected.to send_user_to(
-            admin_role_path(assigns(:role))
-          ).with_flash(:success, "admin.flash.roles.success.create")
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.roles.success.create") }
       end
 
       context "with invalid params" do
-        it "renders new" do
-          post :create, params: { role: bad_params }
+        subject { post :create, params: { role: bad_params } }
 
-          is_expected.to successfully_render("admin/roles/new")
+        it { is_expected.to successfully_render("admin/roles/new") }
 
-          expect(assigns(:role)).to have_coerced_attributes(bad_params)
-          expect(assigns(:role)).to be_invalid
+        it { subject; expect(assigns(:role)).to have_coerced_attributes(bad_params) }
+        it { subject; expect(assigns(:role)).to be_invalid }
 
-          expect(assigns(:media)).to match_array(media)
-        end
+        it { subject; expect(assigns(:media)).to match_array(media) }
       end
     end
 
     describe "GET #edit" do
-      it "renders" do
-        get :edit, params: { id: role.to_param }
+      subject { get :edit, params: { id: role.to_param } }
 
-        is_expected.to successfully_render("admin/roles/edit")
+      it { is_expected.to successfully_render("admin/roles/edit") }
 
-        is_expected.to assign(role, :role)
+      it { is_expected.to assign(role, :role) }
 
-        expect(assigns(:media)).to match_array(media)
-      end
+      it { subject; expect(assigns(:media)).to match_array(media) }
     end
 
     describe "PUT #update" do
@@ -121,50 +93,40 @@ RSpec.describe Admin::RolesController, type: :controller do
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do
-        it "updates the requested role" do
+        subject do
           put :update, params: { id: role.to_param, role: update_params }
-
-          is_expected.to assign(role, :role).with_attributes(update_params).and_be_valid
         end
 
-        it "redirects to index" do
-          put :update, params: { id: role.to_param, role: update_params }
+        it { is_expected.to assign(role, :role).with_attributes(update_params).and_be_valid }
 
-          is_expected.to send_user_to(
-            admin_role_path(assigns(:role))
-          ).with_flash(:success, "admin.flash.roles.success.update")
-        end
+        it { is_expected.to send_user_to(admin_role_path(assigns(:role))) }
+
+        it { is_expected.to have_flash(:success, "admin.flash.roles.success.update") }
       end
 
       context "with invalid params" do
-        it "renders edit" do
+        subject do
           put :update, params: { id: role.to_param, role: bad_update_params }
-
-          is_expected.to successfully_render("admin/roles/edit")
-
-          is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid
-
-          expect(assigns(:media)).to match_array(media)
         end
+
+        it { is_expected.to successfully_render("admin/roles/edit") }
+
+        it { is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid }
+
+        it { subject; expect(assigns(:media)).to match_array(media) }
       end
     end
 
     describe "DELETE #destroy" do
       let!(:role) { create(:minimal_role) }
 
-      it "destroys the requested role" do
-        expect {
-          delete :destroy, params: { id: role.to_param }
-        }.to change(Role, :count).by(-1)
-      end
+      subject { delete :destroy, params: { id: role.to_param } }
 
-      it "redirects to index" do
-        delete :destroy, params: { id: role.to_param }
+      it { expect { subject }.to change(Role, :count).by(-1) }
 
-        is_expected.to send_user_to(admin_roles_path).with_flash(
-          :success, "admin.flash.roles.success.destroy"
-        )
-      end
+      it { is_expected.to send_user_to(admin_roles_path) }
+
+      it { is_expected.to have_flash(:success, "admin.flash.roles.success.destroy") }
     end
   end
 

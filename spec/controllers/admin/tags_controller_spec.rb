@@ -19,23 +19,19 @@ RSpec.describe Admin::TagsController, type: :controller do
     end
 
     describe "GET #show" do
-      it "renders" do
-        get :show, params: { id: tag.to_param }
+      subject { get :show, params: { id: tag.to_param } }
 
-        is_expected.to successfully_render("admin/tags/show")
+      it { is_expected.to successfully_render("admin/tags/show") }
 
-        is_expected.to assign(tag, :tag)
-      end
+      it { is_expected.to assign(tag, :tag) }
     end
 
     describe "GET #new" do
-      it "renders" do
-        get :new
+      subject { get :new }
 
-        is_expected.to successfully_render("admin/tags/new")
+      it { is_expected.to successfully_render("admin/tags/new") }
 
-        expect(assigns(:tag)).to be_a_new(Tag)
-      end
+      it { subject; expect(assigns(:tag)).to be_a_new(Tag) }
     end
 
     describe "POST #create" do
@@ -43,47 +39,33 @@ RSpec.describe Admin::TagsController, type: :controller do
       let(:bad_params) { attributes_for(:minimal_tag).except(:name) }
 
       context "with min valid params" do
-        it "creates a new Tag" do
-          expect {
-            post :create, params: { tag: min_params }
-          }.to change(Tag, :count).by(1)
-        end
+        subject { post :create, params: { tag: min_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { tag: min_params }
+        it { expect { subject }.to change(Tag, :count).by(1) }
 
-          is_expected.to assign(Tag.last, :tag).with_attributes(min_params).and_be_valid
-        end
+        it { is_expected.to assign(Tag.last, :tag).with_attributes(min_params).and_be_valid }
 
-        it "redirects to index" do
-          post :create, params: { tag: min_params }
+        it { is_expected.to send_user_to(admin_tag_path(assigns(:tag))) }
 
-          is_expected.to send_user_to(
-            admin_tag_path(assigns(:tag))
-          ).with_flash(:success, "admin.flash.tags.success.create")
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.tags.success.create") }
       end
 
       context "with invalid params" do
-        it "renders new" do
-          post :create, params: { tag: bad_params }
+        subject { post :create, params: { tag: bad_params } }
 
-          is_expected.to successfully_render("admin/tags/new")
+        it { is_expected.to successfully_render("admin/tags/new") }
 
-          expect(assigns(:tag)).to have_coerced_attributes(bad_params)
-          expect(assigns(:tag)).to be_invalid
-        end
+        it { subject; expect(assigns(:tag)).to have_coerced_attributes(bad_params) }
+        it { subject; expect(assigns(:tag)).to be_invalid }
       end
     end
 
     describe "GET #edit" do
-      it "renders" do
-        get :edit, params: { id: tag.to_param }
+      subject { get :edit, params: { id: tag.to_param } }
 
-        is_expected.to successfully_render("admin/tags/edit")
+      it { is_expected.to successfully_render("admin/tags/edit") }
 
-        is_expected.to assign(tag, :tag)
-      end
+      it { is_expected.to assign(tag, :tag) }
     end
 
     describe "PUT #update" do
@@ -91,48 +73,38 @@ RSpec.describe Admin::TagsController, type: :controller do
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do
-        it "updates the requested tag" do
+        subject do
           put :update, params: { id: tag.to_param, tag: update_params }
-
-          is_expected.to assign(tag, :tag).with_attributes(update_params).and_be_valid
         end
 
-        it "redirects to index" do
-          put :update, params: { id: tag.to_param, tag: update_params }
+        it { is_expected.to assign(tag, :tag).with_attributes(update_params).and_be_valid }
 
-          is_expected.to send_user_to(
-            admin_tag_path(assigns(:tag))
-          ).with_flash(:success, "admin.flash.tags.success.update")
-        end
+        it { is_expected.to send_user_to(admin_tag_path(assigns(:tag))) }
+
+        it { is_expected.to have_flash(:success, "admin.flash.tags.success.update") }
       end
 
       context "with invalid params" do
-        it "renders edit" do
+        subject do
           put :update, params: { id: tag.to_param, tag: bad_update_params }
-
-          is_expected.to successfully_render("admin/tags/edit")
-
-          is_expected.to assign(tag, :tag).with_attributes(bad_update_params).and_be_invalid
         end
+
+        it { is_expected.to successfully_render("admin/tags/edit") }
+
+        it { is_expected.to assign(tag, :tag).with_attributes(bad_update_params).and_be_invalid }
       end
     end
 
     describe "DELETE #destroy" do
       let!(:tag) { create(:minimal_tag) }
 
-      it "destroys the requested tag" do
-        expect {
-          delete :destroy, params: { id: tag.to_param }
-        }.to change(Tag, :count).by(-1)
-      end
+      subject { delete :destroy, params: { id: tag.to_param } }
 
-      it "redirects to index" do
-        delete :destroy, params: { id: tag.to_param }
+      it { expect { subject }.to change(Tag, :count).by(-1) }
 
-        is_expected.to send_user_to(admin_tags_path).with_flash(
-          :success, "admin.flash.tags.success.destroy"
-        )
-      end
+      it { is_expected.to send_user_to(admin_tags_path) }
+
+      it { is_expected.to have_flash(:success, "admin.flash.tags.success.destroy") }
     end
   end
 
