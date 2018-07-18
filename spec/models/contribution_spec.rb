@@ -44,6 +44,29 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
+  describe "scope-related" do
+    let!(:with_published) { create_minimal_instance }
+    let!(:with_scheduled) { create_minimal_instance }
+    let!(:with_draft    ) { create_minimal_instance }
+    let!(:with_none     ) { create_minimal_instance }
+
+    let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
+
+    before(:each) do
+      create(:minimal_review, :published, work: with_published.work)
+      create(:minimal_review, :scheduled, work: with_scheduled.work)
+      create(:minimal_review, :draft,     work:     with_draft.work)
+    end
+
+    describe "self#for_show" do
+      subject { described_class.for_show.where(id: ids) }
+
+      it { is_expected.to eager_load(:work, :role, :creator) }
+    end
+
+    pending "self#for_list"
+  end
+
   describe "validations" do
     subject { create_minimal_instance }
 
@@ -62,15 +85,5 @@ RSpec.describe Contribution, type: :model do
 
   describe "instance" do
     let(:instance) { create_minimal_instance }
-
-    describe "#alpha_parts" do
-      subject { instance.alpha_parts }
-
-      it { is_expected.to eq([
-        instance.work.alpha_parts,
-        instance.role.name,
-        instance.creator.name
-      ]) }
-    end
   end
 end

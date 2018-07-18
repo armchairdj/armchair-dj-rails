@@ -68,6 +68,9 @@ class Review < Post
   # ATTRIBUTES.
   #############################################################################
 
+  delegate :display_medium, to: :work, allow_nil: true
+  delegate :alpha_parts,    to: :work, allow_nil: true, prefix: true
+
   #############################################################################
   # VALIDATIONS.
   #############################################################################
@@ -90,8 +93,6 @@ class Review < Post
   # INSTANCE.
   #############################################################################
 
-  delegate :display_medium, to: :work
-
   def display_type(plural: false)
     base = [display_medium, "Review"].compact.join(" ")
 
@@ -99,6 +100,6 @@ class Review < Post
   end
 
   def alpha_parts
-    work.try(:alpha_parts) || []
+    work_alpha_parts || []
   end
 end

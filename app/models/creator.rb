@@ -317,12 +317,12 @@ class Creator < ApplicationRecord
   end
 
   def display_roles
-    cred =       credits.includes(:work)
-    cont = contributions.includes(:work)
+    cred =       credits.includes(:work       )
+    cont = contributions.includes(:work, :role)
 
-    all = (cred.to_a + cont.to_a).group_by(&:display_type)
+    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
 
-    all.transform_values! { |v| v.map(&:name).uniq.sort }
+    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
   end
 
   def alpha_parts

@@ -2,29 +2,6 @@
 
 RSpec.shared_examples "a_contributable_model" do
   describe "included" do
-    describe "scope-related" do
-      let!(:with_published) { create_minimal_instance }
-      let!(:with_scheduled) { create_minimal_instance }
-      let!(:with_draft    ) { create_minimal_instance }
-      let!(:with_none     ) { create_minimal_instance }
-
-      let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
-
-      before(:each) do
-        create(:minimal_review, :published, work: with_published.work)
-        create(:minimal_review, :scheduled, work: with_scheduled.work)
-        create(:minimal_review, :draft,     work:     with_draft.work)
-      end
-
-      describe "self#for_show" do
-        subject { described_class.for_show.where(id: ids) }
-
-        it { is_expected.to eager_load(:work, :creator) }
-      end
-
-      pending "self#for_list"
-    end
-
     describe "associations" do
       it { is_expected.to belong_to(:creator) }
       it { is_expected.to belong_to(:work   ) }
@@ -39,6 +16,20 @@ RSpec.shared_examples "a_contributable_model" do
   end
 
   describe "instance" do
-    # Nothing so far.
+    let(:instance) { create_minimal_instance }
+
+    pending "#display_medium"
+    pending "#work_alpha_parts"
+    pending "#creator_alpha_parts"
+
+    describe "#alpha_parts" do
+      subject { instance.alpha_parts }
+
+      it { is_expected.to eq([
+        instance.work_alpha_parts,
+        instance.role_name,
+        instance.creator_alpha_parts
+      ]) }
+    end
   end
 end

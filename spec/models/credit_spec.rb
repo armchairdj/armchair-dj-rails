@@ -46,22 +46,32 @@ RSpec.describe Credit, type: :model do
     end
   end
 
+  describe "scope-related" do
+    let!(:with_published) { create_minimal_instance }
+    let!(:with_scheduled) { create_minimal_instance }
+    let!(:with_draft    ) { create_minimal_instance }
+    let!(:with_none     ) { create_minimal_instance }
+
+    let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
+
+    before(:each) do
+      create(:minimal_review, :published, work: with_published.work)
+      create(:minimal_review, :scheduled, work: with_scheduled.work)
+      create(:minimal_review, :draft,     work:     with_draft.work)
+    end
+
+    describe "self#for_show" do
+      subject { described_class.for_show.where(id: ids) }
+
+      it { is_expected.to eager_load(:work, :creator) }
+    end
+
+    pending "self#for_list"
+  end
+
   describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
-  end
-
-  describe "instance" do
-    describe "#alpha_parts" do
-      subject { create_minimal_instance }
-
-      it "uses work and creator" do
-        expect(subject.alpha_parts).to eq([
-          subject.work.alpha_parts,
-          subject.creator.alpha_parts
-        ])
-      end
-    end
   end
 end

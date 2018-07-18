@@ -47,6 +47,9 @@ class Credit < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:work, :creator) }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -69,11 +72,7 @@ class Credit < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def name
+  def role_name
     "Creator"
-  end
-
-  def alpha_parts
-    [work.try(:alpha_parts), creator.try(:alpha_parts)]
   end
 end

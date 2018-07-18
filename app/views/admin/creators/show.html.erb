@@ -51,7 +51,7 @@
   <%= admin_section(headline: "Contributions") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
-        <%= content_tag(:dt, contribution.name) %>
+        <%= content_tag(:dt, contribution.role_name) %>
         <%= content_tag(:dd, link_to_work(contribution.work)) %>
       <% end %>
     <% end %>
