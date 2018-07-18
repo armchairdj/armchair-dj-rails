@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_public_policy" do
-  let(:record) { create_minimal_instance }
+  let(     :record) { create_minimal_instance }
+  let(:model_class) { record.class }
 
   subject { described_class.new(user, record) }
 
@@ -88,14 +89,21 @@ RSpec.shared_examples "a_public_policy" do
   describe "scope" do
     subject { described_class::Scope.new(user, model_class.all).resolve }
 
-    let(:model_class) { record.class }
-    let(       :user) { nil }
-
-    it "uses for_public and resolves" do
-       allow(model_class).to receive(:for_public).and_call_original
+    before(:each) do
+      allow( model_class).to receive(:for_public).and_call_original
       expect(model_class).to receive(:for_public)
+    end
 
-      is_expected.to be_a_kind_of(ActiveRecord::Relation)
+    describe "with user" do
+      let(:user) { create(:member) }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    end
+
+    describe "without user" do
+      let(:user) { nil }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
     end
   end
 end

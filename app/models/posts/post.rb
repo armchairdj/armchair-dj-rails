@@ -84,6 +84,13 @@ class Post < ApplicationRecord
     includes(:links, :author, :tags)
   end
 
+  def self.for_cms_user(user)
+    return self.none unless user && user.can_access_cms?
+    return self.all  if user.can_edit?
+
+    where(author_id: user.id)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
@@ -91,9 +98,6 @@ class Post < ApplicationRecord
   scope :scheduled_for_publication, -> {
     scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
   }
-
-  scope :for_user,     -> (user) { user.can_edit? ? all : for_author(user) }
-  scope :for_author,   -> (user) { where(author_id: user.id) }
 
   scope :unpublished,  -> { where.not(status: :published) }
   scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }

@@ -5,7 +5,8 @@ require "rails_helper"
 RSpec.describe Admin::UserPolicy do
   subject { described_class.new(user, record) }
 
-  let(:record) { create(:minimal_user) }
+  let(     :record) { create(:minimal_user) }
+  let(:model_class) { record.class }
 
   context "without user" do
     let(:user) { nil }
@@ -83,13 +84,21 @@ RSpec.describe Admin::UserPolicy do
   describe "scope" do
     subject { described_class::Scope.new(user, model_class.all).resolve }
 
-    let(:model_class) { record.class }
-    let(       :user) { create(:writer) }
+    before(:each) do
+      allow( model_class).to receive(:for_cms_user).and_call_original
+      expect(model_class).to receive(:for_cms_user).with(user)
+    end
 
-    pending "for member"
-    pending "for writer"
-    pending "for editor"
-    pending "for admin"
-    pending "for root"
+    describe "with user" do
+      let(:user) { create(:writer) }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    end
+
+    describe "without user" do
+      let(:user) { nil }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    end
   end
 end

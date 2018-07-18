@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_admin_policy" do
-  let(:record) { create_minimal_instance }
+  let(     :record) { create_minimal_instance }
+  let(:model_class) { record.class }
 
   subject { described_class.new(user, record) }
 
@@ -83,11 +84,23 @@ RSpec.shared_examples "an_admin_policy" do
   end
 
   describe "scope" do
-    subject { described_class::Scope.new(user, model_class).resolve }
+    subject { described_class::Scope.new(user, model_class.all).resolve }
 
-    let(:model_class) { record.class }
-    let(       :user) { create(:writer) }
+    before(:each) do
+      allow( model_class).to receive(:all).and_call_original
+      expect(model_class).to receive(:all)
+    end
 
-    it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    describe "with user" do
+      let(:user) { create(:writer) }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    end
+
+    describe "without user" do
+      let(:user) { nil }
+
+      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    end
   end
 end

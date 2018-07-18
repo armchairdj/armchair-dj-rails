@@ -4,27 +4,27 @@
 class Admin::UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.editable_by(user)
+      scope.for_cms_user(user)
     end
   end
 
   def index?
-    logged_in_as_cms_user? && user.can_administer?
+    logged_in_as_admin_or_root?
   end
 
   def show?
-    logged_in_as_cms_user? && user.can_administer?
+    logged_in_as_admin_or_root?
   end
 
   def create?
-    logged_in_as_cms_user? && user.can_administer?
+    logged_in_as_admin_or_root?
   end
 
   def update?
-    logged_in_as_cms_user? && user.can_administer?
+    logged_in_as_admin_or_root?
   end
 
   def destroy?
-    logged_in_as_cms_user? && user.can_destroy?
+    logged_in_as_admin_or_root?
   end
 end

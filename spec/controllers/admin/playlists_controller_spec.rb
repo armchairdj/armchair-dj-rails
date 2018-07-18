@@ -58,7 +58,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
         it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        it { subject; expect(Playlist.last_author).to eq(controller.current_user) }
+        it { subject; expect(Playlist.last.author).to eq(controller.current_user) }
       end
 
       context "with max valid params" do
@@ -72,7 +72,7 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
 
         it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        it { subject; expect(Playlist.last_author).to eq(controller.current_user) }
+        it { subject; expect(Playlist.last.author).to eq(controller.current_user) }
       end
 
       context "with invalid params" do

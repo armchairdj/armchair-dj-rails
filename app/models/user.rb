@@ -75,11 +75,17 @@ class User < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.for_cms_user(user)
+    return self.none unless user && user.can_administer?
+    return self.all  if user.root?
+
+    where("users.role <= ?", user.raw_role).where.not(id: user.id)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :editable_by, -> (user) { user.root? ? all : where("users.role <= ?", user.raw_role).where.not(id: user.id) }
   scope :published,   -> { joins(:posts).merge(Post.published) }
   scope :for_list,    -> { }
   scope :for_show,    -> { includes(:links, :posts, :playlists, :works, :makers) }
@@ -142,6 +148,7 @@ class User < ApplicationRecord
   def can_write?
     root? || admin? || editor? || writer?
   end
+  alias_method :can_access_cms?, :can_write?
 
   def can_edit?
     root? || admin? || editor?

@@ -89,71 +89,137 @@ RSpec.describe Post, type: :model do
   end
 
   describe "scope-related" do
-    let!(     :draft) { create_minimal_instance(:draft    ) }
-    let!( :scheduled) { create_minimal_instance(:scheduled) }
-    let!( :published) { create_minimal_instance(:published) }
-    let!(       :ids) { [draft, scheduled, published].map(&:id) }
-    let!(:collection) { described_class.where(id: ids) }
+    describe "self#for_cms_user" do
+      let!(:no_user) { nil }
+      let!( :member) { create(:member) }
+      let!( :writer) { create(:writer) }
+      let!( :editor) { create(:editor) }
+      let!(  :admin) { create(:admin ) }
+      let!(   :root) { create(:root  ) }
 
-    pending "self#for_user"
-    pending "self#for_author"
+      let( :writer_post) { create(:minimal_post, author: writer) }
+      let( :editor_post) { create(:minimal_post, author: editor) }
+      let(  :admin_post) { create(:minimal_post, author: admin ) }
+      let(   :root_post) { create(:minimal_post, author: root  ) }
 
-    describe "self#reverse_cron" do
-      subject { collection.reverse_cron }
+      let!(       :ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
 
-      it "includes all, ordered descending by published_at, published_on, updated_at" do
-        is_expected.to eq([draft, scheduled, published])
+      subject { collection.for_cms_user(instance) }
+
+      context "with nil user" do
+        let(:instance) { no_user }
+
+        it "includes nothing" do
+          is_expected.to eq(described_class.none)
+        end
+      end
+
+      context "with member" do
+        let(:instance) { member }
+
+        it "includes nothing" do
+          is_expected.to eq(described_class.none)
+        end
+      end
+
+      context "with writer" do
+        let(:instance) { writer }
+
+        it "includes only own posts" do
+          is_expected.to contain_exactly(writer_post)
+        end
+      end
+
+      context "with editor" do
+        let(:instance) { editor }
+
+        it "includes everything" do
+          is_expected.to match_array(collection.all)
+        end
+      end
+
+      context "with admin" do
+        let(:instance) { admin }
+
+        it "includes everything" do
+          is_expected.to match_array(collection.all)
+        end
+      end
+
+      context "with root" do
+        let(:instance) { root }
+
+        it "includes everything" do
+          is_expected.to match_array(collection.all)
+        end
       end
     end
 
-    describe "for status" do
-      describe "self#draft" do
-        subject { collection.draft }
+    describe "basics" do
+      let!(     :draft) { create_minimal_instance(:draft    ) }
+      let!( :scheduled) { create_minimal_instance(:scheduled) }
+      let!( :published) { create_minimal_instance(:published) }
+      let!(       :ids) { [draft, scheduled, published].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
 
-        it { is_expected.to contain_exactly(draft) }
+      describe "self#reverse_cron" do
+        subject { collection.reverse_cron }
+
+        it "includes all, ordered descending by published_at, published_on, updated_at" do
+          is_expected.to eq([draft, scheduled, published])
+        end
       end
 
-      describe "self#scheduled" do
-        subject { collection.scheduled }
+      describe "for status" do
+        describe "self#draft" do
+          subject { collection.draft }
 
-        it { is_expected.to contain_exactly(scheduled) }
-      end
-
-      describe "self#published" do
-        subject { collection.published }
-
-        it { is_expected.to contain_exactly(published) }
-      end
-
-      describe "self#unpublished" do
-        subject { collection.unpublished }
-
-        it { is_expected.to contain_exactly(draft, scheduled) }
-      end
-
-      describe "booleans" do
-        describe "#draft?" do
-          specify { expect(    draft.draft?).to eq(true ) }
-          specify { expect(scheduled.draft?).to eq(false) }
-          specify { expect(published.draft?).to eq(false) }
+          it { is_expected.to contain_exactly(draft) }
         end
 
-        describe "#scheduled?" do
-          specify { expect(    draft.scheduled?).to eq(false) }
-          specify { expect(scheduled.scheduled?).to eq(true ) }
-          specify { expect(published.scheduled?).to eq(false) }
+        describe "self#scheduled" do
+          subject { collection.scheduled }
+
+          it { is_expected.to contain_exactly(scheduled) }
         end
 
-        describe "#published?" do
-          specify { expect(    draft.published?).to eq(false) }
-          specify { expect(scheduled.published?).to eq(false ) }
-          specify { expect(published.published?).to eq(true ) }
+        describe "self#published" do
+          subject { collection.published }
+
+          it { is_expected.to contain_exactly(published) }
         end
 
-        describe "#unpublished?" do
-          specify { expect(    draft.unpublished?).to eq(true ) }
-          specify { expect(scheduled.unpublished?).to eq(true ) }
-          specify { expect(published.unpublished?).to eq(false) }
+        describe "self#unpublished" do
+          subject { collection.unpublished }
+
+          it { is_expected.to contain_exactly(draft, scheduled) }
+        end
+
+        describe "booleans" do
+          describe "#draft?" do
+            specify { expect(    draft.draft?).to eq(true ) }
+            specify { expect(scheduled.draft?).to eq(false) }
+            specify { expect(published.draft?).to eq(false) }
+          end
+
+          describe "#scheduled?" do
+            specify { expect(    draft.scheduled?).to eq(false) }
+            specify { expect(scheduled.scheduled?).to eq(true ) }
+            specify { expect(published.scheduled?).to eq(false) }
+          end
+
+          describe "#published?" do
+            specify { expect(    draft.published?).to eq(false) }
+            specify { expect(scheduled.published?).to eq(false ) }
+            specify { expect(published.published?).to eq(true ) }
+          end
+
+          describe "#unpublished?" do
+            specify { expect(    draft.unpublished?).to eq(true ) }
+            specify { expect(scheduled.unpublished?).to eq(true ) }
+            specify { expect(published.unpublished?).to eq(false) }
+          end
         end
       end
     end
