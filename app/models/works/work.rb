@@ -74,7 +74,7 @@ class Work < ApplicationRecord
   scope :for_show, -> { includes(
     :aspects, :milestones, :playlists, :reviews, :mixtapes,
     :credits, :makers, :contributions, :contributors
-  ).references(:makers) }
+  ) }
 
   #############################################################################
   # ASSOCIATIONS.

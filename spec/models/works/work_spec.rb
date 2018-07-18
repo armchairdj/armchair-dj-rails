@@ -8,6 +8,11 @@ RSpec.describe Work, type: :model do
 
     it_behaves_like "an_alphabetizable_model"
 
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
+    end
+
     describe "nilify_blanks" do
       subject { create_minimal_instance }
 
@@ -102,24 +107,7 @@ RSpec.describe Work, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let(      :draft) { create_minimal_instance(                      title: "D", maker_names: ["Kate Bush"  ]) }
-      let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", maker_names: ["Prince"     ]) }
-      let(:published_2) { create_minimal_instance(:with_published_post, title: "A", maker_names: ["David Bowie"]) }
-
-      let(        :ids) { [draft, published_1, published_2].map(&:id) }
-      let( :collection) { described_class.where(id: ids) }
-      let(:show_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
-
-      describe "self#for_show" do
-        subject { collection.for_show }
-
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
-        it { is_expected.to eager_load(show_loads) }
-      end
-
-      pending "self#for_list"
-    end
+    # Nothing so far.
   end
 
   describe "associations" do

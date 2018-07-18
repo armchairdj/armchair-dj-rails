@@ -24,9 +24,7 @@ RSpec.describe Link, type: :model do
     describe "nilify_blanks" do
       subject { create_minimal_instance }
 
-      describe "nilify_blanks" do
-        it { is_expected.to nilify_blanks(before: :validation) }
-      end
+      it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 

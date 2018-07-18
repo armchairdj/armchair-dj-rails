@@ -28,23 +28,7 @@ RSpec.describe Creator, type: :model do
 
     it_behaves_like "an_alphabetizable_model"
 
-    describe "nilify_blanks" do
-      subject { create_minimal_instance }
-
-      describe "nilify_blanks" do
-        it { is_expected.to nilify_blanks(before: :validation) }
-      end
-    end
-  end
-
-  describe "class" do
-    # Nothing so far.
-  end
-
-  describe "scope-related" do
-    describe "basics" do
-      let(       :ids) { create_list(:minimal_creator, 3).map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
+    it_behaves_like "an_eager_loadable_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [
         :pseudonyms, :real_names, :members, :groups,
@@ -53,22 +37,20 @@ RSpec.describe Creator, type: :model do
         :reviews, :contributed_reviews,
         :mixtapes, :contributed_mixtapes,
       ] }
-
-      describe "self#for_show" do
-        subject { collection.for_show }
-
-        it { is_expected.to eager_load(show_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
-
-      describe "self#for_list" do
-        subject { collection.for_list }
-
-        it { is_expected.to eager_load(list_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
     end
 
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
+
+  describe "class" do
+    # Nothing so far.
+  end
+
+  describe "scope-related" do
     describe "identities" do
       describe "scopes and booleans" do
         let!(  :primary) { create(  :primary_creator) }

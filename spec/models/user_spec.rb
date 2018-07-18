@@ -51,14 +51,17 @@ RSpec.describe User, type: :model do
 
     it_behaves_like "an_alphabetizable_model"
 
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
+    end
+
     it_behaves_like "a_linkable_model"
 
     describe "nilify_blanks" do
       subject { create_minimal_instance }
 
-      describe "nilify_blanks" do
-        it { is_expected.to nilify_blanks(before: :validation) }
-      end
+      it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 
@@ -67,27 +70,6 @@ RSpec.describe User, type: :model do
   end
 
   describe "scope-related" do
-    let(       :ids) { create_list(:minimal_user, 3).map(&:id) }
-    let(:collection) { described_class.where(id: ids) }
-    let(:list_loads) { [] }
-    let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
-
-    describe "basics" do
-      describe "self#for_show" do
-        subject { collection.for_show }
-
-        it { is_expected.to eager_load(show_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
-
-      describe "self#for_list" do
-        subject { collection.for_list }
-
-        it { is_expected.to eager_load(list_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
-    end
-
     describe "for public site" do
       let(   :saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }

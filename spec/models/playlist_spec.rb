@@ -26,12 +26,15 @@ RSpec.describe Playlist, type: :model do
 
     it_behaves_like "an_authorable_model"
 
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [:author] }
+      let(:show_loads) { [:author, :playlistings, :works] }
+    end
+
     describe "nilify_blanks" do
       subject { create_minimal_instance }
 
-      describe "nilify_blanks" do
-        it { is_expected.to nilify_blanks(before: :validation) }
-      end
+      it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 
@@ -40,26 +43,7 @@ RSpec.describe Playlist, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let(       :ids) { create_list(:minimal_playlist, 3).map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
-      let(:list_loads) { [:author] }
-      let(:show_loads) { [:author, :playlistings, :works] }
-
-      describe "self#for_show" do
-        subject { collection.for_show }
-
-        it { is_expected.to eager_load(show_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
-
-      describe "self#for_list" do
-        subject { collection.for_list }
-
-        it { is_expected.to eager_load(list_loads) }
-        it { is_expected.to contain_exactly(*collection.to_a) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do
