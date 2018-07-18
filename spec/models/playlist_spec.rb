@@ -41,21 +41,24 @@ RSpec.describe Playlist, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let!(     :first) { create(:complete_playlist,                       title: "First" ) }
-      let!(    :middle) { create(:complete_playlist, :with_published_post, title: "Middle") }
-      let!(      :last) { create(:complete_playlist, :with_published_post, title: "Last"  ) }
-      let(        :ids) { [first, middle, last].map(&:id) }
-      let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [:author, :playlistings, :works] }
+      let(       :ids) { create_list(:minimal_playlist, 3).map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+      let(:list_loads) { [:author] }
+      let(:show_loads) { [:author, :playlistings, :works] }
 
       describe "self#for_show" do
         subject { collection.for_show }
 
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to match_array(collection.to_a) }
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
 
-      pending "self#for_list"
+      describe "self#for_list" do
+        subject { collection.for_list }
+
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
     end
   end
 

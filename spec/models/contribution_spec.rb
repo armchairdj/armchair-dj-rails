@@ -45,26 +45,26 @@ RSpec.describe Contribution, type: :model do
   end
 
   describe "scope-related" do
-    let!(:with_published) { create_minimal_instance }
-    let!(:with_scheduled) { create_minimal_instance }
-    let!(:with_draft    ) { create_minimal_instance }
-    let!(:with_none     ) { create_minimal_instance }
+    describe "basics" do
+      let(       :ids) { create_list(:minimal_contribution, 3).map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :role, :creator] }
 
-    let(:ids) { [with_published, with_scheduled, with_draft, with_none].map(&:id) }
+      describe "self#for_show" do
+        subject { collection.for_show }
 
-    before(:each) do
-      create(:minimal_review, :published, work: with_published.work)
-      create(:minimal_review, :scheduled, work: with_scheduled.work)
-      create(:minimal_review, :draft,     work:     with_draft.work)
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
+
+      describe "self#for_list" do
+        subject { collection.for_list }
+
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
     end
-
-    describe "self#for_show" do
-      subject { described_class.for_show.where(id: ids) }
-
-      it { is_expected.to eager_load(:work, :role, :creator) }
-    end
-
-    pending "self#for_list"
   end
 
   describe "validations" do

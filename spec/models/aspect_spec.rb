@@ -38,22 +38,24 @@ RSpec.describe Aspect, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let(      :draft) { create(:minimal_aspect,                       facet: :musical_genre, name: "Trip-Hop" ) }
-      let(:published_1) { create(:minimal_aspect, :with_published_post, facet: :musical_mood,  name: "Paranoid" ) }
-      let(:published_2) { create(:minimal_aspect, :with_published_post, facet: :musical_genre, name: "Downtempo") }
-
-      let(        :ids) { [draft, published_1, published_2].map(&:id) }
-      let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
+      let(       :ids) { create_list(:minimal_aspect, 3).map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+      let(:list_loads) { [] }
+      let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
 
       describe "self#for_show" do
         subject { collection.for_show }
 
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
 
-      pending "self#for_list"
+      describe "self#for_list" do
+        subject { collection.for_list }
+
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
     end
 
     describe "#for_facet" do

@@ -89,79 +89,13 @@ RSpec.describe Post, type: :model do
   end
 
   describe "scope-related" do
-    describe "self#for_cms_user" do
-      let!(:no_user) { nil }
-      let!( :member) { create(:member) }
-      let!( :writer) { create(:writer) }
-      let!( :editor) { create(:editor) }
-      let!(  :admin) { create(:admin ) }
-      let!(   :root) { create(:root  ) }
+    describe "for sorting and status" do
+      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:scheduled) { create_minimal_instance(:scheduled) }
+      let(:published) { create_minimal_instance(:published) }
 
-      let( :writer_post) { create(:minimal_post, author: writer) }
-      let( :editor_post) { create(:minimal_post, author: editor) }
-      let(  :admin_post) { create(:minimal_post, author: admin ) }
-      let(   :root_post) { create(:minimal_post, author: root  ) }
-
-      let!(       :ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
-      let!(:collection) { described_class.where(id: ids) }
-
-      subject { collection.for_cms_user(instance) }
-
-      context "with nil user" do
-        let(:instance) { no_user }
-
-        it "includes nothing" do
-          is_expected.to eq(described_class.none)
-        end
-      end
-
-      context "with member" do
-        let(:instance) { member }
-
-        it "includes nothing" do
-          is_expected.to eq(described_class.none)
-        end
-      end
-
-      context "with writer" do
-        let(:instance) { writer }
-
-        it "includes only own posts" do
-          is_expected.to contain_exactly(writer_post)
-        end
-      end
-
-      context "with editor" do
-        let(:instance) { editor }
-
-        it "includes everything" do
-          is_expected.to match_array(collection.all)
-        end
-      end
-
-      context "with admin" do
-        let(:instance) { admin }
-
-        it "includes everything" do
-          is_expected.to match_array(collection.all)
-        end
-      end
-
-      context "with root" do
-        let(:instance) { root }
-
-        it "includes everything" do
-          is_expected.to match_array(collection.all)
-        end
-      end
-    end
-
-    describe "basics" do
-      let!(     :draft) { create_minimal_instance(:draft    ) }
-      let!( :scheduled) { create_minimal_instance(:scheduled) }
-      let!( :published) { create_minimal_instance(:published) }
-      let!(       :ids) { [draft, scheduled, published].map(&:id) }
-      let!(:collection) { described_class.where(id: ids) }
+      let(       :ids) { [draft, scheduled, published].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
       describe "self#reverse_cron" do
         subject { collection.reverse_cron }
@@ -219,6 +153,90 @@ RSpec.describe Post, type: :model do
             specify { expect(    draft.unpublished?).to eq(true ) }
             specify { expect(scheduled.unpublished?).to eq(true ) }
             specify { expect(published.unpublished?).to eq(false) }
+          end
+        end
+      end
+    end
+
+    describe "for public site" do
+      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:scheduled) { create_minimal_instance(:scheduled) }
+      let(:published) { create_minimal_instance(:published) }
+
+      let!(       :ids) { [draft, scheduled, published].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
+
+      describe "self#for_public" do
+        subject { collection.for_public }
+
+        it { is_expected.to eq [published] }
+      end
+    end
+
+    describe "for cms access to other users' posts" do
+      describe "self#for_cms_user" do
+        let!(:no_user) { nil }
+        let!( :member) { create(:member) }
+        let!( :writer) { create(:writer) }
+        let!( :editor) { create(:editor) }
+        let!(  :admin) { create(:admin ) }
+        let!(   :root) { create(:root  ) }
+
+        let( :writer_post) { create(:minimal_post, author: writer) }
+        let( :editor_post) { create(:minimal_post, author: editor) }
+        let(  :admin_post) { create(:minimal_post, author: admin ) }
+        let(   :root_post) { create(:minimal_post, author: root  ) }
+
+        let!(       :ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
+        let!(:collection) { described_class.where(id: ids) }
+
+        subject { collection.for_cms_user(instance) }
+
+        context "with nil user" do
+          let(:instance) { no_user }
+
+          it "includes nothing" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with member" do
+          let(:instance) { member }
+
+          it "includes nothing" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with writer" do
+          let(:instance) { writer }
+
+          it "includes only own posts" do
+            is_expected.to contain_exactly(writer_post)
+          end
+        end
+
+        context "with editor" do
+          let(:instance) { editor }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
+          end
+        end
+
+        context "with admin" do
+          let(:instance) { admin }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
+          end
+        end
+
+        context "with root" do
+          let(:instance) { root }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
           end
         end
       end

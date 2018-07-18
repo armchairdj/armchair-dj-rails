@@ -109,13 +109,13 @@ RSpec.describe Work, type: :model do
 
       let(        :ids) { [draft, published_1, published_2].map(&:id) }
       let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
+      let(:show_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
 
       describe "self#for_show" do
         subject { collection.for_show }
 
         it { is_expected.to contain_exactly(draft, published_1, published_2) }
-        it { is_expected.to eager_load(eager_loads) }
+        it { is_expected.to eager_load(show_loads) }
       end
 
       pending "self#for_list"

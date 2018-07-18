@@ -36,20 +36,24 @@ RSpec.describe Tag, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let(      :draft) { create(:minimal_tag,                       name: "D") }
-      let(:published_1) { create(:minimal_tag, :with_published_post, name: "Z") }
-      let(:published_2) { create(:minimal_tag, :with_published_post, name: "A") }
-      let(       :ids) { [draft, published_1, published_2].map(&:id) }
+      let(       :ids) { create_list(:minimal_tag, 3).map(&:id) }
       let(:collection) { described_class.where(id: ids) }
+      let(:list_loads) { [] }
+      let(:show_loads) { [:posts] }
 
       describe "self#for_show" do
         subject { collection.for_show }
 
-        it { is_expected.to eager_load(:posts) }
-        it { is_expected.to match_array(collection.to_a) }
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
 
-      pending "self#for_list"
+      describe "self#for_list" do
+        subject { collection.for_list }
+
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
     end
   end
 

@@ -39,31 +39,44 @@ RSpec.describe Playlisting, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
-      let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
-      let(       :ids) { Playlisting.where(playlist_id: [playlist_1.id, playlist_2.id]).map(&:id).shuffle }
+      let(       :ids) { create_list(:minimal_playlisting, 3).map(&:id) }
       let(:collection) { Playlisting.where(id: ids) }
+      let(:list_loads) { [] }
+      let(:show_loads) { [:playlist, :work] }
 
       describe "self#for_show" do
         subject { collection.for_show }
 
-        it { is_expected.to eager_load(:playlist, :work) }
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
 
-      describe "self#sorted" do
-        subject { collection.sorted }
+      describe "self#for_list" do
+        subject { collection.for_list }
 
-        it { is_expected.to_not eager_load(:playlist, :work) }
-
-        it "sorts by playlist name and position" do
-          expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = subject.map(&:id)
-
-          expect(actual).to eq(expected)
-        end
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
+    end
 
-      pending "self#for_list"
+    describe "self#sorted" do
+      let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
+      let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
+
+      let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
+      let(     :items) { Playlisting.where(playlist_id: parent_ids) }
+
+      let(       :ids) { items.map(&:id).shuffle }
+      let(:collection) { Playlisting.where(id: ids) }
+
+      subject { collection.sorted }
+
+      it "sorts by playlist name and position" do
+        expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
+        actual   = subject.map(&:id)
+
+        expect(actual).to eq(expected)
+      end
     end
   end
 

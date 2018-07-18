@@ -43,17 +43,10 @@ RSpec.describe Creator, type: :model do
 
   describe "scope-related" do
     describe "basics" do
-      let!( :richie) { create(:creator, :with_published_post, name: "Richie Hawtin") }
-      let!(    :amy) { create(:creator,                       name: "Amy Winehouse") }
-      let!(   :kate) { create(:creator,                       name: "Kate Bush"    ) }
-      let!(   :carl) { create(:creator, :with_published_post, name: "Carl Craig"   ) }
-      let!(  :feist) { create(:creator,                       name: "Feist"        ) }
-      let!(:derrick) { create(:creator, :with_published_post, name: "Derrick May"  ) }
-
-      let(       :ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
+      let(       :ids) { create_list(:minimal_creator, 3).map(&:id) }
       let(:collection) { described_class.where(id: ids) }
-
-      let(:eager_loads) { [
+      let(:list_loads) { [] }
+      let(:show_loads) { [
         :pseudonyms, :real_names, :members, :groups,
         :credits, :contributed_roles,
         :works, :contributed_works,
@@ -62,12 +55,18 @@ RSpec.describe Creator, type: :model do
       ] }
 
       describe "self#for_show" do
-        subject { described_class.for_show }
+        subject { collection.for_show }
 
-        it { is_expected.to eager_load(*eager_loads) }
+        it { is_expected.to eager_load(show_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
       end
 
-      pending "self#for_list"
+      describe "self#for_list" do
+        subject { collection.for_list }
+
+        it { is_expected.to eager_load(list_loads) }
+        it { is_expected.to contain_exactly(*collection.to_a) }
+      end
     end
 
     describe "identities" do
