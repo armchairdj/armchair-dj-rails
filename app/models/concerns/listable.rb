@@ -3,6 +3,10 @@
 module Listable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # CLASS.
+  #############################################################################
+
   class_methods do
     def acts_as_listable(acts_as_list_scope)
       acts_as_list scope: acts_as_list_scope, top_of_list: 1

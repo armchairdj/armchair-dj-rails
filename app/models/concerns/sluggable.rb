@@ -7,6 +7,10 @@ module Sluggable
   VERSION_SEPARATOR = "-".freeze
   EMPTY_PART        = "!".freeze
 
+  #############################################################################
+  # CLASS.
+  #############################################################################
+
   class_methods do
     def prepare_parts(parts)
       parts.flatten.compact.map { |x| prepare_part(x) }.compact
@@ -24,27 +28,43 @@ module Sluggable
     end
   end
 
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
+
   included do
+    ### CONCERNS.
+
     include FriendlyId
 
     friendly_id :slug_candidates, use: [:slugged, :history]
 
+    ### ATTRIBUTES.
+
     attr_accessor :clear_slug
+
+    ### HOOKS.
 
     before_save :handle_cleared_slug
 
-    # Must be in included block to work.
+    ### METHODS. (Must be in included block to work with FriendlyId.)
+
+    # Override default friendly_id behavior since we're already doing
+    # our own normalization.
     def normalize_friendly_id(input)
       input
     end
 
-    # Must be in included block to work.
     # Override default friendly_id behavior to use ID instead of slug.
     # This allows IDs in admin and custom routes with slugs for public.
     def to_param
       id.to_s
     end
   end
+
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
 
   def clear_slug?
     !!clear_slug

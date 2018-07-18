@@ -3,15 +3,27 @@
 module Paginatable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
+
   included do
     prepend_before_action :prevent_duplicate_first_page, only: [:index]
   end
+
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
 
 private
 
   def prevent_duplicate_first_page
     return unless (params[:page] || "").to_s == "1"
 
+    # TODO Generalize logic for figuring out route namespace.
+    #      We can't just use the controller namespace because the
+    #      route namespace may be different & polymorphic_path
+    #      relies on routes, not controllers.
     url_options = self.class < Admin::BaseController ? [:admin, model_class] : model_class
 
     redirect_to polymorphic_path(url_options), status: 301

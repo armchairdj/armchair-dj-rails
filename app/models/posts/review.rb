@@ -65,11 +65,11 @@ class Review < Post
   has_many :milestones,    through: :work
 
   #############################################################################
-  # ATTRIBUTES.
+  # DELEGATION.
   #############################################################################
 
   delegate :display_medium, to: :work, allow_nil: true
-  delegate :alpha_parts,    to: :work, allow_nil: true, prefix: true
+  delegate :alpha_parts,    to: :work, allow_nil: true
 
   #############################################################################
   # VALIDATIONS.
@@ -97,9 +97,5 @@ class Review < Post
     base = [display_medium, "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
-  end
-
-  def alpha_parts
-    work_alpha_parts || []
   end
 end

@@ -145,6 +145,10 @@ class User < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [last_name, first_name, middle_name]
+  end
+
   def can_write?
     root? || admin? || editor? || writer?
   end
@@ -186,9 +190,5 @@ class User < ApplicationRecord
     instance.errors.add(:role, :invalid_assignment)
 
     false
-  end
-
-  def alpha_parts
-    [last_name, first_name, middle_name]
   end
 end

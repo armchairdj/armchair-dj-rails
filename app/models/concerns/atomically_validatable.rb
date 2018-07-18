@@ -3,6 +3,10 @@
 module AtomicallyValidatable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
+
   def valid_attributes?(*attributes)
     attributes = [attributes].flatten.compact
 

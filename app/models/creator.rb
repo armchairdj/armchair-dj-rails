@@ -304,6 +304,10 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [name]
+  end
+
   def all_works
     works.union(contributed_works).alpha
   end
@@ -323,9 +327,5 @@ class Creator < ApplicationRecord
     all = (cred.to_a + cont.to_a).group_by(&:display_medium)
 
     all.transform_values! { |v| v.map(&:role_name).uniq.sort }
-  end
-
-  def alpha_parts
-    [name]
   end
 end

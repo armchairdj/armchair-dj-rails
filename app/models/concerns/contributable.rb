@@ -3,29 +3,31 @@
 module Contributable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
+
   included do
-    ###########################################################################
-    # ASSOCIATIONS.
-    ###########################################################################
+    ### ASSOCIATIONS.
 
     belongs_to :work,    inverse_of: model_name.param_key.pluralize.to_sym
     belongs_to :creator, inverse_of: model_name.param_key.pluralize.to_sym
 
-    ###########################################################################
-    # ATTRIBUTES.
-    ###########################################################################
+    ### DELEGATION.
 
     delegate :display_medium, to: :work,    allow_nil: true
     delegate :alpha_parts,    to: :work,    allow_nil: true, prefix: true
     delegate :alpha_parts,    to: :creator, allow_nil: true, prefix: true
 
-    ###########################################################################
-    # VALIDATIONS.
-    ###########################################################################
+    ### VALIDATIONS.
 
     validates :work,    presence: true
     validates :creator, presence: true
   end
+
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
 
   def alpha_parts
     [work_alpha_parts, role_name, creator_alpha_parts]

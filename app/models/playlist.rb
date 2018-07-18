@@ -86,6 +86,10 @@ class Playlist < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [title]
+  end
+
   def posts
     Post.where(id: post_ids)
   end
@@ -100,9 +104,5 @@ class Playlist < ApplicationRecord
 
   def creator_ids
     works.map(&:creator_ids).flatten.uniq
-  end
-
-  def alpha_parts
-    [title]
   end
 end
