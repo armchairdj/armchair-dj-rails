@@ -18,7 +18,5 @@
 #
 
 class Gadget < Medium
-  def available_facets
-    [:tech_company, :tech_platform, :device_type]
-  end
+  self.available_facets = [:tech_company, :tech_platform, :device_type]
 end

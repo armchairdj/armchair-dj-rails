@@ -18,7 +18,5 @@
 #
 
 class Song < Medium
-  def available_facets
-    [:song_type, :musical_genre, :musical_mood, :music_label]
-  end
+  self.available_facets = [:song_type, :musical_genre, :musical_mood, :music_label]
 end

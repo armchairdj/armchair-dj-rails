@@ -18,7 +18,5 @@
 #
 
 class Movie < Medium
-  def available_facets
-    [:hollywood_studio, :narrative_genre]
-  end
+  self.available_facets = [:hollywood_studio, :narrative_genre]
 end

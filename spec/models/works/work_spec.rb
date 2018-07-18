@@ -398,7 +398,28 @@ RSpec.describe Work, type: :model do
   describe "instance" do
     let(:instance) { create_minimal_instance }
 
-    pending "#posts"
+    describe "post methods" do
+      let!(:instance) { create_minimal_instance }
+      let!(  :review) { create(:minimal_review, work_id: instance.id) }
+      let!( :mixtape) do
+        playlist               = create(:minimal_playlist)
+        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
+
+        create(:minimal_mixtape, playlist_id: playlist.id)
+      end
+
+      describe "post_ids" do
+        subject { instance.post_ids }
+
+        it { is_expected.to contain_exactly(review.id, mixtape.id) }
+      end
+
+      describe "posts" do
+        subject { instance.posts }
+
+        it { is_expected.to contain_exactly(review, mixtape) }
+      end
+    end
 
     describe "#display_title" do
       it "displays with just title" do

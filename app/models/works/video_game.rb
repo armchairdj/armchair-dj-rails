@@ -18,7 +18,5 @@
 #
 
 class VideoGame < Medium
-  def available_facets
-    [:tech_platform, :game_studio, :game_mechanic]
-  end
+  self.available_facets = [:tech_platform, :game_studio, :game_mechanic]
 end

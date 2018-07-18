@@ -18,7 +18,5 @@
 #
 
 class Product < Medium
-  def available_facets
-    [:manufacturer, :product_type]
-  end
+  self.available_facets = [:manufacturer, :product_type]
 end

@@ -18,7 +18,5 @@
 #
 
 class ComicBook < Medium
-  def available_facets
-    [:publisher, :narrative_genre]
-  end
+  self.available_facets = [:publisher, :narrative_genre]
 end

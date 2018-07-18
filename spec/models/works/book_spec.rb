@@ -23,11 +23,13 @@ RSpec.describe Book, type: :model do
     end
   end
 
-  describe "class" do
-    pending "self#available_facets"
-  end
+  describe "class attributes" do
+    describe "available_facets" do
+      let(:expected) { [:publisher, :narrative_genre] }
+      let(:instance) { create_minimal_instance }
 
-  describe "instance" do
-    # Nothing so far.
+      specify { expect(       instance.available_facets).to eq(expected) }
+      specify { expect(described_class.available_facets).to eq(expected) }
+    end
   end
 end

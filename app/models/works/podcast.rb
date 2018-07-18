@@ -18,7 +18,5 @@
 #
 
 class Podcast < Medium
-  def available_facets
-    [:audio_show_format, :narrative_genre]
-  end
+  self.available_facets = [:audio_show_format, :narrative_genre]
 end

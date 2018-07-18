@@ -18,7 +18,5 @@
 #
 
 class RadioShow < Medium
-  def available_facets
-    [:audio_show_format, :narrative_genre, :radio_network]
-  end
+  self.available_facets = [:audio_show_format, :narrative_genre, :radio_network]
 end

@@ -18,7 +18,5 @@
 #
 
 class Publication < Medium
-  def available_facets
-    [:publication_type, :publisher]
-  end
+  self.available_facets = [:publication_type, :publisher]
 end

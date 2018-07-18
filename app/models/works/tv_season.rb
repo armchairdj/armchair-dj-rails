@@ -18,7 +18,5 @@
 #
 
 class TvSeason < Medium
-  def available_facets
-    [:narrative_genre, :tv_network, :hollywood_studio]
-  end
+  self.available_facets = [:narrative_genre, :tv_network, :hollywood_studio]
 end

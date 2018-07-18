@@ -4,6 +4,12 @@ class Medium < Work
   self.abstract_class = true
 
   #############################################################################
+  # CLASS ATTRIBUTES.
+  #############################################################################
+
+  class_attribute :available_facets, default: []
+
+  #############################################################################
   # CLASS.
   #############################################################################
 
@@ -52,9 +58,5 @@ class Medium < Work
 
   def available_role_ids
     available_roles.ids
-  end
-
-  def available_facets
-    []
   end
 end

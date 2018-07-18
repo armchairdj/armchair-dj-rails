@@ -18,7 +18,5 @@
 #
 
 class App < Medium
-  def available_facets
-    [:tech_company, :tech_platform]
-  end
+  self.available_facets = [:tech_company, :tech_platform]
 end
