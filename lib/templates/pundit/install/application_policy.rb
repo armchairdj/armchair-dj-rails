@@ -66,7 +66,7 @@ protected
   def force_admin_login
     logged_in?
 
-    raise Pundit::NotAuthorizedError, "cannot access cms" unless user.admin?
+    raise Pundit::NotAuthorizedError, "current user does not have permission" unless user.admin?
   end
 
   def raise_unauthorized

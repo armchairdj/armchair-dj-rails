@@ -25,6 +25,6 @@ class Admin::UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    logged_in_as_admin_or_root?
+    logged_in_as_root?
   end
 end
