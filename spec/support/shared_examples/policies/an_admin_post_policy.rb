@@ -65,6 +65,8 @@ RSpec.shared_examples "an_admin_post_policy" do
       it { is_expected.to forbid_action(:destroy ) }
 
       context "published" do
+        let(:record) { create_minimal_instance(:published) }
+
         it { is_expected.to forbid_action(:autosave) }
       end
     end
@@ -85,6 +87,8 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to forbid_action(:destroy ) }
 
     context "published" do
+      let(:record) { create_minimal_instance(:published) }
+
       it { is_expected.to forbid_action(:autosave) }
     end
   end
@@ -99,11 +103,13 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to permit_action(:edit    ) }
     it { is_expected.to permit_action(:update  ) }
     it { is_expected.to permit_action(:autosave) }
+    it { is_expected.to permit_action(:publish ) }
 
-    it { is_expected.to forbid_action(:publish ) }
     it { is_expected.to forbid_action(:destroy ) }
 
     context "published" do
+      let(:record) { create_minimal_instance(:published) }
+
       it { is_expected.to forbid_action(:autosave) }
     end
   end
@@ -122,6 +128,8 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to permit_action(:destroy ) }
 
     context "published" do
+      let(:record) { create_minimal_instance(:published) }
+
       it { is_expected.to forbid_action(:autosave) }
     end
   end

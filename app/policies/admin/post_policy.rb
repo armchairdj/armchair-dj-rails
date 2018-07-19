@@ -16,6 +16,6 @@ class Admin::PostPolicy < Admin::BasePolicy
   end
 
   def autosave?
-    update? && record.persisted? && record.unpublished?
+    update? && record.unpublished?
   end
 end
