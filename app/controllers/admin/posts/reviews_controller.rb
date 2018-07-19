@@ -4,8 +4,8 @@ class Admin::Posts::ReviewsController < Admin::Posts::BaseController
 
 private
 
-  def permitted_keys
-    super.unshift(:work_id)
+  def initial_keys
+    [:work_id]
   end
 
   def prepare_form

@@ -106,6 +106,8 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
 
       context "with invalid params" do
+        let(:bad_create_params) { {} }
+
         before(:each) do
           post :create, params: wrap_create_params(bad_create_params)
         end
@@ -118,8 +120,6 @@ RSpec.shared_examples "an_admin_post_controller" do
           subject { assigns(:post) }
 
           it { is_expected.to be_a_populated_new_post(param_key) }
-
-          it { is_expected.to have_coerced_attributes(bad_create_params) }
 
           it { is_expected.to be_invalid }
         end

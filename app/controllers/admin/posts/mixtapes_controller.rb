@@ -4,8 +4,8 @@ class Admin::Posts::MixtapesController < Admin::Posts::BaseController
 
 private
 
-  def permitted_keys
-    super.unshift(:playlist_id)
+  def initial_keys
+    [:playlist_id]
   end
 
   def prepare_form

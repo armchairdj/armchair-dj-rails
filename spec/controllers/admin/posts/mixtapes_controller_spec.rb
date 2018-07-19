@@ -7,9 +7,8 @@ RSpec.describe Admin::Posts::MixtapesController, type: :controller do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "an_admin_post_controller" do
-      let(:bad_create_params) { minimal_attributes.except(:author_id, :playlist_id) }
       let(    :update_params) { { "body" => "New body.", "playlist_id" => create(:minimal_playlist).id } }
-      let(:bad_update_params) { { "body" => "", "playlist_id" => "" } }
+      let(:bad_update_params) { { "body" => "",          "playlist_id" => "" } }
 
       let(:invalid_unpublish_errors) { { playlist: :blank } }
       let(:invalid_publish_errors  ) { { playlist: :blank, body: :blank } }

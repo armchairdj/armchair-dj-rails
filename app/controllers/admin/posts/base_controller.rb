@@ -3,6 +3,8 @@
 class Admin::Posts::BaseController < Admin::BaseController
   before_action :require_ajax, only: :autosave
 
+  before_action :prepare_autosave, only: :autosave
+
   # GET /posts
   # GET /posts.json
   def index; end
@@ -17,12 +19,12 @@ class Admin::Posts::BaseController < Admin::BaseController
   # POST /posts
   # POST /posts.json
   def create
-    @instance.attributes = create_params
+    @instance.attributes = post_params_for_create
 
     respond_to do |format|
       if @instance.save
-        format.html { redirect_to instance_path, success: I18n.t("admin.flash.posts.success.create") }
-        format.json { render :show, status: :created, location: instance_path(full_url: true) }
+        format.html { redirect_to instance_url, success: I18n.t("admin.flash.posts.success.create") }
+        format.json { render :show, status: :created, location: instance_url(full_url: true) }
       else
         format.html { prepare_form; render :new }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -39,9 +41,9 @@ class Admin::Posts::BaseController < Admin::BaseController
     return handle_step if params[:step].present?
 
     respond_to do |format|
-      if @instance.update(update_params)
-        format.html { redirect_to instance_path, success: I18n.t("admin.flash.posts.success.update") }
-        format.json { render :show, status: :created, location: instance_path(full_url: true) }
+      if @instance.update(post_params_for_update)
+        format.html { redirect_to instance_url, success: I18n.t("admin.flash.posts.success.update") }
+        format.json { render :show, status: :created, location: instance_url(full_url: true) }
       else
         format.html { prepare_form; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -50,18 +52,13 @@ class Admin::Posts::BaseController < Admin::BaseController
   end
 
   def autosave
-    find_instance
-    authorize @instance, :update?
+    @instance.attributes = post_params_for_autosave
 
-    begin
-      @instance.attributes = autosave_params
+    @instance.save!(validate: false)
 
-      @instance.save!(validate: false)
-
-      render json: {}, status: :ok
-    rescue => err
-      handle_500(err)
-    end
+    render json: {}, status: :ok
+  rescue => err
+    handle_500(err)
   end
 
   # DELETE /posts/1
@@ -70,12 +67,17 @@ class Admin::Posts::BaseController < Admin::BaseController
     @instance.destroy
 
     respond_to do |format|
-      format.html { redirect_to collection_path, success: I18n.t("admin.flash.posts.success.destroy") }
+      format.html { redirect_to collection_url, success: I18n.t("admin.flash.posts.success.destroy") }
       format.json { head :no_content }
     end
   end
 
 private
+
+  def prepare_autosave
+    find_instance
+    authorize @instance, :update?
+  end
 
   def find_collection
     @collection = scoped_and_sorted_collection
@@ -103,42 +105,35 @@ private
     %w(edit update).include?(action_name) && params[:step].present?
   end
 
-  def create_params
-    post_params(allow_publishing: false).merge(author: current_user)
-  end
-
-  def update_params
-    post_params(allow_publishing: true)
-  end
-
-  def autosave_params
-    post_params(allow_publishing: false)
-  end
-
-  def post_params(allow_publishing:)
-    permitted = if allow_publishing
-      permitted_keys.unshift(:publish_on, :clear_slug)
-    else
-      permitted_keys
-    end
-
+  def fetch_params(permitted)
     params.fetch(controller_name.singularize.to_sym, {}).permit(permitted)
   end
 
-  def permitted_keys
-    [
-      :body,
-      :summary,
-      {
-        :tag_ids => [],
-        :links_attributes => [
-          :id,
-          :_destroy,
-          :url,
-          :description
-        ]
-      }
-    ]
+  def post_params_for_create
+    fetch_params(initial_keys).merge(author: current_user)
+  end
+
+  def post_params_for_autosave
+    fetch_params(initial_keys + draft_keys)
+  end
+
+  def post_params_for_update
+    fetch_params(publish_keys.unshift(initial_keys + draft_keys))
+  end
+
+  def initial_keys
+    raise NotImplementedError
+  end
+
+  def draft_keys
+    [:body, :summary, {
+      tag_ids:          [],
+      links_attributes: [:id, :_destroy, :url, :description]
+    }]
+  end
+
+  def publish_keys
+    [:publish_on, :clear_slug]
   end
 
   def prepare_form
@@ -169,9 +164,9 @@ private
 
   def update_state_and_respond
     respond_to do |format|
-      if @instance.send(@update_method, update_params)
-        format.html { redirect_to instance_path, success: success_flash }
-        format.json { render :show, status: :ok, location: instance_path(full_url: true) }
+      if @instance.send(@update_method, post_params_for_update)
+        format.html { redirect_to instance_url, success: success_flash }
+        format.json { render :show, status: :ok, location: instance_url(full_url: true) }
       else
         format.html { prepare_form; set_publication_flash; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -180,7 +175,11 @@ private
   end
 
   def set_publication_flash
-    @instance.send(@success_test) ? success_flash : error_flash
+    if @instance.send(@success_test)
+      flash.now[:success] = success_flash
+    else
+      flash.now[:error] = error_Flash
+    end
   end
 
   def success_flash
@@ -188,7 +187,7 @@ private
     # admin.flash.posts.success.unpublish
     # admin.flash.posts.success.schedule
     # admin.flash.posts.success.unschedule
-    flash.now[:success] = I18n.t("admin.flash.posts.success.#{@flash_key}")
+    I18n.t("admin.flash.posts.success.#{@flash_key}")
   end
 
   def error_flash
@@ -196,7 +195,7 @@ private
     # admin.flash.posts.error.unpublish
     # admin.flash.posts.error.schedule
     # admin.flash.posts.error.unschedule
-    flash.now[:error] = I18n.t("admin.flash.posts.error.#{@flash_key}")
+    I18n.t("admin.flash.posts.error.#{@flash_key}")
   end
 
   def allowed_scopes
@@ -215,14 +214,14 @@ private
     })
   end
 
-  def collection_path(full_url: false)
+  def collection_url(full_url: false)
     case full_url
     when true;  polymorphic_url( [:admin, model_class])
     when false; polymorphic_path([:admin, model_class])
     end
   end
 
-  def instance_path(full_url: false)
+  def instance_url(full_url: false)
     case full_url
     when true;  polymorphic_url( [:admin, @instance])
     when false; polymorphic_path([:admin, @instance])

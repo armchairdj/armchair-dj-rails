@@ -1,0 +1,15 @@
+<% return unless f.object.persisted? %>
+
+<%= f.input :body, input_html: {
+  class: "x-large"
+} %>
+
+<%= f.input :summary, required: false, hint: true, input_html: {
+  class: "small"
+} %>
+
+<%= f.input :tag_ids,
+  as:         :select,
+  collection: @tags,
+  input_html: js_selectable_create_tag_attrs
+%>
