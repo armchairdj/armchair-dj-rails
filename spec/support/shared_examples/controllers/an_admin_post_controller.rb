@@ -13,12 +13,16 @@ RSpec.shared_examples "an_admin_post_controller" do
     edit: "posts/#{view_path}/edit",
   } }
 
-  def show_path(instance)
-    polymorphic_path([:admin, instance])
+  def edit_path(instance)
+    controller.send(:"edit_#{param_key}_path", instance)
   end
 
-  def index_path
-    polymorphic_path([:admin, model_class])
+  def show_path(instance)
+    controller.send(:"#{param_key}_path", instance)
+  end
+
+  def collection_path
+    controller.send(:"#{view_path}_path")
   end
 
   def wrap_create_params(params)
@@ -75,7 +79,7 @@ RSpec.shared_examples "an_admin_post_controller" do
         context "results" do
           before(:each) { post :create, params: wrap_create_params(max_create_params) }
 
-          it { is_expected.to send_user_to(show_path(assigns(:post))) }
+          it { is_expected.to send_user_to(edit_path(assigns(:post))) }
 
           it { is_expected.to have_flash(:success, "admin.flash.posts.success.create") }
 
@@ -95,7 +99,7 @@ RSpec.shared_examples "an_admin_post_controller" do
         describe "results" do
           before(:each) { post :create, params: wrap_create_params(min_create_params) }
 
-          it { is_expected.to send_user_to(show_path(assigns(:post))) }
+          it { is_expected.to send_user_to(edit_path(assigns(:post))) }
 
           it { is_expected.to have_flash(:success, "admin.flash.posts.success.create") }
 
@@ -411,7 +415,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       describe "results" do
         before(:each) { delete :destroy, params: { id: instance.to_param } }
 
-        it { is_expected.to send_user_to(index_path) }
+        it { is_expected.to send_user_to(collection_path) }
 
         it { is_expected.to have_flash(:success, "admin.flash.posts.success.destroy") }
       end

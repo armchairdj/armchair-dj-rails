@@ -23,8 +23,8 @@ class Admin::Posts::BaseController < Admin::BaseController
 
     respond_to do |format|
       if @instance.save
-        format.html { redirect_to instance_url, success: I18n.t("admin.flash.posts.success.create") }
-        format.json { render :show, status: :created, location: instance_url(full_url: true) }
+        format.html { redirect_to edit_path, success: I18n.t("admin.flash.posts.success.create") }
+        format.json { render :show, status: :created, location: show_path }
       else
         format.html { prepare_form; render :new }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -42,8 +42,8 @@ class Admin::Posts::BaseController < Admin::BaseController
 
     respond_to do |format|
       if @instance.update(post_params_for_update)
-        format.html { redirect_to instance_url, success: I18n.t("admin.flash.posts.success.update") }
-        format.json { render :show, status: :created, location: instance_url(full_url: true) }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.posts.success.update") }
+        format.json { render :show, status: :created, location: show_path }
       else
         format.html { prepare_form; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -67,7 +67,7 @@ class Admin::Posts::BaseController < Admin::BaseController
     @instance.destroy
 
     respond_to do |format|
-      format.html { redirect_to collection_url, success: I18n.t("admin.flash.posts.success.destroy") }
+      format.html { redirect_to collection_path, success: I18n.t("admin.flash.posts.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -165,8 +165,8 @@ private
   def update_state_and_respond
     respond_to do |format|
       if @instance.send(@update_method, post_params_for_update)
-        format.html { redirect_to instance_url, success: success_flash }
-        format.json { render :show, status: :ok, location: instance_url(full_url: true) }
+        format.html { redirect_to show_path, success: success_flash }
+        format.json { render :show, status: :ok, location: show_path }
       else
         format.html { prepare_form; set_publication_flash; render :edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
@@ -214,17 +214,15 @@ private
     })
   end
 
-  def collection_url(full_url: false)
-    case full_url
-    when true;  polymorphic_url( [:admin, model_class])
-    when false; polymorphic_path([:admin, model_class])
-    end
+  def collection_path
+    polymorphic_path([:admin, model_class])
   end
 
-  def instance_url(full_url: false)
-    case full_url
-    when true;  polymorphic_url( [:admin, @instance])
-    when false; polymorphic_path([:admin, @instance])
-    end
+  def edit_path
+    edit_polymorphic_path([:admin, @instance])
+  end
+
+  def show_path
+    polymorphic_path([:admin, @instance])
   end
 end

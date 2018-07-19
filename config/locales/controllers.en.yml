@@ -24,7 +24,7 @@ en:
           update:  "Playlist updated."
       posts:
         success:
-          create:     "Post created."
+          create:     "Post created. Now you can begin writing in earnest. When the screen flashes, you'll know it's been autosaved."
           destroy:    "Post destroyed."
           update:     "Post updated."
           publish:    "Post published."
