@@ -38,7 +38,9 @@ FactoryBot.define do
     publish_on 3.weeks.from_now
 
     after(:create) do |instance, evaluator|
-      raise StandardError("could not schedule: #{instance.errors.inspect}") unless instance.schedule!
+      unless instance.schedule!
+        raise StandardError, "could not schedule: #{instance.errors.inspect}"
+      end
 
       instance.reload
     end
@@ -48,7 +50,9 @@ FactoryBot.define do
     with_body
 
     after(:create) do |instance, evaluator|
-      raise StandardError.new("could not publish: #{instance.errors.inspect}") unless instance.publish!
+      unless instance.publish!
+        raise StandardError, "could not publish: #{instance.errors.inspect}"
+      end
 
       instance.reload
     end

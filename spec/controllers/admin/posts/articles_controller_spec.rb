@@ -7,11 +7,10 @@ RSpec.describe Admin::Posts::ArticlesController, type: :controller do
     it_behaves_like "an_admin_controller"
 
     it_behaves_like "an_admin_post_controller" do
-      let(    :update_params) { { "body" => "New body.", "title" => "New title" } }
-      let(:bad_update_params) { { "body" => "",          "title" => "" } }
+      let(:bad_update_params) { { "body" => "", "title" => "" } }
 
-      let(:invalid_unpublish_errors) { { title: :blank } }
-      let(:invalid_publish_errors  ) { { title: :blank, body: :blank } }
+      let(:expected_unpublish_errors) { { title: :blank } }
+      let(:expected_publish_errors  ) { { title: :blank, body: :blank } }
     end
 
     it_behaves_like "a_linkable_controller"

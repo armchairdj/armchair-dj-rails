@@ -178,7 +178,7 @@ private
     if @instance.send(@success_test)
       flash.now[:success] = success_flash
     else
-      flash.now[:error] = error_Flash
+      flash.now[:error] = error_flash
     end
   end
 
