@@ -13,7 +13,6 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
 
     @model_class = assign(:model_name, Mixtape)
 
-    @tags      = assign(:tags,       Tag.all.alpha)
     @playlists = assign(:playlists,  Playlist.all.alpha)
 
     @post = @mixtape = build(:mixtape)
@@ -27,10 +26,9 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       render
 
       assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-        assert_select("div.error-notification", { count: 0 })
-
-        assert_select("textarea[name=?]", "mixtape[body]")
-        assert_select("textarea[name=?]", "mixtape[summary]")
+        assert_select("div.error-notification",               { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
       end
     end
   end
@@ -44,10 +42,7 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       render
 
       assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-        assert_select("div.error-notification")
-
-        assert_select("textarea[name=?]", "mixtape[body]")
-        assert_select("textarea[name=?]", "mixtape[summary]")
+        assert_select("div.error-notification", { count: 1 })
       end
     end
   end

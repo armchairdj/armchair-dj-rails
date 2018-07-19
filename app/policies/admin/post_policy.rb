@@ -14,4 +14,8 @@ class Admin::PostPolicy < Admin::BasePolicy
   def publish?
     update? && user.can_publish?
   end
+
+  def autosave?
+    update? && record.persisted? && record.unpublished?
+  end
 end

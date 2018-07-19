@@ -70,8 +70,6 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       it { is_expected.to successfully_render(templates[:new]) }
 
-      it { is_expected.to prepare_the_post_form(param_key) }
-
       describe "instance" do
         subject { operation; assigns(:post) }
 
@@ -107,8 +105,6 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         it { is_expected.to successfully_render(templates[:new]) }
 
-        it { is_expected.to prepare_the_post_form(param_key) }
-
         describe "instance" do
           subject { operation; assigns(:post) }
 
@@ -129,11 +125,11 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       it { is_expected.to assign(instance, :post) }
 
-      it { is_expected.to prepare_the_post_form(param_key) }
+      it { is_expected.to prepare_the_edit_post_form(param_key) }
     end
 
     describe "PUT #update" do
-      describe "draft" do
+      context "draft" do
         let(:operation) { put :update, params: wrap_update_params(instance, params) }
         let( :instance) { create_minimal_instance(:draft) }
 
@@ -166,8 +162,15 @@ RSpec.shared_examples "an_admin_post_controller" do
 
           it { is_expected.to assign(instance, :post).with_attributes(params).and_be_invalid }
 
-          it { is_expected.to prepare_the_post_form(param_key) }
+          it { is_expected.to prepare_the_edit_post_form(param_key) }
         end
+      end
+
+      context "published" do
+        let(:operation) { put :update, params: wrap_update_params(instance, params) }
+        let( :instance) { create_minimal_instance(:published) }
+
+        subject { operation }
 
         context "replacing slug" do
           let(:params) { reset_slug_params }
@@ -216,7 +219,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.publish") }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
 
@@ -234,7 +237,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.publish") }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_publish_errors) }
 
@@ -273,7 +276,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, nil) }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_unpublish_errors) }
 
@@ -317,7 +320,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.schedule") }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
 
@@ -335,7 +338,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.schedule") }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_publish_errors) }
 
@@ -374,7 +377,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
             it { is_expected.to have_flash_now(:error, nil) }
 
-            it { is_expected.to prepare_the_post_form(param_key) }
+            it { is_expected.to prepare_the_edit_post_form(param_key) }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_unpublish_errors) }
 
@@ -413,18 +416,16 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
 
       context "with blacklisted params" do
-        let(:params) { { "clear_slug" => "1", "publish_on" => 3.weeks.from_now } }
+        let(:params) { { "publish_on" => 3.weeks.from_now } }
 
         before(:each) { instance.update_column(:slug, "old_slug") }
 
         it { is_expected.to render_empty_json_200 }
 
-        describe "cannot change status or slug" do
+        describe "cannot change status" do
           subject { operation; instance.reload } 
 
           it { is_expected.to_not be_scheduled }
-
-          it { expect(subject.slug).to eq("old_slug") }
         end
       end
 

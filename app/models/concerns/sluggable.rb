@@ -3,9 +3,10 @@
 module Sluggable
   extend ActiveSupport::Concern
 
-  PART_SEPARATOR    = "/".freeze
-  VERSION_SEPARATOR = "-".freeze
-  EMPTY_PART        = "!".freeze
+  WORD_SEPARATOR         =   "_".freeze
+  PART_SEPARATOR         =   "/".freeze
+  VERSION_SEPARATOR      =   "-".freeze
+  EMPTY_PART_REPLACEMENT = "xxx".freeze
 
   #############################################################################
   # CLASS.
@@ -18,13 +19,31 @@ module Sluggable
 
     def prepare_part(str)
       str = str.underscore.to_ascii.strip
-      str = str.gsub("&", "_and_")
-      str = str.gsub(/["“”'‘’]/, "")
-      str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
-      str = str.gsub(/[^[:word:]]/, "")
-      str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
+      str = fix_quote_marks(str)
+      str = fix_ampersands(str)
+      str = fix_non_words(str)
+      str = compact_word_separators(str)
 
-      str.blank? ? EMPTY_PART : str
+      str.blank? ? EMPTY_PART_REPLACEMENT : str
+    end
+
+    def fix_quote_marks(str)
+      str.gsub(/["“”'‘’]/, "")
+    end
+
+    def fix_ampersands(str)
+      str.gsub("&", "#{WORD_SEPARATOR}and#{WORD_SEPARATOR}")
+    end
+
+    def fix_non_words(str)
+      str = str.gsub(/[[:punct:]|[:blank:]]/, WORD_SEPARATOR)
+      str = str.gsub(/[^[:word:]]/, "")
+    end
+
+    def compact_word_separators(str)
+      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}+/, "_")
+      str = str.gsub(/^#{Regexp.quote(WORD_SEPARATOR)}/,  "")
+      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}$/, "")
     end
   end
 
@@ -45,7 +64,8 @@ module Sluggable
 
     ### HOOKS.
 
-    before_save :handle_cleared_slug
+    before_save :conditionally_reset_slug_and_history
+    before_save :handle_clear_slug_checkbox
 
     ### METHODS. (Must be in included block to work with FriendlyId.)
 
@@ -67,7 +87,7 @@ module Sluggable
   #############################################################################
 
   def clear_slug?
-    !!clear_slug
+    persisted? && published? && !!clear_slug
   end
 
   def sluggable_parts
@@ -76,10 +96,29 @@ module Sluggable
 
 private
 
-  def handle_cleared_slug
-    self.slug = nil if persisted? && clear_slug?
+  def handle_clear_slug_checkbox
+    return unless clear_slug?
 
-    valid?
+    self.slug = nil
+
+    valid? # Regenerates slug
+  end
+
+  def conditionally_reset_slug_and_history
+    return unless persisted? && should_reset_slug_and_history?
+
+    reset_slug_history
+    self.slug = nil
+
+    valid? # Regenerates slug
+  end
+
+  def should_reset_slug_and_history?
+    false
+  end
+
+  def reset_slug_history
+    self.slugs.clear
   end
 
   def slug_candidates

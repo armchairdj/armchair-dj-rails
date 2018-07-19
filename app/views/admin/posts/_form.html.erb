@@ -1,6 +1,9 @@
 <%
   html_opts = { class: "admin" }
-  html_opts = js_autosave_attrs(@post).merge(html_opts) unless @post.new_record?
+
+  if @post.persisted? && @post.unpublished?
+    html_opts = js_autosave_attrs(@post).merge(html_opts)
+  end
 %>
 
 <%= simple_form_for([:admin, @post], html: html_opts) do |f| %>

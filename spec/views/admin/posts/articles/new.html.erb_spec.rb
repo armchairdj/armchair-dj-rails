@@ -10,8 +10,6 @@ RSpec.describe "admin/posts/articles/new", type: :view do
 
     @model_class = assign(:model_name, Article)
 
-    @tags = assign(:tags, Tag.all.alpha)
-
     @post = @article = build(:article)
 
     assign(:review, @article)
@@ -23,10 +21,9 @@ RSpec.describe "admin/posts/articles/new", type: :view do
       render
 
       assert_select "form[action=?][method=?]", admin_articles_path, "post" do
-        assert_select("div.error-notification", { count: 0 })
-
-        assert_select("textarea[name=?]", "article[body]")
-        assert_select("textarea[name=?]", "article[summary]")
+        assert_select("div.error-notification",               { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
       end
     end
   end
@@ -42,9 +39,6 @@ RSpec.describe "admin/posts/articles/new", type: :view do
 
         assert_select "form[action=?][method=?]", admin_articles_path, "post" do
           assert_select("div.error-notification", { count: 1 })
-
-          assert_select("textarea[name=?]", "article[body]")
-          assert_select("textarea[name=?]", "article[summary]")
         end
       end
     end

@@ -4,7 +4,11 @@
   <%= content_tag(:fieldset) do %>
     <%= content_tag(:legend, "Publication Details") %>
 
-    <%= f.input(:slug, disabled: true) + f.input(:clear_slug, as: :boolean) %>
+    <%= f.input(:slug, disabled: true) %>
+
+    <% unless f.object.draft? %>
+      <%= f.input(:clear_slug, as: :boolean) %>
+    <% end %>
 
     <%= f.input(:status, as: :string, disabled: true, required: false, input_html: {
       value: f.object.human_status

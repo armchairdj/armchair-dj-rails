@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::Posts::BaseController < Admin::BaseController
-  before_action :require_ajax, only: :autosave
-
-  before_action :prepare_autosave, only: :autosave
-
   # GET /posts
   # GET /posts.json
   def index; end
@@ -52,13 +48,19 @@ class Admin::Posts::BaseController < Admin::BaseController
   end
 
   def autosave
-    @instance.attributes = post_params_for_autosave
+    require_ajax
+    find_instance
+    authorize_instance
 
-    @instance.save!(validate: false)
+    begin
+      @instance.attributes = post_params_for_autosave
 
-    render json: {}, status: :ok
-  rescue => err
-    handle_500(err)
+      @instance.save!(validate: false)
+
+      render json: {}, status: :ok
+    rescue => err
+      handle_500(err)
+    end
   end
 
   # DELETE /posts/1
@@ -73,11 +75,6 @@ class Admin::Posts::BaseController < Admin::BaseController
   end
 
 private
-
-  def prepare_autosave
-    find_instance
-    authorize @instance, :update?
-  end
 
   def find_collection
     @collection = scoped_and_sorted_collection
@@ -118,7 +115,7 @@ private
   end
 
   def post_params_for_update
-    fetch_params(publish_keys.unshift(initial_keys + draft_keys))
+    fetch_params(initial_keys + publish_keys + draft_keys)
   end
 
   def initial_keys
@@ -133,13 +130,15 @@ private
   end
 
   def publish_keys
-    [:publish_on, :clear_slug]
+    @instance.published? ? [:clear_slug] : [:publish_on]
   end
 
   def prepare_form
-    @instance.prepare_links
+    if @instance.persisted?
+      @instance.prepare_links
 
-    @tags = Tag.alpha
+      @tags = Tag.alpha
+    end
   end
 
   def prepare_show
