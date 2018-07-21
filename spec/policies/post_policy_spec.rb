@@ -4,4 +4,5 @@ require "rails_helper"
 
 RSpec.describe PostPolicy do
   it_behaves_like "a_public_policy"
+  it_behaves_like "a_feedable_policy"
 end
