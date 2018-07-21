@@ -21,72 +21,57 @@ RSpec.shared_examples "an_alphabetizable_model" do
         described_class.where(id: instances.map(&:id))
       end
 
-      specify "self#alpha" do
-        expected = ["!", "0 723", "0 alright", "0723", "a", "a", "aa", "z a", "z d c"]
-        actual   = collection.alpha.map(&:alpha)
+      describe "self#alpha" do
+        subject { collection.alpha.map(&:alpha) }
 
-        expect(actual).to eq(expected)
+        let(:expected) { ["!", "0 723", "0 alright", "0723", "a", "a", "aa", "z a", "z d c"] }
+
+        it { is_expected.to eq(expected) }
       end
 
       describe "hooks" do
-        subject { build_minimal_instance }
+        let(:instance) { build_minimal_instance }
 
         describe "before_save" do
-          specify "calls #set_alpha" do
-            allow( subject).to receive(:set_alpha).and_call_original
-            expect(subject).to receive(:set_alpha)
+          it "calls #set_alpha" do
+            allow( instance).to receive(:set_alpha)
+            expect(instance).to receive(:set_alpha)
 
-            subject.save!
+            instance.save
+          end
+        end
+
+        describe "#set_alpha" do
+          subject { instance.alpha }
+
+          before(:each) do
+            allow(instance).to receive(:alpha_parts).and_return(parts)
+
+            instance.send(:set_alpha)
           end
 
-          describe "#set_alpha" do
-            before(:each) do
-              allow( subject).to receive(:calculate_alpha_string).and_call_original
-              expect(subject).to receive(:calculate_alpha_string)
-            end
+          describe "with one part" do
+            let(:parts) { ["Kate Bush"] }
 
-            specify "one part" do
-              allow(subject).to receive(:alpha_parts).and_return(["Kate Bush"])
+            it { is_expected.to eq("kate bush") }
+          end
 
-              subject.send(:set_alpha)
+          describe "with multiple parts" do
+            let(:parts) { ["Kate Bush", "Never for Ever"] }
 
-              expect(subject.alpha).to eq("kate bush")
-            end
+            it { is_expected.to eq("kate bush never for ever") }
+          end
 
-            specify "multiple parts" do
-              allow(subject).to receive(:alpha_parts).and_return([
-                "Kate Bush",
-                "Never for Ever"
-              ])
+          describe "with blank parts" do
+            let(:parts) { ["Kate Bush", nil, "Never for Ever", ""] }
 
-              subject.send(:set_alpha)
+            it { is_expected.to eq("kate bush never for ever") }
+          end
 
-              expect(subject.alpha).to eq("kate bush never for ever")
-            end
+          describe "with nested parts" do
+            let(:parts) { [ ["Kate Bush", "Never for Ever"], "Remastered Edition" ] }
 
-            specify "blank parts" do
-              allow(subject).to receive(:alpha_parts).and_return([
-                "Kate Bush",
-                nil,
-                "Never for Ever",
-                ""
-              ])
-
-              subject.send(:set_alpha)
-
-              expect(subject.alpha).to eq("kate bush never for ever")
-            end
-
-            specify "nested parts" do
-              allow(subject).to receive(:alpha_parts).and_return([
-                ["Kate Bush", "Never for Ever"],
-                "Remastered Edition"
-              ])
-
-              subject.send(:set_alpha)
-
-              expect(subject.alpha).to eq("kate bush never for ever remastered edition")
-            end
+            it { is_expected.to eq("kate bush never for ever remastered edition") }
           end
         end
       end
@@ -95,16 +80,20 @@ RSpec.shared_examples "an_alphabetizable_model" do
         subject { create_minimal_instance }
 
         describe "#ensure_alpha" do
-          specify "invalid" do
-            expect(subject.valid?).to eq(true)
+          describe "with alpha" do
+            it { is_expected.to be_valid }
           end
 
-          specify "valid" do
-            allow(subject).to receive(:alpha).and_return(nil)
+          describe "without alpha" do
+            before(:each) do
+              allow(subject).to receive(:alpha).and_return(nil)
 
-            expect(subject.valid?).to eq(false)
+              subject.valid?
+            end
 
-            is_expected.to have_error(base: :missing_alpha)
+            it { is_expected.to be_invalid }
+
+            it { is_expected.to have_error(base: :missing_alpha) }
           end
         end
       end
@@ -112,8 +101,8 @@ RSpec.shared_examples "an_alphabetizable_model" do
   end
 
   describe "instance" do
-    subject { build_minimal_instance }
+    subject { build_minimal_instance.alpha_parts }
 
-    it { is_expected.to respond_to(:alpha_parts) }
+    it { is_expected.to be_a_kind_of(Array) }
   end
 end
