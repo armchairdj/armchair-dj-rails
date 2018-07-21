@@ -102,7 +102,34 @@ RSpec.describe Work, type: :model do
     end
 
     describe "self#load_descendants" do
-      pending "requires subclass files in development mode only"
+      before(:each) { allow(File).to receive(:basename) }
+
+      context "in test environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("test".inquiry) }
+
+        it "loads" do
+          expect(File).to receive(:basename)
+          described_class.load_descendants
+        end
+      end
+
+      context "in development environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("development".inquiry) }
+
+        it "loads" do
+          expect(File).to receive(:basename)
+          described_class.load_descendants
+        end
+      end
+
+      context "in production environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("production".inquiry) }
+
+        it "does not load" do
+          expect(File).to_not receive(:basename)
+          described_class.load_descendants
+        end
+      end
     end
   end
 
@@ -237,6 +264,26 @@ RSpec.describe Work, type: :model do
             it { is_expected.to have(6).items }
           end
         end
+      end
+    end
+
+    describe "#prepare_for_editing" do
+      let(:instance) { create_minimal_instance }
+
+      subject { instance.prepare_for_editing }
+
+      before(:each) do
+        allow(instance).to receive(:prepare_credits)
+        allow(instance).to receive(:prepare_contributions)
+        allow(instance).to receive(:prepare_milestones)
+
+        expect(instance).to receive(:prepare_credits)
+        expect(instance).to receive(:prepare_contributions)
+        expect(instance).to receive(:prepare_milestones)
+      end
+
+      it "prepares all nested associations" do
+        subject
       end
     end
   end

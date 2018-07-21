@@ -131,6 +131,16 @@ class Work < ApplicationRecord
     end
   end
 
+  # All.
+
+  def prepare_for_editing
+    return unless medium.present?
+
+    prepare_credits
+    prepare_contributions
+    prepare_milestones
+  end
+
   #############################################################################
   # VALIDATIONS.
   #############################################################################

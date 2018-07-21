@@ -91,13 +91,11 @@ private
   end
 
   def prepare_form
+    @work.prepare_for_editing
+
     @media = Work.media
 
     if @work.medium.present?
-      @work.prepare_credits
-      @work.prepare_contributions
-      @work.prepare_milestones
-
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
     end
