@@ -1,3 +1,8 @@
+<%
+  scopes = @relation.scope_map
+  sorts  = @relation.sort_map
+%>
+
 <%= content_tag(:div, class: "tabgroup") do %>
   <% if scopes.length > 1 %>
     <%= content_tag(:ul, class: "tabs") do %>

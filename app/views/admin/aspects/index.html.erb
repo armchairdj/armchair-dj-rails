@@ -8,12 +8,12 @@
 %>
 
 <%= render "admin/shared/index",
-  scopes:  @scopes,
-  sorts:   @sorts,
+  relation: @relation,
+  relation: @relation,
   records: @aspects,
   columns: [
-    { name: "ID",        method: :id          },
-    { name: "Facet",     method: :human_facet },
-    { name: "Name",      method: :name        },
+    { name: "ID",    method: :id          },
+    { name: "Facet", method: :human_facet },
+    { name: "Name",  method: :name        },
   ]
 %>

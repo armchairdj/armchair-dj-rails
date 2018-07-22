@@ -482,7 +482,6 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       specify "keys are short tab names" do
         expect(subject.keys).to match_array([
-          "All",
           "Draft",
           "Scheduled",
           "Published",

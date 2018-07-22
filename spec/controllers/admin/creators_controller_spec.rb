@@ -237,9 +237,7 @@ RSpec.describe Admin::CreatorsController, type: :controller do
       subject { described_class.new.send(:allowed_scopes) }
 
       specify "keys are short tab names" do
-        expect(subject.keys).to match_array([
-          "All",
-        ])
+        expect(subject.keys).to match_array([])
       end
     end
 
@@ -248,8 +246,6 @@ RSpec.describe Admin::CreatorsController, type: :controller do
 
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
-          "Default",
-          "ID",
           "Name",
           "Primary",
           "Individual",

@@ -1,16 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::Posts::BaseController < Admin::BaseController
-  # GET /posts
-  # GET /posts.json
-  def index; end
-
-  # GET /posts/1
-  # GET /posts/1.json
-  def show; end
-
-  # GET /posts/new
-  def new; end
+  before_action :require_ajax, only: :autosave
 
   # POST /posts
   # POST /posts.json
@@ -27,9 +18,6 @@ class Admin::Posts::BaseController < Admin::BaseController
       end
     end
   end
-
-  # GET /posts/1/edit
-  def edit; end
 
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
@@ -48,7 +36,6 @@ class Admin::Posts::BaseController < Admin::BaseController
   end
 
   def autosave
-    require_ajax
     find_instance
     authorize_instance
 
@@ -76,26 +63,16 @@ class Admin::Posts::BaseController < Admin::BaseController
 
 private
 
-  def find_collection
-    @collection = scoped_and_sorted_collection
-
-    instance_variable_set(:"@#{controller_name}", @collection)
-  end
-
   def build_new_instance
-    @post = @instance = model_class.new
-
-    instance_variable_set(:"@#{controller_name.singularize}", @instance)
+    @post = super
   end
 
   def find_instance
-    @post = @instance = scoped_instance(params[:id])
-
-    instance_variable_set(:"@#{controller_name.singularize}", @instance)
+    @post = super
   end
 
   def authorize_instance
-    authorize(@instance, publishing? ? :publish? : nil)
+    authorize(@post, publishing? ? :publish? : nil)
   end
 
   def publishing?
@@ -142,8 +119,8 @@ private
   end
 
   def prepare_show
-    @tags   = @instance.tags.alpha
-    @links  = @instance.links
+    @tags  = @instance.tags.alpha
+    @links = @instance.links
   end
 
   def handle_step
@@ -198,30 +175,22 @@ private
   end
 
   def allowed_scopes
-    super.reverse_merge({
+    {
       "Draft"      => :draft,
       "Scheduled"  => :scheduled,
       "Published"  => :published
-    })
+    }
   end
 
   def allowed_sorts
-    super.merge({
+    {
       "Title"   => alpha_sort,
       "Status"  => [post_status_sort,   alpha_sort],
       "Author"  => [user_username_sort, alpha_sort],
-    })
+    }
   end
 
-  def collection_path
-    polymorphic_path([:admin, model_class])
-  end
-
-  def edit_path
-    edit_polymorphic_path([:admin, @instance])
-  end
-
-  def show_path
-    polymorphic_path([:admin, @instance])
+  def post_status_sort
+    "posts.status ASC"
   end
 end

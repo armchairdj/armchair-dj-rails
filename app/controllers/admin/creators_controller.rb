@@ -1,26 +1,14 @@
 # frozen_string_literal: true
 
 class Admin::CreatorsController < Admin::BaseController
-  # GET /creators
-  # GET /creators.json
-  def index; end
-
-  # GET /creators/1
-  # GET /creators/1.json
-  def show; end
-
-  # GET /creators/new
-  def new; end
-
-  # GET /creators/1/edit
-  def edit; end
-
   # POST /creators
   # POST /creators.json
   def create
+    @creator.attributes = instance_params
+
     respond_to do |format|
       if @creator.save
-        format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.create") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.creators.success.create") }
         format.json { render :show, status: :created, location: admin_creator_url(@creator) }
       else
         format.html { prepare_form; render :new }
@@ -34,7 +22,7 @@ class Admin::CreatorsController < Admin::BaseController
   def update
     respond_to do |format|
       if @creator.update(instance_params)
-        format.html { redirect_to admin_creator_path(@creator), success: I18n.t("admin.flash.creators.success.update") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.creators.success.update") }
         format.json { render :show, status: :ok, location: admin_creator_url(@creator) }
       else
         format.html { prepare_form; render :edit }
@@ -49,28 +37,12 @@ class Admin::CreatorsController < Admin::BaseController
     @creator.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_creators_path, success: I18n.t("admin.flash.creators.success.destroy") }
+      format.html { redirect_to collection_path, success: I18n.t("admin.flash.creators.success.destroy") }
       format.json { head :no_content }
     end
   end
 
 private
-
-  def find_collection
-    @creators = scoped_and_sorted_collection
-  end
-
-  def build_new_instance
-    @creator = Creator.new(instance_params)
-  end
-
-  def find_instance
-    @creator = scoped_instance(params[:id])
-  end
-
-  def authorize_instance
-    authorize @creator
-  end
 
   def instance_params
     params.fetch(:creator, {}).permit(
@@ -123,10 +95,18 @@ private
   end
 
   def allowed_sorts
-    super.merge({
+    {
       "Name"       => name_sort,
       "Primary"    => [creator_primary_sort,    name_sort],
       "Individual" => [creator_individual_sort, name_sort],
-    })
+    }
+  end
+
+  def creator_individual_sort
+    "creators.individual ASC"
+  end
+
+  def creator_primary_sort
+    "creators.primary ASC"
   end
 end

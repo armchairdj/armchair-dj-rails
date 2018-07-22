@@ -15,6 +15,7 @@ module ArmchairDjRails
 
     config.time_zone = "Pacific Time (US & Canada)"
 
+    config.autoload_paths += %W(#{config.root}/lib/utilities)
     config.autoload_paths += %W(#{config.root}/app/models/posts)
     config.autoload_paths += %W(#{config.root}/app/models/works)
 

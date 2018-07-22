@@ -8,8 +8,7 @@
 %>
 
 <%= render "admin/shared/index",
-  scopes:  @scopes,
-  sorts:   @sorts,
+  relation: @relation,
   records: @reviews,
   columns: [
     { name: "Status", method: -> (x) { post_status_icon(x) }, text: status_icon_header, class: "icon" },

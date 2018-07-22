@@ -1,22 +1,13 @@
 class Admin::RolesController < Admin::BaseController
 
-  # GET /admin/roles
-  # GET /admin/roles.json
-  def index; end
-
-  # GET /admin/roles/1
-  # GET /admin/roles/1.json
-  def show; end
-
-  # GET /admin/roles/new
-  def new; end
-
   # POST /admin/roles
   # POST /admin/roles.json
   def create
+    @role.attributes = instance_params
+
     respond_to do |format|
       if @role.save
-        format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.create") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.roles.success.create") }
         format.json { render :show, status: :created, location: admin_role_url(@role) }
       else
         format.html { prepare_form; render :new }
@@ -25,15 +16,12 @@ class Admin::RolesController < Admin::BaseController
     end
   end
 
-  # GET /admin/roles/1/edit
-  def edit; end
-
   # PATCH/PUT /admin/roles/1
   # PATCH/PUT /admin/roles/1.json
   def update
     respond_to do |format|
       if @role.update(instance_params)
-        format.html { redirect_to admin_role_path(@role), success: I18n.t("admin.flash.roles.success.update") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.roles.success.update") }
         format.json { render :show, status: :ok, location: admin_role_url(@role) }
       else
         format.html { prepare_form; render :edit }
@@ -48,28 +36,12 @@ class Admin::RolesController < Admin::BaseController
     @role.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_roles_path, success: I18n.t("admin.flash.roles.success.destroy") }
+      format.html { redirect_to collection_path, success: I18n.t("admin.flash.roles.success.destroy") }
       format.json { head :no_content }
     end
   end
 
 private
-
-  def find_collection
-    @roles = scoped_and_sorted_collection
-  end
-
-  def build_new_instance
-    @role = Role.new(instance_params)
-  end
-
-  def find_instance
-    @role = scoped_instance(params[:id])
-  end
-
-  def authorize_instance
-    authorize @role
-  end
 
   def instance_params
     params.fetch(:role, {}).permit(
@@ -83,9 +55,13 @@ private
   end
 
   def allowed_sorts
-    super.merge({
+    {
       "Name"   => [name_sort, role_medium_sort],
       "Medium" => [role_medium_sort, name_sort],
-    })
+    }
+  end
+
+  def role_medium_sort
+    "LOWER(roles.medium) ASC"
   end
 end

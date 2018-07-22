@@ -8,8 +8,8 @@
 %>
 
 <%= render "admin/shared/index",
-  scopes:  @scopes,
-  sorts:   @sorts,
+  relation: @relation,
+  relation: @relation,
   records: @playlists,
   columns: [
     { name: "ID",      method: :id             },

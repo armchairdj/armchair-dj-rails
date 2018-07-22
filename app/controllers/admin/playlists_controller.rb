@@ -1,23 +1,14 @@
 class Admin::PlaylistsController < Admin::BaseController
   before_action :require_ajax, only: :reorder_playlistings
 
-  # GET /admin/playlists
-  # GET /admin/playlists.json
-  def index; end
-
-  # GET /admin/playlists/1
-  # GET /admin/playlists/1.json
-  def show; end
-
-  # GET /admin/playlists/new
-  def new; end
-
   # POST /admin/playlists
   # POST /admin/playlists.json
   def create
+    @playlist.attributes = instance_params
+
     respond_to do |format|
       if @playlist.save
-        format.html { redirect_to admin_playlist_path(@playlist), success: I18n.t("admin.flash.playlists.success.create") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.playlists.success.create") }
         format.json { render :show, status: :created, location: admin_playlist_url(@playlist) }
       else
         format.html { prepare_form; render :new }
@@ -26,15 +17,12 @@ class Admin::PlaylistsController < Admin::BaseController
     end
   end
 
-  # GET /admin/playlists/1/edit
-  def edit; end
-
   # PATCH/PUT /admin/playlists/1
   # PATCH/PUT /admin/playlists/1.json
   def update
     respond_to do |format|
       if @playlist.update(instance_params)
-        format.html { redirect_to admin_playlist_path(@playlist), success: I18n.t("admin.flash.playlists.success.update") }
+        format.html { redirect_to show_path, success: I18n.t("admin.flash.playlists.success.update") }
         format.json { render :show, status: :ok, location: admin_playlist_url(@playlist) }
       else
         format.html { prepare_form; render :edit }
@@ -49,7 +37,7 @@ class Admin::PlaylistsController < Admin::BaseController
     @playlist.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_playlists_path, success: I18n.t("admin.flash.playlists.success.destroy") }
+      format.html { redirect_to collection_path, success: I18n.t("admin.flash.playlists.success.destroy") }
       format.json { head :no_content }
     end
   end
@@ -65,22 +53,6 @@ class Admin::PlaylistsController < Admin::BaseController
   end
 
 private
-
-  def find_collection
-    @playlists = scoped_and_sorted_collection
-  end
-
-  def build_new_instance
-    @playlist = Playlist.new(instance_params)
-  end
-
-  def find_instance
-    @playlist = scoped_instance(params[:id])
-  end
-
-  def authorize_instance
-    authorize @playlist
-  end
 
   def instance_params
     fetched = params.fetch(:playlist, {}).permit(
@@ -105,9 +77,9 @@ private
   end
 
   def allowed_sorts
-    super.merge({
+    {
       "Title"   => alpha_sort,
       "Author"  => [user_username_sort, alpha_sort],
-    })
+    }
   end
 end

@@ -24,8 +24,6 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
       specify "keys are short sort names" do
         expect(subject.keys).to match_array([
-          "Default",
-          "ID",
           "Title",
           "Author",
           "Status",
