@@ -61,7 +61,7 @@ class Admin::WorksController < Admin::BaseController
 private
 
   def build_new_instance
-    @work = Work.new(medium: params[:work].try(:[], :medium))
+    @instance = @work = Work.new(medium: params[:work].try(:[], :medium))
   end
 
   def handle_medium
