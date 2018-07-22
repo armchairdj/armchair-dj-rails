@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AspectScoper < PostScoper
+class AspectScoper < Scoper
 
 private
 

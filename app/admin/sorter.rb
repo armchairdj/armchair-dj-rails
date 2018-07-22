@@ -21,7 +21,7 @@ class Sorter < Dicer
   end
 
   def resolve
-    ensure_valid
+    validate
 
     sql = [allowed[@current_sort]].flatten
     sql = sql.map(&:squish).join(JOINER)
@@ -51,7 +51,7 @@ class Sorter < Dicer
 
 private
 
-  def ensure_valid
+  def validate
     return if allowed.keys.include?(@current_sort)
 
     raise Pundit::NotAuthorizedError, "Unknown sort for #{model_class}: #{@current_sort}."

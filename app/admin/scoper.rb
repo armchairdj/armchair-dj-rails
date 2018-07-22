@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scoper < Dicer
-  def initialize(current_scope, current_sort, current_dir)
+  def initialize(current_scope = nil, current_sort = nil, current_dir = nil)
     current_scope = allowed.keys.first if current_scope.blank?
     current_sort  = nil                if current_sort.blank?
     current_dir   = nil                if current_dir.blank?
@@ -10,7 +10,7 @@ class Scoper < Dicer
   end
 
   def resolve
-    ensure_valid
+    validate
 
     allowed[@current_scope]
   end
@@ -31,7 +31,7 @@ class Scoper < Dicer
 
 private
 
-  def ensure_valid
+  def validate
     return if allowed.keys.include?(@current_scope)
 
     raise Pundit::NotAuthorizedError, "Unknown scope for #{model_class}: #{@current_scope}."
