@@ -13,8 +13,4 @@ private
 
     @works = Work.grouped_by_medium
   end
-
-  def allowed_sorts
-    super.merge({ "Medium" => [work_medium_sort, alpha_sort] })
-  end
 end

@@ -178,25 +178,4 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       end
     end
   end
-
-  describe "helpers" do
-    describe "#allowed_scopes" do
-      subject { described_class.new.send(:allowed_scopes) }
-
-      specify "keys are short tab names" do
-        expect(subject.keys).to match_array([])
-      end
-    end
-
-    describe "#allowed_sorts" do
-      subject { described_class.new.send(:allowed_sorts) }
-
-      specify "keys are short sort names" do
-        expect(subject.keys).to match_array([
-          "Title",
-          "Author",
-        ])
-      end
-    end
-  end
 end

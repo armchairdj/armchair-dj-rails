@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::BaseController < ApplicationController
-  include SortClauses
   include Paginatable
 
   before_action :authorize_model, only: [
@@ -65,23 +64,13 @@ class Admin::BaseController < ApplicationController
 private
 
   def build_relation
-    @relation = ScopedAndSortedRelation.new(
+    @relation = DicedRelation.new(
       scoped_collection,
-      scopes: allowed_scopes,
-      sorts:  allowed_sorts,
       scope:  params[:scope],
       sort:   params[:sort ],
       dir:    params[:dir  ],
       page:   params[:page ]
     )
-  end
-
-  def allowed_scopes
-    {}
-  end
-
-  def allowed_sorts
-    {}
   end
 
   def find_collection

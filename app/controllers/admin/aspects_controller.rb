@@ -53,15 +53,4 @@ private
   def prepare_form
     @facets = Aspect.human_facets
   end
-
-  def allowed_sorts
-    {
-      "Facet" => [aspect_facet_sort, name_sort],
-      "Name"  => [name_sort, aspect_facet_sort],
-    }
-  end
-
-  def aspect_facet_sort
-    Aspect.alpha_order_clause_for(:facet)
-  end
 end

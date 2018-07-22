@@ -93,20 +93,4 @@ private
     @available_members    = Creator.available_members
     @available_groups     = Creator.available_groups
   end
-
-  def allowed_sorts
-    {
-      "Name"       => name_sort,
-      "Primary"    => [creator_primary_sort,    name_sort],
-      "Individual" => [creator_individual_sort, name_sort],
-    }
-  end
-
-  def creator_individual_sort
-    "creators.individual ASC"
-  end
-
-  def creator_primary_sort
-    "creators.primary ASC"
-  end
 end

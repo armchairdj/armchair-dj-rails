@@ -79,31 +79,4 @@ private
   def prepare_show
     @links = @user.links
   end
-
-  def allowed_scopes
-    {
-      "Member" => :member,
-      "Writer" => :writer,
-      "Editor" => :editor,
-      "Admin"  => :admin,
-      "Root"   => :root
-    }
-  end
-
-  def allowed_sorts
-    {
-      "Name"     => alpha_sort,
-      "Username" => user_username_sort,
-      "Email"    => user_email_sort,
-      "Role"     => [user_role_sort, alpha_sort],
-    }
-  end
-
-  def user_email_sort
-    "LOWER(users.email) ASC"
-  end
-
-  def user_role_sort
-    "users.role ASC"
-  end
 end

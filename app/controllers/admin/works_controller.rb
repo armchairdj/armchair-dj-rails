@@ -116,16 +116,4 @@ private
       ],
     ])
   end
-
-  def allowed_sorts
-    {
-      "Title"   => title_sort,
-      "Makers" =>  [work_makers_sort, title_sort],
-      "Medium"  => [work_medium_sort, title_sort],
-    }
-  end
-
-  def work_makers_sort
-    "LOWER(works.display_makers) ASC"
-  end
 end

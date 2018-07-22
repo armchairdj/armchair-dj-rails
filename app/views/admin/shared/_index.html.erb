@@ -1,6 +1,6 @@
 <%
-  scopes = @relation.scope_map
-  sorts  = @relation.sort_map
+  scopes = @relation.scoper.map
+  sorts  = @relation.sorter.map
 %>
 
 <%= content_tag(:div, class: "tabgroup") do %>

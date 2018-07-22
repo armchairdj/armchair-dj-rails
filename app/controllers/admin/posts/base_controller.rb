@@ -173,24 +173,4 @@ private
     # admin.flash.posts.error.unschedule
     I18n.t("admin.flash.posts.error.#{@flash_key}")
   end
-
-  def allowed_scopes
-    {
-      "Draft"      => :draft,
-      "Scheduled"  => :scheduled,
-      "Published"  => :published
-    }
-  end
-
-  def allowed_sorts
-    {
-      "Title"   => alpha_sort,
-      "Status"  => [post_status_sort,   alpha_sort],
-      "Author"  => [user_username_sort, alpha_sort],
-    }
-  end
-
-  def post_status_sort
-    "posts.status ASC"
-  end
 end

@@ -475,18 +475,4 @@ RSpec.shared_examples "an_admin_post_controller" do
     pending "cannot publish"
     pending "cannot access others' posts"
   end
-
-  describe "helpers" do
-    describe "#allowed_scopes" do
-      subject { described_class.new.send(:allowed_scopes) }
-
-      specify "keys are short tab names" do
-        expect(subject.keys).to match_array([
-          "Draft",
-          "Scheduled",
-          "Published",
-        ])
-      end
-    end
-  end
 end

@@ -48,8 +48,4 @@ private
       :name,
     )
   end
-
-  def allowed_sorts
-    { "Name" => [name_sort] }
-  end
 end

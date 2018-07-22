@@ -53,15 +53,4 @@ private
   def prepare_form
     @media = Work.media
   end
-
-  def allowed_sorts
-    {
-      "Name"   => [name_sort, role_medium_sort],
-      "Medium" => [role_medium_sort, name_sort],
-    }
-  end
-
-  def role_medium_sort
-    "LOWER(roles.medium) ASC"
-  end
 end

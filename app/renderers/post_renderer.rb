@@ -1,4 +1,6 @@
-class PostRender < Redcarpet::Render::HTML
+# frozen_string_literal: true
+
+class PostRenderer < Redcarpet::Render::HTML
   include ActionView::Helpers::UrlHelper
 
   INTERNAL_REGEXP = /^internal:/.freeze

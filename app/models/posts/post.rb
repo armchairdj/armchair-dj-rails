@@ -254,7 +254,7 @@ private
   #############################################################################
 
   def renderer
-    @renderer ||= Redcarpet::Markdown.new(PostRender)
+    @renderer ||= Redcarpet::Markdown.new(PostRenderer)
   end
 
   #############################################################################

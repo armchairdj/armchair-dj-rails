@@ -75,11 +75,4 @@ private
 
     @works = Work.grouped_by_medium
   end
-
-  def allowed_sorts
-    {
-      "Title"   => alpha_sort,
-      "Author"  => [user_username_sort, alpha_sort],
-    }
-  end
 end

@@ -15,19 +15,4 @@ RSpec.describe Admin::Posts::ReviewsController, type: :controller do
 
     it_behaves_like "a_paginatable_controller"
   end
-
-  describe "helpers" do
-    describe "#allowed_sorts" do
-      subject { described_class.new.send(:allowed_sorts) }
-
-      specify "keys are short sort names" do
-        expect(subject.keys).to match_array([
-          "Title",
-          "Author",
-          "Status",
-          "Medium",
-        ])
-      end
-    end
-  end
 end

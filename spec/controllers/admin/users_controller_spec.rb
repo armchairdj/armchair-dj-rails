@@ -108,33 +108,4 @@ RSpec.describe Admin::UsersController, type: :controller do
       it { is_expected.to have_flash(:success, "admin.flash.users.success.destroy") }
     end
   end
-
-  describe "helpers" do
-    describe "#allowed_scopes" do
-      subject { described_class.new.send(:allowed_scopes) }
-
-      specify "keys are short tab names" do
-        expect(subject.keys).to match_array([
-          "Member",
-          "Writer",
-          "Editor",
-          "Admin",
-          "Root"
-        ])
-      end
-    end
-
-    describe "#allowed_sorts" do
-      subject { described_class.new.send(:allowed_sorts) }
-
-      specify "keys are short sort names" do
-        expect(subject.keys).to match_array([
-          "Name",
-          "Username",
-          "Email",
-          "Role",
-        ])
-      end
-    end
-  end
 end
