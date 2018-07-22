@@ -6,8 +6,6 @@ RSpec.describe Admin::TagsController, type: :controller do
   let(:tag) { create(:minimal_tag) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 

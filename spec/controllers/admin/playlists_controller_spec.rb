@@ -6,8 +6,6 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
   let(:instance) { create(:minimal_playlist) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 

@@ -6,8 +6,6 @@ RSpec.describe Admin::AspectsController, type: :controller do
   let(:aspect) { create(:minimal_aspect) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 

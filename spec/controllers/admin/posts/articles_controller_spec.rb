@@ -4,8 +4,6 @@ require "rails_helper"
 
 RSpec.describe Admin::Posts::ArticlesController, type: :controller do
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "an_admin_post_controller" do
       let(:bad_update_params) { { "body" => "", "title" => "" } }
 

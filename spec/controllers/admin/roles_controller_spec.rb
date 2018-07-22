@@ -7,8 +7,6 @@ RSpec.describe Admin::RolesController, type: :controller do
   let(        :role) { create(:minimal_role, medium: media.first.last) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 
