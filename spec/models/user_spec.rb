@@ -45,13 +45,24 @@
 
 require "rails_helper"
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
 
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
+    end
+
     it_behaves_like "a_linkable_model"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe "class" do
@@ -59,52 +70,106 @@ RSpec.describe User, type: :model do
   end
 
   describe "scope-related" do
-    let(      :jenny) { create(:writer,  first_name: "Jenny",   last_name: "Foster",  username: "jenny"  ) }
-    let(      :brian) { create(:root,    first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
-    let(    :charlie) { create(:admin,   first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-    let(     :gruber) { create(:editor,  first_name: "John",    last_name: "Gruber",  username: "gruber" ) }
-    let(        :ids) { [jenny, charlie, brian, gruber].map(&:id) }
-    let( :collection) { described_class.where(id: ids) }
-    let(:eager_loads) { [:links, :posts, :playlists, :works, :makers] }
+    describe "for public site" do
+      let(   :saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
+      let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }
+      let(  :celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
+      let(:charlie) { create(:admin,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
+      let(  :brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
 
-    before(:each) do
-      create(:minimal_article, :published, author: jenny  )
-      create(:minimal_article, :published, author: brian  )
-      create(:minimal_article, :scheduled, author: charlie)
-      create(:minimal_article, :draft,     author: gruber )
-    end
+      let(       :ids) { [saru, monique, celia, charlie, brian].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
-    describe "self#eager" do
-      subject { collection.eager }
-
-      it { is_expected.to match_array(collection) }
-
-      it { is_expected.to eager_load(eager_loads) }
-    end
-
-    describe "self#for_admin" do
-      subject { collection.for_admin }
-
-      it { is_expected.to match_array(collection) }
-
-      it { is_expected.to eager_load(eager_loads) }
-    end
-
-    describe "self#for_site" do
-      subject { collection.for_site }
-
-      it "includes only published writers, sorted" do
-        is_expected.to eq([brian, jenny])
+      before(:each) do
+        create(:minimal_article, :draft,     author: monique)
+        create(:minimal_article, :scheduled, author: celia  )
+        create(:minimal_article, :published, author: charlie)
+        create(:minimal_article, :published, author: brian  )
       end
 
-      it { is_expected.to eager_load(eager_loads) }
+      describe "self#for_public" do
+        subject { collection.for_public }
+
+        it "includes only published writers" do
+          is_expected.to contain_exactly(charlie, brian)
+        end
+      end
+
+      describe "#published?" do
+        specify { expect(   saru.published?).to eq(false) }
+        specify { expect(monique.published?).to eq(false) }
+        specify { expect(  celia.published?).to eq(false) }
+        specify { expect(charlie.published?).to eq(true ) }
+        specify { expect(  brian.published?).to eq(true ) }
+      end
     end
 
-    describe "#published?" do
-      specify { expect(  jenny.published?).to eq(true ) }
-      specify { expect(  brian.published?).to eq(true ) }
-      specify { expect(charlie.published?).to eq(false) }
-      specify { expect( gruber.published?).to eq(false) }
+    describe "for cms access to other users" do
+      let(:no_user) { nil }
+      let( :member) { create(:member) }
+      let( :writer) { create(:writer) }
+      let( :editor) { create(:editor) }
+      let(:admin_1) { create(:admin ) }
+      let(:admin_2) { create(:admin ) }
+      let( :root_1) { create(:root  ) }
+      let( :root_2) { create(:root  ) }
+
+      let!(       :ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
+
+      describe "self#for_cms_user" do
+        subject { collection.for_cms_user(instance) }
+
+        context "with nil user" do
+          let(:instance) { no_user }
+
+          it "includes nobody" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with member" do
+          let(:instance) { member }
+
+          it "includes nobody" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with writer" do
+          let(:instance) { writer }
+
+          it "includes nobody" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with editor" do
+          let(:instance) { editor }
+
+          it "includes nobody" do
+            is_expected.to eq(described_class.none)
+          end
+        end
+
+        context "with admin" do
+          let(:instance) { admin_1 }
+          let(:expected) { [member, writer, editor, admin_2] }
+
+          it "includes all members, writers & editors, plus admins other than self" do
+            is_expected.to contain_exactly(*expected)
+          end
+        end
+
+        context "with root" do
+          let(:instance) { root_1 }
+          let(:expected) { [member, writer, editor, admin_1, admin_2, root_1, root_2] }
+
+          it "includes everyone including self" do
+            is_expected.to contain_exactly(*expected)
+          end
+        end
+      end
     end
   end
 

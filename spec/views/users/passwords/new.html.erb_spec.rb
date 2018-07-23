@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "users/passwords/new", type: :view do
+RSpec.describe "users/passwords/new" do
   before(:each) do
     @model_class = assign(:model_name, User)
     @user        = assign(:user, create(:member))

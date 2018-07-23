@@ -4,10 +4,6 @@ require "rails_helper"
 RSpec.describe <%= class_name %>, <%= type_metatag(:model) %> do
   pending "add some examples to (or delete) #{__FILE__}"
 
-  describe "constants" do
-    # Nothing so far.
-  end
-
   describe "concerns" do
     # Nothing so far.
   end

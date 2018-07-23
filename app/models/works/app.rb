@@ -7,7 +7,7 @@
 #  display_makers :string
 #  medium         :string
 #  subtitle       :string
-#  title          :string           not null
+#  title          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
@@ -18,7 +18,5 @@
 #
 
 class App < Medium
-  def available_facets
-    [:tech_company, :tech_platform]
-  end
+  self.available_facets = [:tech_company, :tech_platform]
 end

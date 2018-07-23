@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe LayoutHelper, type: :helper do
+RSpec.describe LayoutHelper do
   describe "#body_classes" do
     it "works on non-admin pages" do
       assign(:admin, false)

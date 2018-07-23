@@ -17,37 +17,30 @@
 
 require "rails_helper"
 
-RSpec.describe Role, type: :model do
+RSpec.describe Role do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:contributions, :works] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
+
+  describe "class" do
+    # Nothing so far.
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let!(    :first) { create(:minimal_role, name: "First" ) }
-      let!(   :middle) { create(:minimal_role, name: "Middle") }
-      let!(     :last) { create(:minimal_role, name: "Last"  ) }
-      let(       :ids) { [first, middle, last].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
-
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to eager_load(:contributions, :works) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        specify "includes all, unsorted" do
-          is_expected.to match_array([first, middle, last])
-        end
-
-        it { is_expected.to eager_load(:contributions, :works) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do

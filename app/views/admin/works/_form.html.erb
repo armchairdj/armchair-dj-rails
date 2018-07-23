@@ -29,33 +29,35 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "shared/forms/has_many_fieldset", locals: {
+    <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :credits,
       required:    true,
-      headline:    "Creators",
-    } %>
+      headline:    "Creators"
+    %>
 
-    <%= render partial: "shared/forms/has_many_fieldset", locals: {
+    <%= render "shared/forms/has_many_fieldset",
       f:           f,
-      association: :milestones,
-    } %>
+      association: :milestones
+    %>
 
     <%= render "fieldset_aspects", f: f %>
 
-    <%= render partial: "shared/forms/has_many_fieldset", locals: {
+    <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :contributions,
-      headline:    "Contributors",
-    } %>
+      headline:    "Contributors"
+    %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>
     <%= admin_submit_button(f) %>
 
-    <%= f.button(:button, "Update Medium", type: :submit,
-      name: "step", value: "select_medium", class: "secondary",
-      "data-target": "autosubmit.button"
-    ) if @work.new_record? %>
+    <% if @work.new_record? %>
+      <%= f.button(:button, "Update Medium", type: :submit,
+        name: "step", value: "select_medium", class: "secondary",
+        "data-target": "autosubmit.button"
+      ) %>
+    <% end %>
   <% end %>
 <% end %>

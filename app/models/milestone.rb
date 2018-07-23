@@ -37,9 +37,9 @@ class Milestone < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :sorted,    -> { order(:year) }
-  scope :eager,     -> { includes(:work) }
-  scope :for_admin, -> { eager }
+  scope :sorted,   -> { order(:year) }
+  scope :for_list, -> { sorted }
+  scope :for_show, -> { sorted.includes(:work) }
 
   #############################################################################
   # ASSOCIATIONS.

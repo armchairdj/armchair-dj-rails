@@ -2,16 +2,20 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/posts/articles/edit", type: :view do
+RSpec.describe "admin/posts/articles/edit" do
   login_root
 
   before(:each) do
     3.times { create(:minimal_tag) }
 
     @model_class = assign(:model_name, Article)
-    @creators    = assign(:creators,   Creator.all.alpha)
-    @tags        = assign(:tags,       Tag.for_admin.alpha)
-    @article     = assign(:article,    create(:minimal_article))
+
+    @tags = assign(:tags, Tag.all.alpha)
+
+    @post = @article = create(:minimal_article)
+
+    assign(:review, @article)
+    assign(:post,   @article)
   end
 
   context "pristine" do

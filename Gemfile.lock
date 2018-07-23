@@ -72,6 +72,8 @@ GEM
     annotate (2.7.4)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
+    archive-zip (0.11.0)
+      io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.0)
     awesome_print (1.8.0)
@@ -103,6 +105,9 @@ GEM
       xpath (~> 3.1)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+    chromedriver-helper (1.2.0)
+      archive-zip (~> 0.10)
+      nokogiri (~> 1.8)
     climate_control (0.2.0)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
@@ -152,6 +157,7 @@ GEM
     inline_svg (1.3.1)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
+    io-like (0.3.0)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -390,6 +396,7 @@ DEPENDENCIES
   bullet
   byebug
   capybara
+  chromedriver-helper
   climate_control
   database_cleaner
   db-query-matchers

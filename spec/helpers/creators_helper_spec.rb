@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CreatorsHelper, type: :helper do
+RSpec.describe CreatorsHelper do
   describe "#link_to_creator" do
     let(:instance) { create(:minimal_creator, name: "Kate Bush") }
 

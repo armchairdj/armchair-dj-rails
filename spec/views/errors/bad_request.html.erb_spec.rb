@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "errors/bad_request", type: :view do
+RSpec.describe "errors/bad_request" do
   it "renders static page with no instance variables" do
     render
   end

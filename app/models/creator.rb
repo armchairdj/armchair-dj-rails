@@ -64,15 +64,14 @@ class Creator < ApplicationRecord
   scope :available_real_names, -> { alpha.primary            }
   scope :available_pseudonyms, -> { alpha.secondary.orphaned }
 
-  scope :eager, -> { includes(
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(
     :pseudonyms, :real_names, :members, :groups,
     :credits, :contributed_roles,
     :works, :contributed_works,
     :reviews, :contributed_reviews,
     :mixtapes, :contributed_mixtapes,
   ) }
-
-  scope :for_admin, -> { eager }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -305,6 +304,10 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [name]
+  end
+
   def all_works
     works.union(contributed_works).alpha
   end
@@ -318,15 +321,11 @@ class Creator < ApplicationRecord
   end
 
   def display_roles
-    cred =       credits.includes(:work)
-    cont = contributions.includes(:work)
+    cred =       credits.includes(:work       )
+    cont = contributions.includes(:work, :role)
 
-    all = (cred.to_a + cont.to_a).group_by(&:display_type)
+    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
 
-    all.transform_values! { |v| v.map(&:name).uniq.sort }
-  end
-
-  def alpha_parts
-    [name]
+    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
   end
 end

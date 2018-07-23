@@ -1,3 +1,5 @@
+<% return unless f.object.persisted? %>
+
 <%= f.input :body, input_html: {
   class: "x-large",
   "data-controller": "editor"

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::RolesController, type: :routing do
+RSpec.describe Admin::RolesController do
   describe "routes to" do
     it "#index" do
       expect(get: "/admin/roles").to route_to("admin/roles#index")

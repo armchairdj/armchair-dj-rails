@@ -104,7 +104,7 @@ FactoryBot.define do
 
     trait :with_specific_children do
       after(:create) do |work, evaluator|
-        [evaluator.children].flatten.each do |child|
+        [*evaluator.children].each do |child|
           child.update!(parent: work)
         end
 

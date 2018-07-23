@@ -8,7 +8,7 @@
 #  display_makers :string
 #  medium         :string
 #  subtitle       :string
-#  title          :string           not null
+#  title          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
@@ -70,12 +70,11 @@ class Work < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager, -> { includes(
+  scope :for_list, -> { }
+  scope :for_show, -> { includes(
     :aspects, :milestones, :playlists, :reviews, :mixtapes,
     :credits, :makers, :contributions, :contributors
-  ).references(:makers) }
-
-  scope :for_admin, -> { eager }
+  ) }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -130,6 +129,16 @@ class Work < ApplicationRecord
     if milestones.first.new_record?
       milestones.first.activity = :released
     end
+  end
+
+  # All.
+
+  def prepare_for_editing
+    return unless medium.present?
+
+    prepare_credits
+    prepare_contributions
+    prepare_milestones
   end
 
   #############################################################################

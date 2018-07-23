@@ -8,12 +8,12 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "shared/forms/has_many_fieldset", locals: {
+    <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :playlistings,
       required:    true,
-      headline:    "Tracks",
-    } %>
+      headline:    "Tracks"
+    %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

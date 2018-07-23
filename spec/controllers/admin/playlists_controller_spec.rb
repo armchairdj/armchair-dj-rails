@@ -2,12 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::PlaylistsController, type: :controller do
+RSpec.describe Admin::PlaylistsController do
   let(:instance) { create(:minimal_playlist) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 
@@ -19,22 +17,26 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     end
 
     describe "GET #show" do
-      it "renders" do
+      subject do
         get :show, params: { id: instance.to_param }
-
-        is_expected.to successfully_render("admin/playlists/show")
-
-        is_expected.to assign(instance, :playlist)
       end
+
+      it { is_expected.to successfully_render("admin/playlists/show") }
+
+      it { is_expected.to assign(instance, :playlist) }
     end
 
     describe "GET #new" do
-      it "renders" do
-        get :new
+      let(:operation) { get :new }
 
-        is_expected.to successfully_render("admin/playlists/new")
+      subject { operation }
 
-        expect(assigns(:playlist)).to be_a_new(Playlist)
+      it { is_expected.to successfully_render("admin/playlists/new") }
+
+      describe "instance" do
+        subject { operation; assigns(:playlist) }
+
+        it { is_expected.to be_a_new(Playlist) }
       end
     end
 
@@ -44,113 +46,93 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       let(:bad_params) { attributes_for(:minimal_playlist ).except(:author_id, :title) }
 
       context "with min valid params" do
-        it "creates a new Playlist" do
-          expect {
-            post :create, params: { playlist: min_params }
-          }.to change { Playlist.count }.by(1)
-        end
+        subject { post :create, params: { playlist: min_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { playlist: min_params }
+        it { expect { subject }.to change { Playlist.count }.by(1) }
 
-          is_expected.to assign(Playlist.last, :playlist).with_attributes(min_params).and_be_valid
-        end
+        it { is_expected.to assign(Playlist.last, :playlist).with_attributes(min_params).and_be_valid }
 
-        it "playlist belongs to current_user" do
-          post :create, params: { playlist: min_params }
+        it { is_expected.to send_user_to(admin_playlist_path(assigns(:playlist))) }
 
-          expect(Playlist.last.author).to eq(controller.current_user)
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        it "redirects to index" do
-          post :create, params: { playlist: min_params }
-
-          is_expected.to send_user_to(
-            admin_playlist_path(assigns(:playlist))
-          ).with_flash(:success, "admin.flash.playlists.success.create")
-        end
+        it { subject; expect(Playlist.last.author).to eq(controller.current_user) }
       end
 
       context "with max valid params" do
-        it "creates a new Playlist" do
-          expect {
-            post :create, params: { playlist: max_params }
-          }.to change(Playlist, :count).by(1)
-        end
+        subject { post :create, params: { playlist: max_params } }
 
-        it "creates the right attributes" do
-          post :create, params: { playlist: max_params }
+        it { expect { subject }.to change { Playlist.count }.by(1) }
 
-          is_expected.to assign(Playlist.last, :playlist).with_attributes(max_params).and_be_valid
-        end
+        it { is_expected.to assign(Playlist.last, :playlist).with_attributes(max_params).and_be_valid }
 
-        it "playlist belongs to current_user" do
-          post :create, params: { playlist: max_params }
+        it { is_expected.to send_user_to(admin_playlist_path(assigns(:playlist))) }
 
-          expect(Playlist.last.author).to eq(controller.current_user)
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.playlists.success.create") }
 
-        it "redirects to index" do
-          post :create, params: { playlist: max_params }
-
-          is_expected.to send_user_to(
-            admin_playlist_path(assigns(:playlist))
-          ).with_flash(:success, "admin.flash.playlists.success.create")
-        end
+        it { subject; expect(Playlist.last.author).to eq(controller.current_user) }
       end
 
       context "with invalid params" do
-        it "renders new" do
-          post :create, params: { playlist: bad_params }
+        let(:operation) { post :create, params: { playlist: bad_params } }
 
-          is_expected.to successfully_render("admin/playlists/new")
+        subject { operation }
 
-          expect(assigns(:playlist)).to have_coerced_attributes(bad_params)
-          expect(assigns(:playlist)).to be_invalid
+        it { is_expected.to successfully_render("admin/playlists/new") }
 
-          expect(assigns(:works)).to be_a_kind_of(Array)
+        describe "instance" do
+          subject { operation; assigns(:playlist) }
+
+          it { is_expected.to have_coerced_attributes(bad_params) }
+          it { is_expected.to be_invalid }
+        end
+
+        describe "assigns" do
+          subject { operation; assigns(:works) }
+
+          it { is_expected.to be_a_kind_of(Array) }
         end
       end
     end
 
     describe "GET #edit" do
-      it "renders" do
-        get :edit, params: { id: instance.to_param }
+      subject { get :edit, params: { id: instance.to_param } }
 
-        is_expected.to successfully_render("admin/playlists/edit")
-        is_expected.to assign(instance, :playlist)
-      end
+      it { is_expected.to successfully_render("admin/playlists/edit") }
+      it { is_expected.to assign(instance, :playlist) }
     end
 
     describe "PUT #update" do
-      let(:update_params) { { title: "New Title" } }
-      let(:bad_update_params) { { title: ""         } }
+      let(    :update_params) { { title: "New Title" } }
+      let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do
-        it "updates the requested playlist" do
+        subject do
           put :update, params: { id: instance.to_param, playlist: update_params }
-
-          is_expected.to assign(instance, :playlist).with_attributes(update_params).and_be_valid
         end
 
-        it "redirects to index" do
-          put :update, params: { id: instance.to_param, playlist: update_params }
+        it { is_expected.to assign(instance, :playlist).with_attributes(update_params).and_be_valid }
 
-          is_expected.to send_user_to(
-            admin_playlist_path(assigns(:playlist))
-          ).with_flash(:success, "admin.flash.playlists.success.update")
-        end
+        it { is_expected.to send_user_to(admin_playlist_path(assigns(:playlist))) }
+
+        it { is_expected.to have_flash(:success, "admin.flash.playlists.success.update") }
       end
 
       context "with invalid params" do
-        it "renders edit" do
+        let(:operation) do
           put :update, params: { id: instance.to_param, playlist: bad_update_params }
+        end
 
-          is_expected.to successfully_render("admin/playlists/edit")
+        subject { operation }
 
-          is_expected.to assign(instance, :playlist).with_attributes(bad_update_params).and_be_invalid
+        it { is_expected.to successfully_render("admin/playlists/edit") }
 
-          expect(assigns(:works)).to be_a_kind_of(Array)
+        it { is_expected.to assign(instance, :playlist).with_attributes(bad_update_params).and_be_invalid }
+
+        describe "assigns" do
+          subject { operation; assigns(:works) }
+
+          it { is_expected.to be_a_kind_of(Array) }
         end
       end
     end
@@ -158,19 +140,13 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
     describe "DELETE #destroy" do
       let!(:instance) { create(:minimal_playlist) }
 
-      it "destroys the requested playlist" do
-        expect {
-          delete :destroy, params: { id: instance.to_param }
-        }.to change(Playlist, :count).by(-1)
-      end
+      subject { delete :destroy, params: { id: instance.to_param } }
 
-      it "redirects to index" do
-        delete :destroy, params: { id: instance.to_param }
+      it { expect { subject }.to change(Playlist, :count).by(-1) }
 
-        is_expected.to send_user_to(admin_playlists_path).with_flash(
-          :success, "admin.flash.playlists.success.destroy"
-        )
-      end
+      it { is_expected.to send_user_to(admin_playlists_path) }
+
+      it { is_expected.to have_flash(:success, "admin.flash.playlists.success.destroy") }
     end
 
     describe "POST #reorder_playlistings" do
@@ -178,50 +154,27 @@ RSpec.describe Admin::PlaylistsController, type: :controller do
       let(:shuffled) { instance.playlistings.ids.shuffle }
 
       describe "non-xhr" do
-        it "errors" do
-          post :reorder_playlistings, params: {
-            id: instance.to_param, playlisting_ids: shuffled
-          }
-
-          is_expected.to render_bad_request
+        subject do
+          post :reorder_playlistings, params: { id: instance.to_param, playlisting_ids: shuffled }
         end
+
+        it { is_expected.to render_bad_request }
       end
 
       describe "xhr" do
-        it "reorders playlistings" do
-          post :reorder_playlistings, xhr: true, params: {
-            id: instance.to_param, playlisting_ids: shuffled
-          }
-
-          expect(response).to have_http_status(200)
-
-          expect(instance.reload.playlistings.ids).to eq(shuffled)
+        let(:operation) do
+          post :reorder_playlistings, xhr: true, params: { id: instance.to_param, playlisting_ids: shuffled }
         end
-      end
-    end
-  end
 
-  describe "helpers" do
-    describe "#allowed_scopes" do
-      subject { described_class.new.send(:allowed_scopes) }
+        subject { operation }
 
-      specify "keys are short tab names" do
-        expect(subject.keys).to match_array([
-          "All",
-        ])
-      end
-    end
+        it { expect(response).to have_http_status(200) }
 
-    describe "#allowed_sorts" do
-      subject { described_class.new.send(:allowed_sorts) }
+        describe "reordering" do
+          subject { operation; instance.reload.playlistings.ids }
 
-      specify "keys are short sort names" do
-        expect(subject.keys).to match_array([
-          "Default",
-          "ID",
-          "Title",
-          "Author",
-        ])
+          it { is_expected.to eq(shuffled) }
+        end
       end
     end
   end

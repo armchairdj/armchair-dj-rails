@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::WorksController, type: :routing do
+RSpec.describe Admin::WorksController do
   describe "routes to" do
     it "#index" do
       expect(get: "/admin/works").to route_to("admin/works#index")

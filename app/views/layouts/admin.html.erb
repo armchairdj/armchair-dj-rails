@@ -1,11 +1,11 @@
 <% @admin = true %>
 
 <% content_for :masthead do %>
-  <%= render partial: "layouts/admin/admin_nav", locals: { wrapper: :header } %>
+  <%= render "layouts/admin/admin_nav", wrapper: :header %>
 <% end %>
 
 <% content_for :footer do %>
-  <%= render partial: "layouts/admin/admin_nav", locals: { wrapper: :footer } %>
+  <%= render "layouts/admin/admin_nav", wrapper: :footer %>
 <% end %>
 
 <%= render template: "layouts/global" %>

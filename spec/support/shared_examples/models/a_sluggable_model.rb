@@ -22,13 +22,13 @@ RSpec.shared_examples "a_sluggable_model" do
       describe "blankable parts" do
         let(:parts) { ["Talk Talk", "?", nil] }
 
-        it { is_expected.to eq(["talk_talk", "!"]) }
+        it { is_expected.to eq(["talk_talk", "xxx"]) }
       end
 
       describe "blankable parts redux" do
         let(:parts) { ["Glass Candy", "///", nil] }
 
-        it { is_expected.to eq(["glass_candy", "!"]) }
+        it { is_expected.to eq(["glass_candy", "xxx"]) }
       end
     end
 
@@ -127,62 +127,6 @@ RSpec.shared_examples "a_sluggable_model" do
     end
   end
 
-  describe "included" do
-    describe "generating new slug" do
-      describe "#clear_slug?" do
-        subject { instance.clear_slug? }
-
-        describe "false by default" do
-          let(:instance) { build_minimal_instance }
-
-          it { is_expected.to eq(false) }
-        end
-
-        describe "true" do
-          let(:instance) { build_minimal_instance(clear_slug: true) }
-
-          it { is_expected.to eq(true) }
-        end
-
-        describe "1" do
-          let(:instance) { build_minimal_instance(clear_slug: "1") }
-
-          it { is_expected.to eq(true) }
-        end
-      end
-
-      describe "#handle_cleared_slug" do
-        before(:each) do
-          allow(instance).to receive(:slug_candidates).and_call_original
-        end
-
-        describe "false" do
-          let(:instance) { create_minimal_instance }
-
-          it "does not regenerate slug" do
-            expect(instance).to_not receive(:slug_candidates)
-
-            instance.save
-          end
-        end
-
-        describe "true" do
-          let(:instance) do
-            instance            = create_minimal_instance
-            instance.clear_slug = "1"
-            instance
-          end
-
-          it "regenerates slug" do
-            expect(instance).to receive(:slug_candidates)
-
-            instance.save
-          end
-        end
-      end
-    end
-  end
-
   describe "instance" do
     let(:instance) { create_minimal_instance }
 
@@ -192,7 +136,161 @@ RSpec.shared_examples "a_sluggable_model" do
       it { is_expected.to be_a_kind_of(Array) }
     end
 
+    describe "generating new slug" do
+      describe "#clear_slug?" do
+        subject { instance.clear_slug? }
+
+        context "draft" do
+          let(:instance) { create_minimal_instance(:draft) }
+
+          describe "false by default" do
+            it { is_expected.to eq(false) }
+          end
+
+          describe "false even if set to true" do
+            before(:each) { instance.clear_slug = true }
+
+            it { is_expected.to eq(false) }
+          end
+
+          describe "false even if set to 1" do
+            before(:each) { instance.clear_slug = "1" }
+
+            it { is_expected.to eq(false) }
+          end
+        end
+
+        context "scheduled" do
+          let(:instance) { create_minimal_instance(:scheduled) }
+
+          describe "false by default" do
+            it { is_expected.to eq(false) }
+          end
+
+          describe "false even if set to true" do
+            before(:each) { instance.clear_slug = true }
+
+            it { is_expected.to eq(false) }
+          end
+
+          describe "false even if set to 1" do
+            before(:each) { instance.clear_slug = "1" }
+
+            it { is_expected.to eq(false) }
+          end
+        end
+
+        context "published" do
+          let(:instance) { create_minimal_instance(:published) }
+
+          describe "false by default" do
+            it { is_expected.to eq(false) }
+          end
+
+          describe "true" do
+            before(:each) { instance.clear_slug = true }
+
+            it { is_expected.to eq(true) }
+          end
+
+          describe "1" do
+            before(:each) { instance.clear_slug = "1" }
+
+            it { is_expected.to eq(true) }
+          end
+        end
+      end
+
+      describe "#should_reset_slug_and_history?" do
+        subject { instance.send(:should_reset_slug_and_history?) }
+
+        context "draft" do
+          let(:instance) { create_minimal_instance(:draft) }
+
+          it { is_expected.to eq(true) }
+        end
+
+        context "scheduled" do
+          let(:instance) { create_minimal_instance(:scheduled) }
+
+          it { is_expected.to eq(true) }
+        end
+
+        context "published" do
+          let(:instance) { create_minimal_instance(:published) }
+
+          it { is_expected.to eq(false) }
+        end
+      end
+
+      describe "slug regeneration (#handle_clear_slug_checkbox and #conditionally_reset_slug_and_history" do
+        let(:instance) { create_minimal_instance }
+
+        before(:each) do
+          allow(instance).to receive(:slug_candidates   ).and_call_original
+          allow(instance).to receive(:reset_slug_history).and_call_original
+        end
+
+        context "clear_slug? is true" do
+          before(:each) do
+            allow(instance).to receive(:clear_slug?                   ).and_return(true)
+            allow(instance).to receive(:should_reset_slug_and_history?).and_return(false)
+          end
+
+          it "resets slug" do
+            expect(instance).to     receive(:slug_candidates   )
+            expect(instance).to_not receive(:reset_slug_history)
+
+            instance.save
+          end
+        end
+
+        context "should_reset_slug_and_history? is true" do
+          before(:each) do
+            allow(instance).to receive(:clear_slug?                   ).and_return(false)
+            allow(instance).to receive(:should_reset_slug_and_history?).and_return(true )
+          end
+
+          it "resets slug and slug history" do
+            expect(instance).to receive(:slug_candidates   )
+            expect(instance).to receive(:reset_slug_history)
+
+            instance.save
+          end
+        end
+
+        context "both are false" do
+          before(:each) do
+            allow(instance).to receive(:clear_slug?                   ).and_return(false)
+            allow(instance).to receive(:should_reset_slug_and_history?).and_return(false)
+          end
+
+          it "does nothing" do
+            expect(instance).to_not receive(:slug_candidates   )
+            expect(instance).to_not receive(:reset_slug_history)
+
+            instance.save
+          end
+        end
+      end
+    end
+
     context "private" do
+      describe "#reset_slug_history" do
+        subject { instance.send(:reset_slug_history) }
+
+        let(:instance) do
+          instance = create_minimal_instance(:published, title: "foo")
+          instance.update!(title: "bar", clear_slug: true)
+          instance.update!(title: "bat", clear_slug: true)
+          instance
+        end
+
+        it "removes all old slugs so they can be reused" do
+          expect { subject }.to change { instance.slugs.count }.from(3).to(0)
+        end
+      end
+
       describe "#slug_candidates" do
         subject { instance.send(:slug_candidates) }
 
@@ -234,9 +332,9 @@ RSpec.shared_examples "a_sluggable_model" do
               end
             end
 
-            it { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/!"  ) }
-            it { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/!-2") }
-            it { expect(three.slug).to eq("salt_n_pepa/blacks_magic/!-3") }
+            it { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/xxx"  ) }
+            it { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/xxx-2") }
+            it { expect(three.slug).to eq("salt_n_pepa/blacks_magic/xxx-3") }
           end
         end
       end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/works/edit", type: :view do
+RSpec.describe "admin/works/edit" do
   login_root
 
   before(:each) do

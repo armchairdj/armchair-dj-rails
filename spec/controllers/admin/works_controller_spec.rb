@@ -2,14 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::WorksController, type: :controller do
+RSpec.describe Admin::WorksController do
   let(:instance) { create(:minimal_song) }
 
   describe "concerns" do
-    it_behaves_like "an_admin_controller"
-
-    it_behaves_like "a_linkable_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 
@@ -21,23 +17,20 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #show" do
-      it "renders" do
-        get :show, params: { id: instance.to_param }
+      subject { get :show, params: { id: instance.to_param } }
 
-        is_expected.to successfully_render("admin/works/show")
-        is_expected.to assign(instance, :work)
-      end
+      it { is_expected.to successfully_render("admin/works/show") }
+      it { is_expected.to assign(instance, :work) }
     end
 
     describe "GET #new" do
-      it "renders only the media dropdown" do
-        get :new
+      subject { get :new }
 
-        is_expected.to successfully_render("admin/works/new")
-        expect(assigns(:work)).to be_a_new(Work)
+      it { is_expected.to successfully_render("admin/works/new") }
 
-        is_expected.to prepare_the_initial_form
-      end
+      it { is_expected.to prepare_the_initial_form }
+
+      it { subject; expect(assigns(:work)).to be_a_new(Work) }
     end
 
     describe "POST #create" do
@@ -46,16 +39,14 @@ RSpec.describe Admin::WorksController, type: :controller do
       let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
 
       context "with initial params" do
-        it "renders new with full form but no errors" do
-          post :create, params: { step: "select_medium", work: initial_params }
+        subject { post :create, params: { step: "select_medium", work: initial_params } }
 
-          is_expected.to successfully_render("admin/works/new")
+        it { is_expected.to successfully_render("admin/works/new") }
 
-          expect(assigns(:work)       ).to have_coerced_attributes(initial_params)
-          expect(assigns(:work).errors).to match_array([])
+        it { subject; expect(assigns(:work)       ).to have_coerced_attributes(initial_params) }
+        it { subject; expect(assigns(:work).errors).to match_array([]) }
 
-          is_expected.to prepare_the_complete_form
-        end
+        it { is_expected.to prepare_the_complete_form }
       end
 
       context "with valid params" do
@@ -65,9 +56,9 @@ RSpec.describe Admin::WorksController, type: :controller do
 
         it { is_expected.to assign(Work.last, :work).with_attributes(max_params).and_be_valid }
 
-        it { is_expected.to send_user_to(admin_work_path(assigns(:work))).with_flash(
-          :success, "admin.flash.works.success.create"
-        ) }
+        it { is_expected.to send_user_to(admin_work_path(assigns(:work))) }
+
+        it { is_expected.to have_flash(:success, "admin.flash.works.success.create") }
       end
 
       context "with invalid params" do
@@ -92,13 +83,13 @@ RSpec.describe Admin::WorksController, type: :controller do
     end
 
     describe "GET #edit" do
-      it "renders" do
-        get :edit, params: { id: instance.to_param }
+      subject { get :edit, params: { id: instance.to_param } }
 
-        is_expected.to successfully_render("admin/works/edit")
-        is_expected.to assign(instance, :work)
-        is_expected.to prepare_the_complete_form
-      end
+      it { is_expected.to successfully_render("admin/works/edit") }
+
+      it { is_expected.to assign(instance, :work) }
+
+      it { is_expected.to prepare_the_complete_form }
     end
 
     describe "PUT #update" do
@@ -106,68 +97,39 @@ RSpec.describe Admin::WorksController, type: :controller do
       let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do
-        it "updates the requested work" do
-          put :update, params: { id: instance.to_param, work: update_params }
+        subject { put :update, params: { id: instance.to_param, work: update_params } }
 
-          is_expected.to assign(instance, :work).with_attributes(update_params).and_be_valid
-        end
+        it { is_expected.to assign(instance, :work).with_attributes(update_params).and_be_valid }
 
-        it "redirects to index" do
-          put :update, params: { id: instance.to_param, work: update_params }
+        it { is_expected.to send_user_to(admin_work_path(assigns(:work))) }
 
-          is_expected.to send_user_to(
-            admin_work_path(assigns(:work))
-          ).with_flash(:success, "admin.flash.works.success.update")
-        end
+        it { is_expected.to have_flash(:success, "admin.flash.works.success.update") }
       end
 
       context "with invalid params" do
-        it "renders edit" do
-          put :update, params: { id: instance.to_param, work: bad_update_params }
+        subject { put :update, params: { id: instance.to_param, work: bad_update_params } }
 
-          is_expected.to successfully_render("admin/works/edit")
+        it { is_expected.to successfully_render("admin/works/edit") }
 
-          is_expected.to assign(instance, :work).with_attributes(bad_update_params).and_be_invalid
+        it { is_expected.to assign(instance, :work).with_attributes(bad_update_params).and_be_invalid }
 
-          is_expected.to prepare_the_complete_form
-        end
+        it { is_expected.to prepare_the_complete_form }
       end
     end
 
     describe "DELETE #destroy" do
       let!(:instance) { create(:junior_boys_like_a_child_c2_remix) }
 
-      it "destroys the requested work" do
-        expect {
-          delete :destroy, params: { id: instance.to_param }
-        }.to change(Work, :count).by(-1)
-      end
+      subject { delete :destroy, params: { id: instance.to_param } }
 
-      it "destroys associated credits" do
-        expect {
-          delete :destroy, params: { id: instance.to_param }
-        }.to change(Credit, :count).by(-1)
-      end
+      it { expect{ subject }.to change(Work,         :count).by(-1) }
+      it { expect{ subject }.to change(Credit,       :count).by(-1) }
+      it { expect{ subject }.to change(Contribution, :count).by(-1) }
+      it { expect{ subject }.to change(Milestone,    :count).by(-1) }
 
-      it "destroys associated contributions" do
-        expect {
-          delete :destroy, params: { id: instance.to_param }
-        }.to change(Contribution, :count).by(-1)
-      end
+      it { is_expected.to send_user_to(admin_works_path) }
 
-      it "destroys associated milestones" do
-        expect {
-          delete :destroy, params: { id: instance.to_param }
-        }.to change(Milestone, :count).by(-1)
-      end
-
-      it "redirects to index" do
-        delete :destroy, params: { id: instance.to_param }
-
-        is_expected.to send_user_to(
-          admin_works_path
-        ).with_flash(:success, "admin.flash.works.success.destroy")
-      end
+      it { is_expected.to have_flash(:success, "admin.flash.works.success.destroy") }
     end
 
     describe "POST #reorder_credits" do
@@ -175,51 +137,27 @@ RSpec.describe Admin::WorksController, type: :controller do
       let(:shuffled) { instance.credits.ids.shuffle }
 
       describe "non-xhr" do
-        it "errors" do
-          post :reorder_credits, params: {
-            id: instance.to_param, credit_ids: shuffled
-          }
-
-          is_expected.to render_bad_request
+        subject do
+          post :reorder_credits, params: { id: instance.to_param, credit_ids: shuffled }
         end
+
+        it { is_expected.to render_bad_request }
       end
 
       describe "xhr" do
-        it "reorders credits" do
-          post :reorder_credits, xhr: true, params: {
-            id: instance.to_param, credit_ids: shuffled
-          }
-
-          expect(response).to have_http_status(200)
-
-          expect(instance.reload.credits.ids).to eq(shuffled)
+        let(:operation) do
+          post :reorder_credits, xhr: true, params: { id: instance.to_param, credit_ids: shuffled }
         end
-      end
-    end
-  end
 
-  describe "helpers" do
-    describe "#allowed_scopes" do
-      subject { described_class.new.send(:allowed_scopes) }
+        subject { operation }
 
-      specify "keys are short tab names" do
-        expect(subject.keys).to match_array([
-          "All",
-        ])
-      end
-    end
+        it { expect(response).to have_http_status(200) }
 
-    describe "#allowed_sorts" do
-      subject { described_class.new.send(:allowed_sorts) }
+        describe "reordering" do
+          subject { operation; instance.reload.credits.ids }
 
-      specify "keys are short sort names" do
-        expect(subject.keys).to match_array([
-          "Default",
-          "ID",
-          "Title",
-          "Makers",
-          "Medium",
-        ])
+          it { is_expected.to eq(shuffled) }
+        end
       end
     end
   end

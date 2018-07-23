@@ -21,13 +21,20 @@
 
 require "rails_helper"
 
-RSpec.describe Milestone, type: :model do
-  describe "constants" do
-    # Nothing so far.
-  end
-
+RSpec.describe Milestone do
   describe "concerns" do
     it_behaves_like "an_application_record"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe "class" do
@@ -35,27 +42,7 @@ RSpec.describe Milestone, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let(:remastered) { create(:minimal_milestone, activity: :remastered, year: 2005) }
-      let(   :remixed) { create(:minimal_milestone, activity: :remixed,    year: 1977) }
-      let(  :reissued) { create(:minimal_milestone, activity: :reissued,   year: 2017) }
-      let(       :ids) { [remastered, remixed, reissued].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
-
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to eager_load(:work) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin.where(id: ids) }
-
-        it { is_expected.to eager_load(:work) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe ApplicationController do
   describe "concerns" do
     it_behaves_like "an_errorable_controller"
 

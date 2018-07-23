@@ -20,7 +20,7 @@
   ]
 %>
 
-<% if (credits = @work.credits.for_admin).any? %>
+<% if (credits = @work.credits).any? %>
   <%= admin_section(headline: "Makers", subhead: "Drag to Reorder") do %>
     <%= content_tag(:ol, js_sortable_credits_attrs(@work)) do %>
       <% credits.each do |credit| %>
@@ -56,16 +56,16 @@
   <% end %>
 <% end %>
 
-<% if (contributions = @work.contributions.for_admin.alpha).any? %>
+<% if (contributions = @work.contributions.alpha).any? %>
   <%= admin_section(headline: "Contributors") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
-        <%= content_tag(:dt, contribution.name                    ) %>
+        <%= content_tag(:dt, contribution.role_name               ) %>
         <%= content_tag(:dd, link_to_creator(contribution.creator)) %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list",     as: "posts",     object: @work.posts.for_admin.reverse_cron %>
-<%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.for_admin.alpha %>
+<%= render partial: "admin/posts/list",     as: "posts",     object: @work.posts.reverse_cron %>
+<%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.alpha %>

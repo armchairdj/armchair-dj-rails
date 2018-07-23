@@ -75,13 +75,21 @@ class User < ApplicationRecord
   # CLASS.
   #############################################################################
 
+  def self.for_cms_user(user)
+    return self.none unless user && user.can_administer?
+    return self.all  if user.root?
+
+    where("users.role <= ?", user.raw_role).where.not(id: user.id)
+  end
+
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:links, :posts, :playlists, :works, :makers) }
-  scope :for_admin, -> { eager }
-  scope  :for_site, -> { eager.alpha.joins(:posts).merge(Post.published) }
+  scope :published,   -> { joins(:posts).merge(Post.published) }
+  scope :for_list,    -> { }
+  scope :for_show,    -> { includes(:links, :posts, :playlists, :works, :makers) }
+  scope :for_public,  -> { published }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -137,9 +145,14 @@ class User < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [last_name, first_name, middle_name]
+  end
+
   def can_write?
     root? || admin? || editor? || writer?
   end
+  alias_method :can_access_cms?, :can_write?
 
   def can_edit?
     root? || admin? || editor?
@@ -177,9 +190,5 @@ class User < ApplicationRecord
     instance.errors.add(:role, :invalid_assignment)
 
     false
-  end
-
-  def alpha_parts
-    [last_name, first_name, middle_name]
   end
 end

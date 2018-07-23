@@ -1,5 +1,9 @@
 en:
   exceptions:
+    scoper:
+      invalid: "Unknown scope for %{model}: %{scope}."
+    sorter:
+      invalid: "Unknown sort or dir for %{model}: %{sort}/%{dir}."
     helpers:
       layout:
         title:

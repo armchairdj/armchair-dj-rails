@@ -8,6 +8,7 @@
   $ brew install yarn --without-node
   $ bundle
   $ bundle exec rails webpacker:install
+  $ brew cask install chromedriver
 
 * Configuration
 

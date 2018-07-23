@@ -8,6 +8,10 @@
 module Errorable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
+
   included do
     # 500
     # Rules for rescue_from are evaluated in reverse source order, so

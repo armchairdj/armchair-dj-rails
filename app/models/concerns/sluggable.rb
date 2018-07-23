@@ -3,9 +3,14 @@
 module Sluggable
   extend ActiveSupport::Concern
 
-  PART_SEPARATOR    = "/".freeze
-  VERSION_SEPARATOR = "-".freeze
-  EMPTY_PART        = "!".freeze
+  WORD_SEPARATOR         =   "_".freeze
+  PART_SEPARATOR         =   "/".freeze
+  VERSION_SEPARATOR      =   "-".freeze
+  EMPTY_PART_REPLACEMENT = "xxx".freeze
+
+  #############################################################################
+  # CLASS.
+  #############################################################################
 
   class_methods do
     def prepare_parts(parts)
@@ -14,31 +19,62 @@ module Sluggable
 
     def prepare_part(str)
       str = str.underscore.to_ascii.strip
-      str = str.gsub("&", "_and_")
-      str = str.gsub(/["“”'‘’]/, "")
-      str = str.gsub(/[[:punct:]|[:blank:]]/, "_")
-      str = str.gsub(/[^[:word:]]/, "")
-      str = str.gsub(/_+/, "_").gsub(/^_/, "").gsub(/_$/, "")
+      str = fix_quote_marks(str)
+      str = fix_ampersands(str)
+      str = fix_non_words(str)
+      str = compact_word_separators(str)
 
-      str.blank? ? EMPTY_PART : str
+      str.blank? ? EMPTY_PART_REPLACEMENT : str
+    end
+
+    def fix_quote_marks(str)
+      str.gsub(/["“”'‘’]/, "")
+    end
+
+    def fix_ampersands(str)
+      str.gsub("&", "#{WORD_SEPARATOR}and#{WORD_SEPARATOR}")
+    end
+
+    def fix_non_words(str)
+      str = str.gsub(/[[:punct:]|[:blank:]]/, WORD_SEPARATOR)
+      str = str.gsub(/[^[:word:]]/, "")
+    end
+
+    def compact_word_separators(str)
+      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}+/, "_")
+      str = str.gsub(/^#{Regexp.quote(WORD_SEPARATOR)}/,  "")
+      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}$/, "")
     end
   end
 
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
+
   included do
+    ### CONCERNS.
+
     include FriendlyId
 
     friendly_id :slug_candidates, use: [:slugged, :history]
 
+    ### ATTRIBUTES.
+
     attr_accessor :clear_slug
 
-    before_save :handle_cleared_slug
+    ### HOOKS.
 
-    # Must be in included block to work.
+    before_save :conditionally_reset_slug_and_history
+    before_save :handle_clear_slug_checkbox
+
+    ### METHODS. (Must be in included block to work with FriendlyId.)
+
+    # Override default friendly_id behavior since we're already doing
+    # our own normalization.
     def normalize_friendly_id(input)
       input
     end
 
-    # Must be in included block to work.
     # Override default friendly_id behavior to use ID instead of slug.
     # This allows IDs in admin and custom routes with slugs for public.
     def to_param
@@ -46,8 +82,12 @@ module Sluggable
     end
   end
 
+  #############################################################################
+  # INSTANCE.
+  #############################################################################
+
   def clear_slug?
-    !!clear_slug
+    persisted? && published? && !!clear_slug
   end
 
   def sluggable_parts
@@ -56,10 +96,29 @@ module Sluggable
 
 private
 
-  def handle_cleared_slug
-    self.slug = nil if persisted? && clear_slug?
+  def handle_clear_slug_checkbox
+    return unless clear_slug?
 
-    valid?
+    self.slug = nil
+
+    valid? # Regenerates slug
+  end
+
+  def conditionally_reset_slug_and_history
+    return unless persisted? && should_reset_slug_and_history?
+
+    reset_slug_history
+    self.slug = nil
+
+    valid? # Regenerates slug
+  end
+
+  def should_reset_slug_and_history?
+    false
+  end
+
+  def reset_slug_history
+    self.slugs.clear
   end
 
   def slug_candidates

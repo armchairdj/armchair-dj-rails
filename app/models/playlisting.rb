@@ -27,7 +27,7 @@ class Playlisting < ApplicationRecord
 
   include Listable
 
-  scoped_list(:playlist)
+  acts_as_listable(:playlist)
 
   #############################################################################
   # CLASS.
@@ -37,8 +37,8 @@ class Playlisting < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :eager,     -> { includes(:playlist, :work) }
-  scope :for_admin, -> { eager.sorted }
+  scope :for_list,  -> { sorted }
+  scope :for_show,  -> { sorted.includes(:playlist, :work).references(:author) }
 
   #############################################################################
   # ASSOCIATIONS.

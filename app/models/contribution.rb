@@ -46,6 +46,9 @@ class Contribution < ApplicationRecord
   # SCOPES.
   #############################################################################
 
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:work, :creator, :role) }
+
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
@@ -55,8 +58,6 @@ class Contribution < ApplicationRecord
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
-
-  delegate :name, to: :role
 
   #############################################################################
   # VALIDATIONS.
@@ -75,7 +76,7 @@ class Contribution < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def alpha_parts
-    [work.try(:alpha_parts), role.try(:name), creator.try(:name)]
+  def role_name
+    role.try(:name)
   end
 end

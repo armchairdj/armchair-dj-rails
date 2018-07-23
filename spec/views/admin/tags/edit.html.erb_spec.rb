@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin/tags/edit", type: :view do
+RSpec.describe "admin/tags/edit" do
   login_root
 
   before(:each) do

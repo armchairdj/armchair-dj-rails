@@ -3,8 +3,12 @@
 module Listable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # CLASS.
+  #############################################################################
+
   class_methods do
-    def scoped_list(acts_as_list_scope)
+    def acts_as_listable(acts_as_list_scope)
       acts_as_list scope: acts_as_list_scope, top_of_list: 1
 
       scope :sorted, -> { joins(acts_as_list_scope).order(:"#{acts_as_list_scope}_id", :position) }

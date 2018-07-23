@@ -1,3 +1,8 @@
+<%
+  scopes = collection.scoper.map
+  sorts  = collection.sorter.map
+%>
+
 <%= content_tag(:div, class: "tabgroup") do %>
   <% if scopes.length > 1 %>
     <%= content_tag(:ul, class: "tabs") do %>

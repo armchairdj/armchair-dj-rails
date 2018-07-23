@@ -33,8 +33,8 @@ class Tag < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope     :eager, -> { includes(:posts) }
-  scope :for_admin, -> { eager }
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:posts) }
 
   #############################################################################
   # ASSOCIATIONS.

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::PlaylistsController, type: :routing do
+RSpec.describe Admin::PlaylistsController do
   describe "routes to" do
     it "#index" do
       expect(get: "/admin/playlists").to route_to("admin/playlists#index")

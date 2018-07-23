@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "style_guides/button", type: :view do
+RSpec.describe "style_guides/button" do
   it "renders static page with no instance variables" do
     render
   end

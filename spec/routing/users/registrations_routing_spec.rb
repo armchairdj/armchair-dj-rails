@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::RegistrationsController, type: :routing do
+RSpec.describe Users::RegistrationsController do
   describe "routes to" do
     it "#new" do
       expect(get: "/register").to route_to("users/registrations#new")

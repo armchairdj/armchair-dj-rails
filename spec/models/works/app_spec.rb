@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe App, type: :model do
+RSpec.describe App do
   describe "concerns" do
     it_behaves_like "a_medium"
   end
@@ -23,11 +23,13 @@ RSpec.describe App, type: :model do
     end
   end
 
-  describe "class" do
-    pending "self#available_facets"
-  end
+  describe "class attributes" do
+    describe "available_facets" do
+      let(:expected) { [:tech_company, :tech_platform] }
+      let(:instance) { create_minimal_instance }
 
-  describe "instance" do
-    # Nothing so far.
+      specify { expect(       instance.available_facets).to eq(expected) }
+      specify { expect(described_class.available_facets).to eq(expected) }
+    end
   end
 end

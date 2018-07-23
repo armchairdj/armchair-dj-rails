@@ -7,7 +7,7 @@
 %>
 
 <% if @work.medium.blank? %>
-  <%= render partial: "form_choose_medium" %>
+  <%= render "form_choose_medium" %>
 <% else %>
   <%= render "form" %>
 <% end %>

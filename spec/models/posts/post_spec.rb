@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Post, type: :model do
+RSpec.describe Post do
   subject { create_minimal_instance }
 
   describe "concerns" do
@@ -15,6 +15,20 @@ RSpec.describe Post, type: :model do
     it_behaves_like "a_linkable_model"
 
     it_behaves_like "a_sluggable_model"
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        # Must specify individual fields for STI models.
+        it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
+        it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
+        it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
+        it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
+        it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
+        it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
+      end
+    end
   end
 
   describe "class" do
@@ -75,68 +89,155 @@ RSpec.describe Post, type: :model do
   end
 
   describe "scope-related" do
-    let!(     :draft) { create_minimal_instance(:draft    ) }
-    let!( :scheduled) { create_minimal_instance(:scheduled) }
-    let!( :published) { create_minimal_instance(:published) }
-    let!(       :ids) { [draft, scheduled, published].map(&:id) }
-    let!(:collection) { described_class.where(id: ids) }
+    describe "for sorting and status" do
+      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:scheduled) { create_minimal_instance(:scheduled) }
+      let(:published) { create_minimal_instance(:published) }
 
-    describe "self#reverse_cron" do
-      subject { collection.reverse_cron }
+      let(       :ids) { [draft, scheduled, published].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
 
-      it "includes all, ordered descending by published_at, published_on, updated_at" do
-        is_expected.to eq([draft, scheduled, published])
+      describe "self#reverse_cron" do
+        subject { collection.reverse_cron }
+
+        it "includes all, ordered descending by published_at, published_on, updated_at" do
+          is_expected.to eq([draft, scheduled, published])
+        end
+      end
+
+      describe "for status" do
+        describe "self#draft" do
+          subject { collection.draft }
+
+          it { is_expected.to contain_exactly(draft) }
+        end
+
+        describe "self#scheduled" do
+          subject { collection.scheduled }
+
+          it { is_expected.to contain_exactly(scheduled) }
+        end
+
+        describe "self#published" do
+          subject { collection.published }
+
+          it { is_expected.to contain_exactly(published) }
+        end
+
+        describe "self#unpublished" do
+          subject { collection.unpublished }
+
+          it { is_expected.to contain_exactly(draft, scheduled) }
+        end
+
+        describe "booleans" do
+          describe "#draft?" do
+            specify { expect(    draft.draft?).to eq(true ) }
+            specify { expect(scheduled.draft?).to eq(false) }
+            specify { expect(published.draft?).to eq(false) }
+          end
+
+          describe "#scheduled?" do
+            specify { expect(    draft.scheduled?).to eq(false) }
+            specify { expect(scheduled.scheduled?).to eq(true ) }
+            specify { expect(published.scheduled?).to eq(false) }
+          end
+
+          describe "#published?" do
+            specify { expect(    draft.published?).to eq(false) }
+            specify { expect(scheduled.published?).to eq(false ) }
+            specify { expect(published.published?).to eq(true ) }
+          end
+
+          describe "#unpublished?" do
+            specify { expect(    draft.unpublished?).to eq(true ) }
+            specify { expect(scheduled.unpublished?).to eq(true ) }
+            specify { expect(published.unpublished?).to eq(false) }
+          end
+        end
       end
     end
 
-    describe "for status" do
-      describe "self#draft" do
-        subject { collection.draft }
+    describe "for public site" do
+      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:scheduled) { create_minimal_instance(:scheduled) }
+      let(:published) { create_minimal_instance(:published) }
 
-        it { is_expected.to contain_exactly(draft) }
+      let!(       :ids) { [draft, scheduled, published].map(&:id) }
+      let!(:collection) { described_class.where(id: ids) }
+
+      describe "self#for_public" do
+        subject { collection.for_public }
+
+        it { is_expected.to eq [published] }
       end
+    end
 
-      describe "self#scheduled" do
-        subject { collection.scheduled }
+    describe "for cms access to other users' posts" do
+      describe "self#for_cms_user" do
+        let!(:no_user) { nil }
+        let!( :member) { create(:member) }
+        let!( :writer) { create(:writer) }
+        let!( :editor) { create(:editor) }
+        let!(  :admin) { create(:admin ) }
+        let!(   :root) { create(:root  ) }
 
-        it { is_expected.to contain_exactly(scheduled) }
-      end
+        let( :writer_post) { create(:minimal_post, author: writer) }
+        let( :editor_post) { create(:minimal_post, author: editor) }
+        let(  :admin_post) { create(:minimal_post, author: admin ) }
+        let(   :root_post) { create(:minimal_post, author: root  ) }
 
-      describe "self#published" do
-        subject { collection.published }
+        let!(       :ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
+        let!(:collection) { described_class.where(id: ids) }
 
-        it { is_expected.to contain_exactly(published) }
-      end
+        subject { collection.for_cms_user(instance) }
 
-      describe "self#unpublished" do
-        subject { collection.unpublished }
+        context "with nil user" do
+          let(:instance) { no_user }
 
-        it { is_expected.to contain_exactly(draft, scheduled) }
-      end
-
-      describe "booleans" do
-        describe "#draft?" do
-          specify { expect(    draft.draft?).to eq(true ) }
-          specify { expect(scheduled.draft?).to eq(false) }
-          specify { expect(published.draft?).to eq(false) }
+          it "includes nothing" do
+            is_expected.to eq(described_class.none)
+          end
         end
 
-        describe "#scheduled?" do
-          specify { expect(    draft.scheduled?).to eq(false) }
-          specify { expect(scheduled.scheduled?).to eq(true ) }
-          specify { expect(published.scheduled?).to eq(false) }
+        context "with member" do
+          let(:instance) { member }
+
+          it "includes nothing" do
+            is_expected.to eq(described_class.none)
+          end
         end
 
-        describe "#published?" do
-          specify { expect(    draft.published?).to eq(false) }
-          specify { expect(scheduled.published?).to eq(false ) }
-          specify { expect(published.published?).to eq(true ) }
+        context "with writer" do
+          let(:instance) { writer }
+
+          it "includes only own posts" do
+            is_expected.to contain_exactly(writer_post)
+          end
         end
 
-        describe "#unpublished?" do
-          specify { expect(    draft.unpublished?).to eq(true ) }
-          specify { expect(scheduled.unpublished?).to eq(true ) }
-          specify { expect(published.unpublished?).to eq(false) }
+        context "with editor" do
+          let(:instance) { editor }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
+          end
+        end
+
+        context "with admin" do
+          let(:instance) { admin }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
+          end
+        end
+
+        context "with root" do
+          let(:instance) { root }
+
+          it "includes everything" do
+            is_expected.to match_array(collection.all)
+          end
         end
       end
     end
@@ -671,8 +772,27 @@ RSpec.describe Post, type: :model do
   end
 
   describe "instance" do
-    pending "#publish_date"
+    describe "#formatted_body" do
+      subject { instance.formatted_body }
 
-    pending "#formatted_body"
+      let(:renderer) { double }
+
+      before(:each) do
+        allow(instance).to receive(:renderer).and_return(renderer)
+        allow(renderer).to receive(:render  ).and_return("rendered markdown")
+      end
+
+      context "happy path" do
+        let(:instance) { create_minimal_instance(body: "markdown") }
+
+        it { is_expected.to eq("rendered markdown".html_safe) }
+      end
+
+      context "nil body" do
+        let(:instance) { create_minimal_instance(body: nil) }
+
+        it { is_expected.to eq(nil) }
+      end
+    end
   end
 end

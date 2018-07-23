@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-class Admin::PostPolicy < AdminPolicy
+class Admin::PostPolicy < Admin::BasePolicy
   class Scope < Scope
     def resolve
-      return scope.for_admin if user.can_edit?
-
-      scope.for_admin.where(author_id: user.id)
+      scope.for_cms_user(user)
     end
   end
 
@@ -15,5 +13,9 @@ class Admin::PostPolicy < AdminPolicy
 
   def publish?
     update? && user.can_publish?
+  end
+
+  def autosave?
+    update? && record.unpublished?
   end
 end

@@ -12,7 +12,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope
+      scope.all
     end
   end
 
@@ -66,7 +66,7 @@ protected
   def force_admin_login
     logged_in?
 
-    raise Pundit::NotAuthorizedError, "must be CMS user" unless user.admin?
+    raise Pundit::NotAuthorizedError, "current user does not have permission" unless user.admin?
   end
 
   def raise_unauthorized

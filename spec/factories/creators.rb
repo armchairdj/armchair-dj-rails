@@ -111,7 +111,7 @@ FactoryBot.define do
       primary
 
       after(:create) do |creator, evaluator|
-        [evaluator.pseudonyms].flatten.each do |pseudonym|
+        [*evaluator.pseudonyms].each do |pseudonym|
           create(:minimal_identity, real_name: creator, pseudonym: pseudonym)
         end
 
@@ -141,7 +141,7 @@ FactoryBot.define do
       secondary
 
       after(:create) do |creator, evaluator|
-        [evaluator.real_names].flatten.each do |real_name|
+        [*evaluator.real_names].each do |real_name|
           create(:minimal_identity, pseudonym: creator, real_name: real_name)
         end
 
@@ -171,7 +171,7 @@ FactoryBot.define do
       collective
 
       after(:create) do |creator, evaluator|
-        [evaluator.members].flatten.each do |member|
+        [*evaluator.members].each do |member|
           create(:minimal_membership, group: creator, member: member)
         end
 
@@ -201,7 +201,7 @@ FactoryBot.define do
       individual
 
       after(:create) do |creator, evaluator|
-        [evaluator.groups].flatten.each do |group|
+        [*evaluator.groups].each do |group|
           create(:minimal_membership, member: creator, group: group)
         end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class YearnessValidator < ActiveModel::EachValidator
   YEAR_MIN = 1
   YEAR_MAX = (Date.today.year + 1)
