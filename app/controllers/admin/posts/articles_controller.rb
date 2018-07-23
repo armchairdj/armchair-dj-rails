@@ -4,7 +4,7 @@ class Admin::Posts::ArticlesController < Admin::Posts::BaseController
 
 private
 
-  def permitted_keys
-    super.unshift(:title)
+  def initial_keys
+    [:title]
   end
 end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::ConfirmationsController, type: :routing do
+RSpec.describe Users::ConfirmationsController do
   describe "routes to" do
     it "#new" do
       expect(get: "/users/confirmation/new").to route_to("users/confirmations#new")

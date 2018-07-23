@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Posts::MixtapesController, type: :routing do
+RSpec.describe Posts::MixtapesController do
   describe "routes to" do
     it "#index" do
       expect(get: "/mixtapes").to route_to("posts/mixtapes#index")

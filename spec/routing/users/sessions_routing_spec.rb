@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::SessionsController, type: :routing do
+RSpec.describe Users::SessionsController do
   describe "routes to" do
     it "#new" do
       expect(get: "/log_in").to route_to("users/sessions#new")

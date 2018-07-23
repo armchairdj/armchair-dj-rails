@@ -2,14 +2,14 @@
   <%= f.error_notification %>
 
   <%= content_tag(:div, class: "form-inputs") do %>
-    <%= render partial: "admin/users/form_fields", locals: {
+    <%= render "admin/users/form_fields",
       f:             f,
       roles:         @roles,
       show_bio:      true,
       show_links:    true,
       show_password: @user.new_record?,
-      show_role:     true,
-    } %>
+      show_role:     true
+    %>
   <% end %>
 
   <%= content_tag(:div, class: "button-group") do %>

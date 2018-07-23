@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module FactoryHelpers
-  def minimal_attributes(*args)
+  def attributes_for_minimal_instance(*args)
     attributes_for(key_for_minimal, *args)
   end
 
-  def complete_attributes(*args)
+  def attributes_for_complete_instance(*args)
     attributes_for(key_for_complete, *args)
   end
 

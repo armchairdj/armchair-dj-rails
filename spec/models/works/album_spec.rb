@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Album, type: :model do
+RSpec.describe Album do
   describe "concerns" do
     it_behaves_like "a_medium"
   end
@@ -20,6 +20,16 @@ RSpec.describe Album, type: :model do
       specify { expect(instance.true_model_name.name).to eq("Album") }
       specify { expect(instance.medium              ).to eq("Album") }
       specify { expect(instance.display_medium      ).to eq("Album") }
+    end
+  end
+
+  describe "class attributes" do
+    describe "available_facets" do
+      let(:expected) { [:album_format, :music_label, :musical_mood, :musical_genre] }
+      let(:instance) { create_minimal_instance }
+
+      specify { expect(       instance.available_facets).to eq(expected) }
+      specify { expect(described_class.available_facets).to eq(expected) }
     end
   end
 end

@@ -20,10 +20,10 @@
   ]
 %>
 
-<%= render partial: "list", as: "creators", object: @creator.groups,     headline: "Groups"     %>
-<%= render partial: "list", as: "creators", object: @creator.members,    headline: "Members"    %>
-<%= render partial: "list", as: "creators", object: @creator.colleagues, headline: "Colleagues" %>
-<%= render partial: "list", as: "creators", object: @creator.personae,   headline: "Personae"   %>
+<%= render partial: "list", as: "creators", object: @creator.groups,     locals: { headline: "Groups"     } %>
+<%= render partial: "list", as: "creators", object: @creator.members,    locals: { headline: "Members"    } %>
+<%= render partial: "list", as: "creators", object: @creator.colleagues, locals: { headline: "Colleagues" } %>
+<%= render partial: "list", as: "creators", object: @creator.personae,   locals: { headline: "Personae"   } %>
 
 <% if (roles = @creator.display_roles).any? %>
   <%= admin_section(headline: "Roles") do %>
@@ -36,7 +36,7 @@
   <% end %>
 <% end %>
 
-<% if (works = @creator.works.for_admin.alpha).any? %>
+<% if (works = @creator.works.alpha).any? %>
   <%= admin_section(headline: "Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
@@ -47,15 +47,15 @@
   <% end %>
 <% end %>
 
-<% if (contributions = @creator.contributions.for_admin.alpha).any? %>
+<% if (contributions = @creator.contributions.alpha).any? %>
   <%= admin_section(headline: "Contributions") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
-        <%= content_tag(:dt, contribution.name) %>
+        <%= content_tag(:dt, contribution.role_name) %>
         <%= content_tag(:dd, link_to_work(contribution.work)) %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
 
-<%= render partial: "admin/posts/list", as: "posts", object: @creator.posts.for_admin.reverse_cron %>
+<%= render partial: "admin/posts/list", as: "posts", object: @creator.posts.reverse_cron %>

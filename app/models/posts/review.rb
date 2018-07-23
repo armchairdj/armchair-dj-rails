@@ -44,7 +44,11 @@ class Review < Post
   # CLASS.
   #############################################################################
 
-  def self.eager
+  def self.for_list
+    super.includes(:work).references(:work)
+  end
+
+  def self.for_show
     super.includes(:work, :makers, :contributions, :aspects, :milestones)
   end
 
@@ -61,8 +65,11 @@ class Review < Post
   has_many :milestones,    through: :work
 
   #############################################################################
-  # ATTRIBUTES.
+  # DELEGATION.
   #############################################################################
+
+  delegate :display_medium, to: :work, allow_nil: true
+  delegate :alpha_parts,    to: :work, allow_nil: true
 
   #############################################################################
   # VALIDATIONS.
@@ -86,15 +93,9 @@ class Review < Post
   # INSTANCE.
   #############################################################################
 
-  delegate :display_medium, to: :work
-
   def display_type(plural: false)
     base = [display_medium, "Review"].compact.join(" ")
 
     plural ? base.pluralize : base
-  end
-
-  def alpha_parts
-    work.try(:alpha_parts) || []
   end
 end

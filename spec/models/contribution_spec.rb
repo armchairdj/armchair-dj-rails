@@ -27,13 +27,24 @@
 
 require "rails_helper"
 
-RSpec.describe Contribution, type: :model do
+RSpec.describe Contribution do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
 
     it_behaves_like "a_contributable_model"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :role, :creator] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe "validations" do
@@ -54,15 +65,5 @@ RSpec.describe Contribution, type: :model do
 
   describe "instance" do
     let(:instance) { create_minimal_instance }
-
-    describe "#alpha_parts" do
-      subject { instance.alpha_parts }
-
-      it { is_expected.to eq([
-        instance.work.alpha_parts,
-        instance.role.name,
-        instance.creator.name
-      ]) }
-    end
   end
 end

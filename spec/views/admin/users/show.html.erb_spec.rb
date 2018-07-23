@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin/users/show", type: :view do
+RSpec.describe "admin/users/show" do
   login_root
 
   before(:each) do

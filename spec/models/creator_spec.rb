@@ -22,11 +22,28 @@
 
 require "rails_helper"
 
-RSpec.describe Creator, type: :model do
+RSpec.describe Creator do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [
+        :pseudonyms, :real_names, :members, :groups,
+        :credits, :contributed_roles,
+        :works, :contributed_works,
+        :reviews, :contributed_reviews,
+        :mixtapes, :contributed_mixtapes,
+      ] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe "class" do
@@ -34,40 +51,6 @@ RSpec.describe Creator, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let!( :richie) { create(:creator, :with_published_post, name: "Richie Hawtin") }
-      let!(    :amy) { create(:creator,                       name: "Amy Winehouse") }
-      let!(   :kate) { create(:creator,                       name: "Kate Bush"    ) }
-      let!(   :carl) { create(:creator, :with_published_post, name: "Carl Craig"   ) }
-      let!(  :feist) { create(:creator,                       name: "Feist"        ) }
-      let!(:derrick) { create(:creator, :with_published_post, name: "Derrick May"  ) }
-
-      let(       :ids) { [richie, amy, kate, carl, feist, derrick].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
-
-      let(:eager_loads) { [
-        :pseudonyms, :real_names, :members, :groups,
-        :credits, :contributed_roles,
-        :works, :contributed_works,
-        :reviews, :contributed_reviews,
-        :mixtapes, :contributed_mixtapes,
-      ] }
-
-      describe "self#eager" do
-        subject { described_class.eager }
-
-        it { is_expected.to eager_load(*eager_loads) }
-      end
-
-      describe "self#for_admin" do
-        subject { described_class.for_admin }
-
-        it { is_expected.to match_array([richie, amy, kate, carl, feist, derrick]) }
-
-        it { is_expected.to eager_load(*eager_loads) }
-      end
-    end
-
     describe "identities" do
       describe "scopes and booleans" do
         let!(  :primary) { create(  :primary_creator) }
@@ -596,9 +579,8 @@ RSpec.describe Creator, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
 
-    xit { is_expected.to validate_presence_of(:primary) }
-
-    xit { is_expected.to validate_presence_of(:collective) }
+    it { is_expected.to be_primary    }
+    it { is_expected.to be_individual }
   end
 
   describe "instance" do

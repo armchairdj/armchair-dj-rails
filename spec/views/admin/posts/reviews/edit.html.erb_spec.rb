@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/posts/reviews/edit", type: :view do
+RSpec.describe "admin/posts/reviews/edit" do
   login_root
 
   before(:each) do
@@ -12,11 +12,15 @@ RSpec.describe "admin/posts/reviews/edit", type: :view do
       create(:minimal_tag)
     end
 
-    @model_class  = assign(:model_name, Review)
-    @creators     = assign(:creators,   Creator.all.alpha   )
-    @works        = assign(:works,      Work.grouped_by_medium)
-    @tags         = assign(:tags,       Tag.for_admin.alpha)
-    @review       = assign(:review,     create(:minimal_review))
+    @model_class = assign(:model_name, Review)
+
+    @tags  = assign(:tags,  Tag.all.alpha)
+    @works = assign(:works, Work.grouped_by_medium)
+
+    @post = @review = create(:minimal_review)
+
+    assign(:review, @review)
+    assign(:post,   @review)
   end
 
   context "pristine" do

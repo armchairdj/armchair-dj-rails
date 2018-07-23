@@ -24,7 +24,7 @@
 
 require "rails_helper"
 
-RSpec.describe Credit, type: :model do
+RSpec.describe Credit do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
@@ -32,28 +32,34 @@ RSpec.describe Credit, type: :model do
 
     it_behaves_like "a_contributable_model"
 
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :creator] }
+    end
+
     it_behaves_like "a_listable_model", :work do
       let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
       let(  :other) { create(:minimal_work, maker_count: 5).credits.sorted }
     end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
+
+  describe "class" do
+    # Nothing so far.
+  end
+
+  describe "scope-related" do
+    # Nothing so far.
   end
 
   describe "validations" do
     subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
-  end
-
-  describe "instance" do
-    describe "#alpha_parts" do
-      subject { create_minimal_instance }
-
-      it "uses work and creator" do
-        expect(subject.alpha_parts).to eq([
-          subject.work.alpha_parts,
-          subject.creator.alpha_parts
-        ])
-      end
-    end
   end
 end

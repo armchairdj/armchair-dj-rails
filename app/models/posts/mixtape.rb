@@ -44,7 +44,11 @@ class Mixtape < Post
   # CLASS.
   #############################################################################
 
-  def self.eager
+  def self.for_list
+    super.includes(:playlist).references(:playlist)
+  end
+
+  def self.for_show
     super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
   end
 
@@ -66,6 +70,12 @@ class Mixtape < Post
   #############################################################################
   # ATTRIBUTES.
   #############################################################################
+
+  #############################################################################
+  # DELEGATION.
+  #############################################################################
+
+  delegate :alpha_parts, to: :playlist, allow_nil: true
 
   #############################################################################
   # VALIDATIONS.
@@ -96,8 +106,4 @@ class Mixtape < Post
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def alpha_parts
-    playlist.try(:alpha_parts) || []
-  end
 end

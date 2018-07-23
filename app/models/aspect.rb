@@ -37,8 +37,8 @@ class Aspect < ApplicationRecord
 
   scope :for_facet, -> (*facets) { where(facet: facets.flatten.compact) }
 
-  scope     :eager, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
-  scope :for_admin, -> { eager }
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -105,6 +105,10 @@ class Aspect < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
+  def alpha_parts
+    [human_facet, name]
+  end
+
   def posts
     Post.where(id: post_ids)
   end
@@ -115,9 +119,5 @@ class Aspect < ApplicationRecord
 
   def display_name(connector: ": ")
     [human_facet, name].compact.join(connector)
-  end
-
-  def alpha_parts
-    [human_facet, name]
   end
 end

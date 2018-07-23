@@ -20,11 +20,22 @@
 
 require "rails_helper"
 
-RSpec.describe Playlist, type: :model do
+RSpec.describe Playlist do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_authorable_model"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [:author] }
+      let(:show_loads) { [:author, :playlistings, :works] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe "class" do
@@ -32,28 +43,7 @@ RSpec.describe Playlist, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let!(     :first) { create(:complete_playlist,                       title: "First" ) }
-      let!(    :middle) { create(:complete_playlist, :with_published_post, title: "Middle") }
-      let!(      :last) { create(:complete_playlist, :with_published_post, title: "Last"  ) }
-      let(        :ids) { [first, middle, last].map(&:id) }
-      let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [:author, :playlistings, :works] }
-
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to eager_load(eager_loads) }
-        it { is_expected.to match_array(collection.to_a) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do

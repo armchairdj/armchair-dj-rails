@@ -3,6 +3,10 @@
 module Enumable
   extend ActiveSupport::Concern
 
+  #############################################################################
+  # CLASS.
+  #############################################################################
+
   class_methods do
     def human_enum_collection(attribute, alphabetical: false)
       collection = send(attribute.to_s.pluralize).keys.collect do |val|
@@ -76,6 +80,10 @@ module Enumable
       "CASE #{whens.join(" ")} END"
     end
   end
+
+  #############################################################################
+  # INCLUDED.
+  #############################################################################
 
   included do
     class_attribute :_enumable_attributes, instance_accessor: false

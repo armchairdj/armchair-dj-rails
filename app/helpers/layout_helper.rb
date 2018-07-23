@@ -15,7 +15,7 @@ module LayoutHelper
   end
 
   def join_attr(*args)
-    attr = [args].flatten.compact.join(" ").gsub(/\s+/, " ").strip.split(" ").uniq.sort.join(" ")
+    attr = args.flatten.compact.join(" ").gsub(/\s+/, " ").strip.split(" ").uniq.sort.join(" ")
 
     attr.blank? ? nil : attr
   end

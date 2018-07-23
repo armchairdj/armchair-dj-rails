@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe StyleGuidesController, type: :routing do
+RSpec.describe StyleGuidesController do
   describe "routes to" do
     it "#index" do
       expect(get: "/style_guide").to route_to("style_guides#index")

@@ -1,3 +1,7 @@
 # frozen_string_literal: true
 
-class PostPolicy < PublicPolicy; end
+class PostPolicy < PublicPolicy
+  def feed?
+    index?
+  end
+end

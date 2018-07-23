@@ -76,8 +76,19 @@ class Post < ApplicationRecord
     memo
   end
 
-  def self.eager
-    includes(:links, :author, :tags).references(:author)
+  def self.for_list
+    includes(:author).references(:author)
+  end
+
+  def self.for_show
+    includes(:links, :author, :tags)
+  end
+
+  def self.for_cms_user(user)
+    return self.none unless user && user.can_access_cms?
+    return self.all  if user.can_edit?
+
+    where(author_id: user.id)
   end
 
   #############################################################################
@@ -90,9 +101,7 @@ class Post < ApplicationRecord
 
   scope :unpublished,  -> { where.not(status: :published) }
   scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-  scope :for_admin, -> { eager }
-  scope :for_site,  -> { eager.published.reverse_cron }
+  scope :for_public,   -> { published.reverse_cron }
 
   # TODO BJD create scopes to list posts by creator, work, year, tag or aspect
   # scope :for_creator
@@ -224,19 +233,28 @@ class Post < ApplicationRecord
     draft? || scheduled?
   end
 
-  def publish_date
-    return published_at if published?
-    return publish_on   if scheduled?
-  end
-
   def formatted_body
+    return unless body.present?
+
     renderer.render(body).html_safe
   end
 
 private
 
+  #############################################################################
+  # SLUGGABLE.
+  #############################################################################
+
+  def should_reset_slug_and_history?
+    unpublished?
+  end
+
+  #############################################################################
+  # MARKDOWN.
+  #############################################################################
+
   def renderer
-    @renderer ||= Redcarpet::Markdown.new(PostRender)
+    @renderer ||= Redcarpet::Markdown.new(PostRenderer)
   end
 
   #############################################################################

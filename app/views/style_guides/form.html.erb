@@ -12,13 +12,13 @@
 
       <%= f.input :string, as: :string %>
 
-      <%= render partial: "shared/forms/custom_radio_group", locals: {
+      <%= render "shared/forms/custom_radio_group",
         f:          f,
         name:       :radios,
         legend:     "Radios",
         hint:       "Hint for radios.",
         collection: [[1, "one"], [2, "two"], [3, "three"]]
-      } %>
+      %>
 
       <%= f.input :select, as: :select do %>
         <%= f.select :select, [true, false], include_blank: :true %>

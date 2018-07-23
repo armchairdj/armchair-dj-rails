@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin/roles/new", type: :view do
+RSpec.describe "admin/roles/new" do
   login_root
 
   before(:each) do

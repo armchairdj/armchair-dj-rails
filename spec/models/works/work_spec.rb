@@ -2,11 +2,29 @@
 
 require "rails_helper"
 
-RSpec.describe Work, type: :model do
+RSpec.describe Work do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
     it_behaves_like "an_alphabetizable_model"
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      describe "nilify_blanks" do
+        # Must specify individual fields for STI models.
+        it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
+        it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
+        it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
+        it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
+        it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
+      end
+    end
   end
 
   describe "class" do
@@ -84,34 +102,39 @@ RSpec.describe Work, type: :model do
     end
 
     describe "self#load_descendants" do
-      pending "requires subclass files in development mode only"
+      before(:each) { allow(File).to receive(:basename) }
+
+      context "in test environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("test".inquiry) }
+
+        it "loads" do
+          expect(File).to receive(:basename)
+          described_class.load_descendants
+        end
+      end
+
+      context "in development environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("development".inquiry) }
+
+        it "loads" do
+          expect(File).to receive(:basename)
+          described_class.load_descendants
+        end
+      end
+
+      context "in production environment" do
+        before(:each) { allow(Rails).to receive(:env).and_return("production".inquiry) }
+
+        it "does not load" do
+          expect(File).to_not receive(:basename)
+          described_class.load_descendants
+        end
+      end
     end
   end
 
   describe "scope-related" do
-    describe "basics" do
-      let(      :draft) { create_minimal_instance(                      title: "D", maker_names: ["Kate Bush"  ]) }
-      let(:published_1) { create_minimal_instance(:with_published_post, title: "Z", maker_names: ["Prince"     ]) }
-      let(:published_2) { create_minimal_instance(:with_published_post, title: "A", maker_names: ["David Bowie"]) }
-
-      let(        :ids) { [draft, published_1, published_2].map(&:id) }
-      let( :collection) { described_class.where(id: ids) }
-      let(:eager_loads) { [ :aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors ] }
-
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to contain_exactly(draft, published_1, published_2) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do
@@ -243,6 +266,26 @@ RSpec.describe Work, type: :model do
         end
       end
     end
+
+    describe "#prepare_for_editing" do
+      let(:instance) { create_minimal_instance }
+
+      subject { instance.prepare_for_editing }
+
+      before(:each) do
+        allow(instance).to receive(:prepare_credits)
+        allow(instance).to receive(:prepare_contributions)
+        allow(instance).to receive(:prepare_milestones)
+
+        expect(instance).to receive(:prepare_credits)
+        expect(instance).to receive(:prepare_contributions)
+        expect(instance).to receive(:prepare_milestones)
+      end
+
+      it "prepares all nested associations" do
+        subject
+      end
+    end
   end
 
   describe "validations" do
@@ -371,7 +414,6 @@ RSpec.describe Work, type: :model do
             subject.milestones_attributes = bad_attributes
 
             is_expected.to be_invalid
-
             is_expected.to have_error(:milestones, :nested_taken)
           end
         end
@@ -403,7 +445,28 @@ RSpec.describe Work, type: :model do
   describe "instance" do
     let(:instance) { create_minimal_instance }
 
-    pending "#posts"
+    describe "post methods" do
+      let!(:instance) { create_minimal_instance }
+      let!(  :review) { create(:minimal_review, work_id: instance.id) }
+      let!( :mixtape) do
+        playlist               = create(:minimal_playlist)
+        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
+
+        create(:minimal_mixtape, playlist_id: playlist.id)
+      end
+
+      describe "post_ids" do
+        subject { instance.post_ids }
+
+        it { is_expected.to contain_exactly(review.id, mixtape.id) }
+      end
+
+      describe "posts" do
+        subject { instance.posts }
+
+        it { is_expected.to contain_exactly(review, mixtape) }
+      end
+    end
 
     describe "#display_title" do
       it "displays with just title" do

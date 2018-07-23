@@ -1,9 +1,16 @@
 <%
   @title = ["Update Review", review_title(@review)]
+
+  deck = if @review.published?
+    "This post has already been published, so changes won't be autosaved."
+  else
+    "This post will be autosaved as you write and edit. When the screen flashes, you'll know it's been saved."
+  end
 %>
 
 <%= render "admin/shared/header", action: :edit, instance: @review,
-  headline: @title.first
+  headline: @title.first,
+  deck:     deck
 %>
 
 <%= render "form" %>

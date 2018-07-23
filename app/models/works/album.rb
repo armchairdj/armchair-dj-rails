@@ -7,7 +7,7 @@
 #  display_makers :string
 #  medium         :string
 #  subtitle       :string
-#  title          :string           not null
+#  title          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
@@ -18,7 +18,5 @@
 #
 
 class Album < Medium
-  def available_facets
-    [:album_format, :music_label, :musical_mood, :musical_genre]
-  end
+  self.available_facets = [:album_format, :music_label, :musical_mood, :musical_genre]
 end

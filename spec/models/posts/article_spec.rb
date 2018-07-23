@@ -2,45 +2,20 @@
 
 require "rails_helper"
 
-RSpec.describe Article, type: :model do
+RSpec.describe Article do
   describe "concerns" do
-    specify { expect(described_class.superclass).to eq(Post) }
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [:author] }
+      let(:show_loads) { [:author, :links, :tags] }
+    end
   end
 
   describe "class" do
-    # Nothing so far.
+    specify { expect(described_class.superclass).to eq(Post) }
   end
 
   describe "scope-related" do
-    let!(      :draft) { create_minimal_instance(:draft    ) }
-    let!(  :scheduled) { create_minimal_instance(:scheduled) }
-    let!(  :published) { create_minimal_instance(:published) }
-    let!(        :ids) { [draft, scheduled, published].map(&:id) }
-    let!( :collection) { described_class.where(id: ids) }
-    let!(:eager_loads) { [:links, :author, :tags] }
-
-    describe "basics" do
-      describe "self#eager" do
-        subject { collection.eager }
-
-        it { is_expected.to contain_exactly(*collection.to_a) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        it { is_expected.to contain_exactly(*collection.to_a) }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-
-      describe "self#for_site" do
-        subject { collection.for_site }
-
-        it { is_expected.to eq [published] }
-        it { is_expected.to eager_load(eager_loads) }
-      end
-    end
+    # Nothing so far.
   end
 
   describe "associations" do

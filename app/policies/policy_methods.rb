@@ -13,7 +13,19 @@ protected
   def logged_in_as_cms_user?
     return true if user && user.can_write?
 
-    raise Pundit::NotAuthorizedError, "must be CMS user"
+    raise Pundit::NotAuthorizedError, "current user does not have permission"
+  end
+
+  def logged_in_as_admin_or_root?
+    return true if user && user.can_administer?
+
+    raise Pundit::NotAuthorizedError, "current user does not have permission"
+  end
+
+  def logged_in_as_root?
+    return true if user && user.root?
+
+    raise Pundit::NotAuthorizedError, "current user does not have permission"
   end
 
   def raise_unauthorized

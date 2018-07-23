@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe JsHelper, type: :helper do
+RSpec.describe JsHelper do
   pending "tests"
 end

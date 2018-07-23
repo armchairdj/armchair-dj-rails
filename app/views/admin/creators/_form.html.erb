@@ -12,28 +12,28 @@
       <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Primary or Pseudonym") %>
 
-        <%= render partial: "shared/forms/custom_radio_group", locals: {
+        <%= render "shared/forms/custom_radio_group",
           name:       :primary,
           f:          f,
           collection: Creator.primary_options,
           invert:     true
-        } %>
+        %>
 
-        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render "shared/forms/has_many_fieldset_with_toggle",
           f:           f,
           association: :pseudonym_identities,
           bool:        true,
           expandable:  true,
-          headline:    "Pseudonyms",
-        } %>
+          headline:    "Pseudonyms"
+        %>
 
-        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render "shared/forms/has_many_fieldset_with_toggle",
           f:           f,
           association: :real_name_identities,
           bool:        false,
           expandable:  false,
-          headline:    "Real Name",
-        } %>
+          headline:    "Real Name"
+        %>
       <% end %>
     <% end %>
 
@@ -41,28 +41,28 @@
       <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Individual or Group") %>
 
-        <%= render partial: "shared/forms/custom_radio_group", locals: {
+        <%= render "shared/forms/custom_radio_group",
           f:          f,
           name:       :individual,
           collection: Creator.individual_options,
           invert:     true
-        } %>
+        %>
 
-        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render "shared/forms/has_many_fieldset_with_toggle",
           f:           f,
           association: :group_memberships,
           bool:        true,
           expandable:  true,
-          headline:    "Groups",
-        } %>
+          headline:    "Groups"
+        %>
 
-        <%= render partial: "shared/forms/has_many_fieldset_with_toggle", locals: {
+        <%= render "shared/forms/has_many_fieldset_with_toggle",
           f:           f,
           association: :member_memberships,
           bool:        false,
           expandable:  true,
-          headline:    "Members",
-        } %>
+          headline:    "Members"
+        %>
       <% end %>
     <% end %>
   <% end %>

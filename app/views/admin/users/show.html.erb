@@ -48,5 +48,5 @@
   ]
 %>
 
-<%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.for_admin.reverse_cron %>
-<%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.for_admin.alpha %>
+<%= render partial: "admin/posts/list",     as: "posts",     object: @user.posts.reverse_cron %>
+<%= render partial: "admin/playlists/list", as: "playlists", object: @user.playlists.alpha %>

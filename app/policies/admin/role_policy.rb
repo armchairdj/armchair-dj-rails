@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-class Admin::RolePolicy < AdminPolicy; end
+class Admin::RolePolicy < Admin::BasePolicy; end

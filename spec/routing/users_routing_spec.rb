@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe UsersController, type: :routing do
+RSpec.describe UsersController do
   describe "routes to" do
     it "#profile" do
       expect(get: "/profile/username").to route_to("users#show", id: "username")

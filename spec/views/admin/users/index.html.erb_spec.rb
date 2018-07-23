@@ -1,25 +1,17 @@
 require "rails_helper"
 
-RSpec.describe "admin/users/index", type: :view do
+RSpec.describe "admin/users/index" do
   login_root
 
-  let(:dummy) { Admin::UsersController.new }
-
   before(:each) do
-    3.times { create(:minimal_user, :with_published_post) }
-
-    allow(dummy).to receive(:polymorphic_path).and_return("/")
+    3.times { create(:minimal_user) }
 
     @model_class = assign(:model_name, User)
-    @scope       = assign(:scope, "All")
-    @sort        = assign(:sort, "Default")
-    @dir         = assign(:dir, "ASC")
-    @scopes      = dummy.send(:scopes_for_view, @scope)
-    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @users       = assign(:users, User.for_admin.page(1))
+    @collection    = assign(:collection, Ginsu::Collection.new(User.all))
+    @users       = assign(:users, @collection.resolve)
   end
 
-  it "renders a list of admin/users" do
+  it "renders a list of users" do
     render
   end
 end

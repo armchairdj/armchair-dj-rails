@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe MixtapesHelper, type: :helper do
+RSpec.describe MixtapesHelper do
   let(:playlist) { create(:minimal_playlist, title: "This Is the Title") }
   let(:instance) { create(:minimal_mixtape, playlist: playlist) }
 

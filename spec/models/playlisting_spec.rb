@@ -17,11 +17,22 @@
 
 require "rails_helper"
 
-RSpec.describe Playlisting, type: :model do
+RSpec.describe Playlisting do
   describe "concerns" do
     it_behaves_like "a_listable_model", :playlist do
       let(:primary) { create(:complete_playlist).playlistings.sorted }
       let(  :other) { create(:complete_playlist).playlistings.sorted }
+    end
+
+    it_behaves_like "an_eager_loadable_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:playlist, :work] }
+    end
+
+    describe "nilify_blanks" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 
@@ -30,42 +41,23 @@ RSpec.describe Playlisting, type: :model do
   end
 
   describe "scope-related" do
-    describe "basics" do
+    describe "self#sorted" do
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
       let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
-      let(       :ids) { Playlisting.where(playlist_id: [playlist_1.id, playlist_2.id]).map(&:id).shuffle }
+
+      let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
+      let(     :items) { Playlisting.where(playlist_id: parent_ids) }
+
+      let(       :ids) { items.map(&:id).shuffle }
       let(:collection) { Playlisting.where(id: ids) }
 
-      describe "self#eager" do
-        subject { collection.eager }
+      subject { collection.sorted }
 
-        it { is_expected.to eager_load(:playlist, :work) }
-      end
+      it "sorts by playlist name and position" do
+        expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
+        actual   = subject.map(&:id)
 
-      describe "self#sorted" do
-        subject { collection.sorted }
-
-        it { is_expected.to_not eager_load(:playlist, :work) }
-
-        it "sorts by playlist name and position" do
-          expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = collection.map(&:id)
-
-          expect(actual).to eq(expected)
-        end
-      end
-
-      describe "self#for_admin" do
-        subject { collection.for_admin }
-
-        specify "includes all, sorted" do
-          expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
-          actual   = collection.map(&:id)
-
-          expect(actual).to eq(expected)
-        end
-
-        it { is_expected.to eager_load(:playlist, :work) }
+        expect(actual).to eq(expected)
       end
     end
   end

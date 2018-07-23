@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ErrorsController, type: :controller do
+RSpec.describe ErrorsController do
   describe "GET #permission_denied" do
     it "renders" do
       get :permission_denied

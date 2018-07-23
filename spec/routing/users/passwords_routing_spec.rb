@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::PasswordsController, type: :routing do
+RSpec.describe Users::PasswordsController do
   describe "routes to" do
     it "#new" do
       expect(get: "/users/password/new").to route_to("users/passwords#new")

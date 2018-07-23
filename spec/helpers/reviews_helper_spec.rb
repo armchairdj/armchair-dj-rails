@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ReviewsHelper, type: :helper do
+RSpec.describe ReviewsHelper do
   let(    :work) { create(:kate_bush_never_for_ever, subtitle: "Alternative Version") }
   let(:instance) { create(:minimal_review, work: work) }
 

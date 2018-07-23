@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/posts/mixtapes/new", type: :view do
+RSpec.describe "admin/posts/mixtapes/new" do
   login_root
 
   before(:each) do
@@ -11,10 +11,14 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       create(:minimal_tag)
     end
 
-    @model_class  = assign(:model_name, Mixtape)
-    @playlists    = assign(:playlists,  Playlist.for_admin.alpha)
-    @tags         = assign(:tags,       Tag.for_admin.alpha)
-    @mixtape      = assign(:mixtape,    build(:mixtape))
+    @model_class = assign(:model_name, Mixtape)
+
+    @playlists = assign(:playlists,  Playlist.all.alpha)
+
+    @post = @mixtape = build(:mixtape)
+
+    assign(:review, @mixtape)
+    assign(:post,   @mixtape)
   end
 
   context "pristine" do
@@ -22,10 +26,9 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       render
 
       assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-        assert_select("div.error-notification", { count: 0 })
-
-        assert_select("textarea[name=?]", "mixtape[body]")
-        assert_select("textarea[name=?]", "mixtape[summary]")
+        assert_select("div.error-notification",               { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
+        assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
       end
     end
   end
@@ -39,10 +42,7 @@ RSpec.describe "admin/posts/mixtapes/new", type: :view do
       render
 
       assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-        assert_select("div.error-notification")
-
-        assert_select("textarea[name=?]", "mixtape[body]")
-        assert_select("textarea[name=?]", "mixtape[summary]")
+        assert_select("div.error-notification", { count: 1 })
       end
     end
   end

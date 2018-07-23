@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Posts::ReviewsController, type: :routing do
+RSpec.describe Posts::ReviewsController do
   describe "routes to" do
     it "#index" do
       expect(get: "/reviews").to route_to("posts/reviews#index")

@@ -3,7 +3,7 @@
 class PublicPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.for_site
+      scope.for_public
     end
   end
 

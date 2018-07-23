@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-class ArticlePolicy < PublicPolicy; end
+class ArticlePolicy < PostPolicy; end

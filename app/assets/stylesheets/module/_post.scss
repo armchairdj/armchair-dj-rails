@@ -1,3 +1,11 @@
 .post-body {
-  
+  @include bottom-margin();
+
+  ul {
+    @include bulleted-list($list-style-type: square);
+  }
+
+  ol {
+    @include numbered-list();
+  }
 }

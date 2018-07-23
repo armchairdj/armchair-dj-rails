@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe Users::SessionsController, type: :controller do
+RSpec.describe Users::SessionsController do
   pending "sessions_controller"
 end

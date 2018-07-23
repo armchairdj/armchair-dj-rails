@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin/users/edit", type: :view do
+RSpec.describe "admin/users/edit" do
   login_root
 
   before(:each) do

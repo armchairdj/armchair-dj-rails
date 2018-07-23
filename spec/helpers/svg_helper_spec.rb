@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SvgHelper, type: :helper do
+RSpec.describe SvgHelper do
   before(:each) do
     allow(helper).to receive(:inline_svg).and_return("inlined_svg")
   end

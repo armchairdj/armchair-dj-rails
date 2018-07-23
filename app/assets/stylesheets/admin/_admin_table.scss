@@ -16,6 +16,10 @@
   thead {
     th {
       padding-top: 0;
+
+      > a {
+        display: block;
+      }
     }
   }
 

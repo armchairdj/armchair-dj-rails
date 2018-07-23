@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ArticlesHelper, type: :helper do
+RSpec.describe ArticlesHelper do
   let(:instance) { create(:minimal_article, title: "This Is the Title") }
 
   describe "#article_title" do

@@ -2,6 +2,6 @@
 
 require "rails_helper"
 
-RSpec.describe Users::RegistrationsController, type: :controller do
+RSpec.describe Users::RegistrationsController do
   pending "registrations_controller"
 end

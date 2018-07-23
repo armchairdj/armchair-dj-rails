@@ -11,10 +11,6 @@
   <% end %>
 <% end %>
 
-<%= render partial: "shared/playback/posts", locals: {
-  posts: @user.posts.for_site
-} %>
+<%= render "shared/playback/posts", posts: @user.posts.for_public %>
 
-<%= render partial: "shared/playback/links", locals: {
-  links: @user.links
-} %>
+<%= render "shared/playback/links", links: @user.links %>

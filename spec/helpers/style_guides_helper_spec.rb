@@ -3,7 +3,7 @@
 require "ffaker"
 require "rails_helper"
 
-RSpec.describe StyleGuidesHelper, type: :helper do
+RSpec.describe StyleGuidesHelper do
   describe "#lorem_html_paragraphs" do
     before(:each) do
       allow(FFaker::HipsterIpsum).to receive(:paragraphs).with(2).and_return(["first", "second"])

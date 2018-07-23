@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UsersController, type: :controller do
+RSpec.describe UsersController do
   context "published writer" do
     let(:user) { create(:writer, :with_published_post) }
 

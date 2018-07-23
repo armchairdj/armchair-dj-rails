@@ -2,23 +2,15 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/creators/index", type: :view do
+RSpec.describe "admin/creators/index" do
   login_root
 
-  let(:dummy) { Admin::CreatorsController.new }
-
   before(:each) do
-    3.times { create(:minimal_creator, :with_published_post) }
-
-    allow(dummy).to receive(:polymorphic_path).and_return("/")
+    3.times { create(:minimal_creator) }
 
     @model_class = assign(:model_name, Creator)
-    @scope       = assign(:scope, "All")
-    @sort        = assign(:sort, "Default")
-    @dir         = assign(:dir, "ASC")
-    @scopes      = dummy.send(:scopes_for_view, @scope)
-    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @creators    = assign(:creators, Creator.all.alpha.page(1))
+    @collection    = assign(:collection, Ginsu::Collection.new(Creator.all))
+    @creators    = assign(:creators, @collection.resolve)
   end
 
   it "renders a list of creators" do
