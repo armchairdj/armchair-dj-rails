@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Product, type: :model do
+RSpec.describe Product do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

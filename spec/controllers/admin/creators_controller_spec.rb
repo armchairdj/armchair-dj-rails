@@ -2,12 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::CreatorsController, type: :controller do
+RSpec.describe Admin::CreatorsController do
   let(:creator) { create(:minimal_creator) }
 
   describe "concerns" do
-    it_behaves_like "a_linkable_controller"
-
     it_behaves_like "a_paginatable_controller"
   end
 

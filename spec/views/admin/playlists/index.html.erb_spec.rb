@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "admin/playlists/index", type: :view do
+RSpec.describe "admin/playlists/index" do
   login_root
 
   before(:each) do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Review, type: :model do
+RSpec.describe Review do
   describe "concerns" do
     it_behaves_like "an_eager_loadable_model" do
       let(:list_loads) { [:author, :work] }

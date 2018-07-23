@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::RolesController, type: :controller do
+RSpec.describe Admin::RolesController do
   let(:media) { Work.media }
   let(        :role) { create(:minimal_role, medium: media.first.last) }
 

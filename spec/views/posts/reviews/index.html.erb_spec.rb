@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "posts/reviews/index", type: :view do
+RSpec.describe "posts/reviews/index" do
   before(:each) do
     3.times { create(:minimal_review, :published) }
 

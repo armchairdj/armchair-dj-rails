@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TvShow, type: :model do
+RSpec.describe TvShow do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

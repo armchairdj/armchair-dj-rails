@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "pages/terms", type: :view do
+RSpec.describe "pages/terms" do
   it "renders static page with no instance variables" do
     render
   end

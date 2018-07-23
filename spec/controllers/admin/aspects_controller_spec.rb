@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::AspectsController, type: :controller do
+RSpec.describe Admin::AspectsController do
   let(:aspect) { create(:minimal_aspect) }
 
   describe "concerns" do

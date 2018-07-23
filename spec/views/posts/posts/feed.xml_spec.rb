@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "posts/posts/feed.rss.builder", type: :view do
+RSpec.describe "posts/posts/feed.rss.builder" do
   before(:each) do
     create(:complete_article, :published)
     create(:complete_review,  :published)

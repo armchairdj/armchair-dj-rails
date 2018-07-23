@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Album, type: :model do
+RSpec.describe Album do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

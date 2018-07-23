@@ -229,6 +229,7 @@ group :development, :test do
   # System and JS specs.
   gem "capybara"
   gem "selenium-webdriver"
+  gem "chromedriver-helper"
 
   # Environment variable loader.
   gem "dotenv-rails"

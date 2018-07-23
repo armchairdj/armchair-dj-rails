@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe StyleGuidesController, type: :controller do
+RSpec.describe StyleGuidesController do
   context "as root" do
     login_writer
 

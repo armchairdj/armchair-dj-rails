@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe MarkupHelper, type: :helper do
+RSpec.describe MarkupHelper do
   describe "#blockquote" do
     context "with block" do
       pending "renders"

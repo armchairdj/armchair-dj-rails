@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe WorksHelper, type: :helper do
+RSpec.describe WorksHelper do
   describe "#link_to_work" do
     let(:instance) { create(:minimal_book, title: "Vacuum Flowers", credits_attributes: {
       "0" => { creator_id: create(:minimal_creator, name: "Michael Swanwick").id }

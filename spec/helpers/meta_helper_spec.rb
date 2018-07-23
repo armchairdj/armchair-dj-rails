@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe MetaHelper, type: :helper do
+RSpec.describe MetaHelper do
   describe "#head_tags" do
     before(:each) do
       allow(helper).to receive(  :csrf_meta_tags).and_return("csrf")

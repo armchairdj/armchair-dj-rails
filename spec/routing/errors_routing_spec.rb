@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ErrorsController, type: :routing do
+RSpec.describe ErrorsController do
   describe "routes to" do
     it "#bad_request" do
       expect(get: "/422").to route_to("errors#bad_request")

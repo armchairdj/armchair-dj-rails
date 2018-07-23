@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::TagsController, type: :controller do
+RSpec.describe Admin::TagsController do
   let(:tag) { create(:minimal_tag) }
 
   describe "concerns" do

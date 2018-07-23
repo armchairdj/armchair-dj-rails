@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "posts/mixtapes/show", type: :view do
+RSpec.describe "posts/mixtapes/show" do
   before(:each) do
     @mixtape = assign(:mixtape, create(:complete_mixtape))
   end

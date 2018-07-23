@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Mixtape, type: :model do
+RSpec.describe Mixtape do
   describe "concerns" do
     it_behaves_like "an_eager_loadable_model" do
       let(:list_loads) { [:author, :playlist] }

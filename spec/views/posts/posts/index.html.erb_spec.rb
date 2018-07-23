@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "posts/posts/index", type: :view do
+RSpec.describe "posts/posts/index" do
   before(:each) do
     create(:minimal_article, :published)
     create(:minimal_review,  :published)

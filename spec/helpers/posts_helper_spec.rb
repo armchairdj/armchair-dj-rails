@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PostsHelper, type: :helper do
+RSpec.describe PostsHelper do
   describe "link methods" do
     pending "#link_to_post"
 

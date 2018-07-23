@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/creators/show", type: :view do
+RSpec.describe "admin/creators/show" do
   login_root
 
   before(:each) do

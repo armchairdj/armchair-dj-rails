@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Posts::PostsController, type: :controller do
+RSpec.describe Posts::PostsController do
   describe "concerns" do
     it_behaves_like "a_paginatable_controller"
   end

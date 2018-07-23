@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe AdminHelper, type: :helper do
+RSpec.describe AdminHelper do
   before(:each) do
     allow(helper).to receive(:current_user).and_return(create(:root))
   end

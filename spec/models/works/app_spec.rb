@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe App, type: :model do
+RSpec.describe App do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

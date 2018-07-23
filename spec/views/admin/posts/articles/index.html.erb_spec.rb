@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "admin/posts/articles/index", type: :view do
+RSpec.describe "admin/posts/articles/index" do
   login_root
 
   before(:each) do

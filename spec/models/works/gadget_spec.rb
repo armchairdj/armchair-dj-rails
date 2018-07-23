@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Gadget, type: :model do
+RSpec.describe Gadget do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

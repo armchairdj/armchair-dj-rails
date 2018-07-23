@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe GraphicNovel, type: :model do
+RSpec.describe GraphicNovel do
   describe "concerns" do
     it_behaves_like "a_medium"
   end

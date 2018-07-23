@@ -17,7 +17,7 @@
 
 require "rails_helper"
 
-RSpec.describe Aspect, type: :model do
+RSpec.describe Aspect do
   describe "concerns" do
     it_behaves_like "an_application_record"
 

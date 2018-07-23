@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "posts/mixtapes/index", type: :view do
+RSpec.describe "posts/mixtapes/index" do
   before(:each) do
     3.times { create(:minimal_mixtape, :published) }
 

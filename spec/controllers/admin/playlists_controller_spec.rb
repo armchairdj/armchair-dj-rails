@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::PlaylistsController, type: :controller do
+RSpec.describe Admin::PlaylistsController do
   let(:instance) { create(:minimal_playlist) }
 
   describe "concerns" do

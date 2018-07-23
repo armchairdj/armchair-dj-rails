@@ -21,7 +21,7 @@
 
 require "rails_helper"
 
-RSpec.describe Milestone, type: :model do
+RSpec.describe Milestone do
   describe "concerns" do
     it_behaves_like "an_application_record"
 

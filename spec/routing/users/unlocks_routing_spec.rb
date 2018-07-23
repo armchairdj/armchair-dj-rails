@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Users::UnlocksController, type: :routing do
+RSpec.describe Users::UnlocksController do
   describe "routes to" do
     it "#new" do
       expect(get: "/users/unlock/new").to route_to("users/unlocks#new")

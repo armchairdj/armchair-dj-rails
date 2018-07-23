@@ -18,11 +18,11 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
-  config.before(:each, type: :system, js: true) do
-    driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+  config.before(:each, type: :system) do
+    driven_by :selenium_chrome_headless
   end
 
-#  config.filter_run_including focus: true
+  # config.filter_run_including focus: true
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe PlaylistsHelper, type: :helper do
+RSpec.describe PlaylistsHelper do
   describe "#link_to_playlist" do
     let(:instance) { create(:minimal_playlist, title: "Playlist") }
 

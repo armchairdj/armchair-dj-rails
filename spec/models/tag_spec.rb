@@ -15,7 +15,7 @@
 
 require "rails_helper"
 
-RSpec.describe Tag, type: :model do
+RSpec.describe Tag do
   describe "concerns" do
     it_behaves_like "an_application_record"
 

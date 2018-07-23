@@ -24,7 +24,7 @@
 
 require "rails_helper"
 
-RSpec.describe Credit, type: :model do
+RSpec.describe Credit do
   describe "concerns" do
     it_behaves_like "an_application_record"
 

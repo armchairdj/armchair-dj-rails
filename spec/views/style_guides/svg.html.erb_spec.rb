@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "style_guides/svg", type: :view do
+RSpec.describe "style_guides/svg" do
   it "renders static page with no instance variables" do
     render
   end
