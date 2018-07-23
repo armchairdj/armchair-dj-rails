@@ -6,18 +6,19 @@ class Sorter < Dicer
   # CONSTANTS.
   #############################################################################
 
-  JOINER = ", ".freeze
+  JOINER       = ", ".freeze
+  ALLOWED_DIRS = ["ASC", "DESC"].freeze
 
   #############################################################################
   # INSTANCE.
   #############################################################################
 
-  def initialize(current_scope, current_sort, current_dir)
+  def initialize(current_scope: nil, current_sort: nil, current_dir: nil)
     current_scope = nil                if current_scope.blank?
     current_sort  = allowed.keys.first if current_sort.blank?
     current_dir   = "ASC"              if current_dir.blank?
 
-    super(current_scope, current_sort, current_dir)
+    super(current_scope: current_scope, current_sort: current_sort, current_dir: current_dir)
   end
 
   def resolve
@@ -51,10 +52,15 @@ class Sorter < Dicer
 
 private
 
-  def validate
-    return if allowed.keys.include?(@current_sort)
+  def valid?
+    return false unless allowed.keys.include?(@current_sort)
+    return false unless ALLOWED_DIRS.include?(@current_dir)
 
-    raise Pundit::NotAuthorizedError, "Unknown sort for #{model_class}: #{@current_sort}."
+    true
+  end
+
+  def invalid_msg
+    I18n.t("exceptions.sorter.invalid", model: model_class, sort: @current_sort, dir: @current_dir)
   end
 
   def reverse_first_clause(compound_sort_clause)
@@ -69,7 +75,7 @@ private
     return clause.gsub("DESC", "ASC") if clause.match(/DESC$/)
     return clause.gsub("ASC", "DESC") if clause.match(/ASC$/)
 
-    "#{parts[0]} DESC"
+    "#{clause} DESC"
   end
 
   def alpha_sort_sql

@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class CreatorScoper < Scoper
+  def allowed
+    super.reverse_merge({
+      "Real"       => :primary,
+      "Pseudynym"  => :secondary,
+      "Individual" => :individual,
+      "Group"      => :collective,
+    })
+  end
 
 private
 

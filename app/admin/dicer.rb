@@ -8,13 +8,27 @@ class Dicer
   attr_reader :current_sort
   attr_reader :current_dir
 
-  def initialize(current_scope = nil, current_sort = nil, current_dir = nil)
+  def initialize(current_scope: nil, current_sort: nil, current_dir: nil)
     @current_scope = current_scope
     @current_sort  = current_sort
     @current_dir   = current_dir
   end
 
 private
+
+  def validate
+    return if valid?
+
+    raise Pundit::NotAuthorizedError, invalid_msg
+  end
+
+  def valid?
+    raise NotImplementedError
+  end
+
+  def invalid_msg
+    raise NotImplementedError
+  end
 
   def model_class
     raise NotImplementedError

@@ -8,8 +8,8 @@ RSpec.shared_examples "a_scoper" do |model_class|
   resolved_map   = described_class.new.map
 
   describe "#constructor" do
-    describe "defaults" do
-      let(:instance) { described_class.new("", "", "") }
+    context "defaults" do
+      let(:instance) { described_class.new(current_scope: "", current_sort: "", current_dir: "") }
 
       describe "sets current_scope to default" do
         subject { instance.current_scope }
@@ -30,10 +30,10 @@ RSpec.shared_examples "a_scoper" do |model_class|
       end
     end
 
-    describe "explicit values" do
-      let(:instance) { described_class.new("All", "ID", "DESC") }
+    context "explicit values" do
+      let(:instance) { described_class.new(current_scope: "All", current_sort: "ID", current_dir: "DESC") }
 
-       describe "sets current_scope" do
+      describe "sets current_scope" do
         subject { instance.current_scope }
 
         it { is_expected.to eq("All") }
@@ -54,17 +54,37 @@ RSpec.shared_examples "a_scoper" do |model_class|
   end
 
   describe "instance" do
-    let(:instance     ) { described_class.new(current_scope, current_sort, current_dir) }
     let(:current_scope) { "All"     }
     let(:current_sort ) { "Default" }
     let(:current_dir  ) { "ASC"     }
+    let(:instance     ) { described_class.new(
+      current_scope: current_scope,
+      current_sort:  current_sort,
+      current_dir:   current_dir
+    ) }
 
     describe "#resolve" do
       subject { instance.resolve }
 
-      before(:each) do
-        allow( instance).to receive(:validate)
-        expect(instance).to receive(:validate)
+      context "basics" do
+        before(:each) do
+          allow( instance).to receive(:validate)
+          expect(instance).to receive(:validate)
+        end
+
+        it "validates" do
+          is_expected.to eq(instance.allowed[current_scope])
+        end
+      end
+
+      allowed_keys.each do |key|
+        context "for #{key} scope" do
+          let(:instance) { described_class.new(current_scope: key) }
+
+          it "returns a scope" do
+            is_expected.to eq(instance.allowed[key])
+          end
+        end
       end
     end
 
@@ -74,70 +94,54 @@ RSpec.shared_examples "a_scoper" do |model_class|
       end
 
       resolved_map.each do |key, value|
-        describe "key #{key}" do
-          it { expect(value          ).to be_a_kind_of(Hash) }
-          it { expect(value[:active?]).to be_in([true, false]) }
-          it { expect(value[:url    ]).to be_a_kind_of(String) }
+        context "for key #{key}" do
+          it { expect(value).to be_a_kind_of(Hash) }
+
+          describe ":active?" do
+            it { expect(value[:active?]).to be_boolean }
+          end
+
+          describe ":url" do
+            it { expect(value[:url]).to match(/\/admin\/\w+\?.+=.+(&.+=.+)*/) }
+          end
         end
       end
     end
 
     describe "#allowed" do
-      allowed_keys.each do |key|
-        describe "key :#{key} is a short string identifier for use in UI and querystring" do
-          specify { expect(key).to be_a_kind_of(String) }
+      describe "keys" do
+        allowed_keys.each do |key|
+          describe "'#{key}' is a short string identifier for use in UI and querystring" do
+            specify { expect(key).to be_a_kind_of(String) }
+          end
         end
       end
 
-      allowed_values.each do |value|
-        describe "value #{value}" do
-          it "is a symbolized model scope" do
-            expect(value).to be_a_kind_of(Symbol)
-          end
+      describe "values" do
+        allowed_values.each.with_index do |value, i|
+          describe "for '#{allowed_keys[i]}'" do
+            it "is a symbolized model scope" do
+              expect(value).to be_a_kind_of(Symbol)
+            end
 
-          it "can be called on the model" do
-            actual = model_class.public_send(value)
+            it "can be called on the model" do
+              actual = model_class.public_send(value)
 
-            expect(actual).to be_a_kind_of(ActiveRecord::Relation)
+              expect(actual).to be_a_kind_of(ActiveRecord::Relation)
+            end
           end
         end
       end
     end
 
     context "private" do
-      describe "#model_class" do
-        subject { instance.send(:model_class) }
-
-        it { is_expected.to eq(model_class) }
-      end
-
-      describe "#diced_url" do
-        subject { instance.send(:diced_url, scope, sort, dir) }
-
-        context "with all params" do
-          let(:scope) { "scope" }
-          let( :sort) { "sort"  }
-          let(  :dir) { "dir"   }
-
-          it { is_expected.to eq("/admin/#{view_path}?dir=dir&scope=scope&sort=sort") }
-        end
-
-        context "with missing params" do
-          let(:scope) { "scope" }
-          let( :sort) { nil     }
-          let(  :dir) { nil     }
-
-          it { is_expected.to eq("/admin/#{view_path}?scope=scope") }
-        end
-      end
-
       describe "#validate" do
         subject { instance.send(:validate) }
 
         describe "valid" do
           allowed_keys.each do |key|
-            describe "for #{key} scope" do
-              let(:instance) { described_class.new(key) }
+            context "for #{key} scope" do
+              let(:instance) { described_class.new(current_scope: key) }
 
               specify { expect{ subject }.to_not raise_exception }
             end
@@ -145,7 +149,7 @@ RSpec.shared_examples "a_scoper" do |model_class|
         end
 
         describe "invalid" do
-          let(:instance) { described_class.new("NOT_A_VALID_KEY") }
+          let(:instance) { described_class.new(current_scope: "NOT_A_VALID_SCOPE_KEY") }
 
           specify { expect{ subject }.to raise_exception(Pundit::NotAuthorizedError) }
         end
