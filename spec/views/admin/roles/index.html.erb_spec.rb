@@ -7,8 +7,8 @@ RSpec.describe "admin/roles/index", type: :view do
     3.times { create(:minimal_role) }
 
     @model_class = assign(:model_name, Role)
-    @relation    = assign(:relation, DicedRelation.new(Role.all))
-    @roles       = assign(:roles, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Role.all))
+    @roles       = assign(:roles, @collection.resolve)
   end
 
   it "renders a list of roles" do

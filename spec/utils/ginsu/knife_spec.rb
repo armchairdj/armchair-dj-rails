@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Dicer do
+RSpec.describe Ginsu::Knife do
   describe "instance" do
     context "class" do
       describe "#diced_url" do

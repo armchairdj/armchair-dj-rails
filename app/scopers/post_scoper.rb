@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PostScoper < Scoper
+class PostScoper < Ginsu::Scoper
   def allowed
     super.reverse_merge({
       "Draft"      => :draft,

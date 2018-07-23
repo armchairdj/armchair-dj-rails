@@ -7,8 +7,8 @@ RSpec.describe "admin/aspects/index", type: :view do
     3.times { create(:minimal_aspect) }
 
     @model_class = assign(:model_name, Aspect)
-    @relation    = assign(:relation, DicedRelation.new(Aspect.all))
-    @aspects     = assign(:aspects, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Aspect.all))
+    @aspects     = assign(:aspects, @collection.resolve)
   end
 
   it "renders a list of aspects" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TagScoper < Scoper
+class TagScoper < Ginsu::Scoper
 
 private
 

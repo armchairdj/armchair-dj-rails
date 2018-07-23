@@ -9,8 +9,8 @@ RSpec.describe "admin/creators/index", type: :view do
     3.times { create(:minimal_creator) }
 
     @model_class = assign(:model_name, Creator)
-    @relation    = assign(:relation, DicedRelation.new(Creator.all))
-    @creators    = assign(:creators, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Creator.all))
+    @creators    = assign(:creators, @collection.resolve)
   end
 
   it "renders a list of creators" do

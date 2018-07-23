@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "a_scoper" do
+RSpec.shared_examples "a_ginsu_scoper" do
   let(:model_class) { described_class.new.send(:model_class) }
   let(:view_path  ) { model_class.model_name.plural }
 

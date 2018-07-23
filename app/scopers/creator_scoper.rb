@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatorScoper < Scoper
+class CreatorScoper < Ginsu::Scoper
   def allowed
     super.reverse_merge({
       "Real"       => :primary,

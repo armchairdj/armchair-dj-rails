@@ -49,7 +49,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     login_root
 
     describe "GET #index" do
-      # it_behaves_like "an_admin_index"
+      it_behaves_like "an_admin_index"
     end
 
     describe "GET #show" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkSorter < Sorter
+class WorkSorter < Ginsu::Sorter
   def allowed
     super.merge({
       "Title"   => title_sort_sql,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkScoper < Scoper
+class WorkScoper < Ginsu::Scoper
 
 private
 

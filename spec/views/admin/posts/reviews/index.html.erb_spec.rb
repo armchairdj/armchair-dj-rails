@@ -9,8 +9,8 @@ RSpec.describe "admin/posts/reviews/index", type: :view do
     3.times { create(:minimal_review) }
 
     @model_class = assign(:model_name, Review)
-    @relation    = assign(:relation, DicedRelation.new(Review.all))
-    @reviews     = assign(:reviews, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Review.all))
+    @reviews     = assign(:reviews, @collection.resolve)
   end
 
   it "renders a list of reviews" do

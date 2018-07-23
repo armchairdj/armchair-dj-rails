@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PostSorter < Sorter
+class PostSorter < Ginsu::Sorter
   def allowed
     super.merge({
       "Title"   => alpha_sort_sql,

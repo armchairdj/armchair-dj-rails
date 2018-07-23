@@ -8,7 +8,7 @@ class Posts::PostsController < ApplicationController
   # GET /
   # GET /.json
   def index
-    @posts = @collection = policy_scope(Post).for_list.page(params[:page])
+    @posts = policy_scope(Post).for_list.page(params[:page])
 
     @homepage = true if request.url == "/"
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserScoper < Scoper
+class UserScoper < Ginsu::Scoper
   def allowed
     super.merge({
       "Member" => :member,

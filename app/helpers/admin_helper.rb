@@ -205,8 +205,6 @@ module AdminHelper
   end
 
   def sortable_link(sorts, name, text: nil)
-    Rails.logger.info sorts.inspect
-    Rails.logger.info name.inspect
     text    = text || content_tag(:span, name)
     props   = sorts[name]
     classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil

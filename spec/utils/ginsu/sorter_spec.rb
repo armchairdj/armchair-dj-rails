@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Sorter do
+RSpec.describe Ginsu::Sorter do
   describe "#class" do
     describe "#prepare_clause" do
       subject { described_class.prepare_clause(clauses, dir) }

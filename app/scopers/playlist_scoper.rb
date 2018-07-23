@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PlaylistScoper < Scoper
+class PlaylistScoper < Ginsu::Scoper
 
 private
 

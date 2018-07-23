@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AspectScoper < Scoper
+class AspectScoper < Ginsu::Scoper
 
 private
 

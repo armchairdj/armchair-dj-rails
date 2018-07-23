@@ -9,8 +9,8 @@ RSpec.describe "admin/posts/articles/index", type: :view do
     3.times { create(:minimal_article) }
 
     @model_class = assign(:model_name, Article)
-    @relation    = assign(:relation, DicedRelation.new(Article.all))
-    @articles    = assign(:articles, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Article.all))
+    @articles    = assign(:articles, @collection.resolve)
   end
 
   it "renders a list of articles" do

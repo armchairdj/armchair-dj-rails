@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RoleSorter < Sorter
+class RoleSorter < Ginsu::Sorter
   def allowed
     super.merge({
       "Name"   => [name_sort_sql, role_medium_sort_sql],

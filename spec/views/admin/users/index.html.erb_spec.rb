@@ -7,8 +7,8 @@ RSpec.describe "admin/users/index", type: :view do
     3.times { create(:minimal_user) }
 
     @model_class = assign(:model_name, User)
-    @relation    = assign(:relation, DicedRelation.new(User.all))
-    @users       = assign(:users, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(User.all))
+    @users       = assign(:users, @collection.resolve)
   end
 
   it "renders a list of users" do

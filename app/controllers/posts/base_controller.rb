@@ -34,9 +34,9 @@ class Posts::BaseController < ApplicationController
 private
 
   def find_collection
-    @collection = policy_scope(model_class).for_list.page(params[:page])
+    collection = policy_scope(model_class).for_list.page(params[:page])
 
-    instance_variable_set(:"@#{controller_name}", @collection)
+    instance_variable_set(:"@#{controller_name}", collection)
   end
 
   def find_instance

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_public_index" do
-  let!(  :param_key) { described_class.controller_name.to_sym }
-  let!(   :template) { "posts/#{param_key}/index" }
-  let!(:model_class) { described_class.new.send(:model_class) }
+  let(:param_key  ) { described_class.controller_name.to_sym }
+  let(:template   ) { "posts/#{param_key}/index" }
+  let(:model_class) { described_class.new.send(:model_class) }
 
-  let(         :ids) { 3.times.map { |i| create_minimal_instance(:with_published_post).id } }
-  let(   :paginated) { model_class.where(id: ids).for_public }
-  let(        :none) { model_class.none.for_public }
+  let(:ids      ) { 3.times.map { |i| create_minimal_instance.id } }
+  let(:paginated) { model_class.where(id: ids) }
+  let(:none     ) { model_class.none }
 
   context "without records" do
     before(:each) do
@@ -16,17 +16,15 @@ RSpec.shared_examples "a_public_index" do
       get :index
     end
 
-    describe "renders" do
-      it { is_expected.to successfully_render(template) }
+    it { is_expected.to successfully_render(template) }
 
-      specify { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
-    end
+    specify { expect(assigns(param_key)).to paginate(0).of_total_records(0) }
   end
 
   context "with records" do
     before(:each) { allow(model_class).to receive(:for_public).and_return(paginated) }
 
-    describe "renders" do
+    context "page 1" do
       before(:each) { get :index }
 
       it { is_expected.to successfully_render(template) }
@@ -34,7 +32,7 @@ RSpec.shared_examples "a_public_index" do
       specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
 
-    describe "paginates" do
+    context "page 2" do
       before(:each) { get :index, params: { page: "2" } }
 
       it { is_expected.to successfully_render(template) }

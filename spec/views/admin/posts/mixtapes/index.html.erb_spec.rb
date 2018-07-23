@@ -9,8 +9,8 @@ RSpec.describe "admin/posts/mixtapes/index", type: :view do
     3.times { create(:minimal_mixtape) }
 
     @model_class = assign(:model_name, Mixtape)
-    @relation    = assign(:relation, DicedRelation.new(Mixtape.all))
-    @mixtapes    = assign(:mixtapes, @relation.resolve)
+    @collection    = assign(:collection, Ginsu::Collection.new(Mixtape.all))
+    @mixtapes    = assign(:mixtapes, @collection.resolve)
   end
 
   it "renders a list of mixtapes" do

@@ -9,11 +9,11 @@ class Admin::BaseController < ApplicationController
     :create
   ]
 
-  before_action :build_relation, only: [
+  before_action :build_collection, only: [
     :index
   ]
 
-  before_action :find_collection, only: [
+  before_action :resolve_collection, only: [
     :index
   ]
 
@@ -63,9 +63,9 @@ class Admin::BaseController < ApplicationController
 
 private
 
-  def build_relation
-    @relation = DicedRelation.new(
-      scoped_collection,
+  def build_collection
+    @collection = Ginsu::Collection.new(
+      policy_scope(model_class).for_list,
       scope:  params[:scope],
       sort:   params[:sort ],
       dir:    params[:dir  ],
@@ -73,10 +73,8 @@ private
     )
   end
 
-  def find_collection
-    @collection = @relation.resolve
-
-    instance_variable_set(:"@#{controller_name}", @collection)
+  def resolve_collection
+    instance_variable_set(:"@#{controller_name}", @collection.resolve)
   end
 
   def find_instance
@@ -97,10 +95,6 @@ private
 
   def policy_scope(scope)
     super([:admin, scope])
-  end
-
-  def scoped_collection
-    policy_scope(model_class).for_list
   end
 
   def scoped_instance

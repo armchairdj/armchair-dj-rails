@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserSorter < Sorter
+class UserSorter < Ginsu::Sorter
   def allowed
     super.merge({
       "Name"     => alpha_sort_sql,

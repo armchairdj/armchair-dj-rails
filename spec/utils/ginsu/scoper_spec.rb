@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Scoper do
+RSpec.describe Ginsu::Scoper do
   describe "#constructor" do
     before(:each) do
       allow_any_instance_of(described_class).to receive(:allowed).and_return({
