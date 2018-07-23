@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe TagSorter do
   describe "concerns" do
     it_behaves_like "a_dicer",  Tag
-    it_behaves_like "a_sorter", Tag
+    it_behaves_like "a sorter"
   end
 
   describe "instance" do

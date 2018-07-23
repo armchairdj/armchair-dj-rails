@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe CreatorSorter do
   describe "concerns" do
     it_behaves_like "a_dicer",  Creator
-    it_behaves_like "a_sorter", Creator
+    it_behaves_like "a sorter"
   end
 
   describe "instance" do

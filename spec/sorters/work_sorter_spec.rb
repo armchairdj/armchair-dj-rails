@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe WorkSorter do
   describe "concerns" do
     it_behaves_like "a_dicer",  Work
-    it_behaves_like "a_sorter", Work
+    it_behaves_like "a sorter"
   end
 
   describe "instance" do

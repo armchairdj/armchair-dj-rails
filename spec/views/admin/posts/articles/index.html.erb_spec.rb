@@ -5,20 +5,12 @@ require "rails_helper"
 RSpec.describe "admin/posts/articles/index", type: :view do
   login_root
 
-  let(:dummy) { Admin::Posts::ArticlesController.new }
-
   before(:each) do
-    3.times { create(:minimal_article, :published) }
-
-    allow(dummy).to receive(:polymorphic_path).and_return("/")
+    3.times { create(:minimal_article) }
 
     @model_class = assign(:model_name, Article)
-    @scope       = assign(:scope, "All")
-    @sort        = assign(:sort, "Default")
-    @dir         = assign(:dir, "ASC")
-    @scopes      = dummy.send(:scopes_for_view, @scope)
-    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @articles    = assign(:articles, Article.all.page(1))
+    @relation    = assign(:relation, DicedRelation.new(Article.all))
+    @articles    = assign(:articles, @relation.resolve)
   end
 
   it "renders a list of articles" do

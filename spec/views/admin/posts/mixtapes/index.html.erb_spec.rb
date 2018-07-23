@@ -5,20 +5,12 @@ require "rails_helper"
 RSpec.describe "admin/posts/mixtapes/index", type: :view do
   login_root
 
-  let(:dummy) { Admin::Posts::MixtapesController.new }
-
   before(:each) do
-    3.times { create(:minimal_mixtape, :published) }
-
-    allow(dummy).to receive(:polymorphic_path).and_return("/")
+    3.times { create(:minimal_mixtape) }
 
     @model_class = assign(:model_name, Mixtape)
-    @scope       = assign(:scope, "All")
-    @sort        = assign(:sort, "Default")
-    @dir         = assign(:dir, "ASC")
-    @scopes      = dummy.send(:scopes_for_view, @scope)
-    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @mixtapes    = assign(:mixtapes, Mixtape.all.page(1))
+    @relation    = assign(:relation, DicedRelation.new(Mixtape.all))
+    @mixtapes    = assign(:mixtapes, @relation.resolve)
   end
 
   it "renders a list of mixtapes" do

@@ -35,7 +35,7 @@ private
   end
 
   def calculate_alpha_string
-    [alpha_parts].flatten.compact.join(ALPHA_CONNECTOR).downcase.squish
+    [*alpha_parts].compact.join(ALPHA_CONNECTOR).downcase.squish
   end
 
   def ensure_alpha

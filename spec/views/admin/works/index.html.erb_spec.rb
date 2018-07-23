@@ -5,20 +5,12 @@ require "rails_helper"
 RSpec.describe "admin/works/index", type: :view do
   login_root
 
-  let(:dummy) { Admin::WorksController.new }
-
   before(:each) do
-    3.times { create(:stuffed_song, :with_published_post) }
-
-    allow(dummy).to receive(:polymorphic_path).and_return("/")
+    3.times { create(:minimal_song) }
 
     @model_class = assign(:model_name, Work)
-    @scope       = assign(:scope, "All")
-    @sort        = assign(:sort, "Default")
-    @dir         = assign(:dir, "ASC")
-    @scopes      = dummy.send(:scopes_for_view, @scope)
-    @sorts       = dummy.send(:sorts_for_view, @scope, @sort, @dir)
-    @works       = assign(:works, Work.all.alpha.page(1))
+    @relation    = assign(:relation, DicedRelation.new(Work.all))
+    @works       = assign(:works, @relation.resolve)
   end
 
   it "renders a list of works" do

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe MixtapeSorter do
   describe "concerns" do
     it_behaves_like "a_dicer",  Mixtape
-    it_behaves_like "a_sorter", Mixtape
+    it_behaves_like "a sorter"
   end
 
   describe "instance" do

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe ReviewSorter do
   describe "concerns" do
     it_behaves_like "a_dicer",  Review
-    it_behaves_like "a_sorter", Review
+    it_behaves_like "a sorter"
   end
 
   describe "instance" do

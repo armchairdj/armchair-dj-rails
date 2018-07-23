@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe AspectScoper do
   describe "concerns" do
     it_behaves_like "a_dicer",  Aspect
-    it_behaves_like "a_scoper", Aspect
+    it_behaves_like "a scoper"
   end
 
   describe "instance" do

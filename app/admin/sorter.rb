@@ -3,11 +3,31 @@
 class Sorter < Dicer
 
   #############################################################################
-  # CONSTANTS.
+  # CLASS.
   #############################################################################
 
-  JOINER       = ", ".freeze
-  ALLOWED_DIRS = ["ASC", "DESC"].freeze
+  def self.prepare_clause(clauses, dir)
+    clauses = [*clauses]
+
+    if dir == "DESC"
+      clauses[0] = reverse_clause(clauses[0])
+    end
+
+    Arel.sql(combine_clauses(clauses))
+  end
+
+  def self.reverse_clause(clause)
+    clause = clause.squish
+
+    return clause.gsub("DESC", "ASC") if clause.match(/DESC$/)
+    return clause.gsub("ASC", "DESC") if clause.match(/ASC$/)
+
+    "#{clause} DESC"
+  end
+
+  def self.combine_clauses(clauses)
+    clauses.map(&:squish).join(", ")
+  end
 
   #############################################################################
   # INSTANCE.
@@ -24,11 +44,7 @@ class Sorter < Dicer
   def resolve
     validate
 
-    sql = [allowed[@current_sort]].flatten
-    sql = sql.map(&:squish).join(JOINER)
-    sql = reverse_first_clause(sql) if @current_dir == "DESC"
-
-    Arel.sql(sql)
+    self.class.prepare_clause(allowed[@current_sort], @current_dir)
   end
 
   def map
@@ -53,29 +69,14 @@ class Sorter < Dicer
 private
 
   def valid?
-    return false unless allowed.keys.include?(@current_sort)
-    return false unless ALLOWED_DIRS.include?(@current_dir)
+    return false unless    allowed.keys.include?(@current_sort)
+    return false unless ["ASC", "DESC"].include?(@current_dir)
 
     true
   end
 
   def invalid_msg
     I18n.t("exceptions.sorter.invalid", model: model_class, sort: @current_sort, dir: @current_dir)
-  end
-
-  def reverse_first_clause(compound_sort_clause)
-    parts = compound_sort_clause.split(JOINER)
-
-    parts[0] = reverse_sort(parts[0])
-
-    parts.join(JOINER)
-  end
-
-  def reverse_sort(clause)
-    return clause.gsub("DESC", "ASC") if clause.match(/DESC$/)
-    return clause.gsub("ASC", "DESC") if clause.match(/ASC$/)
-
-    "#{clause} DESC"
   end
 
   def alpha_sort_sql
