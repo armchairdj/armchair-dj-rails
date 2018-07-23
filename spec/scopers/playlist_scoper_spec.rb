@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe PlaylistScoper do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Playlist
-    it_behaves_like "a scoper"
+    it_behaves_like "a_scoper"
   end
 
   describe "instance" do
@@ -17,6 +16,14 @@ RSpec.describe PlaylistScoper do
       it { is_expected.to match_array([
         "All",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Playlist) }
+      end
     end
   end
 end

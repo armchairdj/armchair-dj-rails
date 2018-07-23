@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe AspectScoper do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Aspect
-    it_behaves_like "a scoper"
+    it_behaves_like "a_scoper"
   end
 
   describe "instance" do
@@ -17,6 +16,14 @@ RSpec.describe AspectScoper do
       it { is_expected.to match_array([
         "All",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Aspect) }
+      end
     end
   end
 end

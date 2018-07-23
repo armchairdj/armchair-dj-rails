@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe WorkSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Work
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -21,6 +20,14 @@ RSpec.describe WorkSorter do
         "Medium",
         "Title"
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Work) }
+      end
     end
   end
 end

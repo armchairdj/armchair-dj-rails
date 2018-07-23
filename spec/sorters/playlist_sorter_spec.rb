@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe PlaylistSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Playlist
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -20,6 +19,14 @@ RSpec.describe PlaylistSorter do
         "Title",
         "Author",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Playlist) }
+      end
     end
   end
 end

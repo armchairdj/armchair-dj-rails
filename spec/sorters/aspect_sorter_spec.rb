@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe AspectSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Aspect
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -20,6 +19,14 @@ RSpec.describe AspectSorter do
         "Facet",
         "Name",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Aspect) }
+      end
     end
   end
 end

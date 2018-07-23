@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe CreatorScoper do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Creator
-    it_behaves_like "a scoper"
+    it_behaves_like "a_scoper"
   end
 
   describe "instance" do
@@ -21,6 +20,14 @@ RSpec.describe CreatorScoper do
         "Individual",
         "Group",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Creator) }
+      end
     end
   end
 end

@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe CreatorSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Creator
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -21,6 +20,14 @@ RSpec.describe CreatorSorter do
         "Primary",
         "Individual",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Creator) }
+      end
     end
   end
 end

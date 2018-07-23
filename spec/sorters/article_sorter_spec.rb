@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe ArticleSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Article
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -21,6 +20,14 @@ RSpec.describe ArticleSorter do
         "Status",
         "Author",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Article) }
+      end
     end
   end
 end

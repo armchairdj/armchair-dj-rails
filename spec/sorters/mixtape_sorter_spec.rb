@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe MixtapeSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Mixtape
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -21,6 +20,14 @@ RSpec.describe MixtapeSorter do
         "Status",
         "Author",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Mixtape) }
+      end
     end
   end
 end

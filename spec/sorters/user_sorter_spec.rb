@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe UserSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  User
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -22,6 +21,14 @@ RSpec.describe UserSorter do
         "Email",
         "Role",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(User) }
+      end
     end
   end
 end

@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe MixtapeScoper do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Mixtape
-    it_behaves_like "a scoper"
+    it_behaves_like "a_scoper"
   end
 
   describe "instance" do
@@ -20,6 +19,14 @@ RSpec.describe MixtapeScoper do
         "Scheduled",
         "Published",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Mixtape) }
+      end
     end
   end
 end

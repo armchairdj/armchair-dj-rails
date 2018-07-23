@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe ReviewSorter do
   describe "concerns" do
-    it_behaves_like "a_dicer",  Review
-    it_behaves_like "a sorter"
+    it_behaves_like "a_sorter"
   end
 
   describe "instance" do
@@ -22,6 +21,14 @@ RSpec.describe ReviewSorter do
         "Author",
         "Medium",
       ]) }
+    end
+
+    context "private" do
+      describe "#model_class" do
+        subject { instance.send(:model_class) }
+
+        it { is_expected.to eq(Review) }
+      end
     end
   end
 end
