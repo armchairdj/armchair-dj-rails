@@ -141,7 +141,10 @@ RSpec.describe Playlist do
   describe "instance" do
     let(:instance) { build_minimal_instance }
 
-    pending "#posts"
+    describe "post methods" do
+      pending "#post_ids"
+      pending "#posts"
+    end
 
     describe "creator methods" do
       let(:role     ) { create(:minimal_role, medium: "Song") }
