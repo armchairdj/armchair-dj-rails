@@ -6,29 +6,17 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
   describe "class" do
     subject { described_class }
 
-    describe "self#human_enum_collection" do
-      it { is_expected.to respond_to(:human_enum_collection) }
-    end
+    it { is_expected.to respond_to(:human_enum_collection) }
 
-    describe "self#human_enum_collection_with_keys" do
-      it { is_expected.to respond_to(:human_enum_collection_with_keys) }
-    end
+    it { is_expected.to respond_to(:human_enum_collection_with_keys) }
 
-    describe "self#human_enum_value" do
-      it { is_expected.to respond_to(:human_enum_value) }
-    end
+    it { is_expected.to respond_to(:human_enum_value) }
 
-    describe "self#enumable_attributes" do
-      it { is_expected.to respond_to(:enumable_attributes) }
-    end
+    it { is_expected.to respond_to(:enumable_attributes) }
 
-    describe "self#alpha_order_clause_for" do
-      it { is_expected.to respond_to(:alpha_order_clause_for) }
-    end
+    it { is_expected.to respond_to(:alpha_order_clause_for) }
 
-    describe "self#retrieve_enumable_attributes" do
-      specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
-    end
+    specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
   end
 
   attributes.each do |attribute|
@@ -84,7 +72,7 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
 
           describe "self#alphabetical_human_#{plural_attr}" do
-            it "gives alphabetical 2D array for use in dropdowns" do
+            it "returns an alphabetical 2D array for use in dropdowns" do
               expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
               actual   = described_class.send(:"alphabetical_human_#{plural_attr}")
 
@@ -93,9 +81,9 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
 
           describe "self#human_#{single_attr}" do
-            specify { expect(described_class.send(:"human_#{single_attr}", "b")).to eq("Z.") }
-            specify { expect(described_class.send(:"human_#{single_attr}", "a")).to eq("Y.") }
-            specify { expect(described_class.send(:"human_#{single_attr}", "r")).to eq("X.") }
+            it "accepts an enum string identifier and returns the humanized i18n value" do
+              expect(described_class.send(:"human_#{single_attr}", "b")).to eq("Z.")
+            end
           end
 
           describe "self#alpha_order_clause_for" do

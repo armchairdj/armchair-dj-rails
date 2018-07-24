@@ -63,24 +63,18 @@ FactoryBot.define do
     trait :with_draft_post do
       after(:create) do |work|
         create(:minimal_review, :draft, work_id: work.id)
-
-        work.reload
       end
     end
 
     trait :with_scheduled_post do
       after(:create) do |work|
         create(:minimal_review, :scheduled, work_id: work.id)
-
-        work.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |work|
         create(:minimal_review, :published, work_id: work.id)
-
-        work.reload
       end
     end
 
@@ -97,8 +91,6 @@ FactoryBot.define do
 
       after(:create) do |work, evaluator|
         evaluator.child_count.times { create(:minimal_work, parent: work) }
-
-        work.reload
       end
     end
 
@@ -107,8 +99,6 @@ FactoryBot.define do
         [*evaluator.children].each do |child|
           child.update!(parent: work)
         end
-
-        work.reload
       end
     end
 

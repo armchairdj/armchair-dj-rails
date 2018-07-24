@@ -10,7 +10,7 @@ RSpec.shared_examples "a_medium" do
   describe "validation" do
     describe "custom" do
       describe "#only_available_facets" do
-        subject { create_minimal_instance }
+        subject { build_minimal_instance }
 
         let!(  :all_facets) { Aspect.facets.keys.map(&:to_sym) }
         let!(:avail_facets) { subject.available_facets }
@@ -54,22 +54,22 @@ RSpec.shared_examples "a_medium" do
     end
 
     describe "role methods" do
-      let!(   :instance) { create_minimal_instance }
+      let!(:instance   ) { create_minimal_instance }
       let!(:other_media) { Work.valid_media.reject{ |x| x == instance.medium } }
-      let!(:good_role_1) { create(:minimal_role, medium: instance.medium, name: "X") }
-      let!(:good_role_2) { create(:minimal_role, medium: instance.medium, name: "M") }
-      let!(   :bad_role) { create(:minimal_role, medium: other_media.sample) }
+      let!(:good_role_z) { create(:minimal_role, medium: instance.medium, name: "Z") }
+      let!(:good_role_a) { create(:minimal_role, medium: instance.medium, name: "A") }
+      let!(:bad_role   ) { create(:minimal_role, medium: other_media.sample) }
 
       describe "#available_roles" do
-        subject { instance.available_roles }
+        subject { instance.available_roles.map(&:name) }
 
-        it { is_expected.to eq([good_role_2, good_role_1]) }
+        it { is_expected.to eq(["A", "Z"]) }
       end
 
       describe "#available_role_ids" do
         subject { instance.available_role_ids }
 
-        it { is_expected.to eq([good_role_2.id, good_role_1.id]) }
+        it { is_expected.to eq([good_role_a.id, good_role_z.id]) }
       end
     end
   end

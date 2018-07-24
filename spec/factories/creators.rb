@@ -38,8 +38,6 @@ FactoryBot.define do
         })
 
         create(:minimal_review, :draft, work_id: work.id)
-
-        creator.reload
       end
     end
 
@@ -50,8 +48,6 @@ FactoryBot.define do
         })
 
         create(:minimal_review, :scheduled, work_id: work.id)
-
-        creator.reload
       end
     end
 
@@ -62,8 +58,6 @@ FactoryBot.define do
         })
 
         create(:minimal_review, :published, work_id: work.id)
-
-        creator.reload
       end
     end
 
@@ -102,8 +96,6 @@ FactoryBot.define do
 
       after(:create) do |creator|
         create(:minimal_identity, real_name: creator)
-
-        creator.reload
       end
     end
 
@@ -114,8 +106,6 @@ FactoryBot.define do
         [*evaluator.pseudonyms].each do |pseudonym|
           create(:minimal_identity, real_name: creator, pseudonym: pseudonym)
         end
-
-        creator.reload
       end
     end
 
@@ -132,8 +122,6 @@ FactoryBot.define do
 
       after(:create) do |creator|
         create(:minimal_identity, pseudonym: creator)
-
-        creator.reload
       end
     end
 
@@ -144,8 +132,6 @@ FactoryBot.define do
         [*evaluator.real_names].each do |real_name|
           create(:minimal_identity, pseudonym: creator, real_name: real_name)
         end
-
-        creator.reload
       end
     end
 
@@ -162,8 +148,6 @@ FactoryBot.define do
 
       after(:create) do |creator|
         create(:minimal_membership, group: creator)
-
-        creator.reload
       end
     end
 
@@ -174,8 +158,6 @@ FactoryBot.define do
         [*evaluator.members].each do |member|
           create(:minimal_membership, group: creator, member: member)
         end
-
-        creator.reload
       end
     end
 
@@ -192,8 +174,6 @@ FactoryBot.define do
 
       after(:create) do |creator|
         create(:minimal_membership, member: creator)
-
-        creator.reload
       end
     end
 
@@ -204,8 +184,6 @@ FactoryBot.define do
         [*evaluator.groups].each do |group|
           create(:minimal_membership, member: creator, group: group)
         end
-
-        creator.reload
       end
     end
 

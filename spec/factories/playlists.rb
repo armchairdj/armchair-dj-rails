@@ -50,24 +50,18 @@ FactoryBot.define do
     trait :with_draft_post do
       after(:create) do |playlist|
         create(:minimal_mixtape, :draft, author_id: playlist.author.id, playlist_id: playlist.id)
-
-        playlist.reload
       end
     end
 
     trait :with_scheduled_post do
       after(:create) do |playlist|
         create(:minimal_mixtape, :scheduled, author_id: playlist.author.id, playlist_id: playlist.id)
-
-        playlist.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |playlist|
         create(:minimal_mixtape, :published, author_id: playlist.author.id, playlist_id: playlist.id)
-
-        playlist.reload
       end
     end
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Post do
-  subject { create_minimal_instance }
+  subject { build_minimal_instance }
 
   describe "concerns" do
     it_behaves_like "an_application_record"
@@ -17,7 +17,7 @@ RSpec.describe Post do
     it_behaves_like "a_sluggable_model"
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       describe "nilify_blanks" do
         # Must specify individual fields for STI models.

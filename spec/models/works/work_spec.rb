@@ -14,7 +14,7 @@ RSpec.describe Work do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       describe "nilify_blanks" do
         # Must specify individual fields for STI models.
@@ -289,7 +289,7 @@ RSpec.describe Work do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:medium) }
 

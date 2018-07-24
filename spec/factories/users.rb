@@ -54,8 +54,6 @@ FactoryBot.define do
 
       after(:create) do |user|
         create(:minimal_article, :draft, author: user)
-
-        user.reload
       end
     end
 
@@ -64,8 +62,6 @@ FactoryBot.define do
 
       after(:create) do |user|
         create(:minimal_article, :scheduled, author: user)
-
-        user.reload
       end
     end
 
@@ -74,8 +70,6 @@ FactoryBot.define do
 
       after(:create) do |user|
         create(:minimal_article, :published, author: user)
-
-        user.reload
       end
     end
 

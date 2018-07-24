@@ -41,7 +41,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: armchairdj_postgres_test
+  database: armchairdj_postgres_test<%= ENV['TEST_ENV_NUMBER'] %>
   pool: 5
   username: armchairdj_postgres
   password:

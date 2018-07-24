@@ -216,6 +216,9 @@ group :development, :test do
   # Declarative fixtures.
   gem "factory_bot_rails"
 
+  # Fast tests.
+  gem "parallel_tests"
+
   # RSpec.
   gem "rspec-rails"
   gem "accept_values_for"

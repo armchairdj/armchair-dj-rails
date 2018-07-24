@@ -41,14 +41,14 @@ RSpec.describe Contribution do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
 

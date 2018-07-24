@@ -40,7 +40,7 @@ RSpec.describe Creator do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -532,7 +532,7 @@ RSpec.describe Creator do
         end
 
         describe "instance" do
-          subject { create_minimal_instance }
+          subject { build_minimal_instance }
 
           describe "#individual_text" do
             specify "individual" do
@@ -575,7 +575,7 @@ RSpec.describe Creator do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:name) }
 
@@ -764,9 +764,11 @@ RSpec.describe Creator do
       let!(       :both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
 
       describe "#all_works" do
-        subject { instance.all_works }
+        subject { instance.all_works.ids }
 
-        it { is_expected.to match_array([created, contributed, both]) }
+        let(:expected) { [created, contributed, both].map(&:id) }
+
+        it { is_expected.to match_array(expected) }
       end
 
       describe "#posts" do
@@ -783,36 +785,50 @@ RSpec.describe Creator do
         let!(       :both_review) { create(:minimal_review,  work_id:         both.id) }
         let!(           :mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
-        subject { instance.posts }
+        subject { instance.posts.ids }
 
-        it { is_expected.to match_array([mixtape, both_review, contributed_review, created_review]) }
+        let(:expected) { [mixtape, both_review, contributed_review, created_review].map(&:id) }
+
+        it { is_expected.to match_array(expected) }
       end
     end
 
     describe "#display_roles" do
-      subject { create_minimal_instance }
+      let(:instance) { create_minimal_instance }
 
-      let(    :editor) { create(:minimal_role, medium: "Book",   name: "Editor"    ) }
-      let(    :author) { create(:minimal_role, medium: "Book",   name: "Author"    ) }
-      let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
-      let(  :director) { create(:minimal_role, medium: "TvShow", name: "Director"  ) }
+      subject { instance.display_roles }
 
-      let(:tv_show) { create(:minimal_tv_show) }
-      let(   :book) { create(:minimal_book) }
+      context "with credits and contributions" do
+        let(    :editor) { create(:minimal_role, medium: "Book",   name: "Editor"    ) }
+        let(    :author) { create(:minimal_role, medium: "Book",   name: "Author"    ) }
+        let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
+        let(  :director) { create(:minimal_role, medium: "TvShow", name: "Director"  ) }
 
-      let!( :credit_1) { subject.credits.create(      work: tv_show                  ) }
-      let!(:contrib_1) { subject.contributions.create(work: tv_show, role: showrunner) }
-      let!(:contrib_2) { subject.contributions.create(work: tv_show, role: director  ) }
+        let(:tv_show) { create(:minimal_tv_show) }
+        let(   :book) { create(:minimal_book) }
 
-      let!( :credit_2) { subject.credits.create(      work: book              ) }
-      let!(:contrib_3) { subject.contributions.create(work: book, role: editor) }
-      let!(:contrib_4) { subject.contributions.create(work: book, role: author) }
+        before(:each) do
+          instance.credits.create(work: tv_show)
+          instance.credits.create(work: book)
 
-      it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
-        expect(subject.display_roles).to eq({
-          "Book"    => ["Author",  "Creator",  "Editor"    ],
-          "TV Show" => ["Creator", "Director", "Showrunner"]
-        })
+          instance.contributions.create(work: tv_show, role: showrunner)
+          instance.contributions.create(work: tv_show, role: director)
+          instance.contributions.create(work: book,    role: editor)
+          instance.contributions.create(work: book,    role: author)
+        end
+
+        it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
+          is_expected.to eq({
+            "Book"    => ["Author",  "Creator",  "Editor"    ],
+            "TV Show" => ["Creator", "Director", "Showrunner"]
+          })
+        end
+      end
+
+      context "without credits or contributions" do
+        it "returns an empty hash" do
+          is_expected.to eq({})
+        end
       end
     end
 

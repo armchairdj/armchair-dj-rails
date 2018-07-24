@@ -35,7 +35,7 @@ RSpec.describe Identity do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:real_name) }
     it { is_expected.to validate_presence_of(:pseudonym) }
@@ -43,7 +43,7 @@ RSpec.describe Identity do
     it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
     describe "custom" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       describe "#real_name_is_primary" do
         before(:each) do

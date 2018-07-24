@@ -32,7 +32,7 @@ RSpec.describe Playlist do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -118,11 +118,13 @@ RSpec.describe Playlist do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
 
     describe "is_expected.to validate_length_of(:playlistings).is_at_least(2)" do
+      subject { create_minimal_instance }
+
       it { is_expected.to be_valid }
 
       specify "invalid" do

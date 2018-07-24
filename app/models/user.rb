@@ -132,7 +132,7 @@ class User < ApplicationRecord
   validates :role,       presence:   true
 
   validates :username,   presence:   true
-  validates :username,   uniqueness: true
+  validates :username,   uniqueness: { case_sensitive: false }
   validates :username,   format: { with: /\A[a-zA-Z0-9]+\z/ }
 
   validates :bio, absence: true, unless: :can_write?

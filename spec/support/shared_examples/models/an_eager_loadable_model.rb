@@ -12,13 +12,19 @@ RSpec.shared_examples "an_eager_loadable_model" do
     subject { collection.for_list }
 
     it { is_expected.to eager_load(list_loads) }
-    it { is_expected.to contain_exactly(*collection.to_a) }
+
+    it "contains all the records" do
+      is_expected.to contain_exactly(*collection.to_a)
+    end
   end
 
   describe "self#for_show" do
     subject { collection.for_show }
 
     it { is_expected.to eager_load(show_loads) }
-    it { is_expected.to contain_exactly(*collection.to_a) }
+
+    it "contains all the records" do
+      is_expected.to contain_exactly(*collection.to_a)
+    end
   end
 end

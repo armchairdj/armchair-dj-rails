@@ -23,7 +23,7 @@ RSpec.describe Article do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
   end

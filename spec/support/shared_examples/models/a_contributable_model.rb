@@ -8,7 +8,7 @@ RSpec.shared_examples "a_contributable_model" do
     end
 
     describe "validations" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to validate_presence_of(:creator) }
       it { is_expected.to validate_presence_of(:work   ) }

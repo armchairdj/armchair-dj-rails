@@ -41,8 +41,6 @@ FactoryBot.define do
       unless instance.schedule!
         raise StandardError, "could not schedule: #{instance.errors.inspect}"
       end
-
-      instance.reload
     end
   end
 
@@ -53,8 +51,6 @@ FactoryBot.define do
       unless instance.publish!
         raise StandardError, "could not publish: #{instance.errors.inspect}"
       end
-
-      instance.reload
     end
   end
 
