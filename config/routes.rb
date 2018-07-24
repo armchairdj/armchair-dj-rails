@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get    "log_in",  to: "users/sessions#new",     as: :new_user_session
     post   "log_in",  to: "users/sessions#create",  as: :user_session
-    match  "log_out", to: "users/sessions#destroy", as: :destroy_user_session, via: Devise.sign_out_via
+    match  "log_out", to: "users/sessions#destroy", as: :log_out, via: Devise.sign_out_via
 
     get    "register", to: "users/registrations#new",   as: :new_user_registration
     post   "register", to: "users/registrations#create"

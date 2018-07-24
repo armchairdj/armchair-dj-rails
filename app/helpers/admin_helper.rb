@@ -32,10 +32,6 @@ module AdminHelper
     parts.join(" ").html_safe
   end
 
-  def total_count_for(association)
-    pluralize(association.total_count, "Total Record")
-  end
-
   #############################################################################
   # POLYMORPHIC WRAPPERS.
   #############################################################################
@@ -139,61 +135,8 @@ module AdminHelper
     admin_icon_link(icon, path, title, desc, class: "public-view")
   end
 
-  #############################################################################
-  # ACTION LINKS.
-  #############################################################################
-
-  def admin_nav_links
-    links = [
-      link_to("Articles",    admin_articles_path      ),
-      link_to("Reviews",     admin_reviews_path       ),
-      link_to("Mixtapes",    admin_mixtapes_path      ),
-      link_to("Playlists",   admin_playlists_path     ),
-      link_to("Works",       admin_works_path         ),
-      link_to("Creators",    admin_creators_path      ),
-      link_to("Roles",       admin_roles_path         ),
-      link_to("Aspects",     admin_aspects_path       ),
-      link_to("Tags",        admin_tags_path          ),
-      link_to("Styles",      style_guides_path        ),
-      link_to("Log Out",     destroy_user_session_path)
-    ]
-
-    if Pundit.policy!(current_user, [:admin, User]).index?
-      links.unshift link_to("Users", admin_users_path)
-    end
-
-    markup = links.map { |link| content_tag(:li, link) }.compact.join("\n").html_safe
-
-    content_tag(:ul, markup, class: "arrowed")
-  end
-
-  def admin_header_links(model_class, action, instance = nil)
-    links = case action
-    when :index
-      [
-        admin_create_link(model_class)
-      ]
-    when :new
-      [
-        admin_list_link(  model_class)
-      ]
-    when :edit
-      [
-        admin_public_link(  instance),
-        admin_view_link(    instance),
-        admin_destroy_link( instance),
-        admin_list_link( model_class),
-      ]
-    when :show
-      [
-        admin_public_link(  instance),
-        admin_update_link(  instance),
-        admin_destroy_link( instance),
-        admin_list_link( model_class),
-      ]
-    end
-
-    links.compact.join.html_safe
+  def should_link_to_admin_users?
+    Pundit.policy!(current_user, [:admin, User]).index?
   end
 
   #############################################################################

@@ -27,7 +27,14 @@ module Ginsu
     end
 
     def resolve
-      prepare_relation.page(@page)
+      @resolved ||= prepare_relation.page(@page)
+    end
+
+    def display_count
+      count      = resolve.total_count
+      pluralized = "Total Record".pluralize(count)
+
+      "#{count} #{pluralized}"
     end
 
   private

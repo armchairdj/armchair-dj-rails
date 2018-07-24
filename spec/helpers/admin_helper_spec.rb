@@ -13,8 +13,6 @@ RSpec.describe AdminHelper do
 
   describe "formatting methods" do
     pending "#admin_post_status"
-
-    pending "#total_count_for"
   end
 
   describe "link methods" do
@@ -164,7 +162,6 @@ RSpec.describe AdminHelper do
   end
 
   describe "markup generators" do
-    pending "#admin_header"
     pending "#status_icon_header"
     pending "#sortable_link"
   end

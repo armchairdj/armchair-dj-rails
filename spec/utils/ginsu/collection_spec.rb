@@ -142,5 +142,35 @@ RSpec.describe Ginsu::Collection do
         subject
       end
     end
+
+    describe "#display_count" do
+      let(:relation  ) { Creator.for_list }
+      let(:instance  ) { described_class.new(relation) }
+      let(:collection) { double }
+
+      subject { instance.display_count }
+
+      before(:each) do
+        allow(instance).to receive(:resolve).and_return(collection)
+      end
+
+      context "0 records" do
+        before(:each) { allow(collection).to receive(:total_count).and_return(0) }
+
+        it { is_expected.to eq("0 Total Records") }
+      end
+
+      context "1 record" do
+        before(:each) { allow(collection).to receive(:total_count).and_return(1) }
+
+        it { is_expected.to eq("1 Total Record") }
+      end
+
+      context ">1 records" do
+        before(:each) { allow(collection).to receive(:total_count).and_return(2) }
+
+        it { is_expected.to eq("2 Total Records") }
+      end
+    end
   end
 end
