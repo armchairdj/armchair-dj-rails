@@ -21,10 +21,8 @@ RSpec.describe AdminHelper do
 
     describe "#admin_list_link" do
       before(:each) do
-        allow( helper).to receive(:semantic_svg_image).with("open_iconic/list.svg", anything).and_return("list"   )
-
-        allow( helper).to receive(:polymorphic_path).and_return("path")
-        expect(helper).to receive(:polymorphic_path).with([:admin, model])
+        expect(helper).to receive(:semantic_svg_image).with("open_iconic/list.svg", anything).and_return("list")
+        expect(helper).to receive(:polymorphic_path).with([:admin, model]).and_return("path")
       end
 
       subject { helper.admin_list_link(model) }
@@ -36,10 +34,8 @@ RSpec.describe AdminHelper do
 
     describe "#admin_view_link" do
       before(:each) do
-        allow( helper).to receive(:semantic_svg_image).with("open_iconic/eye.svg", anything).and_return("view"   )
-
-        allow( helper).to receive(:polymorphic_path).and_return("path")
-        expect(helper).to receive(:polymorphic_path).with([:admin, instance])
+        expect(helper).to receive(:semantic_svg_image).with("open_iconic/eye.svg", anything).and_return("view")
+        expect(helper).to receive(:polymorphic_path).with([:admin, instance]).and_return("path")
       end
 
       subject { helper.admin_view_link(instance) }
@@ -51,10 +47,8 @@ RSpec.describe AdminHelper do
 
     describe "#admin_create_link" do
       before(:each) do
-        allow( helper).to receive(:semantic_svg_image).with("open_iconic/plus.svg", anything).and_return("create" )
-
-        allow( helper).to receive(:new_polymorphic_path).and_return("path")
-        expect(helper).to receive(:new_polymorphic_path).with([:admin, model])
+        expect(helper).to receive(:semantic_svg_image).with("open_iconic/plus.svg", anything).and_return("create")
+        expect(helper).to receive(:new_polymorphic_path).with([:admin, model]).and_return("path")
       end
 
       subject { helper.admin_create_link(model) }
@@ -66,10 +60,8 @@ RSpec.describe AdminHelper do
 
     describe "#admin_update_link" do
       before(:each) do
-        allow( helper).to receive(:semantic_svg_image).with("open_iconic/pencil.svg", anything).and_return("update" )
-
-        allow( helper).to receive(:edit_polymorphic_path).and_return("path")
-        expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance])
+        expect(helper).to receive(:semantic_svg_image).with("open_iconic/pencil.svg", anything).and_return("update")
+        expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance]).and_return("path")
       end
 
       subject { helper.admin_update_link(instance) }
@@ -81,10 +73,8 @@ RSpec.describe AdminHelper do
 
     describe "#admin_destroy_link" do
       before(:each) do
-        allow( helper).to receive(:semantic_svg_image).with("open_iconic/trash.svg", anything).and_return("destroy")
-
-        allow( helper).to receive(:polymorphic_path).and_return("path")
-        expect(helper).to receive(:polymorphic_path).with([:admin, instance])
+        expect(helper).to receive(:semantic_svg_image).with("open_iconic/trash.svg", anything).and_return("destroy")
+        expect(helper).to receive(:polymorphic_path).with([:admin, instance]).and_return("path")
       end
 
       subject { helper.admin_destroy_link(instance) }
@@ -106,10 +96,8 @@ RSpec.describe AdminHelper do
       describe "users" do
         describe "published" do
           before(:each) do
-            allow( helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
-
-            allow( helper).to receive(:polymorphic_path).and_return("path")
-            expect(helper).to receive(:polymorphic_path).with(instance, format: nil)
+            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
+            expect(helper).to receive(:polymorphic_path).with(instance, format: nil).and_return("path")
           end
 
           let(:instance) { create(:writer, :with_published_post) }
@@ -134,10 +122,8 @@ RSpec.describe AdminHelper do
       describe "posts" do
         describe "published" do
           before(:each) do
-            allow( helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
-
-            allow( helper).to receive(:article_path).and_return("path")
-            expect(helper).to receive(:article_path).with(instance.slug, format: nil)
+            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
+            expect(helper).to receive(:article_path).with(instance.slug, format: nil).and_return("path")
           end
 
           let(:instance) { create(:minimal_article, :published) }

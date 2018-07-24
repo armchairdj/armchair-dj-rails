@@ -47,8 +47,7 @@ RSpec.describe Identity do
 
       describe "#real_name_is_primary" do
         before(:each) do
-          allow( subject).to receive(:real_name_is_primary).and_call_original
-          expect(subject).to receive(:real_name_is_primary)
+          expect(subject).to receive(:real_name_is_primary).and_call_original
         end
 
         specify "valid" do
@@ -66,8 +65,7 @@ RSpec.describe Identity do
 
       describe "#pseudonym_is_secondary" do
         before(:each) do
-          allow( subject).to receive(:pseudonym_is_secondary).and_call_original
-          expect(subject).to receive(:pseudonym_is_secondary)
+          expect(subject).to receive(:pseudonym_is_secondary).and_call_original
         end
 
         specify "valid" do

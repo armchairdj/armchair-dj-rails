@@ -34,7 +34,6 @@ RSpec.shared_examples "an_alphabetizable_model" do
 
         describe "before_save" do
           it "calls #set_alpha" do
-            allow( instance).to receive(:set_alpha)
             expect(instance).to receive(:set_alpha)
 
             instance.save

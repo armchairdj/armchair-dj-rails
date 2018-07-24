@@ -429,10 +429,9 @@ RSpec.describe Work do
         subject { instance.display_makers }
 
         before(:each) do
-          allow( instance).to receive(:collect_makers).and_return("collected")
+          allow(instance).to receive(:collect_makers).and_return("collected")
 
-          allow( instance).to receive(:memoize_display_makers).and_call_original
-          expect(instance).to receive(:memoize_display_makers)
+          expect(instance).to receive(:memoize_display_makers).and_call_original
 
           instance.save
         end

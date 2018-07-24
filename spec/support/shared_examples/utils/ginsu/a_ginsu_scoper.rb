@@ -21,7 +21,6 @@ RSpec.shared_examples "a_ginsu_scoper" do
 
       context "basics" do
         before(:each) do
-          allow( instance).to receive(:validate)
           expect(instance).to receive(:validate)
         end
 

@@ -147,8 +147,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     subject { described_class::Scope.new(user, model_class).resolve }
 
     before(:each) do
-      allow( model_class).to receive(:for_cms_user).and_call_original
-      expect(model_class).to receive(:for_cms_user).with(user)
+      expect(model_class).to receive(:for_cms_user).with(user).and_call_original
     end
 
     describe "with user" do
