@@ -8,10 +8,7 @@ RSpec.describe Ginsu::Collection do
       let(:relation) { Tag.for_list }
 
       before(:each) do
-         allow( TagScoper).to receive(:new)
          expect(TagScoper).to receive(:new)
-
-         allow( TagSorter).to receive(:new).with(**expected_args)
          expect(TagSorter).to receive(:new).with(**expected_args)
       end
 
@@ -35,10 +32,7 @@ RSpec.describe Ginsu::Collection do
     context "with a model that is" do
       context "vanilla" do
         before(:each) do
-           allow( AspectScoper).to receive(:new)
            expect(AspectScoper).to receive(:new)
-
-           allow( AspectSorter).to receive(:new)
            expect(AspectSorter).to receive(:new)
         end
 
@@ -50,10 +44,7 @@ RSpec.describe Ginsu::Collection do
       context "STI" do
         context "with multiple subclasses but one controller" do
           before(:each) do
-             allow( WorkScoper).to receive(:new)
              expect(WorkScoper).to receive(:new)
-
-             allow( WorkSorter).to receive(:new)
              expect(WorkSorter).to receive(:new)
           end
 
@@ -64,10 +55,7 @@ RSpec.describe Ginsu::Collection do
 
         context "with multiple subclasses and controllers" do
           before(:each) do
-             allow( ArticleScoper).to receive(:new)
              expect(ArticleScoper).to receive(:new)
-
-             allow( ArticleSorter).to receive(:new)
              expect(ArticleSorter).to receive(:new)
           end
 
@@ -132,15 +120,13 @@ RSpec.describe Ginsu::Collection do
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
       it "resolves the scoper" do
-        allow( instance.scoper).to receive(:resolve).and_call_original
-        expect(instance.scoper).to receive(:resolve)
+        expect(instance.scoper).to receive(:resolve).and_call_original
 
         subject
       end
 
       it "resolves the sorter" do
-        allow( instance.sorter).to receive(:resolve).and_call_original
-        expect(instance.sorter).to receive(:resolve)
+        expect(instance.sorter).to receive(:resolve).and_call_original
 
         subject
       end
@@ -149,13 +135,9 @@ RSpec.describe Ginsu::Collection do
         allow(instance.scoper).to receive(:resolve).and_return(:all)
         allow(instance.sorter).to receive(:resolve).and_return("created_at DESC")
 
-        allow_any_instance_of(ActiveRecord::Relation).to receive(:order).and_call_original
-        allow( Creator).to receive(:page).and_call_original
-        allow( Creator).to receive(:all ).and_call_original
-
-        expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with("created_at DESC")
-        expect(Creator).to receive(:all)
-        expect(Creator).to receive(:page).with("2")
+        expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with("created_at DESC").and_call_original
+        expect(Creator).to receive(:all).at_least(:once).and_call_original
+        expect(Creator).to receive(:page).with("2").and_call_original
 
         subject
       end

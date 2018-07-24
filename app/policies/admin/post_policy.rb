@@ -8,7 +8,7 @@ class Admin::PostPolicy < Admin::BasePolicy
   end
 
   def update?
-    super && (user.can_edit? || user == record.author)
+    super && (user.can_edit? || user.id == record.author_id)
   end
 
   def publish?

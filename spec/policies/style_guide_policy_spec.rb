@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe StyleGuidePolicy do
-  let(:record) { true }
+  let(:record) { double }
 
   subject { described_class.new(user, record) }
 
@@ -17,7 +17,7 @@ RSpec.describe StyleGuidePolicy do
   end
 
   describe "as member" do
-    let(:user) { create(:member) }
+    let(:user) { build_stubbed(:member) }
 
     it { is_expected.to raise_not_authorized_for(:index        ) }
     it { is_expected.to raise_not_authorized_for(:show         ) }
@@ -26,7 +26,7 @@ RSpec.describe StyleGuidePolicy do
   end
 
   describe "as writer" do
-    let(:user) { create(:writer) }
+    let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to permit_action(:index        ) }
     it { is_expected.to permit_action(:show         ) }
@@ -35,7 +35,7 @@ RSpec.describe StyleGuidePolicy do
   end
 
   describe "as editor" do
-    let(:user) { create(:editor) }
+    let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to permit_action(:index        ) }
     it { is_expected.to permit_action(:show         ) }
@@ -44,7 +44,7 @@ RSpec.describe StyleGuidePolicy do
   end
 
   describe "as admin" do
-    let(:user) { create(:admin) }
+    let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:index        ) }
     it { is_expected.to permit_action(:show         ) }
@@ -53,7 +53,7 @@ RSpec.describe StyleGuidePolicy do
   end
 
   context "as root" do
-    let(:user) { create(:root) }
+    let(:user) { build_stubbed(:root) }
 
     it { is_expected.to permit_action(:index        ) }
     it { is_expected.to permit_action(:show         ) }

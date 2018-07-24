@@ -3,10 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_feedable_policy" do
-  let(     :record) { create_minimal_instance }
-  let(:model_class) { record.class }
-
-  subject { described_class.new(user, model_class) }
+  subject { described_class.new(user, determine_model_class) }
 
   context "without user" do
     let(:user) { nil }
@@ -15,31 +12,31 @@ RSpec.shared_examples "a_feedable_policy" do
   end
 
   describe "as member" do
-    let(:user) { create(:member) }
+    let(:user) { build_stubbed(:member) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
   describe "as writer" do
-    let(:user) { create(:writer) }
+    let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
   describe "as editor" do
-    let(:user) { create(:editor) }
+    let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
   describe "as admin" do
-    let(:user) { create(:admin) }
+    let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
   context "as root" do
-    let(:user) { create(:root) }
+    let(:user) { build_stubbed(:root) }
 
     it { is_expected.to permit_action(:feed) }
   end
