@@ -53,7 +53,7 @@ RSpec.describe Creator do
   describe "scope-related" do
     describe "identities" do
       describe "scopes and booleans" do
-        let!(  :primary) { create(  :primary_creator) }
+        let!(:primary) { create(  :primary_creator) }
         let!(:secondary) { create(:secondary_creator) }
 
         describe "self#primary" do
@@ -80,12 +80,12 @@ RSpec.describe Creator do
       end
 
       describe "collections" do
-        let!(    :richie) { create(:richie_hawtin) }
-        let!(  :robotman) { create(:robotman     ) }
+        let!(:richie) { create(:richie_hawtin) }
+        let!(:robotman) { create(:robotman     ) }
         let!(:plastikman) { create(:plastikman   ) }
-        let!(      :fuse) { create(:fuse         ) }
-        let!(       :gas) { create(:gas          ) }
-        let!(  :identity) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
+        let!(:fuse) { create(:fuse         ) }
+        let!(:gas) { create(:gas          ) }
+        let!(:identity) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
 
         describe "self#available_pseudonyms" do
           subject { described_class.available_pseudonyms }
@@ -137,12 +137,12 @@ RSpec.describe Creator do
         describe "self#available_members" do
           subject { described_class.available_members }
 
-          let!(      :band) { create(:fleetwood_mac     ) }
-          let!(    :stevie) { create(:stevie_nicks      ) }
-          let!(   :lindsay) { create(:lindsay_buckingham) }
-          let!( :christine) { create(:christine_mcvie   ) }
-          let!(      :mick) { create(:mick_fleetwood    ) }
-          let!(      :john) { create(:john_mcvie        ) }
+          let!(:band) { create(:fleetwood_mac     ) }
+          let!(:stevie) { create(:stevie_nicks      ) }
+          let!(:lindsay) { create(:lindsay_buckingham) }
+          let!(:christine) { create(:christine_mcvie   ) }
+          let!(:mick) { create(:mick_fleetwood    ) }
+          let!(:john) { create(:john_mcvie        ) }
           let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
           it "includes even used members and alphabetizes" do
@@ -187,12 +187,12 @@ RSpec.describe Creator do
       describe "pseudonym_identities" do
         subject { create(:primary_creator) }
 
-        let(  :valid) { create(:secondary_creator) }
+        let(:valid) { create(:secondary_creator) }
         let(:invalid) { create(:primary_creator  ) }
 
-        let(  :valid_params) { { "0" => { pseudonym_id:   valid.id } } }
+        let(:valid_params) { { "0" => { pseudonym_id:   valid.id } } }
         let(:bad_params) { { "0" => { pseudonym_id: invalid.id } } }
-        let(  :empty_params) { { "0" => {                          } } }
+        let(:empty_params) { { "0" => {                          } } }
 
         it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }
 
@@ -274,12 +274,12 @@ RSpec.describe Creator do
       describe "real_name_identities" do
         subject { create(:secondary_creator) }
 
-        let(  :valid) { create(:primary_creator  ) }
+        let(:valid) { create(:primary_creator  ) }
         let(:invalid) { create(:secondary_creator) }
 
-        let(  :valid_params) { { "0" => { real_name_id:   valid.id } } }
+        let(:valid_params) { { "0" => { real_name_id:   valid.id } } }
         let(:bad_params) { { "0" => { real_name_id: invalid.id } } }
-        let(  :empty_params) { { "0" => {                          } } }
+        let(:empty_params) { { "0" => {                          } } }
 
         it { is_expected.to accept_nested_attributes_for(:real_name_identities).allow_destroy(true) }
 
@@ -360,12 +360,12 @@ RSpec.describe Creator do
       describe "member_memberships" do
         subject { create(:collective_creator) }
 
-        let(  :valid) { create(:individual_creator) }
+        let(:valid) { create(:individual_creator) }
         let(:invalid) { create(:collective_creator) }
 
-        let(  :valid_params) { { "0" => { member_id:   valid.id } } }
+        let(:valid_params) { { "0" => { member_id:   valid.id } } }
         let(:bad_params) { { "0" => { member_id: invalid.id } } }
-        let(  :empty_params) { { "0" => {                       } } }
+        let(:empty_params) { { "0" => {                       } } }
 
         it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
 
@@ -447,12 +447,12 @@ RSpec.describe Creator do
       describe "group_memberships" do
         subject { create(:individual_creator) }
 
-        let(  :valid) { create(:collective_creator) }
+        let(:valid) { create(:collective_creator) }
         let(:invalid) { create(:individual_creator) }
 
-        let(  :valid_params) { { "0" => { group_id:   valid.id } } }
+        let(:valid_params) { { "0" => { group_id:   valid.id } } }
         let(:bad_params) { { "0" => { group_id: invalid.id } } }
-        let(  :empty_params) { { "0" => {                      } } }
+        let(:empty_params) { { "0" => {                      } } }
 
         it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
 
@@ -588,7 +588,7 @@ RSpec.describe Creator do
       describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do
         context "without identities" do
           let!(:kate_bush) { create(:kate_bush) }
-          let!(      :gas) { create(:gas      ) }
+          let!(:gas) { create(:gas      ) }
 
           specify "primary" do
             expect(kate_bush.pseudonym_identities).to eq(Identity.none)
@@ -612,9 +612,9 @@ RSpec.describe Creator do
         end
 
         context "with identities" do
-          let!(    :richie) { create(:richie_hawtin_with_pseudonyms) }
+          let!(:richie) { create(:richie_hawtin_with_pseudonyms) }
           let!(:plastikman) { described_class.find_by(name: "Plastikman") }
-          let!(      :fuse) { described_class.find_by(name: "F.U.S.E."  ) }
+          let!(:fuse) { described_class.find_by(name: "F.U.S.E."  ) }
 
           specify "primary" do
             expect(richie.pseudonym_identities    ).to have(2).items
@@ -673,10 +673,10 @@ RSpec.describe Creator do
         end
 
         context "with a single band" do
-          let!(  :band) { create(:spawn_with_members) }
+          let!(:band) { create(:spawn_with_members) }
           let!(:richie) { described_class.find_by(name: "Richie Hawtin" ) }
-          let!(  :fred) { described_class.find_by(name: "Fred Giannelli") }
-          let!(   :dan) { described_class.find_by(name: "Dan Bell"      ) }
+          let!(:fred) { described_class.find_by(name: "Fred Giannelli") }
+          let!(:dan) { described_class.find_by(name: "Dan Bell"      ) }
 
           specify "collective" do
             expect(band.member_memberships   ).to have(3).items
@@ -712,12 +712,12 @@ RSpec.describe Creator do
         end
 
         context "with multiple bands" do
-          let!(     :band) { create(:fleetwood_mac_with_members) }
-          let!(   :stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
-          let!(  :lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
+          let!(:band) { create(:fleetwood_mac_with_members) }
+          let!(:stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
+          let!(:lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
           let!(:christine) { described_class.find_by(name: "Christine McVie"   ) }
-          let!(     :mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
-          let!(     :john) { described_class.find_by(name: "John McVie"        ) }
+          let!(:mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
+          let!(:john) { described_class.find_by(name: "John McVie"        ) }
 
           let!(:imaginary) { create(:minimal_creator, :primary, name: "Imaginary") }
 
@@ -758,10 +758,10 @@ RSpec.describe Creator do
     end
 
     describe "composite methods" do
-      let!(   :instance) { create_minimal_instance }
-      let!(    :created) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
+      let!(:instance   ) { create_minimal_instance }
+      let!(:created    ) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
       let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }
-      let!(       :both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
+      let!(:both       ) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
 
       describe "#all_works" do
         subject { instance.all_works.ids }
@@ -780,10 +780,10 @@ RSpec.describe Creator do
           })
         end
 
-        let!(    :created_review) { create(:minimal_review,  work_id:      created.id) }
+        let!(:created_review    ) { create(:minimal_review,  work_id:      created.id) }
         let!(:contributed_review) { create(:minimal_review,  work_id:  contributed.id) }
-        let!(       :both_review) { create(:minimal_review,  work_id:         both.id) }
-        let!(           :mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
+        let!(:both_review       ) { create(:minimal_review,  work_id:         both.id) }
+        let!(:mixtape           ) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
         subject { instance.posts.ids }
 
@@ -799,13 +799,13 @@ RSpec.describe Creator do
       subject { instance.display_roles }
 
       context "with credits and contributions" do
-        let(    :editor) { create(:minimal_role, medium: "Book",   name: "Editor"    ) }
-        let(    :author) { create(:minimal_role, medium: "Book",   name: "Author"    ) }
+        let(:editor    ) { create(:minimal_role, medium: "Book",   name: "Editor"    ) }
+        let(:author    ) { create(:minimal_role, medium: "Book",   name: "Author"    ) }
         let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
-        let(  :director) { create(:minimal_role, medium: "TvShow", name: "Director"  ) }
+        let(:director  ) { create(:minimal_role, medium: "TvShow", name: "Director"  ) }
 
         let(:tv_show) { create(:minimal_tv_show) }
-        let(   :book) { create(:minimal_book) }
+        let(:book) { create(:minimal_book) }
 
         before(:each) do
           instance.credits.create(work: tv_show)
@@ -833,7 +833,7 @@ RSpec.describe Creator do
     end
 
     describe "#alpha_parts" do
-      let(:instance) { create_minimal_instance }
+      let(:instance) { build_minimal_instance }
 
       subject { instance.alpha_parts }
 

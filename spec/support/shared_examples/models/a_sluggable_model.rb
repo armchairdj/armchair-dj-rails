@@ -128,7 +128,7 @@ RSpec.shared_examples "a_sluggable_model" do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
@@ -298,9 +298,9 @@ RSpec.shared_examples "a_sluggable_model" do
 
         describe "calling #base_slug, #sequenced_slug & #normalize_friendly_id" do
           describe "basic characters" do
-            let(  :one) { build_minimal_instance }
-            let(  :two) { build_minimal_instance }
-            let(:three) { build_minimal_instance }
+            let(:one) { create_minimal_instance }
+            let(:two) { create_minimal_instance }
+            let(:three) { create_minimal_instance }
 
             let!(:instances) { [one, two, three] }
 
@@ -318,9 +318,9 @@ RSpec.shared_examples "a_sluggable_model" do
           end
 
           describe "special characters" do
-            let(  :one) { build_minimal_instance }
-            let(  :two) { build_minimal_instance }
-            let(:three) { build_minimal_instance }
+            let(:one) { create_minimal_instance }
+            let(:two) { create_minimal_instance }
+            let(:three) { create_minimal_instance }
 
             let!(:instances) { [one, two, three] }
 

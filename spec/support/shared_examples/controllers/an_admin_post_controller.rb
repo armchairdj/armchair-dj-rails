@@ -2,8 +2,8 @@
 
 RSpec.shared_examples "an_admin_post_controller" do
   let(:model_class) { described_class.controller_name.classify.constantize }
-  let(  :view_path) { described_class.controller_name.to_sym }
-  let(  :param_key) { model_class.model_name.param_key.to_sym }
+  let(:view_path) { described_class.controller_name.to_sym }
+  let(:param_key) { model_class.model_name.param_key.to_sym }
 
   let(:templates) { {
     show: "admin/posts/#{view_path}/show",
@@ -28,7 +28,7 @@ RSpec.shared_examples "an_admin_post_controller" do
   let(:min_update_params) { attributes_for_minimal_instance.except(:author_id) }
   let(:max_update_params) { attributes_for_complete_instance.except(:author_id) }
   let(:reset_slug_params) { { "clear_slug" => "1" } }
-  let(  :autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
+  let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
 
   def wrap_create_params(params)
     hash = {}
@@ -53,7 +53,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #show" do
-      let( :instance) { create_minimal_instance(:draft) }
+      let(:instance) { create_minimal_instance(:draft) }
       let(:operation) { get :show, params: { id: instance.to_param } }
 
       subject { operation }
@@ -116,7 +116,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #edit" do
-      let( :instance) { create_minimal_instance(:draft) }
+      let(:instance) { create_minimal_instance(:draft) }
       let(:operation) { get :edit, params: { id: instance.to_param } }
 
       subject { operation }
@@ -131,7 +131,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     describe "PUT #update" do
       context "draft" do
         let(:operation) { put :update, params: wrap_update_params(instance, params) }
-        let( :instance) { create_minimal_instance(:draft) }
+        let(:instance) { create_minimal_instance(:draft) }
 
         subject { operation }
 
@@ -168,7 +168,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       context "published" do
         let(:operation) { put :update, params: wrap_update_params(instance, params) }
-        let( :instance) { create_minimal_instance(:published) }
+        let(:instance) { create_minimal_instance(:published) }
 
         subject { operation }
 
@@ -190,7 +190,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         describe "publishing" do
           let(:operation) { put :update, params: wrap_update_params(instance, params, step: "publish") }
-          let( :instance) { create_minimal_instance(:draft) }
+          let(:instance) { create_minimal_instance(:draft) }
 
           context "with valid params" do
             let(:params) { max_update_params }
@@ -251,7 +251,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         describe "unpublishing" do
           let(:operation) { put :update, params: wrap_update_params(instance, params, step: "unpublish") }
-          let( :instance) { create_minimal_instance(:published) }
+          let(:instance) { create_minimal_instance(:published) }
 
           context "with valid params" do
             let(:params) { max_update_params }
@@ -289,9 +289,9 @@ RSpec.shared_examples "an_admin_post_controller" do
         end
 
         describe "scheduling" do
-          let(  :instance) { create_minimal_instance(:draft) }
+          let(:instance) { create_minimal_instance(:draft) }
           let(:all_params) { params.merge(publish_on: 3.weeks.from_now) }
-          let( :operation) { put :update, params: wrap_update_params(instance, all_params, step: "schedule") }
+          let(:operation) { put :update, params: wrap_update_params(instance, all_params, step: "schedule") }
 
           context "with valid params" do
             let(:params) { max_update_params }
@@ -352,7 +352,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         describe "unscheduling" do
           let(:operation) { put :update, params: wrap_update_params(instance, params, step: "unschedule") }
-          let( :instance) { create_minimal_instance(:scheduled) }
+          let(:instance) { create_minimal_instance(:scheduled) }
 
           context "with valid params" do
             let(:params) { max_update_params }
@@ -440,7 +440,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
 
       context "non-xhr" do
-        let(   :params) { autosave_params }
+        let(:params) { autosave_params }
         let(:operation) { put :autosave, params: wrap_update_params(instance, params) }
 
         it { is_expected.to render_bad_request }

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::RolesController do
   let(:media) { Work.media }
-  let(        :role) { create(:minimal_role, medium: media.first.last) }
+  let(:role) { create(:minimal_role, medium: media.first.last) }
 
   describe "concerns" do
     it_behaves_like "a_paginatable_controller"
@@ -87,7 +87,7 @@ RSpec.describe Admin::RolesController do
     end
 
     describe "PUT #update" do
-      let(    :update_params) { { name: "New Name" } }
+      let(:update_params) { { name: "New Name" } }
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do

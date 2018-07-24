@@ -117,9 +117,9 @@ RSpec.describe Admin::CreatorsController do
     describe "PUT #update" do
       let!(:creator) { create(:minimal_creator, :with_member, :with_pseudonym) }
 
-      let(    :bad_params) { { name: ""         } }
-      let(    :min_params) { { name: "New Name" } }
-      let(    :max_params) { attributes_for(:minimal_creator, :with_new_member, :with_new_pseudonym) }
+      let(:bad_params) { { name: ""         } }
+      let(:min_params) { { name: "New Name" } }
+      let(:max_params) { attributes_for(:minimal_creator, :with_new_member, :with_new_pseudonym) }
       let(:ignored_params) { attributes_for(:minimal_creator, :with_new_group,  :with_new_real_name) }
 
       context "with min valid params" do

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_atomically_validatable_model" do
-  subject { build_minimal_instance }
+  subject { create_minimal_instance }
 
   describe "methods" do
     describe "valid_attributes?" do

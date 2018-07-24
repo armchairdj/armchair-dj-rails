@@ -139,7 +139,7 @@ RSpec.describe Playlist do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     pending "#posts"
 

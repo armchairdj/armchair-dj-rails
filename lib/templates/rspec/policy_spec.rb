@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe <%= class_name %>Policy do
-  let(:record) { create_minimal_instance }
+  let(:record) { build_minimal_instance }
 
   context "without user" do
     let(:user) { nil }

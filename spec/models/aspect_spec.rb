@@ -41,8 +41,8 @@ RSpec.describe Aspect do
 
   describe "scope-related" do
     describe "#for_facet" do
-      let!( :mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
-      let!( :mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
+      let!(:mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
+      let!(:mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
       let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop" ) }
       let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
 
@@ -92,7 +92,7 @@ RSpec.describe Aspect do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
@@ -101,7 +101,7 @@ RSpec.describe Aspect do
     end
 
     describe "#display_name" do
-      subject { create_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
+      subject { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
       specify { expect(subject.display_name                ).to eq("Musical Genre: Trip-Hop") }
       specify { expect(subject.display_name(connector: "/")).to eq("Musical Genre/Trip-Hop" ) }

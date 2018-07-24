@@ -30,7 +30,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
       end
 
       describe "hooks" do
-        let(:instance) { build_minimal_instance }
+        let(:instance) { create_minimal_instance }
 
         describe "before_save" do
           it "calls #set_alpha" do
@@ -100,7 +100,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
   end
 
   describe "instance" do
-    subject { build_minimal_instance.alpha_parts }
+    subject { create_minimal_instance.alpha_parts }
 
     it { is_expected.to be_a_kind_of(Array) }
   end

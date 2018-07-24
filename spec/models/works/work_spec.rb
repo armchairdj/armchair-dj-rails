@@ -29,8 +29,8 @@ RSpec.describe Work do
 
   describe "class" do
     describe "self#grouped_by_medium" do
-      let( :song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
-      let( :song_2) { create(:minimal_song, maker_names: ["Annie"]) }
+      let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
+      let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show         ) }
       let(:podcast) { create(:minimal_podcast         ) }
 
@@ -268,7 +268,7 @@ RSpec.describe Work do
     end
 
     describe "#prepare_for_editing" do
-      let(:instance) { create_minimal_instance }
+      let(:instance) { build_minimal_instance }
 
       subject { instance.prepare_for_editing }
 
@@ -330,7 +330,7 @@ RSpec.describe Work do
         describe "credits" do
           before(:each) { subject.credits = [] }
 
-          let(      :creator) { create(:minimal_creator) }
+          let(:creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
           let(:good_attributes) { {
@@ -364,8 +364,8 @@ RSpec.describe Work do
           subject { build(:minimal_song) }
 
           let(:creator) { create(:minimal_creator) }
-          let( :role_1) { create(:minimal_role, medium: "Song") }
-          let( :role_2) { create(:minimal_role, medium: "Song") }
+          let(:role_1) { create(:minimal_role, medium: "Song") }
+          let(:role_2) { create(:minimal_role, medium: "Song") }
 
           let(:good_attributes) { {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
@@ -442,16 +442,17 @@ RSpec.describe Work do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "post methods" do
       let!(:instance) { create_minimal_instance }
-      let!(  :review) { create(:minimal_review, work_id: instance.id) }
-      let!( :mixtape) do
-        playlist               = create(:minimal_playlist)
-        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
+      let!(:review  ) { create(:minimal_review, work_id: instance.id) }
+      let!(:playlist) { create(:minimal_playlist) }
+      let!(:mixtape ) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
-        create(:minimal_mixtape, playlist_id: playlist.id)
+      before(:each) do
+        # TODO let the factory handle this with transient attributes
+        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
       end
 
       describe "post_ids" do
@@ -542,7 +543,7 @@ RSpec.describe Work do
     end
 
     describe "all-creator methods" do
-      let(     :role) { create(:minimal_role, medium: "Song") }
+      let(:role) { create(:minimal_role, medium: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }

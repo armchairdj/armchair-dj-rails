@@ -67,12 +67,12 @@ module FactoryHelpers
     build(key_for_minimal, *args)
   end
 
-  def create_minimal_instance(*args)
-    create(key_for_minimal, *args)
-  end
-
   def stub_minimal_instance(*args)
     build_stubbed(key_for_minimal, *args)
+  end
+
+  def create_minimal_instance(*args)
+    create(key_for_minimal, *args)
   end
 
   #############################################################################
@@ -91,11 +91,11 @@ module FactoryHelpers
     build(key_for_complete, *args)
   end
 
-  def create_complete_instance(*args)
-    create(key_for_complete, *args)
-  end
-
   def stub_complete_instance(*args)
     build_stubbed(key_for_complete, *args)
+  end
+
+  def create_complete_instance(*args)
+    create(key_for_complete, *args)
   end
 end

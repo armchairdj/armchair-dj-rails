@@ -14,7 +14,7 @@ RSpec.describe VideoGame do
     end
 
     describe "instance" do
-      let(:instance) { create_minimal_instance }
+      let(:instance) { build_minimal_instance }
 
       specify { expect(instance.model_name.name     ).to eq("Work") }
       specify { expect(instance.true_model_name.name).to eq("VideoGame") }
@@ -26,7 +26,7 @@ RSpec.describe VideoGame do
   describe "class attributes" do
     describe "available_facets" do
       let(:expected) { [:tech_platform, :game_studio, :game_mechanic] }
-      let(:instance) { create_minimal_instance }
+      let(:instance) { build_minimal_instance }
 
       specify { expect(       instance.available_facets).to eq(expected) }
       specify { expect(described_class.available_facets).to eq(expected) }

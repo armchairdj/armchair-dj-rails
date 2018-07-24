@@ -33,8 +33,8 @@ RSpec.describe Post do
 
   describe "class" do
     describe "scheduled publication" do
-      let!(  :future) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
-      let!( :current) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
+      let!(:future  ) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
+      let!(:current ) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
       let!(:past_due) { create_minimal_instance(:scheduled, publish_on: 1.days.from_now) }
 
       describe "self#scheduled_for_publication" do
@@ -90,11 +90,11 @@ RSpec.describe Post do
 
   describe "scope-related" do
     describe "for sorting and status" do
-      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:draft    ) { create_minimal_instance(:draft    ) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
       let(:published) { create_minimal_instance(:published) }
 
-      let(       :ids) { [draft, scheduled, published].map(&:id) }
+      let(:ids       ) { [draft, scheduled, published].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       describe "self#reverse_cron" do
@@ -159,11 +159,11 @@ RSpec.describe Post do
     end
 
     describe "for public site" do
-      let(    :draft) { create_minimal_instance(:draft    ) }
+      let(:draft    ) { create_minimal_instance(:draft    ) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
       let(:published) { create_minimal_instance(:published) }
 
-      let!(       :ids) { [draft, scheduled, published].map(&:id) }
+      let!(:ids       ) { [draft, scheduled, published].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
       describe "self#for_public" do
@@ -176,18 +176,18 @@ RSpec.describe Post do
     describe "for cms access to other users' posts" do
       describe "self#for_cms_user" do
         let!(:no_user) { nil }
-        let!( :member) { create(:member) }
-        let!( :writer) { create(:writer) }
-        let!( :editor) { create(:editor) }
-        let!(  :admin) { create(:admin ) }
-        let!(   :root) { create(:root  ) }
+        let!(:member) { create(:member) }
+        let!(:writer) { create(:writer) }
+        let!(:editor) { create(:editor) }
+        let!(:admin) { create(:admin ) }
+        let!(:root) { create(:root  ) }
 
-        let( :writer_post) { create(:minimal_post, author: writer) }
-        let( :editor_post) { create(:minimal_post, author: editor) }
-        let(  :admin_post) { create(:minimal_post, author: admin ) }
-        let(   :root_post) { create(:minimal_post, author: root  ) }
+        let(:writer_post) { create(:minimal_post, author: writer) }
+        let(:editor_post) { create(:minimal_post, author: editor) }
+        let(:admin_post) { create(:minimal_post, author: admin ) }
+        let(:root_post) { create(:minimal_post, author: root  ) }
 
-        let!(       :ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
+        let!(:ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
         let!(:collection) { described_class.where(id: ids) }
 
         subject { collection.for_cms_user(instance) }
@@ -279,7 +279,7 @@ RSpec.describe Post do
 
     describe "conditional" do
       describe "draft" do
-        subject { create_minimal_instance(:draft) }
+        subject { build_minimal_instance(:draft) }
 
         it { is_expected.to_not validate_presence_of(:body        ) }
         it { is_expected.to_not validate_presence_of(:published_at) }
@@ -311,7 +311,7 @@ RSpec.describe Post do
   end
 
   describe "aasm" do
-    let!(    :draft) { create_minimal_instance(:draft    ) }
+    let!(:draft    ) { create_minimal_instance(:draft    ) }
     let!(:scheduled) { create_minimal_instance(:scheduled) }
     let!(:published) { create_minimal_instance(:published) }
 
@@ -504,7 +504,7 @@ RSpec.describe Post do
       end
 
       describe "#set_published_at" do
-        subject { create_minimal_instance(:draft) }
+        subject { build_minimal_instance(:draft) }
 
         it "sets published_at" do
           Timecop.freeze(2020, 3, 3) do
@@ -529,7 +529,7 @@ RSpec.describe Post do
 
       describe "#clear_published_at" do
         it "removes published_at" do
-          instance = create_minimal_instance(:published)
+          instance = build_minimal_instance(:published)
 
           instance.send(:clear_published_at)
 
@@ -539,7 +539,7 @@ RSpec.describe Post do
 
       describe "#clear_publish_on" do
         it "removes publish_on" do
-          instance = create_minimal_instance(:published)
+          instance = build_minimal_instance(:published)
 
           instance.send(:clear_publish_on)
 
@@ -783,13 +783,13 @@ RSpec.describe Post do
       end
 
       context "happy path" do
-        let(:instance) { create_minimal_instance(body: "markdown") }
+        let(:instance) { build_minimal_instance(body: "markdown") }
 
         it { is_expected.to eq("rendered markdown".html_safe) }
       end
 
       context "nil body" do
-        let(:instance) { create_minimal_instance(body: nil) }
+        let(:instance) { build_minimal_instance(body: nil) }
 
         it { is_expected.to eq(nil) }
       end

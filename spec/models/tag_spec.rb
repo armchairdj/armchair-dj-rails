@@ -52,7 +52,7 @@ RSpec.describe Tag do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }

@@ -71,13 +71,13 @@ RSpec.describe User do
 
   describe "scope-related" do
     describe "for public site" do
-      let(   :saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
+      let(:saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }
-      let(  :celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
+      let(:celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
       let(:charlie) { create(:admin,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-      let(  :brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+      let(:brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
 
-      let(       :ids) { [saru, monique, celia, charlie, brian].map(&:id) }
+      let(:ids) { [saru, monique, celia, charlie, brian].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       before(:each) do
@@ -106,15 +106,15 @@ RSpec.describe User do
 
     describe "self#for_cms_user" do
       let(:no_user) { nil }
-      let( :member) { create(:member) }
-      let( :writer) { create(:writer) }
-      let( :editor) { create(:editor) }
+      let(:member) { create(:member) }
+      let(:writer) { create(:writer) }
+      let(:editor) { create(:editor) }
       let(:admin_1) { create(:admin ) }
       let(:admin_2) { create(:admin ) }
-      let( :root_1) { create(:root  ) }
-      let( :root_2) { create(:root  ) }
+      let(:root_1) { create(:root  ) }
+      let(:root_2) { create(:root  ) }
 
-      let!(       :ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
+      let!(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
       subject { collection.for_cms_user(instance) }
@@ -255,14 +255,14 @@ RSpec.describe User do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "role" do
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
-      let( :admin) { create( :admin) }
-      let(  :root) { create(  :root) }
+      let(:admin) { create( :admin) }
+      let(:root) { create(  :root) }
 
       describe "booleans" do
         describe "#can_write? is true for writers, editors, admins & roots" do

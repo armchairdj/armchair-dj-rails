@@ -67,7 +67,7 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "PUT #update" do
-      let(    :update_params) { { name: "New Name" } }
+      let(:update_params) { { name: "New Name" } }
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do

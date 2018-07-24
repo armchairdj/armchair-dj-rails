@@ -39,7 +39,7 @@ RSpec.describe Review do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#display_type" do
       let(:instance) { create(:never_for_ever_album_review) }

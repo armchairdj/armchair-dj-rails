@@ -42,7 +42,7 @@ RSpec.describe Mixtape do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#display_type" do
       specify { expect(instance.display_type              ).to eq("Mixtape" ) }

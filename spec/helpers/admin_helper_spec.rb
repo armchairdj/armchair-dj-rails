@@ -16,7 +16,7 @@ RSpec.describe AdminHelper do
   end
 
   describe "link methods" do
-    let(   :model) { Creator }
+    let(:model) { Creator }
     let(:instance) { create(:minimal_creator) }
 
     describe "#admin_list_link" do

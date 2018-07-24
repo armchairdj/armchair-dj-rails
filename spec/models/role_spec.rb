@@ -60,7 +60,7 @@ RSpec.describe Role do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
@@ -84,7 +84,7 @@ RSpec.describe Role do
 
     describe "#display_medium" do
       describe "basic" do
-        subject { create_minimal_instance(medium: "TvEpisode").display_medium }
+        subject { build_minimal_instance(medium: "TvEpisode").display_medium }
 
         it { is_expected.to eq("TV Episode") }
       end

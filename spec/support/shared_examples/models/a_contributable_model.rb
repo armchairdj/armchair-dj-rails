@@ -16,14 +16,14 @@ RSpec.shared_examples "a_contributable_model" do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     pending "#display_medium"
     pending "#work_alpha_parts"
     pending "#creator_alpha_parts"
 
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      subject { create_minimal_instance.alpha_parts }
 
       it { is_expected.to eq([
         instance.work_alpha_parts,
