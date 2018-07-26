@@ -80,12 +80,12 @@ RSpec.describe Creator do
       end
 
       describe "collections" do
-        let!(:richie) { create(:richie_hawtin) }
-        let!(:robotman) { create(:robotman     ) }
+        let!(:richie    ) { create(:richie_hawtin) }
+        let!(:robotman  ) { create(:robotman     ) }
         let!(:plastikman) { create(:plastikman   ) }
-        let!(:fuse) { create(:fuse         ) }
-        let!(:gas) { create(:gas          ) }
-        let!(:identity) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
+        let!(:fuse      ) { create(:fuse         ) }
+        let!(:gas       ) { create(:gas          ) }
+        let!(:identity  ) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
 
         describe "self#available_pseudonyms" do
           subject { described_class.available_pseudonyms }
@@ -137,12 +137,12 @@ RSpec.describe Creator do
         describe "self#available_members" do
           subject { described_class.available_members }
 
-          let!(:band) { create(:fleetwood_mac     ) }
-          let!(:stevie) { create(:stevie_nicks      ) }
-          let!(:lindsay) { create(:lindsay_buckingham) }
-          let!(:christine) { create(:christine_mcvie   ) }
-          let!(:mick) { create(:mick_fleetwood    ) }
-          let!(:john) { create(:john_mcvie        ) }
+          let!(:band      ) { create(:fleetwood_mac     ) }
+          let!(:stevie    ) { create(:stevie_nicks      ) }
+          let!(:lindsay   ) { create(:lindsay_buckingham) }
+          let!(:christine ) { create(:christine_mcvie   ) }
+          let!(:mick      ) { create(:mick_fleetwood    ) }
+          let!(:john      ) { create(:john_mcvie        ) }
           let!(:membership) { create(:minimal_membership, group: band, member: christine) }
 
           it "includes even used members and alphabetizes" do
@@ -154,32 +154,38 @@ RSpec.describe Creator do
   end
 
   describe "associations" do
-    it { is_expected.to have_many(:credits) }
-    it { is_expected.to have_many(:works  ).through(:credits) }
-    it { is_expected.to have_many(:reviews).through(:works  ) }
+    ### Credits.
 
-    it { is_expected.to have_many(:playlistings).through(:works         ) }
-    it { is_expected.to have_many(:playlists   ).through(:playlistings  ) }
-    it { is_expected.to have_many(:mixtapes    ).through(:playlists     ) }
+    it { is_expected.to have_many(:credits).dependent(:destroy) }
 
-    it { is_expected.to have_many(:contributions) }
-    it { is_expected.to have_many(:contributed_roles  ).through(:contributions    ) }
-    it { is_expected.to have_many(:contributed_works  ).through(:contributions    ) }
-    it { is_expected.to have_many(:contributed_reviews).through(:contributed_works) }
+    it { is_expected.to have_many(:works       ).through(:credits) }
+    it { is_expected.to have_many(:reviews     ).through(:works) }
+    it { is_expected.to have_many(:playlistings).through(:works) }
+    it { is_expected.to have_many(:playlists   ).through(:playlistings) }
+    it { is_expected.to have_many(:mixtapes    ).through(:playlists ) }
 
-    it { is_expected.to have_many(:contributed_playlistings).through(:contributed_works         ) }
-    it { is_expected.to have_many(:contributed_playlists   ).through(:contributed_playlistings  ) }
-    it { is_expected.to have_many(:contributed_mixtapes    ).through(:contributed_playlists     ) }
+    ### Contributions.
 
-    it { is_expected.to have_many(:pseudonym_identities) }
-    it { is_expected.to have_many(:real_name_identities) }
-    it { is_expected.to have_many(:member_memberships  ) }
-    it { is_expected.to have_many( :group_memberships  ) }
+    it { is_expected.to have_many(:contributions).dependent(:destroy) }
+
+    it { is_expected.to have_many(:contributed_roles       ).through(:contributions) }
+    it { is_expected.to have_many(:contributed_works       ).through(:contributions) }
+    it { is_expected.to have_many(:contributed_reviews     ).through(:contributed_works) }
+    it { is_expected.to have_many(:contributed_playlistings).through(:contributed_works) }
+    it { is_expected.to have_many(:contributed_playlists   ).through(:contributed_playlistings) }
+    it { is_expected.to have_many(:contributed_mixtapes    ).through(:contributed_playlists) }
+
+    ### Identities & Memberships.
+
+    it { is_expected.to have_many(:pseudonym_identities).dependent(:destroy) }
+    it { is_expected.to have_many(:real_name_identities).dependent(:destroy) }
+    it { is_expected.to have_many(:member_memberships  ).dependent(:destroy) }
+    it { is_expected.to have_many(:group_memberships   ).dependent(:destroy) }
 
     it { is_expected.to have_many(:pseudonyms).through(:pseudonym_identities).order("creators.name") }
     it { is_expected.to have_many(:real_names).through(:real_name_identities).order("creators.name") }
-    it { is_expected.to have_many(:members   ).through(  :member_memberships).order("creators.name") }
-    it { is_expected.to have_many(:groups    ).through(   :group_memberships).order("creators.name") }
+    it { is_expected.to have_many(:members   ).through(:member_memberships  ).order("creators.name") }
+    it { is_expected.to have_many(:groups    ).through(:group_memberships   ).order("creators.name") }
   end
 
   describe "attributes" do
@@ -360,11 +366,11 @@ RSpec.describe Creator do
       describe "member_memberships" do
         subject { create(:collective_creator) }
 
-        let(:valid) { create(:individual_creator) }
+        let(:valid  ) { create(:individual_creator) }
         let(:invalid) { create(:collective_creator) }
 
         let(:valid_params) { { "0" => { member_id:   valid.id } } }
-        let(:bad_params) { { "0" => { member_id: invalid.id } } }
+        let(:bad_params  ) { { "0" => { member_id: invalid.id } } }
         let(:empty_params) { { "0" => {                       } } }
 
         it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
@@ -447,11 +453,11 @@ RSpec.describe Creator do
       describe "group_memberships" do
         subject { create(:individual_creator) }
 
-        let(:valid) { create(:collective_creator) }
+        let(:valid  ) { create(:collective_creator) }
         let(:invalid) { create(:individual_creator) }
 
         let(:valid_params) { { "0" => { group_id:   valid.id } } }
-        let(:bad_params) { { "0" => { group_id: invalid.id } } }
+        let(:bad_params  ) { { "0" => { group_id: invalid.id } } }
         let(:empty_params) { { "0" => {                      } } }
 
         it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
@@ -588,7 +594,7 @@ RSpec.describe Creator do
       describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do
         context "without identities" do
           let!(:kate_bush) { create(:kate_bush) }
-          let!(:gas) { create(:gas      ) }
+          let!(:gas      ) { create(:gas      ) }
 
           specify "primary" do
             expect(kate_bush.pseudonym_identities).to eq(Identity.none)
@@ -612,9 +618,9 @@ RSpec.describe Creator do
         end
 
         context "with identities" do
-          let!(:richie) { create(:richie_hawtin_with_pseudonyms) }
+          let!(:richie    ) { create(:richie_hawtin_with_pseudonyms) }
           let!(:plastikman) { described_class.find_by(name: "Plastikman") }
-          let!(:fuse) { described_class.find_by(name: "F.U.S.E."  ) }
+          let!(:fuse      ) { described_class.find_by(name: "F.U.S.E."  ) }
 
           specify "primary" do
             expect(richie.pseudonym_identities    ).to have(2).items
@@ -673,10 +679,10 @@ RSpec.describe Creator do
         end
 
         context "with a single band" do
-          let!(:band) { create(:spawn_with_members) }
+          let!(:band  ) { create(:spawn_with_members) }
           let!(:richie) { described_class.find_by(name: "Richie Hawtin" ) }
-          let!(:fred) { described_class.find_by(name: "Fred Giannelli") }
-          let!(:dan) { described_class.find_by(name: "Dan Bell"      ) }
+          let!(:fred  ) { described_class.find_by(name: "Fred Giannelli") }
+          let!(:dan   ) { described_class.find_by(name: "Dan Bell"      ) }
 
           specify "collective" do
             expect(band.member_memberships   ).to have(3).items
@@ -712,12 +718,12 @@ RSpec.describe Creator do
         end
 
         context "with multiple bands" do
-          let!(:band) { create(:fleetwood_mac_with_members) }
-          let!(:stevie) { described_class.find_by(name: "Stevie Nicks"      ) }
-          let!(:lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
+          let!(:band     ) { create(:fleetwood_mac_with_members) }
+          let!(:stevie   ) { described_class.find_by(name: "Stevie Nicks"      ) }
+          let!(:lindsay  ) { described_class.find_by(name: "Lindsay Buckingham") }
           let!(:christine) { described_class.find_by(name: "Christine McVie"   ) }
-          let!(:mick) { described_class.find_by(name: "Mick Fleetwood"    ) }
-          let!(:john) { described_class.find_by(name: "John McVie"        ) }
+          let!(:mick     ) { described_class.find_by(name: "Mick Fleetwood"    ) }
+          let!(:john     ) { described_class.find_by(name: "John McVie"        ) }
 
           let!(:imaginary) { create(:minimal_creator, :primary, name: "Imaginary") }
 
