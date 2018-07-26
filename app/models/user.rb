@@ -95,11 +95,11 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :posts,     dependent: :destroy, foreign_key: "author_id"
-  has_many :articles,  dependent: :destroy, foreign_key: "author_id"
-  has_many :reviews,   dependent: :destroy, foreign_key: "author_id"
-  has_many :mixtapes,  dependent: :destroy, foreign_key: "author_id"
-  has_many :playlists, dependent: :destroy, foreign_key: "author_id"
+  has_many :posts,     dependent: :nullify, foreign_key: "author_id"
+  has_many :articles,  dependent: :nullify, foreign_key: "author_id"
+  has_many :reviews,   dependent: :nullify, foreign_key: "author_id"
+  has_many :mixtapes,  dependent: :nullify, foreign_key: "author_id"
+  has_many :playlists, dependent: :nullify, foreign_key: "author_id"
 
   has_many :works, through: :reviews
   has_many :makers, -> { distinct }, through: :works

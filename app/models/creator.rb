@@ -81,14 +81,11 @@ class Creator < ApplicationRecord
 
   has_many :credits, inverse_of: :creator, dependent: :destroy
 
-  has_many :works,        through: :credits
-
-  has_many :reviews,      through: :works
+  has_many :works,   through: :credits
+  has_many :reviews, through: :works
 
   has_many :playlistings, -> { distinct }, through: :works
-
   has_many :playlists,    -> { distinct }, through: :playlistings
-
   has_many :mixtapes,     -> { distinct }, through: :playlists
 
   # Contributions.

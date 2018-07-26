@@ -7,7 +7,7 @@ RSpec.shared_examples "a_linkable_model" do
 
   describe "included" do
     describe "associations" do
-      it { is_expected.to have_many(:links) }
+      it { is_expected.to have_many(:links).dependent(:destroy) }
     end
 
     describe "attributes" do

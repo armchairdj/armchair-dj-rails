@@ -53,7 +53,7 @@ RSpec.describe Creator do
   describe "scope-related" do
     describe "identities" do
       describe "scopes and booleans" do
-        let!(:primary) { create(  :primary_creator) }
+        let!(:primary  ) { create(  :primary_creator) }
         let!(:secondary) { create(:secondary_creator) }
 
         describe "self#primary" do
@@ -193,11 +193,11 @@ RSpec.describe Creator do
       describe "pseudonym_identities" do
         subject { create(:primary_creator) }
 
-        let(:valid) { create(:secondary_creator) }
+        let(:valid  ) { create(:secondary_creator) }
         let(:invalid) { create(:primary_creator  ) }
 
         let(:valid_params) { { "0" => { pseudonym_id:   valid.id } } }
-        let(:bad_params) { { "0" => { pseudonym_id: invalid.id } } }
+        let(:bad_params  ) { { "0" => { pseudonym_id: invalid.id } } }
         let(:empty_params) { { "0" => {                          } } }
 
         it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }

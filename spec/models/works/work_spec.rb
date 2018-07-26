@@ -140,17 +140,17 @@ RSpec.describe Work do
   describe "associations" do
     it { is_expected.to have_and_belong_to_many(:aspects) }
 
-    it { is_expected.to have_many(:milestones) }
+    it { is_expected.to have_many(:milestones).dependent(:destroy) }
 
-    it { is_expected.to have_many(:credits) }
+    it { is_expected.to have_many(:credits).dependent(:destroy) }
     it { is_expected.to have_many(:makers).through(:credits) }
 
-    it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:contributions).dependent(:destroy) }
     it { is_expected.to have_many(:contributors).through(:contributions) }
 
-    it { is_expected.to have_many(:reviews) }
+    it { is_expected.to have_many(:reviews).dependent(:nullify) }
 
-    it { is_expected.to have_many(:playlistings) }
+    it { is_expected.to have_many(:playlistings).dependent(:nullify) }
     it { is_expected.to have_many(:playlists).through(:playlistings) }
     it { is_expected.to have_many(:mixtapes).through(:playlists) }
   end

@@ -48,14 +48,14 @@ RSpec.describe Playlist do
 
   describe "associations" do
     describe "playlistings" do
-      let(:instance) { create_complete_instance }
-
-      it { is_expected.to have_many(:playlistings) }
+      it { is_expected.to have_many(:playlistings).dependent(:destroy) }
 
       describe "ordering" do
+        let(:instance) { create_minimal_instance }
+
         subject { instance.playlistings.map(&:position) }
 
-        it { is_expected.to eq((1..10).to_a) }
+        it { is_expected.to eq((1..2).to_a) }
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Playlist do
     it { is_expected.to have_many(:makers      ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
-    it { is_expected.to have_many(:mixtapes) }
+    it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
   end
 
   describe "attributes" do

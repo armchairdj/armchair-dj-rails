@@ -41,8 +41,8 @@ RSpec.describe Aspect do
 
   describe "scope-related" do
     describe "#for_facet" do
-      let!(:mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
-      let!(:mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
+      let!(:mood_a ) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
+      let!(:mood_b ) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
       let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop" ) }
       let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
 

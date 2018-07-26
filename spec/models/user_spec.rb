@@ -172,9 +172,11 @@ RSpec.describe User do
   end
 
   describe "associations" do
-   it { is_expected.to have_many(:articles) }
-   it { is_expected.to have_many(:reviews ) }
-   it { is_expected.to have_many(:mixtapes) }
+   it { is_expected.to have_many(:posts    ).dependent(:nullify) }
+   it { is_expected.to have_many(:articles ).dependent(:nullify) }
+   it { is_expected.to have_many(:reviews  ).dependent(:nullify) }
+   it { is_expected.to have_many(:mixtapes ).dependent(:nullify) }
+   it { is_expected.to have_many(:playlists).dependent(:nullify) }
 
    it { is_expected.to have_many(:works).through(:reviews) }
 
