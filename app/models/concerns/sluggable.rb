@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Sluggable
-  extend ActiveSupport::Concern
+concern :Sluggable do
 
   WORD_SEPARATOR         =   "_".freeze
   PART_SEPARATOR         =   "/".freeze

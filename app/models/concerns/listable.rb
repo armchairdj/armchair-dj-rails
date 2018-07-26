@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Listable
-  extend ActiveSupport::Concern
+concern :Listable do
 
   #############################################################################
   # CLASS.

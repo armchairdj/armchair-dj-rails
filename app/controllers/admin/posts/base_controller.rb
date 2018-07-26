@@ -3,6 +3,8 @@
 class Admin::Posts::BaseController < Admin::BaseController
   before_action :require_ajax, only: :autosave
 
+  skip_before_action :authorize_instance, only: [:update]
+
   # POST /posts
   # POST /posts.json
   def create
@@ -22,11 +24,13 @@ class Admin::Posts::BaseController < Admin::BaseController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    return handle_step if params[:step].present?
+    @instance.attributes = post_params_for_update
+
+    authorize_instance
 
     respond_to do |format|
-      if @instance.update(post_params_for_update)
-        format.html { redirect_to show_path, success: I18n.t("admin.flash.posts.success.update") }
+      if @instance.save
+        format.html { redirect_to show_path, success: flash_for_update }
         format.json { render :show, status: :created, location: show_path }
       else
         format.html { prepare_form; render :edit }
@@ -72,11 +76,11 @@ private
   end
 
   def authorize_instance
-    authorize(@post, publishing? ? :publish? : nil)
-  end
-
-  def publishing?
-    %w(edit update).include?(action_name) && params[:step].present?
+    if @post.changing_publication_status?
+      authorize(@post, :publish?)
+    else
+      authorize(@post)
+    end
   end
 
   def fetch_params(permitted)
@@ -84,30 +88,34 @@ private
   end
 
   def post_params_for_create
-    fetch_params(initial_keys).merge(author: current_user)
+    fetch_params(keys_for_create).merge(author: current_user)
   end
 
   def post_params_for_autosave
-    fetch_params(initial_keys + draft_keys)
+    fetch_params(keys_for_create + keys_for_update)
   end
 
   def post_params_for_update
-    fetch_params(initial_keys + publish_keys + draft_keys)
+    fetch_params(keys_for_create + keys_for_status_change + keys_for_update)
   end
 
-  def initial_keys
+  def keys_for_create
     raise NotImplementedError
   end
 
-  def draft_keys
+  def keys_for_update
     [:body, :summary, {
       tag_ids:          [],
       links_attributes: [:id, :_destroy, :url, :description]
     }]
   end
 
-  def publish_keys
-    @instance.published? ? [:clear_slug] : [:publish_on]
+  def keys_for_status_change
+    case @instance.status
+    when "draft";     [:publishing, :scheduling, :publish_on]
+    when "scheduled"; [:unscheduling]
+    when "published"; [:clear_slug, :unpublishing]
+    end
   end
 
   def prepare_form
@@ -118,59 +126,15 @@ private
     end
   end
 
-  def prepare_show
-    @tags  = @instance.tags.alpha
-    @links = @instance.links
+  def flash_for_update
+    I18n.t("admin.flash.posts.success.update", flash_for_update_action_name)
   end
 
-  def handle_step
-    @update_method, @flash_key, @success_test = case params[:step]
-    when "publish"
-      [ :update_and_publish,    "publish",    :published? ]
-    when "unpublish"
-      [ :update_and_unpublish,  "unpublish",  :draft?     ]
-    when "schedule"
-      [ :update_and_schedule,   "schedule",   :scheduled? ]
-    when "unschedule"
-      [ :update_and_unschedule, "unschedule", :draft?     ]
-    end
-
-    update_state_and_respond
-  end
-
-  def update_state_and_respond
-    respond_to do |format|
-      if @instance.send(@update_method, post_params_for_update)
-        format.html { redirect_to show_path, success: success_flash }
-        format.json { render :show, status: :ok, location: show_path }
-      else
-        format.html { prepare_form; set_publication_flash; render :edit }
-        format.json { render json: @instance.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def set_publication_flash
-    if @instance.send(@success_test)
-      flash.now[:success] = success_flash
-    else
-      flash.now[:error] = error_flash
-    end
-  end
-
-  def success_flash
-    # admin.flash.posts.success.publish
-    # admin.flash.posts.success.unpublish
-    # admin.flash.posts.success.schedule
-    # admin.flash.posts.success.unschedule
-    I18n.t("admin.flash.posts.success.#{@flash_key}")
-  end
-
-  def error_flash
-    # admin.flash.posts.error.publish
-    # admin.flash.posts.error.unpublish
-    # admin.flash.posts.error.schedule
-    # admin.flash.posts.error.unschedule
-    I18n.t("admin.flash.posts.error.#{@flash_key}")
+  def flash_for_update_action_name
+    return "published"   if @instance.publishing?
+    return "unpublished" if @instance.unpublishing?
+    return "scheduled"   if @instance.scheduling?
+    return "unscheduled" if @instance.unscheduling?
+    return "updated"
   end
 end

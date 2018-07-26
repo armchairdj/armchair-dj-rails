@@ -44,37 +44,179 @@ class Post < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include AASM
   include Alphabetizable
   include Authorable
   include Linkable
   include Sluggable
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Publishing.
   #############################################################################
 
-  def self.publish_scheduled
-    ready = self.scheduled_for_publication
+  concerning :Publishable do
+    included do
 
-    memo = {
-      all:     ready.to_a,
-      success: [],
-      failure: []
-    }
+      #####################################################
+      # Virtual attributes to trigger AASM transitions.
+      #####################################################
 
-    ready.each do |instance|
-      instance.unschedule!
+      attribute :publishing,   :boolean, default: false
+      attribute :unpublishing, :boolean, default: false
+      attribute :scheduling,   :boolean, default: false
+      attribute :unscheduling, :boolean, default: false
 
-      if instance.publish!
-        memo[:success] << instance
-      else
-        memo[:failure] << instance
+      after_save :unpublish!,   if: :unpublishing?
+      after_save :unschedule!,  if: :unscheduling?
+      after_save :publish!,     if: :publishing?
+      after_save :schedule!,    if: :scheduling?
+
+      after_save :handle_status_changes
+
+      def handle_status_changes
+        return unless changing_publication_status?
+
+        case
+        when publishing? && !published?
+          self.publishing = false
+          self.errors.add(:base, "Could not publish")
+          # clear published_on from database?
+        when scheduling? && !scheduled?
+          self.scheduling = false
+          self.errors.add(:base, "Could not schedule")
+          # clear scheduled_at from database
+        when unpublishing? && published?
+          self.unpublishing = false
+          self.errors.add(:base, "Could not unpublish")
+        when unscheduling? && scheduled?
+          sefl.unscheduling = false
+          self.errors.add(:base, "Could not unschedule")
+        end
+      end
+
+      #####################################################
+      # Attributes.
+      #####################################################
+
+      enum status: {
+        draft:      0,
+        scheduled:  5,
+        published: 10
+      }
+
+      enumable_attributes :status
+
+      def unpublished?
+        draft? || scheduled?
+      end
+
+      #####################################################
+      # State Machine.
+      #####################################################
+
+      include AASM
+
+      aasm( column: :status, enum: true,
+            create_scopes: true,
+            no_direct_assignment: true,
+            whiny_persistence: false,
+            whiny_transitions: false
+      ) do
+        state :draft, initial: true
+        state :scheduled
+        state :published
+
+        event(:schedule) do
+          transitions from: :draft, to: :scheduled, guards: [:persisted?]
+        end
+
+        event(:unschedule, before: :clear_publish_on) do
+          transitions from: :scheduled, to: :draft
+        end
+
+        event(:publish, before: :set_published_at) do
+          transitions from: [:draft, :scheduled], to: :published, guards: [:persisted?]
+        end
+
+        event(:unpublish, before: :clear_published_at) do
+          transitions from: :published, to: :draft
+        end
       end
     end
 
-    memo
+    #######################################################
+    # Instance.
+    #######################################################
+
+    def changing_publication_status?
+      unpublishing? || publishing? || unscheduling? || scheduling?
+    end
+
+  private
+
+    def set_published_at
+      self.published_at = DateTime.now
+    end
+
+    def clear_published_at
+      self.published_at = nil
+    end
+
+    def clear_publish_on
+      self.publish_on = nil
+    end
   end
+
+  #############################################################################
+  # Concerning: Scheduled publication rake task.
+  #############################################################################
+
+  concerning :Schedulable do
+    included do
+      scope :scheduled_for_publication, -> {
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
+      }
+    end
+
+    class_methods do
+      def publish_scheduled
+        memo = { success: [], failure: [], all: scheduled_for_publication.to_a }
+
+        memo[:all].each do |item|
+          item.unschedule!
+
+          if item.publish!
+            memo[:success] << item
+          else
+            memo[:failure] << item
+          end
+        end
+
+        memo
+      end
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Markdown.
+  #############################################################################
+
+  concerning :Markdownable do
+    def formatted_body
+      return unless body.present?
+
+      renderer.render(body).html_safe
+    end
+
+  private
+
+    def renderer
+      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
+    end
+  end
+
+  #############################################################################
+  # CLASS
+  #############################################################################
 
   def self.for_list
     includes(:author).references(:author)
@@ -95,38 +237,17 @@ class Post < ApplicationRecord
   # SCOPES.
   #############################################################################
 
-  scope :scheduled_for_publication, -> {
-    scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
-  }
+  scope :for_public,  -> { published.reverse_cron }
 
-  scope :unpublished,  -> { where.not(status: :published) }
   scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-  scope :for_public,   -> { published.reverse_cron }
 
-  # TODO BJD create scopes to list posts by creator, work, year, tag or aspect
-  # scope :for_creator
-  # scope :for_year
-  # scope :for_work
-  # scope :for_tag
-  # scope :for_aspect
+  scope :unpublished, -> { where.not(status: :published) }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :tags, -> { distinct }
-
-  #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  enum status: {
-    draft:      0,
-    scheduled:  5,
-    published: 10
-  }
-
-  enumable_attributes :status
+  has_and_belongs_to_many :tags, -> { order("tags.name").distinct }
 
   #############################################################################
   # VALIDATION.
@@ -138,150 +259,27 @@ class Post < ApplicationRecord
 
   validates :summary, length: { in: 40..320 }, allow_blank: true
 
-  validates :body,         presence: true, unless: :draft?
-  validates :published_at, presence: true, if: :published?
-  validates :publish_on,   presence: true, if: :scheduled?
+  validates :body,         presence: true, if: :requires_body?
+  validates :published_at, presence: true, if: :requires_published_at?
+  validates :publish_on,   presence: true, if: :requires_publish_on?
 
-  validates_date :publish_on, :after => lambda { Date.current }, allow_blank: true
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # AASM LIFECYCLE.
-  #############################################################################
-
-  aasm(
-    column:                   :status,
-    create_scopes:            true,
-    enum:                     true,
-    no_direct_assignment:     true,
-    whiny_persistence:        false,
-    whiny_transitions:        false
-  ) do
-    state :draft, initial: true
-    state :scheduled
-    state :published
-
-    event(:schedule) do
-      transitions from: :draft, to: :scheduled, guards: [:ready_to_publish?]
-    end
-
-    event(:unschedule,
-      before: :clear_publish_on
-    ) do
-      transitions from: :scheduled, to: :draft
-    end
-
-    event(:publish,
-      before: :set_published_at
-    ) do
-      transitions from: [:draft, :scheduled], to: :published, guards: [:ready_to_publish?]
-    end
-
-    event(:unpublish,
-      before: :clear_published_at
-    ) do
-      transitions from: :published, to: :draft
-    end
-  end
-
-  #############################################################################
-  # AASM TRANSITIONS.
-  #############################################################################
-
-  def update_and_publish(params)
-    return true if self.update(params) && self.publish!
-
-    self.errors.add(:body, :blank) unless body.present?
-
-    return false
-  end
-
-  def update_and_unpublish(params)
-    # Transition and reload to trigger validation changes before update.
-    unpublished = self.unpublish!
-    updated     = self.reload.update(params)
-
-    unpublished && updated
-  end
-
-  def update_and_schedule(params)
-    return true if self.update(params) && self.schedule!
-
-    clear_publish_on_from_database
-
-    self.errors.add(:body, :blank) unless body.present?
-
-    return false
-  end
-
-  def update_and_unschedule(params)
-    # Transition and reload to trigger validation changes before update.
-    unscheduled = self.unschedule!
-    updated     = self.reload.update(params)
-
-    unscheduled && updated
-  end
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def unpublished?
-    draft? || scheduled?
-  end
-
-  def formatted_body
-    return unless body.present?
-
-    renderer.render(body).html_safe
-  end
+  validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
 
 private
 
-  #############################################################################
-  # SLUGGABLE.
-  #############################################################################
+  def requires_body?
+    published? || publishing? || scheduled? || scheduling?
+  end
+
+  def requires_publish_on?
+    scheduled? || scheduling?
+  end
+
+  def requires_published_at?
+    published? || publishing?
+  end
 
   def should_reset_slug_and_history?
     unpublished?
-  end
-
-  #############################################################################
-  # MARKDOWN.
-  #############################################################################
-
-  def renderer
-    @renderer ||= Redcarpet::Markdown.new(PostRenderer)
-  end
-
-  #############################################################################
-  # AASM CALLBACKS.
-  #############################################################################
-
-  def ready_to_publish?
-    persisted? && unpublished? && valid? && body.present?
-  end
-
-  def set_published_at
-    self.published_at = DateTime.now
-  end
-
-  def clear_published_at
-    self.published_at = nil
-  end
-
-  def clear_publish_on
-    self.publish_on = nil
-  end
-
-  def clear_publish_on_from_database
-    return unless temp = self.publish_on
-
-    self.update_column(:publish_on, nil)
-
-    self.publish_on = temp
   end
 end

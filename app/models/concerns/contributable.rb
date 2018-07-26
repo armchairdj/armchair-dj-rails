@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Contributable
-  extend ActiveSupport::Concern
+concern :Contributable do
 
   #############################################################################
   # INCLUDED.

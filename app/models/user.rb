@@ -95,11 +95,13 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :posts,     dependent: :nullify, foreign_key: "author_id"
-  has_many :articles,  dependent: :nullify, foreign_key: "author_id"
-  has_many :reviews,   dependent: :nullify, foreign_key: "author_id"
-  has_many :mixtapes,  dependent: :nullify, foreign_key: "author_id"
-  has_many :playlists, dependent: :nullify, foreign_key: "author_id"
+  with_options(dependent: :nullify, foreign_key: "author_id") do |user|
+    user.has_many :posts
+    user.has_many :articles
+    user.has_many :reviews
+    user.has_many :mixtapes
+    user.has_many :playlists
+  end
 
   has_many :works, through: :reviews
   has_many :makers, -> { distinct }, through: :works

@@ -25,16 +25,16 @@
     <% if f.object.published? %>
       <%= f.button :button, "Unpublish",
         type:           :submit,
-        name:           "step",
-        value:          "unpublish",
+        name:           "#{f.object.model_name.param_key}[unpublishing]",
+        value:          "1",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
     <% else %>
       <%= f.button :button, "Publish",
         type:           :submit,
-        name:           "step",
-        value:          "publish",
+        name:           "#{f.object.model_name.param_key}[publishing]",
+        value:          "1",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
@@ -43,16 +43,16 @@
     <% if f.object.scheduled? %>
       <%= f.button :button, "Unschedule",
         type:           :submit,
-        name:           "step",
-        value:          "unschedule",
+        name:           "#{f.object.model_name.param_key}[unscheduling]",
+        value:          "1",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
-    <% else %>
+    <% elsif f.object.draft? %>
       <%= f.button :button, "Schedule",
         type:           :submit,
-        name:           "step",
-        value:          "schedule",
+        name:           "#{f.object.model_name.param_key}[scheduling]",
+        value:          "1",
         class:          "danger",
         "data-confirm": "Are you sure?"
       %>
