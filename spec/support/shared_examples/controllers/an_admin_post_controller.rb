@@ -191,9 +191,7 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_published }
           end
 
-          context "invalid" do
-
-          end
+          pending "invalid"
         end
 
         context "unpublishing" do
@@ -212,9 +210,7 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_draft }
           end
 
-          context "invalid" do
-
-          end
+          pending "invalid"
         end
 
         context "scheduling" do
@@ -235,9 +231,7 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_scheduled }
           end
 
-          context "invalid" do
-
-          end
+          pending "invalid"
         end
 
         context "unscheduling" do
@@ -256,9 +250,7 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_draft }
           end
 
-          context "invalid" do
-
-          end
+          pending "invalid"
         end
       end
 

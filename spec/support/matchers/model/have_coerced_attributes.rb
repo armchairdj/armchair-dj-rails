@@ -16,7 +16,7 @@ RSpec::Matchers.define :have_coerced_attributes do |attributes|
       if val.blank?
         expect(actual.send(key)).to be_blank
       else
-        expect(actual.send(key)).to eq(val.is_a? Symbol ? val.to_s : val)
+        expect(actual.send(key)).to eq(val.is_a?(Symbol) ? val.to_s : val)
       end
     end
 

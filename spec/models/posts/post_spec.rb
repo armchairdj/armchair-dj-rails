@@ -441,6 +441,8 @@ RSpec.describe Post do
         specify { expect(published).to_not allow_transition_to(:published) }
       end
     end
+
+    pending "virtual attributes trigger correct transitions"
   end
 
   describe "instance" do
