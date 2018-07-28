@@ -27,8 +27,6 @@ RSpec.shared_examples "an_admin_post_controller" do
   let(:bad_create_params) { {} }
   let(:min_update_params) { attributes_for_minimal_instance.except(:author_id) }
   let(:max_update_params) { attributes_for_complete_instance.except(:author_id) }
-  let(:reset_slug_params) { { "clear_slug" => "1" } }
-  let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
 
   def wrap_create_params(params)
     hash = {}
@@ -36,11 +34,16 @@ RSpec.shared_examples "an_admin_post_controller" do
     hash
   end
 
-  def wrap_update_params(instance, params, step: nil)
+  def wrap_update_params(instance, params, op = nil)
     hash = { "id" => instance.to_param }
 
+    unless op.nil?
+      params = params.dup
+
+      params[op.to_s] = "1"
+    end
+
     hash[param_key.to_s] = params
-    hash["step"        ] = step unless step.nil?
 
     hash
   end
@@ -129,11 +132,12 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "PUT #update" do
-      context "draft" do
-        let(:operation) { put :update, params: wrap_update_params(instance, params) }
+      context "basics" do
         let(:instance) { create_minimal_instance(:draft) }
 
-        subject { operation }
+        before(:each) do
+          put :update, params: wrap_update_params(instance, params)
+        end
 
         context "with min valid params" do
           let(:params) { min_update_params }
@@ -142,7 +146,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
           it { is_expected.to send_user_to(show_path(instance)) }
 
-          it { is_expected.to have_flash(:success, "admin.flash.posts.success.update") }
+          it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated") }
         end
 
         context "with max valid params" do
@@ -152,7 +156,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
           it { is_expected.to send_user_to(show_path(instance)) }
 
-          it { is_expected.to have_flash(:success, "admin.flash.posts.success.update") }
+          it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated") }
         end
 
         context "with invalid params" do
@@ -166,233 +170,118 @@ RSpec.shared_examples "an_admin_post_controller" do
         end
       end
 
-      context "published" do
-        let(:operation) { put :update, params: wrap_update_params(instance, params) }
-        let(:instance) { create_minimal_instance(:published) }
+      context "status updates" do
+        before(:each) do
+          put :update, params: wrap_update_params(instance, params, transformation)
+        end
 
-        subject { operation }
+        context "publishing" do
+          let(:instance) { create_minimal_instance(:draft) }
+          let(:transformation) { :publishing }
 
-        context "replacing slug" do
-          let(:params) { reset_slug_params }
+          context "valid" do
+            let(:params) { { "body" => "body" } }
 
-          before(:each) { instance.update_column(:slug, "old_slug") }
+            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
 
-          subject { operation; instance.reload.slugs }
+            it { is_expected.to send_user_to(show_path(instance)) }
 
-          it "forces model to update slug" do
-            is_expected.to_not eq("old_slug")
+            it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated & published") }
+
+            specify { expect(instance.reload).to be_published }
+          end
+
+          context "invalid" do
+
+          end
+        end
+
+        context "unpublishing" do
+          let(:instance) { create_minimal_instance(:published) }
+          let(:transformation) { :unpublishing }
+
+          context "valid" do
+            let(:params) { { "body" => "body" } }
+
+            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
+
+            it { is_expected.to send_user_to(show_path(instance)) }
+
+            it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated & unpublished") }
+
+            specify { expect(instance.reload).to be_draft }
+          end
+
+          context "invalid" do
+
+          end
+        end
+
+        context "scheduling" do
+          let(:instance) { create_minimal_instance(:draft) }
+          let(:transformation) { :scheduling }
+
+          context "valid" do
+            let(:publish_on) { 3.weeks.from_now }
+
+            let(:params) { { "body" => "body", "publish_on" => publish_on } }
+
+            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
+
+            it { is_expected.to send_user_to(show_path(instance)) }
+
+            it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated & scheduled") }
+
+            specify { expect(instance.reload).to be_scheduled }
+          end
+
+          context "invalid" do
+
+          end
+        end
+
+        context "unscheduling" do
+          let(:instance) { create_minimal_instance(:scheduled) }
+          let(:transformation) { :unscheduling }
+
+          context "valid" do
+            let(:params) { { "body" => "body" } }
+
+            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
+
+            it { is_expected.to send_user_to(show_path(instance)) }
+
+            it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated & unscheduled") }
+
+            specify { expect(instance.reload).to be_draft }
+          end
+
+          context "invalid" do
+
           end
         end
       end
 
-      describe "status update operations" do
-        subject { operation }
+      context "published" do
+        let(:instance) { create_minimal_instance(:published) }
 
-        describe "publishing" do
-          let(:operation) { put :update, params: wrap_update_params(instance, params, step: "publish") }
-          let(:instance) { create_minimal_instance(:draft) }
-
-          context "with valid params" do
-            let(:params) { max_update_params }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            it { is_expected.to send_user_to(show_path(instance)) }
-
-            it { is_expected.to have_flash(:success, "admin.flash.posts.success.publish") }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_published }
-            end
-          end
-
-          context "with failed transition" do
-            let(:params) { max_update_params }
-
-            before(:each) do
-              allow_any_instance_of(Post).to receive(:ready_to_publish?).and_return(false)
-            end
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.publish") }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            describe "instance" do
-              subject { operation; instance.reload }
-
-              it { is_expected.to_not be_published }
-            end
-          end
-
-          context "with invalid params" do
-            let(:params) { bad_update_params }
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.publish") }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_publish_errors) }
-
-            describe "instance" do
-              subject { operation; instance.reload }
-
-              it { is_expected.to_not be_published }
-            end
-          end
+        before(:each) do
+          put :update, params: wrap_update_params(instance, params)
         end
 
-        describe "unpublishing" do
-          let(:operation) { put :update, params: wrap_update_params(instance, params, step: "unpublish") }
-          let(:instance) { create_minimal_instance(:published) }
+        context "replacing slug" do
+          let(:params) { { "clear_slug" => "1" } }
 
-          context "with valid params" do
-            let(:params) { max_update_params }
+          it { is_expected.to send_user_to(show_path(instance)) }
 
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            it { is_expected.to send_user_to(show_path(instance)) }
-
-            it { is_expected.to have_flash(:success, "admin.flash.posts.success.unpublish") }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_draft }
-            end
-          end
-
-          context "with invalid params" do
-            let(:params) { bad_update_params }
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, nil) }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_unpublish_errors) }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_draft }
-            end
-          end
-        end
-
-        describe "scheduling" do
-          let(:instance) { create_minimal_instance(:draft) }
-          let(:all_params) { params.merge(publish_on: 3.weeks.from_now) }
-          let(:operation) { put :update, params: wrap_update_params(instance, all_params, step: "schedule") }
-
-          context "with valid params" do
-            let(:params) { max_update_params }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            it { is_expected.to send_user_to(show_path(instance)) }
-
-            it { is_expected.to have_flash(:success, "admin.flash.posts.success.schedule") }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_scheduled }
-            end
-          end
-
-          context "with failed transition" do
-            let(:params) { max_update_params }
-
-            before(:each) do
-              allow_any_instance_of(Post).to receive(:ready_to_publish?).and_return(false)
-            end
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.schedule") }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            describe "instance" do
-              subject { operation; instance.reload }
-
-              it { is_expected.to_not be_scheduled }
-            end
-          end
-
-          context "with invalid params" do
-            let(:params) { bad_update_params }
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, "admin.flash.posts.error.schedule") }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_publish_errors) }
-
-            describe "instance" do
-              subject { operation; instance.reload }
-
-              it { is_expected.to_not be_scheduled }
-            end
-          end
-        end
-
-        describe "unscheduling" do
-          let(:operation) { put :update, params: wrap_update_params(instance, params, step: "unschedule") }
-          let(:instance) { create_minimal_instance(:scheduled) }
-
-          context "with valid params" do
-            let(:params) { max_update_params }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
-
-            it { is_expected.to send_user_to(show_path(instance)) }
-
-            it { is_expected.to have_flash(:success, "admin.flash.posts.success.unschedule") }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_draft }
-            end
-          end
-
-          context "with invalid params" do
-            let(:params) { bad_update_params }
-
-            it { is_expected.to successfully_render(templates[:edit]) }
-
-            it { is_expected.to have_flash_now(:error, nil) }
-
-            it { is_expected.to prepare_the_edit_post_form(param_key) }
-
-            it { is_expected.to assign(instance, :post).with_attributes(params).with_errors(expected_unpublish_errors) }
-
-            describe "instance" do
-              subject { operation; assigns(:post) }
-
-              it { is_expected.to be_draft }
-            end
-          end
+          it { is_expected.to have_flash(:success, "admin.flash.posts.success.update", action: "updated") }
         end
       end
     end
 
     describe "PUT #autosave" do
       let!(:instance) { create_minimal_instance(:draft) }
+      let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
       let(:operation) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
 
       subject { operation }
@@ -416,16 +305,12 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
 
       context "with blacklisted params" do
-        let(:params) { { "publish_on" => 3.weeks.from_now } }
-
-        before(:each) { instance.update_column(:slug, "old_slug") }
+        let(:params) { { "publish_on" => 3.weeks.from_now, "publishing" => "1" } }
 
         it { is_expected.to render_empty_json_200 }
 
         describe "cannot change status" do
-          subject { operation; instance.reload } 
-
-          it { is_expected.to_not be_scheduled }
+          it { expect(instance.reload).to_not be_scheduled }
         end
       end
 

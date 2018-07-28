@@ -57,43 +57,6 @@ class Post < ApplicationRecord
     included do
 
       #####################################################
-      # Virtual attributes to trigger AASM transitions.
-      #####################################################
-
-      attribute :publishing,   :boolean, default: false
-      attribute :unpublishing, :boolean, default: false
-      attribute :scheduling,   :boolean, default: false
-      attribute :unscheduling, :boolean, default: false
-
-      after_save :unpublish!,   if: :unpublishing?
-      after_save :unschedule!,  if: :unscheduling?
-      after_save :publish!,     if: :publishing?
-      after_save :schedule!,    if: :scheduling?
-
-      after_save :handle_status_changes
-
-      def handle_status_changes
-        return unless changing_publication_status?
-
-        case
-        when publishing? && !published?
-          self.publishing = false
-          self.errors.add(:base, "Could not publish")
-          # clear published_on from database?
-        when scheduling? && !scheduled?
-          self.scheduling = false
-          self.errors.add(:base, "Could not schedule")
-          # clear scheduled_at from database
-        when unpublishing? && published?
-          self.unpublishing = false
-          self.errors.add(:base, "Could not unpublish")
-        when unscheduling? && scheduled?
-          sefl.unscheduling = false
-          self.errors.add(:base, "Could not unschedule")
-        end
-      end
-
-      #####################################################
       # Attributes.
       #####################################################
 
@@ -105,9 +68,27 @@ class Post < ApplicationRecord
 
       enumable_attributes :status
 
-      def unpublished?
-        draft? || scheduled?
-      end
+      #####################################################
+      # Virtual attributes to trigger AASM transitions.
+      #####################################################
+
+      attribute :publishing,   :boolean, default: false
+      attribute :unpublishing, :boolean, default: false
+      attribute :scheduling,   :boolean, default: false
+      attribute :unscheduling, :boolean, default: false
+
+      #####################################################
+      # Hooks.
+      #####################################################
+
+      before_validation :unpublish,  if: :unpublishing?
+      before_validation :unschedule, if: :unscheduling?
+      before_validation :publish,    if: :publishing?
+      before_validation :schedule,   if: :scheduling?
+
+      after_validation :handle_failed_transition
+
+      after_save :clear_transition_flags
 
       #####################################################
       # State Machine.
@@ -115,18 +96,20 @@ class Post < ApplicationRecord
 
       include AASM
 
-      aasm( column: :status, enum: true,
-            create_scopes: true,
-            no_direct_assignment: true,
-            whiny_persistence: false,
-            whiny_transitions: false
+      aasm(
+        column:               :status,
+        enum:                 true,
+        create_scopes:        true,
+        no_direct_assignment: true,
+        whiny_persistence:    false,
+        whiny_transitions:    false
       ) do
         state :draft, initial: true
         state :scheduled
-        state :published
+        state :published, before_enter: :clear_publish_on
 
         event(:schedule) do
-          transitions from: :draft, to: :scheduled, guards: [:persisted?]
+          transitions from: :draft, to: :scheduled
         end
 
         event(:unschedule, before: :clear_publish_on) do
@@ -134,7 +117,7 @@ class Post < ApplicationRecord
         end
 
         event(:publish, before: :set_published_at) do
-          transitions from: [:draft, :scheduled], to: :published, guards: [:persisted?]
+          transitions from: [:draft, :scheduled], to: :published
         end
 
         event(:unpublish, before: :clear_published_at) do
@@ -147,11 +130,63 @@ class Post < ApplicationRecord
     # Instance.
     #######################################################
 
+    def unpublished?
+      draft? || scheduled?
+    end
+
     def changing_publication_status?
       unpublishing? || publishing? || unscheduling? || scheduling?
     end
 
   private
+
+    def handle_failed_transition
+      return unless self.errors.any? && changing_publication_status?
+
+      case
+      when publishing?;   handle_failed_publish
+      when unpublishing?; handle_failed_unpublish
+      when scheduling?;   handle_failed_schedule
+      when unscheduling?; handle_failed_unschedule
+      end
+
+      clear_transition_flags
+    end
+
+    def handle_failed_publish
+      self.unpublish
+      self.errors.add(:base, :failed_to_publish)
+    end
+
+    def handle_failed_unpublish
+      self.publish
+      self.errors.add(:base, :failed_to_unpublish)
+
+      self.published_at = self.published_at_was
+    end
+
+    def handle_failed_schedule
+      temp = self.publish_on
+
+      self.unschedule
+      self.errors.add(:base, :failed_to_schedule)
+
+      self.publish_on = temp
+    end
+
+    def handle_failed_unschedule
+      self.schedule
+      self.errors.add(:base, :failed_to_unschedule)
+
+      self.publish_on = self.publish_on_was
+    end
+
+    def clear_transition_flags
+      self.publishing   = false
+      self.unpublishing = false
+      self.scheduling   = false
+      self.unscheduling = false
+    end
 
     def set_published_at
       self.published_at = DateTime.now
@@ -170,16 +205,16 @@ class Post < ApplicationRecord
   # Concerning: Scheduled publication rake task.
   #############################################################################
 
-  concerning :Schedulable do
+  concerning :Scheduled do
     included do
-      scope :scheduled_for_publication, -> {
+      scope :scheduled_and_due, -> {
         scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
       }
     end
 
     class_methods do
       def publish_scheduled
-        memo = { success: [], failure: [], all: scheduled_for_publication.to_a }
+        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
 
         memo[:all].each do |item|
           item.unschedule!
@@ -259,9 +294,13 @@ class Post < ApplicationRecord
 
   validates :summary, length: { in: 40..320 }, allow_blank: true
 
-  validates :body,         presence: true, if: :requires_body?
-  validates :published_at, presence: true, if: :requires_published_at?
-  validates :publish_on,   presence: true, if: :requires_publish_on?
+  validates :body, presence: true, if: :requires_body?
+
+  validates :published_at, presence: true, if:     :requires_published_at?
+  validates :published_at, absence:  true, unless: :requires_published_at?
+
+  validates :publish_on, presence: true, if:     :requires_publish_on?
+  validates :publish_on, absence:  true, unless: :requires_publish_on?
 
   validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
 

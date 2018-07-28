@@ -71,13 +71,13 @@ RSpec.describe User do
 
   describe "scope-related" do
     describe "for public site" do
-      let(:saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
+      let(:saru   ) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }
-      let(:celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
+      let(:celia  ) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
       let(:charlie) { create(:admin,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-      let(:brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+      let(:brian  ) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
 
-      let(:ids) { [saru, monique, celia, charlie, brian].map(&:id) }
+      let(:ids       ) { [saru, monique, celia, charlie, brian].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       before(:each) do

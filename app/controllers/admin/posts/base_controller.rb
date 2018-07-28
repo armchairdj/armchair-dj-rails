@@ -28,9 +28,11 @@ class Admin::Posts::BaseController < Admin::BaseController
 
     authorize_instance
 
+    success_msg = flash_for_update
+
     respond_to do |format|
       if @instance.save
-        format.html { redirect_to show_path, success: flash_for_update }
+        format.html { redirect_to show_path, success: success_msg }
         format.json { render :show, status: :created, location: show_path }
       else
         format.html { prepare_form; render :edit }
@@ -113,8 +115,8 @@ private
   def keys_for_status_change
     case @instance.status
     when "draft";     [:publishing, :scheduling, :publish_on]
-    when "scheduled"; [:unscheduling]
-    when "published"; [:clear_slug, :unpublishing]
+    when "scheduled"; [:publishing, :unscheduling]
+    when "published"; [:unpublishing, :clear_slug]
     end
   end
 
@@ -127,14 +129,14 @@ private
   end
 
   def flash_for_update
-    I18n.t("admin.flash.posts.success.update", flash_for_update_action_name)
-  end
+    action = case
+      when @instance.publishing?;   "updated & published"
+      when @instance.unpublishing?; "updated & unpublished"
+      when @instance.scheduling?;   "updated & scheduled"
+      when @instance.unscheduling?; "updated & unscheduled"
+      else "updated"
+    end
 
-  def flash_for_update_action_name
-    return "published"   if @instance.publishing?
-    return "unpublished" if @instance.unpublishing?
-    return "scheduled"   if @instance.scheduling?
-    return "unscheduled" if @instance.unscheduling?
-    return "updated"
+    I18n.t("admin.flash.posts.success.update", action: action)
   end
 end

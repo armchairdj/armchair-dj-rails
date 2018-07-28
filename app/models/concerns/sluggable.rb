@@ -59,7 +59,7 @@ concern :Sluggable do
 
     ### ATTRIBUTES.
 
-    attr_accessor :clear_slug
+    attribute :clear_slug, :boolean, default: false
 
     ### HOOKS.
 
@@ -85,10 +85,6 @@ concern :Sluggable do
   # INSTANCE.
   #############################################################################
 
-  def clear_slug?
-    persisted? && published? && !!clear_slug
-  end
-
   def sluggable_parts
     []
   end
@@ -96,11 +92,15 @@ concern :Sluggable do
 private
 
   def handle_clear_slug_checkbox
-    return unless clear_slug?
+    return unless should_clear_slug?
 
     self.slug = nil
 
     valid? # Regenerates slug
+  end
+
+  def should_clear_slug?
+    persisted? && published? && clear_slug?
   end
 
   def conditionally_reset_slug_and_history
