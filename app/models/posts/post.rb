@@ -282,7 +282,7 @@ class Post < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_and_belongs_to_many :tags, -> { order("tags.name").distinct }
+  has_and_belongs_to_many :tags, -> { order("tags.name") }
 
   #############################################################################
   # VALIDATION.
