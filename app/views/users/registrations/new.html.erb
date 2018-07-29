@@ -16,8 +16,6 @@
       %>
     <% end %>
 
-    <%= content_tag(:div, class: "button-group") do %>
-      <%= f.button :button, "Register", type: :submit %>
-    <% end %>
+    <%= button_group submit_button(@user, "Register") %>
   <% end %>
 <% end %>

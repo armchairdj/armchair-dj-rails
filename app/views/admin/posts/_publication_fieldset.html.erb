@@ -1,4 +1,6 @@
-<% return unless f.object.persisted? %>
+<% return unless @post.persisted? %>
+
+<% param_key = @post.model_name.param_key %>
 
 <%= content_tag(:section, class: "adj-module") do %>
   <%= content_tag(:fieldset) do %>
@@ -6,56 +8,32 @@
 
     <%= f.input(:slug, disabled: true) %>
 
-    <% unless f.object.draft? %>
+    <% unless @post.draft? %>
       <%= f.input(:clear_slug, as: :boolean) %>
     <% end %>
 
     <%= f.input(:status, as: :string, disabled: true, required: false, input_html: {
-      value: f.object.human_status
+      value: @post.human_status
     } ) %>
 
-    <% if f.object.published? %>
+    <% if @post.published? %>
       <%= f.input :published_at, as: :date, html5: true, disabled: true %>
     <% else %>
       <%= f.input :publish_on,   as: :date, html5: true, hint: true %>
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <% if f.object.published? %>
-      <%= f.button :button, "Unpublish",
-        type:           :submit,
-        name:           "#{f.object.model_name.param_key}[unpublishing]",
-        value:          "1",
-        class:          "danger",
-        "data-confirm": "Are you sure?"
-      %>
+  <%= button_group do %>
+    <% if @post.published? %>
+      <%= confirm_button @post, "Unpublish",  name: "#{param_key}[unpublishing]", value: "1" %>
     <% else %>
-      <%= f.button :button, "Publish",
-        type:           :submit,
-        name:           "#{f.object.model_name.param_key}[publishing]",
-        value:          "1",
-        class:          "danger",
-        "data-confirm": "Are you sure?"
-      %>
+      <%= confirm_button @post, "Publish",    name: "#{param_key}[publishing]",   value: "1" %>
     <% end %>
 
-    <% if f.object.scheduled? %>
-      <%= f.button :button, "Unschedule",
-        type:           :submit,
-        name:           "#{f.object.model_name.param_key}[unscheduling]",
-        value:          "1",
-        class:          "danger",
-        "data-confirm": "Are you sure?"
-      %>
-    <% elsif f.object.draft? %>
-      <%= f.button :button, "Schedule",
-        type:           :submit,
-        name:           "#{f.object.model_name.param_key}[scheduling]",
-        value:          "1",
-        class:          "danger",
-        "data-confirm": "Are you sure?"
-      %>
+    <% if @post.scheduled? %>
+      <%= confirm_button @post, "Unschedule", name: "#{param_key}[unscheduling]", value: "1" %>
+    <% elsif @post.draft? %>
+      <%= confirm_button @post, "Schedule",   name: "#{param_key}[scheduling]",   value: "1" %>
     <% end %>
   <% end %>
 <% end %>

@@ -12,7 +12,5 @@
     <%= f.input :password, hint: true, required: true, autocomplete: "off" %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :button, "Change Password", type: :submit %>
-  <% end %>
+  <%= button_group submit_button(@user, "Change Password") %>
 <% end %>

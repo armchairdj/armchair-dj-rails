@@ -7,10 +7,6 @@ RSpec.describe AdminHelper do
     allow(helper).to receive(:current_user).and_return(create(:root))
   end
 
-  describe "form methods" do
-    pending "#admin_submit_button"
-  end
-
   describe "formatting methods" do
     pending "#admin_post_status"
   end

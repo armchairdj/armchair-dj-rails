@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 module AdminHelper
-  #############################################################################
-  # FORMS.
-  #############################################################################
-
-  def admin_submit_button(f)
-    name = f.object.new_record? ? "Save" : "Save Changes"
-
-    f.button :button, name, type: :submit
-  end
 
   #############################################################################
   # FORMATTING.

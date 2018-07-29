@@ -15,9 +15,10 @@
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button(:button, "Continue", type: :submit,
-      name: "step", value: "select_medium",
+  <%= button_group do %>
+    <%= submit_button(@work, "Continue",
+      name:          "step",
+      value:         "select_medium",
       "data-target": "autosubmit.button"
     ) %>
   <% end %>
