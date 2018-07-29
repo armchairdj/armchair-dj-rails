@@ -7,6 +7,10 @@ RSpec.describe FormHelper do
 
   pending "#confirm_button"
 
+  pending "#expandable_fieldset"
+
+  pending "#form_inputs"
+
   describe "#required_indicator" do
     subject { helper.required_indicator }
 

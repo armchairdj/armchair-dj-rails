@@ -1,7 +1,7 @@
 <%= simple_form_for([:admin, @playlist], html: { class: "admin" }) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= form_inputs do %>
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
         <%= f.input :title, required: true %>

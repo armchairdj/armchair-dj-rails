@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :playlistings, playlisting do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
+  <%= expandable_fieldset do %>
     <%= ff.input :work_id, as: :grouped_select,
       label:              false,
       collection:         @works,

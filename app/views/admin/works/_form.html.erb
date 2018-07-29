@@ -9,7 +9,7 @@
 <%= simple_form_for([:admin, @work], html: form_attrs) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= form_inputs do %>
     <%= content_tag(:section, class: "adj-module") do %>
       <%= content_tag(:fieldset) do %>
         <% if f.object.persisted? %>

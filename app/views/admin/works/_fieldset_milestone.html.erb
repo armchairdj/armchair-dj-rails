@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :milestones, milestone do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
+  <%= expandable_fieldset do %>
     <%= content_tag(:div, class: "activity-year") do %>
       <%= ff.input :activity,
         as:            :select,

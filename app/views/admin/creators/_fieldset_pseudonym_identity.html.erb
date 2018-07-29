@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :pseudonym_identities, pseudonym_identity do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
+  <%= expandable_fieldset do %>
     <%= ff.input :pseudonym_id,
       as:            :select,
       label:         false,
