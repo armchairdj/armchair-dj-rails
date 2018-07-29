@@ -15,8 +15,8 @@ RSpec.describe CreatorScoper do
 
       it { is_expected.to match_array([
         "All",
-        "Real",
-        "Pseudynym",
+        "Primary",
+        "Secondary",
         "Individual",
         "Group",
       ]) }

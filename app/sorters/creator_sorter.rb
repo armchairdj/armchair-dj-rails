@@ -3,9 +3,9 @@
 class CreatorSorter < Ginsu::Sorter
   def allowed
     super.merge({
-      "Name"       => name_sort_sql,
-      "Primary"    => [creator_primary_sort_sql,    name_sort_sql],
-      "Individual" => [creator_individual_sort_sql, name_sort_sql],
+      "Name"          => name_sort_sql,
+      "Identity Type" => [creator_primary_sort_sql,    name_sort_sql],
+      "Creator Type"  => [creator_individual_sort_sql, name_sort_sql],
     })
   end
 

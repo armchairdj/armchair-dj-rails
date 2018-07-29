@@ -190,6 +190,14 @@ class Creator < ApplicationRecord
     !primary?
   end
 
+  def identity_type
+    primary? ? "Primary" : "Secondary"
+  end
+
+  def membership_type
+    individual? ? "Individual" : "Group"
+  end
+
   alias_method :alias?, :secondary?
 
   def real_name

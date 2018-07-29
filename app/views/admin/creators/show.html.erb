@@ -9,14 +9,14 @@
 <%= render "admin/shared/show",
   record: @creator,
   rows: [
-    { name: "ID",        method: :id },
-    { name: "Name",      method: :name },
-    { name: "Group?",    method: :group? },
-    { name: "Alias?",    method: :alias? },
-    { name: "Real Name", method: -> (x) { link_to_creator(x.real_name) if x.real_name.present? }, },
-    { name: "Created",   date: true, method: :created_at },
-    { name: "Updated",   date: true, method: :updated_at },
-    { name: "Alpha",     method: :alpha },
+    { name: "ID",               method: :id },
+    { name: "Name",             method: :name },
+    { name: "Creator Type",     method: :membership_type },
+    { name: "Identity Type",    method: :identity_type },
+    { name: "Primary Identity", method: -> (x) { link_to_creator(x.real_name) }, if: -> (x) { x.real_name.present? } },
+    { name: "Created",          date: true, method: :created_at },
+    { name: "Updated",          date: true, method: :updated_at },
+    { name: "Alpha",            method: :alpha },
   ]
 %>
 

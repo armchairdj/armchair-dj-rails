@@ -21,7 +21,7 @@ en:
       tag:
       creator:
       identity:
-        real_name_id: "Real Name"
+        real_name_id: "Primary Identity"
         pseudonym_id: "Pseudonym"
       membership:
         group_id: "Group"

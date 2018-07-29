@@ -1,20 +1,29 @@
 <%= admin_section(headline: local_assigns[:headline], class: "tabled") do %>
   <%= content_tag(:table, class: "admin admin-view") do %>
     <%= content_tag(:tbody) do %>
+
       <% rows.each do |row| %>
-        <%= content_tag(:tr) do %>
-          <%= content_tag(:th, row[:name]) %>
-          <%= content_tag(:td, class: row[:class]) do %>
-            <% if row[:method].is_a?(Proc) %>
-              <%= row[:method].call(record) %>
-            <% elsif row[:date] %>
-              <%= date_tag record.send(row[:method]) %>
-            <% else %>
-              <%= record.send(row[:method]) %>
+
+        <% if !row.has_key?(:if) || row[:if].call(record) %>
+          <%= content_tag(:tr) do %>
+
+            <%= content_tag(:th, row[:name]) %>
+
+            <%= content_tag(:td, class: row[:class]) do %>
+              <% if row[:method].is_a?(Proc) %>
+                <%= row[:method].call(record) %>
+              <% elsif row[:date] %>
+                <%= date_tag record.send(row[:method]) %>
+              <% else %>
+                <%= record.send(row[:method]) %>
+              <% end %>
             <% end %>
+
           <% end %>
         <% end %>
+
       <% end %>
+
     <% end %>
   <% end %>
 <% end %>

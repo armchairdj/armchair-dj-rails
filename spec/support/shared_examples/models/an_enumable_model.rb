@@ -86,10 +86,10 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
 
           describe "self#alpha_order_clause_for" do
-            subject { described_class.send(:alpha_order_clause_for, "human_#{single_attr}") }
+            subject { described_class.send(:alpha_order_clause_for, single_attr) }
 
             it "returns a SQL order clause that sorts by humanized values" do
-              expected = "CASE WHEN human_facet=r THEN 0 WHEN human_facet=a THEN 1 WHEN human_facet=b THEN 2 END"
+              expected = "CASE WHEN #{single_attr}=2 THEN 0 WHEN #{single_attr}=1 THEN 1 WHEN #{single_attr}=0 THEN 2 END"
 
               is_expected.to eq(expected)
             end

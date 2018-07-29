@@ -11,9 +11,9 @@
   collection: @collection,
   records: @creators,
   columns: [
-    { name: "ID",         method: :id          },
-    { name: "Name",       method: :name        },
-    { name: "Primary",    method: :primary?    },
-    { name: "Individual", method: :individual? },
+    { name: "ID",            method: :id              },
+    { name: "Name",          method: :name            },
+    { name: "Creator Type",  method: :membership_type },
+    { name: "Identity Type", method: :identity_type   },
   ]
 %>
