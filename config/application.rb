@@ -4,8 +4,6 @@ require_relative "boot"
 
 require "rails/all"
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module ArmchairDjRails
@@ -19,16 +17,17 @@ module ArmchairDjRails
     config.autoload_paths += %W(#{config.root}/app/models/posts)
     config.autoload_paths += %W(#{config.root}/app/models/works)
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
-
     config.generators do |g|
+      g.test_framework :rspec
+      g.helper_specs true
+      g.controller_specs true
+      g.view_specs true
+      g.routing_specs true
+      g.request_specs false
+      g.system_specs true # Does not work
       g.javascripts false
       g.scaffold_stylesheet false
       g.stylesheets false
-      g.system_tests true
       g.helper true
       g.pundit true
       g.scaffold_controller :scaffold_controller_with_pundit
