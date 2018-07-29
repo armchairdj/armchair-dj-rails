@@ -12,7 +12,7 @@
   partial   = "admin/#{view_path}/fieldset_#{singular}"
 %>
 
-<%= content_tag(:section, class: "adj-module") do %>
+<%= adj_module do %>
   <%= content_tag(:fieldset, class: classes, "data-controller": "expandable-fieldset") do %>
     <%= content_tag(:legend) do %>
       <%= headline %>

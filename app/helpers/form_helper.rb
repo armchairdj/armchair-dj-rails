@@ -8,10 +8,7 @@ module FormHelper
   end
 
   def confirm_button(obj = nil, text = nil, **opts)
-    opts = combine_attrs(opts, {
-      class: "danger",
-      "data-confirm": "Are you sure?"
-    })
+    opts = combine_attrs(opts, class: "danger", "data-confirm": "Are you sure?")
 
     submit_button obj, text, **opts
   end
@@ -19,10 +16,7 @@ module FormHelper
   def expandable_fieldset(content = nil, **opts, &block)
     content ||= capture(&block)
 
-    opts = combine_attrs(opts, {
-      class: "accepts-nested",
-      "data-target": "expandable-fieldset.field"
-    })
+    opts = combine_attrs(opts, class: "accepts-nested", "data-target": "expandable-fieldset.field")
 
     content_tag :fieldset, content, **opts
   end

@@ -10,7 +10,7 @@
   <%= f.error_notification %>
 
   <%= form_inputs do %>
-    <%= content_tag(:section, class: "adj-module") do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
         <% if f.object.persisted? %>
           <%= f.input :medium, as: :select, collection: @media, disabled: true %>

@@ -2,13 +2,13 @@
   <%= f.error_notification %>
 
   <%= form_inputs do %>
-    <%= content_tag(:section, class: "adj-module") do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
         <%= f.input :name %>
       <% end %>
     <% end %>
 
-    <%= content_tag(:section, class: "adj-module") do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Primary or Pseudonym") %>
 
@@ -37,7 +37,7 @@
       <% end %>
     <% end %>
 
-    <%= content_tag(:section, class: "adj-module") do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
         <%= content_tag(:legend, "Individual or Group") %>
 

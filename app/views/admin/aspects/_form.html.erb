@@ -2,7 +2,7 @@
   <%= f.error_notification %>
 
   <%= form_inputs do %>
-    <%= content_tag(:section, class: "adj-module") do %>
+    <%= adj_module do %>
       <%= f.input(:facet,
         as:            :select,
         collection:    @facets,
