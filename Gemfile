@@ -220,7 +220,7 @@ group :development, :test do
   gem "parallel_tests"
 
   # RSpec.
-  gem "rspec-rails"
+  gem "rspec-rails", "~> 3.7.2"
   gem "accept_values_for"
   gem "db-query-matchers"
   gem "rspec-collection_matchers"

@@ -433,7 +433,7 @@ DEPENDENCIES
   responders
   rspec-collection_matchers
   rspec-html-matchers
-  rspec-rails
+  rspec-rails (~> 3.7.2)
   rubocop
   rubocop-rails
   sass-rails (~> 5.0)

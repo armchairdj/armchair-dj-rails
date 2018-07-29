@@ -47,6 +47,7 @@ RSpec.configure do |config|
   config.include Rails.application.routes.url_helpers
   config.include RSpecHtmlMatchers
   config.include InlineSvg::ActionView::Helpers
+  config.include Devise::Test::ControllerHelpers, type: :system
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include FactoryHelpers

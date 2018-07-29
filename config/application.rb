@@ -28,7 +28,7 @@ module ArmchairDjRails
       g.javascripts false
       g.scaffold_stylesheet false
       g.stylesheets false
-      # g.system_tests nil
+      g.system_tests true
       g.helper true
       g.pundit true
       g.scaffold_controller :scaffold_controller_with_pundit
