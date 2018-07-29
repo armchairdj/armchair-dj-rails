@@ -142,8 +142,27 @@ RSpec.describe Playlist do
     let(:instance) { build_minimal_instance }
 
     describe "post methods" do
-      pending "#post_ids"
-      pending "#posts"
+      let!(:work    ) { create(:minimal_work) }
+      let!(:instance) { create_minimal_instance }
+      let!(:review  ) { create(:minimal_review, work_id: work.id) }
+      let!(:mixtape ) { create(:minimal_mixtape, playlist_id: instance.id) }
+
+      before(:each) do
+        # TODO let the factory handle this with transient attributes
+        instance.playlistings << create(:minimal_playlisting, work_id: work.id)
+      end
+
+      describe "post_ids" do
+        subject { instance.post_ids }
+
+        it { is_expected.to contain_exactly(review.id, mixtape.id) }
+      end
+
+      describe "posts" do
+        subject { instance.posts }
+
+        it { is_expected.to contain_exactly(review, mixtape) }
+      end
     end
 
     describe "creator methods" do
