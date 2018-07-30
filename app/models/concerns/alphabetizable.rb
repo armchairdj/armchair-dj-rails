@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-module Alphabetizable
-  extend ActiveSupport::Concern
-
+concern :Alphabetizable do
   ALPHA_CONNECTOR = " "
 
   #############################################################################

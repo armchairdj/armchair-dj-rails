@@ -3,8 +3,8 @@
 class CreatorScoper < Ginsu::Scoper
   def allowed
     super.reverse_merge({
-      "Real"       => :primary,
-      "Pseudynym"  => :secondary,
+      "Primary"    => :primary,
+      "Secondary"  => :secondary,
       "Individual" => :individual,
       "Group"      => :collective,
     })

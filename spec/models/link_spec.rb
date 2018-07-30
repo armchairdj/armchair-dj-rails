@@ -22,7 +22,7 @@ RSpec.describe Link do
     it_behaves_like "an_application_record"
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -33,7 +33,7 @@ RSpec.describe Link do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:url) }
 

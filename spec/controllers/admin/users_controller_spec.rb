@@ -33,7 +33,7 @@ RSpec.describe Admin::UsersController do
 
     describe "POST #create" do
       let(:valid_params) { attributes_for(:complete_user) }
-      let(  :bad_params) { attributes_for(:complete_user).except(:first_name) }
+      let(:bad_params) { attributes_for(:complete_user).except(:first_name) }
 
       context "with valid params" do
         subject { post :create, params: { user: valid_params } }
@@ -71,7 +71,7 @@ RSpec.describe Admin::UsersController do
       let(:user) { create(:minimal_user) }
 
       let(:valid_params) { { first_name: "New First Name" } }
-      let(  :bad_params) { { first_name: ""               } }
+      let(:bad_params) { { first_name: ""               } }
 
       context "with valid params" do
         subject do

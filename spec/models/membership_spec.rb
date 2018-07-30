@@ -35,7 +35,7 @@ RSpec.describe Membership do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:group ) }
     it { is_expected.to validate_presence_of(:member) }
@@ -43,12 +43,11 @@ RSpec.describe Membership do
     it { is_expected.to validate_uniqueness_of(:group_id).scoped_to(:member_id) }
 
     describe "custom" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       describe "#group_is_collective" do
         before(:each) do
-          allow( subject).to receive(:group_is_collective).and_call_original
-          expect(subject).to receive(:group_is_collective)
+          expect(subject).to receive(:group_is_collective).and_call_original
         end
 
         specify "valid" do
@@ -66,8 +65,7 @@ RSpec.describe Membership do
 
       describe "#member_is_individual" do
         before(:each) do
-          allow( subject).to receive(:member_is_individual).and_call_original
-          expect(subject).to receive(:member_is_individual)
+          expect(subject).to receive(:member_is_individual).and_call_original
         end
 
         specify "valid" do

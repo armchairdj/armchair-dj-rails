@@ -1,8 +1,8 @@
 <%= simple_form_for([:admin, @work], html: { class: "admin", "data-controller": "autosubmit" }) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
-    <%= content_tag(:section, class: "adj-module") do %>
+  <%= form_inputs do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
         <%= f.input :medium, as: :select,
           collection: @media,
@@ -15,9 +15,10 @@
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button(:button, "Continue", type: :submit,
-      name: "step", value: "select_medium",
+  <%= button_group do %>
+    <%= submit_button(@work, "Continue",
+      name:          "step",
+      value:         "select_medium",
       "data-target": "autosubmit.button"
     ) %>
   <% end %>

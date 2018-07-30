@@ -65,7 +65,7 @@ private
 
   def build_collection
     @collection = Ginsu::Collection.new(
-      policy_scope(model_class).for_list,
+      policy_scope(@model_class).for_list,
       scope:  params[:scope],
       sort:   params[:sort ],
       dir:    params[:dir  ],
@@ -84,7 +84,7 @@ private
   end
 
   def build_new_instance
-    @instance = model_class.new
+    @instance = @model_class.new
 
     instance_variable_set(:"@#{controller_name.singularize}", @instance)
   end
@@ -98,7 +98,7 @@ private
   end
 
   def scoped_instance
-    policy_scope(model_class).for_show.find(params[:id])
+    policy_scope(@model_class).for_show.find(params[:id])
   end
 
   def authorize(record, query = nil)
@@ -113,7 +113,7 @@ private
   def prepare_show; end
 
   def collection_path
-    polymorphic_path([:admin, model_class])
+    polymorphic_path([:admin, @model_class])
   end
 
   def edit_path

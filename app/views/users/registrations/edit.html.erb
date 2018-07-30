@@ -5,7 +5,7 @@
 <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= form_inputs do %>
     <%= render "admin/users/form_fields",
       f:             f,
       show_bio:      @user.can_write?,
@@ -21,7 +21,5 @@
     <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :button, "Update", type: :submit %>
-  <% end %>
+  <%= button_group submit_button(@user, "Update") %>
 <% end %>

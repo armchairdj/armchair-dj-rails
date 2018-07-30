@@ -6,7 +6,7 @@
 %>
 
 <%= simple_form_for(:user, method: :get, url: "/") do |f| %>
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= form_inputs do %>
     <%= content_tag(:fieldset) do %>
       <%= content_tag(:legend, "Plain Fields") %>
 
@@ -65,7 +65,7 @@
     <% end %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
+  <%= button_group do %>
     <%= f.button :button, "Submit", type: :submit %>
   <% end %>
 <% end %>

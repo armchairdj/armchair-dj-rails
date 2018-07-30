@@ -3,5 +3,5 @@
 require "rails_helper"
 
 RSpec.describe Users::PasswordsController do
-  pending "passwords_controller"
+  # Not overriding anything.
 end

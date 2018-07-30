@@ -81,14 +81,11 @@ class Creator < ApplicationRecord
 
   has_many :credits, inverse_of: :creator, dependent: :destroy
 
-  has_many :works,        through: :credits
-
-  has_many :reviews,      through: :works
+  has_many :works,   through: :credits
+  has_many :reviews, through: :works
 
   has_many :playlistings, -> { distinct }, through: :works
-
   has_many :playlists,    -> { distinct }, through: :playlistings
-
   has_many :mixtapes,     -> { distinct }, through: :playlists
 
   # Contributions.
@@ -115,11 +112,10 @@ class Creator < ApplicationRecord
 
   # Identities.
 
-  has_many :pseudonym_identities, class_name: "Identity", dependent: :destroy,
-    foreign_key: :real_name_id, inverse_of: :real_name
-
-  has_many :real_name_identities, class_name: "Identity", dependent: :destroy,
-    foreign_key: :pseudonym_id, inverse_of: :pseudonym
+  with_options(class_name: "Identity", dependent: :destroy) do |creator|
+    creator.has_many :pseudonym_identities, foreign_key: :real_name_id, inverse_of: :real_name
+    creator.has_many :real_name_identities, foreign_key: :pseudonym_id, inverse_of: :pseudonym
+  end
 
   has_many :pseudonyms, -> { order("creators.name") },
     through: :pseudonym_identities, source: :pseudonym
@@ -129,11 +125,10 @@ class Creator < ApplicationRecord
 
   # Memberships.
 
-  has_many :member_memberships, class_name: "Membership", dependent: :destroy,
-    foreign_key: :group_id, inverse_of: :group
-
-  has_many :group_memberships,  class_name: "Membership", dependent: :destroy,
-    foreign_key: :member_id, inverse_of: :member
+  with_options(class_name: "Membership", dependent: :destroy) do |creator|
+    creator.has_many :member_memberships, foreign_key: :group_id,  inverse_of: :group
+    creator.has_many :group_memberships,  foreign_key: :member_id, inverse_of: :member
+  end
 
   has_many :members, -> { order("creators.name") },
     through: :member_memberships, source: :member
@@ -193,6 +188,14 @@ class Creator < ApplicationRecord
 
   def secondary?
     !primary?
+  end
+
+  def identity_type
+    primary? ? "Primary" : "Secondary"
+  end
+
+  def membership_type
+    individual? ? "Individual" : "Group"
   end
 
   alias_method :alias?, :secondary?

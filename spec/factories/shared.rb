@@ -35,27 +35,13 @@ FactoryBot.define do
 
   trait :scheduled do
     with_body
-    publish_on 3.weeks.from_now
-
-    after(:create) do |instance, evaluator|
-      unless instance.schedule!
-        raise StandardError, "could not schedule: #{instance.errors.inspect}"
-      end
-
-      instance.reload
-    end
+    publish_on { 3.weeks.from_now }
+    scheduling true
   end
 
   trait :published do
     with_body
-
-    after(:create) do |instance, evaluator|
-      unless instance.publish!
-        raise StandardError, "could not publish: #{instance.errors.inspect}"
-      end
-
-      instance.reload
-    end
+    publishing true
   end
 
   trait :with_creator do

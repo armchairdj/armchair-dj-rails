@@ -4,7 +4,7 @@ class Admin::Posts::ReviewsController < Admin::Posts::BaseController
 
 private
 
-  def initial_keys
+  def keys_for_create
     [:work_id]
   end
 

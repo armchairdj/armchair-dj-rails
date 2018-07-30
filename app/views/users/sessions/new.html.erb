@@ -4,16 +4,14 @@
 
 <%= render "users/shared/auth_tabs", selected_tab: :login  do %>
   <%= simple_form_for(@user, url: user_session_path) do |f| %>
-    <%= content_tag(:div, class: "form-inputs") do %>
+    <%= form_inputs do %>
       <%= f.input :email,    required: true, placeholder: true %>
       <%= f.input :password, required: true, hint: false %>
 
       <%= f.input(:remember_me, as: :boolean) %>
     <% end %>
 
-    <%= content_tag(:div, class: "button-group") do %>
-      <%= f.button :button, "Log In", type: :submit %>
-    <% end %>
+    <%= button_group submit_button(@user, "Log In") %>
 
     <%= content_tag(:ul) do %>
       <%= content_tag :li, link_to("Forgot your password?", new_user_password_path) %>

@@ -69,8 +69,8 @@ en:
         'true':  "This is a primary creator. It can have pseudonyms."
         'false': "This is a secondary creator. It can point to a primary identity."
       creator/individual:
-        'true': "This is an individual creator. It can belong to a group."
-        'false':  "This is a group creator. It can have members."
+        'true':  "This is an individual creator. It can belong to a group."
+        'false': "This is a group creator. It can have members."
       credit:
       identity:
         pseudynym_id: "Pseudonym"
@@ -110,13 +110,19 @@ en:
       models:
         post:
           attributes: &post_errors
+            base:
+              failed_to_publish:    "Could not publish because of the errors below."
+              failed_to_schedule:   "Could not schedule because of the errors below."
+              failed_to_unpublish:  "Could not unpublish because of the errors below."
+              failed_to_unschedule: "Could not unschedule because of the errors below."
             author:
               blank: "Please choose an author."
               invalid_author: "This user is not an author."
             body:
-              blank_during_publish: "You cannot publish a post without a body."
+              blank: "You can't publish or schedule a post without a body."
             publish_on:
               blank: "Please choose a publication date to schedule this post."
+              present: "Please don't choose a publish date unless you're scheduling this post."
         article:
           attributes:
             <<: *post_errors
@@ -143,13 +149,13 @@ en:
               not_primary: "Only primary creators can have pseudonyms."
             pseudonym_id:
               not_secondary: "Primary creators cannot be pseudonyms."
-              taken: "This pseudonym is already taken."
+              taken: "This pseudonym is already assigned to another primary creator."
         membership:
           attributes:
             group_id:
-              not_collective: "Only collectives can have members."
+              not_collective: "Only groups can have members."
             member_id:
-              not_individual: "Collectives cannot be members of other collectives."
+              not_individual: "Groups cannot be members of other groups."
         playlist:
           attributes:
             author:
@@ -174,4 +180,4 @@ en:
         user:
           attributes:
             role:
-              invalid_assignment: "You cannot create users with this role."
+              invalid_assignment: "You are not allowed to create users with this role."

@@ -29,7 +29,7 @@ RSpec.describe Role do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -44,13 +44,13 @@ RSpec.describe Role do
   end
 
   describe "associations" do
-    it { is_expected.to have_many(:contributions) }
+    it { is_expected.to have_many(:contributions).dependent(:nullify) }
 
     it { is_expected.to have_many(:works).through(:contributions) }
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:medium) }
     it { is_expected.to validate_inclusion_of(:medium).in_array(Work.valid_media) }
@@ -60,7 +60,7 @@ RSpec.describe Role do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
@@ -84,7 +84,7 @@ RSpec.describe Role do
 
     describe "#display_medium" do
       describe "basic" do
-        subject { create_minimal_instance(medium: "TvEpisode").display_medium }
+        subject { build_minimal_instance(medium: "TvEpisode").display_medium }
 
         it { is_expected.to eq("TV Episode") }
       end

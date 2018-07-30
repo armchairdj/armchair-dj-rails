@@ -12,6 +12,21 @@
   <%= content_tag_unless_empty(:h5, deck) %>
 
   <%= content_tag(:div, class: "actions") do %>
-    <%= admin_header_links(@model_class, action, instance) %>
+    <% case action %>
+    <% when :index %>
+      <%= admin_create_link  @model_class %>
+    <% when :new %>
+      <%= admin_list_link    @model_class %>
+    <% when :edit %>
+      <%= admin_public_link  instance     %>
+      <%= admin_view_link    instance     %>
+      <%= admin_destroy_link instance     %>
+      <%= admin_list_link    @model_class %>
+    <% when :show %>
+      <%= admin_public_link  instance     %>
+      <%= admin_update_link  instance     %>
+      <%= admin_destroy_link instance     %>
+      <%= admin_list_link    @model_class %>
+    <% end %>
   <% end %>
 <% end %>

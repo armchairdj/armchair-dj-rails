@@ -32,7 +32,7 @@ RSpec.describe Playlist do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -48,14 +48,14 @@ RSpec.describe Playlist do
 
   describe "associations" do
     describe "playlistings" do
-      let(:instance) { create_complete_instance }
-
-      it { is_expected.to have_many(:playlistings) }
+      it { is_expected.to have_many(:playlistings).dependent(:destroy) }
 
       describe "ordering" do
+        let(:instance) { create_minimal_instance }
+
         subject { instance.playlistings.map(&:position) }
 
-        it { is_expected.to eq((1..10).to_a) }
+        it { is_expected.to eq((1..2).to_a) }
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Playlist do
     it { is_expected.to have_many(:makers      ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
-    it { is_expected.to have_many(:mixtapes) }
+    it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
   end
 
   describe "attributes" do
@@ -118,11 +118,13 @@ RSpec.describe Playlist do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
 
     describe "is_expected.to validate_length_of(:playlistings).is_at_least(2)" do
+      subject { create_minimal_instance }
+
       it { is_expected.to be_valid }
 
       specify "invalid" do
@@ -137,9 +139,31 @@ RSpec.describe Playlist do
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
-    pending "#posts"
+    describe "post methods" do
+      let!(:work    ) { create(:minimal_work) }
+      let!(:instance) { create_minimal_instance }
+      let!(:review  ) { create(:minimal_review, work_id: work.id) }
+      let!(:mixtape ) { create(:minimal_mixtape, playlist_id: instance.id) }
+
+      before(:each) do
+        # TODO let the factory handle this with transient attributes
+        instance.playlistings << create(:minimal_playlisting, work_id: work.id)
+      end
+
+      describe "post_ids" do
+        subject { instance.post_ids }
+
+        it { is_expected.to contain_exactly(review.id, mixtape.id) }
+      end
+
+      describe "posts" do
+        subject { instance.posts }
+
+        it { is_expected.to contain_exactly(review, mixtape) }
+      end
+    end
 
     describe "creator methods" do
       let(:role     ) { create(:minimal_role, medium: "Song") }

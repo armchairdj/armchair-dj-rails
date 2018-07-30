@@ -6,29 +6,17 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
   describe "class" do
     subject { described_class }
 
-    describe "self#human_enum_collection" do
-      it { is_expected.to respond_to(:human_enum_collection) }
-    end
+    it { is_expected.to respond_to(:human_enum_collection) }
 
-    describe "self#human_enum_collection_with_keys" do
-      it { is_expected.to respond_to(:human_enum_collection_with_keys) }
-    end
+    it { is_expected.to respond_to(:human_enum_collection_with_keys) }
 
-    describe "self#human_enum_value" do
-      it { is_expected.to respond_to(:human_enum_value) }
-    end
+    it { is_expected.to respond_to(:human_enum_value) }
 
-    describe "self#enumable_attributes" do
-      it { is_expected.to respond_to(:enumable_attributes) }
-    end
+    it { is_expected.to respond_to(:enumable_attributes) }
 
-    describe "self#alpha_order_clause_for" do
-      it { is_expected.to respond_to(:alpha_order_clause_for) }
-    end
+    it { is_expected.to respond_to(:alpha_order_clause_for) }
 
-    describe "self#retrieve_enumable_attributes" do
-      specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
-    end
+    specify { expect(described_class.retrieve_enumable_attributes).to match_array(attributes) }
   end
 
   attributes.each do |attribute|
@@ -66,40 +54,45 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
           end
 
           describe "self#human_#{plural_attr}" do
-            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
-              expected = [["Z.", "b"], ["Y.", "a"], ["X.", "r"]]
-              actual   = described_class.send(:"human_#{plural_attr}")
+            subject { described_class.send(:"human_#{plural_attr}") }
 
-              expect(actual).to eq(expected)
+            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
+              is_expected.to eq([["Z.", "b"], ["Y.", "a"], ["X.", "r"]])
             end
           end
 
           describe "self#human_#{plural_attr}_with_keys" do
-            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
-              expected = [["Z.", "b", 0], ["Y.", "a", 1], ["X.", "r", 2]]
-              actual   = described_class.send(:"human_#{plural_attr}_with_keys")
+            subject { described_class.send(:"human_#{plural_attr}_with_keys") }
 
-              expect(actual).to eq(expected)
+            it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
+              is_expected.to eq([["Z.", "b", 0], ["Y.", "a", 1], ["X.", "r", 2]])
             end
           end
 
           describe "self#alphabetical_human_#{plural_attr}" do
-            it "gives alphabetical 2D array for use in dropdowns" do
-              expected = [["X.", "r"], ["Y.", "a"], ["Z.", "b"]]
-              actual   = described_class.send(:"alphabetical_human_#{plural_attr}")
+            subject { described_class.send(:"alphabetical_human_#{plural_attr}") }
 
-              expect(actual).to eq(expected)
+            it "returns an alphabetical 2D array for use in dropdowns" do
+              is_expected.to eq([["X.", "r"], ["Y.", "a"], ["Z.", "b"]])
             end
           end
 
           describe "self#human_#{single_attr}" do
-            specify { expect(described_class.send(:"human_#{single_attr}", "b")).to eq("Z.") }
-            specify { expect(described_class.send(:"human_#{single_attr}", "a")).to eq("Y.") }
-            specify { expect(described_class.send(:"human_#{single_attr}", "r")).to eq("X.") }
+            subject { described_class.send(:"human_#{single_attr}", "b") }
+
+            it "accepts an enum string identifier and returns the humanized i18n value" do
+              is_expected.to eq("Z.")
+            end
           end
 
           describe "self#alpha_order_clause_for" do
-            pending "works"
+            subject { described_class.send(:alpha_order_clause_for, single_attr) }
+
+            it "returns a SQL order clause that sorts by humanized values" do
+              expected = "CASE WHEN #{single_attr}=2 THEN 0 WHEN #{single_attr}=1 THEN 1 WHEN #{single_attr}=0 THEN 2 END"
+
+              is_expected.to eq(expected)
+            end
           end
         end
 

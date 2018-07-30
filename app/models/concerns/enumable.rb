@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Enumable
-  extend ActiveSupport::Concern
+concern :Enumable do
 
   #############################################################################
   # CLASS.

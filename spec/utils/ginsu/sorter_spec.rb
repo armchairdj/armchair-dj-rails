@@ -8,8 +8,7 @@ RSpec.describe Ginsu::Sorter do
       subject { described_class.prepare_clause(clauses, dir) }
 
       before(:each) do
-        allow( Arel).to receive(:sql).and_call_original
-        expect(Arel).to receive(:sql)
+        expect(Arel).to receive(:sql).and_call_original
       end
 
       context "single clause, ascending" do

@@ -35,8 +35,8 @@ RSpec.describe Admin::WorksController do
 
     describe "POST #create" do
       let(:initial_params) { attributes_for(:work, medium: "Song") }
-      let(    :max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song") }
-      let(    :bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
+      let(:max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song") }
+      let(:bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
 
       context "with initial params" do
         subject { post :create, params: { step: "select_medium", work: initial_params } }
@@ -93,7 +93,7 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "PUT #update" do
-      let(    :update_params) { { title: "New Title" } }
+      let(:update_params) { { title: "New Title" } }
       let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do

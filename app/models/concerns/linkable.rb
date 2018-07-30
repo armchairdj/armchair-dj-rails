@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Linkable
-  extend ActiveSupport::Concern
+concern :Linkable do
 
   MAX_LINKS_AT_ONCE = 5.freeze
 

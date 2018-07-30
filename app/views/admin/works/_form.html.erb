@@ -9,8 +9,8 @@
 <%= simple_form_for([:admin, @work], html: form_attrs) do |f| %>
   <%= f.error_notification %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
-    <%= content_tag(:section, class: "adj-module") do %>
+  <%= form_inputs do %>
+    <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
         <% if f.object.persisted? %>
           <%= f.input :medium, as: :select, collection: @media, disabled: true %>
@@ -50,11 +50,11 @@
     %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= admin_submit_button(f) %>
+  <%= button_group do %>
+    <%= submit_button(@work) %>
 
     <% if @work.new_record? %>
-      <%= f.button(:button, "Update Medium", type: :submit,
+      <%= submit_button(@work, "Update Medium",
         name: "step", value: "select_medium", class: "secondary",
         "data-target": "autosubmit.button"
       ) %>

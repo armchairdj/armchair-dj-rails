@@ -3,10 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Admin::UserPolicy do
-  subject { described_class.new(user, record) }
+  let(:record) { build_stubbed(:minimal_user) }
 
-  let(     :record) { create(:minimal_user) }
-  let(:model_class) { record.class }
+  subject { described_class.new(user, record) }
 
   context "without user" do
     let(:user) { nil }
@@ -21,7 +20,7 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "as member" do
-    let(:user) { create(:member) }
+    let(:user) { build_stubbed(:member) }
 
     it { is_expected.to raise_not_authorized_for(:index  ) }
     it { is_expected.to raise_not_authorized_for(:show   ) }
@@ -33,7 +32,7 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "as writer" do
-    let(:user) { create(:writer) }
+    let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to raise_not_authorized_for(:index  ) }
     it { is_expected.to raise_not_authorized_for(:show   ) }
@@ -45,7 +44,7 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "as editor" do
-    let(:user) { create(:editor) }
+    let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to raise_not_authorized_for(:index  ) }
     it { is_expected.to raise_not_authorized_for(:show   ) }
@@ -57,7 +56,7 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "as admin" do
-    let(:user) { create(:admin) }
+    let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:index  ) }
     it { is_expected.to permit_action(:show   ) }
@@ -70,7 +69,7 @@ RSpec.describe Admin::UserPolicy do
   end
 
   context "as root" do
-    let(:user) { create(:root) }
+    let(:user) { build_stubbed(:root) }
 
     it { is_expected.to permit_action(:index  ) }
     it { is_expected.to permit_action(:show   ) }
@@ -82,15 +81,16 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "scope" do
-    subject { described_class::Scope.new(user, model_class.all).resolve }
+    let(:model_class) { determine_model_class }
+
+    subject { described_class::Scope.new(user, model_class).resolve }
 
     before(:each) do
-      allow( model_class).to receive(:for_cms_user).and_call_original
-      expect(model_class).to receive(:for_cms_user).with(user)
+      expect(model_class).to receive(:for_cms_user).with(user).and_call_original
     end
 
     describe "with user" do
-      let(:user) { create(:writer) }
+      let(:user) { build_stubbed(:writer) }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
     end

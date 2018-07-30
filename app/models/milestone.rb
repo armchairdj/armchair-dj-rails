@@ -92,14 +92,4 @@ class Milestone < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  # TODO This doesn't make much sense. We should have a class method
-  # that takes a year and then finds all posts with a milestone of that year.
-  def posts
-    Post.where(id: post_ids)
-  end
-
-  def post_ids
-    reviews.ids + mixtapes.ids
-  end
 end

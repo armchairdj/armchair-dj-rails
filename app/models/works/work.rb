@@ -90,9 +90,9 @@ class Work < ApplicationRecord
   has_many :makers,       through: :credits,       source: :creator, class_name: "Creator"
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
-  has_many :reviews, dependent: :destroy
+  has_many :reviews, dependent: :nullify
 
-  has_many :playlistings, inverse_of: :work, dependent: :destroy
+  has_many :playlistings, inverse_of: :work, dependent: :nullify
   has_many :playlists, through: :playlistings
   has_many :mixtapes,  through: :playlists
 

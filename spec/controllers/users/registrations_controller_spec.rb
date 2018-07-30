@@ -3,5 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Users::RegistrationsController do
-  pending "registrations_controller"
+  describe "additional actions" do
+    pending "#edit_password"
+    pending "#update_password"
+  end
 end

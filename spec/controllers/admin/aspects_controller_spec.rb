@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Admin::AspectsController do
-  let(:aspect) { create(:minimal_aspect) }
+  let(:instance) { create_minimal_instance }
 
   describe "concerns" do
     it_behaves_like "a_paginatable_controller"
@@ -17,11 +17,11 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "GET #show" do
-      before(:each) { get :show, params: { id: aspect.to_param } }
+      before(:each) { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/aspects/show") }
 
-      it { is_expected.to assign(aspect, :aspect) }
+      it { is_expected.to assign(instance, :aspect) }
     end
 
     describe "GET #new" do
@@ -66,23 +66,23 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "GET #edit" do
-      before(:each) { get :edit, params: { id: aspect.to_param } }
+      before(:each) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/aspects/edit") }
 
-      it { is_expected.to assign(aspect, :aspect) }
+      it { is_expected.to assign(instance, :aspect) }
     end
 
     describe "PUT #update" do
-      let(    :update_params) { { name: "New Name" } }
+      let(:update_params) { { name: "New Name" } }
       let(:bad_update_params) { { name: ""         } }
 
       context "with valid params" do
         before(:each) do
-          put :update, params: { id: aspect.to_param, aspect: update_params }
+          put :update, params: { id: instance.to_param, aspect: update_params }
         end
 
-        it { is_expected.to assign(aspect, :aspect).with_attributes(update_params).and_be_valid }
+        it { is_expected.to assign(instance, :aspect).with_attributes(update_params).and_be_valid }
 
         it { is_expected.to send_user_to(admin_aspect_path(assigns(:aspect))) }
 
@@ -91,19 +91,19 @@ RSpec.describe Admin::AspectsController do
 
       context "with invalid params" do
         before(:each) do
-          put :update, params: { id: aspect.to_param, aspect: bad_update_params }
+          put :update, params: { id: instance.to_param, aspect: bad_update_params }
         end
 
         it { is_expected.to successfully_render("admin/aspects/edit") }
 
-        it { is_expected.to assign(aspect, :aspect).with_attributes(bad_update_params).and_be_invalid }
+        it { is_expected.to assign(instance, :aspect).with_attributes(bad_update_params).and_be_invalid }
       end
     end
 
     describe "DELETE #destroy" do
-      let!(:aspect) { create(:minimal_aspect) }
+      let!(:instance) { create(:minimal_aspect) }
 
-      subject { delete :destroy, params: { id: aspect.to_param } }
+      subject { delete :destroy, params: { id: instance.to_param } }
 
       it { expect { subject }.to change(Aspect, :count).by(-1) }
 

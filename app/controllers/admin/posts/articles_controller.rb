@@ -4,7 +4,7 @@ class Admin::Posts::ArticlesController < Admin::Posts::BaseController
 
 private
 
-  def initial_keys
+  def keys_for_create
     [:title]
   end
 end

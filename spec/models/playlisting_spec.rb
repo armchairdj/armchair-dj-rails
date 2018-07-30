@@ -21,7 +21,7 @@ RSpec.describe Playlisting do
   describe "concerns" do
     it_behaves_like "a_listable_model", :playlist do
       let(:primary) { create(:complete_playlist).playlistings.sorted }
-      let(  :other) { create(:complete_playlist).playlistings.sorted }
+      let(:other) { create(:complete_playlist).playlistings.sorted }
     end
 
     it_behaves_like "an_eager_loadable_model" do
@@ -30,7 +30,7 @@ RSpec.describe Playlisting do
     end
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -46,9 +46,9 @@ RSpec.describe Playlisting do
       let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
 
       let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
-      let(     :items) { Playlisting.where(playlist_id: parent_ids) }
+      let(:items) { Playlisting.where(playlist_id: parent_ids) }
 
-      let(       :ids) { items.map(&:id).shuffle }
+      let(:ids) { items.map(&:id).shuffle }
       let(:collection) { Playlisting.where(id: ids) }
 
       subject { collection.sorted }
@@ -68,7 +68,7 @@ RSpec.describe Playlisting do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:playlist) }
     it { is_expected.to validate_presence_of(:work) }

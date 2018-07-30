@@ -59,7 +59,7 @@ RSpec.describe User do
     it_behaves_like "a_linkable_model"
 
     describe "nilify_blanks" do
-      subject { create_minimal_instance }
+      subject { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -71,13 +71,13 @@ RSpec.describe User do
 
   describe "scope-related" do
     describe "for public site" do
-      let(   :saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
+      let(:saru   ) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }
-      let(  :celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
+      let(:celia  ) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
       let(:charlie) { create(:admin,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-      let(  :brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+      let(:brian  ) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
 
-      let(       :ids) { [saru, monique, celia, charlie, brian].map(&:id) }
+      let(:ids       ) { [saru, monique, celia, charlie, brian].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       before(:each) do
@@ -104,79 +104,79 @@ RSpec.describe User do
       end
     end
 
-    describe "for cms access to other users" do
+    describe "self#for_cms_user" do
       let(:no_user) { nil }
-      let( :member) { create(:member) }
-      let( :writer) { create(:writer) }
-      let( :editor) { create(:editor) }
+      let(:member) { create(:member) }
+      let(:writer) { create(:writer) }
+      let(:editor) { create(:editor) }
       let(:admin_1) { create(:admin ) }
       let(:admin_2) { create(:admin ) }
-      let( :root_1) { create(:root  ) }
-      let( :root_2) { create(:root  ) }
+      let(:root_1) { create(:root  ) }
+      let(:root_2) { create(:root  ) }
 
-      let!(       :ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
+      let!(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
-      describe "self#for_cms_user" do
-        subject { collection.for_cms_user(instance) }
+      subject { collection.for_cms_user(instance) }
 
-        context "with nil user" do
-          let(:instance) { no_user }
+      context "when passed a nil user" do
+        let(:instance) { no_user }
 
-          it "includes nobody" do
-            is_expected.to eq(described_class.none)
-          end
+        it "prevents access to all users" do
+          is_expected.to eq(described_class.none)
         end
+      end
 
-        context "with member" do
-          let(:instance) { member }
+      context "when passed a member" do
+        let(:instance) { member }
 
-          it "includes nobody" do
-            is_expected.to eq(described_class.none)
-          end
+        it "prevents access to all users" do
+          is_expected.to eq(described_class.none)
         end
+      end
 
-        context "with writer" do
-          let(:instance) { writer }
+      context "when passed a writer" do
+        let(:instance) { writer }
 
-          it "includes nobody" do
-            is_expected.to eq(described_class.none)
-          end
+        it "prevents access to all users" do
+          is_expected.to eq(described_class.none)
         end
+      end
 
-        context "with editor" do
-          let(:instance) { editor }
+      context "when passed an editor" do
+        let(:instance) { editor }
 
-          it "includes nobody" do
-            is_expected.to eq(described_class.none)
-          end
+        it "prevents access to all users" do
+          is_expected.to eq(described_class.none)
         end
+      end
 
-        context "with admin" do
-          let(:instance) { admin_1 }
-          let(:expected) { [member, writer, editor, admin_2] }
+      context "when passed an admin" do
+        let(:instance) { admin_1 }
+        let(:expected) { [member, writer, editor, admin_2] }
 
-          it "includes all members, writers & editors, plus admins other than self" do
-            is_expected.to contain_exactly(*expected)
-          end
+        it "allows access to all users except the passed user and root users" do
+          is_expected.to contain_exactly(*expected)
         end
+      end
 
-        context "with root" do
-          let(:instance) { root_1 }
-          let(:expected) { [member, writer, editor, admin_1, admin_2, root_1, root_2] }
+      context "when passed a root" do
+        let(:instance) { root_1 }
+        let(:expected) { [member, writer, editor, admin_1, admin_2, root_1, root_2] }
 
-          it "includes everyone including self" do
-            is_expected.to contain_exactly(*expected)
-          end
+        it "allows access to all users including the passed user" do
+          is_expected.to contain_exactly(*expected)
         end
       end
     end
   end
 
   describe "associations" do
-   it { is_expected.to have_many(:articles) }
-   it { is_expected.to have_many(:reviews ) }
-   it { is_expected.to have_many(:mixtapes) }
+   it { is_expected.to have_many(:posts    ).dependent(:nullify) }
+   it { is_expected.to have_many(:articles ).dependent(:nullify) }
+   it { is_expected.to have_many(:reviews  ).dependent(:nullify) }
+   it { is_expected.to have_many(:mixtapes ).dependent(:nullify) }
+   it { is_expected.to have_many(:playlists).dependent(:nullify) }
 
    it { is_expected.to have_many(:works).through(:reviews) }
 
@@ -192,17 +192,24 @@ RSpec.describe User do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name ) }
 
     it { is_expected.to validate_presence_of(:role) }
 
-    it { is_expected.to validate_presence_of(  :username) }
-    it { is_expected.to validate_uniqueness_of(:username) }
+    it { is_expected.to validate_presence_of(:username) }
+    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
 
-    pending "username format"
+    describe "enforce username format" do
+      it { is_expected.to     allow_value("ArmchairDJ10039" ).for(:username) }
+      it { is_expected.to_not allow_value("Armchair-DJ10039").for(:username) }
+      it { is_expected.to_not allow_value("Armchair_DJ10039").for(:username) }
+      it { is_expected.to_not allow_value("Armchair/DJ10039").for(:username) }
+      it { is_expected.to_not allow_value("Armchair%DJ10039").for(:username) }
+      it { is_expected.to_not allow_value("Armchair.DJ10039").for(:username) }
+    end
 
     describe "conditional" do
       describe "as member" do
@@ -243,22 +250,24 @@ RSpec.describe User do
 
       subject { instance.role }
 
-      it { is_expected.to eq("member") }
+      it "database sets the default role to member" do
+        is_expected.to eq("member")
+      end
     end
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "role" do
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
-      let( :admin) { create( :admin) }
-      let(  :root) { create(  :root) }
+      let(:admin) { create( :admin) }
+      let(:root) { create(  :root) }
 
       describe "booleans" do
-        describe "can_write?" do
+        describe "#can_write? is true for writers, editors, admins & roots" do
           specify { expect(member.can_write?).to eq(false) }
           specify { expect(writer.can_write?).to eq(true ) }
           specify { expect(editor.can_write?).to eq(true ) }
@@ -266,7 +275,7 @@ RSpec.describe User do
           specify { expect(  root.can_write?).to eq(true ) }
         end
 
-        describe "can_edit?" do
+        describe "#can_edit? is true for editors, admins & roots" do
           specify { expect(member.can_edit?).to eq(false) }
           specify { expect(writer.can_edit?).to eq(false) }
           specify { expect(editor.can_edit?).to eq(true ) }
@@ -274,7 +283,7 @@ RSpec.describe User do
           specify { expect(  root.can_edit?).to eq(true ) }
         end
 
-        describe "can_publish?" do
+        describe "#can_publish? is true for admins & roots" do
           specify { expect(member.can_publish?).to eq(false) }
           specify { expect(writer.can_publish?).to eq(false) }
           specify { expect(editor.can_publish?).to eq(false) }
@@ -282,7 +291,7 @@ RSpec.describe User do
           specify { expect(  root.can_publish?).to eq(true ) }
         end
 
-        describe "can_destroy?" do
+        describe "#can_destroy? is true for roots" do
           specify { expect(member.can_destroy?).to eq(false) }
           specify { expect(writer.can_destroy?).to eq(false) }
           specify { expect(editor.can_destroy?).to eq(false) }
@@ -301,23 +310,23 @@ RSpec.describe User do
               [ "Root",   "root"   ] ]
           end
 
-          specify do
+          it "is empty for members" do
             expect(member.assignable_role_options).to eq([])
           end
 
-          specify do
+          it "is empty for writers" do
             expect(writer.assignable_role_options).to eq([])
           end
 
-          specify do
+          it "is empty for editors" do
             expect(editor.assignable_role_options).to eq([])
           end
 
-          specify do
+          it "includes everything but root for admins" do
             expect(admin.assignable_role_options).to eq(options[0..3])
           end
 
-          specify do
+          it "includes everything for roots" do
             expect(root.assignable_role_options).to eq(options)
           end
         end
@@ -474,7 +483,7 @@ RSpec.describe User do
     describe "#display_name" do
       subject { instance.display_name }
 
-      describe "no middle name" do
+      describe "without middle name" do
         let(:instance) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
 
         it { is_expected.to eq("Derrick May") }

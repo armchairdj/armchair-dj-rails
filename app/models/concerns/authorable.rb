@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Authorable
-  extend ActiveSupport::Concern
+concern :Authorable do
 
   #############################################################################
   # INCLUDED.

@@ -43,7 +43,7 @@ class Role < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :contributions, dependent: :destroy
+  has_many :contributions, dependent: :nullify
 
   has_many :works, through: :contributions
 

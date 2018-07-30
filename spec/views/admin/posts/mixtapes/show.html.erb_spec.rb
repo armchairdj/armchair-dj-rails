@@ -8,8 +8,6 @@ RSpec.describe "admin/posts/mixtapes/show" do
   before(:each) do
     @model_class = assign(:model_name, Mixtape)
     @mixtape     = assign(:mixtape, create(:complete_mixtape))
-    @tags        = assign(:tags,  @mixtape.tags.alpha)
-    @links       = assign(:links, @mixtape.links)
   end
 
   it "renders" do

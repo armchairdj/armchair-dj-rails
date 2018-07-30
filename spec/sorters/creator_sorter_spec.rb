@@ -17,8 +17,8 @@ RSpec.describe CreatorSorter do
         "Default",
         "ID",
         "Name",
-        "Primary",
-        "Individual",
+        "Creator Type",
+        "Identity Type",
       ]) }
     end
 
