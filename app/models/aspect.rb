@@ -18,14 +18,18 @@
 class Aspect < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
+  # CONCERNING: Alpha.
   #############################################################################
 
-  #############################################################################
-  # CONCERNS.
-  #############################################################################
+  concerning :Alpha do
+    included do
+      include Alphabetizable
+    end
 
-  include Alphabetizable
+    def alpha_parts
+      [human_facet, name]
+    end
+  end
 
   #############################################################################
   # CLASS.
@@ -105,9 +109,6 @@ class Aspect < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def alpha_parts
-    [human_facet, name]
-  end
 
   def posts
     Post.where(id: post_ids)

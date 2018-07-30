@@ -25,18 +25,26 @@ require "wannabe_bool"
 class Creator < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
   # CONCERNS.
   #############################################################################
-
-  include Alphabetizable
 
   include Booletania
 
   booletania_columns :primary, :individual
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alpha do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [name]
+    end
+  end
 
   #############################################################################
   # CONCERNING: Identities.
@@ -368,10 +376,6 @@ class Creator < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def alpha_parts
-    [name]
-  end
 
   def all_works
     works.union(contributed_works).alpha

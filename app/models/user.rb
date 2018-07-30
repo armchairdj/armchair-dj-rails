@@ -46,17 +46,6 @@
 class User < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
-  # CONCERNS.
-  #############################################################################
-
-  include Alphabetizable
-  include Linkable
-
-  #############################################################################
   # PLUGINS.
   #############################################################################
 
@@ -72,24 +61,149 @@ class User < ApplicationRecord
   )
 
   #############################################################################
-  # CLASS.
+  # CONCERNS.
   #############################################################################
 
-  def self.for_cms_user(user)
-    return self.none unless user && user.can_administer?
-    return self.all  if user.root?
+  include Linkable
 
-    where("users.role <= ?", user.raw_role).where.not(id: user.id)
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alpha do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [last_name, first_name, middle_name]
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Name.
+  #############################################################################
+
+  concerning :Name do
+    included do
+      validates :first_name, presence: true
+      validates :last_name,  presence: true
+    end
+
+    def display_name
+      [first_name, middle_name, last_name].compact.join(" ")
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Username.
+  #############################################################################
+
+  concerning :Username do
+    included do
+      validates :username, presence:   true
+      validates :username, uniqueness: { case_sensitive: false }
+      validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
+    end
+
+    def to_param
+      username
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Roles.
+  #############################################################################
+
+  concerning :Role do
+    included do
+      enum role: {
+        member: 10,
+        writer: 20,
+        editor: 30,
+        admin:  40,
+        root:   50
+      }
+
+      enumable_attributes :role
+
+      validates :role, presence:   true
+    end
+
+    def can_write?
+      root? || admin? || editor? || writer?
+    end
+
+    alias_method :can_access_cms?, :can_write?
+
+    def can_edit?
+      root? || admin? || editor?
+    end
+
+    def can_publish?
+      root? || admin?
+    end
+
+    alias_method :can_administer?, :can_publish?
+
+    def can_destroy?
+      root?
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Admin access control.
+  #############################################################################
+
+  concerning :Editable do
+    class_methods do
+      def for_cms_user(user)
+        return self.none unless user && user.can_administer?
+        return self.all  if user.root?
+
+        where("users.role <= ?", user.raw_role).where.not(id: user.id)
+      end
+    end
+
+    def assignable_role_options
+      return [] unless self.can_administer?
+
+      options = self.class.human_roles
+
+      options.slice(0..options.index { |o| o.last == self.role })
+    end
+
+    def valid_role_assignment_for?(instance)
+      return true if instance.role.blank?
+      return true if self.assignable_role_options.map(&:last).include?(instance.role)
+
+      instance.errors.add(:role, :invalid_assignment)
+
+      false
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Public access control.
+  #############################################################################
+
+  concerning :Viewable do
+    included do
+      scope :published,  -> { joins(:posts).merge(Post.published) }
+      scope :for_public, -> { published }
+    end
+
+    def published?
+      can_write? && posts.published.count > 0
+    end
   end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :published,   -> { joins(:posts).merge(Post.published) }
-  scope :for_list,    -> { }
-  scope :for_show,    -> { includes(:links, :posts, :playlists, :works, :makers) }
-  scope :for_public,  -> { published }
+  scope :for_list, -> { }
+  scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
 
   #############################################################################
   # ASSOCIATIONS.
@@ -107,90 +221,8 @@ class User < ApplicationRecord
   has_many :makers, -> { distinct }, through: :works
 
   #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  enum role: {
-    member: 10,
-    writer: 20,
-    editor: 30,
-    admin:  40,
-    root:   50
-  }
-
-  enumable_attributes :role
-
-  def to_param
-    username
-  end
-
-  #############################################################################
   # VALIDATIONS.
   #############################################################################
 
-  validates :first_name, presence:   true
-  validates :last_name,  presence:   true
-
-  validates :role,       presence:   true
-
-  validates :username,   presence:   true
-  validates :username,   uniqueness: { case_sensitive: false }
-  validates :username,   format: { with: /\A[a-zA-Z0-9]+\z/ }
-
   validates :bio, absence: true, unless: :can_write?
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def alpha_parts
-    [last_name, first_name, middle_name]
-  end
-
-  def can_write?
-    root? || admin? || editor? || writer?
-  end
-  alias_method :can_access_cms?, :can_write?
-
-  def can_edit?
-    root? || admin? || editor?
-  end
-
-  def can_publish?
-    root? || admin?
-  end
-  alias_method :can_administer?, :can_publish?
-
-  def can_destroy?
-    root?
-  end
-
-  def published?
-    can_write? && posts.published.count > 0
-  end
-
-  def display_name
-    [first_name, middle_name, last_name].compact.join(" ")
-  end
-
-  def assignable_role_options
-    return [] unless self.can_administer?
-
-    options = self.class.human_roles
-
-    options.slice(0..options.index { |o| o.last == self.role })
-  end
-
-  def valid_role_assignment_for?(instance)
-    return true if instance.role.blank?
-    return true if self.assignable_role_options.map(&:last).include?(instance.role)
-
-    instance.errors.add(:role, :invalid_assignment)
-
-    false
-  end
 end

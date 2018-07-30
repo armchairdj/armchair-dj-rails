@@ -41,6 +41,16 @@
 class Review < Post
 
   #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alpha do
+    included do
+      delegate :alpha_parts, to: :work, allow_nil: true
+    end
+  end
+
+  #############################################################################
   # CONCERNING: STI Subclassed.
   #############################################################################
 
@@ -79,7 +89,6 @@ class Review < Post
   #############################################################################
 
   delegate :display_medium, to: :work, allow_nil: true
-  delegate :alpha_parts,    to: :work, allow_nil: true
 
   def sluggable_parts
     work.try(:sluggable_parts) || []

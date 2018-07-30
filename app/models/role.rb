@@ -18,10 +18,18 @@
 class Role < ApplicationRecord
 
   #############################################################################
-  # CONCERNS.
+  # CONCERNING: Alpha.
   #############################################################################
 
-  include Alphabetizable
+  concerning :Alpha do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [display_medium, name]
+    end
+  end
 
   #############################################################################
   # CONCERNING: Medium
@@ -71,12 +79,4 @@ class Role < ApplicationRecord
   has_many :contributions, dependent: :nullify
 
   has_many :works, through: :contributions
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def alpha_parts
-    [display_medium, name]
-  end
 end

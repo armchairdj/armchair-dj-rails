@@ -31,11 +31,20 @@ class Playlist < ApplicationRecord
   #############################################################################
 
   include Authorable
-  include Alphabetizable
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Alpha.
   #############################################################################
+
+  concerning :Alpha do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [title]
+    end
+  end
 
   #############################################################################
   # SCOPES.
@@ -85,10 +94,6 @@ class Playlist < ApplicationRecord
   #############################################################################
   # INSTANCE.
   #############################################################################
-
-  def alpha_parts
-    [title]
-  end
 
   def posts
     Post.where(id: post_ids)

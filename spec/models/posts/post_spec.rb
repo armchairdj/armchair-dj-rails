@@ -8,8 +8,6 @@ RSpec.describe Post do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
-
     it_behaves_like "an_authorable_model"
 
     it_behaves_like "a_linkable_model"
