@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module Paginatable
-  extend ActiveSupport::Concern
+concern :Paginatable do
 
   #############################################################################
   # INCLUDED.
@@ -19,6 +18,8 @@ private
 
   def prevent_duplicate_first_page
     return unless (params[:page] || "").to_s == "1"
+
+    model_class = determine_model_class
 
     # TODO Generalize logic for figuring out route namespace.
     #      We can't just use the controller namespace because the

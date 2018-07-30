@@ -95,11 +95,13 @@ class User < ApplicationRecord
   # ASSOCIATIONS.
   #############################################################################
 
-  has_many :posts,     dependent: :destroy, foreign_key: "author_id"
-  has_many :articles,  dependent: :destroy, foreign_key: "author_id"
-  has_many :reviews,   dependent: :destroy, foreign_key: "author_id"
-  has_many :mixtapes,  dependent: :destroy, foreign_key: "author_id"
-  has_many :playlists, dependent: :destroy, foreign_key: "author_id"
+  with_options(dependent: :nullify, foreign_key: "author_id") do |user|
+    user.has_many :posts
+    user.has_many :articles
+    user.has_many :reviews
+    user.has_many :mixtapes
+    user.has_many :playlists
+  end
 
   has_many :works, through: :reviews
   has_many :makers, -> { distinct }, through: :works
@@ -132,7 +134,7 @@ class User < ApplicationRecord
   validates :role,       presence:   true
 
   validates :username,   presence:   true
-  validates :username,   uniqueness: true
+  validates :username,   uniqueness: { case_sensitive: false }
   validates :username,   format: { with: /\A[a-zA-Z0-9]+\z/ }
 
   validates :bio, absence: true, unless: :can_write?

@@ -7,8 +7,8 @@ RSpec.describe UsersHelper do
 
   describe "#link_to_author_of" do
     let(:author) { create(:writer, username: "ArmchairDJ") }
-    let(   :obj) { double }
-    let(  :opts) { {} }
+    let(:obj) { double }
+    let(:opts) { {} }
 
     before(:each) { allow(obj).to receive(:author).and_return(author) }
 

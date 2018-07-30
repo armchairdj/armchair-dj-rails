@@ -48,7 +48,7 @@ class Admin::UsersController < Admin::BaseController
 private
 
   def scoped_instance
-    policy_scope(model_class).for_show.find_by!(username: params[:id])
+    policy_scope(@model_class).for_show.find_by!(username: params[:id])
   end
 
   def instance_params

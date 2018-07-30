@@ -7,9 +7,9 @@ RSpec.shared_examples "a_paginatable_controller" do
         get :index, params: { page: "1" }
 
         polymorphic_arg = if controller.controller_path.split('/').first == "admin"
-          [:admin, controller.send(:model_class)]
+          [:admin, controller.send(:determine_model_class)]
         else
-          controller.send(:model_class)
+          controller.send(:determine_model_class)
         end
 
         expect(response).to have_http_status(301)

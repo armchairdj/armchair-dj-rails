@@ -29,26 +29,21 @@ FactoryBot.define do
     trait :with_draft_post do
       after(:create) do |playlisting|
         create(:review, :draft, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
-
-        playlist.reload
       end
     end
 
     trait :with_scheduled_post do
       after(:create) do |playlisting|
         create(:review, :scheduled, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
-
-        playlist.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |playlisting|
         create(:minimal_review, :published, author_id: playlisting.playlist.author.id, work_id: playlisting.work.id)
-
-        playlist.reload
       end
     end
+
     ###########################################################################
     # FACTORIES.
     ###########################################################################

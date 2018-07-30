@@ -3,7 +3,7 @@
 %>
 
 <%= render "admin/shared/header", action: :index,
-  prehead:   total_count_for(@aspects),
+  prehead:  @collection.display_count,
   headline: @title
 %>
 

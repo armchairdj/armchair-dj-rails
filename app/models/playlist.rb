@@ -55,7 +55,7 @@ class Playlist < ApplicationRecord
   has_many :makers,       -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
 
-  has_many :mixtapes, dependent: :destroy
+  has_many :mixtapes, dependent: :nullify
 
   has_many :reviews, through: :works
 

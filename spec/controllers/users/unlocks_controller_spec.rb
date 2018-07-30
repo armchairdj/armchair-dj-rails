@@ -3,5 +3,5 @@
 require "rails_helper"
 
 RSpec.describe Users::UnlocksController do
-  pending "unlocks_controller"
+  # Not overriding anything.
 end

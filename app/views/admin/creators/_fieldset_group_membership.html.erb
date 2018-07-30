@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :group_memberships, group_membership do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
+  <%= expandable_fieldset do %>
     <%= ff.input :group_id,
       as:            :select,
       label:         false,

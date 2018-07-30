@@ -12,11 +12,10 @@ RSpec.shared_examples "an_authorable_model" do
 
     describe "custom" do
       describe "#author_can_write" do
-        subject { build_minimal_instance }
+        subject { create_minimal_instance }
 
         before(:each) do
-          allow( subject).to receive(:author_can_write).and_call_original
-          expect(subject).to receive(:author_can_write)
+          expect(subject).to receive(:author_can_write).and_call_original
         end
 
         specify "root" do

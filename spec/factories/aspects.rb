@@ -33,8 +33,6 @@ FactoryBot.define do
     trait :with_work do
       after(:create) do |aspect|
         create(:minimal_song, aspect_ids: [aspect.id])
-
-        aspect.reload
       end
     end
 
@@ -43,8 +41,6 @@ FactoryBot.define do
 
       after(:create) do |aspect|
         create(:minimal_review, :draft, work_id: aspect.works.first.id)
-
-        aspect.reload
       end
     end
 
@@ -53,8 +49,6 @@ FactoryBot.define do
 
       after(:create) do |aspect|
         create(:minimal_review, :scheduled, work_id: aspect.works.first.id)
-
-        aspect.reload
       end
     end
 
@@ -63,8 +57,6 @@ FactoryBot.define do
 
       after(:create) do |aspect|
         create(:minimal_review, :published, work_id: aspect.works.first.id)
-
-        aspect.reload
       end
     end
 

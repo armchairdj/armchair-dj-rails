@@ -57,4 +57,9 @@ Rails.application.configure do
     host:     "test.armchair-dj.com",
     protocol: "http"
   }
+
+  # Parallel Tests setup.
+
+  config.cache_store = :file_store,
+    Rails.root.join("tmp", "cache", "paralleltests#{ENV['TEST_ENV_NUMBER']}")
 end

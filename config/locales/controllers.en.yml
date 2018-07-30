@@ -24,18 +24,9 @@ en:
           update:  "Playlist updated."
       posts:
         success:
-          create:     "Post created."
-          destroy:    "Post destroyed."
-          update:     "Post updated."
-          publish:    "Post published."
-          unpublish:  "Post unpublished."
-          schedule:   "Post published."
-          unschedule: "Post unpublished."
-        error:
-          publish:    "Post could not be published."
-          unpublish:  "Post could not be unpublished."
-          schedule:   "Post could not be scheduled."
-          unschedule: "Post could not be unscheduled."
+          create:  "Post created."
+          destroy: "Post destroyed."
+          update:  "Post %{action}."
       roles:
         success:
           create:  "Role created."

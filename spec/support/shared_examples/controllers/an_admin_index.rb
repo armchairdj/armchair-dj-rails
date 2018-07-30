@@ -3,7 +3,7 @@
 RSpec.shared_examples "an_admin_index" do
   let(:param_key  ) { described_class.controller_name.to_sym }
   let(:template   ) { "#{described_class.controller_path}/index" }
-  let(:model_class) { described_class.new.send(:model_class) }
+  let(:model_class) { described_class.new.send(:determine_model_class) }
 
   let(:ids      ) { 3.times.map { |i| create_minimal_instance.id } }
   let(:paginated) { model_class.where(id: ids) }

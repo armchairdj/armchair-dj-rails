@@ -27,24 +27,18 @@ FactoryBot.define do
     trait :with_draft_post do
       after(:create) do |tag|
         create(:minimal_article, :draft, tag_ids: [tag.id])
-
-        tag.reload
       end
     end
 
     trait :with_scheduled_post do
       after(:create) do |tag|
         create(:minimal_article, :scheduled, tag_ids: [tag.id])
-
-        tag.reload
       end
     end
 
     trait :with_published_post do
       after(:create) do |tag|
         create(:minimal_article, :published, tag_ids: [tag.id])
-
-        tag.reload
       end
     end
 

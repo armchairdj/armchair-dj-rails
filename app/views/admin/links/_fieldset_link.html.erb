@@ -1,5 +1,5 @@
 <%= f.simple_fields_for :links, link do |ff| %>
-  <%= content_tag(:fieldset, class: "accepts-nested", "data-target": "expandable-fieldset.field") do %>
+  <%= expandable_fieldset do %>
     <%= ff.input :url %>
     <%= ff.input :description %>
 

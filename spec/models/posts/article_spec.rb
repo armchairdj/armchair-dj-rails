@@ -23,13 +23,13 @@ RSpec.describe Article do
   end
 
   describe "validations" do
-    subject { create_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
   end
 
   describe "instance" do
-    let(:instance) { create_minimal_instance }
+    let(:instance) { build_minimal_instance }
 
     describe "#display_type" do
       specify { expect(instance.display_type              ).to eq("Article" ) }

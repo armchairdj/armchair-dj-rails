@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   include Errorable
 
-  prepend_before_action :model_class
+  prepend_before_action :determine_model_class
 
   protect_from_forgery with: :exception
 
@@ -14,30 +14,30 @@ class ApplicationController < ActionController::Base
 
 protected
 
-  def model_class
-    @model_class ||= controller_name.classify.constantize
-  rescue NameError => e
-    @model_class = nil
-  end
-
   def after_sign_in_path_for(user)
     if (requested_page = session.delete("user_return_to")).present?
       requested_page
     elsif user.can_write?
-      admin_articles_path
+      admin_reviews_path
     else
       posts_path
     end
   end
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(user)
     posts_path
   end
 
 private
 
+  def determine_model_class
+    @model_class ||= controller_name.classify.constantize
+  rescue NameError => e
+    @model_class = nil
+  end
+
   def authorize_model
-    authorize model_class
+    authorize @model_class
   end
 
   def determine_layout

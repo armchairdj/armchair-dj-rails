@@ -5,8 +5,7 @@
 # Used in conjunction with ErrorsController & config.exceptions_app & routes.
 ################################################################################
 
-module Errorable
-  extend ActiveSupport::Concern
+concern :Errorable do
 
   #############################################################################
   # INCLUDED.

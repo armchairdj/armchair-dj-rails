@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.describe <%= class_name %>Policy do
-  let(     :record) { create_minimal_instance }
-  let(:model_class) { record.class }
+  let(:record) { build_minimal_instance }
 
   context "without user" do
     let(:user) { nil }
@@ -41,11 +40,12 @@ RSpec.describe <%= class_name %>Policy do
   end
 
   describe "scope" do
-    subject { described_class::Scope.new(user, model_class.all).resolve }
+    let(:model_class) { determine_model_class }
+
+    subject { described_class::Scope.new(user, model_class).resolve }
 
     before(:each) do
-      allow( model_class).to receive(:all).and_call_original
-      expect(model_class).to receive(:all)
+      expect(model_class).to receive(:all).and_call_original
     end
 
     describe "with user" do

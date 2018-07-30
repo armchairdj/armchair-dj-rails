@@ -8,11 +8,9 @@
   <%= f.input :reset_password_token, as: :hidden %>
   <%= f.full_error :reset_password_token %>
 
-  <%= content_tag(:div, class: "form-inputs") do %>
+  <%= form_inputs do %>
     <%= f.input :password, hint: true, required: true, autocomplete: "off" %>
   <% end %>
 
-  <%= content_tag(:div, class: "button-group") do %>
-    <%= f.button :button, "Change Password", type: :submit %>
-  <% end %>
+  <%= button_group submit_button(@user, "Change Password") %>
 <% end %>
