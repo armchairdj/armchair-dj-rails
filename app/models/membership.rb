@@ -25,31 +25,11 @@
 class Membership < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
-  # CONCERNS.
-  #############################################################################
-
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
   belongs_to :group,  class_name: "Creator", foreign_key: :group_id
   belongs_to :member, class_name: "Creator", foreign_key: :member_id
-
-  #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
   
   #############################################################################
   # VALIDATIONS.
@@ -60,28 +40,21 @@ class Membership < ApplicationRecord
 
   validates :group_id, uniqueness: { scope: [:member_id] }
 
-  def group_is_collective
-    self.errors.add :group_id, :not_collective unless group.try(:collective?)
-  end
-
-  private :group_is_collective
-
   validate { group_is_collective }
 
-  def member_is_individual
-    self.errors.add :member_id, :not_individual unless member.try(:individual?)
-  end
-
-  private :member_is_individual
-
   validate { member_is_individual }
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
 
   #############################################################################
   # INSTANCE.
   #############################################################################
 
+private
+
+  def group_is_collective
+    self.errors.add :group_id, :not_collective unless group.try(:collective?)
+  end
+
+  def member_is_individual
+    self.errors.add :member_id, :not_individual unless member.try(:individual?)
+  end
 end

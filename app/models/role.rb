@@ -18,24 +18,49 @@
 class Role < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
   # CONCERNS.
   #############################################################################
 
   include Alphabetizable
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Medium
   #############################################################################
+
+  concerning :Medium do
+    included do
+      scope :for_medium, -> (medium) { where(medium: medium) }
+
+      validates :medium, presence: true
+      validates :medium, inclusion: { in: Work.valid_media }
+    end
+
+    def display_medium
+      return unless medium
+
+      medium.constantize.display_medium
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Name
+  #############################################################################
+
+  concerning :Name do
+    included do
+      validates :name, presence: true
+      validates :name, uniqueness: { scope: [:medium] }
+    end
+
+    def display_name(full: false)
+      full ? [display_medium, name].join(": ") : name
+    end
+  end
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
-  scope :for_medium, -> (medium) { where(medium: medium) }
   scope :for_list,   -> { }
   scope :for_show,   -> { includes(:contributions, :works) }
 
@@ -48,38 +73,10 @@ class Role < ApplicationRecord
   has_many :works, through: :contributions
 
   #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :medium, presence: true
-  validates :medium, inclusion: { in: Work.valid_media }
-
-  validates :name, presence: true
-  validates :name, uniqueness: { scope: [:medium] }
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
   # INSTANCE.
   #############################################################################
 
   def alpha_parts
     [display_medium, name]
-  end
-
-  def display_name(full: false)
-    full ? [display_medium, name].join(": ") : name
-  end
-
-  def display_medium
-    return unless medium
-
-    medium.constantize.display_medium
   end
 end

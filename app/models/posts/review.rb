@@ -41,15 +41,19 @@
 class Review < Post
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: STI Subclassed.
   #############################################################################
 
-  def self.for_list
-    super.includes(:work).references(:work)
-  end
+  concerning :Subclassed do
+    class_methods do
+      def for_list
+        super.includes(:work).references(:work)
+      end
 
-  def self.for_show
-    super.includes(:work, :makers, :contributions, :aspects, :milestones)
+      def for_show
+        super.includes(:work, :makers, :contributions, :aspects, :milestones)
+      end
+    end
   end
 
   #############################################################################
@@ -65,33 +69,21 @@ class Review < Post
   has_many :milestones,    through: :work
 
   #############################################################################
-  # DELEGATION.
-  #############################################################################
-
-  delegate :display_medium, to: :work, allow_nil: true
-  delegate :alpha_parts,    to: :work, allow_nil: true
-
-  #############################################################################
   # VALIDATIONS.
   #############################################################################
 
   validates :work, presence: true
 
   #############################################################################
-  # HOOKS.
+  # INSTANCE.
   #############################################################################
 
-  #############################################################################
-  # SLUGGABLE.
-  #############################################################################
+  delegate :display_medium, to: :work, allow_nil: true
+  delegate :alpha_parts,    to: :work, allow_nil: true
 
   def sluggable_parts
     work.try(:sluggable_parts) || []
   end
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 
   def display_type(plural: false)
     base = [display_medium, "Review"].compact.join(" ")

@@ -113,7 +113,7 @@ private
   end
 
   def should_reset_slug_and_history?
-    false
+    unpublished?
   end
 
   def reset_slug_history

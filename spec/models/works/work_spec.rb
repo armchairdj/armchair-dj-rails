@@ -324,7 +324,7 @@ RSpec.describe Work do
         it { is_expected.to have_error(milestones: :blank) }
       end
 
-      describe "validate_nested_uniqueness_of" do
+      describe "validates_nested_uniqueness_of" do
         subject { build_minimal_instance }
 
         describe "credits" do

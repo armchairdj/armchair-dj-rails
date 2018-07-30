@@ -75,11 +75,11 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :Primariness do
-
+  concerning :PseudonymIdentities do
     MAX_PSEUDONYMS_AT_ONCE = 5.freeze
 
     included do
+      ### Scopes.
 
       scope :primary, -> { where(primary: true) }
 
@@ -123,12 +123,10 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :Secondariness do
-
+  concerning :RealNameIdentities do
     MAX_REAL_NAMES = 1.freeze
 
     included do
-
       ### Scopes.
 
       scope :secondary, -> { where(primary: false) }
@@ -212,8 +210,7 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :Individuality do
-
+  concerning :GroupMemberships do
     MAX_GROUPS_AT_ONCE  = 5.freeze
 
     included do
@@ -254,12 +251,10 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :Collectiveness do
-
+  concerning :MemberMemberships do
     MAX_MEMBERS_AT_ONCE = 5.freeze
 
     included do
-
       ### Scopes.
 
       scope :collective, -> { where(individual: false) }

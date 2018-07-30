@@ -4,59 +4,49 @@ class Medium < Work
   self.abstract_class = true
 
   #############################################################################
-  # CLASS ATTRIBUTES.
+  # CONCERNING: STI Subclassed.
   #############################################################################
 
-  class_attribute :available_facets, default: []
+  concerning :Subclassed do
+    class_methods do
+      def model_name
+        Work.model_name
+      end
+
+      def true_model_name
+        ActiveModel::Name.new(self.name.constantize)
+      end
+
+      def display_medium
+        I18n.t("activerecord.subclasses.work.#{true_model_name.i18n_key}")
+      end
+    end
+
+    included do
+      delegate :true_model_name, to: :class
+      delegate :display_medium,  to: :class
+    end
+  end
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Roles.
   #############################################################################
 
-  def self.model_name
-    Work.model_name
-  end
+  concerning :Roles do
+    def available_roles
+      Role.for_medium(self.medium).alpha
+    end
 
-  def self.true_model_name
-    ActiveModel::Name.new(self.name.constantize)
-  end
-
-  def self.display_medium
-    I18n.t("activerecord.subclasses.work.#{true_model_name.i18n_key}")
+    def available_role_ids
+      available_roles.ids
+    end
   end
 
   #############################################################################
-  # VALIDATIONS.
+  # Instance: Roles.
   #############################################################################
 
-  validate { only_available_facets }
-
-  def only_available_facets
-    candidates = aspects.reject(&:marked_for_destruction?)
-    disallowed = candidates.reject { |x| available_facets.include?(x.facet.to_sym) }
-
-    self.errors.add(:aspects, :invalid) if disallowed.any?
-  end
-
-  private :only_available_facets
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def true_model_name
-    self.class.true_model_name
-  end
-
-  def display_medium
-    self.class.display_medium
-  end
-
-  def available_roles
-    Role.for_medium(self.medium).alpha
-  end
-
-  def available_role_ids
-    available_roles.ids
+  def sluggable_parts
+    [display_medium.pluralize, display_makers, title, subtitle]
   end
 end
