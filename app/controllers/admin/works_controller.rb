@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::WorksController < Admin::BaseController
+class Admin::WorksController < Ginsu::Controller
   before_action :require_ajax, only: :reorder_credits
 
   # POST /works

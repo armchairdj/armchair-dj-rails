@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::BaseController < ApplicationController
+class Ginsu::Controller < ApplicationController
   include Paginatable
 
   before_action :authorize_model, only: [

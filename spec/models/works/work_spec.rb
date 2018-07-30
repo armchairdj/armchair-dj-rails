@@ -505,7 +505,7 @@ RSpec.describe Work do
     end
 
     describe "#collect_makers" do
-      subject { instance.collect_makers }
+      subject { instance.send(:collect_makers) }
 
       context "unsaved" do
         context "no credits" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::Posts::BaseController < Admin::BaseController
+class Admin::Posts::BaseController < Ginsu::Controller
   before_action :require_ajax, only: :autosave
 
   skip_before_action :authorize_instance, only: [:update]

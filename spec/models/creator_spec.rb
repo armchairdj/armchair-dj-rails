@@ -231,7 +231,7 @@ RSpec.describe Creator do
           expect(subject.pseudonyms          ).to eq([valid])
         end
 
-        describe "rejects if #blank_or_primary?" do
+        describe "rejects if #invalid_pseudonym_attrs?" do
           specify "blank" do
             subject.pseudonym_identities_attributes = empty_params
 
@@ -317,7 +317,7 @@ RSpec.describe Creator do
           expect(subject.real_names          ).to eq([valid])
         end
 
-        describe "rejects if #blank_or_secondary?" do
+        describe "rejects if #invalid_real_name_attrs?" do
           specify "blank" do
             subject.real_name_identities_attributes = empty_params
 
@@ -404,7 +404,7 @@ RSpec.describe Creator do
           expect(subject.members           ).to eq([valid])
         end
 
-        describe "rejects if #blank_or_collective?" do
+        describe "rejects if #invalid_member_attributes?" do
           specify "blank" do
             subject.member_memberships_attributes = empty_params
 
@@ -491,7 +491,7 @@ RSpec.describe Creator do
           expect(subject.groups           ).to eq([valid])
         end
 
-        describe "rejects if #blank_or_individual?" do
+        describe "rejects if #invalid_group_attributes?" do
           specify "blank" do
             subject.group_memberships_attributes = empty_params
 

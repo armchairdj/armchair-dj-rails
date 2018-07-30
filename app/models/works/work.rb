@@ -97,10 +97,20 @@ class Work < ApplicationRecord
   has_many :mixtapes,  through: :playlists
 
   #############################################################################
-  # ATTRIBUTES.
+  # ATTRIBUTES: All.
   #############################################################################
 
-  # Credits.
+  def prepare_for_editing
+    return unless medium.present?
+
+    prepare_credits
+    prepare_contributions
+    prepare_milestones
+  end
+
+  #############################################################################
+  # ATTRIBUTES: Credits.
+  #############################################################################
 
   accepts_nested_attributes_for :credits, allow_destroy: true,
     reject_if: proc { |attrs| attrs["creator_id"].blank? }
@@ -109,7 +119,9 @@ class Work < ApplicationRecord
     MAX_CREDITS_AT_ONCE.times { self.credits.build }
   end
 
-  # Contributions.
+  #############################################################################
+  # ATTRIBUTES: Contributions.
+  #############################################################################
 
   accepts_nested_attributes_for :contributions, allow_destroy: true,
     reject_if: proc { |attrs| attrs["creator_id"].blank? }
@@ -118,7 +130,9 @@ class Work < ApplicationRecord
     MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
   end
 
-  # Milestones.
+  #############################################################################
+  # ATTRIBUTES: Milestones.
+  #############################################################################
 
   accepts_nested_attributes_for :milestones, allow_destroy: true,
     reject_if: proc { |attrs| attrs["year"].blank? }
@@ -129,16 +143,6 @@ class Work < ApplicationRecord
     if milestones.first.new_record?
       milestones.first.activity = :released
     end
-  end
-
-  # All.
-
-  def prepare_for_editing
-    return unless medium.present?
-
-    prepare_credits
-    prepare_contributions
-    prepare_milestones
   end
 
   #############################################################################
@@ -168,13 +172,23 @@ class Work < ApplicationRecord
   # HOOKS.
   #############################################################################
 
-  before_save :memoize_display_makers, prepend: true
+  concerning :Memoizeable do
+    included do
+      before_save :memoize_display_makers, prepend: true
+    end
 
-  def memoize_display_makers
-    self.display_makers = collect_makers
+  private
+
+    def memoize_display_makers
+      self.display_makers = collect_makers
+    end
+
+    def collect_makers
+      names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
+
+      names.empty? ? nil : names.join(" & ")
+    end
   end
-
-  private :memoize_display_makers
 
   #############################################################################
   # INSTANCE.
@@ -216,12 +230,6 @@ class Work < ApplicationRecord
 
   def display_milestones
     milestones.sorted
-  end
-
-  def collect_makers
-    arr = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
-
-    arr.empty? ? nil : arr.join(" & ")
   end
 
   def sluggable_parts

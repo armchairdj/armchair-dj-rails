@@ -1,4 +1,4 @@
-class Admin::TagsController < Admin::BaseController
+class Admin::TagsController < Ginsu::Controller
 
   # POST /admin/tags
   # POST /admin/tags.json
