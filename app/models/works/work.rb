@@ -21,10 +21,14 @@
 class Work < ApplicationRecord
 
   #############################################################################
-  # CONCERNS.
+  # CONCERNING: Alpha.
   #############################################################################
 
   include Alphabetizable
+
+  def alpha_parts
+    [display_makers, title, subtitle]
+  end
 
   #############################################################################
   # CONCERNING: STI subclasses.
@@ -141,141 +145,127 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Attributions.
+  #############################################################################
+
+  has_many :attributions, inverse_of: :work, dependent: :destroy
+
+  def creators
+    Creator.where(id: creator_ids)
+  end
+
+  def creator_ids
+    attributions.map(&:creator_id).uniq
+  end
+
+  #############################################################################
   # CONCERNING: Credits.
   #############################################################################
 
-  concerning :Credits do
-    MAX_CREDITS_AT_ONCE = 3.freeze
+  MAX_CREDITS_AT_ONCE = 3.freeze
 
-    included do
-      ### Associations.
+  ### Associations.
 
-      has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
+  has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
 
-      has_many :makers, through: :credits, source: :creator, class_name: "Creator"
+  has_many :makers, through: :credits, source: :creator, class_name: "Creator"
 
-      ### Attributes.
+  ### Attributes.
 
-      accepts_nested_attributes_for(:credits, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["creator_id"].blank? }
-      )
+  accepts_nested_attributes_for(:credits, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["creator_id"].blank? }
+  )
 
-      ### Validations.
+  ### Validations.
 
-      validates :credits, length: { minimum: 1 }
+  validates :credits, length: { minimum: 1 }
 
-      validates_nested_uniqueness_of :credits, uniq_attr: :creator_id
+  validates_nested_uniqueness_of :credits, uniq_attr: :creator_id
 
-      ### Hooks.
+  ### Hooks.
 
-      before_save :memoize_display_makers, prepend: true
-    end
+  before_save :memoize_display_makers, prepend: true
 
-    def prepare_credits
-      MAX_CREDITS_AT_ONCE.times { self.credits.build }
-    end
-
-  private
-
-    def memoize_display_makers
-      self.display_makers = collect_makers
-    end
-
-    def collect_makers
-      names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
-
-      names.empty? ? nil : names.join(" & ")
-    end
+  def prepare_credits
+    MAX_CREDITS_AT_ONCE.times { self.credits.build }
   end
+
+  def memoize_display_makers
+    self.display_makers = collect_makers
+  end
+
+  private :memoize_display_makers
+
+  def collect_makers
+    names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
+
+    names.empty? ? nil : names.join(" & ")
+  end
+
+  private :collect_makers
 
   #############################################################################
   # CONCERNING: Contributions.
   #############################################################################
 
-  concerning :Contributions do
-    MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
+  MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
 
-    included do
-      ### Associations.
+  ### Associations.
 
-      has_many :contributions, inverse_of: :work, dependent: :destroy
+  has_many :contributions, inverse_of: :work, dependent: :destroy
 
-      has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
+  has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
-      ### Attributes.
+  ### Attributes.
 
-      accepts_nested_attributes_for(:contributions, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["creator_id"].blank? }
-      )
+  accepts_nested_attributes_for(:contributions, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["creator_id"].blank? }
+  )
 
-      ### Validations.
+  ### Validations.
 
-      validates_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
-    end
+  validates_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
 
-    def prepare_contributions
-      MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
-    end
+  def prepare_contributions
+    MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
   end
 
   #############################################################################
-  # CONCERNING: Attributable.
+  # CONCERNING: Posts.
   #############################################################################
 
-  concerning :Attributable do
-    def creators
-      Creator.where(id: creator_ids)
-    end
+  has_many :reviews, dependent: :nullify
 
-    def creator_ids
-      (makers.ids + contributors.ids).uniq
-    end
+  has_many :playlistings, inverse_of: :work, dependent: :nullify
+  has_many :playlists, through: :playlistings
+  has_many :mixtapes,  through: :playlists
+
+  def posts
+    Post.where(id: post_ids)
+  end
+
+  def post_ids
+    reviews.ids + mixtapes.ids
   end
 
   #############################################################################
-  # CONCERNING: Postabe.
+  # CONCERNING: Title.
   #############################################################################
 
-  concerning :Postable do
-    included do
-      has_many :reviews, dependent: :nullify
+  validates :title, presence: true
 
-      has_many :playlistings, inverse_of: :work, dependent: :nullify
-      has_many :playlists, through: :playlistings
-      has_many :mixtapes,  through: :playlists
-    end
+  def display_title(full: false)
+    return unless persisted?
 
-    def posts
-      Post.where(id: post_ids)
-    end
+    parts = [title, subtitle]
 
-    def post_ids
-      reviews.ids + mixtapes.ids
-    end
+    parts.unshift(display_makers) if full
+
+    parts.compact.join(": ")
   end
 
-  #############################################################################
-  # CONCERNING: Titleable.
-  #############################################################################
-
-  concerning :Titleable do
-    included do
-      validates :title, presence: true
-    end
-
-    def display_title(full: false)
-      return unless persisted?
-
-      parts = [title, subtitle]
-
-      parts.unshift(display_makers) if full
-
-      parts.compact.join(": ")
-    end
-
-    def full_display_title
-      display_title(full: true)
-    end
+  def full_display_title
+    display_title(full: true)
   end
 
   #############################################################################
@@ -298,9 +288,5 @@ class Work < ApplicationRecord
     prepare_credits
     prepare_contributions
     prepare_milestones
-  end
-
-  def alpha_parts
-    [display_makers, title, subtitle]
   end
 end

@@ -16,14 +16,12 @@ RSpec.describe Work do
     describe "nilify_blanks" do
       subject { build_minimal_instance }
 
-      describe "nilify_blanks" do
-        # Must specify individual fields for STI models.
-        it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
-        it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
-        it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
-        it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
-        it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
-      end
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
+      it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
+      it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
+      it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
+      it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
     end
   end
 

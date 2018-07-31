@@ -25,36 +25,44 @@
 class Membership < ApplicationRecord
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Group.
   #############################################################################
 
-  belongs_to :group,  class_name: "Creator", foreign_key: :group_id
-  belongs_to :member, class_name: "Creator", foreign_key: :member_id
-  
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
+  concerning :Group do
+    included do
+      belongs_to :group, class_name: "Creator", foreign_key: :group_id
 
-  validates :group,   presence: true
-  validates :member,  presence: true
+      validates :group, presence: true
 
-  validates :group_id, uniqueness: { scope: [:member_id] }
+      validates :group_id, uniqueness: { scope: [:member_id] }
 
-  validate { group_is_collective }
+      validate { group_is_collective }
+    end
 
-  validate { member_is_individual }
+  private
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-private
-
-  def group_is_collective
-    self.errors.add :group_id, :not_collective unless group.try(:collective?)
+    def group_is_collective
+      self.errors.add :group_id, :not_collective unless group.try(:collective?)
+    end
   end
 
-  def member_is_individual
-    self.errors.add :member_id, :not_individual unless member.try(:individual?)
+  #############################################################################
+  # CONCERNING: Member.
+  #############################################################################
+
+  concerning :Member do
+    included do
+      belongs_to :member, class_name: "Creator", foreign_key: :member_id
+
+      validates :member, presence: true
+
+      validate { member_is_individual }
+    end
+
+  private
+
+    def member_is_individual
+      self.errors.add :member_id, :not_individual unless member.try(:individual?)
+    end
   end
 end

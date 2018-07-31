@@ -21,49 +21,45 @@ class Role < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    included do
-      include Alphabetizable
-    end
+  include Alphabetizable
 
-    def alpha_parts
-      [display_medium, name]
-    end
+  def alpha_parts
+    [display_medium, name]
   end
 
   #############################################################################
   # CONCERNING: Medium
   #############################################################################
 
-  concerning :Medium do
-    included do
-      scope :for_medium, -> (medium) { where(medium: medium) }
+  scope :for_medium, -> (medium) { where(medium: medium) }
 
-      validates :medium, presence: true
-      validates :medium, inclusion: { in: Work.valid_media }
-    end
+  validates :medium, presence: true
+  validates :medium, inclusion: { in: Work.valid_media }
 
-    def display_medium
-      return unless medium
+  def display_medium
+    return unless medium
 
-      medium.constantize.display_medium
-    end
+    medium.constantize.display_medium
   end
 
   #############################################################################
   # CONCERNING: Name
   #############################################################################
 
-  concerning :Name do
-    included do
-      validates :name, presence: true
-      validates :name, uniqueness: { scope: [:medium] }
-    end
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: [:medium] }
 
-    def display_name(full: false)
-      full ? [display_medium, name].join(": ") : name
-    end
+  def display_name(full: false)
+    full ? [display_medium, name].join(": ") : name
   end
+
+  #############################################################################
+  # CONCERNING: Contributions
+  #############################################################################
+
+  has_many :contributions, dependent: :nullify
+
+  has_many :works, through: :contributions
 
   #############################################################################
   # SCOPES.
@@ -71,12 +67,4 @@ class Role < ApplicationRecord
 
   scope :for_list,   -> { }
   scope :for_show,   -> { includes(:contributions, :works) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_many :contributions, dependent: :nullify
-
-  has_many :works, through: :contributions
 end

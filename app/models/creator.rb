@@ -36,14 +36,10 @@ class Creator < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    included do
-      include Alphabetizable
-    end
+  include Alphabetizable
 
-    def alpha_parts
-      [name]
-    end
+  def alpha_parts
+    [name]
   end
 
   #############################################################################
@@ -52,7 +48,7 @@ class Creator < ApplicationRecord
 
   concerning :Identities do
     included do
-      attribute :primaray, :boolean, default: true
+      attribute :primary, :boolean, default: true
 
       after_save :enforce_primariness
     end
@@ -259,6 +255,12 @@ class Creator < ApplicationRecord
     end
   end
 
+  has_many :member_memberships, foreign_key: :group_id,
+    inverse_of: :group, class_name: "Membership", dependent: :destroy
+
+  has_many :members, -> { order("creators.name") },
+    through: :member_memberships, source: :member
+
   concerning :MemberMemberships do
     MAX_MEMBERS_AT_ONCE = 5.freeze
 
@@ -268,14 +270,6 @@ class Creator < ApplicationRecord
       scope :collective, -> { where(individual: false) }
 
       scope :available_members, -> { individual.alpha }
-
-      ### Associations.
-
-      has_many :member_memberships, foreign_key: :group_id,
-        inverse_of: :group, class_name: "Membership", dependent: :destroy
-
-      has_many :members, -> { order("creators.name") },
-        through: :member_memberships, source: :member
 
       ### Attributes.
 
@@ -307,23 +301,27 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Attributions.
   #############################################################################
 
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(
-    :pseudonyms, :real_names, :members, :groups,
-    :credits, :contributed_roles,
-    :works, :contributed_works,
-    :reviews, :contributed_reviews,
-    :mixtapes, :contributed_mixtapes,
-  ) }
+  has_many :attributions, inverse_of: :creator, dependent: :destroy
+
+  def all_works
+    works.union(contributed_works).alpha
+  end
+
+  def display_roles
+    cred =       credits.includes(:work       )
+    cont = contributions.includes(:work, :role)
+
+    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
+
+    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
+  end
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Credits.
   #############################################################################
-
-  # Credits.
 
   has_many :credits, inverse_of: :creator, dependent: :destroy
 
@@ -334,7 +332,9 @@ class Creator < ApplicationRecord
   has_many :playlists,    -> { distinct }, through: :playlistings
   has_many :mixtapes,     -> { distinct }, through: :playlists
 
-  # Contributions.
+  #############################################################################
+  # CONCERNING: Contributions.
+  #############################################################################
 
   has_many :contributions, inverse_of: :creator, dependent: :destroy
 
@@ -357,15 +357,29 @@ class Creator < ApplicationRecord
     class_name: "Mixtape", source: :mixtapes
 
   #############################################################################
-  # ATTRIBUTES
+  # CONCERNING: Posts.
   #############################################################################
 
-  def prepare_for_editing
-    prepare_pseudonym_identities
-    prepare_real_name_identities
-    prepare_member_memberships
-    prepare_group_memberships
+  def posts
+    Post.where(id: post_ids)
   end
+
+  def post_ids
+    (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
+  end
+
+  #############################################################################
+  # SCOPES.
+  #############################################################################
+
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(
+    :pseudonyms, :real_names, :members, :groups,
+    :credits, :contributed_roles,
+    :works, :contributed_works,
+    :reviews, :contributed_reviews,
+    :mixtapes, :contributed_mixtapes,
+  ) }
 
   #############################################################################
   # VALIDATIONS.
@@ -377,24 +391,10 @@ class Creator < ApplicationRecord
   # INSTANCE.
   #############################################################################
 
-  def all_works
-    works.union(contributed_works).alpha
-  end
-
-  def posts
-    Post.where(id: post_ids)
-  end
-
-  def post_ids
-    (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
-  end
-
-  def display_roles
-    cred =       credits.includes(:work       )
-    cont = contributions.includes(:work, :role)
-
-    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
-
-    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
+  def prepare_for_editing
+    prepare_pseudonym_identities
+    prepare_real_name_identities
+    prepare_member_memberships
+    prepare_group_memberships
   end
 end

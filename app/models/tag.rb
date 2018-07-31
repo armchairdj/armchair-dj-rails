@@ -19,14 +19,10 @@ class Tag < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    included do
-      include Alphabetizable
-    end
+  include Alphabetizable
 
-    def alpha_parts
-      [name]
-    end
+  def alpha_parts
+    [name]
   end
 
   #############################################################################

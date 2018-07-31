@@ -1,11 +1,12 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: contributions
+# Table name: attributions
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  position   :integer
+#  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  creator_id :bigint(8)
@@ -14,54 +15,54 @@
 #
 # Indexes
 #
-#  index_contributions_on_alpha       (alpha)
-#  index_contributions_on_creator_id  (creator_id)
-#  index_contributions_on_role_id     (role_id)
-#  index_contributions_on_work_id     (work_id)
+#  index_attributions_on_alpha       (alpha)
+#  index_attributions_on_creator_id  (creator_id)
+#  index_attributions_on_role_id     (role_id)
+#  index_attributions_on_work_id     (work_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (creator_id => creators.id)
 #  fk_rails_...  (role_id => roles.id)
+#  fk_rails_...  (work_id => works.id)
 #
 
-
-class Contribution < ApplicationRecord
+class Credit < Attribution
 
   #############################################################################
-  # CONCERNS.
+  # CONCERNING: Work.
   #############################################################################
 
-  include Contributable
+  belongs_to :work, inverse_of: :credits
+
+  #############################################################################
+  # CONCERNING: Creator.
+  #############################################################################
+
+  belongs_to :creator, inverse_of: :credits
+
+  validates :creator_id, uniqueness: { scope: [:work_id] }
+
+  #############################################################################
+  # Concerning: Role.
+  #############################################################################
+
+  def role_name
+    "Creator"
+  end
+
+  #############################################################################
+  # Concerning: Acts As List.
+  #############################################################################
+
+  include Listable
+
+  acts_as_listable(:work)
 
   #############################################################################
   # SCOPES.
   #############################################################################
 
   scope :for_list,  -> { }
-  scope :for_show,  -> { includes(:work, :creator, :role) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  belongs_to :role
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :role_id, presence: true
-  validates :role_id, inclusion: { allow_blank: true, in:
-    proc { |record| record.work.try(:available_role_ids) || [] }
-  }
-
-  validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def role_name
-    role.try(:name)
-  end
+  scope :for_show,  -> { includes(:work, :creator) }
 end

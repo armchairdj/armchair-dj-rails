@@ -44,10 +44,8 @@ class Article < Post
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    def alpha_parts
-      [ title ]
-    end
+  def alpha_parts
+    [ title ]
   end
 
   #############################################################################

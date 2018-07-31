@@ -44,17 +44,13 @@ class Mixtape < Post
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    included do
-      delegate :alpha_parts, to: :playlist, allow_nil: true
-    end
-  end
+  delegate :alpha_parts, to: :playlist, allow_nil: true
 
   #############################################################################
   # CONCERNING: STI Subclassed.
   #############################################################################
 
-  concerning :Subclassed do
+  concerning :Subclassing do
     class_methods do
       def for_list
         super.includes(:playlist).references(:playlist)

@@ -1,11 +1,12 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: contributions
+# Table name: attributions
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
+#  position   :integer
+#  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  creator_id :bigint(8)
@@ -14,16 +15,17 @@
 #
 # Indexes
 #
-#  index_contributions_on_alpha       (alpha)
-#  index_contributions_on_creator_id  (creator_id)
-#  index_contributions_on_role_id     (role_id)
-#  index_contributions_on_work_id     (work_id)
+#  index_attributions_on_alpha       (alpha)
+#  index_attributions_on_creator_id  (creator_id)
+#  index_attributions_on_role_id     (role_id)
+#  index_attributions_on_work_id     (work_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (creator_id => creators.id)
 #  fk_rails_...  (role_id => roles.id)
+#  fk_rails_...  (work_id => works.id)
 #
-
 
 require "rails_helper"
 
@@ -33,7 +35,7 @@ RSpec.describe Contribution do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_contributable_model"
+    it_behaves_like "an_attribution"
 
     it_behaves_like "an_eager_loadable_model" do
       let(:list_loads) { [] }
@@ -43,8 +45,13 @@ RSpec.describe Contribution do
     describe "nilify_blanks" do
       subject { build_minimal_instance }
 
-      it { is_expected.to nilify_blanks(before: :validation) }
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
     end
+  end
+
+  describe "class" do
+    specify { expect(described_class.superclass).to eq(Attribution) }
   end
 
   describe "validations" do

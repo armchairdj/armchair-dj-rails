@@ -18,31 +18,33 @@ concern :Sluggable do
 
     def prepare_part(str)
       str = str.underscore.to_ascii.strip
-      str = fix_quote_marks(str)
-      str = fix_ampersands(str)
+      str = remove_quote_marks(str)
+      str = replace_ampersands(str)
       str = fix_non_words(str)
       str = compact_word_separators(str)
 
       str.blank? ? EMPTY_PART_REPLACEMENT : str
     end
 
-    def fix_quote_marks(str)
-      str.gsub(/["“”'‘’]/, "")
+    def remove_quote_marks(str)
+      str.remove(/["“”'‘’]/)
     end
 
-    def fix_ampersands(str)
+    def replace_ampersands(str)
       str.gsub("&", "#{WORD_SEPARATOR}and#{WORD_SEPARATOR}")
     end
 
     def fix_non_words(str)
       str = str.gsub(/[[:punct:]|[:blank:]]/, WORD_SEPARATOR)
-      str = str.gsub(/[^[:word:]]/, "")
+      str = str.remove(/[^[:word:]]/)
     end
 
     def compact_word_separators(str)
-      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}+/, "_")
-      str = str.gsub(/^#{Regexp.quote(WORD_SEPARATOR)}/,  "")
-      str = str.gsub( /#{Regexp.quote(WORD_SEPARATOR)}$/, "")
+      quoted = Regexp.quote(WORD_SEPARATOR)
+
+      str = str.gsub(/#{quoted}+/, WORD_SEPARATOR)
+      str = str.remove(/^#{quoted}/)
+      str = str.remove(/#{quoted}$/)
     end
   end
 

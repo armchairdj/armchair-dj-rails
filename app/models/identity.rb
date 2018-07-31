@@ -25,36 +25,46 @@
 class Identity < ApplicationRecord
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Real name.
   #############################################################################
 
-  belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
-  belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
+  concerning :RealName do
+    included do
+      belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
 
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
+      validates :real_name, presence: true
 
-  validates :real_name,  presence: true
-  validates :pseudonym,  presence: true
+      validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
 
-  validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
-  validates :pseudonym_id, uniqueness: true
+      validate { real_name_is_primary }
+    end
 
-  validate { real_name_is_primary }
-  validate { pseudonym_is_secondary }
+  private
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-private
-
-  def real_name_is_primary
-    self.errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
+    def real_name_is_primary
+      self.errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
+    end
   end
 
-  def pseudonym_is_secondary
-    self.errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+  #############################################################################
+  # CONCERNING: Pseudonym.
+  #############################################################################
+
+  concerning :Pseudonym do
+    included do
+      belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
+
+      validates :pseudonym,  presence: true
+
+      validates :pseudonym_id, uniqueness: true
+
+      validate { pseudonym_is_secondary }
+    end
+
+  private
+
+    def pseudonym_is_secondary
+      self.errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+    end
   end
 end

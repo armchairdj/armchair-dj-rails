@@ -22,15 +22,7 @@
 class Milestone < ApplicationRecord
 
   #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :sorted,   -> { order(:year) }
-  scope :for_list, -> { sorted }
-  scope :for_show, -> { sorted.includes(:work) }
-
-  #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Work.
   #############################################################################
 
   belongs_to :work
@@ -38,13 +30,14 @@ class Milestone < ApplicationRecord
   has_many :makers,       -> { distinct }, through: :work
   has_many :contributors, -> { distinct }, through: :work
 
-  has_many :playlists, through: :work
-  has_many :mixtapes,  through: :work
-  has_many :reviews,   through: :work
+  validates :work, presence: true
 
   #############################################################################
-  # ATTRIBUTES.
+  # CONCERNING: Activity.
   #############################################################################
+
+  validates :activity, presence: true
+  validates :activity, uniqueness: { scope: [:work_id] }
 
   enum activity: {
     released:    0,
@@ -63,13 +56,25 @@ class Milestone < ApplicationRecord
   enumable_attributes :activity
 
   #############################################################################
-  # VALIDATIONS.
+  # CONCERNING: Year.
   #############################################################################
 
-  validates :work, presence: true
-
-  validates :activity, presence: true
-  validates :activity, uniqueness: { scope: [:work_id] }
-
   validates :year, presence: true, yearness: true
+
+  scope :sorted, -> { order(:year) }
+
+  #############################################################################
+  # CONCERNING: Posts.
+  #############################################################################
+
+  has_many :playlists, through: :work
+  has_many :mixtapes,  through: :work
+  has_many :reviews,   through: :work
+
+  #############################################################################
+  # SCOPES.
+  #############################################################################
+
+  scope :for_list, -> { sorted }
+  scope :for_show, -> { sorted.includes(:work) }
 end

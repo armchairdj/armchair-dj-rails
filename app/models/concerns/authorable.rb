@@ -7,11 +7,7 @@ concern :Authorable do
   #############################################################################
 
   included do
-    ### ASSOCIATIONS.
-
     belongs_to :author, class_name: "User", foreign_key: :author_id
-
-    ### VALIDATIONS.
 
     validates :author, presence: true
 

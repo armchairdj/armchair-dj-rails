@@ -7,7 +7,7 @@ class Medium < Work
   # CONCERNING: STI Subclassed.
   #############################################################################
 
-  concerning :Subclassed do
+  concerning :Subclassing do
     class_methods do
       def model_name
         Work.model_name
@@ -32,14 +32,12 @@ class Medium < Work
   # CONCERNING: Roles.
   #############################################################################
 
-  concerning :Roles do
-    def available_roles
-      Role.for_medium(self.medium).alpha
-    end
+  def available_roles
+    Role.for_medium(self.medium).alpha
+  end
 
-    def available_role_ids
-      available_roles.ids
-    end
+  def available_role_ids
+    available_roles.ids
   end
 
   #############################################################################

@@ -70,86 +70,76 @@ class User < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  concerning :Alpha do
-    included do
-      include Alphabetizable
-    end
+  include Alphabetizable
 
-    def alpha_parts
-      [last_name, first_name, middle_name]
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
-
-  concerning :Name do
-    included do
-      validates :first_name, presence: true
-      validates :last_name,  presence: true
-    end
-
-    def display_name
-      [first_name, middle_name, last_name].compact.join(" ")
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Username.
-  #############################################################################
-
-  concerning :Username do
-    included do
-      validates :username, presence:   true
-      validates :username, uniqueness: { case_sensitive: false }
-      validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
-    end
-
-    def to_param
-      username
-    end
+  def alpha_parts
+    [last_name, first_name, middle_name]
   end
 
   #############################################################################
   # CONCERNING: Roles.
   #############################################################################
 
-  concerning :Role do
-    included do
-      enum role: {
-        member: 10,
-        writer: 20,
-        editor: 30,
-        admin:  40,
-        root:   50
-      }
+  enum role: {
+    member: 10,
+    writer: 20,
+    editor: 30,
+    admin:  40,
+    root:   50
+  }
 
-      enumable_attributes :role
+  enumable_attributes :role
 
-      validates :role, presence:   true
-    end
+  validates :role, presence: true
 
-    def can_write?
-      root? || admin? || editor? || writer?
-    end
-
-    alias_method :can_access_cms?, :can_write?
-
-    def can_edit?
-      root? || admin? || editor?
-    end
-
-    def can_publish?
-      root? || admin?
-    end
-
-    alias_method :can_administer?, :can_publish?
-
-    def can_destroy?
-      root?
-    end
+  def can_write?
+    root? || admin? || editor? || writer?
   end
+
+  alias_method :can_access_cms?, :can_write?
+
+  def can_edit?
+    root? || admin? || editor?
+  end
+
+  def can_publish?
+    root? || admin?
+  end
+
+  alias_method :can_administer?, :can_publish?
+
+  def can_destroy?
+    root?
+  end
+
+  #############################################################################
+  # CONCERNING: Name.
+  #############################################################################
+
+  validates :first_name, presence: true
+  validates :last_name,  presence: true
+
+  def display_name
+    [first_name, middle_name, last_name].compact.join(" ")
+  end
+
+  #############################################################################
+  # CONCERNING: Username.
+  #############################################################################
+
+  validates :username, presence:   true
+  validates :username, uniqueness: { case_sensitive: false }
+  validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
+
+  def to_param
+    username
+  end
+
+  #############################################################################
+  # CONCERNING: Bio.
+  #############################################################################
+
+  validates :bio, absence: true, unless: :can_write?
 
   #############################################################################
   # CONCERNING: Admin access control.
@@ -184,13 +174,24 @@ class User < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Public access control.
+  # CONCERNING: Contributing posts and playlists.
   #############################################################################
 
-  concerning :Viewable do
+  concerning :Authoring do
     included do
       scope :published,  -> { joins(:posts).merge(Post.published) }
       scope :for_public, -> { published }
+
+      with_options(dependent: :nullify, foreign_key: "author_id") do |user|
+        user.has_many :posts
+        user.has_many :articles
+        user.has_many :reviews
+        user.has_many :mixtapes
+        user.has_many :playlists
+      end
+
+      has_many :works, through: :reviews
+      has_many :makers, -> { distinct }, through: :works
     end
 
     def published?
@@ -204,25 +205,4 @@ class User < ApplicationRecord
 
   scope :for_list, -> { }
   scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  with_options(dependent: :nullify, foreign_key: "author_id") do |user|
-    user.has_many :posts
-    user.has_many :articles
-    user.has_many :reviews
-    user.has_many :mixtapes
-    user.has_many :playlists
-  end
-
-  has_many :works, through: :reviews
-  has_many :makers, -> { distinct }, through: :works
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :bio, absence: true, unless: :can_write?
 end

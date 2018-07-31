@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_16_162208) do
+ActiveRecord::Schema.define(version: 2018_07_30_224533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,17 +33,19 @@ ActiveRecord::Schema.define(version: 2018_07_16_162208) do
     t.index ["work_id", "aspect_id"], name: "index_aspects_works_on_work_id_and_aspect_id"
   end
 
-  create_table "contributions", force: :cascade do |t|
-    t.bigint "work_id"
+  create_table "attributions", force: :cascade do |t|
+    t.string "type"
     t.bigint "creator_id"
+    t.bigint "work_id"
+    t.bigint "role_id"
+    t.string "alpha"
+    t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "alpha"
-    t.bigint "role_id"
-    t.index ["alpha"], name: "index_contributions_on_alpha"
-    t.index ["creator_id"], name: "index_contributions_on_creator_id"
-    t.index ["role_id"], name: "index_contributions_on_role_id"
-    t.index ["work_id"], name: "index_contributions_on_work_id"
+    t.index ["alpha"], name: "index_attributions_on_alpha"
+    t.index ["creator_id"], name: "index_attributions_on_creator_id"
+    t.index ["role_id"], name: "index_attributions_on_role_id"
+    t.index ["work_id"], name: "index_attributions_on_work_id"
   end
 
   create_table "creators", force: :cascade do |t|
@@ -56,18 +58,6 @@ ActiveRecord::Schema.define(version: 2018_07_16_162208) do
     t.index ["alpha"], name: "index_creators_on_alpha"
     t.index ["individual"], name: "index_creators_on_individual"
     t.index ["primary"], name: "index_creators_on_primary"
-  end
-
-  create_table "credits", force: :cascade do |t|
-    t.bigint "creator_id"
-    t.bigint "work_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "alpha"
-    t.integer "position"
-    t.index ["alpha"], name: "index_credits_on_alpha"
-    t.index ["creator_id"], name: "index_credits_on_creator_id"
-    t.index ["work_id"], name: "index_credits_on_work_id"
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
@@ -236,9 +226,9 @@ ActiveRecord::Schema.define(version: 2018_07_16_162208) do
     t.index ["medium"], name: "index_works_on_medium"
   end
 
-  add_foreign_key "contributions", "roles"
-  add_foreign_key "credits", "creators"
-  add_foreign_key "credits", "works"
+  add_foreign_key "attributions", "creators"
+  add_foreign_key "attributions", "roles"
+  add_foreign_key "attributions", "works"
   add_foreign_key "identities", "creators", column: "pseudonym_id"
   add_foreign_key "identities", "creators", column: "real_name_id"
   add_foreign_key "memberships", "creators", column: "group_id"

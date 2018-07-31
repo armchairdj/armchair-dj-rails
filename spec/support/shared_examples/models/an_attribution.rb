@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "a_contributable_model" do
+RSpec.shared_examples "an_attribution" do
   describe "included" do
     describe "associations" do
       it { is_expected.to belong_to(:creator) }
