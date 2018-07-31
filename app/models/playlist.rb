@@ -40,18 +40,22 @@ class Playlist < ApplicationRecord
   # CONCERNING: Playlistings.
   #############################################################################
 
-  MAX_PLAYLISTINGS_AT_ONCE = 20.freeze
-
   has_many :playlistings, -> { order(:position) }, inverse_of: :playlist, dependent: :destroy
 
   validates :playlistings, length: { minimum: 2 }
 
-  accepts_nested_attributes_for(:playlistings, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["work_id"].blank? }
-  )
+  concerning :NestedPlaylistings do
+    MAX_PLAYLISTINGS_AT_ONCE = 20.freeze
 
-  def prepare_playlistings
-    MAX_PLAYLISTINGS_AT_ONCE.times { self.playlistings.build }
+    included do
+      accepts_nested_attributes_for(:playlistings, allow_destroy: true,
+        reject_if: proc { |attrs| attrs["work_id"].blank? }
+      )
+    end
+
+    def prepare_playlistings
+      MAX_PLAYLISTINGS_AT_ONCE.times { self.playlistings.build }
+    end
   end
 
   #############################################################################

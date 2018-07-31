@@ -101,22 +101,15 @@ class Work < ApplicationRecord
   # CONCERNING: Milestones.
   #############################################################################
 
+  has_many :milestones, dependent: :destroy
+
   concerning :Milestones do
     MAX_MILESTONES_AT_ONCE = 5.freeze
 
     included do
-      ### Associations.
-
-      # , -> { order(:year) }
-      has_many :milestones, dependent: :destroy
-
-      ### Attributes.
-
       accepts_nested_attributes_for(:milestones, allow_destroy: true,
         reject_if: proc { |attrs| attrs["year"].blank? }
       )
-
-      ### Validations.
 
       validates_nested_uniqueness_of :milestones, uniq_attr: :activity
 
@@ -162,72 +155,64 @@ class Work < ApplicationRecord
   # CONCERNING: Credits.
   #############################################################################
 
-  MAX_CREDITS_AT_ONCE = 3.freeze
-
-  ### Associations.
-
   has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
 
   has_many :makers, through: :credits, source: :creator, class_name: "Creator"
 
-  ### Attributes.
+  concerning :NestedCredits do
+    MAX_CREDITS_AT_ONCE = 3.freeze
 
-  accepts_nested_attributes_for(:credits, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["creator_id"].blank? }
-  )
+    included do
+      accepts_nested_attributes_for(:credits, allow_destroy: true,
+        reject_if: proc { |attrs| attrs["creator_id"].blank? }
+      )
 
-  ### Validations.
+      validates :credits, length: { minimum: 1 }
 
-  validates :credits, length: { minimum: 1 }
+      validates_nested_uniqueness_of :credits, uniq_attr: :creator_id
 
-  validates_nested_uniqueness_of :credits, uniq_attr: :creator_id
+      before_save :memoize_display_makers, prepend: true
+    end
 
-  ### Hooks.
+    def prepare_credits
+      MAX_CREDITS_AT_ONCE.times { self.credits.build }
+    end
 
-  before_save :memoize_display_makers, prepend: true
+  private
 
-  def prepare_credits
-    MAX_CREDITS_AT_ONCE.times { self.credits.build }
+    def memoize_display_makers
+      self.display_makers = collect_makers
+    end
+
+    def collect_makers
+      names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
+
+      names.empty? ? nil : names.join(" & ")
+    end
   end
-
-  def memoize_display_makers
-    self.display_makers = collect_makers
-  end
-
-  private :memoize_display_makers
-
-  def collect_makers
-    names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
-
-    names.empty? ? nil : names.join(" & ")
-  end
-
-  private :collect_makers
 
   #############################################################################
   # CONCERNING: Contributions.
   #############################################################################
 
-  MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
-
-  ### Associations.
-
   has_many :contributions, inverse_of: :work, dependent: :destroy
 
   has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
 
-  ### Attributes.
+  concerning :NestedContributions do
+    MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
 
-  accepts_nested_attributes_for(:contributions, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["creator_id"].blank? }
-  )
+    included do
+      accepts_nested_attributes_for(:contributions, allow_destroy: true,
+        reject_if: proc { |attrs| attrs["creator_id"].blank? }
+      )
 
-  ### Validations.
+      validates_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
+    end
 
-  validates_nested_uniqueness_of :contributions, uniq_attr: :creator_id, scope: [:role_id]
-
-  def prepare_contributions
-    MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
+    def prepare_contributions
+      MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
+    end
   end
 
   #############################################################################

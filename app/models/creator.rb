@@ -83,8 +83,6 @@ class Creator < ApplicationRecord
     MAX_PSEUDONYMS_AT_ONCE = 5.freeze
 
     included do
-      ### Scopes.
-
       scope :primary, -> { where(primary: true) }
 
       scope :available_pseudonyms, -> {
@@ -92,15 +90,11 @@ class Creator < ApplicationRecord
         where(identities: { id: nil })
       }
 
-      ### Associations.
-
       has_many :pseudonym_identities, foreign_key: :real_name_id,
         inverse_of: :real_name, class_name: "Identity", dependent: :destroy
 
       has_many :pseudonyms, -> { order("creators.name") },
         through: :pseudonym_identities, source: :pseudonym
-
-      ### Attributes.
 
       accepts_nested_attributes_for(:pseudonym_identities,
         allow_destroy: true, reject_if: :invalid_pseudonym_attrs?
@@ -131,21 +125,15 @@ class Creator < ApplicationRecord
     MAX_REAL_NAMES = 1.freeze
 
     included do
-      ### Scopes.
-
       scope :secondary, -> { where(primary: false) }
 
       scope :available_real_names, -> { primary.alpha }
-
-      ### Associations.
 
       has_many :real_name_identities, foreign_key: :pseudonym_id,
         inverse_of: :pseudonym, class_name: "Identity", dependent: :destroy
 
       has_many :real_names, -> { order("creators.name") },
         through: :real_name_identities, source: :real_name
-
-      ### Attributes.
 
       accepts_nested_attributes_for(:real_name_identities,
         allow_destroy: true, reject_if: :invalid_real_name_attrs?
@@ -218,21 +206,15 @@ class Creator < ApplicationRecord
     MAX_GROUPS_AT_ONCE  = 5.freeze
 
     included do
-      ### Scopes.
-
       scope :individual, -> { where(individual: true) }
 
       scope :available_groups,  -> { collective.alpha }
-
-      ### Associations.
 
       has_many :group_memberships, foreign_key: :member_id,
         inverse_of: :member, class_name: "Membership", dependent: :destroy
 
       has_many :groups, -> { order("creators.name") },
         through: :group_memberships,  source: :group
-
-      ### Attributes.
 
       accepts_nested_attributes_for(:group_memberships,
         allow_destroy: true, reject_if: :invalid_group_attributes?
@@ -265,13 +247,9 @@ class Creator < ApplicationRecord
     MAX_MEMBERS_AT_ONCE = 5.freeze
 
     included do
-      ### Scopes.
-
       scope :collective, -> { where(individual: false) }
 
       scope :available_members, -> { individual.alpha }
-
-      ### Attributes.
 
       accepts_nested_attributes_for(:member_memberships,
         allow_destroy: true, reject_if: :invalid_member_attributes?

@@ -224,7 +224,7 @@ RSpec.shared_examples "a_sluggable_model" do
           end
         end
 
-        describe "slug regeneration (#handle_clear_slug_checkbox and #conditionally_reset_slug_and_history" do
+        describe "slug regeneration (#handle_clear_slug_checkbox and #clear_slug_and_history_if_unpublished" do
           let(:instance) { create_minimal_instance }
 
           before(:each) do
