@@ -15,8 +15,8 @@
         include_blank: :translate,
         input_html:    js_selectable_create_role_attrs
       %>
-    <% end %>
 
-    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
+      <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
+    <% end %>
   <% end %>
 <% end %>

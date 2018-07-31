@@ -95,18 +95,26 @@ export default class extends SelectableController {
   }
 
   formParams() {
-    const params     = {};
     const formParams = this.data.get("form-params");
 
-    if (formParams) {
-      _.each(formParams.split("&"), function (param) {
-        const parts = param.split("=");
+    if (!formParams) { return; }
 
-        params[parts[0]] = $(this.element).parents("form").find(parts[1]).val();
-      });
-    }
+    const params = formParams.split("&");
+    const memo   = {};
+    const adder  = _.bind(this.addParam, this, memo);
 
-    return params;
+    _.each(params, adder);
+
+    return memo;
+  }
+
+  addParam(memo, paramString) {
+    const parts    = paramString.split("=");
+    const param    = parts[0];
+    const selector = `[name='${parts[1]}']`;
+    const $field    = $(this.element).parents("form").find(selector);
+
+    memo[param] = $field.val();
   }
 
   ajaxSuccess(callback, response, status, xhr) {
