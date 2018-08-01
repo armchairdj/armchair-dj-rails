@@ -10,7 +10,7 @@ cache:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database armchair_dj_test;' -U postgres
+  - psql -c 'create database armchairdj_postgres_test;' -U postgres
 before_install:
   - gem update --system
 install:
