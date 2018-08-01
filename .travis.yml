@@ -16,5 +16,5 @@ install:
   - npm i -g yarn
   - yarn
 script:
-  - bundle exec rubocop
   - bundle exec rake
+#  - bundle exec rubocop
