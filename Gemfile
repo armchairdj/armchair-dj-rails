@@ -240,7 +240,7 @@ group :development, :test do
 
   # Static code analysis.
   gem "rubocop", require: false
-  gem "rubocop-rails"
+  gem "rubocop-rails_config"
   gem "mry"
 end
 
