@@ -5,6 +5,7 @@ rvm:
 services:
   - postgresql
 before_install:
+  - export TZ=America/Los_Angeles
   - gem update --system
 install:
   - bundle install --jobs=3 --retry=3 --deployment
