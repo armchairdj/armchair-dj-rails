@@ -4,6 +4,10 @@ rvm:
  - 2.4.1
 services:
   - postgresql
+addons:
+  apt:
+    - google-chrome-stable
+    - chromium-chromedriver
 before_install:
   - export TZ=America/Los_Angeles
   - gem update --system
@@ -16,6 +20,7 @@ install:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
+  - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
 script:
   - bundle exec rake
 #  - bundle exec rubocop
