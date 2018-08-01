@@ -23,3 +23,5 @@
 * Deployment instructions
 
 * ...
+
+## Travis CI
