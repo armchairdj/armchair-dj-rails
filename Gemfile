@@ -200,11 +200,6 @@ group :development do
   # Query optimizer.
   gem "bullet"
 
-  # Static code analysis.
-  gem "rubocop", require: false
-  gem "rubocop-rails"
-  gem "mry"
-
   # Automatic route and schema comments in model files.
   gem "annotate"
 end
@@ -242,6 +237,11 @@ group :development, :test do
 
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+
+  # Static code analysis.
+  gem "rubocop", require: false
+  gem "rubocop-rails"
+  gem "mry"
 end
 
 group :test do
