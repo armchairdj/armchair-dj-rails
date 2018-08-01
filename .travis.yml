@@ -5,9 +5,7 @@ rvm:
 services:
   - postgresql
 addons:
-  apt:
-    - google-chrome-stable
-    - chromium-chromedriver
+  chrome: stable
 before_install:
   - export TZ=America/Los_Angeles
   - gem update --system
