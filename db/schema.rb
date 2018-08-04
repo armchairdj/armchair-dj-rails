@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_04_150212) do
+ActiveRecord::Schema.define(version: 2018_08_04_155413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,16 +98,6 @@ ActiveRecord::Schema.define(version: 2018_08_04_150212) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
-  end
-
-  create_table "milestones", force: :cascade do |t|
-    t.bigint "work_id"
-    t.integer "activity", null: false
-    t.integer "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["activity"], name: "index_milestones_on_activity"
-    t.index ["work_id"], name: "index_milestones_on_work_id"
   end
 
   create_table "playlistings", force: :cascade do |t|
@@ -214,6 +204,16 @@ ActiveRecord::Schema.define(version: 2018_08_04_150212) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "work_milestones", force: :cascade do |t|
+    t.bigint "work_id"
+    t.integer "activity", null: false
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity"], name: "index_work_milestones_on_activity"
+    t.index ["work_id"], name: "index_work_milestones_on_work_id"
+  end
+
   create_table "works", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -233,9 +233,9 @@ ActiveRecord::Schema.define(version: 2018_08_04_150212) do
   add_foreign_key "creator_identities", "creators", column: "real_name_id"
   add_foreign_key "creator_memberships", "creators", column: "group_id"
   add_foreign_key "creator_memberships", "creators", column: "member_id"
-  add_foreign_key "milestones", "works"
   add_foreign_key "playlists", "users", column: "author_id"
   add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
+  add_foreign_key "work_milestones", "works"
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # == Schema Information
 #
-# Table name: milestones
+# Table name: work_milestones
 #
 #  id         :bigint(8)        not null, primary key
 #  activity   :integer          not null
@@ -12,8 +12,8 @@
 #
 # Indexes
 #
-#  index_milestones_on_activity  (activity)
-#  index_milestones_on_work_id   (work_id)
+#  index_work_milestones_on_activity  (activity)
+#  index_work_milestones_on_work_id   (work_id)
 #
 # Foreign Keys
 #
@@ -23,7 +23,7 @@
 require "ffaker"
 
 FactoryBot.define do
-  factory :milestone do
+  factory :work_milestone, class: Work::Milestone do
 
     ###########################################################################
     # TRAITS.
@@ -41,17 +41,17 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :milestone_for_work do
+    factory :work_milestone_for_work do
       activity :released
       with_year
     end
 
-    factory :minimal_milestone do
+    factory :minimal_work_milestone do
       with_work
       with_activity
       with_year
     end
 
-    factory :complete_milestone, parent: :minimal_milestone do; end
+    factory :complete_work_milestone, parent: :minimal_work_milestone do; end
   end
 end

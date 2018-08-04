@@ -101,7 +101,7 @@ class Work < ApplicationRecord
   # CONCERNING: Milestones.
   #############################################################################
 
-  has_many :milestones, dependent: :destroy
+  has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
 
   concerning :Milestones do
     MAX_MILESTONES_AT_ONCE = 5.freeze

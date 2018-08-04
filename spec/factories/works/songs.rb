@@ -27,7 +27,7 @@ FactoryBot.define do
       with_contributions
 
       milestones_attributes { {
-        "0" => attributes_for(:milestone_for_work, year: "2006")
+        "0" => attributes_for(:work_milestone_for_work, year: "2006")
       } }
 
       aspect_ids { [

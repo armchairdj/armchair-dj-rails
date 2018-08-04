@@ -228,17 +228,17 @@ RSpec.describe Work do
       end
 
       describe "milestones" do
-        it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
+        it { is_expected.to accept_nested_attributes_for(:work_milestones).allow_destroy(true) }
 
         describe "reject_if" do
           subject do
             build(:minimal_song, milestones_attributes: {
-              "0" => attributes_for(:milestone_for_work, year: "1981"),
-              "1" => attributes_for(:milestone_for_work, year: ""    )
+              "0" => attributes_for(:work_milestone_for_work, year: "1981"),
+              "1" => attributes_for(:work_milestone_for_work, year: ""    )
             })
           end
 
-          specify { expect { subject.save }.to change { Milestone.count }.by(1) }
+          specify { expect { subject.save }.to change { Work::Milestone.count }.by(1) }
 
           specify { expect(subject.milestones).to have(1).items }
         end
@@ -313,7 +313,7 @@ RSpec.describe Work do
       describe "#has_released_milestone" do
         subject do
           build_minimal_instance(milestones_attributes: {
-            "0" => attributes_for(:milestone_for_work, activity: :remixed, year: "1972")
+            "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")
           })
         end
 
@@ -393,13 +393,13 @@ RSpec.describe Work do
           before(:each) { subject.milestones = [] }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:milestone, activity: :released,   year: "1977"),
-            "1" => attributes_for(:milestone, activity: :remastered, year: "2005"),
+            "0" => attributes_for(:work_milestone, activity: :released,   year: "1977"),
+            "1" => attributes_for(:work_milestone, activity: :remastered, year: "2005"),
           }}
 
           let(:bad_attributes) { {
-            "0" => attributes_for(:milestone, activity: :released, year: "1977"),
-            "1" => attributes_for(:milestone, activity: :released, year: "2005"),
+            "0" => attributes_for(:work_milestone, activity: :released, year: "1977"),
+            "1" => attributes_for(:work_milestone, activity: :released, year: "2005"),
           }}
 
           it "accepts non-dupes" do

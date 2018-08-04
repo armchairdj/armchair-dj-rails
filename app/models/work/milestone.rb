@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: milestones
+# Table name: work_milestones
 #
 #  id         :bigint(8)        not null, primary key
 #  activity   :integer          not null
@@ -11,15 +11,16 @@
 #
 # Indexes
 #
-#  index_milestones_on_activity  (activity)
-#  index_milestones_on_work_id   (work_id)
+#  index_work_milestones_on_activity  (activity)
+#  index_work_milestones_on_work_id   (work_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (work_id => works.id)
 #
 
-class Milestone < ApplicationRecord
+class Work::Milestone < ApplicationRecord
+  self.table_name = "work_milestones"
 
   #############################################################################
   # CONCERNING: Work.

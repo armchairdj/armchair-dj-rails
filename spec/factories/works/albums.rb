@@ -18,7 +18,7 @@ FactoryBot.define do
       with_contributions
 
       milestones_attributes { {
-        "0" => attributes_for(:milestone_for_work, year: "1994")
+        "0" => attributes_for(:work_milestone_for_work, year: "1994")
       } }
 
       transient do

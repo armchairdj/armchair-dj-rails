@@ -4,7 +4,7 @@
       <%= ff.input :activity,
         as:            :select,
         include_blank: :translate,
-        collection:    Milestone.human_activities,
+        collection:    Work::Milestone.human_activities,
         input_html:    { "data-controller": "selectable" }
       %>
 
