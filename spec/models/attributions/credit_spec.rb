@@ -41,9 +41,9 @@ RSpec.describe Credit do
       let(:show_loads) { [:work, :creator] }
     end
 
-    it_behaves_like "a_listable_model", :work do
+    it_behaves_like "a_listable_model", :work, :credits do
       let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
-      let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
+      let(:other  ) { create(:minimal_work, maker_count: 5).credits.sorted }
     end
 
     describe "nilify_blanks" do

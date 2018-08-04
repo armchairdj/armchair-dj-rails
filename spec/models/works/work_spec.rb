@@ -449,7 +449,7 @@ RSpec.describe Work do
 
       before(:each) do
         # TODO let the factory handle this with transient attributes
-        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
+        playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
       end
 
       describe "post_ids" do

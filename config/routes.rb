@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     resources :roles,    concerns: :paginatable
 
     resources :playlists, concerns: :paginatable do
-      member { post :reorder_playlistings }
+      member { post :reorder_tracks }
     end
 
     resources :works, concerns: :paginatable do

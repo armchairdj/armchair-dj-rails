@@ -161,7 +161,7 @@ en:
             author:
               blank: "Please choose an author."
               invalid_author: "This user is not an author."
-            playlistings:
+            tracks:
               too_short: "Please choose at least two works."
         role:
           attributes:

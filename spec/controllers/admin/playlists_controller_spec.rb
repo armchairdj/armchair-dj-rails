@@ -149,13 +149,13 @@ RSpec.describe Admin::PlaylistsController do
       it { is_expected.to have_flash(:success, "admin.flash.playlists.success.destroy") }
     end
 
-    describe "POST #reorder_playlistings" do
+    describe "POST #reorder_tracks" do
       let(:instance) { create(:complete_playlist) }
-      let(:shuffled) { instance.playlistings.ids.shuffle }
+      let(:shuffled) { instance.tracks.ids.shuffle }
 
       describe "non-xhr" do
         subject do
-          post :reorder_playlistings, params: { id: instance.to_param, playlisting_ids: shuffled }
+          post :reorder_tracks, params: { id: instance.to_param, track_ids: shuffled }
         end
 
         it { is_expected.to render_bad_request }
@@ -163,7 +163,7 @@ RSpec.describe Admin::PlaylistsController do
 
       describe "xhr" do
         let(:operation) do
-          post :reorder_playlistings, xhr: true, params: { id: instance.to_param, playlisting_ids: shuffled }
+          post :reorder_tracks, xhr: true, params: { id: instance.to_param, track_ids: shuffled }
         end
 
         subject { operation }
@@ -171,7 +171,7 @@ RSpec.describe Admin::PlaylistsController do
         it { expect(response).to have_http_status(200) }
 
         describe "reordering" do
-          subject { operation; instance.reload.playlistings.ids }
+          subject { operation; instance.reload.tracks.ids }
 
           it { is_expected.to eq(shuffled) }
         end

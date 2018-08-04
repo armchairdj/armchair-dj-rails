@@ -99,8 +99,8 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :pseudonym_identities, foreign_key: :real_name_id,
-    inverse_of: :real_name, class_name: "Creator::Identity", dependent: :destroy
+  has_many :pseudonym_identities, class_name: "Creator::Identity",
+    foreign_key: :real_name_id, inverse_of: :real_name, dependent: :destroy
 
   has_many :pseudonyms, -> { order("creators.name") },
     through: :pseudonym_identities, source: :pseudonym
@@ -139,8 +139,8 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :real_name_identities, foreign_key: :pseudonym_id,
-    inverse_of: :pseudonym, class_name: "Creator::Identity", dependent: :destroy
+  has_many :real_name_identities, class_name: "Creator::Identity",
+    foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
 
   has_many :real_names, -> { order("creators.name") },
     through: :real_name_identities, source: :real_name
@@ -218,8 +218,8 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :group_memberships, foreign_key: :member_id,
-    inverse_of: :member, class_name: "Creator::Membership", dependent: :destroy
+  has_many :group_memberships, class_name: "Creator::Membership",
+    foreign_key: :member_id, inverse_of: :member, dependent: :destroy
 
   has_many :groups, -> { order("creators.name") },
     through: :group_memberships,  source: :group
@@ -253,8 +253,8 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :member_memberships, foreign_key: :group_id,
-    inverse_of: :group, class_name: "Creator::Membership", dependent: :destroy
+  has_many :member_memberships, class_name: "Creator::Membership",
+    foreign_key: :group_id, inverse_of: :group, dependent: :destroy
 
   has_many :members, -> { order("creators.name") },
     through: :member_memberships, source: :member
@@ -323,8 +323,9 @@ class Creator < ApplicationRecord
   has_many :reviews, through: :works
 
   has_many :playlistings, -> { distinct }, through: :works
-  has_many :playlists,    -> { distinct }, through: :playlistings
-  has_many :mixtapes,     -> { distinct }, through: :playlists
+
+  has_many :playlists, -> { distinct }, through: :playlistings
+  has_many :mixtapes,  -> { distinct }, through: :playlists
 
   #############################################################################
   # CONCERNING: Contributions.
@@ -342,7 +343,7 @@ class Creator < ApplicationRecord
     class_name: "Review", source: :reviews
 
   has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
-    class_name: "Playlisting", source: :playlistings
+    class_name: "Playlist::Track", source: :playlistings
 
   has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
     class_name: "Playlist", source: :playlist

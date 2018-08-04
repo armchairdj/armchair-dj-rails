@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: playlistings
+# Table name: playlist_tracks
 #
 #  id          :bigint(8)        not null, primary key
 #  position    :integer
@@ -11,11 +11,12 @@
 #
 # Indexes
 #
-#  index_playlistings_on_playlist_id  (playlist_id)
-#  index_playlistings_on_work_id      (work_id)
+#  index_playlist_tracks_on_playlist_id  (playlist_id)
+#  index_playlist_tracks_on_work_id      (work_id)
 #
 
-class Playlisting < ApplicationRecord
+class Playlist::Track < ApplicationRecord
+  self.table_name = "playlist_tracks"
 
   #############################################################################
   # CONCERNING: Playlist.
@@ -25,7 +26,7 @@ class Playlisting < ApplicationRecord
 
   acts_as_listable(:playlist)
 
-  belongs_to :playlist, inverse_of: :playlistings
+  belongs_to :playlist, inverse_of: :tracks
 
   validates :playlist, presence: true
 

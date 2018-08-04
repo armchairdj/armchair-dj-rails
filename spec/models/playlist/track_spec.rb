@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: playlistings
+# Table name: playlist_tracks
 #
 #  id          :bigint(8)        not null, primary key
 #  position    :integer
@@ -11,17 +11,17 @@
 #
 # Indexes
 #
-#  index_playlistings_on_playlist_id  (playlist_id)
-#  index_playlistings_on_work_id      (work_id)
+#  index_playlist_tracks_on_playlist_id  (playlist_id)
+#  index_playlist_tracks_on_work_id      (work_id)
 #
 
 require "rails_helper"
 
-RSpec.describe Playlisting do
+RSpec.describe Playlist::Track do
   describe "concerns" do
-    it_behaves_like "a_listable_model", :playlist do
-      let(:primary) { create(:complete_playlist).playlistings.sorted }
-      let(:other) { create(:complete_playlist).playlistings.sorted }
+    it_behaves_like "a_listable_model", :playlist, :tracks do
+      let(:primary) { create(:complete_playlist).tracks.sorted }
+      let(:other  ) { create(:complete_playlist).tracks.sorted }
     end
 
     it_behaves_like "an_eager_loadable_model" do
@@ -46,15 +46,15 @@ RSpec.describe Playlisting do
       let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
 
       let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
-      let(:items) { Playlisting.where(playlist_id: parent_ids) }
+      let(:items) { Playlist::Track.where(playlist_id: parent_ids) }
 
       let(:ids) { items.map(&:id).shuffle }
-      let(:collection) { Playlisting.where(id: ids) }
+      let(:collection) { Playlist::Track.where(id: ids) }
 
       subject { collection.sorted }
 
       it "sorts by playlist name and position" do
-        expected = playlist_2.playlistings.map(&:id) + playlist_1.playlistings.map(&:id)
+        expected = playlist_2.tracks.map(&:id) + playlist_1.tracks.map(&:id)
         actual   = subject.map(&:id)
 
         expect(actual).to eq(expected)

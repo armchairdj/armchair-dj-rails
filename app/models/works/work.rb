@@ -233,7 +233,9 @@ class Work < ApplicationRecord
 
   has_many :reviews, dependent: :nullify
 
-  has_many :playlistings, inverse_of: :work, dependent: :nullify
+  has_many :playlistings, class_name: "Playlist::Track",
+    inverse_of: :work, foreign_key: :work_id, inverse_of: :work, dependent: :nullify
+
   has_many :playlists, through: :playlistings
   has_many :mixtapes,  through: :playlists
 

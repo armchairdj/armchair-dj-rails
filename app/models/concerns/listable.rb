@@ -49,7 +49,11 @@ concern :Listable do
     ### Bootstrapping.
 
     def find_expected_ids
-      @parent.send(@model_class.model_name.collection).ids
+      @parent.send(association_name).ids
+    end
+
+    def association_name
+      @model_class.name.demodulize.pluralize.downcase
     end
 
     def find_items_in_correct_order
