@@ -38,9 +38,8 @@ jobs:
     <<: *env_config
 
     steps:
-      - checkout # special step to check out source code to working directory
+      - checkout
 
-      # Which version of bundler?
       - run:
           name: Which bundler?
           command: bundle -v
@@ -51,9 +50,8 @@ jobs:
             - armchair-dj-rails-bundle-v2-{{ checksum "Gemfile.lock" }}
             - armchair-dj-rails-bundle-v2-
 
-      # Install bundles
       - run:
-          name: Bundle Install
+          name: Install bundles
           command: bundle check || bundle install
 
       # Store bundle cache
@@ -68,9 +66,8 @@ jobs:
             - armchair-dj-rails-yarn-{{ checksum "yarn.lock" }}
             - armchair-dj-rails-yarn-
 
-      # Install yarn packages
       - run:
-          name: Yarn Install
+          name: Install yarn packages
           command: yarn install --cache-folder ~/.cache/yarn
 
       # Store yarn cache
@@ -79,17 +76,14 @@ jobs:
           paths:
             - ~/.cache/yarn
 
-      # Create DB docker image
       - run:
-          name: Wait for DB
+          name: Wait for Postgres docker image
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
-      # Load schema
       - run:
-          name: Database setup
+          name: Load schema
           command: bin/rails db:schema:load --trace
 
-      # Run Rpsec
       - run:
           name: Run rspec in parallel
           command: |
