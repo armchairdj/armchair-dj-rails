@@ -128,7 +128,7 @@ gem "neat"
 ###############################################################################
 
 # JS bundler.
-gem "webpacker", "~> 3.4"
+gem "webpacker", "~> 3.5"
 
 # JS compresser.
 gem "uglifier", ">= 1.3.0"
