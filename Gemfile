@@ -216,6 +216,7 @@ group :development, :test do
 
   # RSpec.
   gem "rspec-rails", "~> 3.7.2"
+  gem "rspec_junit_formatter"
   gem "accept_values_for"
   gem "db-query-matchers"
   gem "rspec-collection_matchers"

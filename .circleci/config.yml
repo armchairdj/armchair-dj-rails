@@ -35,15 +35,8 @@ jobs:
   build_and_run_specs:
     <<: *env_config
 
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_RESULTS: /tmp/circleci-test-results
-
     steps:
       - checkout # special step to check out source code to working directory
-
-      # Prepare for artifact and test results
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_RESULTS
 
       # Which version of bundler?
       - run:
@@ -100,15 +93,13 @@ jobs:
           command: |
             bundle exec rspec --profile 10 \
                               --format RspecJunitFormatter \
-                              --out $CIRCLE_TEST_RESULTS/rspec.xml \
+                              --out test_results/rspec.xml \
                               --format progress \
                               $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 
-      # Save test results & artifacts
+      # Save test results
       - store_test_results:
-          path: $CIRCLE_TEST_RESULTS
-      - store_artifacts:
-          path: $CIRCLE_ARTIFACTS
+          path: test_results
 
 ################################################################################
 # WORKFLOWS.
