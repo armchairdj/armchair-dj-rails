@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: identities
+# Table name: creator_identities
 #
 #  id           :bigint(8)        not null, primary key
 #  created_at   :datetime         not null
@@ -12,8 +11,8 @@
 #
 # Indexes
 #
-#  index_identities_on_pseudonym_id  (pseudonym_id)
-#  index_identities_on_real_name_id  (real_name_id)
+#  index_creator_identities_on_pseudonym_id  (pseudonym_id)
+#  index_creator_identities_on_real_name_id  (real_name_id)
 #
 # Foreign Keys
 #
@@ -21,17 +20,17 @@
 #  fk_rails_...  (real_name_id => creators.id)
 #
 
-
-class Identity < ApplicationRecord
+class Creator::Identity < ApplicationRecord
+  self.table_name = "creator_identities"
 
   #############################################################################
   # CONCERNING: Real name.
   #############################################################################
 
-  concerning :RealName do
-    included do
-      belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
+  belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
 
+  concerning :RealNameValidation do
+    included do
       validates :real_name, presence: true
 
       validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
@@ -50,10 +49,10 @@ class Identity < ApplicationRecord
   # CONCERNING: Pseudonym.
   #############################################################################
 
-  concerning :Pseudonym do
-    included do
-      belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
+  belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
 
+  concerning :PseudonymValidation do
+    included do
       validates :pseudonym,  presence: true
 
       validates :pseudonym_id, uniqueness: true
