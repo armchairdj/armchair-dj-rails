@@ -31,10 +31,10 @@ class Role < ApplicationRecord
   # CONCERNING: Medium
   #############################################################################
 
-  scope :for_medium, -> (medium) { where(medium: medium) }
-
   validates :medium, presence: true
   validates :medium, inclusion: { in: Work.valid_media }
+
+  scope :for_medium, -> (medium) { where(medium: medium) }
 
   def display_medium
     return unless medium
@@ -62,7 +62,7 @@ class Role < ApplicationRecord
   has_many :works, through: :contributions
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list,   -> { }

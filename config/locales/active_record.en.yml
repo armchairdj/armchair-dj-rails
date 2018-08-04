@@ -71,22 +71,11 @@ en:
       creator/individual:
         'true':  "This is an individual creator. It can belong to a group."
         'false': "This is a group creator. It can have members."
+      creator/identity:
+        pseudynym_id: "Pseudonym"
+      creator/membership:
+        pseudynym_id: "Pseudonym"
       credit:
-      identity:
-        pseudynym_id: "Pseudonym"
-      membership:
-        pseudynym_id: "Pseudonym"
-      milestone:
-        activities:
-          released:   "Released in"
-          published:  "Published in"
-          aired:      "Aired in"
-          created:    "Created in"
-          reissued:   "Reissued in"
-          remastered: "Remastered in"
-          rereleased: "Re-released in"
-          recut:      "Re-edited in"
-          remixed:    "Remixed in"
       role:
         medium: "Medium"
       user:
@@ -106,6 +95,17 @@ en:
         username: "Handle"
       work:
         subtitle: "Subtitle or Version"
+      work/milestone:
+        activities:
+          released:   "Released in"
+          published:  "Published in"
+          aired:      "Aired in"
+          created:    "Created in"
+          reissued:   "Reissued in"
+          remastered: "Remastered in"
+          rereleased: "Re-released in"
+          recut:      "Re-edited in"
+          remixed:    "Remixed in"
     errors:
       models:
         post:
@@ -139,23 +139,23 @@ en:
               taken: "This contributor cannot appear twice in the same role."
         creator:
           attributes:
-        credit:
-          attributes:
-            creator_id:
-              taken: "This creator cannot appear twice."
-        identity:
+        creator/identity:
           attributes:
             real_name_id:
               not_primary: "Only primary creators can have pseudonyms."
             pseudonym_id:
               not_secondary: "Primary creators cannot be pseudonyms."
               taken: "This pseudonym is already assigned to another primary creator."
-        membership:
+        creator/membership:
           attributes:
             group_id:
               not_collective: "Only groups can have members."
             member_id:
               not_individual: "Groups cannot be members of other groups."
+        credit:
+          attributes:
+            creator_id:
+              taken: "This creator cannot appear twice."
         playlist:
           attributes:
             author:

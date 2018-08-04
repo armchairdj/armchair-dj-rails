@@ -122,10 +122,10 @@ RSpec.describe Admin::WorksController do
 
       subject { delete :destroy, params: { id: instance.to_param } }
 
-      it { expect{ subject }.to change(Work,         :count).by(-1) }
-      it { expect{ subject }.to change(Credit,       :count).by(-1) }
-      it { expect{ subject }.to change(Contribution, :count).by(-1) }
-      it { expect{ subject }.to change(Milestone,    :count).by(-1) }
+      it { expect{ subject }.to change(Work,            :count).by(-1) }
+      it { expect{ subject }.to change(Credit,          :count).by(-1) }
+      it { expect{ subject }.to change(Contribution,    :count).by(-1) }
+      it { expect{ subject }.to change(Work::Milestone, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_works_path) }
 

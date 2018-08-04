@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: memberships
+# Table name: creator_memberships
 #
 #  id         :bigint(8)        not null, primary key
 #  created_at :datetime         not null
@@ -12,8 +11,8 @@
 #
 # Indexes
 #
-#  index_memberships_on_group_id   (group_id)
-#  index_memberships_on_member_id  (member_id)
+#  index_creator_memberships_on_group_id   (group_id)
+#  index_creator_memberships_on_member_id  (member_id)
 #
 # Foreign Keys
 #
@@ -21,10 +20,9 @@
 #  fk_rails_...  (member_id => creators.id)
 #
 
-
 require "rails_helper"
 
-RSpec.describe Membership do
+RSpec.describe Creator::Membership do
   describe "concerns" do
     it_behaves_like "an_application_record"
   end

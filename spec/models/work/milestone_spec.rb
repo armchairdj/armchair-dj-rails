@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: milestones
+# Table name: work_milestones
 #
 #  id         :bigint(8)        not null, primary key
 #  activity   :integer          not null
@@ -11,8 +11,8 @@
 #
 # Indexes
 #
-#  index_milestones_on_activity  (activity)
-#  index_milestones_on_work_id   (work_id)
+#  index_work_milestones_on_activity  (activity)
+#  index_work_milestones_on_work_id   (work_id)
 #
 # Foreign Keys
 #
@@ -21,7 +21,7 @@
 
 require "rails_helper"
 
-RSpec.describe Milestone do
+RSpec.describe Work::Milestone do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
@@ -64,13 +64,5 @@ RSpec.describe Milestone do
     it { is_expected.to validate_yearness_of(:year) }
 
     it { is_expected.to validate_presence_of(:activity) }
-  end
-
-  describe "hooks" do
-    # Nothing so far.
-  end
-
-  describe "instance" do
-    # Nothing so far.
   end
 end

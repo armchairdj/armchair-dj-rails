@@ -85,7 +85,7 @@ RSpec.describe Creator do
         let!(:plastikman) { create(:plastikman   ) }
         let!(:fuse      ) { create(:fuse         ) }
         let!(:gas       ) { create(:gas          ) }
-        let!(:identity  ) { create(:minimal_identity, real_name: richie, pseudonym: fuse) }
+        let!(:identity  ) { create(:minimal_creator_identity, real_name: richie, pseudonym: fuse) }
 
         describe "self#available_pseudonyms" do
           subject { described_class.available_pseudonyms }
@@ -143,7 +143,7 @@ RSpec.describe Creator do
           let!(:christine ) { create(:christine_mcvie   ) }
           let!(:mick      ) { create(:mick_fleetwood    ) }
           let!(:john      ) { create(:john_mcvie        ) }
-          let!(:membership) { create(:minimal_membership, group: band, member: christine) }
+          let!(:membership) { create(:minimal_creator_membership, group: band, member: christine) }
 
           it "includes even used members and alphabetizes" do
             is_expected.to contain_exactly(christine, john, lindsay, mick, stevie)
@@ -253,7 +253,7 @@ RSpec.describe Creator do
 
             expect {
               subject.update!(primary: false)
-            }.to change { Identity.count }.by(-1)
+            }.to change { Creator::Identity.count }.by(-1)
 
             expect(subject.reload.pseudonym_identities).to have(0).items
           end
@@ -339,7 +339,7 @@ RSpec.describe Creator do
 
             expect {
               subject.update!(primary: true)
-            }.to change { Identity.count }.by(-1)
+            }.to change { Creator::Identity.count }.by(-1)
 
             expect(subject.reload.real_name_identities).to have(0).items
           end
@@ -426,7 +426,7 @@ RSpec.describe Creator do
 
             expect {
               subject.update!(individual: true)
-            }.to change { Membership.count }.by(-1)
+            }.to change { Creator::Membership.count }.by(-1)
 
             expect(subject.reload.member_memberships).to have(0).items
           end
@@ -513,7 +513,7 @@ RSpec.describe Creator do
 
             expect {
               subject.update!(individual: false)
-            }.to change { Membership.count }.by(-1)
+            }.to change { Creator::Membership.count }.by(-1)
 
             expect(subject.reload.group_memberships).to have(0).items
           end
@@ -597,21 +597,21 @@ RSpec.describe Creator do
           let!(:gas      ) { create(:gas      ) }
 
           specify "primary" do
-            expect(kate_bush.pseudonym_identities).to eq(Identity.none)
+            expect(kate_bush.pseudonym_identities).to eq(Creator::Identity.none)
             expect(kate_bush.pseudonyms          ).to eq(Creator.none)
             expect(kate_bush.personae            ).to eq(Creator.none)
 
-            expect(kate_bush.real_name_identities).to eq(Identity.none)
+            expect(kate_bush.real_name_identities).to eq(Creator::Identity.none)
             expect(kate_bush.real_names          ).to eq(Creator.none)
             expect(kate_bush.real_name           ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(gas.pseudonym_identities      ).to eq(Identity.none)
+            expect(gas.pseudonym_identities      ).to eq(Creator::Identity.none)
             expect(gas.pseudonyms                ).to eq(Creator.none)
             expect(gas.personae                  ).to eq(Creator.none)
 
-            expect(gas.real_name_identities      ).to eq(Identity.none)
+            expect(gas.real_name_identities      ).to eq(Creator::Identity.none)
             expect(gas.real_names                ).to eq(Creator.none)
             expect(gas.real_name                 ).to eq(nil)
           end
@@ -627,13 +627,13 @@ RSpec.describe Creator do
             expect(richie.pseudonyms              ).to eq([fuse, plastikman])
             expect(richie.personae                ).to eq([fuse, plastikman])
 
-            expect(richie.real_name_identities    ).to eq(Identity.none)
+            expect(richie.real_name_identities    ).to eq(Creator::Identity.none)
             expect(richie.real_names              ).to eq(Creator.none)
             expect(richie.real_name               ).to eq(nil)
           end
 
           specify "secondary" do
-            expect(plastikman.pseudonym_identities).to eq(Identity.none)
+            expect(plastikman.pseudonym_identities).to eq(Creator::Identity.none)
             expect(plastikman.pseudonyms          ).to eq([])
             expect(plastikman.personae            ).to eq([fuse, richie])
 
@@ -641,7 +641,7 @@ RSpec.describe Creator do
             expect(plastikman.real_names          ).to eq([richie])
             expect(plastikman.real_name           ).to eq(richie)
 
-            expect(fuse.pseudonym_identities      ).to eq(Identity.none)
+            expect(fuse.pseudonym_identities      ).to eq(Creator::Identity.none)
             expect(fuse.pseudonyms                ).to eq([])
             expect(fuse.personae                  ).to eq([plastikman, richie])
 
@@ -660,19 +660,19 @@ RSpec.describe Creator do
           let!(:solo) { create(:wolfgang_voigt) }
 
           specify "collective" do
-            expect(band.member_memberships).to eq(Membership.none)
+            expect(band.member_memberships).to eq(Creator::Membership.none)
             expect(band.members           ).to eq(Creator.none)
 
-            expect(band.group_memberships ).to eq(Membership.none)
+            expect(band.group_memberships ).to eq(Creator::Membership.none)
             expect(band.groups            ).to eq(Creator.none)
             expect(band.colleagues        ).to eq(Creator.none)
           end
 
           specify "individual" do
-            expect(solo.member_memberships).to eq(Membership.none)
+            expect(solo.member_memberships).to eq(Creator::Membership.none)
             expect(solo.members           ).to eq(Creator.none)
 
-            expect(solo.group_memberships ).to eq(Membership.none)
+            expect(solo.group_memberships ).to eq(Creator::Membership.none)
             expect(solo.groups            ).to eq(Creator.none)
             expect(solo.colleagues        ).to eq(Creator.none)
           end
@@ -688,27 +688,27 @@ RSpec.describe Creator do
             expect(band.member_memberships   ).to have(3).items
             expect(band.members              ).to eq([dan, fred, richie])
 
-            expect(band.group_memberships    ).to eq(Membership.none)
+            expect(band.group_memberships    ).to eq(Creator::Membership.none)
             expect(band.groups               ).to eq(Creator.none)
             expect(band.colleagues           ).to eq(Creator.none)
           end
 
           specify "individual" do
-            expect(richie.member_memberships ).to eq(Membership.none)
+            expect(richie.member_memberships ).to eq(Creator::Membership.none)
             expect(richie.members            ).to eq(Creator.none)
 
             expect(richie.group_memberships  ).to have(1).items
             expect(richie.groups             ).to eq([band])
             expect(richie.colleagues         ).to eq([dan, fred])
 
-            expect(fred.member_memberships   ).to eq(Membership.none)
+            expect(fred.member_memberships   ).to eq(Creator::Membership.none)
             expect(fred.members              ).to eq(Creator.none)
 
             expect(fred.group_memberships    ).to have(1).items
             expect(fred.groups               ).to eq([band])
             expect(fred.colleagues           ).to eq([dan, richie])
 
-            expect(dan.member_memberships    ).to eq(Membership.none)
+            expect(dan.member_memberships    ).to eq(Creator::Membership.none)
             expect(dan.members               ).to eq(Creator.none)
 
             expect(dan.group_memberships     ).to have(1).items
@@ -730,9 +730,9 @@ RSpec.describe Creator do
           let!(:other_band) do
             other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
 
-            create(:membership, group: other_band, member: lindsay  )
-            create(:membership, group: other_band, member: stevie   )
-            create(:membership, group: other_band, member: imaginary)
+            create(:minimal_creator_membership, group: other_band, member: lindsay  )
+            create(:minimal_creator_membership, group: other_band, member: stevie   )
+            create(:minimal_creator_membership, group: other_band, member: imaginary)
 
             other_band
           end

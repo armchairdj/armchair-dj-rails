@@ -26,21 +26,21 @@ class Tag < ApplicationRecord
   end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Name.
   #############################################################################
 
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(:posts) }
+  validates :name, presence: true
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Posts.
   #############################################################################
 
   has_and_belongs_to_many :posts, -> { distinct }
 
   #############################################################################
-  # VALIDATIONS.
+  # CONCERNING: Ginsu.
   #############################################################################
 
-  validates :name, presence: true
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:posts) }
 end

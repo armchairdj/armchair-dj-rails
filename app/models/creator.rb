@@ -25,14 +25,6 @@ require "wannabe_bool"
 class Creator < ApplicationRecord
 
   #############################################################################
-  # CONCERNS.
-  #############################################################################
-
-  include Booletania
-
-  booletania_columns :primary, :individual
-
-  #############################################################################
   # CONCERNING: Alpha.
   #############################################################################
 
@@ -43,12 +35,40 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Identities.
+  # CONCERNING: Name.
   #############################################################################
 
-  concerning :Identities do
+  validates :name, presence: true
+
+  #############################################################################
+  # CONCERNING: Nested Attributes.
+  #############################################################################
+
+  def prepare_for_editing
+    prepare_pseudonym_identities
+    prepare_real_name_identities
+    prepare_member_memberships
+    prepare_group_memberships
+  end
+
+  #############################################################################
+  # CONCERNING: i18n for booleans.
+  #############################################################################
+
+  include Booletania
+
+  booletania_columns :primary, :individual
+
+  #############################################################################
+  # CONCERNING: Primariness & Identities.
+  #############################################################################
+
+  concerning :Primariness do
     included do
       attribute :primary, :boolean, default: true
+
+      scope :primary,   -> { where(primary: true ) }
+      scope :secondary, -> { where(primary: false) }
 
       after_save :enforce_primariness
     end
@@ -79,22 +99,20 @@ class Creator < ApplicationRecord
     end
   end
 
+  has_many :pseudonym_identities, foreign_key: :real_name_id,
+    inverse_of: :real_name, class_name: "Creator::Identity", dependent: :destroy
+
+  has_many :pseudonyms, -> { order("creators.name") },
+    through: :pseudonym_identities, source: :pseudonym
+
   concerning :PseudonymIdentities do
     MAX_PSEUDONYMS_AT_ONCE = 5.freeze
 
     included do
-      scope :primary, -> { where(primary: true) }
-
       scope :available_pseudonyms, -> {
         secondary.alpha.left_outer_joins(:real_name_identities).
-        where(identities: { id: nil })
+        where(creator_identities: { id: nil })
       }
-
-      has_many :pseudonym_identities, foreign_key: :real_name_id,
-        inverse_of: :real_name, class_name: "Identity", dependent: :destroy
-
-      has_many :pseudonyms, -> { order("creators.name") },
-        through: :pseudonym_identities, source: :pseudonym
 
       accepts_nested_attributes_for(:pseudonym_identities,
         allow_destroy: true, reject_if: :invalid_pseudonym_attrs?
@@ -121,19 +139,17 @@ class Creator < ApplicationRecord
     end
   end
 
+  has_many :real_name_identities, foreign_key: :pseudonym_id,
+    inverse_of: :pseudonym, class_name: "Creator::Identity", dependent: :destroy
+
+  has_many :real_names, -> { order("creators.name") },
+    through: :real_name_identities, source: :real_name
+
   concerning :RealNameIdentities do
     MAX_REAL_NAMES = 1.freeze
 
     included do
-      scope :secondary, -> { where(primary: false) }
-
       scope :available_real_names, -> { primary.alpha }
-
-      has_many :real_name_identities, foreign_key: :pseudonym_id,
-        inverse_of: :pseudonym, class_name: "Identity", dependent: :destroy
-
-      has_many :real_names, -> { order("creators.name") },
-        through: :real_name_identities, source: :real_name
 
       accepts_nested_attributes_for(:real_name_identities,
         allow_destroy: true, reject_if: :invalid_real_name_attrs?
@@ -169,10 +185,10 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Memberships.
+  # CONCERNING: Individuality & Memberships.
   #############################################################################
 
-  concerning :Memberships do
+  concerning :Individuality do
     included do
       attribute :individual, :boolean, default: true
 
@@ -202,6 +218,12 @@ class Creator < ApplicationRecord
     end
   end
 
+  has_many :group_memberships, foreign_key: :member_id,
+    inverse_of: :member, class_name: "Creator::Membership", dependent: :destroy
+
+  has_many :groups, -> { order("creators.name") },
+    through: :group_memberships,  source: :group
+
   concerning :GroupMemberships do
     MAX_GROUPS_AT_ONCE  = 5.freeze
 
@@ -209,12 +231,6 @@ class Creator < ApplicationRecord
       scope :individual, -> { where(individual: true) }
 
       scope :available_groups,  -> { collective.alpha }
-
-      has_many :group_memberships, foreign_key: :member_id,
-        inverse_of: :member, class_name: "Membership", dependent: :destroy
-
-      has_many :groups, -> { order("creators.name") },
-        through: :group_memberships,  source: :group
 
       accepts_nested_attributes_for(:group_memberships,
         allow_destroy: true, reject_if: :invalid_group_attributes?
@@ -238,7 +254,7 @@ class Creator < ApplicationRecord
   end
 
   has_many :member_memberships, foreign_key: :group_id,
-    inverse_of: :group, class_name: "Membership", dependent: :destroy
+    inverse_of: :group, class_name: "Creator::Membership", dependent: :destroy
 
   has_many :members, -> { order("creators.name") },
     through: :member_memberships, source: :member
@@ -347,7 +363,7 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list,  -> { }
@@ -358,21 +374,4 @@ class Creator < ApplicationRecord
     :reviews, :contributed_reviews,
     :mixtapes, :contributed_mixtapes,
   ) }
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :name, presence: true
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def prepare_for_editing
-    prepare_pseudonym_identities
-    prepare_real_name_identities
-    prepare_member_memberships
-    prepare_group_memberships
-  end
 end

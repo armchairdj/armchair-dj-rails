@@ -21,17 +21,7 @@
 class Work < ApplicationRecord
 
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [display_makers, title, subtitle]
-  end
-
-  #############################################################################
-  # CONCERNING: STI subclasses.
+  # CONCERNING: STI subclass contract.
   #############################################################################
 
   concerning :Subclassable do
@@ -71,6 +61,16 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  def alpha_parts
+    [display_makers, title, subtitle]
+  end
+
+  #############################################################################
   # CONCERNING: Aspects.
   #############################################################################
 
@@ -98,10 +98,22 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Nested Attributes.
+  #############################################################################
+
+  def prepare_for_editing
+    return unless medium.present?
+
+    prepare_credits
+    prepare_contributions
+    prepare_milestones
+  end
+
+  #############################################################################
   # CONCERNING: Milestones.
   #############################################################################
 
-  has_many :milestones, dependent: :destroy
+  has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
 
   concerning :Milestones do
     MAX_MILESTONES_AT_ONCE = 5.freeze
@@ -254,7 +266,7 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list, -> { }
@@ -262,16 +274,4 @@ class Work < ApplicationRecord
     :aspects, :milestones, :playlists, :reviews, :mixtapes,
     :credits, :makers, :contributions, :contributors
   ) }
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def prepare_for_editing
-    return unless medium.present?
-
-    prepare_credits
-    prepare_contributions
-    prepare_milestones
-  end
 end

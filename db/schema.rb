@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_30_224533) do
+ActiveRecord::Schema.define(version: 2018_08_04_155413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,24 @@ ActiveRecord::Schema.define(version: 2018_07_30_224533) do
     t.index ["work_id"], name: "index_attributions_on_work_id"
   end
 
+  create_table "creator_identities", force: :cascade do |t|
+    t.bigint "real_name_id"
+    t.bigint "pseudonym_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pseudonym_id"], name: "index_creator_identities_on_pseudonym_id"
+    t.index ["real_name_id"], name: "index_creator_identities_on_real_name_id"
+  end
+
+  create_table "creator_memberships", force: :cascade do |t|
+    t.bigint "group_id"
+    t.bigint "member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_creator_memberships_on_group_id"
+    t.index ["member_id"], name: "index_creator_memberships_on_member_id"
+  end
+
   create_table "creators", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -72,15 +90,6 @@ ActiveRecord::Schema.define(version: 2018_07_30_224533) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
-  create_table "identities", force: :cascade do |t|
-    t.bigint "real_name_id"
-    t.bigint "pseudonym_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["pseudonym_id"], name: "index_identities_on_pseudonym_id"
-    t.index ["real_name_id"], name: "index_identities_on_real_name_id"
-  end
-
   create_table "links", force: :cascade do |t|
     t.string "linkable_type"
     t.bigint "linkable_id"
@@ -89,25 +98,6 @@ ActiveRecord::Schema.define(version: 2018_07_30_224533) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
-  end
-
-  create_table "memberships", force: :cascade do |t|
-    t.bigint "group_id"
-    t.bigint "member_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_memberships_on_group_id"
-    t.index ["member_id"], name: "index_memberships_on_member_id"
-  end
-
-  create_table "milestones", force: :cascade do |t|
-    t.bigint "work_id"
-    t.integer "activity", null: false
-    t.integer "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["activity"], name: "index_milestones_on_activity"
-    t.index ["work_id"], name: "index_milestones_on_work_id"
   end
 
   create_table "playlistings", force: :cascade do |t|
@@ -214,6 +204,16 @@ ActiveRecord::Schema.define(version: 2018_07_30_224533) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "work_milestones", force: :cascade do |t|
+    t.bigint "work_id"
+    t.integer "activity", null: false
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity"], name: "index_work_milestones_on_activity"
+    t.index ["work_id"], name: "index_work_milestones_on_work_id"
+  end
+
   create_table "works", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -229,13 +229,13 @@ ActiveRecord::Schema.define(version: 2018_07_30_224533) do
   add_foreign_key "attributions", "creators"
   add_foreign_key "attributions", "roles"
   add_foreign_key "attributions", "works"
-  add_foreign_key "identities", "creators", column: "pseudonym_id"
-  add_foreign_key "identities", "creators", column: "real_name_id"
-  add_foreign_key "memberships", "creators", column: "group_id"
-  add_foreign_key "memberships", "creators", column: "member_id"
-  add_foreign_key "milestones", "works"
+  add_foreign_key "creator_identities", "creators", column: "pseudonym_id"
+  add_foreign_key "creator_identities", "creators", column: "real_name_id"
+  add_foreign_key "creator_memberships", "creators", column: "group_id"
+  add_foreign_key "creator_memberships", "creators", column: "member_id"
   add_foreign_key "playlists", "users", column: "author_id"
   add_foreign_key "posts", "playlists"
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
+  add_foreign_key "work_milestones", "works"
 end

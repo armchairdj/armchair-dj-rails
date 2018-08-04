@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: identities
+# Table name: creator_identities
 #
 #  id           :bigint(8)        not null, primary key
 #  created_at   :datetime         not null
@@ -12,8 +11,8 @@
 #
 # Indexes
 #
-#  index_identities_on_pseudonym_id  (pseudonym_id)
-#  index_identities_on_real_name_id  (real_name_id)
+#  index_creator_identities_on_pseudonym_id  (pseudonym_id)
+#  index_creator_identities_on_real_name_id  (real_name_id)
 #
 # Foreign Keys
 #
@@ -21,16 +20,15 @@
 #  fk_rails_...  (real_name_id => creators.id)
 #
 
-
 FactoryBot.define do
-  factory :identity do
-    factory :minimal_identity do
-      with_associations
-    end
-
+  factory :creator_identity, class: Creator::Identity do
     trait :with_associations do
       association :real_name, factory: :primary_creator
       association :pseudonym, factory: :secondary_creator
+    end
+
+    factory :minimal_creator_identity do
+      with_associations
     end
   end
 end
