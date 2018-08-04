@@ -97,7 +97,7 @@ jobs:
                               --format RspecJunitFormatter \
                               --out test_results/rspec.xml \
                               --format progress \
-                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings --timings-type=classname)
 
       # Save test results
       - store_test_results:
