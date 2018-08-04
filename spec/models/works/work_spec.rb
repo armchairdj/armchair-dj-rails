@@ -228,7 +228,7 @@ RSpec.describe Work do
       end
 
       describe "milestones" do
-        it { is_expected.to accept_nested_attributes_for(:work_milestones).allow_destroy(true) }
+        it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
 
         describe "reject_if" do
           subject do

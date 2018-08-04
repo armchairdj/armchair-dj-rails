@@ -38,7 +38,7 @@ class Playlisting < ApplicationRecord
   validates :work, presence: true
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list, -> { sorted }

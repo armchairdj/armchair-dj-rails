@@ -73,7 +73,7 @@ class Work::Milestone < ApplicationRecord
   has_many :reviews,   through: :work
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list, -> { sorted }

@@ -25,14 +25,6 @@ require "wannabe_bool"
 class Creator < ApplicationRecord
 
   #############################################################################
-  # CONCERNS.
-  #############################################################################
-
-  include Booletania
-
-  booletania_columns :primary, :individual
-
-  #############################################################################
   # CONCERNING: Alpha.
   #############################################################################
 
@@ -41,6 +33,31 @@ class Creator < ApplicationRecord
   def alpha_parts
     [name]
   end
+
+  #############################################################################
+  # CONCERNING: Name.
+  #############################################################################
+
+  validates :name, presence: true
+
+  #############################################################################
+  # CONCERNING: Nested Attributes.
+  #############################################################################
+
+  def prepare_for_editing
+    prepare_pseudonym_identities
+    prepare_real_name_identities
+    prepare_member_memberships
+    prepare_group_memberships
+  end
+
+  #############################################################################
+  # CONCERNING: i18n for booleans.
+  #############################################################################
+
+  include Booletania
+
+  booletania_columns :primary, :individual
 
   #############################################################################
   # CONCERNING: Primariness & Identities.
@@ -346,7 +363,7 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list,  -> { }
@@ -357,21 +374,4 @@ class Creator < ApplicationRecord
     :reviews, :contributed_reviews,
     :mixtapes, :contributed_mixtapes,
   ) }
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :name, presence: true
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def prepare_for_editing
-    prepare_pseudonym_identities
-    prepare_real_name_identities
-    prepare_member_memberships
-    prepare_group_memberships
-  end
 end
