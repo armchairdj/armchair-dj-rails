@@ -107,6 +107,7 @@ RSpec.describe Work do
 
         it "loads" do
           expect(File).to receive(:basename)
+
           described_class.load_descendants
         end
       end
@@ -116,6 +117,7 @@ RSpec.describe Work do
 
         it "loads" do
           expect(File).to receive(:basename)
+
           described_class.load_descendants
         end
       end
@@ -125,6 +127,7 @@ RSpec.describe Work do
 
         it "does not load" do
           expect(File).to_not receive(:basename)
+
           described_class.load_descendants
         end
       end
@@ -271,10 +274,6 @@ RSpec.describe Work do
       subject { instance.prepare_for_editing }
 
       before(:each) do
-        allow(instance).to receive(:prepare_credits)
-        allow(instance).to receive(:prepare_contributions)
-        allow(instance).to receive(:prepare_milestones)
-
         expect(instance).to receive(:prepare_credits)
         expect(instance).to receive(:prepare_contributions)
         expect(instance).to receive(:prepare_milestones)

@@ -17,11 +17,11 @@ RSpec.shared_examples "a_ginsu_sorter" do
     ) }
 
     describe "#resolve" do
-      subject { instance.resolve }
-
       before(:each) do
         allow(described_class).to receive(:reverse_clause).and_call_original
       end
+
+      subject { instance.resolve }
 
       context "basics" do
         before(:each) do
