@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_04_172240) do
+ActiveRecord::Schema.define(version: 2018_08_04_183908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,6 +214,15 @@ ActiveRecord::Schema.define(version: 2018_08_04_172240) do
     t.index ["work_id"], name: "index_work_milestones_on_work_id"
   end
 
+  create_table "work_versionings", force: :cascade do |t|
+    t.bigint "original_id"
+    t.bigint "revision_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["original_id"], name: "index_work_versionings_on_original_id"
+    t.index ["revision_id"], name: "index_work_versionings_on_revision_id"
+  end
+
   create_table "works", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -238,4 +247,6 @@ ActiveRecord::Schema.define(version: 2018_08_04_172240) do
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
   add_foreign_key "work_milestones", "works"
+  add_foreign_key "work_versionings", "works", column: "original_id"
+  add_foreign_key "work_versionings", "works", column: "revision_id"
 end

@@ -134,10 +134,6 @@ RSpec.describe Work do
     end
   end
 
-  describe "scope-related" do
-    # Nothing so far.
-  end
-
   describe "associations" do
     it { is_expected.to have_and_belong_to_many(:aspects) }
 

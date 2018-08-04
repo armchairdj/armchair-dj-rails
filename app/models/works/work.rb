@@ -110,6 +110,22 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Versions.
+  #############################################################################
+
+  has_many :original_versionings, class_name: "Work::Version",
+    foreign_key: :original_id, inverse_of: :original, dependent: :destroy
+
+  has_many :originals, -> { order("works.title") },
+    through: :original_versionings, source: :original
+
+  has_many :alternate_versionings, class_name: "Work::Version",
+    foreign_key: :revision_id, inverse_of: :revision, dependent: :destroy
+
+  has_many :revisions, -> { order("works.title") },
+    through: :alternate_versionings, source: :revision
+
+  #############################################################################
   # CONCERNING: Milestones.
   #############################################################################
 
