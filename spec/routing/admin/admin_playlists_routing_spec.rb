@@ -30,8 +30,8 @@ RSpec.describe Admin::PlaylistsController do
       expect(patch: "/admin/playlists/1").to route_to("admin/playlists#update", id: "1")
     end
 
-    it "#reorder_playlistings" do
-      expect(post: "/admin/playlists/1/reorder_playlistings").to route_to("admin/playlists#reorder_playlistings", id: "1")
+    it "#reorder_tracks" do
+      expect(post: "/admin/playlists/1/reorder_tracks").to route_to("admin/playlists#reorder_tracks", id: "1")
     end
 
     it "#destroy" do

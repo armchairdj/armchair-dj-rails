@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a_listable_model" do |scope|
+RSpec.shared_examples "a_listable_model" do |scope, association_name|
   describe "configuration" do
     # :primary and :other defined by caller as scoped acts_as_list collections
 
@@ -33,7 +33,7 @@ RSpec.shared_examples "a_listable_model" do |scope|
         it "reorders" do
           subject
 
-          actual = parent.reload.send(described_class.model_name.collection).sorted
+          actual = parent.reload.send(association_name).sorted
 
           expect(actual.ids            ).to eq(reordered_ids)
           expect(actual.map(&:position)).to eq((1..primary.length).to_a)

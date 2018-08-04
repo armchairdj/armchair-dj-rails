@@ -76,11 +76,11 @@ module JsHelper
     js_attrs("selectable-prepare-work", opts)
   end
 
-  def js_sortable_playlistings_attrs(playlist)
+  def js_sortable_tracks_attrs(playlist)
     opts = {
       class: "numbered sortable",
-      param: "playlisting_ids",
-      url:   reorder_playlistings_admin_playlist_path(playlist)
+      param: "track_ids",
+      url:   reorder_tracks_admin_playlist_path(playlist)
     }
 
     js_attrs("sortable", opts)

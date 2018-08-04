@@ -43,24 +43,25 @@ class Playlist < ApplicationRecord
   validates :title, presence: true
 
   #############################################################################
-  # CONCERNING: Playlistings.
+  # CONCERNING: Tracks.
   #############################################################################
 
-  has_many :playlistings, -> { order(:position) }, inverse_of: :playlist, dependent: :destroy
+  has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
+    class_name: "Playlist::Track", dependent: :destroy
 
-  validates :playlistings, length: { minimum: 2 }
+  validates :tracks, length: { minimum: 2 }
 
-  concerning :NestedPlaylistings do
-    MAX_PLAYLISTINGS_AT_ONCE = 20.freeze
+  concerning :NestedTracks do
+    MAX_TRACKS_AT_ONCE = 20.freeze
 
     included do
-      accepts_nested_attributes_for(:playlistings, allow_destroy: true,
+      accepts_nested_attributes_for(:tracks, allow_destroy: true,
         reject_if: proc { |attrs| attrs["work_id"].blank? }
       )
     end
 
-    def prepare_playlistings
-      MAX_PLAYLISTINGS_AT_ONCE.times { self.playlistings.build }
+    def prepare_tracks
+      MAX_TRACKS_AT_ONCE.times { self.tracks.build }
     end
   end
 
@@ -68,7 +69,7 @@ class Playlist < ApplicationRecord
   # CONCERNING: Works.
   #############################################################################
 
-  has_many :works, through: :playlistings
+  has_many :works, through: :tracks
 
   has_many :makers,       -> { distinct }, through: :works
   has_many :contributors, -> { distinct }, through: :works
@@ -102,5 +103,5 @@ class Playlist < ApplicationRecord
   #############################################################################
 
   scope :for_list,  -> { includes(:author).references(:author) }
-  scope :for_show,  -> { includes(:author, :playlistings, :works) }
+  scope :for_show,  -> { includes(:author, :tracks, :works) }
 end

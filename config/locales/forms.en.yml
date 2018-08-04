@@ -45,7 +45,7 @@ en:
       mixtape:
         slug: "URL slugs are automatically generated on first save. If you've changed the playlist's title, you can generate a new slug by checking the box below."
       playlist:
-        playlistings: "Select at least two."
+        tracks: "Select at least two."
       work:
         credits: "Select at least one."
       user:

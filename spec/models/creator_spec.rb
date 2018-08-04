@@ -779,10 +779,10 @@ RSpec.describe Creator do
 
       describe "#posts" do
         let!(:playlist) do
-          create(:playlist, :with_author, title: "Title", playlistings_attributes: {
-            "0" => attributes_for(:playlisting, work_id:     created.id),
-            "1" => attributes_for(:playlisting, work_id: contributed.id),
-            "2" => attributes_for(:playlisting, work_id:        both.id),
+          create(:playlist, :with_author, title: "Title", tracks_attributes: {
+            "0" => attributes_for(:playlist_track, work_id:     created.id),
+            "1" => attributes_for(:playlist_track, work_id: contributed.id),
+            "2" => attributes_for(:playlist_track, work_id:        both.id),
           })
         end
 

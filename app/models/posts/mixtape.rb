@@ -57,7 +57,7 @@ class Mixtape < Post
       end
 
       def for_show
-        super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
+        super.includes(:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones)
       end
     end
   end
@@ -68,8 +68,8 @@ class Mixtape < Post
 
   belongs_to :playlist
 
-  has_many :playlistings, through: :playlist
-  has_many :works,        through: :playlistings
+  has_many :tracks, through: :playlist
+  has_many :works,  through: :tracks
 
   has_many :makers,        through: :works
   has_many :contributions, through: :works
