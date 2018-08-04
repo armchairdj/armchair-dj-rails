@@ -12,7 +12,7 @@ env_config: &env_config
   working_directory: ~/armchairdj/armchair-dj-rails
   shell: /bin/bash --login
   docker:
-    - image: circleci/ruby:2.4-node
+    - image: circleci/ruby:2.4.1-node-browsers
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
@@ -34,9 +34,11 @@ env_config: &env_config
 jobs:
   build_and_run_specs:
     <<: *env_config
+
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_RESULTS: /tmp/circleci-test-results
+
     steps:
       - checkout # special step to check out source code to working directory
 
