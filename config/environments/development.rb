@@ -58,9 +58,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  # Raise errors on non-whitelisted mass-assignment params.
-  config.action_controller.action_on_unpermitted_parameters = :raise
-
   config.action_mailer.default_url_options = {
     host:     "localhost",
     protocol: "http",

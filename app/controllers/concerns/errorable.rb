@@ -29,6 +29,7 @@ concern :Errorable do
     # 422
     rescue_from ActionController::UnknownFormat,            with: :handle_422
     rescue_from ActionController::InvalidAuthenticityToken, with: :handle_422
+    rescue_from ActionController::UnpermittedParameters,    with: :handle_422
 
   protected
 

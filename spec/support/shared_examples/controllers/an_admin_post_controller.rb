@@ -299,11 +299,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       context "with blacklisted params" do
         let(:params) { { "publish_on" => 3.weeks.from_now, "publishing" => "1" } }
 
-        it { is_expected.to render_empty_json_200 }
-
-        describe "cannot change status" do
-          it { expect(instance.reload).to_not be_scheduled }
-        end
+        it { is_expected.to have_http_status(422) }
       end
 
       context "with failed save" do

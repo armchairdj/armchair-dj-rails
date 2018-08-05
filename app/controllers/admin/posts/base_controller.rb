@@ -45,15 +45,11 @@ class Admin::Posts::BaseController < Ginsu::Controller
     find_instance
     authorize_instance
 
-    begin
-      @instance.attributes = post_params_for_autosave
+    @instance.attributes = post_params_for_autosave
 
-      @instance.save!(validate: false)
+    @instance.save!(validate: false)
 
-      render json: {}, status: :ok
-    rescue => err
-      handle_500(err)
-    end
+    render json: {}, status: :ok
   end
 
   # DELETE /posts/1
