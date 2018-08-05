@@ -106,6 +106,15 @@ en:
           rereleased: "Re-released in"
           recut:      "Re-edited in"
           remixed:    "Remixed in"
+      work/relationship:
+        connections:
+          is_a_version_of:     "is a version of"
+          is_a_performance_of: "is a performance of"
+          is_a_remake_of:      "is a remake of"
+          is_a_sequel_to:      "is a sequel to"
+          is_a_spinoff_of:     "is a spinoff of"
+          borrows_from:        "borrows or samples from"
+          is_a_member_of:      "is a member of"
     errors:
       models:
         post:

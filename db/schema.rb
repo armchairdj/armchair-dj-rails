@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_04_183908) do
+ActiveRecord::Schema.define(version: 2018_08_05_144057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,13 +214,14 @@ ActiveRecord::Schema.define(version: 2018_08_04_183908) do
     t.index ["work_id"], name: "index_work_milestones_on_work_id"
   end
 
-  create_table "work_versionings", force: :cascade do |t|
-    t.bigint "original_id"
-    t.bigint "revision_id"
+  create_table "work_relationships", force: :cascade do |t|
+    t.bigint "source_id", null: false
+    t.bigint "target_id", null: false
+    t.integer "connection", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["original_id"], name: "index_work_versionings_on_original_id"
-    t.index ["revision_id"], name: "index_work_versionings_on_revision_id"
+    t.index ["source_id"], name: "index_work_relationships_on_source_id"
+    t.index ["target_id"], name: "index_work_relationships_on_target_id"
   end
 
   create_table "works", force: :cascade do |t|
@@ -247,6 +248,6 @@ ActiveRecord::Schema.define(version: 2018_08_04_183908) do
   add_foreign_key "posts", "users", column: "author_id"
   add_foreign_key "posts", "works"
   add_foreign_key "work_milestones", "works"
-  add_foreign_key "work_versionings", "works", column: "original_id"
-  add_foreign_key "work_versionings", "works", column: "revision_id"
+  add_foreign_key "work_relationships", "works", column: "source_id"
+  add_foreign_key "work_relationships", "works", column: "target_id"
 end

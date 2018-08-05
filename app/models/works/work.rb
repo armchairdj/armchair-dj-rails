@@ -71,6 +71,26 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Title.
+  #############################################################################
+
+  validates :title, presence: true
+
+  def display_title(full: false)
+    return unless persisted?
+
+    parts = [title, subtitle]
+
+    parts.unshift(display_makers) if full
+
+    parts.compact.join(": ")
+  end
+
+  def full_display_title
+    display_title(full: true)
+  end
+
+  #############################################################################
   # CONCERNING: Aspects.
   #############################################################################
 
@@ -98,32 +118,20 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Nested Attributes.
-  #############################################################################
-
-  def prepare_for_editing
-    return unless medium.present?
-
-    prepare_credits
-    prepare_contributions
-    prepare_milestones
-  end
-
-  #############################################################################
   # CONCERNING: Versions.
   #############################################################################
 
-  has_many :original_versionings, class_name: "Work::Versioning",
-    foreign_key: :revision_id, inverse_of: :revision, dependent: :destroy
+  has_many :source_relationships, class_name: "Work::Relationship",
+    foreign_key: :target_id, inverse_of: :target, dependent: :destroy
 
-  has_many :originals, -> { order("works.title") },
-    through: :original_versionings, source: :original
+  has_many :source_works, -> { order("works.title") },
+    through: :source_relationships, source: :source
 
-  has_many :revision_versionings, class_name: "Work::Versioning",
-    foreign_key: :original_id, inverse_of: :original, dependent: :destroy
+  has_many :target_relationships, class_name: "Work::Relationship",
+    foreign_key: :source_id, inverse_of: :source, dependent: :destroy
 
-  has_many :revisions, -> { order("works.title") },
-    through: :revision_versionings, source: :revision
+  has_many :target_works, -> { order("works.title") },
+    through: :target_relationships, source: :target
 
   #############################################################################
   # CONCERNING: Milestones.
@@ -250,7 +258,7 @@ class Work < ApplicationRecord
   has_many :reviews, dependent: :nullify
 
   has_many :playlistings, class_name: "Playlist::Track",
-    inverse_of: :work, foreign_key: :work_id, inverse_of: :work, dependent: :nullify
+    inverse_of: :work, foreign_key: :work_id, dependent: :nullify
 
   has_many :playlists, through: :playlistings
   has_many :mixtapes,  through: :playlists
@@ -264,23 +272,15 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Title.
+  # CONCERNING: Editing.
   #############################################################################
 
-  validates :title, presence: true
+  def prepare_for_editing
+    return unless medium.present?
 
-  def display_title(full: false)
-    return unless persisted?
-
-    parts = [title, subtitle]
-
-    parts.unshift(display_makers) if full
-
-    parts.compact.join(": ")
-  end
-
-  def full_display_title
-    display_title(full: true)
+    prepare_credits
+    prepare_contributions
+    prepare_milestones
   end
 
   #############################################################################

@@ -1,27 +1,28 @@
 # == Schema Information
 #
-# Table name: work_versionings
+# Table name: work_relationships
 #
-#  id          :bigint(8)        not null, primary key
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  original_id :bigint(8)
-#  revision_id :bigint(8)
+#  id         :bigint(8)        not null, primary key
+#  connection :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  source_id  :bigint(8)        not null
+#  target_id  :bigint(8)        not null
 #
 # Indexes
 #
-#  index_work_versionings_on_original_id  (original_id)
-#  index_work_versionings_on_revision_id  (revision_id)
+#  index_work_relationships_on_source_id  (source_id)
+#  index_work_relationships_on_target_id  (target_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (original_id => works.id)
-#  fk_rails_...  (revision_id => works.id)
+#  fk_rails_...  (source_id => works.id)
+#  fk_rails_...  (target_id => works.id)
 #
 
 require "rails_helper"
 
-RSpec.describe Work::Versioning, type: :model do
+RSpec.describe Work::Relationship, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 
   describe "concerns" do

@@ -41,25 +41,6 @@ class Creator < ApplicationRecord
   validates :name, presence: true
 
   #############################################################################
-  # CONCERNING: Nested Attributes.
-  #############################################################################
-
-  def prepare_for_editing
-    prepare_pseudonym_identities
-    prepare_real_name_identities
-    prepare_member_memberships
-    prepare_group_memberships
-  end
-
-  #############################################################################
-  # CONCERNING: i18n for booleans.
-  #############################################################################
-
-  include Booletania
-
-  booletania_columns :primary, :individual
-
-  #############################################################################
   # CONCERNING: Primariness & Identities.
   #############################################################################
 
@@ -362,6 +343,25 @@ class Creator < ApplicationRecord
   def post_ids
     (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
   end
+
+  #############################################################################
+  # CONCERNING: Nested Attributes.
+  #############################################################################
+
+  def prepare_for_editing
+    prepare_pseudonym_identities
+    prepare_real_name_identities
+    prepare_member_memberships
+    prepare_group_memberships
+  end
+
+  #############################################################################
+  # CONCERNING: i18n for booleans.
+  #############################################################################
+
+  include Booletania
+
+  booletania_columns :primary, :individual
 
   #############################################################################
   # CONCERNING: Ginsu.
