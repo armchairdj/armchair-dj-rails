@@ -36,7 +36,7 @@ RSpec.describe Creator::Membership do
 
     it { is_expected.to validate_uniqueness_of(:group_id).scoped_to(:member_id) }
 
-    describe "#group_is_collective" do
+    describe "validates #group_is_collective" do
       before(:each) do
         expect(subject).to receive(:group_is_collective).and_call_original
       end
@@ -62,7 +62,7 @@ RSpec.describe Creator::Membership do
 
     it { is_expected.to validate_presence_of(:member) }
 
-    describe "#member_is_individual" do
+    describe "validates #member_is_individual" do
       before(:each) do
         expect(subject).to receive(:member_is_individual).and_call_original
       end

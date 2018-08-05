@@ -102,7 +102,7 @@ class Creator < ApplicationRecord
       }
 
       accepts_nested_attributes_for(:pseudonym_identities,
-        allow_destroy: true, reject_if: :invalid_pseudonym_attrs?
+        allow_destroy: true, reject_if: :reject_pseudonym_identity?
       )
     end
 
@@ -116,7 +116,7 @@ class Creator < ApplicationRecord
 
   private
 
-    def invalid_pseudonym_attrs?(attrs)
+    def reject_pseudonym_identity?(attrs)
       key = attrs["pseudonym_id"]
 
       return true if key.blank?
@@ -133,7 +133,7 @@ class Creator < ApplicationRecord
       scope :available_real_names, -> { primary.alpha }
 
       accepts_nested_attributes_for(:real_name_identities,
-        allow_destroy: true, reject_if: :invalid_real_name_attrs?
+        allow_destroy: true, reject_if: :reject_real_name_identity?
       )
     end
 
@@ -155,7 +155,7 @@ class Creator < ApplicationRecord
 
   private
 
-    def invalid_real_name_attrs?(attrs)
+    def reject_real_name_identity?(attrs)
       key = attrs["real_name_id"]
 
       return true if key.blank?
@@ -220,7 +220,7 @@ class Creator < ApplicationRecord
       scope :available_groups,  -> { collective.alpha }
 
       accepts_nested_attributes_for(:group_memberships,
-        allow_destroy: true, reject_if: :invalid_group_attributes?
+        allow_destroy: true, reject_if: :reject_group_membership?
       )
     end
 
@@ -230,7 +230,7 @@ class Creator < ApplicationRecord
 
   private
 
-    def invalid_group_attributes?(attrs)
+    def reject_group_membership?(attrs)
       key = attrs["group_id"]
 
       return true if key.blank?
@@ -249,7 +249,7 @@ class Creator < ApplicationRecord
       scope :available_members, -> { individual.alpha }
 
       accepts_nested_attributes_for(:member_memberships,
-        allow_destroy: true, reject_if: :invalid_member_attributes?
+        allow_destroy: true, reject_if: :reject_member_membership?
       )
     end
 
@@ -265,7 +265,7 @@ class Creator < ApplicationRecord
 
   private
 
-    def invalid_member_attributes?(attrs)
+    def reject_member_membership?(attrs)
       key = attrs["member_id"]
 
       return true if key.blank?

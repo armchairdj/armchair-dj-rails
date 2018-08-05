@@ -11,8 +11,7 @@
   @include bottom-margin-only(1.5rem);
 
   &.with-error {
-    label,
-    legend {
+    label {
       color: $error-color;
     }
   }
@@ -29,6 +28,10 @@ legend {
   display: table;
   @include bottom-margin-only(.75rem);
   @include legend-text();
+
+  .fieldset-with-errors & {
+    color: $error-color;
+  }
 }
 
 .legend-hint {

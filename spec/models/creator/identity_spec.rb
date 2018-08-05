@@ -36,7 +36,7 @@ RSpec.describe Creator::Identity do
 
     it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
-    describe "#real_name_is_primary" do
+    describe "validates #real_name_is_primary" do
       before(:each) do
         expect(subject).to receive(:real_name_is_primary).and_call_original
       end
@@ -62,7 +62,9 @@ RSpec.describe Creator::Identity do
 
     it { is_expected.to validate_presence_of(:pseudonym) }
 
-    describe "#pseudonym_is_secondary" do
+    it { is_expected.to validate_uniqueness_of(:pseudonym_id) }
+
+    describe "validates #pseudonym_is_secondary" do
       before(:each) do
         expect(subject).to receive(:pseudonym_is_secondary).and_call_original
       end

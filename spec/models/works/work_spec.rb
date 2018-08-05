@@ -35,6 +35,48 @@ RSpec.describe Work do
         it { is_expected.to have_many(:source_works).through(:source_relationships) }
       end
 
+      describe "validates nested uniqueness" do
+        subject { build_minimal_instance }
+
+        let(:source      ) { create_minimal_instance }
+        let(:other_source) { create_minimal_instance }
+
+        before(:each) do
+          subject.source_relationships_attributes = attributes
+        end
+
+        context "without dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id      ),
+            "1" => attributes_for(:minimal_work_relationship, source_id: other_source.id)
+          }}
+
+          it { is_expected.to be_valid }
+        end
+
+        context "with dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
+            "1" => attributes_for(:minimal_work_relationship, source_id: source.id)
+          }}
+
+          it "is has the correct error" do
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:source_relationships, :nested_taken)
+          end
+        end
+
+        context "with duplicate sources but different connections" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
+            "1" => attributes_for(:minimal_work_relationship, source_id: source.id, connection: "spinoff_of")
+          }}
+
+          it { is_expected.to be_valid }
+        end
+      end
+
       describe "accepts nested attributes" do
         let(:source      ) { create(:minimal_work) }
         let(:valid_params) { { "0" => { connection: "member_of", source_id: source.id } } }
@@ -60,7 +102,7 @@ RSpec.describe Work do
           end
         end
 
-        describe "#invalid_target_attrs?" do
+        describe "#reject_source_relationship?" do
           subject { instance.source_relationships }
 
           describe "accepts if source_id is present" do
@@ -382,11 +424,11 @@ RSpec.describe Work do
         describe "credits" do
           before(:each) { subject.credits = [] }
 
-          let(:creator) { create(:minimal_creator) }
+          let(:creator      ) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:minimal_credit, creator_id:       creator.id),
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id      ),
             "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
           }}
 
