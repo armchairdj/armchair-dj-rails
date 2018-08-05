@@ -2,12 +2,12 @@
 #
 # Table name: work_relationships
 #
-#  id          :bigint(8)        not null, primary key
-#  correlation :integer          not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  source_id   :bigint(8)        not null
-#  target_id   :bigint(8)        not null
+#  id         :bigint(8)        not null, primary key
+#  connection :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  source_id  :bigint(8)        not null
+#  target_id  :bigint(8)        not null
 #
 # Indexes
 #
@@ -35,10 +35,10 @@ RSpec.describe Work::Relationship do
     it { is_expected.to validate_presence_of(:target) }
   end
 
-  describe "correlation" do
-    it_behaves_like "an_enumable_model", [:correlation]
+  describe "connection" do
+    it_behaves_like "an_enumable_model", [:connection]
 
-    it { is_expected.to validate_presence_of(:correlation) }
+    it { is_expected.to validate_presence_of(:connection) }
   end
 
   describe "source" do
@@ -46,6 +46,6 @@ RSpec.describe Work::Relationship do
 
     it { is_expected.to validate_presence_of(:source) }
 
-    it { is_expected.to validate_uniqueness_of(:source_id).scoped_to(:target_id, :correlation) }
+    it { is_expected.to validate_uniqueness_of(:source_id).scoped_to(:target_id, :connection) }
   end
 end

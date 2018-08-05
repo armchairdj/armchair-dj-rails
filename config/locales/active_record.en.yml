@@ -109,7 +109,7 @@ en:
           recut:      "Re-edited in"
           remixed:    "Remixed in"
       work/relationship:
-        correlations:
+        connections:
           version_of:     "is a version of"
           performance_of: "is a performance of"
           remake_of:      "is a remake of"
@@ -185,7 +185,7 @@ en:
               blank: "Please choose a release date."
         work/relationship:
           attributes:
-            correlation: "Please choose a connection between these works."
+            connection: "Please choose a connection between these works."
         user:
           attributes:
             role:

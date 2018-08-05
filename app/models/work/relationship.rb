@@ -3,12 +3,12 @@
 #
 # Table name: work_relationships
 #
-#  id          :bigint(8)        not null, primary key
-#  correlation :integer          not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  source_id   :bigint(8)        not null
-#  target_id   :bigint(8)        not null
+#  id         :bigint(8)        not null, primary key
+#  connection :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  source_id  :bigint(8)        not null
+#  target_id  :bigint(8)        not null
 #
 # Indexes
 #
@@ -33,12 +33,12 @@ class Work::Relationship < ApplicationRecord
   validates :target, presence: true
 
   #############################################################################
-  # CONCERNING: Correlation.
+  # CONCERNING: Connection.
   #############################################################################
 
-  validates :correlation, presence: true
+  validates :connection, presence: true
 
-  enum correlation: {
+  enum connection: {
     member_of:       100,
 
     version_of:      200,
@@ -51,7 +51,7 @@ class Work::Relationship < ApplicationRecord
     borrows_from:    400,
   }
 
-  enumable_attributes :correlation
+  enumable_attributes :connection
 
   #############################################################################
   # CONCERNING: Source.
@@ -61,5 +61,5 @@ class Work::Relationship < ApplicationRecord
 
   validates :source, presence: true
 
-  validates :source_id, uniqueness: { scope: [:target_id, :correlation] }
+  validates :source_id, uniqueness: { scope: [:target_id, :connection] }
 end
