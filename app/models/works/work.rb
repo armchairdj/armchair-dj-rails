@@ -118,7 +118,7 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Versions.
+  # CONCERNING: Relationships to other works.
   #############################################################################
 
   has_many :source_relationships, class_name: "Work::Relationship",
@@ -132,6 +132,46 @@ class Work < ApplicationRecord
 
   has_many :target_works, -> { order("works.title") },
     through: :target_relationships, source: :target
+
+  concerning :NestedSourceRelationships do
+    MAX_SOURCE_RELATIONSHIPS_AT_ONCE = 5.freeze
+
+    included do
+      accepts_nested_attributes_for(:source_relationships,
+        allow_destroy: true, reject_if: :invalid_source_attrs?
+      )
+    end
+
+    def prepare_source_relationships
+      MAX_SOURCE_RELATIONSHIPS_AT_ONCE.times { self.source_relationships.build }
+    end
+
+  private
+
+    def invalid_source_attrs?(attrs)
+      attrs["source_id"].blank?
+    end
+  end
+
+  concerning :NestedTargetRelationships do
+    MAX_TARGET_RELATIONSHIPS_AT_ONCE = 5.freeze
+
+    included do
+      accepts_nested_attributes_for(:target_relationships,
+        allow_destroy: true, reject_if: :invalid_target_attrs?
+      )
+    end
+
+    def prepare_target_relationships
+      MAX_TARGET_RELATIONSHIPS_AT_ONCE.times { self.target_relationships.build }
+    end
+
+  private
+
+    def invalid_target_attrs?(attrs)
+      attrs["target_id"].blank?
+    end
+  end
 
   #############################################################################
   # CONCERNING: Milestones.

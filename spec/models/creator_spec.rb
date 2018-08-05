@@ -258,23 +258,6 @@ RSpec.describe Creator do
             expect(subject.reload.pseudonym_identities).to have(0).items
           end
         end
-
-        describe "allow_destroy" do
-          it "destroys the identity but not the pseudonym" do
-            subject.update!(pseudonym_identities_attributes: valid_params)
-
-            expect(subject.pseudonyms).to eq([valid])
-
-            subject.pseudonym_identities.destroy_all
-
-            subject.reload
-
-            expect(subject.pseudonym_identities).to eq([])
-            expect(subject.pseudonyms).to eq([])
-
-            expect(valid.reload).to eq(valid)
-          end
-        end
       end
 
       describe "real_name_identities" do
@@ -342,23 +325,6 @@ RSpec.describe Creator do
             }.to change { Creator::Identity.count }.by(-1)
 
             expect(subject.reload.real_name_identities).to have(0).items
-          end
-        end
-
-        describe "allow_destroy" do
-          it "destroys the identity but not the real_name" do
-            subject.update!(real_name_identities_attributes: valid_params)
-
-            expect(subject.real_names).to eq([valid])
-
-            subject.real_name_identities.destroy_all
-
-            subject.reload
-
-            expect(subject.real_name_identities).to eq([])
-            expect(subject.real_names          ).to eq([])
-
-            expect(valid.reload).to eq(valid)
           end
         end
       end
@@ -429,23 +395,6 @@ RSpec.describe Creator do
             }.to change { Creator::Membership.count }.by(-1)
 
             expect(subject.reload.member_memberships).to have(0).items
-          end
-        end
-
-        describe "allow_destroy" do
-          it "destroys the identity but not the member" do
-            subject.update!(member_memberships_attributes: valid_params)
-
-            expect(subject.members).to eq([valid])
-
-            subject.member_memberships.destroy_all
-
-            subject.reload
-
-            expect(subject.member_memberships).to eq([])
-            expect(subject.members           ).to eq([])
-
-            expect(valid.reload).to eq(valid)
           end
         end
       end
@@ -523,16 +472,16 @@ RSpec.describe Creator do
       describe "booletania" do
         describe "class" do
           specify "self#individual_options" do
-            expect(described_class.individual_options).to eq([
-              ["This is an individual creator. It can belong to a group.", true ],
-              ["This is a group creator. It can have members.",            false]
+            expect(described_class.individual_options).to match_array([
+              [a_string_matching(/^This is an individual/), true ],
+              [a_string_matching(/^This is a group/),       false]
             ])
           end
 
           specify "self#collective_options" do
-            expect(described_class.primary_options).to eq([
-              ["This is a primary creator. It can have pseudonyms.",               true ],
-              ["This is a secondary creator. It can point to a primary identity.", false]
+            expect(described_class.primary_options).to match_array([
+              [a_string_matching(/^This is a primary/),   true ],
+              [a_string_matching(/^This is a secondary/), false]
             ])
           end
         end
@@ -544,17 +493,13 @@ RSpec.describe Creator do
             specify "individual" do
               subject.individual = true
 
-              expect(subject.individual_text).to eq(
-                "This is an individual creator. It can belong to a group."
-              )
+              expect(subject.individual_text).to match(/^This is an individual/)
             end
 
             specify "collective" do
               subject.individual = false
 
-              expect(subject.individual_text).to eq(
-                "This is a group creator. It can have members."
-              )
+              expect(subject.individual_text).to match(/^This is a group/)
             end
           end
 
@@ -562,17 +507,13 @@ RSpec.describe Creator do
             specify "primary" do
               subject.primary = true
 
-              expect(subject.primary_text).to eq(
-                "This is a primary creator. It can have pseudonyms."
-              )
+              expect(subject.primary_text).to match(/^This is a primary/)
             end
 
             specify "secondary" do
               subject.primary = false
 
-              expect(subject.primary_text).to eq(
-                "This is a secondary creator. It can point to a primary identity."
-              )
+              expect(subject.primary_text).to match(/^This is a secondary/)
             end
           end
         end

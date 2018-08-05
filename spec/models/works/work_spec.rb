@@ -25,6 +25,65 @@ RSpec.describe Work do
     end
   end
 
+  describe "relationships" do
+    describe "as target" do
+      describe "has associations" do
+        subject { build_minimal_instance }
+
+        it { is_expected.to have_many(:source_relationships).dependent(:destroy) }
+
+        it { is_expected.to have_many(:source_works).through(:source_relationships) }
+      end
+
+      describe "accepts nested attributes" do
+        let(:source      ) { create(:minimal_work) }
+        let(:valid_params) { { "0" => { connection: "member_of", source_id: source.id } } }
+        let(:empty_params) { { "0" => { connection: "member_of", source_id: nil       } } }
+
+        it { is_expected.to accept_nested_attributes_for(:source_relationships).allow_destroy(true) }
+
+        describe "#prepare_source_relationships" do
+          subject { instance.source_relationships }
+
+          before(:each) { instance.prepare_source_relationships }
+
+          describe "initial state" do
+            let(:instance) { build_minimal_instance }
+
+            it { is_expected.to have(5).items }
+          end
+
+          describe "with prior associations" do
+            let(:instance) { create_minimal_instance(source_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(6).items }
+          end
+        end
+
+        describe "#invalid_target_attrs?" do
+          subject { instance.source_relationships }
+
+          describe "accepts if source_id is present" do
+            let(:instance) { build_minimal_instance(source_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(1).item }
+          end
+
+          describe "rejects if source_id is blank" do
+            let(:instance) { build_minimal_instance(source_relationships_attributes: empty_params) }
+
+            it { is_expected.to have(0).items }
+          end
+        end
+      end
+    end
+
+    describe "as source" do
+      it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
+      it { is_expected.to have_many(:target_works).through(:target_relationships) }
+    end
+  end
+
   describe "class" do
     describe "self#grouped_by_medium" do
       let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
