@@ -1,6 +1,6 @@
 <%= f.simple_fields_for :milestones, milestone do |ff| %>
   <%= expandable_fieldset do %>
-    <%= content_tag(:div, class: "activity-year") do %>
+    <%= content_tag(:div, class: "row activity-year") do %>
       <%= ff.input :activity,
         as:            :select,
         include_blank: :translate,
@@ -9,8 +9,8 @@
       %>
 
       <%= ff.input :year %>
-
-      <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
     <% end %>
+
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>
 <% end %>

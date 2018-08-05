@@ -1,22 +1,22 @@
 <%= f.simple_fields_for :contributions, contribution do |ff| %>
   <%= expandable_fieldset do %>
-    <%= content_tag(:div, class: "creator-role") do %>
+    <%= content_tag(:div, class: "row creator-role") do %>
       <%= ff.input :creator_id,
         as:            :select,
         collection:    @creators,
-        required:      false,
+        required:      true,
         include_blank: :translate,
         input_html:    js_selectabe_create_creator_attrs
       %>
 
       <%= ff.input :role_id, as: :select,
         collection:    @roles,
-        required:      false,
+        required:      true,
         include_blank: :translate,
         input_html:    js_selectable_create_role_attrs
       %>
-
-      <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
     <% end %>
+
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
   <% end %>
 <% end %>

@@ -44,7 +44,7 @@ RSpec.describe Role do
   end
 
   describe "associations" do
-    it { is_expected.to have_many(:contributions).dependent(:nullify) }
+    it { is_expected.to have_many(:contributions).dependent(:destroy) }
 
     it { is_expected.to have_many(:works).through(:contributions) }
   end

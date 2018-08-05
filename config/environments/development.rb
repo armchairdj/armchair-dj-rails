@@ -58,6 +58,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Raise errors on non-whitelisted mass-assignment params.
+  config.action_controller.action_on_unpermitted_parameters = :raise
+
   config.action_mailer.default_url_options = {
     host:     "localhost",
     protocol: "http",
@@ -76,7 +79,7 @@ Rails.application.configure do
     Bullet.add_footer                  = false
     Bullet.n_plus_one_query_enable     = true
     Bullet.counter_cache_enable        = true
-    Bullet.unused_eager_loading_enable = false
+    Bullet.unused_eager_loading_enable = true
     # Bullet.stacktrace_includes         = [ "your_gem",  "your_middleware"  ]
     # Bullet.stacktrace_excludes         = [ "their_gem", "their_middleware" ]
   end

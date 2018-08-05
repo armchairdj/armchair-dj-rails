@@ -129,6 +129,16 @@ fieldset {
         }
       }
 
+      &.connection-source {
+        .form-field:first-child {
+          width: 35%;
+        }
+
+        .form-field:last-child {
+          width: 65%;
+        }
+      }
+
       &.activity-year {
         .form-field:first-child {
           width: 65%;

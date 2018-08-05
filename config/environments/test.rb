@@ -58,6 +58,9 @@ Rails.application.configure do
     protocol: "http"
   }
 
+  # Raise errors on non-whitelisted mass-assignment params.
+  config.action_controller.action_on_unpermitted_parameters = :raise
+
   # Parallel Tests setup.
 
   config.cache_store = :file_store,

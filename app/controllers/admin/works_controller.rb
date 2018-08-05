@@ -79,6 +79,7 @@ private
     if @work.medium.present?
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
+      @sources  = Work.grouped_by_medium
     end
   end
 
@@ -113,6 +114,13 @@ private
         :work_id,
         :activity,
         :year,
+      ],
+      source_relationships_attributes: [
+        :id,
+        :_destroy,
+        :target_id,
+        :connection,
+        :source_id,
       ],
     ])
   end

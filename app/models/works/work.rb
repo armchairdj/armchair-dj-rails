@@ -321,6 +321,7 @@ class Work < ApplicationRecord
     prepare_credits
     prepare_contributions
     prepare_milestones
+    prepare_source_relationships
   end
 
   #############################################################################

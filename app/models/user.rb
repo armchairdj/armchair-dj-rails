@@ -160,7 +160,7 @@ class User < ApplicationRecord
 
       options = self.class.human_roles
 
-      options.slice(0..options.index { |o| o.last == self.role })
+      options.slice(0..options.index { |x| x.last == self.role })
     end
 
     def valid_role_assignment_for?(instance)
