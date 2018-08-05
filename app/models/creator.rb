@@ -105,7 +105,13 @@ class Creator < ApplicationRecord
   has_many :pseudonyms, -> { order("creators.name") },
     through: :pseudonym_identities, source: :pseudonym
 
-  concerning :PseudonymIdentities do
+  has_many :real_name_identities, class_name: "Creator::Identity",
+    foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
+
+  has_many :real_names, -> { order("creators.name") },
+    through: :real_name_identities, source: :real_name
+
+  concerning :NestedPseudonymIdentities do
     MAX_PSEUDONYMS_AT_ONCE = 5.freeze
 
     included do
@@ -139,13 +145,7 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :real_name_identities, class_name: "Creator::Identity",
-    foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
-
-  has_many :real_names, -> { order("creators.name") },
-    through: :real_name_identities, source: :real_name
-
-  concerning :RealNameIdentities do
+  concerning :NestedRealNameIdentities do
     MAX_REAL_NAMES = 1.freeze
 
     included do
@@ -222,9 +222,15 @@ class Creator < ApplicationRecord
     foreign_key: :member_id, inverse_of: :member, dependent: :destroy
 
   has_many :groups, -> { order("creators.name") },
-    through: :group_memberships,  source: :group
+    through: :group_memberships, source: :group
 
-  concerning :GroupMemberships do
+  has_many :member_memberships, class_name: "Creator::Membership",
+    foreign_key: :group_id, inverse_of: :group, dependent: :destroy
+
+  has_many :members, -> { order("creators.name") },
+    through: :member_memberships, source: :member
+
+  concerning :NestedGroupMemberships do
     MAX_GROUPS_AT_ONCE  = 5.freeze
 
     included do
@@ -253,13 +259,7 @@ class Creator < ApplicationRecord
     end
   end
 
-  has_many :member_memberships, class_name: "Creator::Membership",
-    foreign_key: :group_id, inverse_of: :group, dependent: :destroy
-
-  has_many :members, -> { order("creators.name") },
-    through: :member_memberships, source: :member
-
-  concerning :MemberMemberships do
+  concerning :NestedMemberMemberships do
     MAX_MEMBERS_AT_ONCE = 5.freeze
 
     included do
