@@ -27,56 +27,56 @@ RSpec.describe Creator::Membership do
     it_behaves_like "an_application_record"
   end
 
-  describe "associations" do
-    it { is_expected.to belong_to(:group ).class_name("Creator") }
-    it { is_expected.to belong_to(:member).class_name("Creator") }
-  end
-
-  describe "validations" do
+  describe "group" do
     subject { build_minimal_instance }
 
+    it { is_expected.to belong_to(:group ).class_name("Creator") }
+
     it { is_expected.to validate_presence_of(:group ) }
-    it { is_expected.to validate_presence_of(:member) }
 
     it { is_expected.to validate_uniqueness_of(:group_id).scoped_to(:member_id) }
 
-    describe "custom" do
-      subject { build_minimal_instance }
-
-      describe "#group_is_collective" do
-        before(:each) do
-          expect(subject).to receive(:group_is_collective).and_call_original
-        end
-
-        specify "valid" do
-          is_expected.to be_valid
-        end
-
-        specify "invalid" do
-          subject.group = create(:individual_creator)
-
-          is_expected.to_not be_valid
-
-          is_expected.to have_error(group_id: :not_collective)
-        end
+    describe "#group_is_collective" do
+      before(:each) do
+        expect(subject).to receive(:group_is_collective).and_call_original
       end
 
-      describe "#member_is_individual" do
-        before(:each) do
-          expect(subject).to receive(:member_is_individual).and_call_original
-        end
+      specify "valid" do
+        is_expected.to be_valid
+      end
 
-        specify "valid" do
-          is_expected.to be_valid
-        end
+      specify "invalid" do
+        subject.group = create(:individual_creator)
 
-        specify "invalid" do
-          subject.member = create(:collective_creator)
+        is_expected.to_not be_valid
 
-          is_expected.to_not be_valid
+        is_expected.to have_error(group_id: :not_collective)
+      end
+    end
+  end
 
-          is_expected.to have_error(member_id: :not_individual)
-        end
+  describe "member" do
+    subject { build_minimal_instance }
+
+    it { is_expected.to belong_to(:member).class_name("Creator") }
+
+    it { is_expected.to validate_presence_of(:member) }
+
+    describe "#member_is_individual" do
+      before(:each) do
+        expect(subject).to receive(:member_is_individual).and_call_original
+      end
+
+      specify "valid" do
+        is_expected.to be_valid
+      end
+
+      specify "invalid" do
+        subject.member = create(:collective_creator)
+
+        is_expected.to_not be_valid
+
+        is_expected.to have_error(member_id: :not_individual)
       end
     end
   end

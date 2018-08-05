@@ -215,9 +215,9 @@ ActiveRecord::Schema.define(version: 2018_08_05_144057) do
   end
 
   create_table "work_relationships", force: :cascade do |t|
-    t.bigint "source_id", null: false
     t.bigint "target_id", null: false
-    t.integer "connection", null: false
+    t.integer "correlation", null: false
+    t.bigint "source_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["source_id"], name: "index_work_relationships_on_source_id"

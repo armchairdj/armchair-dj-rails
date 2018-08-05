@@ -66,15 +66,17 @@ en:
       contribution:
       creator:
       creator/primary:
-        'true':  "This is a primary creator. It can have pseudonyms."
-        'false': "This is a secondary creator. It can point to a primary identity."
+        'true':  "This is a primary identity. It can have pseudonyms."
+        'false': "This is a secondary identity. It is a pseudonym of a primary identity."
       creator/individual:
         'true':  "This is an individual creator. It can belong to a group."
         'false': "This is a group creator. It can have members."
       creator/identity:
         pseudynym_id: "Pseudonym"
+        real_name_id: "Main Name"
       creator/membership:
-        pseudynym_id: "Pseudonym"
+        group_id: "Group"
+        member_id: "Member"
       credit:
       role:
         medium: "Medium"
@@ -107,14 +109,14 @@ en:
           recut:      "Re-edited in"
           remixed:    "Remixed in"
       work/relationship:
-        connections:
-          is_a_version_of:     "is a version of"
-          is_a_performance_of: "is a performance of"
-          is_a_remake_of:      "is a remake of"
-          is_a_sequel_to:      "is a sequel to"
-          is_a_spinoff_of:     "is a spinoff of"
-          borrows_from:        "borrows or samples from"
-          is_a_member_of:      "is a member of"
+        correlations:
+          version_of:     "is a version of"
+          performance_of: "is a performance of"
+          remake_of:      "is a remake of"
+          sequel_to:      "is a sequel to"
+          spinoff_of:     "is a spinoff of"
+          borrows_from:   "borrows from or interpolates"
+          member_of:      "belongs to"
     errors:
       models:
         post:
@@ -131,7 +133,7 @@ en:
               blank: "You can't publish or schedule a post without a body."
             publish_on:
               blank: "Please choose a publication date to schedule this post."
-              present: "Please don't choose a publish date unless you're scheduling this post."
+              present: "Please don't choose a publication date unless you're scheduling this post."
         article:
           attributes:
             <<: *post_errors
@@ -141,13 +143,14 @@ en:
         mixtape:
           attributes:
             <<: *post_errors
-        aspect:
         contribution:
           attributes:
             creator_id:
               taken: "This contributor cannot appear twice in the same role."
-        creator:
+        credit:
           attributes:
+            creator_id:
+              taken: "This creator cannot appear twice."
         creator/identity:
           attributes:
             real_name_id:
@@ -161,10 +164,6 @@ en:
               not_collective: "Only groups can have members."
             member_id:
               not_individual: "Groups cannot be members of other groups."
-        credit:
-          attributes:
-            creator_id:
-              taken: "This creator cannot appear twice."
         playlist:
           attributes:
             author:
@@ -176,8 +175,6 @@ en:
           attributes:
             medium:
               inclusion: "Please choose a valid medium."
-        tag:
-          attributes:
         work:
           attributes:
             aspects:
@@ -186,6 +183,9 @@ en:
               too_short: "Please choose at least one creator."
             milestones:
               blank: "Please choose a release date."
+        work/relationship:
+          attributes:
+            correlation: "Please choose a connection between these works."
         user:
           attributes:
             role:

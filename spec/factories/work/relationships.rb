@@ -2,12 +2,12 @@
 #
 # Table name: work_relationships
 #
-#  id         :bigint(8)        not null, primary key
-#  connection :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  source_id  :bigint(8)        not null
-#  target_id  :bigint(8)        not null
+#  id          :bigint(8)        not null, primary key
+#  correlation :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  source_id   :bigint(8)        not null
+#  target_id   :bigint(8)        not null
 #
 # Indexes
 #
@@ -21,7 +21,11 @@
 #
 
 FactoryBot.define do
-  factory :work_relationship, class: 'Work::Relationship' do
-    
+  factory :work_relationship, class: "Work::Relationship" do
+    factory :minimal_work_relationship do
+      association :target, factory: :minimal_song
+      correlation :member_of
+      association :source, factory: :minimal_album
+    end
   end
 end

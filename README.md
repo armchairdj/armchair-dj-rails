@@ -24,4 +24,8 @@
 
 * ...
 
-## Travis CI
+## CirlceCI
+
+## Parallel Tests
+
+    $ bundle exec rake parallel:prepare
