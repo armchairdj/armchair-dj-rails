@@ -266,6 +266,10 @@ class Work < ApplicationRecord
       )
     end
 
+    def available_sources
+      Work.where.not(id: self.id).grouped_by_medium
+    end
+
     def prepare_source_relationships
       MAX_SOURCE_RELATIONSHIPS_AT_ONCE.times { self.source_relationships.build }
     end

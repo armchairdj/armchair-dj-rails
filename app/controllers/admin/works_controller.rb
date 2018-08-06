@@ -79,7 +79,7 @@ private
     if @work.medium.present?
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
-      @sources  = Work.grouped_by_medium
+      @sources  = @work.available_sources
     end
   end
 

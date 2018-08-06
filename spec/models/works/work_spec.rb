@@ -118,6 +118,19 @@ RSpec.describe Work do
           end
         end
       end
+
+      describe "#available_sources" do
+        subject { instance.available_sources }
+
+        let(:instance) { create(:minimal_song ) }
+        let!(:other  ) { create(:minimal_song ) }
+        let!(:album  ) { create(:minimal_album) }
+
+        it { is_expected.to eq([
+          ["Album", [album] ],
+          ["Song",  [other] ]
+        ]) }
+      end
     end
 
     describe "as source" do
@@ -128,8 +141,8 @@ RSpec.describe Work do
 
   describe "class" do
     describe "self#grouped_by_medium" do
-      let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
-      let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
+      let(:song_1 ) { create(:minimal_song, maker_names: ["Wilco"]) }
+      let(:song_2 ) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show         ) }
       let(:podcast) { create(:minimal_podcast         ) }
 
