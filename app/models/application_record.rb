@@ -20,7 +20,7 @@ class ApplicationRecord < ActiveRecord::Base
     self.where(id: ids).order(Arel.sql(clause))
   end
 
-  def self.validate_nested_uniqueness_of(*nested_attrs)
+  def self.validates_nested_uniqueness_of(*nested_attrs)
     opts      = nested_attrs.extract_options!
     uniq_attr = opts[:uniq_attr]
     scope     = opts[:scope    ] || []

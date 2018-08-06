@@ -1,4 +1,4 @@
-class Admin::AspectsController < Admin::BaseController
+class Admin::AspectsController < Ginsu::Controller
 
   # POST /admin/aspects
   # POST /admin/aspects.json

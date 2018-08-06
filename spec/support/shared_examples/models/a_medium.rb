@@ -9,7 +9,7 @@ RSpec.shared_examples "a_medium" do
 
   describe "validation" do
     describe "custom" do
-      describe "#only_available_facets" do
+      describe "#only_available_aspects" do
         subject { build_minimal_instance }
 
         let!(:all_facets  ) { Aspect.facets.keys.map(&:to_sym) }

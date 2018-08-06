@@ -18,68 +18,54 @@
 class Role < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
-  # CONCERNS.
+  # CONCERNING: Alpha.
   #############################################################################
 
   include Alphabetizable
-
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :for_medium, -> (medium) { where(medium: medium) }
-  scope :for_list,   -> { }
-  scope :for_show,   -> { includes(:contributions, :works) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_many :contributions, dependent: :nullify
-
-  has_many :works, through: :contributions
-
-  #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :medium, presence: true
-  validates :medium, inclusion: { in: Work.valid_media }
-
-  validates :name, presence: true
-  validates :name, uniqueness: { scope: [:medium] }
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 
   def alpha_parts
     [display_medium, name]
   end
 
-  def display_name(full: false)
-    full ? [display_medium, name].join(": ") : name
-  end
+  #############################################################################
+  # CONCERNING: Medium
+  #############################################################################
+
+  validates :medium, presence: true
+  validates :medium, inclusion: { in: Work.valid_media }
+
+  scope :for_medium, -> (medium) { where(medium: medium) }
 
   def display_medium
     return unless medium
 
     medium.constantize.display_medium
   end
+
+  #############################################################################
+  # CONCERNING: Name
+  #############################################################################
+
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: [:medium] }
+
+  def display_name(full: false)
+    full ? [display_medium, name].join(": ") : name
+  end
+
+  #############################################################################
+  # CONCERNING: Contributions
+  #############################################################################
+
+  has_many :attributions,  dependent: :destroy
+  has_many :contributions, dependent: :destroy
+
+  has_many :works, through: :contributions
+
+  #############################################################################
+  # CONCERNING: Ginsu.
+  #############################################################################
+
+  scope :for_list,   -> { }
+  scope :for_show,   -> { includes(:contributions, :works) }
 end

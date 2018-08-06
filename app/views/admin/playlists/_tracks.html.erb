@@ -1,0 +1,18 @@
+<% return if tracks.empty? %>
+
+<%= admin_section(headline: "Tracks", subhead: "Drag to Reorder") do %>
+  <%= content_tag(:ol, js_sortable_tracks_attrs(@playlist)) do %>
+    <% tracks.each do |track| %>
+      <%= content_tag(:li, "data-id": track.id) do %>
+        <%= link_to_work(track.work, full: false) %>
+        by
+        <% track.work.credits.each.with_index(1) do |credit, index| %>
+          <%= link_to_creator(credit.creator) %>
+          <% if index != track.work.credits.size %>
+            &amp;
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

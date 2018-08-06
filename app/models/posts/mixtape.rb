@@ -41,15 +41,25 @@
 class Mixtape < Post
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Alpha.
   #############################################################################
 
-  def self.for_list
-    super.includes(:playlist).references(:playlist)
-  end
+  delegate :alpha_parts, to: :playlist, allow_nil: true
 
-  def self.for_show
-    super.includes(:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones)
+  #############################################################################
+  # CONCERNING: STI Subclassed.
+  #############################################################################
+
+  concerning :Subclassing do
+    class_methods do
+      def for_list
+        super.includes(:playlist).references(:playlist)
+      end
+
+      def for_show
+        super.includes(:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones)
+      end
+    end
   end
 
   #############################################################################
@@ -58,8 +68,8 @@ class Mixtape < Post
 
   belongs_to :playlist
 
-  has_many :playlistings, through: :playlist
-  has_many :works,        through: :playlistings
+  has_many :tracks, through: :playlist
+  has_many :works,  through: :tracks
 
   has_many :makers,        through: :works
   has_many :contributions, through: :works
@@ -68,42 +78,20 @@ class Mixtape < Post
   has_many :milestones,    through: :works
 
   #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  #############################################################################
-  # DELEGATION.
-  #############################################################################
-
-  delegate :alpha_parts, to: :playlist, allow_nil: true
-
-  #############################################################################
   # VALIDATIONS.
   #############################################################################
 
   validates :playlist, presence: true
 
   #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # SLUGGABLE.
+  # INSTANCE.
   #############################################################################
 
   def sluggable_parts
-    [playlist.try(:title)]
+    [ playlist.try(:title) ]
   end
-
-  #############################################################################
-  # INSTANCE: TYPE METHODS.
-  #############################################################################
 
   def display_type(plural: false)
     plural ? "Mixtapes" : "Mixtape"
   end
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 end

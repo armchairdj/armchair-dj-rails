@@ -76,7 +76,7 @@ Rails.application.configure do
     Bullet.add_footer                  = false
     Bullet.n_plus_one_query_enable     = true
     Bullet.counter_cache_enable        = true
-    Bullet.unused_eager_loading_enable = false
+    Bullet.unused_eager_loading_enable = true
     # Bullet.stacktrace_includes         = [ "your_gem",  "your_middleware"  ]
     # Bullet.stacktrace_excludes         = [ "their_gem", "their_middleware" ]
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::UsersController < Admin::BaseController
+class Admin::UsersController < Ginsu::Controller
 
   # POST /users
   # POST /users.json

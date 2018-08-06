@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe Mixtape do
   describe "concerns" do
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [:author, :playlist] }
-      let(:show_loads) { [:playlist, :playlistings, :works, :makers, :contributions, :aspects, :milestones] }
+      let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
     end
   end
 
@@ -21,8 +21,8 @@ RSpec.describe Mixtape do
   describe "associations" do
     it { is_expected.to belong_to(:playlist) }
 
-    it { is_expected.to have_many(:playlistings).through(:playlist) }
-    it { is_expected.to have_many(:works       ).through(:playlistings) }
+    it { is_expected.to have_many(:tracks).through(:playlist) }
+    it { is_expected.to have_many(:works ).through(:tracks) }
 
     it { is_expected.to have_many(:makers       ).through(:works) }
     it { is_expected.to have_many(:contributions).through(:works) }

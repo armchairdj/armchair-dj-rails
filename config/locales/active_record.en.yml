@@ -66,27 +66,18 @@ en:
       contribution:
       creator:
       creator/primary:
-        'true':  "This is a primary creator. It can have pseudonyms."
-        'false': "This is a secondary creator. It can point to a primary identity."
+        'true':  "This is a primary identity. It can have pseudonyms."
+        'false': "This is a secondary identity. It is a pseudonym of a primary identity."
       creator/individual:
         'true':  "This is an individual creator. It can belong to a group."
         'false': "This is a group creator. It can have members."
+      creator/identity:
+        pseudynym_id: "Pseudonym"
+        real_name_id: "Main Name"
+      creator/membership:
+        group_id: "Group"
+        member_id: "Member"
       credit:
-      identity:
-        pseudynym_id: "Pseudonym"
-      membership:
-        pseudynym_id: "Pseudonym"
-      milestone:
-        activities:
-          released:   "Released in"
-          published:  "Published in"
-          aired:      "Aired in"
-          created:    "Created in"
-          reissued:   "Reissued in"
-          remastered: "Remastered in"
-          rereleased: "Re-released in"
-          recut:      "Re-edited in"
-          remixed:    "Remixed in"
       role:
         medium: "Medium"
       user:
@@ -106,6 +97,26 @@ en:
         username: "Handle"
       work:
         subtitle: "Subtitle or Version"
+      work/milestone:
+        activities:
+          released:   "Released in"
+          published:  "Published in"
+          aired:      "Aired in"
+          created:    "Created in"
+          reissued:   "Reissued in"
+          remastered: "Remastered in"
+          rereleased: "Re-released in"
+          recut:      "Re-edited in"
+          remixed:    "Remixed in"
+      work/relationship:
+        connections:
+          version_of:     "is a version of"
+          performance_of: "is a performance of"
+          remake_of:      "is a remake of"
+          sequel_to:      "is a sequel to"
+          spinoff_of:     "is a spinoff of"
+          borrows_from:   "borrows from or interpolates"
+          member_of:      "belongs to"
     errors:
       models:
         post:
@@ -122,7 +133,7 @@ en:
               blank: "You can't publish or schedule a post without a body."
             publish_on:
               blank: "Please choose a publication date to schedule this post."
-              present: "Please don't choose a publish date unless you're scheduling this post."
+              present: "Please don't choose a publication date unless you're scheduling this post."
         article:
           attributes:
             <<: *post_errors
@@ -132,25 +143,22 @@ en:
         mixtape:
           attributes:
             <<: *post_errors
-        aspect:
         contribution:
           attributes:
             creator_id:
               taken: "This contributor cannot appear twice in the same role."
-        creator:
-          attributes:
         credit:
           attributes:
             creator_id:
               taken: "This creator cannot appear twice."
-        identity:
+        creator/identity:
           attributes:
             real_name_id:
               not_primary: "Only primary creators can have pseudonyms."
             pseudonym_id:
               not_secondary: "Primary creators cannot be pseudonyms."
               taken: "This pseudonym is already assigned to another primary creator."
-        membership:
+        creator/membership:
           attributes:
             group_id:
               not_collective: "Only groups can have members."
@@ -161,14 +169,12 @@ en:
             author:
               blank: "Please choose an author."
               invalid_author: "This user is not an author."
-            playlistings:
+            tracks:
               too_short: "Please choose at least two works."
         role:
           attributes:
             medium:
               inclusion: "Please choose a valid medium."
-        tag:
-          attributes:
         work:
           attributes:
             aspects:
@@ -177,6 +183,12 @@ en:
               too_short: "Please choose at least one creator."
             milestones:
               blank: "Please choose a release date."
+        work/relationship:
+          attributes:
+            connection:
+              blank: "Please choose a connection between these works."
+            source_id:
+              same_as_target: This work cannot connect to itself.
         user:
           attributes:
             role:

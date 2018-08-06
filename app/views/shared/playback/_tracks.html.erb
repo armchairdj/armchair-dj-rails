@@ -1,0 +1,5 @@
+<% return if tracks.empty? %>
+
+<%= content_tag(:ol, class: "numbered") do %>
+  <%= render partial: "shared/playback/track", collection: tracks %>
+<% end %>

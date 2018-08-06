@@ -25,310 +25,361 @@ require "wannabe_bool"
 class Creator < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  MAX_PSEUDONYMS_AT_ONCE  = 5.freeze
-  MAX_REAL_NAMES          = 1.freeze
-
-  MAX_MEMBERS_AT_ONCE     = 5.freeze
-  MAX_GROUPS_AT_ONCE      = 5.freeze
-
-  #############################################################################
-  # CONCERNS.
+  # CONCERNING: Alpha.
   #############################################################################
 
   include Alphabetizable
+
+  def alpha_parts
+    [name]
+  end
+
+  #############################################################################
+  # CONCERNING: Name.
+  #############################################################################
+
+  validates :name, presence: true
+
+  #############################################################################
+  # CONCERNING: Primariness & Individuality.
+  #############################################################################
+
+  concerning :Primariness do
+    included do
+      attribute :primary, :boolean, default: true
+
+      scope :primary,   -> { where(primary: true ) }
+      scope :secondary, -> { where(primary: false) }
+
+      after_save :enforce_primariness
+    end
+
+    def identity_type
+      primary? ? "Primary" : "Secondary"
+    end
+
+    def personae
+      return pseudonyms if primary?
+
+      return self.class.none unless real_name
+
+      aliases   = self.real_name.pseudonyms.where.not(id: self.id)
+      real_name = self.class.where(id: self.real_name.id)
+
+      aliases.union_all(real_name).alpha
+    end
+
+  private
+
+    def enforce_primariness
+      if self.primary?
+        self.real_name_identities.clear
+      else
+        self.pseudonym_identities.clear
+      end
+    end
+  end
+
+  concerning :Individuality do
+    included do
+      attribute :individual, :boolean, default: true
+
+      after_save :enforce_individuality
+    end
+
+    def membership_type
+      individual? ? "Individual" : "Group"
+    end
+
+    def colleagues
+      return self.class.none unless individual? && groups.any?
+
+      ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
+
+      Creator.where(id: ids).alpha
+    end
+
+  private
+
+    def enforce_individuality
+      if self.collective?
+        self.group_memberships.clear
+      else
+        self.member_memberships.clear
+      end
+    end
+  end
 
   include Booletania
 
   booletania_columns :primary, :individual
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Identities
   #############################################################################
 
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :primary,    -> { where(primary:     true) }
-  scope :secondary,  -> { where(primary:    false) }
-  scope :individual, -> { where(individual:  true) }
-  scope :collective, -> { where(individual: false) }
-
-  scope :orphaned, -> { left_outer_joins(:real_name_identities).where(identities: { id: nil } ) }
-
-  scope :available_groups,     -> { alpha.collective         }
-  scope :available_members,    -> { alpha.individual         }
-  scope :available_real_names, -> { alpha.primary            }
-  scope :available_pseudonyms, -> { alpha.secondary.orphaned }
-
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(
-    :pseudonyms, :real_names, :members, :groups,
-    :credits, :contributed_roles,
-    :works, :contributed_works,
-    :reviews, :contributed_reviews,
-    :mixtapes, :contributed_mixtapes,
-  ) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  # Credits.
-
-  has_many :credits, inverse_of: :creator, dependent: :destroy
-
-  has_many :works,   through: :credits
-  has_many :reviews, through: :works
-
-  has_many :playlistings, -> { distinct }, through: :works
-  has_many :playlists,    -> { distinct }, through: :playlistings
-  has_many :mixtapes,     -> { distinct }, through: :playlists
-
-  # Contributions.
-
-  has_many :contributions, inverse_of: :creator, dependent: :destroy
-
-  has_many :contributed_roles, -> { includes(contributions: :work) },
-    through: :contributions, class_name: "Role", source: :role
-
-  has_many :contributed_works, -> { distinct }, through: :contributions,
-    class_name: "Work", source: :work
-
-  has_many :contributed_reviews, through: :contributed_works,
-    class_name: "Review", source: :reviews
-
-  has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
-    class_name: "Playlisting", source: :playlistings
-
-  has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
-    class_name: "Playlist", source: :playlist
-
-  has_many :contributed_mixtapes, -> { distinct }, through: :contributed_playlists,
-    class_name: "Mixtape", source: :mixtapes
-
-  # Identities.
-
-  with_options(class_name: "Identity", dependent: :destroy) do |creator|
-    creator.has_many :pseudonym_identities, foreign_key: :real_name_id, inverse_of: :real_name
-    creator.has_many :real_name_identities, foreign_key: :pseudonym_id, inverse_of: :pseudonym
-  end
+  has_many :pseudonym_identities, class_name: "Creator::Identity",
+    foreign_key: :real_name_id, inverse_of: :real_name, dependent: :destroy
 
   has_many :pseudonyms, -> { order("creators.name") },
     through: :pseudonym_identities, source: :pseudonym
 
+  has_many :real_name_identities, class_name: "Creator::Identity",
+    foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
+
   has_many :real_names, -> { order("creators.name") },
     through: :real_name_identities, source: :real_name
 
-  # Memberships.
+  concerning :NestedPseudonymIdentities do
+    MAX_PSEUDONYMS_AT_ONCE = 5.freeze
 
-  with_options(class_name: "Membership", dependent: :destroy) do |creator|
-    creator.has_many :member_memberships, foreign_key: :group_id,  inverse_of: :group
-    creator.has_many :group_memberships,  foreign_key: :member_id, inverse_of: :member
+    included do
+      scope :available_pseudonyms, -> {
+        secondary.alpha.left_outer_joins(:real_name_identities).
+        where(creator_identities: { id: nil })
+      }
+
+      accepts_nested_attributes_for(:pseudonym_identities,
+        allow_destroy: true, reject_if: :reject_pseudonym_identity?
+      )
+    end
+
+    def prepare_pseudonym_identities
+      MAX_PSEUDONYMS_AT_ONCE.times { self.pseudonym_identities.build }
+    end
+
+    def available_pseudonyms
+      self.class.available_pseudonyms.union(self.pseudonyms).alpha
+    end
+
+  private
+
+    def reject_pseudonym_identity?(attrs)
+      key = attrs["pseudonym_id"]
+
+      return true if key.blank?
+      return true if self.class.find(key).primary?
+
+      false
+    end
   end
+
+  concerning :NestedRealNameIdentities do
+    MAX_REAL_NAMES = 1.freeze
+
+    included do
+      scope :available_real_names, -> { primary.alpha }
+
+      accepts_nested_attributes_for(:real_name_identities,
+        allow_destroy: true, reject_if: :reject_real_name_identity?
+      )
+    end
+
+    def prepare_real_name_identities
+      count_needed = MAX_REAL_NAMES - self.real_name_identities.length
+
+      count_needed.times { self.real_name_identities.build }
+    end
+
+    def secondary?
+      !primary?
+    end
+
+    alias_method :pseudonym?, :secondary?
+
+    def real_name
+      real_names.first
+    end
+
+  private
+
+    def reject_real_name_identity?(attrs)
+      key = attrs["real_name_id"]
+
+      return true if key.blank?
+      return true if self.class.find(key).secondary?
+
+      false
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Memberships.
+  #############################################################################
+
+  has_many :group_memberships, class_name: "Creator::Membership",
+    foreign_key: :member_id, inverse_of: :member, dependent: :destroy
+
+  has_many :groups, -> { order("creators.name") },
+    through: :group_memberships, source: :group
+
+  has_many :member_memberships, class_name: "Creator::Membership",
+    foreign_key: :group_id, inverse_of: :group, dependent: :destroy
 
   has_many :members, -> { order("creators.name") },
     through: :member_memberships, source: :member
 
-  has_many  :groups, -> { order("creators.name") },
-    through: :group_memberships,  source: :group
+  concerning :NestedGroupMemberships do
+    MAX_GROUPS_AT_ONCE  = 5.freeze
 
-  #############################################################################
-  # ATTRIBUTES: pseudonym_identities
-  #############################################################################
+    included do
+      scope :individual, -> { where(individual: true) }
 
-  accepts_nested_attributes_for :pseudonym_identities, allow_destroy: true,
-    reject_if: :blank_or_primary?
+      scope :available_groups,  -> { collective.alpha }
 
-  def blank_or_primary?(attrs)
-    key = attrs["pseudonym_id"]
+      accepts_nested_attributes_for(:group_memberships,
+        allow_destroy: true, reject_if: :reject_group_membership?
+      )
+    end
 
-    return true if key.blank?
-    return true if self.class.find(key).primary?
-  end
+    def prepare_group_memberships
+      MAX_GROUPS_AT_ONCE.times { self.group_memberships.build }
+    end
 
-  private :blank_or_primary?
+  private
 
-  def prepare_pseudonym_identities
-    MAX_PSEUDONYMS_AT_ONCE.times { self.pseudonym_identities.build }
-  end
+    def reject_group_membership?(attrs)
+      key = attrs["group_id"]
 
-  def available_pseudonyms
-    self.class.available_pseudonyms.union(self.pseudonyms).alpha
-  end
+      return true if key.blank?
+      return true if self.class.find(key).individual?
 
-  #############################################################################
-  # ATTRIBUTES: real_name_identities
-  #############################################################################
-
-  accepts_nested_attributes_for :real_name_identities, allow_destroy: true,
-    reject_if: :blank_or_secondary?
-
-  def blank_or_secondary?(attrs)
-    key = attrs["real_name_id"]
-
-    return true if key.blank?
-    return true if self.class.find(key).secondary?
-  end
-
-  private :blank_or_secondary?
-
-  def prepare_real_name_identities
-    count_needed = MAX_REAL_NAMES - self.real_name_identities.length
-
-    count_needed.times { self.real_name_identities.build }
-  end
-
-  def group?
-    !individual?
-  end
-
-  def secondary?
-    !primary?
-  end
-
-  def identity_type
-    primary? ? "Primary" : "Secondary"
-  end
-
-  def membership_type
-    individual? ? "Individual" : "Group"
-  end
-
-  alias_method :alias?, :secondary?
-
-  def real_name
-    real_names.first
-  end
-
-  def personae
-    return pseudonyms if primary?
-
-    return self.class.none unless real_name
-
-    aliases = real_name.pseudonyms.where.not(id: self.id)
-    parent  = self.class.where(id: real_name.id)
-
-    aliases.union_all(parent).alpha
-  end
-
-  #############################################################################
-  # ATTRIBUTES: member_memberships
-  #############################################################################
-
-  accepts_nested_attributes_for :member_memberships, allow_destroy: true,
-    reject_if: :blank_or_collective?
-
-  def blank_or_collective?(attrs)
-    key = attrs["member_id"]
-
-    return true if key.blank?
-    return true if self.class.find(key).collective?
-  end
-
-  private :blank_or_collective?
-
-  def prepare_member_memberships
-    MAX_MEMBERS_AT_ONCE.times { self.member_memberships.build }
-  end
-
-  #############################################################################
-  # ATTRIBUTES: group_memberships
-  #############################################################################
-
-  accepts_nested_attributes_for :group_memberships, allow_destroy: true,
-    reject_if: :blank_or_individual?
-
-  def blank_or_individual?(attrs)
-    key = attrs["group_id"]
-
-    return true if key.blank?
-    return true if self.class.find(key).individual?
-  end
-
-  private :blank_or_individual?
-
-  def prepare_group_memberships
-    MAX_GROUPS_AT_ONCE.times { self.group_memberships.build }
-  end
-
-  def collective?
-    !individual?
-  end
-
-  def colleagues
-    return self.class.none unless individual? && groups.any?
-
-    ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
-
-    Creator.where(id: ids).alpha
-  end
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :name,       presence: true
-  # validates :primary,    presence: true
-  # validates :individual, presence: true
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  def enforce_primariness
-    if self.primary?
-      self.real_name_identities.destroy_all
-    else
-      self.pseudonym_identities.destroy_all
+      false
     end
   end
 
-  after_save :enforce_primariness
+  concerning :NestedMemberMemberships do
+    MAX_MEMBERS_AT_ONCE = 5.freeze
 
-  private :enforce_primariness
+    included do
+      scope :collective, -> { where(individual: false) }
 
-  def enforce_individuality
-    if self.collective?
-      self.group_memberships.destroy_all
-    else
-      self.member_memberships.destroy_all
+      scope :available_members, -> { individual.alpha }
+
+      accepts_nested_attributes_for(:member_memberships,
+        allow_destroy: true, reject_if: :reject_member_membership?
+      )
+    end
+
+    def prepare_member_memberships
+      MAX_MEMBERS_AT_ONCE.times { self.member_memberships.build }
+    end
+
+    def collective?
+      !individual?
+    end
+
+    alias_method :group?, :collective?
+
+  private
+
+    def reject_member_membership?(attrs)
+      key = attrs["member_id"]
+
+      return true if key.blank?
+      return true if self.class.find(key).collective?
+
+      false
     end
   end
 
-  after_save :enforce_individuality
-
-  private :enforce_individuality
-
   #############################################################################
-  # INSTANCE.
+  # CONCERNING: Attributions.
   #############################################################################
 
-  def alpha_parts
-    [name]
+  has_many :attributions,  inverse_of: :creator, dependent: :destroy
+  has_many :credits,       inverse_of: :creator, dependent: :destroy
+  has_many :contributions, inverse_of: :creator, dependent: :destroy
+
+  def works
+    Work.where(id: attributions.select(:work_id).distinct)
   end
 
-  def all_works
-    works.union(contributed_works).alpha
+  def display_roles
+    raw = attributions.includes(:work, :role).to_a.group_by(&:display_medium)
+
+    raw.transform_values! { |v| v.map(&:role_name).uniq.sort }
+  end
+
+  #############################################################################
+  # CONCERNING: Credited works & playlists.
+  #############################################################################
+
+  has_many :credited_works, -> { distinct }, through: :credits,
+    class_name: "Work", source: :work
+
+  has_many :credited_playlistings, -> { distinct }, through: :credited_works,
+    class_name: "Playlist::Track", source: :playlistings
+
+  has_many :credited_playlists, -> { distinct }, through: :credited_playlistings,
+    class_name: "Playlist", source: :playlist
+
+  #############################################################################
+  # CONCERNING: Contributed works & playlists.
+  #############################################################################
+
+  has_many :contributed_works, -> { distinct }, through: :contributions,
+    class_name: "Work", source: :work
+
+  has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
+    class_name: "Playlist::Track", source: :playlistings
+
+  has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
+    class_name: "Playlist", source: :playlist
+
+  has_many :contributed_roles, -> { includes(contributions: :work) },
+    through: :contributions, class_name: "Role", source: :role
+
+  #############################################################################
+  # CONCERNING: Posts.
+  #############################################################################
+
+  has_many :credited_reviews, -> { distinct }, through: :credited_works,
+    class_name: "Review", source: :reviews
+
+  has_many :contributed_reviews, -> { distinct }, through: :contributed_works,
+    class_name: "Review", source: :reviews
+
+  has_many :credited_mixtapes, -> { distinct }, through: :credited_playlists,
+    class_name: "Mixtape", source: :mixtapes
+
+  has_many :contributed_mixtapes, -> { distinct }, through: :contributed_playlists,
+    class_name: "Mixtape", source: :mixtapes
+
+  def post_ids
+    (contributed_mixtapes.ids +
+        credited_mixtapes.ids +
+      contributed_reviews.ids +
+         credited_reviews.ids).uniq
   end
 
   def posts
     Post.where(id: post_ids)
   end
 
-  def post_ids
-    (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
+  #############################################################################
+  # CONCERNING: Nested Attributes.
+  #############################################################################
+
+  def prepare_for_editing
+    prepare_pseudonym_identities
+    prepare_real_name_identities
+    prepare_member_memberships
+    prepare_group_memberships
   end
 
-  def display_roles
-    cred =       credits.includes(:work       )
-    cont = contributions.includes(:work, :role)
+  #############################################################################
+  # CONCERNING: Ginsu.
+  #############################################################################
 
-    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
-
-    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
-  end
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(
+    :pseudonyms,        :real_names,
+    :members,           :groups,
+    :credits,           :contributions,
+    :credited_works,    :contributed_works,
+    :credited_reviews,  :contributed_reviews,
+    :credited_mixtapes, :contributed_mixtapes,
+    :contributed_roles
+  ) }
 end

@@ -32,21 +32,28 @@
     <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :credits,
-      required:    true,
-      headline:    "Creators"
+      headline:    "Creators",
+      required:    true
     %>
 
     <%= render "shared/forms/has_many_fieldset",
       f:           f,
-      association: :milestones
+      association: :contributions,
+      headline:    "Contributors"
+    %>
+
+    <%= render "shared/forms/has_many_fieldset",
+      f:           f,
+      association: :milestones,
+      required:    true
     %>
 
     <%= render "fieldset_aspects", f: f %>
 
     <%= render "shared/forms/has_many_fieldset",
       f:           f,
-      association: :contributions,
-      headline:    "Contributors"
+      association: :source_relationships,
+      headline:    "Related Works"
     %>
   <% end %>
 

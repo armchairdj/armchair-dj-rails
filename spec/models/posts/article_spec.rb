@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Article do
   describe "concerns" do
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [:author] }
       let(:show_loads) { [:author, :links, :tags] }
     end

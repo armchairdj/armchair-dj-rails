@@ -1,0 +1,108 @@
+version: 2
+
+# https://circleci.com/docs/2.0/executor-types/
+# https://circleci.com/docs/2.0/circleci-images/
+
+################################################################################
+# CONFIG.
+################################################################################
+
+env_config: &env_config
+  parallelism: 1
+  working_directory: ~/armchairdj/armchair-dj-rails
+  shell: /bin/bash --login
+  docker:
+    - image: circleci/ruby:2.4.1-node-browsers
+      environment:
+        TZ: "/usr/share/zoneinfo/America/Los_Angeles"
+        BUNDLE_JOBS: 3
+        BUNDLE_RETRY: 3
+        BUNDLE_PATH: vendor/bundle
+        PGHOST: 127.0.0.1
+        PGUSER: armchairdj_postgres
+        RAILS_ENV: test
+        RACK_ENV: test
+    - image: circleci/postgres:10.4-alpine-ram
+      environment:
+        TZ: "/usr/share/zoneinfo/America/Los_Angeles"
+        POSTGRES_USER: armchairdj_postgres
+        POSTGRES_DB: armchairdj_postgres_test
+        POSTGRES_PASSWORD: ""
+
+################################################################################
+# JOBS.
+################################################################################
+
+jobs:
+  build_and_run_specs:
+    <<: *env_config
+
+    steps:
+      - checkout
+
+      - run:
+          name: Which bundler?
+          command: bundle -v
+
+      # Restore bundle cache
+      - restore_cache:
+          keys:
+            - armchair-dj-rails-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - armchair-dj-rails-bundle-v2-
+
+      - run:
+          name: Install bundles
+          command: bundle check || bundle install
+
+      # Store bundle cache
+      - save_cache:
+          key: armchair-dj-rails-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # Restore yarn cache
+      - restore_cache:
+          keys:
+            - armchair-dj-rails-yarn-{{ checksum "yarn.lock" }}
+            - armchair-dj-rails-yarn-
+
+      - run:
+          name: Install yarn packages
+          command: yarn install --cache-folder ~/.cache/yarn
+
+      # Store yarn cache
+      - save_cache:
+          key: armchair-dj-rails-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      - run:
+          name: Wait for Postgres docker image
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Load schema
+          command: bin/rails db:schema:load --trace
+
+      - run:
+          name: Run rspec in parallel
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings --timings-type=classname)
+
+      # Save test results
+      - store_test_results:
+          path: test_results
+
+################################################################################
+# WORKFLOWS.
+################################################################################
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_and_run_specs

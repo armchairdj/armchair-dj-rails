@@ -1,0 +1,17 @@
+<%= f.simple_fields_for :tracks, track do |ff| %>
+  <%= expandable_fieldset do %>
+    <%= ff.input :work_id, as: :grouped_select,
+      label:              false,
+      collection:         @works,
+      required:           false,
+      group_label_method: :first,
+      group_method:       :last,
+      label_method:       :full_display_title,
+      value_method:       :id,
+      include_blank:      :translate,
+      input_html:         { "data-controller": "selectable" }
+    %>
+
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

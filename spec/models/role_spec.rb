@@ -23,7 +23,7 @@ RSpec.describe Role do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:contributions, :works] }
     end
@@ -44,7 +44,7 @@ RSpec.describe Role do
   end
 
   describe "associations" do
-    it { is_expected.to have_many(:contributions).dependent(:nullify) }
+    it { is_expected.to have_many(:contributions).dependent(:destroy) }
 
     it { is_expected.to have_many(:works).through(:contributions) }
   end

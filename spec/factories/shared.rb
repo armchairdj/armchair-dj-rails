@@ -4,14 +4,37 @@ require "ffaker"
 
 FactoryBot.define do
 
-  sequence :aspect_name    { |n| "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-  sequence :creator_name   { |n| "#{FFaker::Music.artist}-#{n}" }
-  sequence :link_url       { |n| "http://www.example.com/articles/#{n}" }
-  sequence :role_name      { |n| "Role #{n}" }
-  sequence :tag_name       { |n| "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}" }
-  sequence :user_email     { |n| "user#{n}@example.com" }
-  sequence :user_username  { |n| "realcoolperson#{n}"   }
-  sequence :year           { |n| rand(1..2020) }
+  sequence :aspect_name do |n|
+    "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+  end
+
+  sequence :creator_name do |n|
+    "#{FFaker::Music.artist}-#{n}"
+  end
+
+  sequence :link_url do |n|
+    "http://www.example.com/articles/#{n}"
+  end
+
+  sequence :role_name do |n|
+    "Role #{n}"
+  end
+
+  sequence :tag_name do |n|
+    "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+  end
+
+  sequence :user_email do |n|
+    "user#{n}@example.com"
+  end
+
+  sequence :user_username do |n|
+    "realcoolperson#{n}"
+  end
+
+  sequence :year do |n|
+    rand(1..2020)
+  end
 
   trait :skip_validation do
     to_create { |instance| instance.save(validate: false) }

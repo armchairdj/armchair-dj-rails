@@ -13,7 +13,7 @@ RSpec.describe Admin::CreatorsController do
     login_root
 
     describe "GET #index" do
-      it_behaves_like "an_admin_index"
+      it_behaves_like "a_ginsu_index"
     end
 
     describe "GET #show" do
@@ -61,9 +61,9 @@ RSpec.describe Admin::CreatorsController do
       context "with max valid params including memeber and pseudonym" do
         subject { post :create, params: { creator: max_params } }
 
-        it { expect { subject }.to change(Creator,    :count).by(3) }
-        it { expect { subject }.to change(Identity,   :count).by(1) }
-        it { expect { subject }.to change(Membership, :count).by(1) }
+        it { expect { subject }.to change(Creator,             :count).by(3) }
+        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
+        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(Creator.last, :creator).with_attributes(max_params).and_be_valid }
 
@@ -75,9 +75,9 @@ RSpec.describe Admin::CreatorsController do
       context "with max valid params including group and real_name" do
         subject { post :create, params: { creator: alt_params } }
 
-        it { expect { subject }.to change(Creator,    :count).by(3) }
-        it { expect { subject }.to change(Identity,   :count).by(1) }
-        it { expect { subject }.to change(Membership, :count).by(1) }
+        it { expect { subject }.to change(Creator,             :count).by(3) }
+        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
+        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(Creator.last, :creator).with_attributes(alt_params).and_be_valid }
 
@@ -138,9 +138,9 @@ RSpec.describe Admin::CreatorsController do
           put :update, params: { id: instance.to_param, creator: max_params }
         end
 
-        it { expect { subject }.to change(Identity,   :count).by(1) }
+        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
 
-        it { expect { subject }.to change(Membership, :count).by(1) }
+        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(instance, :creator).with_attributes(max_params).and_be_valid }
 

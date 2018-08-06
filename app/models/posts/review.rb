@@ -41,15 +41,25 @@
 class Review < Post
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Alpha.
   #############################################################################
 
-  def self.for_list
-    super.includes(:work).references(:work)
-  end
+  delegate :alpha_parts, to: :work, allow_nil: true
 
-  def self.for_show
-    super.includes(:work, :makers, :contributions, :aspects, :milestones)
+  #############################################################################
+  # CONCERNING: STI Subclassed.
+  #############################################################################
+
+  concerning :Subclassing do
+    class_methods do
+      def for_list
+        super.includes(:work).references(:work)
+      end
+
+      def for_show
+        super.includes(:work, :makers, :contributions, :aspects, :milestones)
+      end
+    end
   end
 
   #############################################################################
@@ -65,33 +75,20 @@ class Review < Post
   has_many :milestones,    through: :work
 
   #############################################################################
-  # DELEGATION.
-  #############################################################################
-
-  delegate :display_medium, to: :work, allow_nil: true
-  delegate :alpha_parts,    to: :work, allow_nil: true
-
-  #############################################################################
   # VALIDATIONS.
   #############################################################################
 
   validates :work, presence: true
 
   #############################################################################
-  # HOOKS.
+  # INSTANCE.
   #############################################################################
 
-  #############################################################################
-  # SLUGGABLE.
-  #############################################################################
+  delegate :display_medium, to: :work, allow_nil: true
 
   def sluggable_parts
     work.try(:sluggable_parts) || []
   end
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 
   def display_type(plural: false)
     base = [display_medium, "Review"].compact.join(" ")

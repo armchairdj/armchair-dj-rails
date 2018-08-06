@@ -239,7 +239,6 @@ movie_composer             = FactoryBot.create(:role, medium: "Movie", name: "Co
 movie_sound_editor         = FactoryBot.create(:role, medium: "Movie", name: "Sound Editor")
 movie_sound_effects        = FactoryBot.create(:role, medium: "Movie", name: "Sound Effects")
 
-tv_show_creator            = FactoryBot.create(:role, medium: "TvShow", name: "Creator")
 tv_show_producer           = FactoryBot.create(:role, medium: "TvShow", name: "Producer")
 tv_show_executive_producer = FactoryBot.create(:role, medium: "TvShow", name: "Executive Producer")
 tv_show_co_producer        = FactoryBot.create(:role, medium: "TvShow", name: "Co-Producer")

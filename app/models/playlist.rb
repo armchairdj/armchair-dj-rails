@@ -21,74 +21,74 @@
 class Playlist < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  MAX_PLAYLISTINGS_AT_ONCE = 20.freeze
-
-  #############################################################################
-  # CONCERNS.
+  # CONCERNING: Authorable.
   #############################################################################
 
   include Authorable
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
   include Alphabetizable
-
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :for_list,  -> { includes(:author).references(:author) }
-  scope :for_show,  -> { includes(:author, :playlistings, :works) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_many :playlistings, -> { order(:position) }, inverse_of: :playlist, dependent: :destroy
-
-  has_many :works, through: :playlistings
-
-  has_many :makers,       -> { distinct }, through: :works
-  has_many :contributors, -> { distinct }, through: :works
-
-  has_many :mixtapes, dependent: :nullify
-
-  has_many :reviews, through: :works
-
-  #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
-
-  accepts_nested_attributes_for :playlistings, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["work_id"].blank? }
-
-  def prepare_playlistings
-    MAX_PLAYLISTINGS_AT_ONCE.times { self.playlistings.build }
-  end
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :title, presence: true
-
-  validates :playlistings, length: { minimum: 2 }
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
 
   def alpha_parts
     [title]
   end
+
+  #############################################################################
+  # CONCERNING: Title.
+  #############################################################################
+
+  validates :title, presence: true
+
+  #############################################################################
+  # CONCERNING: Tracks.
+  #############################################################################
+
+  has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
+    class_name: "Playlist::Track", dependent: :destroy
+
+  validates :tracks, length: { minimum: 2 }
+
+  concerning :NestedTracks do
+    MAX_TRACKS_AT_ONCE = 20.freeze
+
+    included do
+      accepts_nested_attributes_for(:tracks, allow_destroy: true,
+        reject_if: proc { |attrs| attrs["work_id"].blank? }
+      )
+    end
+
+    def prepare_tracks
+      MAX_TRACKS_AT_ONCE.times { self.tracks.build }
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Works.
+  #############################################################################
+
+  has_many :works, through: :tracks
+
+  has_many :makers,       -> { distinct }, through: :works
+  has_many :contributors, -> { distinct }, through: :works
+
+  def creators
+    Creator.where(id: creator_ids)
+  end
+
+  def creator_ids
+    works.map(&:creator_ids).flatten.uniq
+  end
+
+  #############################################################################
+  # CONCERNING: Posts.
+  #############################################################################
+
+  has_many :mixtapes, dependent: :nullify
+
+  has_many :reviews, through: :works
 
   def posts
     Post.where(id: post_ids)
@@ -98,11 +98,10 @@ class Playlist < ApplicationRecord
     reviews.ids + mixtapes.ids
   end
 
-  def creators
-    Creator.where(id: creator_ids)
-  end
+  #############################################################################
+  # CONCERNING: Ginsu.
+  #############################################################################
 
-  def creator_ids
-    works.map(&:creator_ids).flatten.uniq
-  end
+  scope :for_list,  -> { includes(:author).references(:author) }
+  scope :for_show,  -> { includes(:author, :tracks, :works) }
 end

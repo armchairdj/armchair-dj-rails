@@ -8,7 +8,7 @@ RSpec.describe Work do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
     end
@@ -16,21 +16,133 @@ RSpec.describe Work do
     describe "nilify_blanks" do
       subject { build_minimal_instance }
 
-      describe "nilify_blanks" do
-        # Must specify individual fields for STI models.
-        it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
-        it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
-        it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
-        it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
-        it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
+      it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
+      it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
+      it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
+      it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
+    end
+  end
+
+  describe "relationships" do
+    describe "as target" do
+      describe "has associations" do
+        subject { build_minimal_instance }
+
+        it { is_expected.to have_many(:source_relationships).dependent(:destroy) }
+
+        it { is_expected.to have_many(:source_works).through(:source_relationships) }
       end
+
+      describe "validates nested uniqueness" do
+        subject { build_minimal_instance }
+
+        let(:source      ) { create_minimal_instance }
+        let(:other_source) { create_minimal_instance }
+
+        before(:each) do
+          subject.source_relationships_attributes = attributes
+        end
+
+        context "without dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id      ),
+            "1" => attributes_for(:minimal_work_relationship, source_id: other_source.id)
+          }}
+
+          it { is_expected.to be_valid }
+        end
+
+        context "with dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
+            "1" => attributes_for(:minimal_work_relationship, source_id: source.id)
+          }}
+
+          it "is has the correct error" do
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:source_relationships, :nested_taken)
+          end
+        end
+
+        context "with duplicate sources but different connections" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
+            "1" => attributes_for(:minimal_work_relationship, source_id: source.id, connection: "spinoff_of")
+          }}
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      describe "accepts nested attributes" do
+        let(:source      ) { create(:minimal_work) }
+        let(:valid_params) { { "0" => { connection: "member_of", source_id: source.id } } }
+        let(:empty_params) { { "0" => { connection: "member_of", source_id: nil       } } }
+
+        it { is_expected.to accept_nested_attributes_for(:source_relationships).allow_destroy(true) }
+
+        describe "#prepare_source_relationships" do
+          subject { instance.source_relationships }
+
+          before(:each) { instance.prepare_source_relationships }
+
+          describe "initial state" do
+            let(:instance) { build_minimal_instance }
+
+            it { is_expected.to have(5).items }
+          end
+
+          describe "with prior associations" do
+            let(:instance) { create_minimal_instance(source_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(6).items }
+          end
+        end
+
+        describe "#reject_source_relationship?" do
+          subject { instance.source_relationships }
+
+          describe "accepts if source_id is present" do
+            let(:instance) { build_minimal_instance(source_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(1).item }
+          end
+
+          describe "rejects if source_id is blank" do
+            let(:instance) { build_minimal_instance(source_relationships_attributes: empty_params) }
+
+            it { is_expected.to have(0).items }
+          end
+        end
+      end
+
+      describe "#available_sources" do
+        subject { instance.available_sources }
+
+        let(:instance) { create(:minimal_song ) }
+        let!(:other  ) { create(:minimal_song ) }
+        let!(:album  ) { create(:minimal_album) }
+
+        it { is_expected.to eq([
+          ["Album", [album] ],
+          ["Song",  [other] ]
+        ]) }
+      end
+    end
+
+    describe "as source" do
+      it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
+      it { is_expected.to have_many(:target_works).through(:target_relationships) }
     end
   end
 
   describe "class" do
     describe "self#grouped_by_medium" do
-      let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
-      let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
+      let(:song_1 ) { create(:minimal_song, maker_names: ["Wilco"]) }
+      let(:song_2 ) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show         ) }
       let(:podcast) { create(:minimal_podcast         ) }
 
@@ -109,6 +221,7 @@ RSpec.describe Work do
 
         it "loads" do
           expect(File).to receive(:basename)
+
           described_class.load_descendants
         end
       end
@@ -118,6 +231,7 @@ RSpec.describe Work do
 
         it "loads" do
           expect(File).to receive(:basename)
+
           described_class.load_descendants
         end
       end
@@ -127,14 +241,11 @@ RSpec.describe Work do
 
         it "does not load" do
           expect(File).to_not receive(:basename)
+
           described_class.load_descendants
         end
       end
     end
-  end
-
-  describe "scope-related" do
-    # Nothing so far.
   end
 
   describe "associations" do
@@ -235,12 +346,12 @@ RSpec.describe Work do
         describe "reject_if" do
           subject do
             build(:minimal_song, milestones_attributes: {
-              "0" => attributes_for(:milestone_for_work, year: "1981"),
-              "1" => attributes_for(:milestone_for_work, year: ""    )
+              "0" => attributes_for(:work_milestone_for_work, year: "1981"),
+              "1" => attributes_for(:work_milestone_for_work, year: ""    )
             })
           end
 
-          specify { expect { subject.save }.to change { Milestone.count }.by(1) }
+          specify { expect { subject.save }.to change { Work::Milestone.count }.by(1) }
 
           specify { expect(subject.milestones).to have(1).items }
         end
@@ -273,10 +384,6 @@ RSpec.describe Work do
       subject { instance.prepare_for_editing }
 
       before(:each) do
-        allow(instance).to receive(:prepare_credits)
-        allow(instance).to receive(:prepare_contributions)
-        allow(instance).to receive(:prepare_milestones)
-
         expect(instance).to receive(:prepare_credits)
         expect(instance).to receive(:prepare_contributions)
         expect(instance).to receive(:prepare_milestones)
@@ -315,7 +422,7 @@ RSpec.describe Work do
       describe "#has_released_milestone" do
         subject do
           build_minimal_instance(milestones_attributes: {
-            "0" => attributes_for(:milestone_for_work, activity: :remixed, year: "1972")
+            "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")
           })
         end
 
@@ -324,17 +431,17 @@ RSpec.describe Work do
         it { is_expected.to have_error(milestones: :blank) }
       end
 
-      describe "validate_nested_uniqueness_of" do
+      describe "validates_nested_uniqueness_of" do
         subject { build_minimal_instance }
 
         describe "credits" do
           before(:each) { subject.credits = [] }
 
-          let(:creator) { create(:minimal_creator) }
+          let(:creator      ) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:minimal_credit, creator_id:       creator.id),
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id      ),
             "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
           }}
 
@@ -395,13 +502,13 @@ RSpec.describe Work do
           before(:each) { subject.milestones = [] }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:milestone, activity: :released,   year: "1977"),
-            "1" => attributes_for(:milestone, activity: :remastered, year: "2005"),
+            "0" => attributes_for(:work_milestone, activity: :released,   year: "1977"),
+            "1" => attributes_for(:work_milestone, activity: :remastered, year: "2005"),
           }}
 
           let(:bad_attributes) { {
-            "0" => attributes_for(:milestone, activity: :released, year: "1977"),
-            "1" => attributes_for(:milestone, activity: :released, year: "2005"),
+            "0" => attributes_for(:work_milestone, activity: :released, year: "1977"),
+            "1" => attributes_for(:work_milestone, activity: :released, year: "2005"),
           }}
 
           it "accepts non-dupes" do
@@ -452,7 +559,7 @@ RSpec.describe Work do
 
       before(:each) do
         # TODO let the factory handle this with transient attributes
-        playlist.playlistings << create(:minimal_playlisting, work_id: instance.id)
+        playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
       end
 
       describe "post_ids" do
@@ -505,7 +612,7 @@ RSpec.describe Work do
     end
 
     describe "#collect_makers" do
-      subject { instance.collect_makers }
+      subject { instance.send(:collect_makers) }
 
       context "unsaved" do
         context "no credits" do

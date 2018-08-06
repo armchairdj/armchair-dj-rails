@@ -5,7 +5,7 @@ require "ffaker"
 FactoryBot.define do
   trait :with_milestone do
     milestones_attributes { {
-      "0" => attributes_for(:milestone, activity: :released, year: "1972")
+      "0" => attributes_for(:work_milestone, activity: :released, year: "1972")
     } }
   end
 

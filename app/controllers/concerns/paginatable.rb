@@ -25,7 +25,7 @@ private
     #      We can't just use the controller namespace because the
     #      route namespace may be different & polymorphic_path
     #      relies on routes, not controllers.
-    url_options = self.class < Admin::BaseController ? [:admin, model_class] : model_class
+    url_options = self.class < Ginsu::Controller ? [:admin, model_class] : model_class
 
     redirect_to polymorphic_path(url_options), status: 301
   end

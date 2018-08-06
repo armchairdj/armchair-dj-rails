@@ -4,33 +4,17 @@ require "rails_helper"
 
 RSpec.shared_examples "an_alphabetizable_model" do
   describe "included" do
-    describe "scopes" do
-      let!(:alphas) { ["AA", "A", "Z D C", "0 723", "!", "a", "Z a", "0 Alright", "0723"] }
-
-      let!(:collection) do
-        instances = []
-
-        alphas.length.times do |n|
-          instance = create_minimal_instance
-
-          instance.update_column(:alpha, alphas[n].downcase)
-
-          instances << instance
-        end
-
-        described_class.where(id: instances.map(&:id))
-      end
-
+    describe "scope-related" do
       describe "self#alpha" do
-        subject { collection.alpha.map(&:alpha) }
+        it "orders by alpha column" do
+          expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with(:alpha)
 
-        let(:expected) { ["!", "0 723", "0 alright", "0723", "a", "a", "aa", "z a", "z d c"] }
-
-        it { is_expected.to eq(expected) }
+          described_class.alpha
+        end
       end
 
       describe "hooks" do
-        let(:instance) { create_minimal_instance }
+        let(:instance) { build_minimal_instance }
 
         describe "before_save" do
           it "calls #set_alpha" do

@@ -12,28 +12,17 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
-        _destroy: "Remove this association"
+        _destroy: "Remove"
         clear_slug: "Generate new slug"
-      post:
-      article:
-      review:
-      mixtape:
-      tag:
-      creator:
-      identity:
+      creator/identity:
         real_name_id: "Primary Identity"
         pseudonym_id: "Pseudonym"
-      membership:
+      creator/membership:
         group_id: "Group"
         member_id: "Member"
       work:
         contributions:
           creator_id: "Contributor"
-      credit:
-      contribution:
-      milestone:
-      aspect:
-      playlist:
       user:
         first_name: "First"
         middle_name: "Middle"
@@ -49,25 +38,16 @@ en:
         summary: "For use in the meta description tag and RSS."
         links: "For display on the public permalink page for this %{model_name}."
         publish_on: "Leave blank unless scheduling this post for future publication."
-      post:
       article:
         slug: "URL slugs are automatically generated on first save. If you've changed the title, you can generate a new slug by checking the box below."
       review:
         slug: "URL slugs are automatically generated on first save. If you've made changes to the title, subtitle or makers of the reviewed item, you can generate a new slug by checking the box below."
       mixtape:
         slug: "URL slugs are automatically generated on first save. If you've changed the playlist's title, you can generate a new slug by checking the box below."
-      tag:
-      creator:
-      identity:
-      membership:
       playlist:
-        playlistings: "Select at least two."
+        tracks: "Select at least two."
       work:
         credits: "Select at least one."
-      credit:
-      contribution:
-      milestone:
-      aspect:
       user:
         bio: "For display on your public author profile."
         current_password: "We need your current password to confirm your changes"
@@ -77,18 +57,6 @@ en:
       defaults:
         email: "name@domain.com"
         url: "https://www.domain.com"
-      post:
-      article:
-      review:
-      mixtape:
-      contribution:
-      creator:
-      credit:
-      identity:
-      membership:
-      playlist:
-      tag:
-      user:
       work:
         subtitle:
           album: "e.g. Remastered Version"
@@ -97,17 +65,18 @@ en:
           comic_book: "e.g. Vol. 4, Issue 20"
           gadget: ""
           graphic_novel: "e.g. The Death of Jean Grey"
-          movie: ""
+          movie: "e.g. Director's Cut"
           podcast: ""
           product: ""
           publication: ""
           radio_show: ""
           song: "e.g. C2 Remix, Live at The Badlands"
-          tv_episode: "Conversations With Dead People"
-          tv_season: "Season 7"
-          tv_show: "A Documentary"
+          tv_episode: "e.g. Conversations With Dead People"
+          tv_season: "e.g. Season 7"
+          tv_show: "e.g. A Documentary"
           video_game: ""
     include_blanks:
+      connection: "Please choose"
       creator_id: "Please choose"
       group_id: "Please choose"
       member_id: "Please choose"
@@ -118,20 +87,3 @@ en:
       role_id: "Please choose"
       work_id: "Please choose"
       type: "Please choose"
-    prompts:
-      defaults:
-      post:
-      article:
-      review:
-      tag:
-      mixtape:
-      creator:
-      identity:
-      membership:
-      work:
-      credit:
-      contribution:
-      milestone:
-      aspect:
-      playlist:
-      user:

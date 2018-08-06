@@ -18,44 +18,22 @@
 class Aspect < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
-  # CONCERNS.
+  # CONCERNING: Alpha.
   #############################################################################
 
   include Alphabetizable
 
-  #############################################################################
-  # CLASS.
-  #############################################################################
+  def alpha_parts
+    [human_facet, name]
+  end
 
   #############################################################################
-  # SCOPES.
+  # CONCERNING: Facet.
   #############################################################################
 
   scope :for_facet, -> (*facets) { where(facet: facets.flatten.compact) }
 
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_and_belongs_to_many :works, -> { distinct }
-
-  has_many :makers,       -> { distinct }, through: :works
-  has_many :contributors, -> { distinct }, through: :works
-
-  has_many :playlists, through: :works
-  has_many :mixtapes,  through: :works
-  has_many :reviews,   through: :works
-
-  #############################################################################
-  # ATTRIBUTES.
-  #############################################################################
+  validates :facet, presence: true
 
   enum facet: {
     album_format:         0,
@@ -89,25 +67,32 @@ class Aspect < ApplicationRecord
   enumable_attributes :facet
 
   #############################################################################
-  # VALIDATIONS.
+  # CONCERNING: Name.
   #############################################################################
-
-  validates :facet, presence: true
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: [:facet] }
 
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def alpha_parts
-    [human_facet, name]
+  def display_name(connector: ": ")
+    [human_facet, name].compact.join(connector)
   end
+
+  #############################################################################
+  # CONCERNING: Works.
+  #############################################################################
+
+  has_and_belongs_to_many :works, -> { distinct }
+
+  has_many :playlists,    -> { distinct }, through: :works
+  has_many :makers,       -> { distinct }, through: :works
+  has_many :contributors, -> { distinct }, through: :works
+
+  #############################################################################
+  # CONCERNING: Posts.
+  #############################################################################
+
+  has_many :mixtapes, through: :works
+  has_many :reviews,  through: :works
 
   def posts
     Post.where(id: post_ids)
@@ -117,7 +102,10 @@ class Aspect < ApplicationRecord
     reviews.ids + mixtapes.ids
   end
 
-  def display_name(connector: ": ")
-    [human_facet, name].compact.join(connector)
-  end
+  #############################################################################
+  # CONCERNING: Ginsu.
+  #############################################################################
+
+  scope :for_list,  -> { }
+  scope :for_show,  -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
 end

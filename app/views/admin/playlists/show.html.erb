@@ -18,6 +18,6 @@
   ]
 %>
 
-<%= render partial: "playlistings",        as: "playlistings", object: @playlist.playlistings %>
-<%= render partial: "admin/creators/list", as: "creators",     object: @playlist.creators.alpha %>
-<%= render partial: "admin/posts/list",    as: "posts",        object: @playlist.posts.reverse_cron %>
+<%= render partial: "tracks",              as: "tracks",   object: @playlist.tracks %>
+<%= render partial: "admin/creators/list", as: "creators", object: @playlist.creators.alpha %>
+<%= render partial: "admin/posts/list",    as: "posts",    object: @playlist.posts.reverse_cron %>

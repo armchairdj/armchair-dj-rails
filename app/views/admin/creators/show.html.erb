@@ -36,7 +36,7 @@
   <% end %>
 <% end %>
 
-<% if (works = @creator.works.alpha).any? %>
+<% if (works = @creator.credited_works.alpha).any? %>
   <%= admin_section(headline: "Works") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% works.each do |work| %>
@@ -52,7 +52,7 @@
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% contributions.each do |contribution| %>
         <%= content_tag(:dt, contribution.role_name) %>
-        <%= content_tag(:dd, link_to_work(contribution.work)) %>
+        <%= content_tag(:dd, link_to_work(contribution.work, full: true)) %>
       <% end %>
     <% end %>
   <% end %>

@@ -12,16 +12,14 @@ concern :Errorable do
   #############################################################################
 
   included do
-    # 500
-    # Rules for rescue_from are evaluated in reverse source order, so
-    # this fallback must come first.
+    # 500: Global fallback must come first irst
     unless Rails.application.config.consider_all_requests_local
       rescue_from StandardError, with: :handle_500
     end
 
     # 403
-    rescue_from Pundit::NotAuthenticatedError, with: :handle_403_recoverable
     rescue_from Pundit::NotAuthorizedError,    with: :handle_403
+    rescue_from Pundit::NotAuthenticatedError, with: :handle_403_recoverable
 
     # 404
     rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
@@ -29,7 +27,9 @@ concern :Errorable do
     rescue_from AbstractController::ActionNotFound,  with: :handle_404
 
     # 422
-    rescue_from ActionController::UnknownFormat, with: :handle_422
+    rescue_from ActionController::UnknownFormat,            with: :handle_422
+    rescue_from ActionController::InvalidAuthenticityToken, with: :handle_422
+    rescue_from ActionController::UnpermittedParameters,    with: :handle_422
 
   protected
 
@@ -100,33 +100,29 @@ concern :Errorable do
     end
 
     def log_error(code, exception = nil)
-      logger.error [
-        error_identifier(code),
-        url_identifier,
-        user_identifier,
-        exception
-      ].compact.join(" :: ")
+      parts = [error_id(code), url_str, user_str, exception.try(:message)]
+
+      logger.error parts.compact.join(" :: ")
     end
 
-    def error_identifier(code)
+    def error_id(code)
       case code
-      when 500
-        "ARMCHAIRDJ_WHOOPS (500)"
-      when 422
-        "ARMCHAIRDJ_BAD_FORMAT (422)"
-      when 404
-        "ARMCHAIRDJ_NOT_FOUND (404)"
-      when 403
-        "ARMCHAIRDJ_FORBIDDEN (403)"
+      when 403; "FORBIDDEN_ERROR (403)"
+      when 404; "NOT_FOUND_ERROR (404)"
+      when 422; "BAD_REQUEST_ERROR (422)"
+      when 500; "WHOOPS_EXCEPTION (500)"
+      else;     "UNKNOWN_EXCEPTION"
       end
     end
 
-    def url_identifier
-      request.url ? request.url : "unknown URL"
+    def url_str
+      request.try(:url) || "unknown URL"
     end
 
-    def user_identifier
-      user_signed_in? ? "#{current_user.id} [#{current_user.email}]" : "guest user"
+    def user_str
+      return "guest user" unless user_signed_in?
+
+      "User ##{current_user.id} [#{current_user.email}]"
     end
   end
 end

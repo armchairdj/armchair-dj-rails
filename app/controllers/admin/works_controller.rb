@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::WorksController < Admin::BaseController
+class Admin::WorksController < Ginsu::Controller
   before_action :require_ajax, only: :reorder_credits
 
   # POST /works
@@ -79,6 +79,7 @@ private
     if @work.medium.present?
       @creators = Creator.all.alpha
       @roles    = @work.available_roles
+      @sources  = @work.available_sources
     end
   end
 
@@ -113,6 +114,13 @@ private
         :work_id,
         :activity,
         :year,
+      ],
+      source_relationships_attributes: [
+        :id,
+        :_destroy,
+        :target_id,
+        :connection,
+        :source_id,
       ],
     ])
   end

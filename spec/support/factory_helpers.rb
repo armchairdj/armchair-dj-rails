@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # PROBLEM:
-#   In complex shared examples, you may need to create many instances of the
+#   In complex shared examples, we may need to create many instances of the
 #   described class. Having to #let them in the calling spec and pass them in
 #   using the block syntax of #it_behaves_like is a pain.
 # SOLUTION:
 #   Name our factories consistently, with a `minimal_#{model}` flavor and a
-#   `complete_#(model}` flavor. Then you can safely use these helpers in your
+#   `complete_#(model}` flavor. Then we can safely use these helpers in our
 #   shared examples.
 
 # PROBLEM:
@@ -14,40 +14,39 @@
 #   difficult. The semantics are different for model, controller & policy specs
 #   - let alone STI models that override #model_name.
 # SOLUTION:
-#   Use #determine_model_name method below to introspect common spec types.
+#   Use #determine_model_name method below to discern model class from common
+#   spec types.
 
 module FactoryHelpers
 
+  POLICY_OR_HELPER_MATCHER = /sHelper|Policy$/
+
   def determine_model_class
+    # MODELS
     if described_class.respond_to? :model_name
-      # MODELS
       described_class
+
+    # CONTROLLERS
     elsif described_class.respond_to? :controller_name
-      # CONTROLLERS
       described_class.controller_name.classify.constantize
-    elsif described_class.to_s.match(/Policy$/)
-      # POLICIES
-      described_class.to_s.demodulize.gsub(/Policy$/, "").constantize
+
+    # POLICIES & HELPERS
+    elsif described_class.to_s.match(POLICY_OR_HELPER_MATCHER)
+      described_class.to_s.demodulize.remove(POLICY_OR_HELPER_MATCHER).constantize
+
     else
       raise NotImplementedError.new "cannot find model class in this context"
     end
   end
 
   def determine_model_name
-    if described_class.respond_to? :true_model_name
-      # STI MODELS THAT OVERRIDE #model_name
-      described_class.true_model_name
-    elsif described_class.respond_to? :model_name
-      # VANILLA MODELS & PLAIN STI MODELS
-      described_class.model_name
-    elsif described_class.respond_to? :controller_name
-      # CONTROLLERS
-      determine_model_class.model_name
-    elsif described_class.to_s.match(/Policy$/)
-      # POLICIES
-      determine_model_class.model_name
+    model_class = determine_model_class
+
+    # SPECIAL CASING FOR STI MODELS THAT OVERRIDE #model_name.
+    if model_class.respond_to? :true_model_name
+      model_class.true_model_name
     else
-      raise NotImplementedError.new "cannot find model name in this context"
+      model_class.model_name
     end
   end
 
@@ -75,6 +74,18 @@ module FactoryHelpers
     create(key_for_minimal, *args)
   end
 
+  def build_minimal_list(*args)
+    build_list(key_for_minimal, *args)
+  end
+
+  def create_minimal_list(*args)
+    create_list(key_for_minimal, *args)
+  end
+
+  def ids_for_minimal_list(*args)
+    create_minimal_list(*args).map(&:id)
+  end
+
   #############################################################################
   # COMPLETE HELPERS rely on the model having a `:complete_#{model}` factory.
   #############################################################################
@@ -97,5 +108,17 @@ module FactoryHelpers
 
   def create_complete_instance(*args)
     create(key_for_complete, *args)
+  end
+
+  def build_complete_list(*args)
+    build_list(key_for_complete, *args)
+  end
+
+  def create_complete_list(*args)
+    create_list(key_for_complete, *args)
+  end
+
+  def ids_for_complete_list(*args)
+    create_complete_list(*args).map(&:id)
   end
 end

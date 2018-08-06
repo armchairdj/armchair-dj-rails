@@ -14,7 +14,7 @@ RSpec.describe Admin::RolesController do
     login_root
 
     describe "GET #index" do
-      it_behaves_like "an_admin_index"
+      it_behaves_like "a_ginsu_index"
     end
 
     describe "GET #show" do
