@@ -729,16 +729,18 @@ RSpec.describe Creator do
           })
         end
 
-        let!(:created_review    ) { create(:minimal_review,  work_id:      created.id) }
+        let!(:credited_review   ) { create(:minimal_review,  work_id:      created.id) }
         let!(:contributed_review) { create(:minimal_review,  work_id:  contributed.id) }
         let!(:both_review       ) { create(:minimal_review,  work_id:         both.id) }
         let!(:mixtape           ) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
         subject { instance.posts.ids }
 
-        let(:expected) { [mixtape, both_review, contributed_review, created_review].map(&:id) }
+        let(:expected) { [mixtape, both_review, contributed_review, credited_review].map(&:id) }
 
-        it { is_expected.to match_array(expected) }
+        it "finds all distinct created and contributed posts" do
+          is_expected.to match_array(expected)
+        end
       end
     end
 

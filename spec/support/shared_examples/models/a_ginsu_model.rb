@@ -5,8 +5,7 @@ require "rails_helper"
 RSpec.shared_examples "a ginsu_model" do
   # show_loads and list_loads will be defined by the caller
 
-  let!(:ids) { 3.times.map { create_minimal_instance.id } }
-  let!(:collection) { described_class.where(id: ids) }
+  let!(:collection) { described_class.where(id: ids_for_minimal_list(3)) }
 
   describe "self#for_list" do
     subject { collection.for_list }

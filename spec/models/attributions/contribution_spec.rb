@@ -66,7 +66,7 @@ RSpec.describe Contribution do
     describe "role" do
       subject { build_minimal_instance(work_id: create(:minimal_song).id) }
 
-      let!(:song_role_ids) { 3.times.map { |i| create(:minimal_role, medium: "Song").id } }
+      let!(:song_role_ids) { create_list(:minimal_role, 3, medium: "Song").map(&:id) }
 
       it { is_expected.to validate_presence_of(:role_id) }
 

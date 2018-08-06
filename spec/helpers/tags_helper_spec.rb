@@ -33,7 +33,7 @@ RSpec.describe TagsHelper do
     end
 
     context "full collection" do
-      let(:tags) { Tag.where(id: 3.times.map { |i| create(:minimal_tag).id }) }
+      let(:tags) { Tag.where(id: ids_for_minimal_list(3)) }
 
       it { is_expected.to_not have_tag("a") }
 
