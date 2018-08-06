@@ -185,7 +185,10 @@ en:
               blank: "Please choose a release date."
         work/relationship:
           attributes:
-            connection: "Please choose a connection between these works."
+            connection:
+              blank: "Please choose a connection between these works."
+            source_id:
+              same_as_target: This work cannot connect to itself.
         user:
           attributes:
             role:

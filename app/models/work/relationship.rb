@@ -62,4 +62,18 @@ class Work::Relationship < ApplicationRecord
   validates :source, presence: true
 
   validates :source_id, uniqueness: { scope: [:target_id, :connection] }
+
+  #############################################################################
+  # CONCERNING: Self-referentiality.
+  #############################################################################
+
+  validate { source_and_target_are_different }
+
+private
+
+  def source_and_target_are_different
+    return unless source_id == target_id
+
+    self.errors.add(:source_id, :same_as_target)
+  end
 end

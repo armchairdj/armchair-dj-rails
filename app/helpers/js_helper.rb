@@ -25,8 +25,8 @@ module JsHelper
     js_attrs("autosave", opts)
   end
 
-  def js_selectabe_create_creator_attrs(scope = "creator")
-    opts = { scope: scope, url: admin_creators_path, param: "creator[name]" }
+  def js_selectabe_create_creator_attrs(scope = "creator", **opts)
+    opts = opts.merge(scope: scope, url: admin_creators_path, param: "creator[name]")
 
     opts["extra-params"] = case scope
       when "creator[real_name]"; "creator[primary]=true"
@@ -38,13 +38,13 @@ module JsHelper
     js_attrs("selectable-create", opts)
   end
 
-  def js_selectable_create_role_attrs
-    opts = {
+  def js_selectable_create_role_attrs(**opts)
+    opts = opts.merge({
       scope:         "role",
       url:           admin_roles_path,
       param:         "role[name]",
       "form-params": "role[medium]=work[medium]"
-    }
+    })
 
     js_attrs("selectable-create", opts)
   end

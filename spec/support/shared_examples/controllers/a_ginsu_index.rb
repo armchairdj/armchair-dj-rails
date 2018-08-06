@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "an_admin_index" do
+RSpec.shared_examples "a_ginsu_index" do
   let(:param_key  ) { described_class.controller_name.to_sym }
   let(:template   ) { "#{described_class.controller_path}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }

@@ -97,7 +97,7 @@ export default class extends SelectableController {
   formParams() {
     const formParams = this.data.get("form-params");
 
-    if (!formParams) { return; }
+    if (!formParams) { return }
 
     const params = formParams.split("&");
     const memo   = {};

@@ -12,7 +12,7 @@ en:
         id: "ID"
         created_at: "Created"
         updated_at: "Updated"
-        _destroy: "Remove this association"
+        _destroy: "Remove"
         clear_slug: "Generate new slug"
       creator/identity:
         real_name_id: "Primary Identity"
