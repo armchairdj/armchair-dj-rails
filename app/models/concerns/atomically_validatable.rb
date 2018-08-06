@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 concern :AtomicallyValidatable do
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
   def valid_attributes?(*attributes)
     attributes = [attributes].flatten.compact
 

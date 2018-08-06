@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::Posts::BaseController < Admin::BaseController
+class Admin::Posts::BaseController < Ginsu::Controller
   before_action :require_ajax, only: :autosave
 
   skip_before_action :authorize_instance, only: [:update]
@@ -45,15 +45,11 @@ class Admin::Posts::BaseController < Admin::BaseController
     find_instance
     authorize_instance
 
-    begin
-      @instance.attributes = post_params_for_autosave
+    @instance.attributes = post_params_for_autosave
 
-      @instance.save!(validate: false)
+    @instance.save!(validate: false)
 
-      render json: {}, status: :ok
-    rescue => err
-      handle_500(err)
-    end
+    render json: {}, status: :ok
   end
 
   # DELETE /posts/1

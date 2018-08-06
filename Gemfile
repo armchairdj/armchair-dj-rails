@@ -128,7 +128,7 @@ gem "neat"
 ###############################################################################
 
 # JS bundler.
-gem "webpacker", "~> 3.4"
+gem "webpacker", "~> 3.5"
 
 # JS compresser.
 gem "uglifier", ">= 1.3.0"
@@ -200,11 +200,6 @@ group :development do
   # Query optimizer.
   gem "bullet"
 
-  # Static code analysis.
-  gem "rubocop", require: false
-  gem "rubocop-rails"
-  gem "mry"
-
   # Automatic route and schema comments in model files.
   gem "annotate"
 end
@@ -221,6 +216,7 @@ group :development, :test do
 
   # RSpec.
   gem "rspec-rails", "~> 3.7.2"
+  gem "rspec_junit_formatter"
   gem "accept_values_for"
   gem "db-query-matchers"
   gem "rspec-collection_matchers"
@@ -242,6 +238,11 @@ group :development, :test do
 
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+
+  # Static code analysis.
+  gem "rubocop", require: false
+  gem "rubocop-rails_config"
+  gem "mry"
 end
 
 group :test do

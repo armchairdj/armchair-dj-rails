@@ -23,3 +23,9 @@
 * Deployment instructions
 
 * ...
+
+## CirlceCI
+
+## Parallel Tests
+
+    $ bundle exec rake parallel:prepare

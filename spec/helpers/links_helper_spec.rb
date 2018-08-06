@@ -15,7 +15,7 @@ RSpec.describe LinksHelper do
     end
 
     context "full collection" do
-      let(:links) { Link.where(id: 3.times.map { |i| create(:minimal_link).id }) }
+      let(:links) { Link.where(id: ids_for_minimal_list(3)) }
 
       it { is_expected.to have_tag("ul", count: 1) }
       it { is_expected.to have_tag("ul li", count: 3) }

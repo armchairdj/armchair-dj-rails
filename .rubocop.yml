@@ -4,7 +4,7 @@ inherit_from:
   - config/rubocop/disabled.yml
 
 inherit_gem:
-  rubocop-rails:
+  rubocop-rails_config:
     - config/rails.yml
 
 # This is the default configuration file. Enabling and disabling is configured

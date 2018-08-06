@@ -1,32 +1,67 @@
 import BaseController from "./base_controller";
 
 export default class extends BaseController {
-  static targets = [ "field" ];
+  static targets = [ "item" ];
 
   setup() {
-    this.hidden = this.fieldTargets.filter(field => !$(field).find("select").val());
+    this.hidden = this.itemTargets.filter(this.shouldHideField, this);
 
-    if (this.hidden.length == this.fieldTargets.length) {
-      this.hidden.shift();
-    }
-
-    if (this.hidden.length > 0) {
-      $(this.hidden).hide();
-
-      this.addLink();
-    }
+    this.alwaysShowFirstItem();
+    this.hideIfNecessary();
   }
 
   teardown(evt) {
-    $(this.fieldTargets).show();
+    $(this.itemTargets).show();
 
     this.removeLink();
   }
 
+  alwaysShowFirstItem() {
+    if (this.hidden.length == this.itemTargets.length) {
+      this.hidden.shift();
+    }
+  }
+
+  hideIfNecessary() {
+    if (this.hidden.length == 0) { return }
+
+    $(this.hidden).hide();
+
+    this.addLink();
+  }
+
+  shouldHideField(item) {
+    if (this.itemHasErrors(item)) { return false }
+    if (this.itemHasValues(item)) { return false }
+
+    return true;
+  }
+
+  itemHasErrors(item) {
+    const errors = $(item).find(".with-error");
+
+    return errors.length > 0;
+  }
+
+  itemHasValues(item) {
+    const inputs     = $(item).find("select, input:not([type=checkbox]):not([type=radio])").get();
+    const withValues = inputs.filter(input => !!$(input).val());
+
+    return withValues.length > 0;
+  }
+
   addLink() {
-    this.$link = $('<div class="expand" data-expand-link="true"><a href="#" data-action="expandable-fieldset#expand">add another</a></div>');
+    this.$link = $(this.linkMarkup());
 
     $(this.element).append(this.$link);
+  }
+
+  linkMarkup() {
+    return [
+      '<div class="expand" data-expand-link="true">',
+        '<a href="#" data-action="expandable-fieldset#expand">add another</a>',
+      '</div>'
+    ].join("");
   }
 
   removeLink() {

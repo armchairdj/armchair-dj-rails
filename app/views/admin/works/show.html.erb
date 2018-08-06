@@ -30,7 +30,7 @@
   <% end %>
 <% end %>
 
-<% if (milestones = @work.display_milestones).any? %>
+<% if (milestones = @work.milestones).any? %>
   <%= admin_section(headline: "Milestones") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
       <% milestones.each do |milestone| %>

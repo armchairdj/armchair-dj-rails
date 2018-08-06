@@ -44,9 +44,9 @@ RSpec.shared_examples "an_application_record" do
       end
     end
 
-    describe "self#validate_nested_uniqueness_of" do
+    describe "self#validates_nested_uniqueness_of" do
       it "is defined" do
-        expect(described_class).to respond_to(:validate_nested_uniqueness_of)
+        expect(described_class).to respond_to(:validates_nested_uniqueness_of)
       end
     end
   end

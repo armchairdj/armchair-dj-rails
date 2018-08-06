@@ -41,25 +41,55 @@
 class Post < ApplicationRecord
 
   #############################################################################
-  # CONCERNS.
+  # CONCERNING: STI subclass contract.
+  #############################################################################
+
+  concerning :Subclassable do
+    included do
+      validates :type, presence: true
+    end
+
+    class_methods do
+      def for_list
+        includes(:author).references(:author)
+      end
+
+      def for_show
+        includes(:links, :author, :tags)
+      end
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Alpha.
   #############################################################################
 
   include Alphabetizable
+
+  #############################################################################
+  # CONCERNING: Author.
+  #############################################################################
+
   include Authorable
+
+  #############################################################################
+  # CONCERNING: Links.
+  #############################################################################
+
   include Linkable
+
+  #############################################################################
+  # CONCERNING: Slugs.
+  #############################################################################
+
   include Sluggable
 
   #############################################################################
-  # CONCERNING: Publishing.
+  # CONCERNING: Status.
   #############################################################################
 
-  concerning :Publishable do
+  concerning :Status do
     included do
-
-      #####################################################
-      # Attributes.
-      #####################################################
-
       enum status: {
         draft:      0,
         scheduled:  5,
@@ -68,18 +98,24 @@ class Post < ApplicationRecord
 
       enumable_attributes :status
 
-      #####################################################
-      # Virtual attributes to trigger AASM transitions.
-      #####################################################
+      validates :status, presence: true
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Triggering status changes with virtual attributes.
+  #############################################################################
+
+  concerning :Triggerable do
+    included do
+      ### Virtual attributes.
 
       attribute :publishing,   :boolean, default: false
       attribute :unpublishing, :boolean, default: false
       attribute :scheduling,   :boolean, default: false
       attribute :unscheduling, :boolean, default: false
 
-      #####################################################
-      # Hooks.
-      #####################################################
+      ### Hooks.
 
       before_validation :unpublish,  if: :unpublishing?
       before_validation :unschedule, if: :unscheduling?
@@ -89,49 +125,6 @@ class Post < ApplicationRecord
       after_validation :handle_failed_transition
 
       after_save :clear_transition_flags
-
-      #####################################################
-      # State Machine.
-      #####################################################
-
-      include AASM
-
-      aasm(
-        column:               :status,
-        enum:                 true,
-        create_scopes:        true,
-        no_direct_assignment: true,
-        whiny_persistence:    false,
-        whiny_transitions:    false
-      ) do
-        state :draft, initial: true
-        state :scheduled
-        state :published, before_enter: :clear_publish_on
-
-        event(:schedule) do
-          transitions from: :draft, to: :scheduled
-        end
-
-        event(:unschedule, before: :clear_publish_on) do
-          transitions from: :scheduled, to: :draft
-        end
-
-        event(:publish, before: :set_published_at) do
-          transitions from: [:draft, :scheduled], to: :published
-        end
-
-        event(:unpublish, before: :clear_published_at) do
-          transitions from: :published, to: :draft
-        end
-      end
-    end
-
-    #######################################################
-    # Instance.
-    #######################################################
-
-    def unpublished?
-      draft? || scheduled?
     end
 
     def changing_publication_status?
@@ -187,6 +180,99 @@ class Post < ApplicationRecord
       self.scheduling   = false
       self.unscheduling = false
     end
+  end
+
+  #############################################################################
+  # CONCERNING: Conditional validation based on status.
+  #############################################################################
+
+  concerning :Validateable do
+    included do
+      validates :summary, length: { in: 40..320 }, allow_blank: true
+
+      validates :body, presence: true, if: :requires_body?
+
+      validates :published_at, presence: true, if:     :requires_published_at?
+      validates :published_at, absence:  true, unless: :requires_published_at?
+
+      validates :publish_on, presence: true, if:     :requires_publish_on?
+      validates :publish_on, absence:  true, unless: :requires_publish_on?
+
+      validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
+    end
+
+  private
+
+    def requires_body?
+      published? || publishing? || scheduled? || scheduling?
+    end
+
+    def requires_publish_on?
+      scheduled? || scheduling?
+    end
+
+    def requires_published_at?
+      published? || publishing?
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Publishable.
+  #############################################################################
+
+  concerning :Publishable do
+    included do
+      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+
+      scope :for_public, -> { published.reverse_cron }
+
+      scope :unpublished, -> { where.not(status: :published) }
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: State Machine.
+  #############################################################################
+
+  concerning :Transitionable do
+    included do
+      include AASM
+
+      aasm(
+        column:               :status,
+        enum:                 true,
+        create_scopes:        true,
+        no_direct_assignment: true,
+        whiny_persistence:    false,
+        whiny_transitions:    false
+      ) do
+        state :draft, initial: true
+        state :scheduled
+        state :published, before_enter: :clear_publish_on
+
+        event(:schedule) do
+          transitions from: :draft, to: :scheduled
+        end
+
+        event(:unschedule, before: :clear_publish_on) do
+          transitions from: :scheduled, to: :draft
+        end
+
+        event(:publish, before: :set_published_at) do
+          transitions from: [:draft, :scheduled], to: :published
+        end
+
+        event(:unpublish, before: :clear_published_at) do
+          transitions from: :published, to: :draft
+        end
+      end
+    end
+
+  private
 
     def set_published_at
       self.published_at = DateTime.now
@@ -202,10 +288,10 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # Concerning: Scheduled publication rake task.
+  # CONCERNING: Publishing of scheduled posts.
   #############################################################################
 
-  concerning :Scheduled do
+  concerning :Scheduleable do
     included do
       scope :scheduled_and_due, -> {
         scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
@@ -250,75 +336,23 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CLASS
+  # CONCERNING: Access control.
   #############################################################################
 
-  def self.for_list
-    includes(:author).references(:author)
+  concerning :Editable do
+    class_methods do
+      def for_cms_user(user)
+        return self.none unless user && user.can_access_cms?
+        return self.all  if user.can_edit?
+
+        where(author_id: user.id)
+      end
+    end
   end
-
-  def self.for_show
-    includes(:links, :author, :tags)
-  end
-
-  def self.for_cms_user(user)
-    return self.none unless user && user.can_access_cms?
-    return self.all  if user.can_edit?
-
-    where(author_id: user.id)
-  end
-
-  #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :for_public,  -> { published.reverse_cron }
-
-  scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-  scope :unpublished, -> { where.not(status: :published) }
 
   #############################################################################
   # ASSOCIATIONS.
   #############################################################################
 
   has_and_belongs_to_many :tags, -> { order("tags.name") }
-
-  #############################################################################
-  # VALIDATION.
-  #############################################################################
-
-  validates :type, presence: true
-
-  validates :status, presence: true
-
-  validates :summary, length: { in: 40..320 }, allow_blank: true
-
-  validates :body, presence: true, if: :requires_body?
-
-  validates :published_at, presence: true, if:     :requires_published_at?
-  validates :published_at, absence:  true, unless: :requires_published_at?
-
-  validates :publish_on, presence: true, if:     :requires_publish_on?
-  validates :publish_on, absence:  true, unless: :requires_publish_on?
-
-  validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
-
-private
-
-  def requires_body?
-    published? || publishing? || scheduled? || scheduling?
-  end
-
-  def requires_publish_on?
-    scheduled? || scheduling?
-  end
-
-  def requires_published_at?
-    published? || publishing?
-  end
-
-  def should_reset_slug_and_history?
-    unpublished?
-  end
 end

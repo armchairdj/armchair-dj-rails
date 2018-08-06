@@ -8,16 +8,9 @@ concern :Alphabetizable do
   #############################################################################
 
   included do
-
-    ### SCOPES.
-
     scope :alpha, -> { order(:alpha) }
 
-    ### HOOKS.
-
     before_save :set_alpha
-
-    ### VALIDATION.
 
     validate { ensure_alpha }
   end

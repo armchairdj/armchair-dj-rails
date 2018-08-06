@@ -26,9 +26,9 @@ RSpec.describe Playlist do
 
     it_behaves_like "an_authorable_model"
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [:author] }
-      let(:show_loads) { [:author, :playlistings, :works] }
+      let(:show_loads) { [:author, :tracks, :works] }
     end
 
     describe "nilify_blanks" do
@@ -47,19 +47,19 @@ RSpec.describe Playlist do
   end
 
   describe "associations" do
-    describe "playlistings" do
-      it { is_expected.to have_many(:playlistings).dependent(:destroy) }
+    describe "tracks" do
+      it { is_expected.to have_many(:tracks).dependent(:destroy) }
 
       describe "ordering" do
         let(:instance) { create_minimal_instance }
 
-        subject { instance.playlistings.map(&:position) }
+        subject { instance.tracks.map(&:position) }
 
         it { is_expected.to eq((1..2).to_a) }
       end
     end
 
-    it { is_expected.to have_many(:works).through(:playlistings) }
+    it { is_expected.to have_many(:works).through(:tracks) }
 
     it { is_expected.to have_many(:makers      ).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
@@ -69,47 +69,41 @@ RSpec.describe Playlist do
 
   describe "attributes" do
     describe "nested" do
-      describe "playlistings" do
-        it { is_expected.to accept_nested_attributes_for(:playlistings).allow_destroy(true) }
+      describe "tracks" do
+        it { is_expected.to accept_nested_attributes_for(:tracks).allow_destroy(true) }
 
         describe "rejects" do
           let(:instance) do
-            create(:minimal_playlist, playlistings_attributes: {
-              "0" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
-              "1" => attributes_for(:minimal_playlisting, work_id: create(:minimal_song).id),
-              "2" => attributes_for(:minimal_playlisting, work_id: nil),
+            create(:minimal_playlist, tracks_attributes: {
+              "0" => attributes_for(:minimal_playlist_track, work_id: create(:minimal_song).id),
+              "1" => attributes_for(:minimal_playlist_track, work_id: create(:minimal_song).id),
+              "2" => attributes_for(:minimal_playlist_track, work_id: nil),
             })
           end
 
           it "rejects blank work_id" do
             instance.save!
 
-            expect(instance.playlistings.length).to eq(2)
+            expect(instance.tracks.length).to eq(2)
           end
         end
 
-        describe "#prepare_playlistings" do
+        describe "#prepare_tracks" do
+          subject { instance.prepare_tracks }
+
           describe "new instance" do
-            subject { described_class.new }
+            let(:instance) { described_class.new }
 
-            it "builds 20 playlistings" do
-              expect(subject.playlistings).to have(0).items
-
-              subject.prepare_playlistings
-
-              expect(subject.playlistings).to have(20).items
+            it "builds 20 tracks" do
+              expect { subject }.to change { instance.tracks.length }.from(0).to(20)
             end
           end
 
-          describe "saved instance with saved playlistings" do
-            subject { create(:minimal_playlist) }
+          describe "saved instance with saved tracks" do
+            let(:instance) { create(:minimal_playlist) }
 
-            it "builds 20 more playlistings" do
-              expect(subject.playlistings).to have(2).items
-
-              subject.prepare_playlistings
-
-              expect(subject.playlistings).to have(22).items
+            it "builds 20 more tracks" do
+              expect { subject }.to change { instance.tracks.length }.from(2).to(22)
             end
           end
         end
@@ -122,18 +116,18 @@ RSpec.describe Playlist do
 
     it { is_expected.to validate_presence_of(:title) }
 
-    describe "is_expected.to validate_length_of(:playlistings).is_at_least(2)" do
+    describe "is_expected.to validate_length_of(:tracks).is_at_least(2)" do
       subject { create_minimal_instance }
 
       it { is_expected.to be_valid }
 
       specify "invalid" do
-        subject.playlistings.first.destroy
+        subject.tracks.first.destroy
         subject.reload
 
         is_expected.to_not be_valid
 
-        is_expected.to have_error(playlistings: :too_short)
+        is_expected.to have_error(tracks: :too_short)
       end
     end
   end
@@ -149,7 +143,7 @@ RSpec.describe Playlist do
 
       before(:each) do
         # TODO let the factory handle this with transient attributes
-        instance.playlistings << create(:minimal_playlisting, work_id: work.id)
+        instance.tracks << create(:minimal_playlist_track, work_id: work.id)
       end
 
       describe "post_ids" do
@@ -189,9 +183,9 @@ RSpec.describe Playlist do
       end
 
       let(:instance) do
-        create(:minimal_playlist, playlistings_attributes: {
-          "0" => attributes_for(:minimal_playlisting, work_id: track_1.id),
-          "1" => attributes_for(:minimal_playlisting, work_id: track_2.id),
+        create(:minimal_playlist, tracks_attributes: {
+          "0" => attributes_for(:minimal_playlist_track, work_id: track_1.id),
+          "1" => attributes_for(:minimal_playlist_track, work_id: track_2.id),
         })
       end
 

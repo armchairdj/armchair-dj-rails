@@ -9,10 +9,6 @@ RSpec.shared_examples "an_errorable_controller" do
     let(:json_headers) { {"HTTP_ACCEPT" => "application/json"} }
 
     describe "#handle_403_recoverable" do
-      before(:each) do
-        allow(controller).to receive(:set_user_return_to)
-      end
-
       controller do
         def index
           raise Pundit::NotAuthenticatedError.new "error"
@@ -71,7 +67,6 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-           allow(controller).to receive(:handle_403_recoverable)
           expect(controller).to receive(:handle_403_recoverable)
         end
 
@@ -128,7 +123,6 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-           allow(controller).to receive(:handle_403)
           expect(controller).to receive(:handle_403)
         end
 
@@ -185,7 +179,6 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-           allow(controller).to receive(:handle_404)
           expect(controller).to receive(:handle_404)
         end
 
@@ -266,7 +259,6 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-           allow(controller).to receive(:handle_422)
           expect(controller).to receive(:handle_422)
         end
 
@@ -325,7 +317,6 @@ RSpec.shared_examples "an_errorable_controller" do
 
       describe "rescue_from" do
         before(:each) do
-          allow(controller).to  receive(:handle_500)
           expect(controller).to receive(:handle_500)
         end
 

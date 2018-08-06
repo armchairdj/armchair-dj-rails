@@ -9,6 +9,17 @@
   error     = f.error(association)
   hint_text = error || hint
   classes   = join_attr("fields-for", ("fieldset-with-errors" if error))
+
+  # admin/creators/fieldset_group_membership
+  # admin/creators/fieldset_member_membership
+  # admin/creators/pseudonym_identity_membership
+  # admin/creators/real_name_identity_membership
+  # admin/links/fieldset_link
+  # admin/playlists/fieldset_track
+  # admin/works/fieldset_contribution
+  # admin/works/fieldset_credit
+  # admin/works/fieldset_milestone
+  # admin/works/fieldset_source_relationship
   partial   = "admin/#{view_path}/fieldset_#{singular}"
 %>
 

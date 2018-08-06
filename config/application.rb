@@ -16,7 +16,7 @@ module ArmchairDjRails
 
     config.time_zone = "Pacific Time (US & Canada)"
 
-    config.autoload_paths += %W(#{config.root}/lib/utilities)
+    config.autoload_paths += %W(#{config.root}/app/models/attributions)
     config.autoload_paths += %W(#{config.root}/app/models/posts)
     config.autoload_paths += %W(#{config.root}/app/models/works)
 
@@ -38,5 +38,8 @@ module ArmchairDjRails
 
     # Custom error pages.
     config.exceptions_app = self.routes
+
+    # Raise errors on non-whitelisted mass-assignment params.
+    config.action_controller.action_on_unpermitted_parameters = :raise
   end
 end

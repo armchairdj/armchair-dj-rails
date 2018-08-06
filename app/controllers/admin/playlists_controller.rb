@@ -1,5 +1,5 @@
-class Admin::PlaylistsController < Admin::BaseController
-  before_action :require_ajax, only: :reorder_playlistings
+class Admin::PlaylistsController < Ginsu::Controller
+  before_action :require_ajax, only: :reorder_tracks
 
   # POST /admin/playlists
   # POST /admin/playlists.json
@@ -42,12 +42,12 @@ class Admin::PlaylistsController < Admin::BaseController
     end
   end
 
-  # POST /admin/playlists/1/reorder_playlistings
-  def reorder_playlistings
+  # POST /admin/playlists/1/reorder_tracks
+  def reorder_tracks
     find_instance
     authorize @playlist, :update?
 
-    Playlisting.reorder_for!(@playlist, params[:playlisting_ids])
+    Playlist::Track.reorder_for!(@playlist, params[:track_ids])
 
     render json: {}, status: :ok
   end
@@ -59,7 +59,7 @@ private
       :name,
       :title,
       :author_id,
-      playlistings_attributes: [
+      tracks_attributes: [
         :id,
         :_destroy,
         :playlist_id,
@@ -71,7 +71,7 @@ private
   end
 
   def prepare_form
-    @playlist.prepare_playlistings
+    @playlist.prepare_tracks
 
     @works = Work.grouped_by_medium
   end

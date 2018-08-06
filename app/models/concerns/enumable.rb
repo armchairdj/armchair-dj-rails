@@ -3,6 +3,16 @@
 concern :Enumable do
 
   #############################################################################
+  # INCLUDED.
+  #############################################################################
+
+  included do
+    class_attribute :_enumable_attributes, instance_accessor: false
+
+    self._enumable_attributes = []
+  end
+
+  #############################################################################
   # CLASS.
   #############################################################################
 
@@ -26,6 +36,8 @@ concern :Enumable do
     def human_enum_value(attribute, val)
       I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{attribute.to_s.pluralize}.#{val}")
     end
+
+    # TODO break out define_instance_methods & define_class_methods
 
     def enumable_attributes(*attributes)
       self._enumable_attributes = Set.new(attributes.map(&:to_sym))
@@ -78,15 +90,5 @@ concern :Enumable do
 
       "CASE #{whens.join(" ")} END"
     end
-  end
-
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
-  included do
-    class_attribute :_enumable_attributes, instance_accessor: false
-
-    self._enumable_attributes = []
   end
 end

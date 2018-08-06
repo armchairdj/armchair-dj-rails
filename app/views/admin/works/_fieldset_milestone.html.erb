@@ -1,10 +1,10 @@
 <%= f.simple_fields_for :milestones, milestone do |ff| %>
   <%= expandable_fieldset do %>
-    <%= content_tag(:div, class: "activity-year") do %>
+    <%= content_tag(:div, class: "row activity-year") do %>
       <%= ff.input :activity,
         as:            :select,
         include_blank: :translate,
-        collection:    Milestone.human_activities,
+        collection:    Work::Milestone.human_activities,
         input_html:    { "data-controller": "selectable" }
       %>
 

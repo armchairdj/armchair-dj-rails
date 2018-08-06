@@ -22,7 +22,7 @@ module MetaHelper
   def meta_tag(name, content = nil, name_key: "name")
     return unless content
 
-    tag(:meta, name_key => name, "content" => content.to_s.gsub('"', '')).html_safe
+    tag(:meta, name_key => name, "content" => content.to_s.remove('"')).html_safe
   end
 
   def content_type_tag

@@ -46,17 +46,6 @@
 class User < ApplicationRecord
 
   #############################################################################
-  # CONSTANTS.
-  #############################################################################
-
-  #############################################################################
-  # CONCERNS.
-  #############################################################################
-
-  include Alphabetizable
-  include Linkable
-
-  #############################################################################
   # PLUGINS.
   #############################################################################
 
@@ -72,42 +61,23 @@ class User < ApplicationRecord
   )
 
   #############################################################################
-  # CLASS.
+  # CONCERNING: Links.
   #############################################################################
 
-  def self.for_cms_user(user)
-    return self.none unless user && user.can_administer?
-    return self.all  if user.root?
+  include Linkable
 
-    where("users.role <= ?", user.raw_role).where.not(id: user.id)
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  def alpha_parts
+    [last_name, first_name, middle_name]
   end
 
   #############################################################################
-  # SCOPES.
-  #############################################################################
-
-  scope :published,   -> { joins(:posts).merge(Post.published) }
-  scope :for_list,    -> { }
-  scope :for_show,    -> { includes(:links, :posts, :playlists, :works, :makers) }
-  scope :for_public,  -> { published }
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  with_options(dependent: :nullify, foreign_key: "author_id") do |user|
-    user.has_many :posts
-    user.has_many :articles
-    user.has_many :reviews
-    user.has_many :mixtapes
-    user.has_many :playlists
-  end
-
-  has_many :works, through: :reviews
-  has_many :makers, -> { distinct }, through: :works
-
-  #############################################################################
-  # ATTRIBUTES.
+  # CONCERNING: Roles.
   #############################################################################
 
   enum role: {
@@ -120,40 +90,12 @@ class User < ApplicationRecord
 
   enumable_attributes :role
 
-  def to_param
-    username
-  end
-
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :first_name, presence:   true
-  validates :last_name,  presence:   true
-
-  validates :role,       presence:   true
-
-  validates :username,   presence:   true
-  validates :username,   uniqueness: { case_sensitive: false }
-  validates :username,   format: { with: /\A[a-zA-Z0-9]+\z/ }
-
-  validates :bio, absence: true, unless: :can_write?
-
-  #############################################################################
-  # HOOKS.
-  #############################################################################
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def alpha_parts
-    [last_name, first_name, middle_name]
-  end
+  validates :role, presence: true
 
   def can_write?
     root? || admin? || editor? || writer?
   end
+
   alias_method :can_access_cms?, :can_write?
 
   def can_edit?
@@ -163,34 +105,104 @@ class User < ApplicationRecord
   def can_publish?
     root? || admin?
   end
+
   alias_method :can_administer?, :can_publish?
 
   def can_destroy?
     root?
   end
 
-  def published?
-    can_write? && posts.published.count > 0
-  end
+  #############################################################################
+  # CONCERNING: Name.
+  #############################################################################
+
+  validates :first_name, presence: true
+  validates :last_name,  presence: true
 
   def display_name
     [first_name, middle_name, last_name].compact.join(" ")
   end
 
-  def assignable_role_options
-    return [] unless self.can_administer?
+  #############################################################################
+  # CONCERNING: Username.
+  #############################################################################
 
-    options = self.class.human_roles
+  validates :username, presence:   true
+  validates :username, uniqueness: { case_sensitive: false }
+  validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
 
-    options.slice(0..options.index { |o| o.last == self.role })
+  def to_param
+    username
   end
 
-  def valid_role_assignment_for?(instance)
-    return true if instance.role.blank?
-    return true if self.assignable_role_options.map(&:last).include?(instance.role)
+  #############################################################################
+  # CONCERNING: Bio.
+  #############################################################################
 
-    instance.errors.add(:role, :invalid_assignment)
+  validates :bio, absence: true, unless: :can_write?
 
-    false
+  #############################################################################
+  # CONCERNING: Admin access control.
+  #############################################################################
+
+  concerning :Editable do
+    class_methods do
+      def for_cms_user(user)
+        return self.none unless user && user.can_administer?
+        return self.all  if user.root?
+
+        where("users.role <= ?", user.raw_role).where.not(id: user.id)
+      end
+    end
+
+    def assignable_role_options
+      return [] unless self.can_administer?
+
+      options = self.class.human_roles
+
+      options.slice(0..options.index { |x| x.last == self.role })
+    end
+
+    def valid_role_assignment_for?(instance)
+      return true if instance.role.blank?
+      return true if self.assignable_role_options.map(&:last).include?(instance.role)
+
+      instance.errors.add(:role, :invalid_assignment)
+
+      false
+    end
   end
+
+  #############################################################################
+  # CONCERNING: Contributing posts and playlists.
+  #############################################################################
+
+  concerning :Authoring do
+    included do
+      scope :published,  -> { joins(:posts).merge(Post.published) }
+      scope :for_public, -> { published }
+
+      with_options(dependent: :nullify, foreign_key: "author_id") do |user|
+        user.has_many :posts
+        user.has_many :articles
+        user.has_many :reviews
+        user.has_many :mixtapes
+        user.has_many :playlists
+      end
+
+      has_many :works, through: :reviews
+      has_many :makers, -> { distinct }, through: :works
+    end
+
+    def published?
+      can_write? && posts.published.count > 0
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Ginsu.
+  #############################################################################
+
+  scope :for_list, -> { }
+  scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
 end

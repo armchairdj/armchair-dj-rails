@@ -1,9 +1,5 @@
 FactoryBot.define do
-  factory :song do
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
+  factory :song, class: "Song" do
 
     factory :minimal_song, class: "Song", parent: :minimal_work_parent do
       factory :minimal_work do; end
@@ -21,13 +17,26 @@ FactoryBot.define do
     # SPECIFIC FACTORIES.
     ###########################################################################
 
+    factory :junior_boys_like_a_child, parent: :minimal_song do
+      title "Like a Child"
+      subtitle "Original Version"
+
+      transient do
+        maker_names ["Junior Boys"]
+      end
+
+      milestones_attributes { {
+        "0" => attributes_for(:work_milestone_for_work, year: "2006")
+      } }
+    end
+
     factory :junior_boys_like_a_child_c2_remix, parent: :minimal_song do
       title "Like a Child"
       subtitle "C2 Remix"
       with_contributions
 
       milestones_attributes { {
-        "0" => attributes_for(:milestone_for_work, year: "2006")
+        "0" => attributes_for(:work_milestone_for_work, year: "2006")
       } }
 
       aspect_ids { [

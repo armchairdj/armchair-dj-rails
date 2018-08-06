@@ -5,8 +5,7 @@ RSpec.shared_examples "a_public_index" do
   let(:template   ) { "posts/#{param_key}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }
 
-  let(:ids      ) { 3.times.map { |i| create_minimal_instance.id } }
-  let(:paginated) { model_class.where(id: ids) }
+  let(:paginated) { model_class.where(id: ids_for_minimal_list(3)) }
   let(:none     ) { model_class.none }
 
   context "without records" do

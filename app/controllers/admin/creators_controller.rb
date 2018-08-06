@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::CreatorsController < Admin::BaseController
+class Admin::CreatorsController < Ginsu::Controller
   # POST /creators
   # POST /creators.json
   def create
@@ -83,10 +83,7 @@ private
   end
 
   def prepare_form
-    @creator.prepare_pseudonym_identities
-    @creator.prepare_real_name_identities
-    @creator.prepare_member_memberships
-    @creator.prepare_group_memberships
+    @creator.prepare_for_editing
 
     @available_pseudonyms = @creator.available_pseudonyms
     @available_real_names = Creator.available_real_names

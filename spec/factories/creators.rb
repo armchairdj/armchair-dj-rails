@@ -95,7 +95,7 @@ FactoryBot.define do
       primary
 
       after(:create) do |creator|
-        create(:minimal_identity, real_name: creator)
+        create(:minimal_creator_identity, real_name: creator)
       end
     end
 
@@ -104,7 +104,7 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [*evaluator.pseudonyms].each do |pseudonym|
-          create(:minimal_identity, real_name: creator, pseudonym: pseudonym)
+          create(:minimal_creator_identity, real_name: creator, pseudonym: pseudonym)
         end
       end
     end
@@ -121,7 +121,7 @@ FactoryBot.define do
       secondary
 
       after(:create) do |creator|
-        create(:minimal_identity, pseudonym: creator)
+        create(:minimal_creator_identity, pseudonym: creator)
       end
     end
 
@@ -130,7 +130,7 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [*evaluator.real_names].each do |real_name|
-          create(:minimal_identity, pseudonym: creator, real_name: real_name)
+          create(:minimal_creator_identity, pseudonym: creator, real_name: real_name)
         end
       end
     end
@@ -147,7 +147,7 @@ FactoryBot.define do
       collective
 
       after(:create) do |creator|
-        create(:minimal_membership, group: creator)
+        create(:minimal_creator_membership, group: creator)
       end
     end
 
@@ -156,7 +156,7 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [*evaluator.members].each do |member|
-          create(:minimal_membership, group: creator, member: member)
+          create(:minimal_creator_membership, group: creator, member: member)
         end
       end
     end
@@ -173,7 +173,7 @@ FactoryBot.define do
       individual
 
       after(:create) do |creator|
-        create(:minimal_membership, member: creator)
+        create(:minimal_creator_membership, member: creator)
       end
     end
 
@@ -182,7 +182,7 @@ FactoryBot.define do
 
       after(:create) do |creator, evaluator|
         [*evaluator.groups].each do |group|
-          create(:minimal_membership, member: creator, group: group)
+          create(:minimal_creator_membership, member: creator, group: group)
         end
       end
     end

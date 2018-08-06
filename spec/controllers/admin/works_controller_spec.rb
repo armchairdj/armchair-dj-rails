@@ -13,7 +13,7 @@ RSpec.describe Admin::WorksController do
     login_root
 
     describe "GET #index" do
-      it_behaves_like "an_admin_index"
+      it_behaves_like "a_ginsu_index"
     end
 
     describe "GET #show" do
@@ -34,8 +34,18 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "POST #create" do
+      let!(:source_work) { create(:junior_boys_like_a_child) }
+
       let(:initial_params) { attributes_for(:work, medium: "Song") }
-      let(:max_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song") }
+
+      let(:max_params) do
+        attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").merge(
+          source_relationships_attributes: {
+            "0" => { connection: "version_of", source_id: source_work.id }
+          }
+        )
+      end
+
       let(:bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
 
       context "with initial params" do
@@ -43,7 +53,8 @@ RSpec.describe Admin::WorksController do
 
         it { is_expected.to successfully_render("admin/works/new") }
 
-        it { subject; expect(assigns(:work)       ).to have_coerced_attributes(initial_params) }
+        it { subject; expect(assigns(:work)).to have_coerced_attributes(initial_params) }
+
         it { subject; expect(assigns(:work).errors).to match_array([]) }
 
         it { is_expected.to prepare_the_complete_form }
@@ -52,7 +63,11 @@ RSpec.describe Admin::WorksController do
       context "with valid params" do
         subject { post :create, params: { work: max_params } }
 
-        it { expect { subject }.to change(Work, :count).by(1) }
+        it { expect { subject }.to change(Work,               :count).by(1) }
+        it { expect { subject }.to change(Work::Relationship, :count).by(1) }
+        it { expect { subject }.to change(Work::Milestone,    :count).by(1) }
+        it { expect { subject }.to change(Credit,             :count).by(1) }
+        it { expect { subject }.to change(Contribution,       :count).by(1) }
 
         it { is_expected.to assign(Work.last, :work).with_attributes(max_params).and_be_valid }
 
@@ -93,7 +108,7 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "PUT #update" do
-      let(:update_params) { { title: "New Title" } }
+      let(:update_params    ) { { title: "New Title" } }
       let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do
@@ -118,14 +133,21 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "DELETE #destroy" do
-      let!(:instance) { create(:junior_boys_like_a_child_c2_remix) }
+      let!(:source_work) { create(:junior_boys_like_a_child) }
+
+      let!(:instance) do
+        create(:junior_boys_like_a_child_c2_remix, source_relationships_attributes: {
+          "0" => { connection: "version_of", source_id: source_work.id }
+        } )
+      end
 
       subject { delete :destroy, params: { id: instance.to_param } }
 
-      it { expect{ subject }.to change(Work,         :count).by(-1) }
-      it { expect{ subject }.to change(Credit,       :count).by(-1) }
-      it { expect{ subject }.to change(Contribution, :count).by(-1) }
-      it { expect{ subject }.to change(Milestone,    :count).by(-1) }
+      it { expect{ subject }.to change(Work,               :count).by(-1) }
+      it { expect{ subject }.to change(Work::Milestone,    :count).by(-1) }
+      it { expect{ subject }.to change(Work::Relationship, :count).by(-1) }
+      it { expect{ subject }.to change(Credit,             :count).by(-1) }
+      it { expect{ subject }.to change(Contribution,       :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_works_path) }
 
