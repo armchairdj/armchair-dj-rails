@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Mixtape do
   describe "concerns" do
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [:author, :playlist] }
       let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
     end

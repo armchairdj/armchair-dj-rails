@@ -24,7 +24,7 @@ RSpec.describe Playlist::Track do
       let(:other  ) { create(:complete_playlist).tracks.sorted }
     end
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:playlist, :work] }
     end

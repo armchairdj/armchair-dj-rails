@@ -47,7 +47,7 @@ class Contribution < Attribution
   # Concerning: Role.
   #############################################################################
 
-  belongs_to :role
+  belongs_to :role, required: true
 
   validates :role_id, presence: true
 

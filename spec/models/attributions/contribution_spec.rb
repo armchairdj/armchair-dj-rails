@@ -37,10 +37,12 @@ RSpec.describe Contribution do
 
     it_behaves_like "an_attribution"
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:work, :role, :creator] }
     end
+
+    it { is_expected.to belong_to(:role).optional(true) }
 
     describe "nilify_blanks" do
       subject { build_minimal_instance }

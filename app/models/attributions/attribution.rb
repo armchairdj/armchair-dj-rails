@@ -67,4 +67,10 @@ class Attribution < ApplicationRecord
   belongs_to :creator, inverse_of: :attributions
 
   validates :creator, presence: true
+
+  #############################################################################
+  # CONCERNING: Role.
+  #############################################################################
+
+  belongs_to :role, required: false
 end

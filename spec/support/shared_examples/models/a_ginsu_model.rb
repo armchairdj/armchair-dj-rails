@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "an_eager_loadable_model" do
+RSpec.shared_examples "a ginsu_model" do
   # show_loads and list_loads will be defined by the caller
 
   let!(:ids) { 3.times.map { create_minimal_instance.id } }

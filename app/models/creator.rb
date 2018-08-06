@@ -41,7 +41,7 @@ class Creator < ApplicationRecord
   validates :name, presence: true
 
   #############################################################################
-  # CONCERNING: Primariness & Identities.
+  # CONCERNING: Primariness & Individuality.
   #############################################################################
 
   concerning :Primariness do
@@ -79,6 +79,44 @@ class Creator < ApplicationRecord
       end
     end
   end
+
+  concerning :Individuality do
+    included do
+      attribute :individual, :boolean, default: true
+
+      after_save :enforce_individuality
+    end
+
+    def membership_type
+      individual? ? "Individual" : "Group"
+    end
+
+    def colleagues
+      return self.class.none unless individual? && groups.any?
+
+      ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
+
+      Creator.where(id: ids).alpha
+    end
+
+  private
+
+    def enforce_individuality
+      if self.collective?
+        self.group_memberships.clear
+      else
+        self.member_memberships.clear
+      end
+    end
+  end
+
+  include Booletania
+
+  booletania_columns :primary, :individual
+
+  #############################################################################
+  # CONCERNING: Identities
+  #############################################################################
 
   has_many :pseudonym_identities, class_name: "Creator::Identity",
     foreign_key: :real_name_id, inverse_of: :real_name, dependent: :destroy
@@ -166,38 +204,8 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Individuality & Memberships.
+  # CONCERNING: Memberships.
   #############################################################################
-
-  concerning :Individuality do
-    included do
-      attribute :individual, :boolean, default: true
-
-      after_save :enforce_individuality
-    end
-
-    def membership_type
-      individual? ? "Individual" : "Group"
-    end
-
-    def colleagues
-      return self.class.none unless individual? && groups.any?
-
-      ids = groups.map(&:members).to_a.flatten.pluck(:id).reject { |id| id == self.id }.uniq
-
-      Creator.where(id: ids).alpha
-    end
-
-  private
-
-    def enforce_individuality
-      if self.collective?
-        self.group_memberships.clear
-      else
-        self.member_memberships.clear
-      end
-    end
-  end
 
   has_many :group_memberships, class_name: "Creator::Membership",
     foreign_key: :member_id, inverse_of: :member, dependent: :destroy
@@ -279,49 +287,39 @@ class Creator < ApplicationRecord
   # CONCERNING: Attributions.
   #############################################################################
 
-  has_many :attributions, inverse_of: :creator, dependent: :destroy
+  has_many :attributions,  inverse_of: :creator, dependent: :destroy
+  has_many :credits,       inverse_of: :creator, dependent: :destroy
+  has_many :contributions, inverse_of: :creator, dependent: :destroy
 
-  def all_works
-    works.union(contributed_works).alpha
+  def works
+    Work.where(id: attributions.select(:work_id).distinct)
   end
 
   def display_roles
-    cred =       credits.includes(:work       )
-    cont = contributions.includes(:work, :role)
+    raw = attributions.includes(:work, :role).to_a.group_by(&:display_medium)
 
-    all = (cred.to_a + cont.to_a).group_by(&:display_medium)
-
-    all.transform_values! { |v| v.map(&:role_name).uniq.sort }
+    raw.transform_values! { |v| v.map(&:role_name).uniq.sort }
   end
 
   #############################################################################
-  # CONCERNING: Credits.
+  # CONCERNING: Credited works & playlists.
   #############################################################################
 
-  has_many :credits, inverse_of: :creator, dependent: :destroy
+  has_many :credited_works, -> { distinct }, through: :credits,
+    class_name: "Work", source: :work
 
-  has_many :works,   through: :credits
-  has_many :reviews, through: :works
+  has_many :credited_playlistings, -> { distinct }, through: :credited_works,
+    class_name: "Playlist::Track", source: :playlistings
 
-  has_many :playlistings, -> { distinct }, through: :works
-
-  has_many :playlists, -> { distinct }, through: :playlistings
-  has_many :mixtapes,  -> { distinct }, through: :playlists
+  has_many :credited_playlists, -> { distinct }, through: :credited_playlistings,
+    class_name: "Playlist", source: :playlist
 
   #############################################################################
-  # CONCERNING: Contributions.
+  # CONCERNING: Contributed works & playlists.
   #############################################################################
-
-  has_many :contributions, inverse_of: :creator, dependent: :destroy
-
-  has_many :contributed_roles, -> { includes(contributions: :work) },
-    through: :contributions, class_name: "Role", source: :role
 
   has_many :contributed_works, -> { distinct }, through: :contributions,
     class_name: "Work", source: :work
-
-  has_many :contributed_reviews, through: :contributed_works,
-    class_name: "Review", source: :reviews
 
   has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
     class_name: "Playlist::Track", source: :playlistings
@@ -329,19 +327,34 @@ class Creator < ApplicationRecord
   has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
     class_name: "Playlist", source: :playlist
 
-  has_many :contributed_mixtapes, -> { distinct }, through: :contributed_playlists,
-    class_name: "Mixtape", source: :mixtapes
+  has_many :contributed_roles, -> { includes(contributions: :work) },
+    through: :contributions, class_name: "Role", source: :role
 
   #############################################################################
   # CONCERNING: Posts.
   #############################################################################
 
-  def posts
-    Post.where(id: post_ids)
-  end
+  has_many :credited_reviews, -> { distinct }, through: :credited_works,
+    class_name: "Review", source: :reviews
+
+  has_many :contributed_reviews, -> { distinct }, through: :contributed_works,
+    class_name: "Review", source: :reviews
+
+  has_many :credited_mixtapes, -> { distinct }, through: :credited_playlists,
+    class_name: "Mixtape", source: :mixtapes
+
+  has_many :contributed_mixtapes, -> { distinct }, through: :contributed_playlists,
+    class_name: "Mixtape", source: :mixtapes
 
   def post_ids
-    (reviews.ids + contributed_reviews.ids + mixtapes.ids + contributed_mixtapes.ids).uniq
+    (contributed_mixtapes.ids +
+        credited_mixtapes.ids +
+      contributed_reviews.ids +
+         credited_reviews.ids).uniq
+  end
+
+  def posts
+    Post.where(id: post_ids)
   end
 
   #############################################################################
@@ -356,23 +369,17 @@ class Creator < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: i18n for booleans.
-  #############################################################################
-
-  include Booletania
-
-  booletania_columns :primary, :individual
-
-  #############################################################################
   # CONCERNING: Ginsu.
   #############################################################################
 
   scope :for_list,  -> { }
   scope :for_show,  -> { includes(
-    :pseudonyms, :real_names, :members, :groups,
-    :credits, :contributed_roles,
-    :works, :contributed_works,
-    :reviews, :contributed_reviews,
-    :mixtapes, :contributed_mixtapes,
+    :pseudonyms,        :real_names,
+    :members,           :groups,
+    :credits,           :contributions,
+    :credited_works,    :contributed_works,
+    :credited_reviews,  :contributed_reviews,
+    :credited_mixtapes, :contributed_mixtapes,
+    :contributed_roles
   ) }
 end

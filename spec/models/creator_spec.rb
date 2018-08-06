@@ -28,14 +28,16 @@ RSpec.describe Creator do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "an_eager_loadable_model" do
+    it_behaves_like "a ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [
-        :pseudonyms, :real_names, :members, :groups,
-        :credits, :contributed_roles,
-        :works, :contributed_works,
-        :reviews, :contributed_reviews,
-        :mixtapes, :contributed_mixtapes,
+        :pseudonyms,        :real_names,
+        :members,           :groups,
+        :credits,           :contributions,
+        :credited_works,    :contributed_works,
+        :credited_reviews,  :contributed_reviews,
+        :credited_mixtapes, :contributed_mixtapes,
+        :contributed_roles
       ] }
     end
 
@@ -158,22 +160,22 @@ RSpec.describe Creator do
 
     it { is_expected.to have_many(:credits).dependent(:destroy) }
 
-    it { is_expected.to have_many(:works       ).through(:credits) }
-    it { is_expected.to have_many(:reviews     ).through(:works) }
-    it { is_expected.to have_many(:playlistings).through(:works) }
-    it { is_expected.to have_many(:playlists   ).through(:playlistings) }
-    it { is_expected.to have_many(:mixtapes    ).through(:playlists ) }
+    it { is_expected.to have_many(:credited_works       ).through(:credits) }
+    it { is_expected.to have_many(:credited_reviews     ).through(:credited_works) }
+    it { is_expected.to have_many(:credited_playlistings).through(:credited_works) }
+    it { is_expected.to have_many(:credited_playlists   ).through(:credited_playlistings) }
+    it { is_expected.to have_many(:credited_mixtapes    ).through(:credited_playlists ) }
 
     ### Contributions.
 
     it { is_expected.to have_many(:contributions).dependent(:destroy) }
 
-    it { is_expected.to have_many(:contributed_roles       ).through(:contributions) }
     it { is_expected.to have_many(:contributed_works       ).through(:contributions) }
     it { is_expected.to have_many(:contributed_reviews     ).through(:contributed_works) }
     it { is_expected.to have_many(:contributed_playlistings).through(:contributed_works) }
     it { is_expected.to have_many(:contributed_playlists   ).through(:contributed_playlistings) }
     it { is_expected.to have_many(:contributed_mixtapes    ).through(:contributed_playlists) }
+    it { is_expected.to have_many(:contributed_roles       ).through(:contributions) }
 
     ### Identities & Memberships.
 
@@ -710,8 +712,8 @@ RSpec.describe Creator do
       let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }
       let!(:both       ) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
 
-      describe "#all_works" do
-        subject { instance.all_works.ids }
+      describe "#works" do
+        subject { instance.works.ids }
 
         let(:expected) { [created, contributed, both].map(&:id) }
 

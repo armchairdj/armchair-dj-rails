@@ -57,6 +57,7 @@ class Role < ApplicationRecord
   # CONCERNING: Contributions
   #############################################################################
 
+  has_many :attributions,  dependent: :destroy
   has_many :contributions, dependent: :destroy
 
   has_many :works, through: :contributions

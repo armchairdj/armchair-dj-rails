@@ -18,8 +18,8 @@ concern :Errorable do
     end
 
     # 403
-    rescue_from Pundit::NotAuthenticatedError, with: :handle_403_recoverable
     rescue_from Pundit::NotAuthorizedError,    with: :handle_403
+    rescue_from Pundit::NotAuthenticatedError, with: :handle_403_recoverable
 
     # 404
     rescue_from ActiveRecord::RecordNotFound,        with: :handle_404
