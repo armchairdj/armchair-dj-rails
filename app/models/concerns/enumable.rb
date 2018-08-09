@@ -17,24 +17,34 @@ concern :Enumable do
   #############################################################################
 
   class_methods do
-    def human_enum_collection(attribute, alphabetical: false)
+    def human_enum_collection(attribute, alphabetical: false, variation: nil)
       collection = send(attribute.to_s.pluralize).keys.collect do |val|
-        [self.human_enum_value(attribute, val), val]
+        [self.human_enum_value(attribute, val, variation: variation), val]
       end
 
       alphabetical ? collection.sort_by(&:first) : collection
     end
 
-    def human_enum_collection_with_keys(attribute, alphabetical: false)
+    def human_enum_collection_with_keys(attribute, alphabetical: false, variation: nil)
       collection = send(attribute.to_s.pluralize).collect do |val, key|
-        [self.human_enum_value(attribute, val), val, key]
+        [self.human_enum_value(attribute, val, variation: variation), val, key]
       end
 
       alphabetical ? collection.sort_by(&:first) : collection
     end
 
-    def human_enum_value(attribute, val)
-      I18n.t("activerecord.attributes.#{model_name.i18n_key}.#{attribute.to_s.pluralize}.#{val}")
+    def human_enum_value(attribute, val, variation: nil)
+      lookup = [
+        "activerecord",
+        "attributes",
+        model_name.i18n_key,
+        attribute.to_s.pluralize,
+        variation,
+        val
+      ].compact.join(".")
+
+
+      I18n.t(lookup)
     end
 
     # TODO break out define_instance_methods & define_class_methods
@@ -47,20 +57,16 @@ concern :Enumable do
 
         # Define class methods
         singleton_class.instance_eval do
-          define_method :"human_#{plural_attr}_with_keys" do
-            self.human_enum_collection_with_keys(attr)
+          define_method :"human_#{plural_attr}_with_keys" do |**opts|
+            self.human_enum_collection_with_keys(attr, **opts)
           end
 
-          define_method :"human_#{plural_attr}" do
-            self.human_enum_collection((attr))
+          define_method :"human_#{plural_attr}" do |**opts|
+            self.human_enum_collection(attr, **opts)
           end
 
-          define_method :"alphabetical_human_#{plural_attr}" do
-            self.human_enum_collection((attr), alphabetical: true)
-          end
-
-          define_method :"human_#{attr}" do |val|
-            self.human_enum_value(attr, val)
+          define_method :"human_#{attr}" do |val, **opts|
+            self.human_enum_value(attr, val, **opts)
           end
         end
 

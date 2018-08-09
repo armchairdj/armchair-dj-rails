@@ -69,14 +69,6 @@ RSpec.shared_examples "an_enumable_model" do |attributes|
             end
           end
 
-          describe "self#alphabetical_human_#{plural_attr}" do
-            subject { described_class.send(:"alphabetical_human_#{plural_attr}") }
-
-            it "returns an alphabetical 2D array for use in dropdowns" do
-              is_expected.to eq([["X.", "r"], ["Y.", "a"], ["Z.", "b"]])
-            end
-          end
-
           describe "self#human_#{single_attr}" do
             subject { described_class.send(:"human_#{single_attr}", "b") }
 

@@ -1,15 +1,15 @@
-<%= f.simple_fields_for :source_relationships, source_relationship do |ff| %>
+<%= f.simple_fields_for :target_relationships, target_relationship do |ff| %>
   <%= expandable_fieldset do %>
     <%#= content_tag(:div, class: "row work-relationship") do %>
       <%= ff.input :connection,
         as:            :select,
-        collection:    Work::Relationship.human_connections(variation: :source),
+        collection:    Work::Relationship.human_connections(variation: :target),
         required:      true,
         include_blank: :translate,
         input_html:    js_selectabe_create_creator_attrs
       %>
 
-      <%= ff.input :source_id, as: :grouped_select,
+      <%= ff.input :target_id, as: :grouped_select,
         collection:         @relatives,
         required:           true,
         group_label_method: :first,

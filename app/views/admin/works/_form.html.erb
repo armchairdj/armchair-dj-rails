@@ -53,7 +53,13 @@
     <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :source_relationships,
-      headline:    "Related Works"
+      headline:    "Parents"
+    %>
+
+    <%= render "shared/forms/has_many_fieldset",
+      f:           f,
+      association: :target_relationships,
+      headline:    "Children"
     %>
   <% end %>
 
