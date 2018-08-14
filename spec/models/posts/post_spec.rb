@@ -246,7 +246,7 @@ RSpec.describe Post do
   describe "attributes" do
     describe "enums" do
       describe "status" do
-        it_behaves_like "an_enumable_model", [:status]
+        it_behaves_like "an_enumable_model", :status
       end
     end
   end

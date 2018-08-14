@@ -78,7 +78,7 @@ RSpec.describe Aspect do
 
   describe "attributes" do
     describe "enums" do
-      it_behaves_like "an_enumable_model", [:facet]
+      it_behaves_like "an_enumable_model", :facet
     end
   end
 

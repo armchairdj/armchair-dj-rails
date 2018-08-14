@@ -186,7 +186,7 @@ RSpec.describe User do
   describe "attributes" do
     describe "enums" do
       describe "role" do
-        it_behaves_like "an_enumable_model", [:role]
+        it_behaves_like "an_enumable_model", :role
       end
     end
   end

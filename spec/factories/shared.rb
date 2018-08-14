@@ -85,7 +85,7 @@ FactoryBot.define do
     end
 
     tag_ids do
-      tag_count.times.inject([]) { |memo, (i)| memo << create(:minimal_tag).id; memo }
+      create_list(:minimal_tag, 3).map(&:id)
     end
   end
 

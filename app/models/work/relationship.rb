@@ -51,7 +51,7 @@ class Work::Relationship < ApplicationRecord
     borrows_from:    400,
   }
 
-  enumable_attributes :connection
+  add_enumable_attribute :connection
 
   #############################################################################
   # CONCERNING: Source.

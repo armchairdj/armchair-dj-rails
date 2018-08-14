@@ -64,7 +64,7 @@ class Aspect < ApplicationRecord
     game_studio:        602,
   }
 
-  enumable_attributes :facet
+  add_enumable_attribute :facet
 
   #############################################################################
   # CONCERNING: Name.

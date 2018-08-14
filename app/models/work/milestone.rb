@@ -54,7 +54,7 @@ class Work::Milestone < ApplicationRecord
     remixed:    24
   }
 
-  enumable_attributes :activity
+  add_enumable_attribute :activity
 
   #############################################################################
   # CONCERNING: Year.

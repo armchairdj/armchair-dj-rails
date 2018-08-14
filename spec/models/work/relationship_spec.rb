@@ -36,7 +36,7 @@ RSpec.describe Work::Relationship do
   end
 
   describe "connection" do
-    it_behaves_like "an_enumable_model", [:connection]
+    it_behaves_like "an_enumable_model", { connection: [:source, :target] }
 
     it { is_expected.to validate_presence_of(:connection) }
   end
