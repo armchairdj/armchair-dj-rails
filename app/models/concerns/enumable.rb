@@ -87,14 +87,37 @@ concern :Enumable do
     end
 
     def human_enumeration_for(attribute, val, variation: nil)
-      I18n.t human_i18n_lookup(attribute.to_s.pluralize, val, variation)
+      humanized = nil
+      lookups   = human_i18n_lookups(attribute.to_s.pluralize, val, variation)
+
+      lookups.each do |lookup|
+        humanized = I18n.t lookup
+
+        break unless humanized.match(/translation missing/i)
+      end
+
+      humanized
+    end
+
+    def human_i18n_lookups(plural_attr, val, variation, model_class = nil)
+      model_class ||= self
+
+      lookups = []
+
+      while model_class != ApplicationRecord
+        lookups << human_i18n_lookup(plural_attr, val, variation, model_class)
+
+        model_class = model_class.superclass
+      end
+
+      lookups
     end
 
     # activerecord.attributes.user.activities.breathe
     # activerecord.attributes.user.activities.short.breathe
     # activerecord.attributes.user.activities.long.breathe
-    def human_i18n_lookup(plural_attr, val, variation)
-      root = "activerecord.attributes.#{model_name.i18n_key}"
+    def human_i18n_lookup(plural_attr, val, variation, model_class)
+      root = "activerecord.attributes.#{model_class.model_name.i18n_key}"
 
       [root, plural_attr, variation, val].compact.join(".")
     end

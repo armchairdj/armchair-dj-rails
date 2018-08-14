@@ -21,7 +21,7 @@ en:
     models:
       <<: *work_subclasses
     attributes:
-      post: &post_attributes
+      post:
         published_at: "Published On"
         publish_on: "Automatically Publish On"
         statuses:
@@ -29,12 +29,6 @@ en:
           scheduled: "Scheduled"
           published: "Published"
         tag_ids: "Tags"
-      article:
-        <<: *post_attributes
-      mixtape:
-        <<: *post_attributes
-      review:
-        <<: *post_attributes
       aspect:
         facets:
           album_format:       "Format"
@@ -138,7 +132,7 @@ en:
     errors:
       models:
         post:
-          attributes: &post_errors
+          attributes:
             base:
               failed_to_publish:    "Could not publish because of the errors below."
               failed_to_schedule:   "Could not schedule because of the errors below."
@@ -152,15 +146,6 @@ en:
             publish_on:
               blank: "Please choose a publication date to schedule this post."
               present: "Please don't choose a publication date unless you're scheduling this post."
-        article:
-          attributes:
-            <<: *post_errors
-        review:
-          attributes:
-            <<: *post_errors
-        mixtape:
-          attributes:
-            <<: *post_errors
         contribution:
           attributes:
             creator_id:
