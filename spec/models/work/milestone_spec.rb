@@ -25,7 +25,7 @@ RSpec.describe Work::Milestone do
   describe "concerns" do
     it_behaves_like "an_application_record"
 
-    it_behaves_like "a ginsu_model" do
+    it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:work] }
     end

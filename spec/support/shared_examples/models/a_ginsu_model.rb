@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_examples "a ginsu_model" do
+RSpec.shared_examples "a_ginsu_model" do
   # show_loads and list_loads will be defined by the caller
 
   let!(:collection) { described_class.where(id: ids_for_minimal_list(3)) }

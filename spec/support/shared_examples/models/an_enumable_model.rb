@@ -53,16 +53,16 @@ RSpec.shared_examples "an_enumable_model" do |enum|
   describe "dynamically defined methods" do
     before(:each) do
       allow(described_class).to receive(plural).and_return({
-        "fake" => 0,
-        "enum" => 1,
+        "init" => 0,
+        "addl" => 1,
       })
 
       allow(I18n).to receive(:t).and_call_original
-      allow(I18n).to receive(:t).with("#{i18n_key}.fake").and_return("Initial Humanized Value")
-      allow(I18n).to receive(:t).with("#{i18n_key}.enum").and_return("Additional Humanized Value")
+      allow(I18n).to receive(:t).with("#{i18n_key}.init").and_return("Initial Humanized Value")
+      allow(I18n).to receive(:t).with("#{i18n_key}.addl").and_return("Additional Humanized Value")
 
-      allow(I18n).to receive(:t).with("#{i18n_key}.short.fake").and_return("Short Initial")
-      allow(I18n).to receive(:t).with("#{i18n_key}.short.enum").and_return("Short Additional")
+      allow(I18n).to receive(:t).with("#{i18n_key}.short.init").and_return("Short Initial")
+      allow(I18n).to receive(:t).with("#{i18n_key}.short.addl").and_return("Short Additional")
     end
 
     describe "class methods" do
@@ -71,8 +71,8 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           subject { described_class.send(:"human_#{plural}") }
 
           let(:expected) do
-            [["Initial Humanized Value",    "fake"],
-             ["Additional Humanized Value", "enum"]]
+            [["Initial Humanized Value",    "init"],
+             ["Additional Humanized Value", "addl"]]
           end
 
           it "gives a 2D array mapping humanized values to enum values for use in dropdowns" do
@@ -84,8 +84,8 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           subject { described_class.send(:"human_#{plural}", alpha: true) }
 
           let(:expected) do
-            [["Additional Humanized Value", "enum"],
-             ["Initial Humanized Value",    "fake"]]
+            [["Additional Humanized Value", "addl"],
+             ["Initial Humanized Value",    "init"]]
           end
 
           it "alphabetizes by humanized string" do
@@ -97,8 +97,8 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           subject { described_class.send(:"human_#{plural}", include_raw: true) }
 
           let(:expected) do
-            [["Initial Humanized Value",    "fake", 0],
-             ["Additional Humanized Value", "enum", 1]]
+            [["Initial Humanized Value",    0, "init",],
+             ["Additional Humanized Value", 1, "addl",]]
           end
 
           it "includes the database integer in each item" do
@@ -110,8 +110,8 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           subject { described_class.send(:"human_#{plural}", variation: :short) }
 
           let(:expected) do
-            [["Short Initial",    "fake"],
-             ["Short Additional", "enum"]]
+            [["Short Initial",    "init"],
+             ["Short Additional", "addl"]]
           end
 
           it "includes the database integer in each item" do
@@ -122,7 +122,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
 
       describe "self#human_#{single}" do
         describe "default behavior" do
-          subject { described_class.send(:"human_#{single}", "fake") }
+          subject { described_class.send(:"human_#{single}", "init") }
 
           it "translates the attribute" do
             is_expected.to eq("Initial Humanized Value")
@@ -130,7 +130,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
         end
 
         describe "with a variation argument" do
-          subject { described_class.send(:"human_#{single}", "fake", variation: :short) }
+          subject { described_class.send(:"human_#{single}", "init", variation: :short) }
 
           it "translates the attribute with the given variation" do
             is_expected.to eq("Short Initial")
@@ -152,7 +152,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
     describe "instance methods" do
       let(:instance) { create_minimal_instance }
 
-      before(:each) { allow(instance).to receive(single).and_return("enum") }
+      before(:each) { allow(instance).to receive(single).and_return("addl") }
 
       describe "#human_#{single}" do
         describe "default behavior" do

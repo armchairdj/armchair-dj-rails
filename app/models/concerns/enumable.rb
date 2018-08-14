@@ -28,13 +28,13 @@ concern :Enumable do
       define_instance_methods single_attr, plural_attr
     end
 
-    def retrieve_enumable_attributes
-      self._enumable_attributes
-    end
-
     def remember_enumable_attribute(attribute)
       self._enumable_attributes ||= Set.new
       self._enumable_attributes << attribute.to_sym
+    end
+
+    def retrieve_enumable_attributes
+      self._enumable_attributes
     end
 
     def define_class_methods(single_attr, plural_attr)
@@ -80,7 +80,7 @@ concern :Enumable do
       collection = send(plural_attr).map do |val, raw|
         humanized = human_enumeration_for(attribute, val, variation: variation)
 
-        include_raw ? [humanized, val, raw] : [humanized, val]
+        include_raw ? [humanized, raw, val] : [humanized, val]
       end
 
       alpha ? collection.sort_by(&:first) : collection
@@ -104,7 +104,7 @@ concern :Enumable do
 
       humanized = human_enumeration(attribute, **opts)
 
-      whens = humanized.map.with_index do |(humanized, val, raw), index|
+      whens = humanized.map.with_index do |(humanized, raw, val), index|
         "WHEN #{attribute}=#{raw} THEN #{index}"
       end
 
