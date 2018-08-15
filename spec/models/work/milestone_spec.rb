@@ -51,7 +51,7 @@ RSpec.describe Work::Milestone do
 
   describe "attributes" do
     describe "enums" do
-      it_behaves_like "an_enumable_model", :activity
+      it_behaves_like "a_model_with_a_better_enum_for", :activity
     end
   end
 

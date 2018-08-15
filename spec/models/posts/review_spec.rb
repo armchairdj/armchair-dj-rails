@@ -28,7 +28,7 @@ RSpec.describe Review do
   end
 
   describe "status" do
-    it_behaves_like "an_enumable_model", :status
+    it_behaves_like "a_model_with_a_better_enum_for", :status
   end
 
   describe "work" do

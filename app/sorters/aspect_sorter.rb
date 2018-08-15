@@ -15,6 +15,6 @@ private
   end
 
   def aspect_facet_sort_sql
-    Aspect.human_enumeration_order_clause(:facet)
+    Aspect.human_facet_order_clause
   end
 end

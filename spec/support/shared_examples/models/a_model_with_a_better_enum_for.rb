@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "an_enumable_model" do |enum|
+RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
+  MISSING_TRANSLATION = /translation missing/i
+
   if enum.is_a?(Hash)
-    attribute  = enum.keys.first
-    variations = enum.values.first
+    attribute  = enum[:attribute ]
+    variations = enum[:variations]
   else
     attribute  = enum
     variations = []
@@ -15,18 +17,15 @@ RSpec.shared_examples "an_enumable_model" do |enum|
 
   it { is_expected.to define_enum_for(attribute) }
 
-  describe "generic class methods" do
+  describe "generic public class methods" do
     subject { described_class }
 
-    it { is_expected.to respond_to(:add_enumable_attribute) }
-    it { is_expected.to respond_to(:human_enumeration) }
-    it { is_expected.to respond_to(:human_enumeration_for) }
-    it { is_expected.to respond_to(:human_enumeration_order_clause) }
+    it { is_expected.to respond_to(:improve_enum) }
 
-    describe "self#retrieve_enumable_attributes" do
-      subject { described_class.retrieve_enumable_attributes }
+    describe "self#better_enums" do
+      subject { described_class.better_enums }
 
-      it "keeps track of which attributes have been defined" do
+      it "reports which attributes have been defined" do
         is_expected.to include(attribute)
       end
     end
@@ -37,20 +36,20 @@ RSpec.shared_examples "an_enumable_model" do |enum|
       it "has a localized string for #{val}" do
         actual = described_class.send(:"human_#{single}", val)
 
-        expect(actual).to_not match(/translation missing/i)
+        expect(actual).to_not match(MISSING_TRANSLATION)
       end
 
       variations.each do |variation|
         it "has a localized string for #{val} with variation #{variation}" do
           actual = described_class.send(:"human_#{single}", val, variation: variation)
 
-          expect(actual).to_not match(/translation missing/i)
+          expect(actual).to_not match(MISSING_TRANSLATION)
         end
       end
     end
   end
 
-  describe "dynamically defined methods" do
+  describe "dynamically defined methods for #{single}" do
     before(:each) do
       allow(described_class).to receive(plural).and_return({
         "init" => 0,
@@ -61,11 +60,11 @@ RSpec.shared_examples "an_enumable_model" do |enum|
       allow(I18n).to receive(:t).with("#{i18n_key}.init").and_return("Initial Humanized Value")
       allow(I18n).to receive(:t).with("#{i18n_key}.addl").and_return("Additional Humanized Value")
 
-      allow(I18n).to receive(:t).with("#{i18n_key}.short.init").and_return("Short Initial")
+      allow(I18n).to receive(:t).with("#{i18n_key}.short.init").and_return("Compact Initial")
       allow(I18n).to receive(:t).with("#{i18n_key}.short.addl").and_return("Short Additional")
     end
 
-    describe "class methods" do
+    describe "at the class level" do
       describe "self#human_#{plural}" do
         context "default behavior" do
           subject { described_class.send(:"human_#{plural}") }
@@ -80,7 +79,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           end
         end
 
-        context "when alpha=true" do
+        context "with the keyword argument alpha: true" do
           subject { described_class.send(:"human_#{plural}", alpha: true) }
 
           let(:expected) do
@@ -93,7 +92,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           end
         end
 
-        context "when include_raw=true" do
+        context "with the keyword argument include_raw: true" do
           subject { described_class.send(:"human_#{plural}", include_raw: true) }
 
           let(:expected) do
@@ -106,11 +105,11 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           end
         end
 
-        describe "when variation is present" do
+        describe "with a variation keyword argument" do
           subject { described_class.send(:"human_#{plural}", variation: :short) }
 
           let(:expected) do
-            [["Short Initial",    "init"],
+            [["Compact Initial",  "init"],
              ["Short Additional", "addl"]]
           end
 
@@ -121,7 +120,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
       end
 
       describe "self#human_#{single}" do
-        describe "default behavior" do
+        context "default behavior" do
           subject { described_class.send(:"human_#{single}", "init") }
 
           it "translates the attribute" do
@@ -129,33 +128,73 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           end
         end
 
-        describe "with a variation argument" do
+        context "with a variation keyword argument" do
           subject { described_class.send(:"human_#{single}", "init", variation: :short) }
 
           it "translates the attribute with the given variation" do
-            is_expected.to eq("Short Initial")
+            is_expected.to eq("Compact Initial")
           end
         end
       end
 
-      describe "self#human_enumeration_order_clause" do
-        subject { described_class.send(:human_enumeration_order_clause, single) }
+      describe "self#human_#{single}_order_clause" do
+        context "default behavior" do
+          subject { described_class.send(:"human_#{single}_order_clause") }
 
-        let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
+          let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
 
-        it "returns a SQL order clause that sorts by humanized values" do
-          is_expected.to eq(expected)
+          it "returns a SQL order clause that sorts by humanized values" do
+            is_expected.to eq(expected)
+          end
+        end
+
+        context "with a variation keyword argument" do
+          subject { described_class.send(:"human_#{single}_order_clause", variation: :short) }
+
+          let(:expected) { "CASE WHEN #{single}=0 THEN 0 WHEN #{single}=1 THEN 1 END" }
+
+          it "returns a SQL order clause that sorts by humanized variation" do
+            is_expected.to eq(expected)
+          end
+        end
+      end
+
+      describe "self#sorted_by_human_#{single}" do
+        subject { described_class }
+
+        context "default behavior" do
+          let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
+
+          it "orders by humanized values" do
+            expect(described_class).to receive(:order).with(expected).and_call_original
+
+            actual = described_class.send(:"sorted_by_human_#{single}")
+
+            expect(actual).to be_a_kind_of(ActiveRecord::Relation)
+          end
+        end
+
+        context "with a variation keyword argument" do
+          let(:expected) { "CASE WHEN #{single}=0 THEN 0 WHEN #{single}=1 THEN 1 END" }
+
+          it "orders by humanized variation" do
+            expect(described_class).to receive(:order).with(expected).and_call_original
+
+            actual = described_class.send(:"sorted_by_human_#{single}", variation: :short)
+
+            expect(actual).to be_a_kind_of(ActiveRecord::Relation)
+          end
         end
       end
     end
 
-    describe "instance methods" do
+    describe "at the instance level" do
       let(:instance) { create_minimal_instance }
 
       before(:each) { allow(instance).to receive(single).and_return("addl") }
 
       describe "#human_#{single}" do
-        describe "default behavior" do
+        context "default behavior" do
           subject { instance.send(:"human_#{single}") }
 
           it "translates the attribute" do
@@ -163,7 +202,7 @@ RSpec.shared_examples "an_enumable_model" do |enum|
           end
         end
 
-        describe "with a variation argument" do
+        context "with a variation keyword argument" do
           subject { instance.send(:"human_#{single}", variation: :short) }
 
           it "translates the attribute with the given variation" do
