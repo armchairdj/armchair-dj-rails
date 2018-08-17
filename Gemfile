@@ -87,7 +87,7 @@ gem "decent_exposure"
 gem "responders"
 
 # State machines.
-gem "aasm"
+gem "aasm", "~> 5.0"
 
 # Pagination.
 gem "kaminari"

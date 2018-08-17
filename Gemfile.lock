@@ -17,7 +17,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (4.12.3)
+    aasm (5.0.0)
       concurrent-ruby (~> 1.0)
     accept_values_for (0.4.3)
       activemodel (>= 3.0.0)
@@ -388,7 +388,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aasm
+  aasm (~> 5.0)
   accept_values_for
   active_record_union
   acts_as_list
