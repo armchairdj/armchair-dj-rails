@@ -12,7 +12,7 @@ export default class extends SelectableController {
   }
 
   initialize() {
-    this.addOptionEventName = `selectable-create:option-add:${this.data.get("scope")}`;
+    this.addOptionEventName = `creatable:option-add:${this.data.get("scope")}`;
     this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
   }
 
@@ -36,9 +36,7 @@ export default class extends SelectableController {
   }
 
   createItem(userInput, callback) {
-    if (!this.confirmCreate(userInput)) {
-      return callback();
-    }
+    if (!this.confirmCreate(userInput)) { return callback() }
 
     this.submitCreate(userInput, callback);
   }

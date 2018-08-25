@@ -9,10 +9,11 @@ export default class extends BaseController {
 
     this.url       = this.data.get("url");
 
-    this.detector  = _.debounce(_.bind(this.detectUpdate,    this), this.wait);
-    this.saver     =            _.bind(this.saveIfNecessary, this);
-    this.onSuccess =            _.bind(this.ajaxSuccess,     this);
-    this.onError   =            _.bind(this.ajaxError,       this);
+    this.detector  = _.debounce(_.bind(this.detectUpdate, this), this.wait);
+
+    this.saver     = _.bind(this.saveIfNecessary, this);
+    this.onSuccess = _.bind(this.ajaxSuccess,     this);
+    this.onError   = _.bind(this.ajaxError,       this);
   }
 
   setup() {
@@ -44,9 +45,9 @@ export default class extends BaseController {
   }
 
   saveIfNecessary() {
-    if (this.lastUpdated > this.lastSaved) {
-      this.submitRequest();
-    }
+    if (this.lastUpdated <= this.lastSaved) { return }
+
+    this.submitRequest();
   }
 
   submitRequest() {
@@ -60,15 +61,13 @@ export default class extends BaseController {
   }
 
   ajaxSuccess(response, status, xhr) {
-    console.log("autosaved");
-
     this.lastSaved = new Date();
 
     this.alertUserOfSuccess();
   }
 
   alertUserOfSuccess() {
-    var $body = $("body");
+    const $body = $("body");
 
     $body.fadeTo(400, 0.5, function () {
       $body.fadeTo(400, 1)

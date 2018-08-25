@@ -1,16 +1,15 @@
-<%= simple_form_for([:admin, @work], html: { class: "admin", "data-controller": "autosubmit" }) do |f| %>
+<%= simple_form_for([:admin, @work], html: {
+  class: "admin", "data-controller": "autosubmittable"
+}) do |f| %>
   <%= f.error_notification %>
 
   <%= form_inputs do %>
     <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
-        <%= f.input :medium, as: :select,
-          collection: @media,
-          input_html: {
-            "data-controller": "selectable",
-            "data-target":     "autosubmit.field"
-          }
-        %>
+        <%= f.input :medium, as: :select, collection: @media, input_html: {
+          "data-controller": "selectable",
+          "data-target":     "autosubmittable.field"
+        } %>
       <% end %>
     <% end %>
   <% end %>
@@ -19,7 +18,7 @@
     <%= submit_button(@work, "Continue",
       name:          "step",
       value:         "select_medium",
-      "data-target": "autosubmit.button"
+      "data-target": "autosubmittable.button"
     ) %>
   <% end %>
 <% end %>

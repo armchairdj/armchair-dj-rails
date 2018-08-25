@@ -11,7 +11,7 @@ module JsHelper
     attrs
   end
 
-  def js_autosave_attrs(post)
+  def js_autosavable_attrs(post)
     return {} unless post.persisted? && post.unpublished?
 
     opts = {}
@@ -22,7 +22,7 @@ module JsHelper
       when "Mixtape"; autosave_admin_mixtape_path(post)
     end
 
-    js_attrs("autosave", opts)
+    js_attrs("autosavable", opts)
   end
 
   def js_selectabe_create_creator_attrs(scope = "creator", **opts)
@@ -35,7 +35,7 @@ module JsHelper
       when "creator[group]";     "creator[individual]=false"
     end unless scope.nil?
 
-    js_attrs("selectable-create", opts)
+    js_attrs("creatable", opts)
   end
 
   def js_selectable_create_role_attrs(**opts)
@@ -46,7 +46,7 @@ module JsHelper
       "form-params": "role[medium]=work[medium]"
     })
 
-    js_attrs("selectable-create", opts)
+    js_attrs("creatable", opts)
   end
 
   def js_selectable_create_aspect_attrs(facet)
@@ -57,13 +57,13 @@ module JsHelper
       "extra-params": "aspect[facet]=#{facet}",
     }
 
-    js_attrs("selectable-create", opts).merge(multiple: true)
+    js_attrs("creatable", opts).merge(multiple: true)
   end
 
   def js_selectable_create_tag_attrs
     opts = { scope: "tag", url: admin_tags_path, param: "tag[name]" }
 
-    js_attrs("selectable-create", opts).merge(multiple: true)
+    js_attrs("creatable", opts).merge(multiple: true)
   end
 
   def js_selectable_prepare_work_attrs
@@ -107,7 +107,7 @@ module JsHelper
 
   def js_tabbable_link(text, tab_name)
     link_to text, "##{tab_name}",
-      "data-action":   "click->tabbable#activate",
+      "data-action":   "tabbable#activate",
       "data-tab-name": tab_name,
       "data-target":   "tabbable.all"
   end
@@ -122,9 +122,9 @@ module JsHelper
   end
 
   def js_togglable_attrs(bool, css_class, expandable:)
-    target = "togglable-fieldset.#{bool ? 'trueFieldset' : 'falseFieldset'}"
+    target = "togglable.#{bool ? 'trueFieldset' : 'falseFieldset'}"
     attrs  = { class: css_class, "data-target": target }
 
-    expandable ? js_attrs("expandable-fieldset").merge(attrs) : attrs
+    expandable ? js_attrs("expandable").merge(attrs) : attrs
   end
 end

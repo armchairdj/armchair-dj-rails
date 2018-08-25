@@ -17,13 +17,13 @@ export default class extends BaseController {
   }
 
   alwaysShowFirstItem() {
-    if (this.hidden.length == this.itemTargets.length) {
+    if (this.hidden.length === this.itemTargets.length) {
       this.hidden.shift();
     }
   }
 
   hideIfNecessary() {
-    if (this.hidden.length == 0) { return }
+    if (this.hidden.length === 0) { return }
 
     $(this.hidden).hide();
 
@@ -59,7 +59,7 @@ export default class extends BaseController {
   linkMarkup() {
     return [
       '<div class="expand" data-expand-link="true">',
-        '<a href="#" data-action="expandable-fieldset#expand">add another</a>',
+        '<a href="#" data-action="expandable#expand">add another</a>',
       '</div>'
     ].join("");
   }

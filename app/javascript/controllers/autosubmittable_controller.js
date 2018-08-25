@@ -10,7 +10,7 @@ export default class extends BaseController {
   setup() {
     $(this.fieldTargets).on("change", this.submitter);
 
-    $(this.buttonTargets).css({ visibility: "hidden", height: 0 });
+    $(this.buttonTargets).addClass("js-visually-hidden");
   }
 
   teardown() {
