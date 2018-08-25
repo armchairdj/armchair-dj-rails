@@ -127,4 +127,13 @@ module JsHelper
 
     expandable ? js_attrs("expandable").merge(attrs) : attrs
   end
+
+  def js_unmaskable_attrs
+    { wrapper_html: {
+      "data-controller": "unmaskable",
+      class:             "js-unmaskable"
+    }, input_html: {
+      "data-target": "unmaskable.field"
+    } }
+  end
 end

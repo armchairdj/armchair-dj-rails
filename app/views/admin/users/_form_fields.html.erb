@@ -2,9 +2,9 @@
   <%= content_tag(:fieldset, class: "name") do %>
     <%= content_tag(:legend, "Name") %>
 
-    <%= f.input(:first_name) %>
-    <%= f.input(:middle_name, required: false) %>
-    <%= f.input(:last_name) %>
+    <%= f.input :first_name %>
+    <%= f.input :middle_name, required: false %>
+    <%= f.input :last_name %>
   <% end %>
 <% end %>
 
@@ -13,24 +13,23 @@
     <%= content_tag(:legend, "Account") %>
 
     <% if show_role && f.object != current_user %>
-      <%= f.input(:role,
-        as:            :select,
-        collection:    roles,
-        include_blank: :translate,
-        input_html:    { "data-controller": "selectable" }
-      ) %>
+      <%= f.input :role, as: :select, collection: roles,
+        include_blank: :translate, input_html: {
+          "data-controller": "selectable"
+        }
+      %>
     <% end %>
 
-    <%= f.input(:username, required: true) %>
+    <%= f.input :username, required: true  %>
 
-    <%= f.input(:email, required: true, placeholder: true) %>
+    <%= f.input :email, required: true, placeholder: true %>
 
     <% if show_password %>
-      <%= f.input(:password, required: true, hint: true) %>
+      <%= f.input :password, required: true, hint: true, **js_unmaskable_attrs %>
     <% end %>
 
     <% if show_bio %>
-      <%= f.input(:bio, hint: true) %>
+      <%= f.input :bio, hint: true %>
     <% end %>
   <% end %>
 <% end %>
