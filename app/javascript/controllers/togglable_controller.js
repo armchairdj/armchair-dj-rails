@@ -24,7 +24,7 @@ export default class extends BaseController {
   toggle(evt) {
     const showTrue = (this.findRadio().filter(":checked").val() === "true");
 
-    $(this.trueFieldsetTarget).toggle(showTrue);
+    $(this.trueFieldsetTarget ).toggle( showTrue);
     $(this.falseFieldsetTarget).toggle(!showTrue);
   }
 }

@@ -145,7 +145,8 @@ module JsHelper
         "class":           "js-unmaskable"
       },
       input_html: {
-        "data-target": "unmaskable.field"
+        "data-target": "unmaskable.field",
+        "data-action": "keydown->unmaskable#enable"
       }
     }
   end

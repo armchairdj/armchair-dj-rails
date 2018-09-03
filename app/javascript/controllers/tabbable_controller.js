@@ -18,13 +18,13 @@ export default class extends BaseController {
   }
 
   teardown(evt) {
-    $(document).off("tabbable:activate", this.activator);
-
-    $(this.allTargets).removeClass("tab-active tab-inactive");
+    $(this.removeTargets).show();
 
     $(this.element).removeClass("initialized");
 
-    $(this.removeTargets).show();
+    $(this.allTargets).removeClass("tab-active tab-inactive");
+
+    $(document).off("tabbable:activate", this.activator);
   }
 
   activate(evt) {

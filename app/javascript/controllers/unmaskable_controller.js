@@ -2,49 +2,52 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   static targets = [ "field" ];
+  static text    = { mask: "conceal", unmask: "reveal" };
 
   initialize() {
-    this.maskText   = "conceal";
-    this.unmaskText = "reveal";
+    this.mask   = _.bind(this.performToggle, this, "password", "unmask", true );
+    this.unmask = _.bind(this.performToggle, this, "text",     "mask",   false);
   }
 
   setup() {
-    this.$trigger = $(this.triggerMarkup()).appendTo(this.element);
+    this.$trigger = this.createTrigger();
+
+    this.enable();
 
     this.mask();
   }
 
   teardown(evt) {
     this.$trigger.remove();
+
+    this.mask();
   }
 
-  triggerMarkup() {
-    return '<a href="#" data-action="unmaskable#toggle" class="trigger" />';
+  createTrigger() {
+    const markup = '<a href="#" data-action="unmaskable#toggle" class="trigger" />';
+
+    return $(markup).appendTo(this.element);
+  }
+
+  enable() {
+    if (!!$(this.fieldTarget).val()) {
+      this.$trigger.show();
+    } else {
+      this.$trigger.hide();
+    }
   }
 
   toggle(evt) {
     evt.preventDefault();
 
-    if (this.masked) {
-      this.unmask();
-    } else {
-      this.mask();
-    }
+    this.masked ? this.unmask() : this.mask();
   }
 
-  unmask() {
-    $(this.fieldTarget).prop("type", "text");
+  performToggle(type, key, val) {
+    $(this.fieldTarget).prop("type", type);
 
-    this.$trigger.text(this.maskText);
+    this.$trigger.text(this.constructor.text[key]);
 
-    this.masked = false;
-  }
-
-  mask() {
-    $(this.fieldTarget).prop("type", "password");
-
-    this.$trigger.text(this.unmaskText);
-
-    this.masked = true;
+    this.masked = val;
   }
 }

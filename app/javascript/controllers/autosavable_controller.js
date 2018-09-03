@@ -5,6 +5,7 @@ import BaseController from "./base_controller";
 export default class extends BaseController {
   static sixtySeconds  = 60 * 1000;
   static thirtySeconds = 30 * 1000;
+  static events        = "change keydown";
 
   initialize() {
     this.duration  = this.constructor.sixtySeconds;
@@ -22,13 +23,13 @@ export default class extends BaseController {
   setup() {
     this.$fields = $(this.element).find("input, select, textarea");
 
-    this.$fields.on("change keydown", this.detector);
+    this.$fields.on(this.constructor.events, this.detector);
 
     this.startInterval();
   }
 
   teardown(evt) {
-    this.$fields.off("change keydown", this.detector);
+    this.$fields.off(this.constructor.events, this.detector);
 
     this.endInterval();
   }
