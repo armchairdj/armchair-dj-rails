@@ -7,14 +7,12 @@ module JsHelper
     opts.each.inject(attrs) do |memo, (key, val)|
       memo["data-#{controller}-#{key}"] = val; memo
     end
-
-    attrs
   end
 
   def js_autosavable_attrs(post)
-    return {} unless post.persisted? && post.unpublished?
-
     opts = {}
+
+    return opts unless post.persisted? && post.unpublished?
 
     opts[:url] = case post.class.name
       when "Article"; autosave_admin_article_path(post)
@@ -25,26 +23,30 @@ module JsHelper
     js_attrs("autosavable", opts)
   end
 
-  def js_selectabe_create_creator_attrs(scope = "creator", **opts)
-    opts = opts.merge(scope: scope, url: admin_creators_path, param: "creator[name]")
+  def js_selectabe_create_creator_attrs(scope = "creator")
+    opts = {
+      url:   admin_creators_path,
+      scope: scope,
+      param: "creator[name]",
+    }
 
     opts["extra-params"] = case scope
       when "creator[real_name]"; "creator[primary]=true"
       when "creator[psuedonym]"; "creator[primary]=false"
       when "creator[member]";    "creator[individual]=true"
       when "creator[group]";     "creator[individual]=false"
-    end unless scope.nil?
+    end
 
     js_attrs("creatable", opts)
   end
 
-  def js_selectable_create_role_attrs(**opts)
-    opts = opts.merge({
-      scope:         "role",
-      url:           admin_roles_path,
-      param:         "role[name]",
-      "form-params": "role[medium]=work[medium]"
-    })
+  def js_selectable_create_role_attrs
+    opts = {
+      "url":         admin_roles_path,
+      "scope":       "role",
+      "param":       "role[name]",
+      "form-params": "role[medium]=work[medium]",
+    }
 
     js_attrs("creatable", opts)
   end
@@ -52,8 +54,8 @@ module JsHelper
   def js_selectable_create_aspect_attrs(facet)
     opts = {
       "url":          admin_aspects_path,
-      "param":        "aspect[name]",
       "scope":        "aspect[facet=#{facet}]",
+      "param":        "aspect[name]",
       "extra-params": "aspect[facet]=#{facet}",
     }
 
@@ -61,7 +63,11 @@ module JsHelper
   end
 
   def js_selectable_create_tag_attrs
-    opts = { scope: "tag", url: admin_tags_path, param: "tag[name]" }
+    opts = {
+      url:   admin_tags_path,
+      scope: "tag",
+      param: "tag[name]",
+    }
 
     js_attrs("creatable", opts).merge(multiple: true)
   end
@@ -70,7 +76,7 @@ module JsHelper
     opts = {
       "tab-name":        "article-new-work",
       "title-selector":  "#article_work_attributes_title",
-      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id"
+      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id",
     }
 
     js_attrs("selectable-prepare-work", opts)
@@ -78,9 +84,9 @@ module JsHelper
 
   def js_sortable_tracks_attrs(playlist)
     opts = {
-      class: "numbered sortable",
+      url:   reorder_tracks_admin_playlist_path(playlist),
       param: "track_ids",
-      url:   reorder_tracks_admin_playlist_path(playlist)
+      class: "numbered sortable",
     }
 
     js_attrs("sortable", opts)
@@ -88,9 +94,9 @@ module JsHelper
 
   def js_sortable_credits_attrs(work)
     opts = {
-      class: "numbered sortable",
+      url:   reorder_credits_admin_work_path(work),
       param: "credit_ids",
-      url:   reorder_credits_admin_work_path(work)
+      class: "numbered sortable",
     }
 
     js_attrs("sortable", opts)
@@ -99,41 +105,48 @@ module JsHelper
   def js_tabbable_attrs(selected_tab)
     opts = {
       "selected-tab": selected_tab,
-      class:          "tabgroup same-page"
+      "class":        "tabgroup same-page"
     }
 
     js_attrs("tabbable", opts)
   end
 
   def js_tabbable_link(text, tab_name)
-    link_to text, "##{tab_name}",
+    opts = {
       "data-action":   "tabbable#activate",
+      "data-target":   "tabbable.all",
       "data-tab-name": tab_name,
-      "data-target":   "tabbable.all"
+    }
+
+    link_to(text, "##{tab_name}", opts)
   end
 
   def js_tabbable_tab_attrs(tab_name)
     {
-      class:           "tab",
-      id:              tab_name,
+      "id":            tab_name,
       "data-tab-name": tab_name,
       "data-target":   "tabbable.all",
+      "class":         "tab",
     }
   end
 
   def js_togglable_attrs(bool, css_class, expandable:)
-    target = "togglable.#{bool ? 'trueFieldset' : 'falseFieldset'}"
+    klass  = bool ? "trueFieldset" : "falseFieldset"
+    target = "togglable.#{klass}"
     attrs  = { class: css_class, "data-target": target }
 
     expandable ? js_attrs("expandable").merge(attrs) : attrs
   end
 
   def js_unmaskable_attrs
-    { wrapper_html: {
-      "data-controller": "unmaskable",
-      class:             "js-unmaskable"
-    }, input_html: {
-      "data-target": "unmaskable.field"
-    } }
+    {
+      wrapper_html: {
+        "data-controller": "unmaskable",
+        "class":           "js-unmaskable"
+      },
+      input_html: {
+        "data-target": "unmaskable.field"
+      }
+    }
   end
 end

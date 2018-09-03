@@ -1,71 +1,68 @@
 import BaseController from "./base_controller";
 
 export default class extends BaseController {
-  static targets = [ "item" ];
+  static targets   = [ "item", "trigger" ];
+  static selectors = {
+    inputs: "select, textarea, input:not([type=checkbox]):not([type=radio])",
+    errors: ".with-error"
+  };
 
   setup() {
-    this.hidden = this.itemTargets.filter(this.shouldHideField, this);
+    this.hidden = this.determineItemsToHide();
 
-    this.alwaysShowFirstItem();
-    this.hideIfNecessary();
-  }
-
-  teardown(evt) {
-    $(this.itemTargets).show();
-
-    this.removeLink();
-  }
-
-  alwaysShowFirstItem() {
-    if (this.hidden.length === this.itemTargets.length) {
-      this.hidden.shift();
-    }
-  }
-
-  hideIfNecessary() {
     if (this.hidden.length === 0) { return }
 
     $(this.hidden).hide();
 
-    this.addLink();
+    this.addTrigger();
   }
 
-  shouldHideField(item) {
-    if (this.itemHasErrors(item)) { return false }
-    if (this.itemHasValues(item)) { return false }
+  teardown(evt) {
+    $(this.hidden).show();
 
-    return true;
+    this.removeTrigger();
   }
 
-  itemHasErrors(item) {
-    const errors = $(item).find(".with-error");
-
-    return errors.length > 0;
+  determineItemsToHide() {
+    return this.itemTargets.filter(this.shouldHideItem, this);
   }
 
-  itemHasValues(item) {
-    const inputs     = $(item).find("select, input:not([type=checkbox]):not([type=radio])").get();
-    const withValues = inputs.filter(input => !!$(input).val());
+  shouldHideItem(item, index) {
+    if (index === 0) { return false }
 
-    return withValues.length > 0;
+    return !this.hasError(item) && !this.hasValue(item);
   }
 
-  addLink() {
-    this.$link = $(this.linkMarkup());
-
-    $(this.element).append(this.$link);
+  hasError(item) {
+    return $(item).find(this.constructor.selectors.errors).length > 0;
   }
 
-  linkMarkup() {
-    return [
-      '<div class="expand" data-expand-link="true">',
-        '<a href="#" data-action="expandable#expand">add another</a>',
+  hasValue(item) {
+    const inputs = $(item).find(this.constructor.selectors.inputs).get();
+
+    return inputs.filter(input => !!$(input).val()).length > 0;
+  }
+
+  addTrigger() {
+    const markup = [
+      '<div class="expandable-expand" data-target="expandable.trigger">',
+        '<a href="#expand" data-action="expandable#expand">',
+          this.triggerText(),
+        '</a>',
       '</div>'
     ].join("");
+
+    this.$trigger = $(markup).appendTo(this.element);
   }
 
-  removeLink() {
-    $(this.element).find("[data-expand-link]").remove();
+  triggerText() {
+    return this.data.get("triggerText") || "add another";
+  }
+
+  removeTrigger() {
+    if (this.hasTriggerTarget) {
+      $(this.triggerTarget).remove();
+    }
   }
 
   expand(evt) {
@@ -74,7 +71,7 @@ export default class extends BaseController {
     $(this.hidden.shift()).show();
 
     if (this.hidden.length === 0) {
-      this.removeLink();
+      this.removeTrigger();
     }
   }
 }

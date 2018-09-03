@@ -3,9 +3,12 @@ const toObject = require("form-to-object");
 import BaseController from "./base_controller";
 
 export default class extends BaseController {
+  static sixtySeconds  = 60 * 1000;
+  static thirtySeconds = 30 * 1000;
+
   initialize() {
-    this.duration  = 60 * 1000;
-    this.wait      = 30 * 1000;
+    this.duration  = this.constructor.sixtySeconds;
+    this.wait      = this.constructor.thirtySeconds;
 
     this.url       = this.data.get("url");
 
@@ -17,13 +20,15 @@ export default class extends BaseController {
   }
 
   setup() {
-    $(this.element).find("input, select, textarea").on("change keydown", this.detector);
+    this.$fields = $(this.element).find("input, select, textarea");
+
+    this.$fields.on("change keydown", this.detector);
 
     this.startInterval();
   }
 
   teardown(evt) {
-    this.$fields.off("change", this.detector);
+    this.$fields.off("change keydown", this.detector);
 
     this.endInterval();
   }
@@ -45,9 +50,13 @@ export default class extends BaseController {
   }
 
   saveIfNecessary() {
-    if (this.lastUpdated <= this.lastSaved) { return }
+    if (this.skipSave()) { return }
 
     this.submitRequest();
+  }
+
+  skipSave() {
+    return this.lastUpdated <= this.lastSaved;
   }
 
   submitRequest() {

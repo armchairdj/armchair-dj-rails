@@ -12,7 +12,8 @@ export default class extends SelectableController {
   }
 
   initialize() {
-    this.addOptionEventName = `creatable:option-add:${this.data.get("scope")}`;
+    this.scope              = this.data.get("scope");
+    this.addOptionEventName = `creatable:option-add:${this.scope}`;
     this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
   }
 
@@ -42,13 +43,13 @@ export default class extends SelectableController {
   }
 
   confirmCreate(userInput) {
-    const isDupe = !!_.findWhere(_.values(this.selectize.options), { text: userInput });
+    if (this.isUnique(userInput)) { return true }
 
-    if (isDupe) {
-      return window.confirm("There's already an item like that. Are you sure you want to create a duplicate?");
-    } else {
-      return true;
-    }
+    return window.confirm("There's already an item like that. Are you sure you want to create a duplicate?");
+  }
+
+  isUnique(userInput) {
+    return !_.findWhere(_.values(this.selectize.options), { text: userInput });
   }
 
   submitCreate(userInput, callback) {
@@ -70,57 +71,52 @@ export default class extends SelectableController {
   }
   
   userParam(userInput) {
-    const params = {};
+    const obj = {};
 
-    params[this.data.get("param")] = userInput;
+    obj[ this.data.get("param") ] = userInput;
 
-    return params;
+    return obj;
   }
 
   extraParams() {
-    const params      = {};
-    const extraParams = this.data.get("extra-params");
+    const params = this.data.get("extra-params");
 
-    if (extraParams) {
-      _.each(extraParams.split("&"), function (param) {
-        const parts = param.split("=");
-
-        params[parts[0]] = parts[1];
-      });
+    if (params) {
+      return params.split("&").reduce(reducer, {});
+    } else {
+      return {};
     }
 
-    return params;
+    function reducer(memo, param) {
+      const parts = param.split("=");
+
+      memo[ parts[0] ] = parts[1];
+
+      return memo;
+    }
   }
 
   formParams() {
-    const formParams = this.data.get("form-params");
+    const $form  = $(this.element).parents("form");
+    const params = this.data.get("form-params")
 
-    if (!formParams) { return }
+    if (params) {
+      return params.split("&").reduce(reducer, {});
+    } else {
+      return {};
+    }
 
-    const params = formParams.split("&");
-    const memo   = {};
-    const adder  = _.bind(this.addParam, this, memo);
+    function reducer(memo, param) {
+      const parts  = param.split("=");
 
-    _.each(params, adder);
+      memo[ parts[0] ] = $form.find(`[name='${parts[1]}']`).val();
 
-    return memo;
-  }
-
-  addParam(memo, paramString) {
-    const parts    = paramString.split("=");
-    const param    = parts[0];
-    const selector = `[name='${parts[1]}']`;
-    const $field    = $(this.element).parents("form").find(selector);
-
-    memo[param] = $field.val();
+      return memo;
+    }
   }
 
   ajaxSuccess(callback, response, status, xhr) {
-    if ($.isArray(response)) {
-      return this.addMultiple(response, callback);
-    }
-
-    callback(this.optFromAjax(response));
+    this.addAll($.makeArray(response), callback);
   }
 
   ajaxError(callback, xhr, status, error) {
@@ -129,52 +125,47 @@ export default class extends SelectableController {
     callback();
   }
 
-  addMultiple(response, callback) {
-    _.each(response, _.bind(this.addOne, this));
+  addAll(items, callback) {
+    const added = items.map(this.addOne, this);
 
-    callback(this.optFromAjax(response[0]));
+    callback(added[0]);
 
     this.selectize.refreshItems();
   }
 
-  addOne(item, index, list) {
-    const opt = this.optFromAjax(item);
+  addOne(raw) {
+    const safe = raw || {};
+    const item = { value: safe.id, text: safe.name }
 
-    this.selectize.addOption(opt);
+    this.selectize.addOption(item);
 
-    this.selectize.addItem(opt.value, true);
-  }
+    this.selectize.addItem(item.value, true);
 
-  optFromAjax(fromAjax) {
-    fromAjax = fromAjax || {};
-
-    return { value: fromAjax.id, text: fromAjax.name };
+    return item;
   }
 
   handleOptionAdd(value, params) {
     const memo = {
-      scope:   this.data.get("scope"),
+      scope:   this.scope,
       value:   params.value,
       text:    params.text,
     };
 
-    if (!this.constructor.memoized(memo)) {
-      this.constructor.memoize(memo);
+    if (this.constructor.memoized(memo)) { return }
 
-      this.broadcastToSiblings(memo);
-    }
+    this.constructor.memoize(memo);
+
+    this.broadcastToSiblings(memo);
   }
 
   broadcastToSiblings(memo) {
-    memo = Object.assign(memo, { element: this.element });
+    const data = Object.assign(memo, { element: this.element });
 
-    $(document).trigger(this.addOptionEventName, memo);
+    $(document).trigger(this.addOptionEventName, data);
   }
 
   handleRemoteOptionAdd(evt, params) {
-    if ($(this.element) === $(params.element)) {
-      return;
-    }
+    if ($(this.element) === $(params.element)) { return }
 
     this.selectize.addOption({ value: params.value, text: params.text });
   }
