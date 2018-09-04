@@ -288,8 +288,8 @@
       position: relative;
       padding-right: 1.2em !important;
 
-      .remove,
-      .remove-single {
+      a.remove,
+      a.remove-single {
         z-index: 1;
         position: absolute;
         vertical-align: middle;
