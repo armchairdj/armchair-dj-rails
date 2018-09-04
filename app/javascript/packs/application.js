@@ -23,9 +23,13 @@ $(document).on("turbolinks:load", function () {
   });
 })
 
-/* jQuery plugins. */
+/* Selectize. */
 
-require("monkey_patches/selectize");
+import Selectize from "selectize";
+
+window.Selectize = Selectize;
+
+// require("monkey_patches/selectize");
 // require("selectize-plugin-clear");
 
 /* Turbolinks */

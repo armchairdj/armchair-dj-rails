@@ -86,7 +86,7 @@ module JsHelper
     opts = {
       url:   reorder_tracks_admin_playlist_path(playlist),
       param: "track_ids",
-      class: "numbered sortable",
+      class: "numbered js-sortable",
     }
 
     js_attrs("sortable", opts)

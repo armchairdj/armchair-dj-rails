@@ -5104,9 +5104,9 @@ select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
 
-selectize@^0.12.4:
-  version "0.12.4"
-  resolved "https://registry.yarnpkg.com/selectize/-/selectize-0.12.4.tgz#50c697526b609dea11da153cf7252b98948f4c0e"
+selectize@^0.12.6:
+  version "0.12.6"
+  resolved "https://registry.yarnpkg.com/selectize/-/selectize-0.12.6.tgz#c2cf08cbaa4cb06c5e99bb452919d71b080690d6"
   dependencies:
     microplugin "0.0.3"
     sifter "^0.5.1"
