@@ -41,9 +41,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    resource.prepare_links
+
+    super
+  end
 
   # PUT /resource
   # def update
@@ -62,7 +64,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
   end
-
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign

@@ -6,9 +6,10 @@
   <%= content_tag(:fieldset) do %>
     <%= content_tag(:legend, "Publication Details") %>
 
-    <%= f.input(:slug, disabled: true) %>
-
-    <% unless @post.draft? %>
+    <% if @post.draft? %>
+      <%= f.input(:slug, as: :text, disabled: true, hint: false, input_html: { class: "small" }) %>
+    <% else %>
+      <%= f.input(:slug, as: :text, disabled: true, hint: true,  input_html: { class: "small" }) %>
       <%= f.input(:clear_slug, as: :boolean) %>
     <% end %>
 

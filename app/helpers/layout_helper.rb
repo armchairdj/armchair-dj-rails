@@ -29,9 +29,9 @@ module LayoutHelper
   end
 
   def page_title
-    return t("site.name_with_tagline") if @homepage
+    return I18n.t("site.name_with_tagline") if @homepage
 
-    raise NoMethodError.new(t("exceptions.helpers.layout.title.missing")) unless @title
+    raise NoMethodError, t("exceptions.helpers.layout.title.missing") unless @title
 
     [t("site.name"), @title].flatten.compact.join(" | ")
   end
