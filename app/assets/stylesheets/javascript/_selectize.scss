@@ -76,13 +76,13 @@
     }
 
     &:focus {
-      outline: none !important;
       @include focus-no-outline();
     }
   }
 }
 
 .selectize-dropdown {
+  //@include form-field-focused();
   max-width: 100%;
   position: absolute;
   z-index: 10;

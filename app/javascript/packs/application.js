@@ -25,12 +25,7 @@ $(document).on("turbolinks:load", function () {
 
 /* Selectize. */
 
-import Selectize from "selectize";
-
-window.Selectize = Selectize;
-
-// require("monkey_patches/selectize");
-// require("selectize-plugin-clear");
+require("monkey_patches/selectize");
 
 /* Turbolinks */
 
