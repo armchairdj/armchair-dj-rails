@@ -12,8 +12,7 @@ export default class extends SelectableController {
   }
 
   initialize() {
-    this.scope              = this.data.get("scope");
-    this.addOptionEventName = `creatable:option-add:${this.scope}`;
+    this.addOptionEventName = `creatable:option-add:${this.data.get("scope")}`;
     this.addOptionListener  = _.bind(this.handleRemoteOptionAdd, this);
   }
 
@@ -146,7 +145,7 @@ export default class extends SelectableController {
 
   handleOptionAdd(value, params) {
     const memo = {
-      scope:   this.scope,
+      scope:   this.data.get("scope"),
       value:   params.value,
       text:    params.text,
     };
