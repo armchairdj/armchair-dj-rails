@@ -1,7 +1,5 @@
 import Selectize from "selectize";
 
-window.Selectize = Selectize;
-
 _.extend(Selectize.prototype, {
   getOptionByText: function(text) {
     return this.getElementWithText(text, this.$dropdown_content.find('[data-selectable]'));
@@ -51,3 +49,5 @@ _.extend(Selectize.prototype, {
     }
   }
 });
+
+export default Selectize;

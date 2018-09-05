@@ -11,8 +11,6 @@ export default class extends BaseController {
     this.duration  = this.constructor.sixtySeconds;
     this.wait      = this.constructor.thirtySeconds;
 
-    this.url       = this.data.get("url");
-
     this.detector  = _.debounce(_.bind(this.detectUpdate, this), this.wait);
 
     this.saver     = _.bind(this.saveIfNecessary, this);
@@ -63,7 +61,7 @@ export default class extends BaseController {
   submitRequest() {
     $.ajax({
       method:   "POST",
-      url:      this.url,
+      url:      this.data.get("url"),
       data:     toObject(this.element),
       success:  this.onSuccess,
       error:    this.onError
