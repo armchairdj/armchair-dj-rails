@@ -88,7 +88,7 @@ class User < ApplicationRecord
     root:   50
   }
 
-  enumable_attributes :role
+  improve_enum :role
 
   validates :role, presence: true
 

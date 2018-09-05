@@ -87,7 +87,7 @@ gem "decent_exposure"
 gem "responders"
 
 # State machines.
-gem "aasm"
+gem "aasm", "~> 5.0"
 
 # Pagination.
 gem "kaminari"
@@ -193,6 +193,7 @@ group :development do
   # Application backgrounder.
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
+  gem "spring-commands-rspec"
 
   # Procfile-based application runner.
   gem "foreman"
@@ -216,13 +217,15 @@ group :development, :test do
 
   # RSpec.
   gem "rspec-rails", "~> 3.7.2"
-  gem "rspec_junit_formatter"
+
+  # RSpec plugins.
   gem "accept_values_for"
   gem "db-query-matchers"
+  gem "pundit-matchers"
   gem "rspec-collection_matchers"
   gem "rspec-html-matchers"
+  gem "rspec_junit_formatter"
   gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "master"
-  gem "pundit-matchers"
   # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
 
   # System and JS specs.

@@ -31,7 +31,7 @@ RSpec.describe "admin/posts/mixtapes/edit" do
 
         assert_select("textarea[name=?]", "mixtape[body]")
         assert_select("textarea[name=?]", "mixtape[summary]")
-        assert_select("input[name=?]",    "mixtape[slug]")
+        assert_select("textarea[name=?]", "mixtape[slug]")
         assert_select("input[name=?]",    "mixtape[publish_on]")
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe "admin/posts/mixtapes/edit" do
 
         assert_select("textarea[name=?]", "mixtape[body]")
         assert_select("textarea[name=?]", "mixtape[summary]")
-        assert_select("input[name=?]",    "mixtape[slug]")
+        assert_select("textarea[name=?]", "mixtape[slug]")
         assert_select("input[name=?]",    "mixtape[publish_on]")
       end
     end

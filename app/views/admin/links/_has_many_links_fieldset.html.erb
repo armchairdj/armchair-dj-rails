@@ -1,6 +1,11 @@
+<%
+  default_hint = I18n.t("simple_form.hints.defaults.links", model_name: controller_name.singularize)
+  hint         = I18n.t("simple_form.hints.#{f.object.model_name.singular}.links", default: default_hint)
+-%>
+
 <%= render "shared/forms/has_many_fieldset",
   f:           f,
   association: :links,
   view_path:   "links",
-  hint:        t("simple_form.hints.defaults.links", model_name: controller_name.singularize)
+  hint:        hint
 %>

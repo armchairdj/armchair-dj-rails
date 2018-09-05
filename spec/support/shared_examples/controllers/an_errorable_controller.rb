@@ -11,7 +11,7 @@ RSpec.shared_examples "an_errorable_controller" do
     describe "#handle_403_recoverable" do
       controller do
         def index
-          raise Pundit::NotAuthenticatedError.new "error"
+          raise Pundit::NotAuthenticatedError, "error"
         end
       end
 
@@ -81,7 +81,7 @@ RSpec.shared_examples "an_errorable_controller" do
     describe "#handle_403" do
       controller do
         def index
-          raise Pundit::NotAuthorizedError.new "error"
+          raise Pundit::NotAuthorizedError, "error"
         end
       end
 
@@ -137,7 +137,7 @@ RSpec.shared_examples "an_errorable_controller" do
     describe "#handle_404" do
       controller do
         def index
-          raise ActiveRecord::RecordNotFound.new "error"
+          raise ActiveRecord::RecordNotFound, "error"
         end
       end
 
@@ -191,7 +191,7 @@ RSpec.shared_examples "an_errorable_controller" do
         describe "ActionController::RoutingError" do
           controller do
             def index
-              raise ActionController::RoutingError.new "error"
+              raise ActionController::RoutingError, "error"
             end
           end
 
@@ -203,7 +203,7 @@ RSpec.shared_examples "an_errorable_controller" do
         describe "AbstractController::ActionNotFound" do
           controller do
             def index
-              raise AbstractController::ActionNotFound.new "error"
+              raise AbstractController::ActionNotFound, "error"
             end
           end
 
@@ -217,7 +217,7 @@ RSpec.shared_examples "an_errorable_controller" do
     describe "#handle_422" do
       controller do
         def index
-          raise ActionController::UnknownFormat.new "error"
+          raise ActionController::UnknownFormat, "error"
         end
       end
 

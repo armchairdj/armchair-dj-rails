@@ -21,7 +21,7 @@ en:
     models:
       <<: *work_subclasses
     attributes:
-      post: &post_attributes
+      post:
         published_at: "Published On"
         publish_on: "Automatically Publish On"
         statuses:
@@ -29,40 +29,34 @@ en:
           scheduled: "Scheduled"
           published: "Published"
         tag_ids: "Tags"
-      article:
-        <<: *post_attributes
-      mixtape:
-        <<: *post_attributes
-      review:
-        <<: *post_attributes
       aspect:
         facets:
-          album_format:       "Album Format"
+          album_format:       "Format"
           song_type:          "Song Type"
-          music_label:        "Music Label"
-          musical_genre:      "Musical Genre"
-          musical_mood:       "Musical Mood"
+          music_label:        "Label"
+          musical_genre:      "Genre"
+          musical_mood:       "Mood"
 
-          audio_show_format:  "Audio Format"
-          radio_network:      "Radio Network"
-          podcast_network:    "Podcast Network"
+          audio_show_format:  "Format"
+          radio_network:      "Network"
+          podcast_network:    "Network"
 
-          narrative_genre:    "Narrative Genre"
-          hollywood_studio:   "Hollywood Studio"
-          tv_network:         "TV Network"
+          narrative_genre:    "Genre"
+          hollywood_studio:   "Studio"
+          tv_network:         "Network"
 
           publisher:          "Publisher"
-          publication_type:   "Publication Type"
+          publication_type:   "Type"
 
-          tech_platform:      "Tech Platform"
-          tech_company:       "Tech Company"
+          tech_platform:      "Platform"
+          tech_company:       "Company"
           device_type:        "Device Type"
 
-          product_type:       "Product Type"
+          product_type:       "Type"
           manufacturer:       "Manufacturer"
 
-          game_mechanic:      "Game Mechanic"
-          game_studio:        "Game Studio"
+          game_mechanic:      "Mechanic"
+          game_studio:        "Studio"
       contribution:
       creator:
       creator/primary:
@@ -109,18 +103,36 @@ en:
           recut:      "Re-edited in"
           remixed:    "Remixed in"
       work/relationship:
+        source_id: "Parent"
+        target_id: "Child"
         connections:
-          version_of:     "is a version of"
-          performance_of: "is a performance of"
-          remake_of:      "is a remake of"
-          sequel_to:      "is a sequel to"
-          spinoff_of:     "is a spinoff of"
-          borrows_from:   "borrows from or interpolates"
-          member_of:      "belongs to"
+          version_of:     "variation"
+          performance_of: "performance"
+          remake_of:      "remake"
+          sequel_to:      "sequel"
+          spinoff_of:     "spinoff"
+          borrows_from:   "interpolation"
+          member_of:      "ownership"
+          source:
+            version_of:     "version of"
+            performance_of: "performance of"
+            remake_of:      "remake of"
+            sequel_to:      "sequel to"
+            spinoff_of:     "spinoff of"
+            borrows_from:   "borrows from"
+            member_of:      "member of"
+          target:
+            version_of:     "has version"
+            performance_of: "has performance"
+            remake_of:      "has remake"
+            sequel_to:      "has sequel"
+            spinoff_of:     "has spinoff"
+            borrows_from:   "borrowed by"
+            member_of:      "has member"
     errors:
       models:
         post:
-          attributes: &post_errors
+          attributes:
             base:
               failed_to_publish:    "Could not publish because of the errors below."
               failed_to_schedule:   "Could not schedule because of the errors below."
@@ -134,15 +146,6 @@ en:
             publish_on:
               blank: "Please choose a publication date to schedule this post."
               present: "Please don't choose a publication date unless you're scheduling this post."
-        article:
-          attributes:
-            <<: *post_errors
-        review:
-          attributes:
-            <<: *post_errors
-        mixtape:
-          attributes:
-            <<: *post_errors
         contribution:
           attributes:
             creator_id:

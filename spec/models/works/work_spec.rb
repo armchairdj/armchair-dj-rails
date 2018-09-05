@@ -8,7 +8,7 @@ RSpec.describe Work do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a ginsu_model" do
+    it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
     end
@@ -26,6 +26,113 @@ RSpec.describe Work do
   end
 
   describe "relationships" do
+    describe "#available_relatives" do
+      subject { instance.available_relatives }
+
+      let(:instance) { create(:minimal_song ) }
+      let!(:song   ) { create(:minimal_song ) }
+      let!(:album  ) { create(:minimal_album) }
+
+      it { is_expected.to eq([
+        ["Album", [album] ],
+        ["Song",  [song ] ]
+      ]) }
+    end
+
+    describe "as source" do
+      describe "has associations" do
+        subject { build_minimal_instance }
+
+        it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
+
+        it { is_expected.to have_many(:target_works).through(:target_relationships) }
+      end
+
+      describe "validates nested uniqueness" do
+        subject { build_minimal_instance }
+
+        let(:target      ) { create_minimal_instance }
+        let(:other_target) { create_minimal_instance }
+
+        before(:each) do
+          subject.target_relationships_attributes = attributes
+        end
+
+        context "without dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, target_id: target.id      ),
+            "1" => attributes_for(:minimal_work_relationship, target_id: other_target.id)
+          }}
+
+          it { is_expected.to be_valid }
+        end
+
+        context "with dupes" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
+            "1" => attributes_for(:minimal_work_relationship, target_id: target.id)
+          }}
+
+          it "is has the correct error" do
+            is_expected.to be_invalid
+
+            is_expected.to have_error(:target_relationships, :nested_taken)
+          end
+        end
+
+        context "with duplicate targets but different connections" do
+          let(:attributes) { {
+            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
+            "1" => attributes_for(:minimal_work_relationship, target_id: target.id, connection: "spinoff_of")
+          }}
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      describe "accepts nested attributes" do
+        let(:target      ) { create(:minimal_work) }
+        let(:valid_params) { { "0" => { connection: "member_of", target_id: target.id } } }
+        let(:empty_params) { { "0" => { connection: "member_of", target_id: nil       } } }
+
+        it { is_expected.to accept_nested_attributes_for(:target_relationships).allow_destroy(true) }
+
+        describe "#prepare_target_relationships" do
+          subject { instance.target_relationships }
+
+          before(:each) { instance.prepare_target_relationships }
+
+          describe "initial state" do
+            let(:instance) { build_minimal_instance }
+
+            it { is_expected.to have(5).items }
+          end
+
+          describe "with prior associations" do
+            let(:instance) { create_minimal_instance(target_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(6).items }
+          end
+        end
+
+        describe "#reject_target_relationship?" do
+          subject { instance.target_relationships }
+
+          describe "accepts if target_id is present" do
+            let(:instance) { build_minimal_instance(target_relationships_attributes: valid_params) }
+
+            it { is_expected.to have(1).item }
+          end
+
+          describe "rejects if target_id is blank" do
+            let(:instance) { build_minimal_instance(target_relationships_attributes: empty_params) }
+
+            it { is_expected.to have(0).items }
+          end
+        end
+      end
+    end
+
     describe "as target" do
       describe "has associations" do
         subject { build_minimal_instance }
@@ -118,24 +225,6 @@ RSpec.describe Work do
           end
         end
       end
-
-      describe "#available_sources" do
-        subject { instance.available_sources }
-
-        let(:instance) { create(:minimal_song ) }
-        let!(:other  ) { create(:minimal_song ) }
-        let!(:album  ) { create(:minimal_album) }
-
-        it { is_expected.to eq([
-          ["Album", [album] ],
-          ["Song",  [other] ]
-        ]) }
-      end
-    end
-
-    describe "as source" do
-      it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
-      it { is_expected.to have_many(:target_works).through(:target_relationships) }
     end
   end
 
@@ -387,6 +476,8 @@ RSpec.describe Work do
         expect(instance).to receive(:prepare_credits)
         expect(instance).to receive(:prepare_contributions)
         expect(instance).to receive(:prepare_milestones)
+        expect(instance).to receive(:prepare_source_relationships)
+        expect(instance).to receive(:prepare_target_relationships)
       end
 
       it "prepares all nested associations" do

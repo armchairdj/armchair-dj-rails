@@ -96,7 +96,7 @@ class Post < ApplicationRecord
         published: 10
       }
 
-      enumable_attributes :status
+      improve_enum :status
 
       validates :status, presence: true
     end

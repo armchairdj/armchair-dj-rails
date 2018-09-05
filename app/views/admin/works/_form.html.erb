@@ -2,7 +2,7 @@
   form_attrs = { class: "admin" }
 
   if @work.new_record?
-    form_attrs.merge!({ "data-controller": "autosubmit" })
+    form_attrs.merge!({ "data-controller": "autosubmittable" })
   end
 %>
 
@@ -12,13 +12,13 @@
   <%= form_inputs do %>
     <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
-        <% if f.object.persisted? %>
-          <%= f.input :medium, as: :select, collection: @media, disabled: true %>
-        <% else %>
+        <% if f.object.new_record? %>
           <%= f.input :medium, as: :select, collection: @media, input_html: {
             "data-controller": "selectable",
-            "data-target":     "autosubmit.field"
+            "data-target":     "autosubmittable.field"
           } %>
+        <% else %>
+          <%= f.input :medium, as: :select, collection: @media, disabled: true %>
         <% end %>
 
         <%= f.input :title %>
@@ -53,7 +53,13 @@
     <%= render "shared/forms/has_many_fieldset",
       f:           f,
       association: :source_relationships,
-      headline:    "Related Works"
+      headline:    "Parents"
+    %>
+
+    <%= render "shared/forms/has_many_fieldset",
+      f:           f,
+      association: :target_relationships,
+      headline:    "Children"
     %>
   <% end %>
 
@@ -63,7 +69,7 @@
     <% if @work.new_record? %>
       <%= submit_button(@work, "Update Medium",
         name: "step", value: "select_medium", class: "secondary",
-        "data-target": "autosubmit.button"
+        "data-target": "autosubmittable.button"
       ) %>
     <% end %>
   <% end %>

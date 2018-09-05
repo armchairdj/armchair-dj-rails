@@ -37,7 +37,7 @@ concern :Listable do
     end
 
     def execute!
-      validate
+      validate!
 
       update_position_column
 
@@ -62,7 +62,7 @@ concern :Listable do
 
     ### Validation.
 
-    def validate
+    def validate!
       return if correct_number_of_ids? && expected_ids_found?
 
       raise ArgumentError.new(error_message)
@@ -80,7 +80,7 @@ concern :Listable do
       "Bad reorder. IDs don't match. Got #{@sorted_ids} but needed #{@expected_ids}."
     end
 
-    ### Update items and parent.
+    ### Database.
 
     def update_position_column
       @model_class.acts_as_list_no_update do

@@ -6,7 +6,7 @@ class ApplicationRecord < ActiveRecord::Base
   nilify_blanks before: :validation
 
   include AtomicallyValidatable
-  include Enumable
+  include BetterEnums
 
   def self.find_by_sorted_ids(ids)
     return self.none unless ids.any?

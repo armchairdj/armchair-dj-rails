@@ -21,7 +21,7 @@ RSpec.describe Tag do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a ginsu_model" do
+    it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:posts] }
     end

@@ -179,14 +179,23 @@ tech_platforms      = [
 ]
 
 tv_networks        = [
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Fox"),
   FactoryBot.create(:aspect, facet: :tv_network, name: "ABC"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "NBC"),
   FactoryBot.create(:aspect, facet: :tv_network, name: "CBS"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "NBC"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Fox"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "The WB"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "UPN"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "The CW"),
+
   FactoryBot.create(:aspect, facet: :tv_network, name: "AMC"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Netflix"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Hulu"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Lifetime"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "HBO"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Cinemax"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Showtime"),
+
   FactoryBot.create(:aspect, facet: :tv_network, name: "Amazon"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Hulu"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Netflix"),
 ]
 
 tech_companies     = [
@@ -278,10 +287,10 @@ publication_writer         = FactoryBot.create(:role, medium: "Publication", nam
 publication_editor         = FactoryBot.create(:role, medium: "Publication", name: "Editor")
 publication_publisher      = FactoryBot.create(:role, medium: "Publication", name: "Publisher")
 
-app_programmer        = FactoryBot.create(:role, medium: "App", name: "Programmer")
-app_designer          = FactoryBot.create(:role, medium: "App", name: "Designer")
+app_programmer             = FactoryBot.create(:role, medium: "App", name: "Programmer")
+app_designer               = FactoryBot.create(:role, medium: "App", name: "Designer")
 
-gadget_designer          = FactoryBot.create(:role, medium: "Gadget", name: "Designer")
+gadget_designer            = FactoryBot.create(:role, medium: "Gadget", name: "Designer")
 
 product_designer           = FactoryBot.create(:role, medium: "Product", name: "Designer")
 
@@ -291,7 +300,7 @@ radio_show_producer        = FactoryBot.create(:role, medium: "RadioShow", name:
 podcast_host               = FactoryBot.create(:role, medium: "Podcast", name: "Host")
 podcast_producer           = FactoryBot.create(:role, medium: "Podcast", name: "Producer")
 
-##### CREATORS, IDENTITIES & MEMBERSHIPS
+##### SONGS & ALBUMS
 
 fleetwood_mac       = FactoryBot.create(:fleetwood_mac_with_members)
 wolfgang_voigt      = FactoryBot.create(:wolfgang_voigt_with_pseudonyms)
@@ -303,49 +312,54 @@ fuse                = Creator.find_by(name: "F.U.S.E.")
 the_kooky_scientist = Creator.find_by(name: "The Kooky Scientist")
 gas                 = Creator.find_by(name: "Gas")
 
-##### WORKS, CREDITS & CONTRIBUTIONS
+kate_bush_album_tki                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "The Kick Inside",    specific_creator: kate_bush)
+kate_bush_album_lh                     = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Lionheart",          specific_creator: kate_bush)
+kate_bush_album_nfe                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Never for Ever",     specific_creator: kate_bush)
+kate_bush_album_td                     = FactoryBot.create(:minimal_album, :with_specific_creator, title: "The Dreaming",       specific_creator: kate_bush)
+kate_bush_album_hol                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Never for Ever",     specific_creator: kate_bush)
+kate_bush_album_tsw                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "The Sensual world",  specific_creator: kate_bush)
+kate_bush_album_trs                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "The Red Shoes",      specific_creator: kate_bush)
+kate_bush_album_aasoh                  = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Aerial",             specific_creator: kate_bush)
+kate_bush_album_dc                     = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Director's Cut",     specific_creator: kate_bush)
+kate_bush_album_fwfs                   = FactoryBot.create(:minimal_album, :with_specific_creator, title: "50 Words for Snow",  specific_creator: kate_bush)
+kate_bush_album_btdl                   = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Before the Dawn",    specific_creator: kate_bush)
 
-kate_bush_album_tki                    = FactoryBot.create(:album, :with_milestone, title: "The Kick Inside",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_lh                     = FactoryBot.create(:album, :with_milestone, title: "Lionheart",         "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_nfe                    = FactoryBot.create(:album, :with_milestone, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_td                     = FactoryBot.create(:album, :with_milestone, title: "The Dreaming",      "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_hol                    = FactoryBot.create(:album, :with_milestone, title: "Never for Ever",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_tsw                    = FactoryBot.create(:album, :with_milestone, title: "The Sensual world", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_trs                    = FactoryBot.create(:album, :with_milestone, title: "The Red Shoes",     "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_aasoh                  = FactoryBot.create(:album, :with_milestone, title: "Aerial",            "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_dc                     = FactoryBot.create(:album, :with_milestone, title: "Director's Cut",    "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_fwfs                   = FactoryBot.create(:album, :with_milestone, title: "50 Words for Snow", "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
-kate_bush_album_btdl                   = FactoryBot.create(:album, :with_milestone, title: "Before the Dawn",   "credits_attributes" => { "0" => { "creator_id" => kate_bush.id } })
+plastikman_album_sheet_one             = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Sheet One",          specific_creator: plastikman)
+plastikman_album_musik                 = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Musik",              specific_creator: plastikman)
+plastikman_album_recycled_plastik      = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Recycled Plastik",   specific_creator: plastikman)
+plastikman_album_consumed              = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Consumed",           specific_creator: plastikman)
+plastikman_album_artifakts             = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Artifakts (BC)",     specific_creator: plastikman)
+plastikman_album_closer                = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Closer",             specific_creator: plastikman)
+plastikman_album_ex                    = FactoryBot.create(:minimal_album, :with_specific_creator, title: "EX",                 specific_creator: plastikman)
 
-plastikman_album_sheet_one             = FactoryBot.create(:album, :with_milestone, title: "Sheet One",        "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_musik                 = FactoryBot.create(:album, :with_milestone, title: "Musik",            "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_recycled_plastik      = FactoryBot.create(:album, :with_milestone, title: "Recycled Plastik", "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_consumed              = FactoryBot.create(:album, :with_milestone, title: "Consumed",         "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_artifakts             = FactoryBot.create(:album, :with_milestone, title: "Artifakts (BC)",   "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_closer                = FactoryBot.create(:album, :with_milestone, title: "Closer",           "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_album_ex                    = FactoryBot.create(:album, :with_milestone, title: "EX",               "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+plastikman_song_hump                   = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Hump",              specific_creator: plastikman)
+plastikman_song_plastique              = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Plastique",         specific_creator: plastikman)
 
-plastikman_song_hump                   = FactoryBot.create(:song, :with_milestone, title: "Hump",               "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
-plastikman_song_plastique              = FactoryBot.create(:song, :with_milestone, title: "Plastique",          "credits_attributes" => { "0" => { "creator_id" => plastikman.id } })
+fleetwood_mac_album_fleetwood_mac      = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Fleetwood Mac",      specific_creator: fleetwood_mac)
+fleetwood_mac_album_rumors             = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Rumors",             specific_creator: fleetwood_mac)
+fleetwood_mac_album_tusk               = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Tusk",               specific_creator: fleetwood_mac)
+fleetwood_mac_album_mirage             = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Mirage",             specific_creator: fleetwood_mac)
+fleetwood_mac_album_tango_in_the_night = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Tango in the Night", specific_creator: fleetwood_mac)
 
-fleetwood_mac_album_fleetwood_mac      = FactoryBot.create(:album, :with_milestone, title: "Fleetwood Mac",      "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_album_rumors             = FactoryBot.create(:album, :with_milestone, title: "Rumors",             "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_album_tusk               = FactoryBot.create(:album, :with_milestone, title: "Tusk",               "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_album_mirage             = FactoryBot.create(:album, :with_milestone, title: "Mirage",             "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_album_tango_in_the_night = FactoryBot.create(:album, :with_milestone, title: "Tango in the Night", "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+fleetwood_mac_song_little_lies         = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Little Lies",       specific_creator: fleetwood_mac)
+fleetwood_mac_song_dreams              = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Dreams",            specific_creator: fleetwood_mac)
+fleetwood_mac_song_dont_stop           = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Don't Stop",        specific_creator: fleetwood_mac)
+fleetwood_mac_song_gold_dust_woman     = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Gold Dust Woman",   specific_creator: fleetwood_mac)
 
-fleetwood_mac_song_little_lies         = FactoryBot.create(:song, :with_milestone, title: "Little Lies",         "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_dreams              = FactoryBot.create(:song, :with_milestone, title: "Dreams",              "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_dont_stop           = FactoryBot.create(:song, :with_milestone, title: "Don't Stop",          "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
-fleetwood_mac_song_gold_dust_woman     = FactoryBot.create(:song, :with_milestone, title: "Gold Dust Woman",     "credits_attributes" => { "0" => { "creator_id" => fleetwood_mac.id } })
+spawn_song_hammerknock                 = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Hammerknock",       specific_creator: spawn_group)
+spawn_song_tension                     = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Tension",           specific_creator: spawn_group)
+spawn_song_infiltrator                 = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Infiltrator",       specific_creator: spawn_group)
+spawn_song_infiltration                = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "Infiltration",      specific_creator: spawn_group)
+spawn_song_the_thinking_man            = FactoryBot.create(:minimal_song,  :with_specific_creator,  title: "The Thinking Man",  specific_creator: spawn_group)
 
-spawn_song_hammerknock                 = FactoryBot.create(:song, :with_milestone, title: "Hammerknock",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_tension                     = FactoryBot.create(:song, :with_milestone, title: "Tension",          "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltrator                 = FactoryBot.create(:song, :with_milestone, title: "Infiltrator",      "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_infiltration                = FactoryBot.create(:song, :with_milestone, title: "Infiltration",     "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
-spawn_song_the_thinking_man            = FactoryBot.create(:song, :with_milestone, title: "The Thinking Man", "credits_attributes" => { "0" => { "creator_id" => spawn_group.id } })
+kooky_album_unpopular_science          = FactoryBot.create(:minimal_album, :with_specific_creator, title: "Unpopular Science",  specific_creator: the_kooky_scientist)
 
-the_kooky_scientist_album_unpopular_science = FactoryBot.create(:album, :with_milestone, title: "Unpopular Science", "credits_attributes" => { "0" => { "creator_id" => the_kooky_scientist.id } })
+##### TV
+
+joss_whedon    = FactoryBot.create(:minimal_creator, name: "Joss Whedon")
+buffy          = FactoryBot.create(:minimal_tv_show,    :with_specific_creator, release_year: "1997", title: "Buffy the Vampire Slayer",          specific_creator: joss_whedon)
+buffy_season_7 = FactoryBot.create(:minimal_tv_season,  :with_specific_creator, release_year: "2002", title: "Buffy the Vampire Slayer Season 7", specific_creator: joss_whedon)
+conversations  = FactoryBot.create(:minimal_tv_episode, :with_specific_creator, release_year: "2002", title: "Conversations With Dead People",    specific_creator: joss_whedon)
 
 ##### POSTS: REVIEWS & STANDALONE
 

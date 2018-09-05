@@ -2,7 +2,7 @@
   html_opts = { class: "admin" }
 
   if @post.persisted? && @post.unpublished?
-    html_opts = js_autosave_attrs(@post).merge(html_opts)
+    html_opts = js_autosavable_attrs(@post).merge(html_opts)
   end
 %>
 

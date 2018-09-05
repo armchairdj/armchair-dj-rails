@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
+
   # GET /about
-  def about; end
-
+  # GET /contact
   # GET /credits
-  def credits; end
-
   # GET /privacy
-  def privacy; end
-
   # GET /terms
-  def terms; end
+  def show
+    render params[:template]
+  end
 end

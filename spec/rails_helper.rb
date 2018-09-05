@@ -3,6 +3,10 @@
 require "simplecov"
 require "awesome_print"
 
+################################################################################
+# SIMPLECOV.
+################################################################################
+
 SimpleCov.start "rails" do
   add_group "Policies", "app/policies"
 
@@ -12,6 +16,10 @@ SimpleCov.start "rails" do
   add_filter "/app/controllers/users"
 end
 
+################################################################################
+# SETUP.
+################################################################################
+
 require "spec_helper"
 
 ENV["RAILS_ENV"] ||= "test"
@@ -19,6 +27,10 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
 
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
+################################################################################
+# RSPEC.
+################################################################################
 
 require "rspec/rails"
 
@@ -34,6 +46,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+################################################################################
+# RSPEC CONFIG + PLUGINS.
+################################################################################
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
@@ -44,15 +60,21 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include AbstractController::Translation
+
   config.include Rails.application.routes.url_helpers
+
   config.include RSpecHtmlMatchers
+
   config.include InlineSvg::ActionView::Helpers
+
   config.include Devise::Test::IntegrationHelpers, type: :system
-  config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include Devise::Test::ControllerHelpers, type: :view
+  config.include Devise::Test::ControllerHelpers,  type: :controller
+  config.include Devise::Test::ControllerHelpers,  type: :view
+
   config.include FactoryHelpers
+
   config.extend ControllerMacros, type: :controller
-  config.extend ViewMacros, type: :view
+  config.extend ViewMacros,       type: :view
 end
 
 Shoulda::Matchers.configure do |config|
@@ -61,6 +83,10 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+################################################################################
+# VCR.
+################################################################################
 
 VCR.configure do |config|
   config.hook_into :faraday
