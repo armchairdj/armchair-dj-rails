@@ -14,11 +14,15 @@
       show_role:     false
     %>
 
-    <%= f.input :current_password, required: true, hint: true %>
+    <%= adj_module do %>
+      <%= f.input :current_password, required: true, hint: true, **js_unmaskable_attrs %>
+    <% end %>
   <% end %>
 
   <% if @user.pending_reconfirmation? %>
-    <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
+    <%= adj_module do %>
+      <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
+    <% end %>
   <% end %>
 
   <%= button_group submit_button(@user, "Update") %>

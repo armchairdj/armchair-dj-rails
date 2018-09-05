@@ -77,9 +77,9 @@ private
     @media = Work.media
 
     if @work.medium.present?
-      @creators = Creator.all.alpha
-      @roles    = @work.available_roles
-      @sources  = @work.available_sources
+      @creators  = Creator.all.alpha
+      @roles     = @work.available_roles
+      @relatives = @work.available_relatives
     end
   end
 
@@ -121,6 +121,13 @@ private
         :target_id,
         :connection,
         :source_id,
+      ],
+      target_relationships_attributes: [
+        :id,
+        :_destroy,
+        :source_id,
+        :connection,
+        :target_id,
       ],
     ])
   end

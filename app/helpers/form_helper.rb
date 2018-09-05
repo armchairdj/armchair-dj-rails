@@ -16,7 +16,7 @@ module FormHelper
   def expandable_fieldset(content = nil, **opts, &block)
     content ||= capture(&block)
 
-    opts = combine_attrs(opts, class: "accepts-nested", "data-target": "expandable-fieldset.item")
+    opts = combine_attrs(opts, class: "accepts-nested", "data-target": "expandable.item")
 
     content_tag :fieldset, content, **opts
   end

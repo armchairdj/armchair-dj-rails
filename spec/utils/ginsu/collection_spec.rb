@@ -8,8 +8,8 @@ RSpec.describe Ginsu::Collection do
       let(:relation) { Tag.for_list }
 
       before(:each) do
-         expect(TagScoper).to receive(:new)
-         expect(TagSorter).to receive(:new).with(**expected_args)
+        expect(TagScoper).to receive(:new)
+        expect(TagSorter).to receive(:new).with(**expected_args)
       end
 
       context "without keyword arguments" do
@@ -32,8 +32,8 @@ RSpec.describe Ginsu::Collection do
     context "with a model that is" do
       context "vanilla" do
         before(:each) do
-           expect(AspectScoper).to receive(:new)
-           expect(AspectSorter).to receive(:new)
+          expect(AspectScoper).to receive(:new)
+          expect(AspectSorter).to receive(:new)
         end
 
         it "builds scopers and sorters based on the relation's class" do

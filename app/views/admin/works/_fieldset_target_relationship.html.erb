@@ -1,0 +1,26 @@
+<%= f.simple_fields_for :target_relationships, target_relationship do |ff| %>
+  <%= expandable_fieldset do %>
+    <%#= content_tag(:div, class: "row work-relationship") do %>
+      <%= ff.input :connection,
+        as:            :select,
+        collection:    Work::Relationship.human_connections(variation: :target),
+        required:      true,
+        include_blank: :translate,
+        input_html:    js_selectabe_create_creator_attrs
+      %>
+
+      <%= ff.input :target_id, as: :grouped_select,
+        collection:         @relatives,
+        required:           true,
+        group_label_method: :first,
+        group_method:       :last,
+        label_method:       :full_display_title,
+        value_method:       :id,
+        include_blank:      :translate,
+        input_html:         { "data-controller": "selectable" }
+      %>
+    <%# end %>
+
+    <%= ff.input(:_destroy, as: :boolean) unless ff.object.new_record? %>
+  <% end %>
+<% end %>

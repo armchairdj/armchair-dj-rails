@@ -9,7 +9,7 @@
   <%= f.full_error :reset_password_token %>
 
   <%= form_inputs do %>
-    <%= f.input :password, hint: true, required: true, autocomplete: "off" %>
+    <%= f.input :password, hint: true, required: true, autocomplete: "off", **js_unmaskable_attrs %>
   <% end %>
 
   <%= button_group submit_button(@user, "Change Password") %>

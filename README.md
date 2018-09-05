@@ -1,31 +1,36 @@
 # README
 
-* Ruby version
+## Ruby version
 
-* System dependencies
+## System dependencies
 
-  $ brew install node
-  $ brew install yarn --without-node
-  $ bundle
-  $ bundle exec rails webpacker:install
-  $ brew cask install chromedriver
+### JavaScript
 
-* Configuration
+    $ brew install node
+    $ brew install yarn --without-node
+    $ bundle
+    $ bundle exec rails webpacker:install
+    $ brew cask install chromedriver
 
-* Database creation
+## Configuration
 
-* Database initialization
+## Database creation
 
-* How to run the test suite
+## Database initialization
 
-* Services (job queues, cache servers, search engines, etc.)
+## How to run the test suite
 
-* Deployment instructions
+### Slow
 
-* ...
+    $ bundle exec rspec
 
-## CirlceCI
-
-## Parallel Tests
+### Fast
 
     $ bundle exec rake parallel:prepare
+    $ bundle exec rake parallel:spec
+
+## Services (job queues, cache servers, search engines, etc.)
+
+## Deployment instructions
+
+## Continuous integration with CirlceCI

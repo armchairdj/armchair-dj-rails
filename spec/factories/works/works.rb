@@ -4,8 +4,12 @@ require "ffaker"
 
 FactoryBot.define do
   trait :with_milestone do
+    transient do
+      release_year "1972"
+    end
+
     milestones_attributes { {
-      "0" => attributes_for(:work_milestone, activity: :released, year: "1972")
+      "0" => attributes_for(:work_milestone, activity: :released, year: release_year)
     } }
   end
 

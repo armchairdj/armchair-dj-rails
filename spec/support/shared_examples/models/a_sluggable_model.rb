@@ -276,21 +276,6 @@ RSpec.shared_examples "a_sluggable_model" do
         end
       end
 
-      describe "#reset_slug_history" do
-        subject { instance.send(:reset_slug_history) }
-
-        let(:instance) do
-          instance = create_minimal_instance(:published, title: "foo")
-          instance.update!(title: "bar", clear_slug: true)
-          instance.update!(title: "bat", clear_slug: true)
-          instance
-        end
-
-        it "removes all old slugs so they can be reused" do
-          expect { subject }.to change { instance.slugs.count }.from(3).to(0)
-        end
-      end
-
       describe "#slug_candidates" do
         subject { instance.send(:slug_candidates) }
 

@@ -50,10 +50,9 @@ Rails.application.routes.draw do
   # PAGES.
   #############################################################################
 
-  get "about",   to: "pages#about"
-  get "credits", to: "pages#credits"
-  get "privacy", to: "pages#privacy"
-  get "terms",   to: "pages#terms"
+  get ":template", to: "pages#show", as: :static_page, constraints: {
+    template: /about|credits|privacy|terms|contact/
+  }
 
   #############################################################################
   # ERRORS.
@@ -116,15 +115,15 @@ Rails.application.routes.draw do
   # STYLE GUIDES.
   #############################################################################
 
-  get "style_guide", to: "style_guides#index", as: "style_guides"
+  get "style_guide", to: "style_guides#index", as: :style_guides
 
-  get "style_guide/:template", to: "style_guides#show", as: "style_guides_item", constraints: {
-      template: /button|form|form_error|headline|list|post|quotation|tabs|tables|svg|text/
-    }
+  get "style_guide/:template", to: "style_guides#show", as: :style_guides_item, constraints: {
+    template: /button|form|form_error|headline|list|post|quotation|tabs|tables|svg|text/
+  }
 
-  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: "style_guides_flash",
+  get "style_guide/flash/:flash_type", to: "style_guides#flash_message", as: :style_guides_flash,
     constraints: { flash_type: /alert|error|info|notice|success/ }
 
-  get "style_guide/error/:error_type", to: "style_guides#error_page", as: "style_guides_error",
+  get "style_guide/error/:error_type", to: "style_guides#error_page", as: :style_guides_error,
     constraints: { error_type: /bad_request|internal_server_error|not_found|permission_denied/ }
 end

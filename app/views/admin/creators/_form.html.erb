@@ -9,7 +9,7 @@
     <% end %>
 
     <%= adj_module do %>
-      <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
+      <%= content_tag(:fieldset, "data-controller": "togglable") do %>
         <%= content_tag(:legend, "Primary or Pseudonym") %>
 
         <%= render "shared/forms/custom_radio_group",
@@ -38,7 +38,7 @@
     <% end %>
 
     <%= adj_module do %>
-      <%= content_tag(:fieldset, "data-controller": "togglable-fieldset") do %>
+      <%= content_tag(:fieldset, "data-controller": "togglable") do %>
         <%= content_tag(:legend, "Individual or Group") %>
 
         <%= render "shared/forms/custom_radio_group",

@@ -30,7 +30,7 @@ export default class extends BaseController {
   }
 
   maxItems() {
-    const maxItems = parseInt(this.data.get("maxItems"));
+    const maxItems = parseInt(this.data.get("maxItems"), 10);
 
     return isNaN(maxItems) ? null : maxItems;
   }

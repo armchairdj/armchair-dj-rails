@@ -4,8 +4,6 @@ import BaseController from "./base_controller";
 
 export default class extends BaseController {
   initialize() {
-    this.url     = this.data.get("url");
-    this.param   = this.data.get("param");
     this.onError = _.bind(this.ajaxError,    this);
     this.updater = _.bind(this.handleUpdate, this);
   }
@@ -33,7 +31,7 @@ export default class extends BaseController {
   sendRequest() {
     $.ajax({
       method: "POST",
-      url:    this.url,
+      url:    this.data.get("url"),
       data:   this.params(),
       error:  this.onError
     });
@@ -42,7 +40,7 @@ export default class extends BaseController {
   params() {
     const params = {};
 
-    params[this.param] = this.sortable.toArray();
+    params[this.data.get("param")] = this.sortable.toArray();
 
     return params;
   }

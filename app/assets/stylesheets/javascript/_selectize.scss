@@ -76,13 +76,13 @@
     }
 
     &:focus {
-      outline: none !important;
       @include focus-no-outline();
     }
   }
 }
 
 .selectize-dropdown {
+  //@include form-field-focused();
   max-width: 100%;
   position: absolute;
   z-index: 10;
@@ -233,48 +233,33 @@
         margin-top: -3px;
         width: 0;
         height: 0;
-        border-style: solid;
-        border-width: 5px 5px 0 5px;
-        border-color: #808080 transparent transparent transparent;
       }
 
       &.dropdown-active:after {
         margin-top: -4px;
-        border-width: 0 5px 5px 5px;
-        border-color: transparent transparent #808080 transparent;
       }
     }
   }
 
   &.multi {
     .selectize-input {
-      > div {
+      [data-value] {
         cursor: pointer;
         margin: 0 3px 3px 0;
         padding: 0 4px;
-//        background: $input-bg-color;
-        border: 1px solid #0073bb;
-
-        &.active {
-//          background: $input-bg-color-focus;
-          border: 1px solid #00578d;
-        }
-      }
-
-      [data-value] {
-        text-shadow: 0 1px 0 rgba(0, 51, 83, 0.3);
+        border: 1px solid $armchair-blue-dark;
         border-radius: $standard-border-radius;
         background-color: $white;
         font-size: .8em;
 
         &.active {
-          background-color: $armchair-blue-lightest;
+          background-color: $light-grey;
         }
       }
 
       &.disabled {
-        > div,
-        > div.active {
+        [data-value],
+        [data-value].active {
           color: $white;
           background: #d2d2d2;
           border: 1px solid #aaaaaa;
@@ -282,7 +267,6 @@
 
         [data-value] {
           color: #999;
-          text-shadow: none;
           background: none;
           border-color: #e6e6e6;
 
@@ -304,25 +288,26 @@
       position: relative;
       padding-right: 1.2em !important;
 
-      .remove {
+      a.remove,
+      a.remove-single {
         z-index: 1;
         position: absolute;
-        top: 0;
-        right: .1em;
-        text-align: center;
-        font-size: 2em;
-        line-height: .7;
-        color: inherit;
-        text-decoration: none;
         vertical-align: middle;
         display: inline-block;
+        font-size: 2em;
+        line-height: 1rem;
+        @include normal();
+        @include underline-never();
+      }
+
+      .remove {
+        top: 3px;
+        right: 3px;
       }
 
       .remove-single {
-        position: absolute;
-        right: 28px;
-        top: 6px;
-        font-size: 1.25rem;
+        right: 5px;
+        top: 5px;
       }
     }
 

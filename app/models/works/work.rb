@@ -253,6 +253,10 @@ class Work < ApplicationRecord
   has_many :target_works, -> { order("works.title") },
     through: :target_relationships, source: :target
 
+  def available_relatives
+    Work.where.not(id: self.id).grouped_by_medium
+  end
+
   concerning :NestedSourceRelationships do
     MAX_SOURCE_RELATIONSHIPS_AT_ONCE = 5.freeze
 
@@ -266,10 +270,6 @@ class Work < ApplicationRecord
       )
     end
 
-    def available_sources
-      Work.where.not(id: self.id).grouped_by_medium
-    end
-
     def prepare_source_relationships
       MAX_SOURCE_RELATIONSHIPS_AT_ONCE.times { self.source_relationships.build }
     end
@@ -278,6 +278,30 @@ class Work < ApplicationRecord
 
     def reject_source_relationship?(attrs)
       attrs["source_id"].blank?
+    end
+  end
+
+  concerning :NestedTargetRelationships do
+    MAX_TARGET_RELATIONSHIPS_AT_ONCE = 5.freeze
+
+    included do
+      accepts_nested_attributes_for(:target_relationships,
+        allow_destroy: true, reject_if: :reject_target_relationship?
+      )
+
+      validates_nested_uniqueness_of(:target_relationships,
+        uniq_attr: :target_id, scope: [:connection]
+      )
+    end
+
+    def prepare_target_relationships
+      MAX_TARGET_RELATIONSHIPS_AT_ONCE.times { self.target_relationships.build }
+    end
+
+  private
+
+    def reject_target_relationship?(attrs)
+      attrs["target_id"].blank?
     end
   end
 
@@ -312,6 +336,7 @@ class Work < ApplicationRecord
     prepare_contributions
     prepare_milestones
     prepare_source_relationships
+    prepare_target_relationships
   end
 
   #############################################################################

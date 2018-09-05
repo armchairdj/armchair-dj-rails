@@ -39,11 +39,11 @@ en:
         links: "For display on the public permalink page for this %{model_name}."
         publish_on: "Leave blank unless scheduling this post for future publication."
       article:
-        slug: "URL slugs are automatically generated on first save. If you've changed the title, you can generate a new slug by checking the box below."
+        slug: "URL slugs are generated automatically. If you've changed this article's title, you can generate a new slug by checking the box below. Old slugs will be redirected."
       review:
-        slug: "URL slugs are automatically generated on first save. If you've made changes to the title, subtitle or makers of the reviewed item, you can generate a new slug by checking the box below."
+        slug: "URL slugs are generated automatically. If you've changed this review's title, subtitle or makers of the reviewed item, you can generate a new slug by checking the box below. Old slugs will be redirected."
       mixtape:
-        slug: "URL slugs are automatically generated on first save. If you've changed the playlist's title, you can generate a new slug by checking the box below."
+        slug: "URL slugs are generated automatically. If you've changed this mixtape's title, you can generate a new slug by checking the box below. Old slugs will be redirected."
       playlist:
         tracks: "Select at least two."
       work:
@@ -51,6 +51,7 @@ en:
       user:
         bio: "For display on your public author profile."
         current_password: "We need your current password to confirm your changes"
+        links: "For display on your public author profile."
         password: "Please use 12-128 characters"
         remember_me: "&nbsp;"
     placeholders:

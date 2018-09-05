@@ -3,26 +3,31 @@ const toObject = require("form-to-object");
 import BaseController from "./base_controller";
 
 export default class extends BaseController {
+  static sixtySeconds  = 60 * 1000;
+  static thirtySeconds = 30 * 1000;
+  static events        = "change keydown";
+
   initialize() {
-    this.duration  = 60 * 1000;
-    this.wait      = 30 * 1000;
+    this.duration  = this.constructor.sixtySeconds;
+    this.wait      = this.constructor.thirtySeconds;
 
-    this.url       = this.data.get("url");
+    this.detector  = _.debounce(_.bind(this.detectUpdate, this), this.wait);
 
-    this.detector  = _.debounce(_.bind(this.detectUpdate,    this), this.wait);
-    this.saver     =            _.bind(this.saveIfNecessary, this);
-    this.onSuccess =            _.bind(this.ajaxSuccess,     this);
-    this.onError   =            _.bind(this.ajaxError,       this);
+    this.saver     = _.bind(this.saveIfNecessary, this);
+    this.onSuccess = _.bind(this.ajaxSuccess,     this);
+    this.onError   = _.bind(this.ajaxError,       this);
   }
 
   setup() {
-    $(this.element).find("input, select, textarea").on("change keydown", this.detector);
+    this.$fields = $(this.element).find("input, select, textarea");
+
+    this.$fields.on(this.constructor.events, this.detector);
 
     this.startInterval();
   }
 
   teardown(evt) {
-    this.$fields.off("change", this.detector);
+    this.$fields.off(this.constructor.events, this.detector);
 
     this.endInterval();
   }
@@ -44,15 +49,19 @@ export default class extends BaseController {
   }
 
   saveIfNecessary() {
-    if (this.lastUpdated > this.lastSaved) {
-      this.submitRequest();
-    }
+    if (this.skipSave()) { return }
+
+    this.submitRequest();
+  }
+
+  skipSave() {
+    return this.lastUpdated <= this.lastSaved;
   }
 
   submitRequest() {
     $.ajax({
       method:   "POST",
-      url:      this.url,
+      url:      this.data.get("url"),
       data:     toObject(this.element),
       success:  this.onSuccess,
       error:    this.onError
@@ -60,15 +69,13 @@ export default class extends BaseController {
   }
 
   ajaxSuccess(response, status, xhr) {
-    console.log("autosaved");
-
     this.lastSaved = new Date();
 
     this.alertUserOfSuccess();
   }
 
   alertUserOfSuccess() {
-    var $body = $("body");
+    const $body = $("body");
 
     $body.fadeTo(400, 0.5, function () {
       $body.fadeTo(400, 1)

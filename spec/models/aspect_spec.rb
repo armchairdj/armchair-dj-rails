@@ -23,7 +23,7 @@ RSpec.describe Aspect do
 
     it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a ginsu_model" do
+    it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
     end
@@ -78,7 +78,7 @@ RSpec.describe Aspect do
 
   describe "attributes" do
     describe "enums" do
-      it_behaves_like "an_enumable_model", [:facet]
+      it_behaves_like "a_model_with_a_better_enum_for", :facet
     end
   end
 
@@ -103,8 +103,8 @@ RSpec.describe Aspect do
     describe "#display_name" do
       subject { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
-      specify { expect(subject.display_name                ).to eq("Musical Genre: Trip-Hop") }
-      specify { expect(subject.display_name(connector: "/")).to eq("Musical Genre/Trip-Hop" ) }
+      specify { expect(subject.display_name                ).to eq("Genre: Trip-Hop") }
+      specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop" ) }
     end
   end
 end

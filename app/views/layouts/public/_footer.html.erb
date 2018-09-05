@@ -25,11 +25,12 @@
       <%= content_tag(:div, copyright_notice, class: "copyright") %>
 
       <%= content_tag(:ul, class: "arrowed") do %>
-        <%= content_tag(:li, link_to("About",    about_path             )) %>
-        <%= content_tag(:li, link_to("Credits",  credits_path           )) %>
-        <%= content_tag(:li, link_to("Privacy",  privacy_path           )) %>
-        <%= content_tag(:li, link_to("Terms",    terms_path             )) %>
-        <%= content_tag(:li, link_to("RSS Feed", feed_path(format: :rss))) %>
+        <%= content_tag(:li, link_to("About",    static_page_path(template: :about  ))) %>
+        <%= content_tag(:li, link_to("Contact",  static_page_path(template: :contact))) %>
+        <%= content_tag(:li, link_to("Credits",  static_page_path(template: :credits))) %>
+        <%= content_tag(:li, link_to("Privacy",  static_page_path(template: :privacy))) %>
+        <%= content_tag(:li, link_to("Terms",    static_page_path(template: :terms  ))) %>
+        <%= content_tag(:li, link_to("RSS Feed", feed_path(       format:   :rss    ))) %>
       <% end %>
     <% end %>
 

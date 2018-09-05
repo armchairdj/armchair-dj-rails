@@ -12,14 +12,10 @@ textarea {
 
 textarea {
   resize: vertical;
+  height: 8rem;
 
   &.small {
     height: 4rem;
-  }
-
-  &,
-  &.medium {
-    height: 8rem;
   }
 
   &.large {

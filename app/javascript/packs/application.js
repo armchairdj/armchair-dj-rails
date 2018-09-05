@@ -23,10 +23,11 @@ $(document).on("turbolinks:load", function () {
   });
 })
 
-/* jQuery plugins. */
+/* Selectize. */
 
-require("monkey_patches/selectize");
-// require("selectize-plugin-clear");
+const Selectize = require("monkey_patches/selectize");
+
+window.Selectize = Selectize;
 
 /* Turbolinks */
 

@@ -36,7 +36,7 @@ RSpec.describe Credit do
 
     it_behaves_like "an_attribution"
 
-    it_behaves_like "a ginsu_model" do
+    it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
       let(:show_loads) { [:work, :creator] }
     end
