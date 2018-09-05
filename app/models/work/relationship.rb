@@ -28,52 +28,60 @@ class Work::Relationship < ApplicationRecord
   # CONCERNING: Target.
   #############################################################################
 
-  belongs_to :target, class_name: "Work", foreign_key: :target_id
+  concerning :TargetAssociation do
+    included do
+      belongs_to :target, class_name: "Work", foreign_key: :target_id
 
-  validates :target, presence: true
-
-  #############################################################################
-  # CONCERNING: Connection.
-  #############################################################################
-
-  validates :connection, presence: true
-
-  enum connection: {
-    member_of:       100,
-
-    version_of:      200,
-    performance_of:  201,
-
-    remake_of:       300,
-    sequel_to:       301,
-    spinoff_of:      302,
-
-    borrows_from:    400,
-  }
-
-  improve_enum :connection
+      validates :target, presence: true
+    end
+  end
 
   #############################################################################
   # CONCERNING: Source.
   #############################################################################
 
-  belongs_to :source, class_name: "Work", foreign_key: :source_id
+  concerning :SourceAssociation do
+    included do
+      belongs_to :source, class_name: "Work", foreign_key: :source_id
 
-  validates :source, presence: true
+      validates :source, presence: true
 
-  validates :source_id, uniqueness: { scope: [:target_id, :connection] }
+      validates :source_id, uniqueness: { scope: [:target_id, :connection] }
+
+      validate { source_and_target_are_different }
+    end
+
+  private
+
+    def source_and_target_are_different
+      return unless source_id == target_id
+
+      self.errors.add(:source_id, :same_as_target)
+    end
+  end
 
   #############################################################################
-  # CONCERNING: Self-referentiality.
+  # CONCERNING: Connection.
   #############################################################################
 
-  validate { source_and_target_are_different }
+  concerning :ConnectionAttribute do
+    included do
+      validates :connection, presence: true
 
-private
+      enum connection: {
+        member_of:       100,
 
-  def source_and_target_are_different
-    return unless source_id == target_id
+        version_of:      200,
+        performance_of:  201,
 
-    self.errors.add(:source_id, :same_as_target)
+        remake_of:       300,
+        sequel_to:       301,
+        spinoff_of:      302,
+
+        borrows_from:    400,
+      }
+
+      improve_enum :connection
+    end
   end
 end

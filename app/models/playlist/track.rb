@@ -24,19 +24,27 @@ class Playlist::Track < ApplicationRecord
 
   include Listable
 
-  acts_as_listable(:playlist)
+  concerning :PlaylistAssociation do
+    included do
+      belongs_to :playlist, inverse_of: :tracks
 
-  belongs_to :playlist, inverse_of: :tracks
+      validates :playlist, presence: true
 
-  validates :playlist, presence: true
+      acts_as_listable(:playlist)
+    end
+  end
 
   #############################################################################
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work, inverse_of: :playlistings
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :playlistings
 
-  validates :work, presence: true
+      validates :work, presence: true
+    end
+  end
 
   #############################################################################
   # CONCERNING: Ginsu.

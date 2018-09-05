@@ -27,10 +27,10 @@ class Creator::Identity < ApplicationRecord
   # CONCERNING: Real name.
   #############################################################################
 
-  belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
-
-  concerning :RealNameValidation do
+  concerning :RealNameAssociation do
     included do
+      belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
+
       validates :real_name, presence: true
 
       validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
@@ -49,10 +49,10 @@ class Creator::Identity < ApplicationRecord
   # CONCERNING: Pseudonym.
   #############################################################################
 
-  belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
-
-  concerning :PseudonymValidation do
+  concerning :PseudonymAssociation do
     included do
+      belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
+
       validates :pseudonym,  presence: true
 
       validates :pseudonym_id, uniqueness: true

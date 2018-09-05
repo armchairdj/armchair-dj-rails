@@ -41,13 +41,7 @@
 class Review < Post
 
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  delegate :alpha_parts, to: :work, allow_nil: true
-
-  #############################################################################
-  # CONCERNING: STI Subclassed.
+  # CONCERNING: STI Subclass.
   #############################################################################
 
   concerning :Subclassing do
@@ -60,39 +54,36 @@ class Review < Post
         super.includes(:work, :makers, :contributions, :aspects, :milestones)
       end
     end
+
+    def display_type(plural: false)
+      base = [display_medium, "Review"].compact.join(" ")
+
+      plural ? base.pluralize : base
+    end
   end
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work
 
-  has_many :makers,        through: :work
-  has_many :contributions, through: :work
-  has_many :contributors,  through: :work
-  has_many :aspects,       through: :work
-  has_many :milestones,    through: :work
+      validates :work, presence: true
 
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
+      has_many :makers,        through: :work
+      has_many :contributions, through: :work
+      has_many :contributors,  through: :work
+      has_many :aspects,       through: :work
+      has_many :milestones,    through: :work
 
-  validates :work, presence: true
+      delegate :alpha_parts,    to: :work, allow_nil: true
+      delegate :display_medium, to: :work, allow_nil: true
+    end
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  delegate :display_medium, to: :work, allow_nil: true
-
-  def sluggable_parts
-    work.try(:sluggable_parts) || []
-  end
-
-  def display_type(plural: false)
-    base = [display_medium, "Review"].compact.join(" ")
-
-    plural ? base.pluralize : base
+    def sluggable_parts
+      work.try(:sluggable_parts) || []
+    end
   end
 end

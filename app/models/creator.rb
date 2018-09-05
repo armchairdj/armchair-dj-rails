@@ -44,7 +44,7 @@ class Creator < ApplicationRecord
   # CONCERNING: Primariness & Individuality.
   #############################################################################
 
-  concerning :Primariness do
+  concerning :PrimaryAttribute do
     included do
       attribute :primary, :boolean, default: true
 
@@ -80,7 +80,7 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :Individuality do
+  concerning :IndividualAttribute do
     included do
       attribute :individual, :boolean, default: true
 

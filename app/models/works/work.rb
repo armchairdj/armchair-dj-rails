@@ -74,27 +74,31 @@ class Work < ApplicationRecord
   # CONCERNING: Title.
   #############################################################################
 
-  validates :title, presence: true
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
 
-  def display_title(full: false)
-    return unless persisted?
+    def display_title(full: false)
+      return unless persisted?
 
-    parts = [title, subtitle]
+      parts = [title, subtitle]
 
-    parts.unshift(display_makers) if full
+      parts.unshift(display_makers) if full
 
-    parts.compact.join(": ")
-  end
+      parts.compact.join(": ")
+    end
 
-  def full_display_title
-    display_title(full: true)
+    def full_display_title
+      display_title(full: true)
+    end
   end
 
   #############################################################################
   # CONCERNING: Aspects.
   #############################################################################
 
-  concerning :Aspects do
+  concerning :AspectsAssociation do
     included do
       class_attribute :available_facets, default: []
 
@@ -121,12 +125,10 @@ class Work < ApplicationRecord
   # CONCERNING: Milestones.
   #############################################################################
 
-  has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
-
-  concerning :Milestones do
-    MAX_MILESTONES_AT_ONCE = 5.freeze
-
+  concerning :MilestonesAssociation do
     included do
+      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
+
       accepts_nested_attributes_for(:milestones, allow_destroy: true,
         reject_if: proc { |attrs| attrs["year"].blank? }
       )
@@ -136,12 +138,18 @@ class Work < ApplicationRecord
       validate { has_released_milestone }
     end
 
+    class_methods do
+      def max_milestones_at_once
+        5
+      end
+    end
+
     def display_milestones
       milestones.sorted
     end
 
     def prepare_milestones
-      MAX_MILESTONES_AT_ONCE.times { self.milestones.build }
+      self.class.max_milestones_at_once.times { self.milestones.build }
 
       if milestones.first.new_record?
         milestones.first.activity = :released

@@ -27,10 +27,10 @@ class Creator::Membership < ApplicationRecord
   # CONCERNING: Group.
   #############################################################################
 
-  belongs_to :group, class_name: "Creator", foreign_key: :group_id
-
-  concerning :GroupValidation do
+  concerning :GroupAssociation do
     included do
+      belongs_to :group, class_name: "Creator", foreign_key: :group_id
+
       validates :group, presence: true
 
       validates :group_id, uniqueness: { scope: [:member_id] }
@@ -49,10 +49,10 @@ class Creator::Membership < ApplicationRecord
   # CONCERNING: Member.
   #############################################################################
 
-  belongs_to :member, class_name: "Creator", foreign_key: :member_id
-
-  concerning :MemberValidation do
+  concerning :MemberAssociation do
     included do
+      belongs_to :member, class_name: "Creator", foreign_key: :member_id
+
       validates :member, presence: true
 
       validate { member_is_individual }

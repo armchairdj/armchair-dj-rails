@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
-  MISSING_TRANSLATION = /translation missing/i
+  missing_translation = /translation missing/i
 
   if enum.is_a?(Hash)
     attribute  = enum[:attribute ]
@@ -36,14 +36,14 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
       it "has a localized string for #{val}" do
         actual = described_class.send(:"human_#{single}", val)
 
-        expect(actual).to_not match(MISSING_TRANSLATION)
+        expect(actual).to_not match(missing_translation)
       end
 
       variations.each do |variation|
         it "has a localized string for #{val} with variation #{variation}" do
           actual = described_class.send(:"human_#{single}", val, variation: variation)
 
-          expect(actual).to_not match(MISSING_TRANSLATION)
+          expect(actual).to_not match(missing_translation)
         end
       end
     end

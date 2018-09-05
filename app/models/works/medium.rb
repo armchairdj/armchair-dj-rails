@@ -4,7 +4,7 @@ class Medium < Work
   self.abstract_class = true
 
   #############################################################################
-  # CONCERNING: STI Subclassed.
+  # CONCERNING: STI Subclass.
   #############################################################################
 
   concerning :Subclassing do

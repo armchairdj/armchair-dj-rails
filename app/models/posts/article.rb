@@ -41,28 +41,30 @@
 class Article < Post
 
   #############################################################################
-  # CONCERNING: Alpha.
+  # CONCERNING: STI Subclass.
   #############################################################################
 
-  def alpha_parts
-    [ title ]
+  concerning :Subclassing do
+    def display_type(plural: false)
+      plural ? "Articles" : "Article"
+    end
   end
 
   #############################################################################
-  # VALIDATIONS.
+  # CONCERNING: Title.
   #############################################################################
 
-  validates :title, presence: true
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
+    def sluggable_parts
+      [ title ]
+    end
 
-  def display_type(plural: false)
-    plural ? "Articles" : "Article"
-  end
-
-  def sluggable_parts
-    [ title ]
+    def alpha_parts
+      [ title ]
+    end
   end
 end

@@ -46,11 +46,15 @@ class Role < ApplicationRecord
   # CONCERNING: Name
   #############################################################################
 
-  validates :name, presence: true
-  validates :name, uniqueness: { scope: [:medium] }
+  concerning :NameAttribute do
+    included do
+      validates :name, presence: true
+      validates :name, uniqueness: { scope: [:medium] }
+    end
 
-  def display_name(full: false)
-    full ? [display_medium, name].join(": ") : name
+    def display_name(full: false)
+      full ? [display_medium, name].join(": ") : name
+    end
   end
 
   #############################################################################

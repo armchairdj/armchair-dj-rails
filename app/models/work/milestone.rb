@@ -26,51 +26,67 @@ class Work::Milestone < ApplicationRecord
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work
 
-  has_many :makers,       -> { distinct }, through: :work
-  has_many :contributors, -> { distinct }, through: :work
+      has_many :makers,       -> { distinct }, through: :work
+      has_many :contributors, -> { distinct }, through: :work
 
-  validates :work, presence: true
+      validates :work, presence: true
+    end
+  end
 
   #############################################################################
   # CONCERNING: Activity.
   #############################################################################
 
-  validates :activity, presence: true
-  validates :activity, uniqueness: { scope: [:work_id] }
+  concerning :ActivityAttribute do
+    included do
+      validates :activity, presence: true
+      validates :activity, uniqueness: { scope: [:work_id] }
 
-  enum activity: {
-    released:    0,
-    published:   1,
-    aired:       2,
+      enum activity: {
+        released:    0,
+        published:   1,
+        aired:       2,
 
-    created:    10,
+        created:    10,
 
-    reissued:   20,
-    rereleased: 21,
-    remastered: 22,
-    recut:      23,
-    remixed:    24
-  }
+        reissued:   20,
+        rereleased: 21,
+        remastered: 22,
+        recut:      23,
+        remixed:    24
+      }
 
-  improve_enum :activity
+      improve_enum :activity
+    end
+  end
 
   #############################################################################
   # CONCERNING: Year.
   #############################################################################
 
-  validates :year, presence: true, yearness: true
+  concerning :YearAttribute do
+    included do
+      validates :year, presence: true, yearness: true
 
-  scope :sorted, -> { order(:year) }
+      scope :sorted, -> { order(:year) }
+    end
+  end
 
   #############################################################################
   # CONCERNING: Posts.
   #############################################################################
 
-  has_many :playlists, through: :work
-  has_many :mixtapes,  through: :work
-  has_many :reviews,   through: :work
+  concerning :PostAssociation do
+    included do
+      has_many :playlists, through: :work
+      has_many :mixtapes,  through: :work
+      has_many :reviews,   through: :work
+    end
+  end
 
   #############################################################################
   # CONCERNING: Ginsu.

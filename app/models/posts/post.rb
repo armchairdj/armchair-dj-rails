@@ -41,6 +41,15 @@
 class Post < ApplicationRecord
 
   #############################################################################
+  # CONCERNS.
+  #############################################################################
+
+  include Alphabetizable
+  include Authorable
+  include Linkable
+  include Sluggable
+
+  #############################################################################
   # CONCERNING: STI subclass contract.
   #############################################################################
 
@@ -61,34 +70,20 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Alpha.
+  # CONCERNING: Tags.
   #############################################################################
 
-  include Alphabetizable
+  concerning :TagAssociation do
+    included do
+      has_and_belongs_to_many :tags, -> { order("tags.name") }
+    end
+  end
 
   #############################################################################
-  # CONCERNING: Author.
+  # CONCERNING: State Machine.
   #############################################################################
 
-  include Authorable
-
-  #############################################################################
-  # CONCERNING: Links.
-  #############################################################################
-
-  include Linkable
-
-  #############################################################################
-  # CONCERNING: Slugs.
-  #############################################################################
-
-  include Sluggable
-
-  #############################################################################
-  # CONCERNING: Status.
-  #############################################################################
-
-  concerning :Status do
+  concerning :StateMachine do
     included do
       enum status: {
         draft:      0,
@@ -99,6 +94,51 @@ class Post < ApplicationRecord
       improve_enum :status
 
       validates :status, presence: true
+
+      include AASM
+
+      aasm(
+        column:               :status,
+        enum:                 true,
+        create_scopes:        true,
+        no_direct_assignment: true,
+        whiny_persistence:    false,
+        whiny_transitions:    false
+      ) do
+        state :draft, initial: true
+        state :scheduled
+        state :published, before_enter: :clear_publish_on
+
+        event(:schedule) do
+          transitions from: :draft, to: :scheduled
+        end
+
+        event(:unschedule, before: :clear_publish_on) do
+          transitions from: :scheduled, to: :draft
+        end
+
+        event(:publish, before: :set_published_at) do
+          transitions from: [:draft, :scheduled], to: :published
+        end
+
+        event(:unpublish, before: :clear_published_at) do
+          transitions from: :published, to: :draft
+        end
+      end
+    end
+
+  private
+
+    def set_published_at
+      self.published_at = DateTime.now
+    end
+
+    def clear_published_at
+      self.published_at = nil
+    end
+
+    def clear_publish_on
+      self.publish_on = nil
     end
   end
 
@@ -106,7 +146,7 @@ class Post < ApplicationRecord
   # CONCERNING: Triggering status changes with virtual attributes.
   #############################################################################
 
-  concerning :Triggerable do
+  concerning :Transitioning do
     included do
       ### Virtual attributes.
 
@@ -183,10 +223,58 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Conditional validation based on status.
+  # CONCERNING: Publishing.
   #############################################################################
 
-  concerning :Validateable do
+  concerning :Publishing do
+    included do
+      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+
+      scope :for_public, -> { published.reverse_cron }
+
+      scope :unpublished, -> { where.not(status: :published) }
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Publishing of scheduled posts.
+  #############################################################################
+
+  concerning :Scheduling do
+    included do
+      scope :scheduled_and_due, -> {
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
+      }
+    end
+
+    class_methods do
+      def publish_scheduled
+        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
+
+        memo[:all].each do |item|
+          item.unschedule!
+
+          if item.publish!
+            memo[:success] << item
+          else
+            memo[:failure] << item
+          end
+        end
+
+        memo
+      end
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Validation.
+  #############################################################################
+
+  concerning :ValidatedAttributes do
     included do
       validates :summary, length: { in: 40..320 }, allow_blank: true
 
@@ -217,102 +305,16 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Publishable.
+  # CONCERNING: Access control.
   #############################################################################
 
-  concerning :Publishable do
-    included do
-      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-      scope :for_public, -> { published.reverse_cron }
-
-      scope :unpublished, -> { where.not(status: :published) }
-    end
-
-    def unpublished?
-      draft? || scheduled?
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: State Machine.
-  #############################################################################
-
-  concerning :Transitionable do
-    included do
-      include AASM
-
-      aasm(
-        column:               :status,
-        enum:                 true,
-        create_scopes:        true,
-        no_direct_assignment: true,
-        whiny_persistence:    false,
-        whiny_transitions:    false
-      ) do
-        state :draft, initial: true
-        state :scheduled
-        state :published, before_enter: :clear_publish_on
-
-        event(:schedule) do
-          transitions from: :draft, to: :scheduled
-        end
-
-        event(:unschedule, before: :clear_publish_on) do
-          transitions from: :scheduled, to: :draft
-        end
-
-        event(:publish, before: :set_published_at) do
-          transitions from: [:draft, :scheduled], to: :published
-        end
-
-        event(:unpublish, before: :clear_published_at) do
-          transitions from: :published, to: :draft
-        end
-      end
-    end
-
-  private
-
-    def set_published_at
-      self.published_at = DateTime.now
-    end
-
-    def clear_published_at
-      self.published_at = nil
-    end
-
-    def clear_publish_on
-      self.publish_on = nil
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Publishing of scheduled posts.
-  #############################################################################
-
-  concerning :Scheduleable do
-    included do
-      scope :scheduled_and_due, -> {
-        scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
-      }
-    end
-
+  concerning :Editing do
     class_methods do
-      def publish_scheduled
-        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
+      def for_cms_user(user)
+        return self.none unless user && user.can_access_cms?
+        return self.all  if user.can_edit?
 
-        memo[:all].each do |item|
-          item.unschedule!
-
-          if item.publish!
-            memo[:success] << item
-          else
-            memo[:failure] << item
-          end
-        end
-
-        memo
+        where(author_id: user.id)
       end
     end
   end
@@ -321,7 +323,7 @@ class Post < ApplicationRecord
   # CONCERNING: Markdown.
   #############################################################################
 
-  concerning :Markdownable do
+  concerning :Rendering do
     def formatted_body
       return unless body.present?
 
@@ -334,25 +336,4 @@ class Post < ApplicationRecord
       @renderer ||= Redcarpet::Markdown.new(PostRenderer)
     end
   end
-
-  #############################################################################
-  # CONCERNING: Access control.
-  #############################################################################
-
-  concerning :Editable do
-    class_methods do
-      def for_cms_user(user)
-        return self.none unless user && user.can_access_cms?
-        return self.all  if user.can_edit?
-
-        where(author_id: user.id)
-      end
-    end
-  end
-
-  #############################################################################
-  # ASSOCIATIONS.
-  #############################################################################
-
-  has_and_belongs_to_many :tags, -> { order("tags.name") }
 end
