@@ -1,4 +1,4 @@
-import SelectableController from "controllers/selectable_controller";
+import SelectableController from "../controllers/selectable_controller";
 
 export default class extends SelectableController {
   selectizeOpts() {

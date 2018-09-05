@@ -25,7 +25,7 @@ $(document).on("turbolinks:load", function () {
 
 /* Selectize. */
 
-const Selectize = require("monkey_patches/selectize");
+const Selectize = require("../monkey_patches/selectize");
 
 window.Selectize = Selectize;
 
