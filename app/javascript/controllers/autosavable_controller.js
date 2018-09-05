@@ -1,6 +1,6 @@
 const toObject = require("form-to-object");
 
-import BaseController from "./base_controller";
+import BaseController from "../controllers/base_controller";
 
 export default class extends BaseController {
   static sixtySeconds  = 60 * 1000;

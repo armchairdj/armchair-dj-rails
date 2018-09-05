@@ -1,3 +1,4 @@
+import _         from "underscore";
 import Selectize from "selectize";
 
 _.extend(Selectize.prototype, {
