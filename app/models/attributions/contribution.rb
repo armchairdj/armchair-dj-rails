@@ -30,33 +30,45 @@
 class Contribution < Attribution
 
   #############################################################################
+  # CONCERNING: Role.
+  #############################################################################
+
+  concerning :RoleAssociation do
+    included do
+      belongs_to :role, required: true
+
+      validates :role_id, presence: true
+
+      validates :role_id, inclusion: { allow_blank: true, in:
+        proc { |record| record.work.try(:available_role_ids) || [] }
+      }
+    end
+
+    def role_name
+      role.try(:name)
+    end
+  end
+
+  #############################################################################
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work, inverse_of: :contributions
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :contributions
+    end
+  end
 
   #############################################################################
   # CONCERNING: Creator.
   #############################################################################
 
-  belongs_to :creator, inverse_of: :contributions
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :contributions
 
-  validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
-
-  #############################################################################
-  # Concerning: Role.
-  #############################################################################
-
-  belongs_to :role, required: true
-
-  validates :role_id, presence: true
-
-  validates :role_id, inclusion: { allow_blank: true, in:
-    proc { |record| record.work.try(:available_role_ids) || [] }
-  }
-
-  def role_name
-    role.try(:name)
+      validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
+    end
   end
 
   #############################################################################

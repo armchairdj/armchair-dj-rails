@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 concern :Alphabetizable do
-  ALPHA_CONNECTOR = " "
-
   #############################################################################
   # INCLUDED.
   #############################################################################
@@ -26,7 +24,7 @@ private
   end
 
   def calculate_alpha_string
-    [*alpha_parts].compact.join(ALPHA_CONNECTOR).downcase.squish
+    [*alpha_parts].compact.join(" ").downcase.squish
   end
 
   def ensure_alpha

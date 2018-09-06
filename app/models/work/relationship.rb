@@ -25,18 +25,6 @@ class Work::Relationship < ApplicationRecord
   self.table_name = "work_relationships"
 
   #############################################################################
-  # CONCERNING: Target.
-  #############################################################################
-
-  concerning :TargetAssociation do
-    included do
-      belongs_to :target, class_name: "Work", foreign_key: :target_id
-
-      validates :target, presence: true
-    end
-  end
-
-  #############################################################################
   # CONCERNING: Source.
   #############################################################################
 
@@ -57,6 +45,18 @@ class Work::Relationship < ApplicationRecord
       return unless source_id == target_id
 
       self.errors.add(:source_id, :same_as_target)
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Target.
+  #############################################################################
+
+  concerning :TargetAssociation do
+    included do
+      belongs_to :target, class_name: "Work", foreign_key: :target_id
+
+      validates :target, presence: true
     end
   end
 

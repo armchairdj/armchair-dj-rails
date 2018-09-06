@@ -16,22 +16,9 @@
 #
 
 class Link < ApplicationRecord
-
-  #############################################################################
-  # CONCERNING: Polymorphism.
-  #############################################################################
-
   belongs_to :linkable, polymorphic: true
 
-  #############################################################################
-  # CONCERNING: URL.
-  #############################################################################
-
-  validates :url, presence: true, urlness: true
-
-  #############################################################################
-  # CONCERNING: Description.
-  #############################################################################
-
+  validates :url,         urlness: true
+  validates :url,         presence: true
   validates :description, presence: true
 end

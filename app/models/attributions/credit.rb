@@ -30,34 +30,40 @@
 class Credit < Attribution
 
   #############################################################################
+  # CONCERNING: Role.
+  #############################################################################
+
+  concerning :RoleAssociation do
+    def role_name
+      "Creator"
+    end
+  end
+
+  #############################################################################
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work, inverse_of: :credits
+  include Listable
+
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :credits
+
+      acts_as_listable(:work)
+    end
+  end
 
   #############################################################################
   # CONCERNING: Creator.
   #############################################################################
 
-  belongs_to :creator, inverse_of: :credits
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :credits
 
-  validates :creator_id, uniqueness: { scope: [:work_id] }
-
-  #############################################################################
-  # Concerning: Role.
-  #############################################################################
-
-  def role_name
-    "Creator"
+      validates :creator_id, uniqueness: { scope: [:work_id] }
+    end
   end
-
-  #############################################################################
-  # Concerning: Acts As List.
-  #############################################################################
-
-  include Listable
-
-  acts_as_listable(:work)
 
   #############################################################################
   # CONCERNING: Ginsu.

@@ -38,6 +38,18 @@ class Work::Milestone < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Posts.
+  #############################################################################
+
+  concerning :PostAssociation do
+    included do
+      has_many :playlists, through: :work
+      has_many :mixtapes,  through: :work
+      has_many :reviews,   through: :work
+    end
+  end
+
+  #############################################################################
   # CONCERNING: Activity.
   #############################################################################
 
@@ -73,18 +85,6 @@ class Work::Milestone < ApplicationRecord
       validates :year, presence: true, yearness: true
 
       scope :sorted, -> { order(:year) }
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
-
-  concerning :PostAssociation do
-    included do
-      has_many :playlists, through: :work
-      has_many :mixtapes,  through: :work
-      has_many :reviews,   through: :work
     end
   end
 

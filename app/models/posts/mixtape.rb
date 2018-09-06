@@ -44,7 +44,7 @@ class Mixtape < Post
   # CONCERNING: STI Subclass.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :Subclassed do
     class_methods do
       def for_list
         super.includes(:playlist).references(:playlist)
@@ -70,8 +70,6 @@ class Mixtape < Post
 
       validates :playlist, presence: true
 
-      delegate :alpha_parts, to: :playlist, allow_nil: true
-
       has_many :tracks, through: :playlist
       has_many :works,  through: :tracks
 
@@ -84,6 +82,16 @@ class Mixtape < Post
 
     def sluggable_parts
       [ playlist.try(:title) ]
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alphabetization do
+    included do
+      delegate :alpha_parts, to: :playlist, allow_nil: true
     end
   end
 end

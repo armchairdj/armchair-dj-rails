@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 concern :Linkable do
-  MAX_LINKS_AT_ONCE = 5.freeze
-
   included do
     has_many :links, as: :linkable, dependent: :destroy
 
@@ -12,6 +10,6 @@ concern :Linkable do
   end
 
   def prepare_links
-    MAX_LINKS_AT_ONCE.times { self.links.build }
+    5.times { self.links.build }
   end
 end

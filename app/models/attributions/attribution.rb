@@ -35,26 +35,19 @@ class Attribution < ApplicationRecord
   # CONCERNING: STI subclass contract.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :Subclassable do
     included do
       validates :type, presence: true
     end
   end
 
   #############################################################################
-  # CONCERNING: Alpha.
+  # CONCERNING: Role.
   #############################################################################
 
-  include Alphabetizable
-
-  concerning :Alphabetization do
+  concerning :RoleAssociation do
     included do
-      delegate :alpha_parts, to: :work,    allow_nil: true, prefix: true
-      delegate :alpha_parts, to: :creator, allow_nil: true, prefix: true
-
-      def alpha_parts
-        [work_alpha_parts, role_name, creator_alpha_parts]
-      end
+      belongs_to :role, required: false
     end
   end
 
@@ -81,8 +74,23 @@ class Attribution < ApplicationRecord
       belongs_to :creator, inverse_of: :attributions
 
       validates :creator, presence: true
+    end
+  end
 
-      belongs_to :role, required: false
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  concerning :Alphabetization do
+    included do
+      delegate :alpha_parts, to: :work,    allow_nil: true, prefix: true
+      delegate :alpha_parts, to: :creator, allow_nil: true, prefix: true
+
+      def alpha_parts
+        [work_alpha_parts, role_name, creator_alpha_parts]
+      end
     end
   end
 end

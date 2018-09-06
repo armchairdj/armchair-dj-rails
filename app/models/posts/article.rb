@@ -44,7 +44,7 @@ class Article < Post
   # CONCERNING: STI Subclass.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :Subclassed do
     def display_type(plural: false)
       plural ? "Articles" : "Article"
     end
@@ -62,7 +62,13 @@ class Article < Post
     def sluggable_parts
       [ title ]
     end
+  end
 
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alphabetization do
     def alpha_parts
       [ title ]
     end

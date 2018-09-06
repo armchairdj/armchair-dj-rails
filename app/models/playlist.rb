@@ -27,41 +27,35 @@ class Playlist < ApplicationRecord
   include Authorable
 
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [title]
-  end
-
-  #############################################################################
   # CONCERNING: Title.
   #############################################################################
 
-  validates :title, presence: true
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
+  end
 
   #############################################################################
   # CONCERNING: Tracks.
   #############################################################################
 
-  has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
-    class_name: "Playlist::Track", dependent: :destroy
-
-  validates :tracks, length: { minimum: 2 }
-
-  concerning :NestedTracks do
-    MAX_TRACKS_AT_ONCE = 20.freeze
-
+  concerning :TrackAssociations do
     included do
+      has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
+        class_name: "Playlist::Track", dependent: :destroy
+
+      validates :tracks, length: { minimum: 2 }
+
+      has_many :works, through: :tracks
+
       accepts_nested_attributes_for(:tracks, allow_destroy: true,
         reject_if: proc { |attrs| attrs["work_id"].blank? }
       )
     end
 
     def prepare_tracks
-      MAX_TRACKS_AT_ONCE.times { self.tracks.build }
+      20.times { self.tracks.build }
     end
   end
 
@@ -69,33 +63,39 @@ class Playlist < ApplicationRecord
   # CONCERNING: Works.
   #############################################################################
 
-  has_many :works, through: :tracks
+  concerning :CreatorAssociations do
+    included do
+      has_many :makers,       -> { distinct }, through: :works
+      has_many :contributors, -> { distinct }, through: :works
+    end
 
-  has_many :makers,       -> { distinct }, through: :works
-  has_many :contributors, -> { distinct }, through: :works
+    def creators
+      Creator.where(id: creator_ids)
+    end
 
-  def creators
-    Creator.where(id: creator_ids)
-  end
-
-  def creator_ids
-    works.map(&:creator_ids).flatten.uniq
+    def creator_ids
+      works.map(&:creator_ids).flatten.uniq
+    end
   end
 
   #############################################################################
   # CONCERNING: Posts.
   #############################################################################
 
-  has_many :mixtapes, dependent: :nullify
+  concerning :PostAssociations do
+    included do
+      has_many :mixtapes, dependent: :nullify
 
-  has_many :reviews, through: :works
+      has_many :reviews, through: :works
+    end
 
-  def posts
-    Post.where(id: post_ids)
-  end
+    def posts
+      Post.where(id: post_ids)
+    end
 
-  def post_ids
-    reviews.ids + mixtapes.ids
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
   end
 
   #############################################################################
@@ -104,4 +104,16 @@ class Playlist < ApplicationRecord
 
   scope :for_list,  -> { includes(:author).references(:author) }
   scope :for_show,  -> { includes(:author, :tracks, :works) }
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  concerning :Alphabetization do
+    def alpha_parts
+      [title]
+    end
+  end
 end

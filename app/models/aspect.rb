@@ -18,16 +18,6 @@
 class Aspect < ApplicationRecord
 
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [human_facet, name]
-  end
-
-  #############################################################################
   # CONCERNING: Facet.
   #############################################################################
 
@@ -89,25 +79,33 @@ class Aspect < ApplicationRecord
   # CONCERNING: Works.
   #############################################################################
 
-  has_and_belongs_to_many :works, -> { distinct }
+  concerning :WorksAssociation do
+    included do
+      has_and_belongs_to_many :works, -> { distinct }
 
-  has_many :playlists,    -> { distinct }, through: :works
-  has_many :makers,       -> { distinct }, through: :works
-  has_many :contributors, -> { distinct }, through: :works
+      has_many :playlists,    -> { distinct }, through: :works
+      has_many :makers,       -> { distinct }, through: :works
+      has_many :contributors, -> { distinct }, through: :works
+    end
+  end
 
   #############################################################################
   # CONCERNING: Posts.
   #############################################################################
 
-  has_many :mixtapes, through: :works
-  has_many :reviews,  through: :works
+  concerning :PostsAssociation do
+    included do
+      has_many :mixtapes, through: :works
+      has_many :reviews,  through: :works
+    end
 
-  def posts
-    Post.where(id: post_ids)
-  end
+    def posts
+      Post.where(id: post_ids)
+    end
 
-  def post_ids
-    reviews.ids + mixtapes.ids
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
   end
 
   #############################################################################
@@ -116,4 +114,16 @@ class Aspect < ApplicationRecord
 
   scope :for_list,  -> { }
   scope :for_show,  -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  concerning :Alphabetization do
+    def alpha_parts
+      [human_facet, name]
+    end
+  end
 end

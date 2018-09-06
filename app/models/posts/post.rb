@@ -311,10 +311,9 @@ class Post < ApplicationRecord
   concerning :Editing do
     class_methods do
       def for_cms_user(user)
-        return self.none unless user && user.can_access_cms?
-        return self.all  if user.can_edit?
-
-        where(author_id: user.id)
+        return all                       if user.try(:can_edit?)
+        return where(author_id: user.id) if user.try(:can_write?)
+        return none
       end
     end
   end

@@ -42,7 +42,6 @@
 #  index_users_on_username              (username) UNIQUE
 #
 
-
 class User < ApplicationRecord
 
   #############################################################################
@@ -65,16 +64,6 @@ class User < ApplicationRecord
   #############################################################################
 
   include Linkable
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [last_name, first_name, middle_name]
-  end
 
   #############################################################################
   # CONCERNING: Roles.
@@ -169,7 +158,7 @@ class User < ApplicationRecord
   # CONCERNING: Contributing posts and playlists.
   #############################################################################
 
-  concerning :Publishing do
+  concerning :PostAssociations do
     included do
       scope :published,  -> { joins(:posts).merge(Post.published) }
       scope :for_public, -> { published }
@@ -197,4 +186,16 @@ class User < ApplicationRecord
 
   scope :for_list, -> { }
   scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  include Alphabetizable
+
+  concerning :Alphabetization do
+    def alpha_parts
+      [last_name, first_name, middle_name]
+    end
+  end
 end

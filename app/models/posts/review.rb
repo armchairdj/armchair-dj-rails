@@ -44,7 +44,7 @@ class Review < Post
   # CONCERNING: STI Subclass.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :Subclassed do
     class_methods do
       def for_list
         super.includes(:work).references(:work)
@@ -78,12 +78,21 @@ class Review < Post
       has_many :aspects,       through: :work
       has_many :milestones,    through: :work
 
-      delegate :alpha_parts,    to: :work, allow_nil: true
       delegate :display_medium, to: :work, allow_nil: true
     end
 
     def sluggable_parts
       work.try(:sluggable_parts) || []
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alphabetization do
+    included do
+      delegate :alpha_parts, to: :work, allow_nil: true
     end
   end
 end
