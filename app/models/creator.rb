@@ -125,6 +125,8 @@ class Creator < ApplicationRecord
       accepts_nested_attributes_for(:real_name_identities,
         allow_destroy: true, reject_if: :reject_real_name_identity?
       )
+
+      alias_method :pseudonym?, :secondary?
     end
 
     def prepare_real_name_identities
@@ -136,8 +138,6 @@ class Creator < ApplicationRecord
     def secondary?
       !primary?
     end
-
-    alias_method :pseudonym?, :secondary?
 
     def real_name
       real_names.first
@@ -237,6 +237,8 @@ class Creator < ApplicationRecord
       accepts_nested_attributes_for(:member_memberships,
         allow_destroy: true, reject_if: :reject_member_membership?
       )
+
+      alias_method :group?, :collective?
     end
 
     def prepare_member_memberships
@@ -246,8 +248,6 @@ class Creator < ApplicationRecord
     def collective?
       !individual?
     end
-
-    alias_method :group?, :collective?
 
   private
 
