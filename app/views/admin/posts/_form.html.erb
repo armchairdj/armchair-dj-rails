@@ -26,5 +26,11 @@
     <% end %>
   <% end %>
 
-  <%= button_group submit_button(@post) %>
+  <%= button_group do %>
+    <%= submit_button(@post) %>
+
+    <% if @post.persisted? %>
+      <%= submit_button @post, "Preview", name: "step", value: "preview", class: "tertiary" %>
+    <% end %>
+  <% end %>
 <% end %>

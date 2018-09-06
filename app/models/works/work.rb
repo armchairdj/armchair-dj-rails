@@ -265,7 +265,7 @@ class Work < ApplicationRecord
   # CONCERNING: Target relationships.
   #############################################################################
 
-  concerning :TargetRelationships do
+  concerning :TargetAssociations do
     included do
       has_many :target_relationships, class_name: "Work::Relationship",
         foreign_key: :source_id, inverse_of: :source, dependent: :destroy

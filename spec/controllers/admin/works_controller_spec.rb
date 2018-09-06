@@ -35,6 +35,7 @@ RSpec.describe Admin::WorksController do
 
     describe "POST #create" do
       let!(:source_work) { create(:junior_boys_like_a_child) }
+      let!(:target_work) { create(:junior_boys_like_a_child_c2_remix_re_edit) }
 
       let(:initial_params) { attributes_for(:work, medium: "Song") }
 
@@ -42,6 +43,9 @@ RSpec.describe Admin::WorksController do
         attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").merge(
           source_relationships_attributes: {
             "0" => { connection: "version_of", source_id: source_work.id }
+          },
+          target_relationships_attributes: {
+            "0" => { connection: "version_of", target_id: target_work.id }
           }
         )
       end
@@ -64,7 +68,7 @@ RSpec.describe Admin::WorksController do
         subject { post :create, params: { work: max_params } }
 
         it { expect { subject }.to change(Work,               :count).by(1) }
-        it { expect { subject }.to change(Work::Relationship, :count).by(1) }
+        it { expect { subject }.to change(Work::Relationship, :count).by(2) }
         it { expect { subject }.to change(Work::Milestone,    :count).by(1) }
         it { expect { subject }.to change(Credit,             :count).by(1) }
         it { expect { subject }.to change(Contribution,       :count).by(1) }

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # Module to include or extend when you want to call URL helpers
 # or polymorphic route helpers in Plain Old Ruby Objects.
-# - include UrlHelpers to use in instance interface.
-# - extend UrlHelpers to use in class interface.
+# - include to use in instance interface.
+# - extend to use in class interface.
 
 module UrlHelpers
   include Rails.application.routes.url_helpers

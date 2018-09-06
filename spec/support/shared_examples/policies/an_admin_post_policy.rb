@@ -12,6 +12,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to raise_not_authorized_for(:index   ) }
     it { is_expected.to raise_not_authorized_for(:show    ) }
+    it { is_expected.to raise_not_authorized_for(:preview ) }
     it { is_expected.to raise_not_authorized_for(:new     ) }
     it { is_expected.to raise_not_authorized_for(:create  ) }
     it { is_expected.to raise_not_authorized_for(:edit    ) }
@@ -26,6 +27,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to raise_not_authorized_for(:index   ) }
     it { is_expected.to raise_not_authorized_for(:show    ) }
+    it { is_expected.to raise_not_authorized_for(:preview ) }
     it { is_expected.to raise_not_authorized_for(:new     ) }
     it { is_expected.to raise_not_authorized_for(:create  ) }
     it { is_expected.to raise_not_authorized_for(:edit    ) }
@@ -42,6 +44,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to permit_action(:show    ) }
     it { is_expected.to permit_action(:new     ) }
     it { is_expected.to permit_action(:create  ) }
+    it { is_expected.to permit_action(:preview ) }
 
     it { is_expected.to forbid_action(:edit    ) }
     it { is_expected.to forbid_action(:update  ) }
@@ -54,6 +57,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
       it { is_expected.to permit_action(:index   ) }
       it { is_expected.to permit_action(:show    ) }
+      it { is_expected.to permit_action(:preview ) }
       it { is_expected.to permit_action(:new     ) }
       it { is_expected.to permit_action(:create  ) }
       it { is_expected.to permit_action(:edit    ) }
@@ -78,6 +82,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to permit_action(:index   ) }
     it { is_expected.to permit_action(:show    ) }
+    it { is_expected.to permit_action(:preview ) }
     it { is_expected.to permit_action(:new     ) }
     it { is_expected.to permit_action(:create  ) }
     it { is_expected.to permit_action(:edit    ) }
@@ -101,6 +106,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to permit_action(:index   ) }
     it { is_expected.to permit_action(:show    ) }
+    it { is_expected.to permit_action(:preview ) }
     it { is_expected.to permit_action(:new     ) }
     it { is_expected.to permit_action(:create  ) }
     it { is_expected.to permit_action(:edit    ) }
@@ -124,6 +130,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to permit_action(:index   ) }
     it { is_expected.to permit_action(:show    ) }
+    it { is_expected.to permit_action(:preview ) }
     it { is_expected.to permit_action(:new     ) }
     it { is_expected.to permit_action(:create  ) }
     it { is_expected.to permit_action(:edit    ) }

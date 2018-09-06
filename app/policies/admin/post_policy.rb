@@ -18,4 +18,8 @@ class Admin::PostPolicy < Admin::BasePolicy
   def autosave?
     update? && record.unpublished?
   end
+
+  def preview?
+    show?
+  end
 end

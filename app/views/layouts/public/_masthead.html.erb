@@ -13,7 +13,7 @@
         <% else %>
           <%= content_tag(:h1, link_to(t("site.name_html"), posts_path, title: "back to homepage")) %>
         <% end %>
-        <%= content_tag(:h2, I18n.t("site.tagline_html")) %>
+        <%= content_tag(:h2, I18n.t("site.tagline_html").html_safe) %>
       <% end %>
     <% end %>
   <% end %>
