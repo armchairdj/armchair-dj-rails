@@ -44,9 +44,6 @@ class Admin::PlaylistsController < Ginsu::Controller
 
   # POST /admin/playlists/1/reorder_tracks
   def reorder_tracks
-    find_instance
-    authorize @playlist, :update?
-
     Playlist::Track.reorder_for!(@playlist, params[:track_ids])
 
     render json: {}, status: :ok

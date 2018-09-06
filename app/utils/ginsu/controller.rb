@@ -22,18 +22,16 @@ class Ginsu::Controller < ApplicationController
     :create
   ]
 
-  before_action :find_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
+  before_action :find_instance, except: [
+    :index,
+    :new,
+    :create
   ]
 
-  before_action :authorize_instance, only: [
-    :show,
-    :edit,
-    :update,
-    :destroy
+  before_action :authorize_instance, except: [
+    :index,
+    :new,
+    :create
   ]
 
   before_action :prepare_form, only: [
@@ -63,6 +61,10 @@ class Ginsu::Controller < ApplicationController
 
 private
 
+  #############################################################################
+  # Find & build.
+  #############################################################################
+
   def build_collection
     @collection = Ginsu::Collection.new(
       policy_scope(@model_class).for_list,
@@ -89,6 +91,10 @@ private
     instance_variable_set(:"@#{controller_name.singularize}", @instance)
   end
 
+  #############################################################################
+  # Authorize.
+  #############################################################################
+
   def authorize_instance
     authorize @instance
   end
@@ -105,12 +111,20 @@ private
     super([:admin, record], query)
   end
 
+  #############################################################################
+  # Rendering.
+  #############################################################################
+
   def determine_layout
     "admin"
   end
 
   def prepare_form; end
   def prepare_show; end
+
+  #############################################################################
+  # Redirects.
+  #############################################################################
 
   def collection_path
     polymorphic_path([:admin, @model_class])

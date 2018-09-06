@@ -50,9 +50,6 @@ class Admin::WorksController < Ginsu::Controller
 
   # POST /admin/works/1/reorder_credits
   def reorder_credits
-    find_instance
-    authorize @work, :update?
-
     Credit.reorder_for!(@work, params[:credit_ids])
 
     render json: {}, status: :ok

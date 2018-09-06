@@ -45,9 +45,6 @@ class Admin::Posts::BaseController < Ginsu::Controller
 
   # PATCH/PUT /admin/{collection}/1/autosave.json
   def autosave
-    find_instance
-    authorize_instance
-
     @instance.attributes = post_params_for_autosave
 
     @instance.save!(validate: false)
