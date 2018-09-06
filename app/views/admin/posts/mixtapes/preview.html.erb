@@ -1,0 +1,23 @@
+<%
+  @title = ["Preview Mixtape", mixtape_title(@mixtape)]
+
+  deck = if @mixtape.published?
+    "This is how the post looks on the site."
+  else
+    "This is how the post will look on the site when published"
+  end
+%>
+
+<%= render "admin/shared/header", action: :edit, instance: @mixtape,
+  headline: @title.first,
+  deck:     deck
+%>
+
+<%= render "admin/posts/tabs", selected_tab: :preview do %>
+  <% content_for :post_preview do %>
+    <%= render "posts/mixtapes/show" %>
+  <% end %>
+
+  <%= content_for :post_header %>
+  <%= content_for :post_preview %>
+<% end %>

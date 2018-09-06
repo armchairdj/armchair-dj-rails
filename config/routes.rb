@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     match "autosave", on: :member, action: :autosave, via: [:patch, :put]
   end
 
+  concern :previewable do
+    match "preview", on: :member, action: :preview, via: [:get]
+  end
+
   #############################################################################
   # USERS.
   #############################################################################
@@ -91,9 +95,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     scope module: :posts do
-      resources :articles, concerns: [:paginatable, :autosaveable]
-      resources :reviews,  concerns: [:paginatable, :autosaveable]
-      resources :mixtapes, concerns: [:paginatable, :autosaveable]
+      resources :articles, concerns: [:paginatable, :previewable, :autosaveable]
+      resources :reviews,  concerns: [:paginatable, :previewable, :autosaveable]
+      resources :mixtapes, concerns: [:paginatable, :previewable, :autosaveable]
     end
 
     resources :users,    concerns: :paginatable

@@ -2,20 +2,9 @@
   @title = mixtape_title(@mixtape)
 %>
 
-<%= content_for(:header) do %>
-  <%= content_tag(:header, class: "post-header") do %>
-    <%= content_tag(:h1, @mixtape.playlist.title) %>
-  <% end %>
+<%= render "show" %>
+
+<% content_for :header do %>
+  <%= content_for :post_header %>
 <% end %>
 
-<%= post_body @mixtape %>
-
-<%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_author_of(@mixtape) %> on <%= post_published_date(@mixtape) %>
-<% end %>
-
-<%= content_tag(:aside, class: "post-tags") do %>
-  <%= render "shared/playback/tags", tags: @mixtape.tags %>
-<% end %>
-
-<%= render "shared/playback/links", links: @mixtape.links %>

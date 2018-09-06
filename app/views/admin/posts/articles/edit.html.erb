@@ -13,4 +13,6 @@
   deck:     deck
 %>
 
-<%= render "form" %>
+<%= render "admin/posts/tabs", selected_tab: :edit do %>
+  <%= render "form" %>
+<% end %>

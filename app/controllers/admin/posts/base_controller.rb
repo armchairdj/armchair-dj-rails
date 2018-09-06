@@ -28,7 +28,7 @@ class Admin::Posts::BaseController < Ginsu::Controller
 
     authorize_instance
 
-    return handle_preview if params[:step] == "preview"
+    return render_preview if params[:step] == "preview"
 
     flash_message = update_message
 
@@ -41,6 +41,12 @@ class Admin::Posts::BaseController < Ginsu::Controller
         format.json { render json: @instance.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # PATCH/PUT /admin/{collection}/1/preview
+  # PATCH/PUT /admin/{collection}/1/preview.json
+  def preview
+    render_preview
   end
 
   # PATCH/PUT /admin/{collection}/1/autosave.json
@@ -142,8 +148,8 @@ private
     @tags = Tag.alpha
   end
 
-  def handle_preview
-    render "posts/#{@instance.model_name.collection}/show"
+  def render_preview
+    render :preview
   end
 
   #############################################################################

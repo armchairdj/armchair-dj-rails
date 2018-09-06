@@ -2,6 +2,18 @@
 
 module PostsHelper
 
+  def preview_admin_post_path(post)
+    return preview_admin_article_path(post) if post.is_a?(Article)
+    return preview_admin_review_path(post)  if post.is_a?(Review)
+    return preview_admin_mixtape_path(post) if post.is_a?(Mixtape)
+  end
+
+  def edit_admin_post_path(post)
+    return edit_admin_article_path(post) if post.is_a?(Article)
+    return edit_admin_review_path(post)  if post.is_a?(Review)
+    return edit_admin_mixtape_path(post) if post.is_a?(Mixtape)
+  end
+
   def link_to_post(post, **opts)
     return link_to_article(post, **opts) if post.is_a?(Article)
     return link_to_review( post, **opts) if post.is_a?(Review)

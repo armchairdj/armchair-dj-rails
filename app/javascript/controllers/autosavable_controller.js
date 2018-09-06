@@ -77,9 +77,7 @@ export default class extends BaseController {
   alertUserOfSuccess() {
     const $body = $("body");
 
-    $body.fadeTo(400, 0.5, function () {
-      $body.fadeTo(400, 1)
-    });
+    $body.fadeTo(400, 0.5, function () { $body.fadeTo(400, 1) });
   }
 
   ajaxError(xhr, status, error) {

@@ -16,6 +16,10 @@ RSpec.describe Admin::Posts::MixtapesController do
       expect(get: "/admin/mixtapes/1").to route_to("admin/posts/mixtapes#show", id: "1")
     end
 
+    it "#preview" do
+      expect(get: "/admin/reviews/1/preview").to route_to("admin/posts/reviews#preview", id: "1")
+    end
+
     it "#new" do
       expect(get: "/admin/mixtapes/new").to route_to("admin/posts/mixtapes#new")
     end

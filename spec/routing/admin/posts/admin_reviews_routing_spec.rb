@@ -16,6 +16,10 @@ RSpec.describe Admin::Posts::ReviewsController do
       expect(get: "/admin/reviews/1").to route_to("admin/posts/reviews#show", id: "1")
     end
 
+    it "#preview" do
+      expect(get: "/admin/reviews/1/preview").to route_to("admin/posts/reviews#preview", id: "1")
+    end
+
     it "#new" do
       expect(get: "/admin/reviews/new").to route_to("admin/posts/reviews#new")
     end
