@@ -29,9 +29,10 @@
   <%= button_group do %>
     <%= submit_button(@post) %>
 
-    <% if @post.persisted? %>
+    <% if false %>
       <%= submit_button @post, "Preview", name: "step", value: "preview", class: "tertiary",
-        "data-controller": "previewable", "data-action": "previewable#preview"
+        "data-controller": "previewable",
+        "data-action":     "previewable#preview"
       %>
     <% end %>
   <% end %>

@@ -126,6 +126,19 @@ module AdminHelper
     admin_icon_link(icon, path, title, desc, class: "public-view")
   end
 
+  def admin_preview_link(instance)
+    return unless instance.is_a?(Post)
+    return unless instance.unpublished?
+
+    path = preview_admin_post_path(instance)
+
+    title = "preview #{instance.model_name.singular} as it will appear on site"
+    desc  = "preview icon"
+    icon  = "link-broken"
+
+    admin_icon_link(icon, path, title, desc, class: "public-view")
+  end
+
   def should_link_to_admin_users?
     Pundit.policy!(current_user, [:admin, User]).index?
   end

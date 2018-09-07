@@ -6,9 +6,10 @@ RSpec.shared_examples "an_admin_post_controller" do
   let(:param_key) { model_class.model_name.param_key.to_sym }
 
   let(:templates) { {
-    show: "admin/posts/#{view_path}/show",
-    new:  "admin/posts/#{view_path}/new",
-    edit: "admin/posts/#{view_path}/edit",
+    show:    "admin/posts/#{view_path}/show",
+    new:     "admin/posts/#{view_path}/new",
+    edit:    "admin/posts/#{view_path}/edit",
+    preview: "admin/posts/#{view_path}/preview",
   } }
 
   def edit_path(instance)
@@ -319,6 +320,8 @@ RSpec.shared_examples "an_admin_post_controller" do
         it { is_expected.to render_bad_request }
       end
     end
+
+    pending "PUT #preview"
 
     describe "DELETE #destroy" do
       let!(:instance) { create_minimal_instance }

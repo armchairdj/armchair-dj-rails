@@ -26,10 +26,6 @@ class Admin::Posts::BaseController < Ginsu::Controller
   def update
     @instance.attributes = post_params_for_update
 
-    authorize_instance
-
-    return render_preview if params[:step] == "preview"
-
     flash_message = update_message
 
     respond_to do |format|
@@ -43,11 +39,9 @@ class Admin::Posts::BaseController < Ginsu::Controller
     end
   end
 
-  # PATCH/PUT /admin/{collection}/1/preview
-  # PATCH/PUT /admin/{collection}/1/preview.json
-  def preview
-    render_preview
-  end
+  # GET /admin/{collection}/1/preview
+  # GET /admin/{collection}/1/preview.json
+  def preview; end
 
   # PATCH/PUT /admin/{collection}/1/autosave.json
   def autosave
@@ -146,10 +140,6 @@ private
     @instance.prepare_links
 
     @tags = Tag.alpha
-  end
-
-  def render_preview
-    render :preview
   end
 
   #############################################################################
