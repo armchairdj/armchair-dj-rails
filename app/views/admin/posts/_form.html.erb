@@ -8,7 +8,7 @@
 
 <%= content_tag(:p, class: "form-instructions") do %>
   <% if @post.new_record? %>
-    <%= I18n.t("content.posts.new.instructions.#{controller_name}") %>
+    <%= I18n.t("content.posts.new.instructions.#{@view_path}") %>
   <% elsif @post.published? %>
     <%= I18n.t("content.posts.edit.instructions.published") %>
   <% else %>
@@ -22,7 +22,7 @@
   <%= form_inputs do %>
     <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
-        <%= render "admin/posts/#{controller_name}/extra_fields", f: f %>
+        <%= render "admin/posts/#{@view_path}/extra_fields", f: f %>
 
         <% unless @post.new_record? %>
           <%= render "admin/posts/standard_fields", f: f %>

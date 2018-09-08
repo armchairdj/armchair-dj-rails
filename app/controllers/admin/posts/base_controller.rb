@@ -3,6 +3,8 @@
 class Admin::Posts::BaseController < Ginsu::Controller
   before_action :require_ajax, only: :autosave
 
+  before_action :set_view_path
+
   # GET /admin/{collection}/new
   def new
     render_new
@@ -143,6 +145,10 @@ private
   #############################################################################
   # Rendering.
   #############################################################################
+
+  def set_view_path
+    @view_path = controller_name
+  end
 
   def prepare_form
     return unless @instance.persisted?

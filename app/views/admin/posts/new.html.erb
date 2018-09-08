@@ -1,5 +1,5 @@
 <%
-  @title = I18n.t("content.posts.new.title.#{controller_name}")
+  @title = I18n.t("content.posts.new.title.#{@view_path}")
 %>
 
 <%= render "admin/shared/header", action: :new, headline: @title %>

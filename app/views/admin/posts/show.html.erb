@@ -1,6 +1,6 @@
 <%
   @title = [
-    I18n.t("content.posts.show.title.#{controller_name}"),
+    I18n.t("content.posts.show.title.#{@view_path}"),
     @post.display_author,
     post_title(@post)
   ]
@@ -10,7 +10,7 @@
   headline: @title.first
 %>
 
-<%= render "admin/posts/#{controller_name}/show" %>
+<%= render "admin/posts/#{@view_path}/show" %>
 
 <%= admin_section do %>
   <%= post_body @post %>

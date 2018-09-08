@@ -1,9 +1,9 @@
 <%
-  @title = [I18n.t("content.posts.preview.title.#{controller_name}"), post_title(@post)]
+  @title = [I18n.t("content.posts.preview.title.#{@view_path}"), post_title(@post)]
 %>
 
 <% content_for :post_preview do %>
-  <%= render "posts/#{controller_name}/show" %>
+  <%= render "posts/#{@view_path}/show" %>
 <% end %>
 
 <%= render "admin/shared/header", action: :preview, instance: @post,
