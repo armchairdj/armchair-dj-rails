@@ -29,6 +29,12 @@
       <%= admin_update_link  instance     %>
       <%= admin_destroy_link instance     %>
       <%= admin_list_link    @model_class %>
+    <% when :preview %>
+      <%= admin_public_link  instance     %>
+      <%= admin_view_link    instance     %>
+      <%= admin_update_link  instance     %>
+      <%= admin_destroy_link instance     %>
+      <%= admin_list_link    @model_class %>
     <% end %>
   <% end %>
 <% end %>

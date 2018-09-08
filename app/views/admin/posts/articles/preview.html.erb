@@ -13,11 +13,9 @@
   deck:     deck
 %>
 
-<%= render "admin/posts/tabs", selected_tab: :preview do %>
-  <% content_for :post_preview do %>
-    <%= render "posts/articles/show" %>
-  <% end %>
-
-  <%= content_for :post_header %>
-  <%= content_for :post_preview %>
+<% content_for :post_preview do %>
+  <%= render "posts/articles/show" %>
 <% end %>
+
+<%= content_for :post_header %>
+<%= content_for :post_preview %>

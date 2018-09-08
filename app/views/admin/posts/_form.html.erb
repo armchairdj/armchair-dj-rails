@@ -6,6 +6,14 @@
   end
 %>
 
+<%= content_tag(:p, class: "autosave-instructions") do %>
+  <% if @post.published? %>
+    <%= I18n.t("content.posts.edit.autosave.published") %>
+  <% else %>
+    <%= I18n.t("content.posts.edit.autosave.unpublished") %>
+  <% end %>
+<% end %>
+
 <%= simple_form_for([:admin, @post], html: html_opts) do |f| %>
   <%= f.error_notification %>
 
