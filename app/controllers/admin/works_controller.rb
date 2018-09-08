@@ -15,7 +15,7 @@ class Admin::WorksController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.works.success.create") }
         format.json { render :show, status: :created, location: admin_work_url(@work) }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -31,7 +31,7 @@ class Admin::WorksController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.works.success.update") }
         format.json { render :show, status: :ok, location: admin_work_url(@work) }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @work.errors, status: :unprocessable_entity }
       end
     end
@@ -63,7 +63,7 @@ private
 
   def handle_medium
     respond_to do |format|
-      format.html { prepare_form; render :new }
+      format.html { render_new }
       format.json { render json: @work.errors, status: :unprocessable_entity }
     end
   end

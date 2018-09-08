@@ -12,7 +12,7 @@ class Admin::UsersController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.users.success.create") }
         format.json { render :show, status: :created, location: admin_user_url(@user) }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -28,7 +28,7 @@ class Admin::UsersController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.users.success.update") }
         format.json { render :show, status: :ok, location: admin_user_url(@user) }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

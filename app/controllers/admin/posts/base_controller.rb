@@ -3,7 +3,15 @@
 class Admin::Posts::BaseController < Ginsu::Controller
   before_action :require_ajax, only: :autosave
 
-  skip_before_action :authorize_instance, only: [:update]
+  # GET /admin/{collection}/new
+  def new
+    render_new
+  end
+
+  # GET /admin/{collection}/1/edit
+  def edit
+    render_edit
+  end
 
   # POST /admin/{collection}
   # POST /admin/{collection}.json
@@ -15,7 +23,7 @@ class Admin::Posts::BaseController < Ginsu::Controller
         format.html { redirect_to edit_path, success: create_message }
         format.json { render :show, status: :created, location: show_path }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
       end
     end
@@ -33,7 +41,7 @@ class Admin::Posts::BaseController < Ginsu::Controller
         format.html { redirect_to show_path, success: flash_message }
         format.json { render :show, status: :created, location: show_path }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @instance.errors, status: :unprocessable_entity }
       end
     end
@@ -41,7 +49,9 @@ class Admin::Posts::BaseController < Ginsu::Controller
 
   # GET /admin/{collection}/1/preview
   # GET /admin/{collection}/1/preview.json
-  def preview; end
+  def preview
+    render_preview
+  end
 
   # PATCH/PUT /admin/{collection}/1/autosave.json
   def autosave
@@ -140,6 +150,32 @@ private
     @instance.prepare_links
 
     @tags = Tag.alpha
+  end
+
+  def render_index
+    render "admin/posts/index"
+  end
+
+  def render_show
+    prepare_show
+
+    render "admin/posts/show"
+  end
+
+  def render_new
+    prepare_form
+
+    render "admin/posts/new"
+  end
+
+  def render_edit
+    prepare_form
+
+    render "admin/posts/edit"
+  end
+
+  def render_preview
+    render "admin/posts/preview"
   end
 
   #############################################################################

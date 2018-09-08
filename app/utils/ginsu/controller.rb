@@ -34,30 +34,29 @@ class Ginsu::Controller < ApplicationController
     :create
   ]
 
-  before_action :prepare_form, only: [
-    :new,
-    :edit
-  ]
-
-  before_action :prepare_show, only: [
-    :show
-  ]
-
   after_action :verify_authorized
 
   # GET /{collection}
   # GET /{collection}.json
-  def index; end
+  def index
+    render_index
+  end
 
   # GET /{collection}/1
   # GET /{collection}/1.json
-  def show; end
+  def show
+    render_show
+  end
 
   # GET /{collection}/new
-  def new; end
+  def new
+    render_new
+  end
 
   # GET /{collection}/1/edit
-  def edit; end
+  def edit
+    render_edit
+  end
 
 private
 
@@ -117,6 +116,28 @@ private
 
   def determine_layout
     "admin"
+  end
+
+  def render_index
+    render :index
+  end
+
+  def render_show
+    prepare_show
+
+    render :show
+  end
+
+  def render_new
+    prepare_form
+
+    render :new
+  end
+
+  def render_edit
+    prepare_form
+
+    render :edit
   end
 
   def prepare_form; end

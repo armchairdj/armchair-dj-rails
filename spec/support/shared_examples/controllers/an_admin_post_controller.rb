@@ -2,14 +2,13 @@
 
 RSpec.shared_examples "an_admin_post_controller" do
   let(:model_class) { described_class.controller_name.classify.constantize }
-  let(:view_path) { described_class.controller_name.to_sym }
-  let(:param_key) { model_class.model_name.param_key.to_sym }
+  let(:param_key  ) { model_class.model_name.param_key.to_sym }
 
   let(:templates) { {
-    show:    "admin/posts/#{view_path}/show",
-    new:     "admin/posts/#{view_path}/new",
-    edit:    "admin/posts/#{view_path}/edit",
-    preview: "admin/posts/#{view_path}/preview",
+    show:    "admin/posts/show",
+    new:     "admin/posts/new",
+    edit:    "admin/posts/edit",
+    preview: "admin/posts/preview",
   } }
 
   def edit_path(instance)
@@ -21,7 +20,7 @@ RSpec.shared_examples "an_admin_post_controller" do
   end
 
   def collection_path
-    controller.send(:"admin_#{view_path}_path")
+    controller.send(:"admin_#{described_class.controller_name}_path")
   end
 
   let(:min_create_params) { attributes_for_minimal_instance.except(:author_id) }
@@ -53,7 +52,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     login_root
 
     describe "GET #index" do
-      it_behaves_like "a_ginsu_index"
+      it_behaves_like "a_ginsu_index", "admin/posts/index"
     end
 
     describe "GET #show" do

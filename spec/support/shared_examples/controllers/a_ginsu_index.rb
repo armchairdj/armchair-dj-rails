@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "a_ginsu_index" do
+RSpec.shared_examples "a_ginsu_index" do |template_override|
+
   let(:param_key  ) { described_class.controller_name.to_sym }
-  let(:template   ) { "#{described_class.controller_path}/index" }
+  let(:template   ) { template_override || "#{described_class.controller_path}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }
 
   let(:paginated) { model_class.where(id: ids_for_minimal_list(3)) }

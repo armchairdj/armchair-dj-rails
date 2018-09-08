@@ -58,31 +58,31 @@ concern :Errorable do
       respond_with_error(500, :internal_server_error, exception)
     end
 
-    def respond_with_error(code, template, exception = nil)
-      render_error_response(code, template)
+    def respond_with_error(status, template, exception = nil)
+      render_error_response(status, template)
 
-      log_error(code, exception)
+      log_error(exception, status)
     end
 
-    def render_error_response(code, template)
-      return render_error_json(code) if request.xhr?
+    def render_error_response(status, template)
+      return render_error_json(status) if request.xhr?
 
       respond_to do |format|
-        format.html { render_error_template(code, template) }
-        format.json { render_error_json(code) }
+        format.html { render_error_template(status, template) }
+        format.json { render_error_json(status) }
       end
     end
 
-    def render_error_template(code, template)
+    def render_error_template(status, template)
       # errors/bad_request
       # errors/internal_server_error
       # errors/not_found
       # errors/permission_denied
-      render template: "errors/#{template}", status: code, layout: "error"
+      render template: "errors/#{template}", status: status, layout: "error"
     end
 
-    def render_error_json(code)
-      render json: {}, status: code
+    def render_error_json(status)
+      render json: {}, status: status
     end
 
   private
@@ -99,14 +99,32 @@ concern :Errorable do
       redirect_to(new_user_session_path, notice: notice)
     end
 
-    def log_error(code, exception = nil)
-      parts = [error_id(code), url_str, user_str, exception.try(:message)]
-
-      logger.error parts.compact.join(" :: ")
+    def log_error(exception = nil, status = nil, logger_method = :error)
+      logger.send(logger_method, logger_message(status, exception))
     end
 
-    def error_id(code)
-      case code
+    def logger_message(status, exception)
+      summary = loggable_summary(status, exception)
+
+      if exception.present? && status == 500
+        exception.backtrace.unshift(summary).join("\n")
+      else
+        summary
+      end
+    end
+
+    def loggable_summary(status, exception)
+      [
+        loggable_token(status),
+        loggable_verb,
+        loggable_url,
+        loggable_user,
+        exception.try(:message),
+      ].compact.join(" :: ")
+    end
+
+    def loggable_token(status)
+      case status
       when 403; "FORBIDDEN_ERROR (403)"
       when 404; "NOT_FOUND_ERROR (404)"
       when 422; "BAD_REQUEST_ERROR (422)"
@@ -115,14 +133,22 @@ concern :Errorable do
       end
     end
 
-    def url_str
+    def loggable_verb
+      request.try(:request_method) || "unknown verb"
+    end
+
+    def loggable_url
       request.try(:url) || "unknown URL"
     end
 
-    def user_str
+    def loggable_user
       return "guest user" unless user_signed_in?
 
-      "User ##{current_user.id} [#{current_user.email}]"
+      id    = current_user.try(:id)    || "unknown"
+      role  = current_user.try(:role)  || "unknown"
+      email = current_user.try(:email) || "unknown"
+
+      "{ id: #{id}, email: #{email}, role: #{role} }"
     end
   end
 end

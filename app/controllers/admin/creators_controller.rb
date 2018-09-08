@@ -11,7 +11,7 @@ class Admin::CreatorsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.creators.success.create") }
         format.json { render :show, status: :created, location: admin_creator_url(@creator) }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end
@@ -25,7 +25,7 @@ class Admin::CreatorsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.creators.success.update") }
         format.json { render :show, status: :ok, location: admin_creator_url(@creator) }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @creator.errors, status: :unprocessable_entity }
       end
     end

@@ -10,7 +10,7 @@ class Admin::AspectsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.aspects.success.create") }
         format.json { render :show, status: :created, location: admin_aspect_url(@aspect) }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @aspect.errors, status: :unprocessable_entity }
       end
     end
@@ -24,7 +24,7 @@ class Admin::AspectsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.aspects.success.update") }
         format.json { render :show, status: :ok, location: admin_aspect_url(@aspect) }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @aspect.errors, status: :unprocessable_entity }
       end
     end

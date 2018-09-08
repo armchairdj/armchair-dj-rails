@@ -11,7 +11,7 @@ class Admin::PlaylistsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.playlists.success.create") }
         format.json { render :show, status: :created, location: admin_playlist_url(@playlist) }
       else
-        format.html { prepare_form; render :new }
+        format.html { render_new }
         format.json { render json: @playlist.errors, status: :unprocessable_entity }
       end
     end
@@ -25,7 +25,7 @@ class Admin::PlaylistsController < Ginsu::Controller
         format.html { redirect_to show_path, success: I18n.t("admin.flash.playlists.success.update") }
         format.json { render :show, status: :ok, location: admin_playlist_url(@playlist) }
       else
-        format.html { prepare_form; render :edit }
+        format.html { render_edit }
         format.json { render json: @playlist.errors, status: :unprocessable_entity }
       end
     end
