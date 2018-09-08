@@ -1,9 +1,0 @@
-<%
-  @title = [I18n.t("content.posts.edit.title.article"), article_title(@article)]
-%>
-
-<%= render "admin/shared/header", action: :edit, instance: @article,
-  headline: @title.first
-%>
-
-<%= render "form" %>

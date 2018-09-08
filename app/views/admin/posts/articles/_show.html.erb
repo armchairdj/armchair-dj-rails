@@ -1,16 +1,8 @@
-<%
-  @title = ["View Mixtape", @mixtape.display_author, mixtape_title(@mixtape)]
-%>
-
-<%= render "admin/shared/header", action: :show, instance: @mixtape,
-  headline: @title.first
-%>
-
 <%= render "admin/shared/show",
-  record: @mixtape,
+  record: @post,
   rows: [
     { name: "ID",       method: :id },
-    { name: "Playlist", method: -> (x) { link_to_playlist(x.playlist) } },
+    { name: "Title",    method: -> (x) { post_title(x) } },
     { name: "Author",   method: -> (x) { link_to_author_of(x, admin: true) } },
     { name: "Status",   method: -> (x) { admin_post_status(x) } },
     { name: "Tags",     method: -> (x) { tag_list(x.tags, admin: true) } },
@@ -22,7 +14,3 @@
     { name: "Summary",  method: -> (x) { paragraphs(x.summary) } },
   ]
 %>
-
-<%= admin_section do %>
-  <%= post_body @mixtape %>
-<% end %>

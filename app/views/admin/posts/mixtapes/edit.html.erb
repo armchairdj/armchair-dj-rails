@@ -1,9 +1,0 @@
-<%
-  @title = [I18n.t("content.posts.edit.title.mixtape"), mixtape_title(@mixtape)]
-%>
-
-<%= render "admin/shared/header", action: :edit, instance: @mixtape,
-  headline: @title.first
-%>
-
-<%= render "form" %>

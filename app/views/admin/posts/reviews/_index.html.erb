@@ -1,12 +1,3 @@
-<%
-  @title = "Reviews"
-%>
-
-<%= render "admin/shared/header", action: :index,
-  prehead:  @collection.display_count,
-  headline: @title
-%>
-
 <%= render "admin/shared/index",
   collection: @collection,
   records: @reviews,

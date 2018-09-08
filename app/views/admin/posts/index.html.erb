@@ -1,0 +1,10 @@
+<%
+  @title = I18n.t("content.posts.index.title.#{controller_name}")
+%>
+
+<%= render "admin/shared/header", action: :index,
+  prehead:  @collection.display_count,
+  headline: @title
+%>
+
+<%= render "admin/posts/#{controller_name}/index" %>

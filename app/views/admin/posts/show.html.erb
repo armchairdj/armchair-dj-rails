@@ -1,0 +1,17 @@
+<%
+  @title = [
+    I18n.t("content.posts.show.title.#{controller_name}"),
+    @post.display_author,
+    post_title(@post)
+  ]
+%>
+
+<%= render "admin/shared/header", action: :show, instance: @post,
+  headline: @title.first
+%>
+
+<%= render "admin/posts/#{controller_name}/show" %>
+
+<%= admin_section do %>
+  <%= post_body @post %>
+<% end %>

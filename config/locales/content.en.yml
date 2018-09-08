@@ -1,11 +1,38 @@
 en:
   content:
     posts:
+      index:
+        title:
+          articles: "Articles"
+          mixtapes: "Mixtapes"
+          reviews:  "Reviews"
+      new:
+        title:
+          articles: "Create Article"
+          mixtapes: "Create Mixtape"
+          reviews:  "Create Review"
+        instructions:
+          articles: "First, Choose a Title"
+          mixtapes: "First, Choose a Playlist"
+          reviews:  "First, Choose What to Review"
       edit:
         title:
-          article: "Edit Article"
-          review:  "Edit Review"
-          mixtape: "Edit Mixtape"
-        autosave:
+          articles: "Edit Article"
+          mixtapes: "Edit Mixtape"
+          reviews:  "Edit Review"
+        instructions:
           published:   "This post has already been published, so changes won't be autosaved."
           unpublished: "This post will be autosaved as you write and edit. When the screen flashes, you'll know it's been saved."
+      preview:
+        title:
+          articles: "Preview Article"
+          mixtapes: "Preview Mixtape"
+          reviews:  "Preview Review"
+        instructions:
+          published:   "This is how the post looks on the site."
+          unpublished: "This is how the post will look on the site when published"
+      show:
+        title:
+          articles: "View Article"
+          mixtapes: "View Mixtape"
+          reviews:  "View Review"

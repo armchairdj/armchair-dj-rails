@@ -6,11 +6,13 @@
   end
 %>
 
-<%= content_tag(:p, class: "autosave-instructions") do %>
-  <% if @post.published? %>
-    <%= I18n.t("content.posts.edit.autosave.published") %>
+<%= content_tag(:p, class: "form-instructions") do %>
+  <% if @post.new_record? %>
+    <%= I18n.t("content.posts.new.instructions.#{controller_name}") %>
+  <% elsif @post.published? %>
+    <%= I18n.t("content.posts.edit.instructions.published") %>
   <% else %>
-    <%= I18n.t("content.posts.edit.autosave.unpublished") %>
+    <%= I18n.t("content.posts.edit.instructions.unpublished") %>
   <% end %>
 <% end %>
 
@@ -20,7 +22,7 @@
   <%= form_inputs do %>
     <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
-        <%= yield f %>
+        <%= render "admin/posts/#{controller_name}/model_specific_fields", f: f %>
 
         <% unless @post.new_record? %>
           <%= render "admin/posts/standard_fields", f: f %>
