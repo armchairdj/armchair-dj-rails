@@ -14,6 +14,12 @@ RSpec.describe "admin/posts/index" do
 
       @collection = assign(:collection, Ginsu::Collection.new(Article.all))
       @articles   = assign(:articles, @collection.resolve)
+
+      allow(controller).to receive(:params).and_return({
+        action:     "index",
+        controller: "admin/posts/articles",
+        page:       nil
+      })
     end
 
     it "renders a list of articles" do
@@ -30,6 +36,12 @@ RSpec.describe "admin/posts/index" do
 
       @collection = assign(:collection, Ginsu::Collection.new(Mixtape.all))
       @mixtapes   = assign(:mixtapes, @collection.resolve)
+
+      allow(controller).to receive(:params).and_return({
+        action:     "index",
+        controller: "admin/posts/mixtapes",
+        page:       nil
+      })
     end
 
     it "renders a list of mixtapes" do
@@ -46,6 +58,12 @@ RSpec.describe "admin/posts/index" do
 
       @collection = assign(:collection, Ginsu::Collection.new(Review.all))
       @reviews    = assign(:reviews, @collection.resolve)
+
+      allow(controller).to receive(:params).and_return({
+        action:     "index",
+        controller: "admin/posts/reviews",
+        page:       nil
+      })
     end
 
     it "renders a list of reviews" do
