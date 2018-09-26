@@ -73,8 +73,9 @@ gem "validates_timeliness", "~> 4.0"
 # Join scopes into one query.
 gem "active_record_union"
 
-# Friendly URL slugs.
+# Friendly URL slugs (requires unidecoder).
 gem "friendly_id"
+gem "unidecoder"
 
 ###############################################################################
 # CONTROLLERS.
@@ -95,9 +96,6 @@ gem "kaminari"
 ###############################################################################
 # VIEWS.
 ###############################################################################
-
-# International character translator.
-gem "unidecoder"
 
 # Form renderer.
 gem "simple_form"

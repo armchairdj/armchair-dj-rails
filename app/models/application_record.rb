@@ -9,7 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
   include BetterEnums
 
   def self.find_by_sorted_ids(ids)
-    return self.none unless ids.any?
+    return none unless ids.any?
 
     clause = [
       "CASE",
@@ -17,7 +17,7 @@ class ApplicationRecord < ActiveRecord::Base
       "END"
     ].flatten.join(" ")
 
-    self.where(id: ids).order(Arel.sql(clause))
+    where(id: ids).order(Arel.sql(clause))
   end
 
   def self.validates_nested_uniqueness_of(*nested_attrs)
