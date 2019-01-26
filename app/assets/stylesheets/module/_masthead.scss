@@ -8,11 +8,11 @@ nav#masthead {
 
     .headlines {
       h1 {
+        @include normal();
         font-size: 3rem;
         color: $white;
         white-space: nowrap;
         @include compact();
-        @include light();
 
         a {
           @include hover-link($white, $white);
@@ -25,6 +25,7 @@ nav#masthead {
       }
 
       h2 {
+        @include normal();
         font-size: 1.2rem;
         line-height: $readable;
         margin-top: -.8rem;

@@ -2,6 +2,7 @@ $footer-logo-width: 100px;
 $footer-logo-radius: $footer-logo-width / 2;
 
 footer#page-footer {
+  @include normal();
   background-color: $flash-bg-color;
   padding: (2rem) 0;
   text-align: center;
