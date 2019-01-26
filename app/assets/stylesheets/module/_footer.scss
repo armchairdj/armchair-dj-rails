@@ -3,14 +3,15 @@ $footer-logo-radius: $footer-logo-width / 2;
 
 footer#page-footer {
   @include normal();
-  background-color: $flash-bg-color;
-  padding: (2rem) 0;
+  background-color: $footer-bg-color;
+  border-top: 1px solid #333;
+  padding: 3rem 0;
   text-align: center;
 
   nav.links {
     ul,
     .copyright {
-      @include bottom-margin(1.2rem);
+      @include bottom-margin(2rem);
     }
 
     ul {
@@ -18,7 +19,7 @@ footer#page-footer {
     }
 
     .copyright {
-      font-size: .7rem;
+      font-size: .8rem;
       color: $medium-grey;
     }
   }

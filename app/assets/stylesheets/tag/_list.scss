@@ -32,7 +32,7 @@ ul {
   }
 
   &.arrowed {
-    @include arrowed-list();
+    @include chunkable-list();
   }
 }
 

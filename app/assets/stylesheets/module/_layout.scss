@@ -1,4 +1,3 @@
-.constrain-narrow,
 .constrain,
 .constrain-wide {
   @include clearfix();
@@ -13,18 +12,16 @@
   }
 }
 
-.wrapper {
-  padding: 1rem 0 2rem;
-  background-color: $armchair-blacktop;
-  min-height: 400px;
-
-  &.admin {}
-
-  &.public {
-    .constrain {
-      @include breakpoint(medium) {
-        max-width: 800px;
-      }
+body.public {
+  .constrain {
+    @include breakpoint(medium) {
+      max-width: 800px;
+      margin: 0 auto;
     }
   }
+}
+
+.wrapper {
+  padding: 1rem 0 2rem;
+  min-height: 400px;
 }

@@ -1,0 +1,21 @@
+nav#navbar {
+  @include clearfix();
+  background-color: $body-bg-color;
+
+  ul {
+    @include chunkable-list($separator: "\00a7", $font-size: 1.2rem, $spread: 1em);
+    text-align: center;
+    margin: 0 0 3rem;
+    padding: .5em 0;
+    background-color: $navbar-bg-color;
+
+    li {
+      text-transform: uppercase;
+      margin: 0;
+
+      a {
+        @include underline-never();
+      }
+    }
+  }
+}

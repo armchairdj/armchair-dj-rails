@@ -1,5 +1,5 @@
 $poppins-font-stack: "Poppins", sans-serif; //300, 500
-$biorhyme-font-stack: "BioRhyme", sans-serif; //700
+$libre-baskerville-font-stack: "Libre Baskerville", sans-serif; //700
 $source-code-pro-font-stack: "Source Code Pro", monospace;//400
 
 @mixin normal() {
@@ -13,7 +13,7 @@ $source-code-pro-font-stack: "Source Code Pro", monospace;//400
 }
 
 @mixin headline() {
-  font-family: $biorhyme-font-stack;
+  font-family: $libre-baskerville-font-stack;
   font-weight: y00;
 }
 

@@ -1,19 +1,21 @@
 <%= content_tag(:nav, id: "masthead") do %>
-  <%= content_tag(:div, class: "constrain-narrow") do %>
+  <%= content_tag(:div, class: "constrain") do %>
     <%= content_tag(:header) do %>
-      <% if @homepage %>
-        <%= content_tag(:span, site_logo, class: "logo") %>
-      <% else %>
-        <%= link_to(site_logo, posts_path, title: "back to homepage", class: "logo") %>
-      <% end %>
-
-      <%= content_tag(:div, class: "headlines") do %>
+      <%= content_tag(:div, class: "inner") do %>
         <% if @homepage %>
-          <%= content_tag(:h1, I18n.t("site.name_html")) %>
+          <%= content_tag(:span, site_logo, class: "logo") %>
         <% else %>
-          <%= content_tag(:h1, link_to(t("site.name_html"), posts_path, title: "back to homepage")) %>
+          <%= link_to(site_logo, posts_path, title: "back to homepage", class: "logo") %>
         <% end %>
-        <%= content_tag(:h2, I18n.t("site.tagline_html").html_safe) %>
+
+        <%= content_tag(:div, class: "headlines") do %>
+          <% if @homepage %>
+            <%= content_tag(:h1, I18n.t("site.name_html")) %>
+          <% else %>
+            <%= content_tag(:h1, link_to(t("site.name_html"), posts_path, title: "back to homepage")) %>
+          <% end %>
+          <%= content_tag(:h2, I18n.t("site.tagline_html").html_safe) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

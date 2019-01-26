@@ -1,51 +1,59 @@
 nav#masthead {
   @include clearfix();
   background-color: $masthead-bg-color;
-  padding: .5rem 0;
+  padding: 3rem 0;
 
   header {
     @include clearfix();
+    text-align: center;
 
-    .headlines {
-      h1 {
-        @include normal();
-        font-size: 3rem;
-        color: $white;
-        white-space: nowrap;
-        @include compact();
+    .inner {
+      @include clearfix();
+      display: inline-block;
 
-        a {
-          @include hover-link($white, $white);
-          @include underline-never();
-        }
-
-        span {
-          @include bold();
-        }
-      }
-
-      h2 {
-        @include normal();
-        font-size: 1.2rem;
-        line-height: $readable;
-        margin-top: -.8rem;
-        color: $tagline-color;
-        line-height: $readable;
-
-        span {
-          display: block;
-          white-space: nowrap;
-        }
-      }
-    }
-
-    .logo {
-      display: block;
-      float: left;
-      width: 5.25rem;
-
-      img {
+      .logo {
         display: block;
+        float: left;
+        width: 5.25rem;
+
+        img {
+          display: block;
+        }
+      }
+
+      .headlines {
+        display: inline-block;
+
+        h1 {
+          @include normal();
+          font-size: 3rem;
+          color: $white;
+          white-space: nowrap;
+          @include compact();
+
+          a {
+            @include hover-link($white, $white);
+            @include underline-never();
+          }
+
+          span {
+            @include bold();
+          }
+        }
+
+        h2 {
+          @include normal();
+          font-size: 1.2rem;
+          line-height: $readable;
+          margin-top: -.8rem;
+          color: $tagline-color;
+          line-height: $readable;
+
+          span {
+            display: block;
+            white-space: nowrap;
+          }
+        }
       }
     }
   }
