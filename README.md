@@ -2,6 +2,12 @@
 
 ## Ruby version
 
+2.5.3
+
+## Rails version
+
+5.2.2
+
 ## System dependencies
 
 ### JavaScript
@@ -11,6 +17,19 @@
     $ bundle
     $ bundle exec rails webpacker:install
     $ brew cask install chromedriver
+
+### puma-dev
+
+    $ brew install puma/puma/puma-dev
+    $ sudo puma-dev -setup
+    $ puma-dev -install
+    $ cd ~/.puma-dev
+    $ echo 5000 > ~/.puma-dev/armchair
+
+## Environments
+
+* [Development](http://armchair.test)
+* [Production](https://www.armchairdj.com)
 
 ## Configuration
 
@@ -29,7 +48,7 @@
     $ bundle exec rake parallel:prepare
     $ bundle exec rake parallel:spec
 
-## Services (job queues, cache servers, search engines, etc.)
+## Services
 
 ## Deployment instructions
 
