@@ -13,8 +13,8 @@ nav#masthead {
 
       .logo {
         display: block;
-        float: left;
         width: 5.25rem;
+        margin: 0 auto .5rem;
 
         img {
           display: block;
@@ -53,6 +53,19 @@ nav#masthead {
             display: block;
             white-space: nowrap;
           }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint(small) {
+  nav#masthead {
+    header {
+      .inner {
+        .logo {
+          margin: 0;
+          float: left;
         }
       }
     }

@@ -16,6 +16,9 @@ ruby "2.5.3"
 
 gem "rails", "5.2.2"
 
+# Required for Rails console.
+gem "rb-readline"
+
 # Postgres for ActiveRecord.
 gem "pg"
 
@@ -38,6 +41,16 @@ gem "puma", "~> 3.7"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 3.0"
+
+###############################################################################
+# ACTIVE STORAGE.
+###############################################################################
+
+# AWS S3.
+gem "aws-sdk-s3", require: false
+
+# Image resizing.
+gem "image_processing", "~> 1.2"
 
 ###############################################################################
 # ACCESS CONTROLE.

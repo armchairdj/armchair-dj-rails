@@ -49,10 +49,12 @@ module MarkupHelper
     time_tag(date, l(date), **opts)
   end
 
-  def paragraphs(str)
+  def paragraphs(str, extra = nil)
     return if str.blank?
 
     ps = str.split(/[\r\n]+ *[\r\n]+/).map { |p| p.squish }.delete_if(&:blank?)
+
+    ps[ps.length - 1] = "#{ps.last} #{extra}".html_safe unless extra.nil?
 
     ps.map { |p| content_tag(:p, p) }.join("\n").html_safe
   end

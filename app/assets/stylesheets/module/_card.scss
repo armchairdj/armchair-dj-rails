@@ -1,0 +1,26 @@
+.card {
+  background-color: #0f0f0f;
+  padding: 1rem;
+  @include bottom-margin(3rem);
+
+  header {
+    @include bottom-margin(.5rem);
+
+    h6 {
+      @include bold();
+      text-transform: uppercase;
+      @include bottom-margin(.5rem);
+    }
+
+    h3 {
+      @include bottom-margin();
+      font-size: 1.2rem;
+      line-height: $spacious;
+    }
+  }
+
+  a.read-more {
+    font-size: .8rem;
+    line-height: (1rem * $spacious);
+  }
+}

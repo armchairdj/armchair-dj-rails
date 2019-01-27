@@ -3,7 +3,7 @@ nav#navbar {
   background-color: $body-bg-color;
 
   ul {
-    @include chunkable-list($separator: "/", $font-size: 1rem, $breakpoint: small, $font-size-big: 1.2rem, $spread: .5em);
+    @include chunkable-list($separator: ":", $font-size: 1rem, $breakpoint: small, $font-size-big: 1.2rem, $spread: .5em);
     text-align: center;
     margin: 0 0 3rem;
     padding: .5em 0;
