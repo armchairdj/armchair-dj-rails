@@ -3,7 +3,7 @@
   records: @reviews,
   columns: [
     { name: "Status", method: -> (x) { post_status_icon(x) }, text: status_icon_header, class: "icon" },
-    { name: "ID",     method: :id },
+    { name: "ID",     method: :id, class: "nowrap" },
     { name: "Title",  method: -> (x) { review_title(x, length: 40) } },
     { name: "Author", method: :display_author  },
     { name: "Medium", method: :display_medium },

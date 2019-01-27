@@ -57,7 +57,7 @@ table.admin {
   @include bottom-margin();
   font-size: $admin-table-font-size;
 
-  td:not(:first-child) {
+  td:not(:first-child):not(.nowrap) {
     @include break-long-words();
   }
 
@@ -96,7 +96,7 @@ table.admin-view {
 }
 
 table.admin-index {
-  @media (max-width: 767px) {
+  @media (max-width: 899px) {
     display: block;
 
     thead,
@@ -144,7 +144,7 @@ table.admin-index {
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 900px) {
     @include regular-admin-table();
   }
 }

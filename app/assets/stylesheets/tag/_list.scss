@@ -34,6 +34,10 @@ ul {
   &.arrowed {
     @include chunkable-list();
   }
+
+  &.arrowed-wide {
+    @include chunkable-list($breakpoint: large);
+  }
 }
 
 ol {

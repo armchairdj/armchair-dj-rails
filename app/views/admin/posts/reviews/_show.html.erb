@@ -1,17 +1,18 @@
 <%= render "admin/shared/show",
   record: @post,
   rows: [
-    { name: "ID",       method: :id },
+    { name: "ID",       method: :id, class: "nowrap" },
     { name: "Medium",   method: -> (x) { x.work.display_medium } },
     { name: "Work",     method: -> (x) { link_to_work(x.work) } },
     { name: "Author",   method: -> (x) { link_to_author_of(x, admin: true) } },
     { name: "Status",   method: -> (x) { admin_post_status(x) } },
     { name: "Tags",     method: -> (x) { tag_list(x.tags, admin: true) } },
     { name: "Links",    method: -> (x) { link_list(x.links) } },
-    { name: "Created",  date: true, method: :created_at },
-    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Created",  method: :created_at, date: true },
+    { name: "Updated",  method: :updated_at, date: true },
     { name: "Alpha",    method: :alpha },
     { name: "Slug",     method: :slug },
     { name: "Summary",  method: -> (x) { paragraphs(x.summary) } },
+    { name: "Body",     method: -> (x) { post_body(x) } },
   ]
 %>

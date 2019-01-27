@@ -45,23 +45,12 @@
   }
 }
 
-@mixin chunkable-list($separator: "\2194", $font-size: 1rem, $spread: .5em) {
+@mixin chunkable-list($separator: "\2194", $font-size: 1rem, $font-size-big: 1rem, $spread: .5em, $breakpoint: medium) {
   margin: 0 0 .5em;
   font-size: 0;
 
   span {
     display: block;
-
-    @include breakpoint(medium) {
-      display: inline-block;
-
-      &+span:before {
-        font-size: $font-size;
-        content: $separator;
-        display: inline-block;
-        margin: 0 $spread;
-      }
-    }
   }
 
   li {
@@ -75,5 +64,27 @@
     content: $separator;
     display: inline-block;
     margin: 0 $spread;
+    font-size: $font-size;
+  }
+
+  @include breakpoint($breakpoint) {
+    li {
+      font-size: $font-size-big;
+    }
+
+    li+li:before {
+      font-size: $font-size-big;
+    }
+
+    span {
+      display: inline-block;
+    }
+
+    span+span:before {
+      font-size: $font-size-big;
+      content: $separator;
+      display: inline-block;
+      margin: 0 $spread;
+    }
   }
 }

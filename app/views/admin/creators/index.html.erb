@@ -11,8 +11,8 @@
   collection: @collection,
   records: @creators,
   columns: [
-    { name: "ID",            method: :id              },
-    { name: "Name",          method: :name            },
+    { name: "ID",            method: :id, class: "nowrap" },
+    { name: "Name",          method: :name },
     { name: "Creator Type",  method: :membership_type },
     { name: "Identity Type", method: :identity_type   },
   ]
