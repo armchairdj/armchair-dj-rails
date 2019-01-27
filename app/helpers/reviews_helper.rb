@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module ReviewsHelper
+  def decorated_review_type(review)
+    [
+      semantic_svg_image("open_iconic/thumb-up.svg", title: "review", desc: "review icon"),
+      content_tag(:span, review.display_type)
+    ].join.html_safe
+  end
+
   def review_title(review, length: nil, full: true)
     smart_truncate(review.work.display_title(full: full), length: length)
   end

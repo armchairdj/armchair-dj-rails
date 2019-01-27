@@ -318,6 +318,17 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  concerning :ImageAttachment do
+    included do
+      has_one_attached  :hero_image
+      has_many_attached :additional_images
+    end
+  end
+
+  #############################################################################
   # CONCERNING: Editing.
   #############################################################################
 

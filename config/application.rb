@@ -17,6 +17,8 @@ module ArmchairDjRails
     config.autoload_paths += %W(#{config.root}/app/models/posts)
     config.autoload_paths += %W(#{config.root}/app/models/works)
 
+    # config.active_storage.variant_processor = :vips
+
     config.generators do |g|
       g.test_framework :rspec
       g.helper_specs true

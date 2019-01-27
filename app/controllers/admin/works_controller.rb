@@ -85,6 +85,8 @@ private
       :medium,
       :title,
       :subtitle,
+      :hero_image,
+      additional_images: [],
       aspect_ids: [],
       links_attributes: [
         :id,

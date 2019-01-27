@@ -10,7 +10,7 @@
 
 ## System dependencies
 
-### JavaScript
+### JavaScript: Node, yarn, etc.
 
     $ brew install node
     $ brew install yarn --without-node
@@ -18,13 +18,17 @@
     $ bundle exec rails webpacker:install
     $ brew cask install chromedriver
 
-### puma-dev
+### Friendly dev URLs: puma-dev
 
     $ brew install puma/puma/puma-dev
     $ sudo puma-dev -setup
     $ puma-dev -install
     $ cd ~/.puma-dev
     $ echo 5000 > ~/.puma-dev/armchair
+
+### Active Storage image manipulation: vips
+
+    $ brew install vips
 
 ## Environments
 

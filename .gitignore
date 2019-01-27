@@ -36,5 +36,8 @@ yarn-error.log*
 yarn-debug.log*
 .yarn-integrity
 
-# Ignore master key for decrypting credentials and more.
+# Key for encrypted secrets.
 /config/master.key
+
+# Dev file storage.
+/storage/*

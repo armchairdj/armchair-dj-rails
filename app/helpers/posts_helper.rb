@@ -30,6 +30,12 @@ module PostsHelper
   # DISPLAY METHODS.
   #############################################################################
 
+  def decorated_post_type(post)
+    return decorated_article_type(post) if post.is_a?(Article)
+    return decorated_review_type( post) if post.is_a?(Review)
+    return decorated_mixtape_type(post) if post.is_a?(Mixtape)
+  end
+
   def post_title(post, **args)
     return article_title(post, **args) if post.is_a?(Article)
     return review_title( post, **args) if post.is_a?(Review)

@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module MixtapesHelper
+  def decorated_mixtape_type(mixtape)
+    [
+      semantic_svg_image("open_iconic/list.svg", title: "mixtape", desc: "mixtape icon"),
+      content_tag(:span, mixtape.display_type)
+    ].join.html_safe
+  end
+
   def mixtape_title(mixtape, length: nil, full: true)
     smart_truncate(mixtape.playlist.title, length: length)
   end

@@ -69,3 +69,27 @@
 
 <%= render partial: "admin/posts/list",     as: "posts",     object: @work.posts.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.alpha %>
+
+<%= admin_section(headline: "Contributors") do %>
+  <%= content_tag(:dl, class: "horizontal right") do %>
+    <%= content_tag(:dt, "Hero Image") %>
+
+    <% if @work.hero_image.attached? %>
+      <%= content_tag(:dd, image_tag(
+        @work.hero_image.variant(resize: "200x200")
+      )) %>
+    <% else %>
+      <%= content_tag(:dd, "No hero image") %>
+    <% end %>
+
+    <%= content_tag(:dt, "Additional Images") %>
+
+    <% if @work.additional_images.attached? %>
+      <% @work.additional_images.each do |image| %>
+        <%= content_tag(:dd, image_tag(image.variant(resize: "200x200"))) %>
+      <% end %>
+    <% else %>
+      <%= content_tag(:dd, "No additional images") %>
+    <% end %>
+  <% end %>
+<% end %>
