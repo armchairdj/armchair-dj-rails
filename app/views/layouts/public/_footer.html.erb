@@ -42,7 +42,7 @@
       <%= content_tag(:div, class: "rss") do %>
         <%= link_to(feed_path(format: :rss), class: "rss-feed") do %>
           <%= content_tag(:span, "RSS Feed") %>
-          <%= semantic_svg_image("open_iconic/rss-alt.svg", title: "RSS Feed", desc: "RSS icon") %>
+          <%= semantic_icon("rss-alt", title: "RSS Feed", desc: "RSS icon") %>
         <% end %>
       <% end %>
 

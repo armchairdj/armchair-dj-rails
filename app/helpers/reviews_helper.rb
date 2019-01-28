@@ -3,7 +3,7 @@
 module ReviewsHelper
   def decorated_review_type(review)
     [
-      semantic_svg_image("open_iconic/thumb-up.svg", title: "review", desc: "review icon"),
+      semantic_icon("thumb-up", title: "review", desc: "review icon"),
       content_tag(:span, review.display_type)
     ].join.html_safe
   end

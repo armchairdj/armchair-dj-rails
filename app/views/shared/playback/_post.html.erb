@@ -1,7 +1,3 @@
-<%
-  read_more = semantic_svg_image("open_iconic/arrow-right.svg", title: "read more", desc: "read more icon")
-%>
-
 <%= content_tag(:article, class: "card") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h6, decorated_post_type(post)) %>
@@ -15,6 +11,6 @@
 
     <%= post.summary %>
 
-    <%= link_to_post(post, text: read_more, class: "read-more") %>
+    <%= link_to_post(post, text: semantic_icon("arrow-right", title: "read more", desc: "read more icon"), class: "read-more") %>
   <% end %>
 <% end %>

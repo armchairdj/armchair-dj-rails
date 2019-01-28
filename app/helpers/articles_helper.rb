@@ -3,7 +3,7 @@
 module ArticlesHelper
   def decorated_article_type(article)
     [
-      semantic_svg_image("open_iconic/justify-left.svg", title: "article", desc: "article icon"),
+      semantic_icon("justify-left", title: "article", desc: "article icon"),
       content_tag(:span, article.display_type)
     ].join.html_safe
   end

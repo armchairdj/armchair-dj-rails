@@ -61,14 +61,14 @@ module PostsHelper
   end
 
   def post_draft_icon
-    svg_icon("lock-locked", title: "draft", desc: "draft icon", wrapper_class: "post-draft")
+    wrapped_icon("lock-locked", title: "draft", desc: "draft icon", wrapper_class: "post-draft")
   end
 
   def post_published_icon
-    svg_icon("lock-unlocked", title: "published", desc: "published icon", wrapper_class: "post-published")
+    wrapped_icon("lock-unlocked", title: "published", desc: "published icon", wrapper_class: "post-published")
   end
 
   def post_scheduled_icon
-    svg_icon("clock", title: "scheduled to be published", desc: "scheduled icon", wrapper_class: "post-scheduled")
+    wrapped_icon("clock", title: "scheduled to be published", desc: "scheduled icon", wrapper_class: "post-scheduled")
   end
 end

@@ -1,6 +1,33 @@
-aside.flash-messages {
-  background-color: $footer-bg-color;
+body.admin {
+  aside.flash-messages {
+    background-color: $flash-bg-color;
 
+    .flash {
+      .flash-inner {
+        padding: 1rem 1.25rem 1rem 0;
+      }
+    }
+  }
+}
+
+body.public {
+  aside.flash-messages {
+    margin: 0 0 3rem;
+    .flash {
+      .flash-inner {
+        background-color: $flash-bg-color;
+        padding: 1rem 2rem 1rem 1rem;
+        border-radius: $standard-border-radius;
+      }
+
+      a.closeable {
+        right: 1rem;
+      }
+    }
+  }
+}
+
+aside.flash-messages {
   .flash-alert,
   .flash-error {
     @include text-and-link($error-color);
@@ -20,7 +47,6 @@ aside.flash-messages {
     margin: 0;
 
     .flash-inner {
-      padding: 1rem 1.25rem 1rem 0;
       position: relative;
     }
 
@@ -29,7 +55,7 @@ aside.flash-messages {
 
       &.closeable {
         position: absolute;
-        top: 1rem;
+        top: 1.25rem;
         right: 0;
         display: block;
         @include square(1rem);

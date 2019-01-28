@@ -56,8 +56,7 @@ module AdminHelper
   #############################################################################
 
   def admin_icon_link(icon, path, title, desc, **opts)
-    svg = semantic_svg_image("open_iconic/#{icon}.svg", title: title, desc: desc)
-
+    svg   = semantic_icon(icon, title: title, desc: desc)
     attrs = combine_attrs(opts, class: "admin-icon")
 
     link_to(svg, path, title: title, **attrs)
@@ -148,7 +147,7 @@ module AdminHelper
   #############################################################################
 
   def status_icon_header
-    svg_icon("eye", title: "Post Status", desc: "eye icon", wrapper_class: "admin-column-header")
+    wrapped_icon("eye", title: "Post Status", desc: "eye icon", wrapper_class: "admin-column-header")
   end
 
   def sortable_link(sorts, name, text: nil)
