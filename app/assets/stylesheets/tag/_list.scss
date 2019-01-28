@@ -57,6 +57,7 @@ dl {
     text-transform: uppercase;
     color: $armchair-smoke;
     @include bottom-margin(1rem * .25);
+    @include bold();
   }
 
   dd {

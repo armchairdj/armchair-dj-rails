@@ -1,6 +1,7 @@
 body.admin {
   aside.flash-messages {
     background-color: $flash-bg-color;
+    @include bottom-margin();
 
     .flash {
       .flash-inner {

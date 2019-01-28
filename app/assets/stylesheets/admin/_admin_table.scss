@@ -86,6 +86,7 @@ table.admin-view {
   @include regular-admin-table();
 
   th {
+    vertical-align: top;
     text-align: right;
     width: $dt-width;
   }

@@ -41,6 +41,17 @@
 class Review < Post
 
   #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  concerning :ImageAttachment do
+    included do
+      delegate :hero_image,        to: :work
+      delegate :additional_images, to: :work
+    end
+  end
+
+  #############################################################################
   # CONCERNING: STI Subclass.
   #############################################################################
 

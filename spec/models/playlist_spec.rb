@@ -31,6 +31,8 @@ RSpec.describe Playlist do
       let(:show_loads) { [:author, :tracks, :works] }
     end
 
+    it_behaves_like "an_imageable_model"
+
     describe "nilify_blanks" do
       subject { build_minimal_instance }
 

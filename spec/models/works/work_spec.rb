@@ -13,6 +13,8 @@ RSpec.describe Work do
       let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
     end
 
+    it_behaves_like "an_imageable_model"
+
     describe "nilify_blanks" do
       subject { build_minimal_instance }
 

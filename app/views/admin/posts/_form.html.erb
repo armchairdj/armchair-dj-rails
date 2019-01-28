@@ -30,6 +30,10 @@
       <% end %>
     <% end %>
 
+    <% if @post.is_a?(Article) %>
+      <%= render "shared/forms/imageable_fieldset", f: f %>
+    <% end %>
+
     <% unless @post.new_record? %>
       <%= render "admin/links/has_many_links_fieldset", f: f %>
       <%= render "admin/posts/publication_fieldset",    f: f %>

@@ -5,7 +5,7 @@
 <% if @mixtapes.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= render partial: "shared/playback/post", collection: @mixtapes %>
+  <%= render partial: "posts/card", collection: @mixtapes, as: :post %>
 
   <%= paginate @mixtapes %>
 <% end %>

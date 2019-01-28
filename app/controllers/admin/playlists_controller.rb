@@ -56,6 +56,8 @@ private
       :name,
       :title,
       :author_id,
+      :hero_image,
+      additional_images: [],
       tracks_attributes: [
         :id,
         :_destroy,

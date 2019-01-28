@@ -1,16 +1,2 @@
-<%= content_tag(:article, class: "card") do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h6, decorated_post_type(post)) %>
-    <%= content_tag(:h3, link_to_post(post, full: true)) %>
-  <% end %>
-
-  <%= content_tag(:p) do %>
-    <% if post.is_a?(Review) && post.work.hero_image.attached? %>
-      <%= image_tag(post.work.hero_image.variant(resize: "200x200")) %>
-    <% end %>
-
-    <%= post.summary %>
-
-    <%= link_to_post(post, text: semantic_icon("arrow-right", title: "read more", desc: "read more icon"), class: "read-more") %>
-  <% end %>
-<% end %>
+<%= content_tag(:dt, post.display_type) %>
+<%= content_tag(:dd, link_to_post(post, full: true)) %>

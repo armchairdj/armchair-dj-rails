@@ -15,3 +15,5 @@
     { name: "Body",     method: -> (x) { post_body(x) } },
   ]
 %>
+
+<%= render partial: "admin/images/list", as: "imageable", object: @post %>

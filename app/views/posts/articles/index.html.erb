@@ -5,7 +5,7 @@
 <% if @articles.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= render partial: "shared/playback/post", collection: @articles %>
+  <%= render partial: "posts/card", collection: @articles, as: :post %>
 
   <%= paginate @articles %>
 <% end %>

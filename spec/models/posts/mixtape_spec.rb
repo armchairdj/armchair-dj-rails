@@ -3,7 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Mixtape do
-  describe "admin" do
+  describe "image attachments" do
+    pending "delegate hero_image to playlist"
+    pending "delegate additional_images to playlist"
+  end
+
+  describe "concerns" do
     it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [:author, :playlist] }
       let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }

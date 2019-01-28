@@ -21,6 +21,12 @@
 class Work < ApplicationRecord
 
   #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  include Imageable
+
+  #############################################################################
   # CONCERNING: STI subclass contract.
   #############################################################################
 
@@ -314,17 +320,6 @@ class Work < ApplicationRecord
 
     def post_ids
       reviews.ids + mixtapes.ids
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
-  concerning :ImageAttachment do
-    included do
-      has_one_attached  :hero_image
-      has_many_attached :additional_images
     end
   end
 

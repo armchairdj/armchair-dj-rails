@@ -41,6 +41,17 @@
 class Mixtape < Post
 
   #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  concerning :ImageAttachment do
+    included do
+      delegate :hero_image,        to: :playlist
+      delegate :additional_images, to: :playlist
+    end
+  end
+
+  #############################################################################
   # CONCERNING: STI Subclass.
   #############################################################################
 

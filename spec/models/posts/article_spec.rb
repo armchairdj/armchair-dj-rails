@@ -3,11 +3,13 @@
 require "rails_helper"
 
 RSpec.describe Article do
-  describe "admin" do
+  describe "concerns" do
     it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [:author] }
       let(:show_loads) { [:author, :links, :tags] }
     end
+
+    it_behaves_like "an_imageable_model"
   end
 
   describe "STI inheritance" do
