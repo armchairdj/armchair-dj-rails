@@ -41,6 +41,12 @@ const Rails = require("rails-ujs");
 
 Rails.start();
 
+/* ActiveStorage */
+
+const ActiveStorage = require("activestorage");
+
+ActiveStorage.start();
+
 /* Stimulus */
 
 import { Application            } from "stimulus";

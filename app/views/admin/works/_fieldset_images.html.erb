@@ -4,7 +4,7 @@
       Images
     <% end %>
     
-    <%= f.input :hero_image %>
-    <%= f.input :additional_images, input_html: { multiple: true } %>
+    <%= f.input :hero_image, input_html: { direct_upload: true } %>
+    <%= f.input :additional_images, input_html: { direct_upload: true, multiple: true } %>
   <% end %>
 <% end %>

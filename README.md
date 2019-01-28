@@ -13,7 +13,7 @@
 ### JavaScript: Node, yarn, etc.
 
     $ brew install node
-    $ brew install yarn --without-node
+    $ brew install yarn
     $ bundle
     $ bundle exec rails webpacker:install
     $ brew cask install chromedriver

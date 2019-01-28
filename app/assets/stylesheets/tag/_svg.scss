@@ -1,14 +1,6 @@
 a {
   .svg-icon.admin-column-header {
-    @include svg() {
-      @include svg-path-fill($link-color);
-    }
-
-    &:hover {
-      @include svg() {
-        @include svg-path-fill($link-color-hover);
-      }
-    }
+    @include svg-link();
   }
 }
 

@@ -25,6 +25,10 @@
       @include bottom-margin(.5rem);
       font-size: 1.2rem;
       line-height: $spacious;
+
+      a {
+        @include underline-never();
+      }
     }
   }
 
@@ -36,9 +40,9 @@
     }
 
     a.read-more {
+      @include svg-link();
       @include inline-block-svg() {
         @include square(1rem);
-        @include svg-path-fill($link-color);
         margin: 0 0 -.2rem .3rem;
       }
     }
