@@ -1,0 +1,9 @@
+a.rss-feed {
+  font-size: .8rem;
+  @include underline-never();
+
+  @include inline-block-svg() {
+    @include square(.6rem);
+    @include svg-path-fill($link-color);
+  }
+}

@@ -1,60 +1,56 @@
 <%= content_tag(:footer, id: "page-footer") do %>
   <%= content_tag(:div, class: "constrain-wide") do %>
     <%= content_tag(:nav, class: "links") do %>
-      <%= content_tag(:ul, class: "arrowed") do %>
+      <%= content_tag(:ul, class: "primary-links") do %>
         <%= content_tag(:span) do %>
           <%= content_tag(:li, link_to("Reviews",   reviews_path )) %>
-          <%= content_tag(:li, link_to("Articles",  articles_path)) %>
+          <%= content_tag(:li, link_to("Mixtapes",  mixtapes_path)) %>
         <% end %>
 
         <%= content_tag(:span) do %>
-          <%= content_tag(:li, link_to("Mixtapes",  mixtapes_path)) %>
+          <%= content_tag(:li, link_to("Articles",  articles_path)) %>
           <%= content_tag(:li, link_to("All Posts", posts_path   )) %>
         <% end %>
       <% end %>
 
-      <%= content_tag(:ul, class: "arrowed") do %>
+      <%= content_tag(:ul, class: "secondary-links") do %>
         <% if user_signed_in? %>
-          <%= content_tag(:span) do %>
-            <% if current_user.can_write? %>
-              <%= content_tag(:li, link_to("Admin",  admin_articles_path)) %>
-            <% end %>
-            <%= content_tag(:li, link_to("Settings", settings_path         )) %>
-            <%= content_tag(:li, link_to("Password", settings_password_path)) %>
-            <%= content_tag(:li, link_to("Log Out",  log_out_path          )) %>
-          <% end %>
+          <%= content_tag(:li, link_to("Admin",    admin_articles_path)) if current_user.can_write? %>
+          <%= content_tag(:li, link_to("Settings", settings_path      )) %>
+          <%= content_tag(:li, link_to("Log Out",  log_out_path       )) %>
         <% else %>
-          <%= content_tag(:span) do %>
-            <%= content_tag(:li, link_to("Register", new_user_registration_path)) %>
-            <%= content_tag(:li, link_to("Log In",   new_user_session_path     )) %>
-          <% end %>
+          <%= content_tag(:li, link_to("Register", new_user_registration_path)) %>
+          <%= content_tag(:li, link_to("Log In",   new_user_session_path     )) %>
         <% end %>
       <% end %>
 
       <%= content_tag(:div, copyright_notice, class: "copyright") %>
 
-      <%= content_tag(:ul, class: "arrowed-wide") do %>
+      <%= content_tag(:ul, class: "tertiary-links") do %>
         <%= content_tag(:span) do %>
           <%= content_tag(:li, link_to("About",    static_page_path(template: :about  ))) %>
           <%= content_tag(:li, link_to("Credits",  static_page_path(template: :credits))) %>
+          <%= content_tag(:li, link_to("Contact",  static_page_path(template: :contact))) %>
         <% end %>
 
         <%= content_tag(:span) do %>
           <%= content_tag(:li, link_to("Privacy",  static_page_path(template: :privacy))) %>
           <%= content_tag(:li, link_to("Terms",    static_page_path(template: :terms  ))) %>
         <% end %>
+      <% end %>
 
-        <%= content_tag(:span) do %>
-          <%= content_tag(:li, link_to("Contact",  static_page_path(template: :contact))) %>
-          <%= content_tag(:li, link_to("RSS Feed", feed_path(       format:   :rss    ))) %>
+      <%= content_tag(:div, class: "rss") do %>
+        <%= link_to(feed_path(format: :rss), class: "rss-feed") do %>
+          <%= content_tag(:span, "RSS Feed") %>
+          <%= semantic_svg_image("open_iconic/rss-alt.svg", title: "RSS Feed", desc: "RSS icon") %>
         <% end %>
       <% end %>
-    <% end %>
 
-    <% if @homepage %>
-      <%= content_tag(:span, site_logo, class: "logo") %>
-    <% else %>
-      <%= link_to(site_logo, posts_path, title: "back to homepage", class: "logo") %>
+      <% if @homepage %>
+        <%= content_tag(:span, site_logo, class: "logo") %>
+      <% else %>
+        <%= link_to(site_logo, posts_path, title: "back to homepage", class: "logo") %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

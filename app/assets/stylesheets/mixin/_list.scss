@@ -45,16 +45,20 @@
   }
 }
 
-@mixin chunkable-list($separator: "\2194", $font-size: 1rem, $font-size-big: 1rem, $spread: .5em, $breakpoint: medium, $separator-color: $standard-text-color) {
-  margin: 0 0 .5em;
+@mixin chunkable-list($separator: "\2194", $font-size: 1rem, $font-size-big: false, $spread: .5em, $breakpoint: medium, $separator-color: $standard-text-color) {
   font-size: 0;
 
   span {
     display: block;
   }
 
-  li {
+  li,
+  li+li:before,
+  span+span:before {
     font-size: $font-size;
+  }
+
+  li {
     display: inline-block;
     margin-top: -.25em;
     margin-bottom: .5em;
@@ -65,16 +69,17 @@
     content: $separator;
     display: inline-block;
     margin: 0 $spread;
-    font-size: $font-size;
   }
 
   @include breakpoint($breakpoint) {
-    li {
-      font-size: $font-size-big;
-    }
+    @if $font-size-big == false {
 
-    li+li:before {
-      font-size: $font-size-big;
+    } else {
+      li,
+      li+li:before,
+      span+span:before {
+        font-size: $font-size-big;
+      }
     }
 
     span {
@@ -86,7 +91,6 @@
       content: $separator;
       display: inline-block;
       margin: 0 $spread;
-      font-size: $font-size-big;
     }
   }
 }
