@@ -1,6 +1,6 @@
 <%= content_for(:post_header) do %>
   <%= content_tag(:header, class: "post-header") do %>
-    <%= content_tag(:h3, @review.type) %>
+    <%= content_tag(:h3, @review.display_type) %>
     <%= content_tag(:h1) do %>
       <%= content_tag(:span, @review.work.display_makers, class: "creators") %>
       <%= content_tag(:span, @review.work.title,          class: "title"   ) %>
@@ -14,6 +14,10 @@
 <%= content_tag(:footer, class: "post-byline") do %>
   Posted by <%= link_to_author_of(@review) %> on <%= post_published_date(@review) %>
 <% end %>
+
+<%= render "shared/playback/aspects", facets: @review.work.display_facets %>
+
+<%= render "shared/playback/contributions", contributions: @review.work.contributions, context: :work %>
 
 <%= content_tag(:aside, class: "post-tags") do %>
   <%= render "shared/playback/tags", tags: @review.tags %>
