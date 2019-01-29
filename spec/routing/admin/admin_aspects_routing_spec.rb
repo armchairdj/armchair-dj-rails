@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
-RSpec.describe Admin::TagsController do
+RSpec.describe Admin::AspectsController do
   it "#index" do
     expect(get: "/admin/aspects").to route_to("admin/aspects#index")
   end

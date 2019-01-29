@@ -93,6 +93,8 @@ Rails.application.routes.draw do
   # ADMIN.
   #############################################################################
 
+  get "/admin", to: redirect("/admin/reviews", status: 302)
+
   namespace :admin do
     scope module: :posts do
       resources :articles, concerns: [:paginatable, :previewable, :autosaveable]
