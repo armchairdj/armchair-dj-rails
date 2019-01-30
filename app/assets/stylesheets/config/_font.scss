@@ -12,9 +12,9 @@ $source-code-pro-font-stack: "Source Code Pro", monospace;//400
   font-weight: 500;
 }
 
-@mixin headline() {
+@mixin display() {
   font-family: $libre-baskerville-font-stack;
-  font-weight: y00;
+  font-weight: 700;
 }
 
 @mixin monospace() {

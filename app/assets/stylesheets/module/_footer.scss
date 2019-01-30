@@ -4,7 +4,7 @@ $footer-logo-radius: $footer-logo-width / 2;
 footer#page-footer {
   @include normal();
   background-color: $footer-bg-color;
-  border-top: 1px solid #333;
+  border-top: 1px solid $darkest-grey;
   padding: 3rem 0;
   text-align: center;
 

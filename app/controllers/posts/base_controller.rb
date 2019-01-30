@@ -23,6 +23,8 @@ class Posts::BaseController < ApplicationController
     :show
   ]
 
+  before_action :set_section
+
   # GET /<plural_param_key>
   # GET /<plural_param_key>.json
   def index; end
@@ -51,5 +53,9 @@ private
 
   def set_meta_tags
     @meta_description = @instance.summary
+  end
+
+  def set_section
+    raise NotImplementedError
   end
 end

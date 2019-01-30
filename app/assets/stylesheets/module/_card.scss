@@ -12,6 +12,7 @@
       @include bold();
       text-transform: uppercase;
       font-size: 1rem;
+      color: $bone;
 
       @include inline-block-svg() {
         @include square(1rem);
@@ -33,12 +34,6 @@
   }
 
   p {
-    img {
-      display: block;
-      @include bottom-margin(.5rem);
-      @include square(100px);
-    }
-
     a.read-more {
       @include svg-link();
       @include inline-block-svg() {
@@ -47,16 +42,33 @@
       }
     }
   }
+
+  &.review {}
+
+  &.article {}
+
+  &.mixtape {}
+
+  img {
+    display: block;
+    @include bottom-margin(.5rem);
+  }
+}
+
+@include breakpoint(medium) {
+  .card {
+    img {
+      float: right;
+      margin: .3rem 0 .5rem 1rem;
+      @include square(150px);
+    }
+  }
 }
 
 @include breakpoint(large) {
   .card {
-    p {
-      img {
-        float: right;
-        margin: 0 0 .5rem 1rem;
-        @include square(200px);
-      }
+    img {
+      @include square(200px);
     }
   }
 }

@@ -1,4 +1,4 @@
-<%= content_tag(:article, class: "card") do %>
+<%= content_tag(:article, class: "card #{post.model_name.param_key}") do %>
   <%= content_tag(:header) do %>
     <%= content_tag(:h6, decorated_post_type(post)) %>
     <%= content_tag(:h3, link_to_post(post, full: true)) %>
@@ -6,7 +6,7 @@
 
   <%= content_tag(:p) do %>
     <% if post.hero_image.attached? %>
-      <%= image_tag(post.hero_image.variant(resize: "200x200")) %>
+      <%= image_tag(post.hero_image.variant(resize: "600x600")) %>
     <% end %>
 
     <%= post.summary %>

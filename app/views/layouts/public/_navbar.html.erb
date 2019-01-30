@@ -2,13 +2,13 @@
   <%= content_tag(:div, class: "constrain") do %>
     <%= content_tag(:ul, class: "arrowed") do %>
       <%= content_tag(:span) do %>
-        <%= content_tag(:li, link_to("Reviews",  reviews_path )) %>
-        <%= content_tag(:li, link_to("Mixtapes", mixtapes_path)) %>
+        <%= content_tag(:li, link_to("All Posts", posts_path   ), class: ("current" if @section == :all     )) %>
+        <%= content_tag(:li, link_to("Articles",  articles_path), class: ("current" if @section == :articles)) %>
       <% end %>
 
       <%= content_tag(:span) do %>
-        <%= content_tag(:li, link_to("Articles",  articles_path)) %>
-        <%= content_tag(:li, link_to("All Posts", posts_path   )) %>
+        <%= content_tag(:li, link_to("Mixtapes", mixtapes_path), class: ("current" if @section == :mixtapes)) %>
+        <%= content_tag(:li, link_to("Reviews",  reviews_path ), class: ("current" if @section == :reviews )) %>
       <% end %>
     <% end %>
   <% end %>

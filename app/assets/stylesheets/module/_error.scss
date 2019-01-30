@@ -1,0 +1,13 @@
+.error-page {
+  border-top: 1px solid $darkest-grey;
+  padding-top: 1.5rem;
+
+  p {
+    font-size: 1.2rem;
+  }
+
+  img {
+    display: block;
+    border: 1px solid $white;
+  }
+}

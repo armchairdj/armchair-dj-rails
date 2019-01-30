@@ -11,6 +11,8 @@ class Posts::PostsController < ApplicationController
     @posts = policy_scope(Post).for_list.page(params[:page])
 
     @homepage = true if request.url == "/"
+
+    @section = :all
   end
 
   # GET /feed.rss
