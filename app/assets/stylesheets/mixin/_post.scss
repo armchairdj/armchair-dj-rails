@@ -1,0 +1,13 @@
+@mixin post-type-identifier($size: 1rem) {
+  @include bold();
+  text-transform: uppercase;
+  font-size: $size;
+  color: $bone;
+
+  @include inline-block-svg() {
+    @include square($size);
+    @include svg-path-fill($bone);
+    margin-right: .2em;
+    margin-bottom: -.1em;
+  }
+}
