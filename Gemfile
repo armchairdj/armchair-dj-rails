@@ -14,7 +14,7 @@ ruby "2.5.3"
 # CORE.
 ###############################################################################
 
-gem "rails", "5.2.2"
+gem "rails", "5.2.3"
 
 # Required for Rails console.
 gem "rb-readline"
