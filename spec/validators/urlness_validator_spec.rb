@@ -30,7 +30,7 @@ RSpec.describe UrlnessValidator do
     context "with a non-URI" do
       subject { ClassWithUrl.new(url: "not a url") }
 
-      it { is_expected.to_not  be_valid }
+      it { is_expected.to_not be_valid }
 
       it "should have error message" do
         subject.valid?
@@ -42,7 +42,7 @@ RSpec.describe UrlnessValidator do
     context "with a non-URL URI" do
       subject { ClassWithUrl.new(url: "protocol://foo/bar/bat") }
 
-      it { is_expected.to_not  be_valid }
+      it { is_expected.to_not be_valid }
 
       it "should have error message" do
         subject.valid?

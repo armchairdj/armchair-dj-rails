@@ -10,7 +10,7 @@ RSpec.describe "admin/playlists/index" do
 
     @model_class = assign(:model_name, Playlist)
     @collection    = assign(:collection, Ginsu::Collection.new(Playlist.all))
-    @playlists   = assign(:playlists, @collection.resolve)
+    @playlists = assign(:playlists, @collection.resolve)
   end
 
   it "renders a list of playlists" do

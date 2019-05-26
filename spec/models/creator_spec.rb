@@ -198,7 +198,7 @@ RSpec.describe Creator do
         let(:valid) { create(:secondary_creator) }
         let(:invalid) { create(:primary_creator) }
 
-        let(:valid_params) { { "0" => { pseudonym_id:   valid.id } } }
+        let(:valid_params) { { "0" => { pseudonym_id: valid.id } } }
         let(:bad_params) { { "0" => { pseudonym_id: invalid.id } } }
         let(:empty_params) { { "0" => {                          } } }
 
@@ -268,7 +268,7 @@ RSpec.describe Creator do
         let(:valid) { create(:primary_creator) }
         let(:invalid) { create(:secondary_creator) }
 
-        let(:valid_params) { { "0" => { real_name_id:   valid.id } } }
+        let(:valid_params) { { "0" => { real_name_id: valid.id } } }
         let(:bad_params) { { "0" => { real_name_id: invalid.id } } }
         let(:empty_params) { { "0" => {                          } } }
 
@@ -337,7 +337,7 @@ RSpec.describe Creator do
         let(:valid) { create(:individual_creator) }
         let(:invalid) { create(:collective_creator) }
 
-        let(:valid_params) { { "0" => { member_id:   valid.id } } }
+        let(:valid_params) { { "0" => { member_id: valid.id } } }
         let(:bad_params) { { "0" => { member_id: invalid.id } } }
         let(:empty_params) { { "0" => {                       } } }
 
@@ -697,9 +697,9 @@ RSpec.describe Creator do
           specify "#colleagues" do
             expect(christine.colleagues).to eq([john, lindsay, mick, stevie])
             expect(imaginary.colleagues).to eq([lindsay,       stevie])
-            expect(john.colleagues).to eq([christine,                  lindsay, mick, stevie])
-            expect(lindsay.colleagues).to eq([christine, imaginary, john,          mick, stevie])
-            expect(mick.colleagues).to eq([christine,            john, lindsay,       stevie])
+            expect(john.colleagues).to eq([christine, lindsay, mick, stevie])
+            expect(lindsay.colleagues).to eq([christine, imaginary, john, mick, stevie])
+            expect(mick.colleagues).to eq([christine, john, lindsay, stevie])
             expect(stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick])
           end
         end
@@ -723,15 +723,15 @@ RSpec.describe Creator do
       describe "#posts" do
         let!(:playlist) do
           create(:playlist, :with_author, title: "Title", tracks_attributes: {
-            "0" => attributes_for(:playlist_track, work_id:     created.id),
+            "0" => attributes_for(:playlist_track, work_id: created.id),
             "1" => attributes_for(:playlist_track, work_id: contributed.id),
-            "2" => attributes_for(:playlist_track, work_id:        both.id),
+            "2" => attributes_for(:playlist_track, work_id: both.id),
           })
         end
 
-        let!(:credited_review) { create(:minimal_review,  work_id:      created.id) }
-        let!(:contributed_review) { create(:minimal_review,  work_id:  contributed.id) }
-        let!(:both_review) { create(:minimal_review,  work_id:         both.id) }
+        let!(:credited_review) { create(:minimal_review, work_id: created.id) }
+        let!(:contributed_review) { create(:minimal_review, work_id:  contributed.id) }
+        let!(:both_review) { create(:minimal_review, work_id:         both.id) }
         let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
         subject { instance.posts.ids }

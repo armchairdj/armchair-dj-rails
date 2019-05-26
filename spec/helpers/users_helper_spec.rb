@@ -82,7 +82,7 @@ RSpec.describe UsersHelper do
         let(:opts) { { admin: true } }
 
         it "has the correct markup" do
-          is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text:  "ArmchairDJ", count: 1)
+          is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
         end
       end
     end

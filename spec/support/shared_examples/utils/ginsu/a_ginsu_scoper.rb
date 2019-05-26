@@ -7,9 +7,9 @@ RSpec.shared_examples "a_ginsu_scoper" do
   allowed_hash = described_class.new.allowed
 
   describe "instance" do
-    let(:current_scope) { "All"     }
+    let(:current_scope) { "All" }
     let(:current_sort) { "Default" }
-    let(:current_dir) { "ASC"     }
+    let(:current_dir) { "ASC" }
     let(:instance) { described_class.new(
       current_scope: current_scope,
       current_sort:  current_sort,

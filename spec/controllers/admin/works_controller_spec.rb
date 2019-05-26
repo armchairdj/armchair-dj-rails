@@ -113,7 +113,7 @@ RSpec.describe Admin::WorksController do
 
     describe "PUT #update" do
       let(:update_params) { { title: "New Title" } }
-      let(:bad_update_params) { { title: ""          } }
+      let(:bad_update_params) { { title: "" } }
 
       context "with valid params" do
         subject { put :update, params: { id: instance.to_param, work: update_params } }

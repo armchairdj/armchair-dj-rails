@@ -104,7 +104,7 @@ RSpec.describe Admin::PlaylistsController do
 
     describe "PUT #update" do
       let(:update_params) { { title: "New Title" } }
-      let(:bad_update_params) { { title: ""          } }
+      let(:bad_update_params) { { title: "" } }
 
       context "with valid params" do
         subject do

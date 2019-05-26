@@ -297,13 +297,13 @@ RSpec.describe Post do
       end
 
       describe "to scheduled" do
-        specify { expect(draft).to     allow_transition_to(:scheduled) }
+        specify { expect(draft).to allow_transition_to(:scheduled) }
         specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
         specify { expect(published).to_not allow_transition_to(:scheduled) }
       end
 
       describe "to published" do
-        specify { expect(draft).to     allow_transition_to(:published) }
+        specify { expect(draft).to allow_transition_to(:published) }
         specify { expect(scheduled).to     allow_transition_to(:published) }
         specify { expect(published).to_not allow_transition_to(:published) }
       end

@@ -27,7 +27,7 @@ FactoryBot.define do
     end
 
     factory :carl_craig_and_green_velvet_unity, parent: :minimal_album do
-      title  "Unity"
+      title "Unity"
       subtitle nil
 
       transient do
@@ -46,10 +46,10 @@ FactoryBot.define do
     end
 
     factory :madonna_ray_of_light, parent: :complete_album do
-      title  "Ray of Light"
+      title "Ray of Light"
 
       transient do
-        maker_names     ["Madonna"]
+        maker_names ["Madonna"]
         contributor_names ["William Orbit"]
       end
     end

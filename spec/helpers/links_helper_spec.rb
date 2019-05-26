@@ -20,7 +20,7 @@ RSpec.describe LinksHelper do
       it "has the correct markup" do
         is_expected.to have_tag("ul", count: 1)
         is_expected.to have_tag("ul li", count: 3)
-        is_expected.to have_tag("ul li a",  count: 3)
+        is_expected.to have_tag("ul li a", count: 3)
       end
 
       it "has the correct urls and text" do

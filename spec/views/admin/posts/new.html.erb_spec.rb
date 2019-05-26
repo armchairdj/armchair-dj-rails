@@ -57,7 +57,7 @@ RSpec.describe "admin/posts/new" do
         create(:minimal_tag)
       end
 
-      @playlists = assign(:playlists,  Playlist.all.alpha)
+      @playlists = assign(:playlists, Playlist.all.alpha)
 
       @post = @mixtape = build(:mixtape)
 

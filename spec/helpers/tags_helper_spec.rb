@@ -56,7 +56,7 @@ RSpec.describe TagsHelper do
         it "has the correct markup" do
           is_expected.to have_tag("ul", count: 1)
           is_expected.to have_tag("ul li", count: 3)
-          is_expected.to have_tag("ul li a",  count: 3)
+          is_expected.to have_tag("ul li a", count: 3)
 
           is_expected.to have_tag("ul li a[href='/admin/tags/#{tags[0].to_param}']", text: tags[0].name)
           is_expected.to have_tag("ul li a[href='/admin/tags/#{tags[1].to_param}']", text: tags[1].name)

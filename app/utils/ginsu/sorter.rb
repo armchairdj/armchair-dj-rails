@@ -70,7 +70,7 @@ module Ginsu
   private
 
     def valid?
-      return false unless    allowed.keys.include?(@current_sort)
+      return false unless allowed.keys.include?(@current_sort)
       return false unless ["ASC", "DESC"].include?(@current_dir)
 
       true

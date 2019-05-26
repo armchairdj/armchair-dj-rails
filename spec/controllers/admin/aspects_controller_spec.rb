@@ -75,7 +75,7 @@ RSpec.describe Admin::AspectsController do
 
     describe "PUT #update" do
       let(:update_params) { { name: "New Name" } }
-      let(:bad_update_params) { { name: ""         } }
+      let(:bad_update_params) { { name: "" } }
 
       context "with valid params" do
         before(:each) do
