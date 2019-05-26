@@ -2,11 +2,11 @@
 
 ## Ruby version
 
-2.5.3
+2.6.3
 
 ## Rails version
 
-5.2.2
+5.2.3
 
 ## System dependencies
 
