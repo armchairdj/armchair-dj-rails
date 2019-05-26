@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PostsHelper
-
   def preview_admin_post_path(post)
     return preview_admin_article_path(post) if post.is_a?(Article)
     return preview_admin_review_path(post)  if post.is_a?(Review)

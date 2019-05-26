@@ -68,6 +68,7 @@ AllCops:
     - 'vendor/**/*'
     - '.git/**/*'
     - 'lib/templates/**/*'
+    - 'db/schema.rb'
   # Default formatter will be used if no `-f/--format` option is given.
   DefaultFormatter: progress
   # Cop names are displayed in offense messages by default. Change behavior
@@ -770,7 +771,9 @@ Naming/PredicateName:
   # Exclude Rspec specs because there is a strong convention to write spec
   # helpers in the form of `have_something` or `be_something`.
   Exclude:
-    - 'spec/**/*'
+    - 'spec/**/*_spec.rb'
+    - 'spec/support/shared_examples/**/*'
+    - 'spec/factories/**/*'
 
 Naming/UncommunicativeBlockParamName:
   # Parameter names may be equal to or greater than this value
@@ -1536,6 +1539,12 @@ Metrics/BlockLength:
   CountComments: false  # count full line comments?
   Max: 25
   ExcludedMethods: []
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'spec/support/shared_examples/**/*'
+    - 'spec/factories/**/*'
+    - 'app/models/concerns/**/*'
+    - 'app/controllers/concerns/**/*'
 
 Metrics/BlockNesting:
   CountBlocks: false

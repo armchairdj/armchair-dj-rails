@@ -125,11 +125,12 @@ concern :Errorable do
 
     def loggable_token(status)
       case status
-      when 403; "FORBIDDEN_ERROR (403)"
-      when 404; "NOT_FOUND_ERROR (404)"
-      when 422; "BAD_REQUEST_ERROR (422)"
-      when 500; "WHOOPS_EXCEPTION (500)"
-      else;     "UNKNOWN_EXCEPTION"
+      when 403 then "FORBIDDEN_ERROR (403)"
+      when 404 then "NOT_FOUND_ERROR (404)"
+      when 422 then "BAD_REQUEST_ERROR (422)"
+      when 500 then "WHOOPS_EXCEPTION (500)"
+      else
+        "UNKNOWN_EXCEPTION"
       end
     end
 

@@ -11,14 +11,14 @@ module SimpleForm
     end
 
     def render
-      if has_errors?
-        content = [
-          template.content_tag(:p, error_message),
-          object.errors[:base].map { |e| template.content_tag(:div, e, class: "error") }
-        ].flatten.compact.join.html_safe
+      return unless has_errors?
 
-        template.content_tag(error_notification_tag, content, html_options)
-      end
+      content = [
+        template.content_tag(:p, error_message),
+        object.errors[:base].map { |e| template.content_tag(:div, e, class: "error") }
+      ].flatten.compact.join.html_safe
+
+      template.content_tag(error_notification_tag, content, html_options)
     end
 
   protected

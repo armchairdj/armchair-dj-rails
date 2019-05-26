@@ -18,7 +18,6 @@
 #   spec types.
 
 module FactoryHelpers
-
   POLICY_OR_HELPER_MATCHER = /sHelper|Policy$/
 
   def determine_model_class
