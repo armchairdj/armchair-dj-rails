@@ -303,11 +303,11 @@ RSpec.describe User do
       describe "methods" do
         describe "#assignable_role_options" do
           let(:options) do
-            [ [ "Member", "member" ],
-              [ "Writer", "writer" ],
-              [ "Editor", "editor" ],
-              [ "Admin",  "admin"  ],
-              [ "Root",   "root"   ] ]
+            [["Member", "member"],
+              ["Writer", "writer"],
+              ["Editor", "editor"],
+              ["Admin",  "admin"],
+              ["Root",   "root"]]
           end
 
           it "is empty for members" do

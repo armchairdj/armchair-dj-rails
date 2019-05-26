@@ -52,7 +52,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
           end
 
           describe "with nested parts" do
-            let(:parts) { [ ["Kate Bush", "Never for Ever"], "Remastered Edition" ] }
+            let(:parts) { [["Kate Bush", "Never for Ever"], "Remastered Edition"] }
 
             it { is_expected.to eq("kate bush never for ever remastered edition") }
           end

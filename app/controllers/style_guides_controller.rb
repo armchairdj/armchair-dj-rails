@@ -2,9 +2,9 @@
 
 class StyleGuidesController < ApplicationController
   before_action :authorize_page
-  before_action :set_template,   only: [:show         ]
+  before_action :set_template,   only: [:show]
   before_action :set_flash_type, only: [:flash_message]
-  before_action :set_error_type, only: [:error_page   ]
+  before_action :set_error_type, only: [:error_page]
 
   def index; end
 

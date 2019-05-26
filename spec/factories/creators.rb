@@ -230,7 +230,7 @@ FactoryBot.define do
 
       factory :wolfgang_voigt_with_pseudonyms do
         transient do
-          pseudonyms { [create(:gas) ] }
+          pseudonyms { [create(:gas)] }
         end
 
         with_specific_pseudonyms
@@ -280,7 +280,7 @@ FactoryBot.define do
 
       factory :richie_hawtin_with_pseudonyms do
         transient do
-          pseudonyms { [create(:plastikman), create(:fuse) ] }
+          pseudonyms { [create(:plastikman), create(:fuse)] }
         end
 
         with_specific_pseudonyms
@@ -294,7 +294,7 @@ FactoryBot.define do
 
       factory :dan_bell_with_pseudonyms do
         transient do
-          pseudonyms { [create(:dbx) ] }
+          pseudonyms { [create(:dbx)] }
         end
 
         with_specific_pseudonyms
@@ -308,7 +308,7 @@ FactoryBot.define do
 
       factory :fred_giannelli_with_pseudonyms do
         transient do
-          pseudonyms { [create(:the_kooky_scientist) ] }
+          pseudonyms { [create(:the_kooky_scientist)] }
         end
 
         with_specific_pseudonyms
@@ -322,7 +322,7 @@ FactoryBot.define do
 
       factory :spawn_with_members do
         transient do
-          members { [create(:fred_giannelli), create(:richie_hawtin), create(:dan_bell) ] }
+          members { [create(:fred_giannelli), create(:richie_hawtin), create(:dan_bell)] }
         end
 
         with_specific_members

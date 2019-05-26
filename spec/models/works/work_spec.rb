@@ -36,8 +36,8 @@ RSpec.describe Work do
       let!(:album  ) { create(:minimal_album) }
 
       it { is_expected.to eq([
-        ["Album", [album] ],
-        ["Song",  [song ] ]
+        ["Album", [album]],
+        ["Song",  [song]]
       ]) }
     end
 
@@ -243,9 +243,9 @@ RSpec.describe Work do
 
       it "groups by type and alphabetizes" do
         is_expected.to eq([
-          [ "Podcast", [podcast       ] ],
-          [ "Song",    [song_2, song_1] ],
-          [ "TV Show", [tv_show       ] ],
+          ["Podcast", [podcast]],
+          ["Song",    [song_2, song_1]],
+          ["TV Show", [tv_show]],
         ])
       end
     end
@@ -255,22 +255,22 @@ RSpec.describe Work do
 
       let(:expected) do
         [
-          ["Album",         "Album"       ],
-          ["App",           "App"         ],
-          ["Book",          "Book"        ],
-          ["Comic Book",    "ComicBook"   ],
-          ["Gadget",        "Gadget"      ],
+          ["Album",         "Album"],
+          ["App",           "App"],
+          ["Book",          "Book"],
+          ["Comic Book",    "ComicBook"],
+          ["Gadget",        "Gadget"],
           ["Graphic Novel", "GraphicNovel"],
-          ["Movie",         "Movie"       ],
-          ["Podcast",       "Podcast"     ],
-          ["Product",       "Product"     ],
-          ["Publication",   "Publication" ],
-          ["Radio Show",    "RadioShow"   ],
-          ["Song",          "Song"        ],
-          ["TV Episode",    "TvEpisode"   ],
-          ["TV Season",     "TvSeason"    ],
-          ["TV Show",       "TvShow"      ],
-          ["Video Game",    "VideoGame"   ],
+          ["Movie",         "Movie"],
+          ["Podcast",       "Podcast"],
+          ["Product",       "Product"],
+          ["Publication",   "Publication"],
+          ["Radio Show",    "RadioShow"],
+          ["Song",          "Song"],
+          ["TV Episode",    "TvEpisode"],
+          ["TV Season",     "TvSeason"],
+          ["TV Show",       "TvShow"],
+          ["Video Game",    "VideoGame"],
         ]
       end
 
@@ -761,13 +761,13 @@ RSpec.describe Work do
       describe "#creator_ids" do
         subject { instance.creator_ids }
 
-        it { is_expected.to match_array([ creator_1.id, creator_2.id, creator_3.id ]) }
+        it { is_expected.to match_array([creator_1.id, creator_2.id, creator_3.id]) }
       end
 
       describe "#creators" do
         subject { instance.creators }
 
-        it { is_expected.to match_array([ creator_1, creator_2, creator_3 ]) }
+        it { is_expected.to match_array([creator_1, creator_2, creator_3]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
       end
     end

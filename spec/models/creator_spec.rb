@@ -475,14 +475,14 @@ RSpec.describe Creator do
         describe "class" do
           specify "self#individual_options" do
             expect(described_class.individual_options).to match_array([
-              [a_string_matching(/^This is an individual/), true ],
+              [a_string_matching(/^This is an individual/), true],
               [a_string_matching(/^This is a group/),       false]
             ])
           end
 
           specify "self#collective_options" do
             expect(described_class.primary_options).to match_array([
-              [a_string_matching(/^This is a primary/),   true ],
+              [a_string_matching(/^This is a primary/),   true],
               [a_string_matching(/^This is a secondary/), false]
             ])
           end
@@ -682,25 +682,25 @@ RSpec.describe Creator do
 
           specify "#members" do
             expect(      band.members).to eq([christine, john, lindsay, mick, stevie])
-            expect(other_band.members).to eq([imaginary, lindsay, stevie            ])
+            expect(other_band.members).to eq([imaginary, lindsay, stevie])
           end
 
           specify "#groups" do
-            expect(christine.groups).to eq([            band])
-            expect(imaginary.groups).to eq([other_band      ])
-            expect(     john.groups).to eq([            band])
+            expect(christine.groups).to eq([band])
+            expect(imaginary.groups).to eq([other_band])
+            expect(     john.groups).to eq([band])
             expect(  lindsay.groups).to eq([other_band, band])
-            expect(     mick.groups).to eq([            band])
+            expect(     mick.groups).to eq([band])
             expect(   stevie.groups).to eq([other_band, band])
           end
 
           specify "#colleagues" do
-            expect(christine.colleagues).to eq([                      john, lindsay, mick, stevie])
-            expect(imaginary.colleagues).to eq([                            lindsay,       stevie])
+            expect(christine.colleagues).to eq([john, lindsay, mick, stevie])
+            expect(imaginary.colleagues).to eq([lindsay,       stevie])
             expect(     john.colleagues).to eq([christine,                  lindsay, mick, stevie])
             expect(  lindsay.colleagues).to eq([christine, imaginary, john,          mick, stevie])
             expect(     mick.colleagues).to eq([christine,            john, lindsay,       stevie])
-            expect(   stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick        ])
+            expect(   stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick])
           end
         end
       end
@@ -770,7 +770,7 @@ RSpec.describe Creator do
 
         it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
           is_expected.to eq({
-            "Book"    => ["Author",  "Creator",  "Editor"    ],
+            "Book"    => ["Author",  "Creator",  "Editor"],
             "TV Show" => ["Creator", "Director", "Showrunner"]
           })
         end

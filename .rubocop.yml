@@ -664,6 +664,10 @@ Layout/TrailingBlankLines:
 Layout/TrailingWhitespace:
   AllowInHeredoc: false
 
+Lint/UselessAssignment:
+  Exclude:
+    - "db/seeds.rb"
+
 #################### Naming ##########################
 
 Naming/FileName:
@@ -1544,7 +1548,7 @@ Metrics/CyclomaticComplexity:
   Max: 6
 
 Metrics/LineLength:
-  Max: 80
+  Max: 120
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true
@@ -1562,11 +1566,11 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
-  Max: 10
+  Max: 20
 
 Metrics/ModuleLength:
   CountComments: false  # count full line comments?
-  Max: 100
+  Max: 500
 
 Metrics/ParameterLists:
   Max: 5

@@ -66,7 +66,7 @@ class Article < Post
     end
 
     def sluggable_parts
-      [ title ]
+      [title]
     end
   end
 
@@ -76,7 +76,7 @@ class Article < Post
 
   concerning :Alphabetization do
     def alpha_parts
-      [ title ]
+      [title]
     end
   end
 end
