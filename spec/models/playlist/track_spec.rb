@@ -23,7 +23,7 @@ RSpec.describe Playlist::Track do
   describe "concerns" do
     it_behaves_like "a_listable_model", :playlist, :tracks do
       let(:primary) { create(:complete_playlist).tracks.sorted }
-      let(:other  ) { create(:complete_playlist).tracks.sorted }
+      let(:other) { create(:complete_playlist).tracks.sorted }
     end
 
     it_behaves_like "a_ginsu_model" do
@@ -44,8 +44,8 @@ RSpec.describe Playlist::Track do
 
   describe "scope-related" do
     describe "self#sorted" do
-      let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z" ) }
-      let(:playlist_2) { create(:complete_playlist,                       title: "A" ) }
+      let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z") }
+      let(:playlist_2) { create(:complete_playlist,                       title: "A") }
 
       let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
       let(:items) { Playlist::Track.where(playlist_id: parent_ids) }
@@ -66,7 +66,7 @@ RSpec.describe Playlist::Track do
 
   describe "associations" do
     it { is_expected.to belong_to(:playlist) }
-    it { is_expected.to belong_to(:work    ) }
+    it { is_expected.to belong_to(:work) }
   end
 
   describe "validations" do

@@ -65,7 +65,7 @@ RSpec.describe Playlist do
 
     it { is_expected.to have_many(:works).through(:tracks) }
 
-    it { is_expected.to have_many(:makers      ).through(:works) }
+    it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
 
     it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
@@ -140,10 +140,10 @@ RSpec.describe Playlist do
     let(:instance) { build_minimal_instance }
 
     describe "post methods" do
-      let!(:work    ) { create(:minimal_work) }
+      let!(:work) { create(:minimal_work) }
       let!(:instance) { create_minimal_instance }
-      let!(:review  ) { create(:minimal_review, work_id: work.id) }
-      let!(:mixtape ) { create(:minimal_mixtape, playlist_id: instance.id) }
+      let!(:review) { create(:minimal_review, work_id: work.id) }
+      let!(:mixtape) { create(:minimal_mixtape, playlist_id: instance.id) }
 
       before(:each) do
         # TODO let the factory handle this with transient attributes
@@ -164,7 +164,7 @@ RSpec.describe Playlist do
     end
 
     describe "creator methods" do
-      let(:role     ) { create(:minimal_role, medium: "Song") }
+      let(:role) { create(:minimal_role, medium: "Song") }
       let(:creator_1) { create(:minimal_creator, name: "One") }
       let(:creator_2) { create(:minimal_creator, name: "Two") }
       let(:creator_3) { create(:minimal_creator, name: "Three") }

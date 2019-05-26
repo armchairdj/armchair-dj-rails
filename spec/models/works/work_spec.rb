@@ -31,9 +31,9 @@ RSpec.describe Work do
     describe "#available_relatives" do
       subject { instance.available_relatives }
 
-      let(:instance) { create(:minimal_song ) }
-      let!(:song   ) { create(:minimal_song ) }
-      let!(:album  ) { create(:minimal_album) }
+      let(:instance) { create(:minimal_song) }
+      let!(:song) { create(:minimal_song) }
+      let!(:album) { create(:minimal_album) }
 
       it { is_expected.to eq([
         ["Album", [album]],
@@ -53,7 +53,7 @@ RSpec.describe Work do
       describe "validates nested uniqueness" do
         subject { build_minimal_instance }
 
-        let(:target      ) { create_minimal_instance }
+        let(:target) { create_minimal_instance }
         let(:other_target) { create_minimal_instance }
 
         before(:each) do
@@ -62,7 +62,7 @@ RSpec.describe Work do
 
         context "without dupes" do
           let(:attributes) { {
-            "0" => attributes_for(:minimal_work_relationship, target_id: target.id      ),
+            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
             "1" => attributes_for(:minimal_work_relationship, target_id: other_target.id)
           }}
 
@@ -93,7 +93,7 @@ RSpec.describe Work do
       end
 
       describe "accepts nested attributes" do
-        let(:target      ) { create(:minimal_work) }
+        let(:target) { create(:minimal_work) }
         let(:valid_params) { { "0" => { connection: "member_of", target_id: target.id } } }
         let(:empty_params) { { "0" => { connection: "member_of", target_id: nil       } } }
 
@@ -147,7 +147,7 @@ RSpec.describe Work do
       describe "validates nested uniqueness" do
         subject { build_minimal_instance }
 
-        let(:source      ) { create_minimal_instance }
+        let(:source) { create_minimal_instance }
         let(:other_source) { create_minimal_instance }
 
         before(:each) do
@@ -156,7 +156,7 @@ RSpec.describe Work do
 
         context "without dupes" do
           let(:attributes) { {
-            "0" => attributes_for(:minimal_work_relationship, source_id: source.id      ),
+            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
             "1" => attributes_for(:minimal_work_relationship, source_id: other_source.id)
           }}
 
@@ -187,7 +187,7 @@ RSpec.describe Work do
       end
 
       describe "accepts nested attributes" do
-        let(:source      ) { create(:minimal_work) }
+        let(:source) { create(:minimal_work) }
         let(:valid_params) { { "0" => { connection: "member_of", source_id: source.id } } }
         let(:empty_params) { { "0" => { connection: "member_of", source_id: nil       } } }
 
@@ -232,10 +232,10 @@ RSpec.describe Work do
 
   describe "class" do
     describe "self#grouped_by_medium" do
-      let(:song_1 ) { create(:minimal_song, maker_names: ["Wilco"]) }
-      let(:song_2 ) { create(:minimal_song, maker_names: ["Annie"]) }
-      let(:tv_show) { create(:minimal_tv_show         ) }
-      let(:podcast) { create(:minimal_podcast         ) }
+      let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
+      let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
+      let(:tv_show) { create(:minimal_tv_show) }
+      let(:podcast) { create(:minimal_podcast) }
 
       let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
 
@@ -366,7 +366,7 @@ RSpec.describe Work do
           it "rejects credits without a creator_id" do
             instance = build_minimal_instance(credits_attributes: {
               "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-              "1" => attributes_for(:credit, creator_id: nil                        )
+              "1" => attributes_for(:credit, creator_id: nil)
             })
 
             expect { instance.save }.to change { Credit.count }.by(1)
@@ -403,7 +403,7 @@ RSpec.describe Work do
           subject do
             build(:minimal_song, contributions_attributes: {
               "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
-              "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil                        )
+              "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
             })
           end
 
@@ -438,7 +438,7 @@ RSpec.describe Work do
           subject do
             build(:minimal_song, milestones_attributes: {
               "0" => attributes_for(:work_milestone_for_work, year: "1981"),
-              "1" => attributes_for(:work_milestone_for_work, year: ""    )
+              "1" => attributes_for(:work_milestone_for_work, year: "")
             })
           end
 
@@ -530,11 +530,11 @@ RSpec.describe Work do
         describe "credits" do
           before(:each) { subject.credits = [] }
 
-          let(:creator      ) { create(:minimal_creator) }
+          let(:creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
           let(:good_attributes) { {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id      ),
+            "0" => attributes_for(:minimal_credit, creator_id: creator.id),
             "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
           }}
 
@@ -646,9 +646,9 @@ RSpec.describe Work do
 
     describe "post methods" do
       let!(:instance) { create_minimal_instance }
-      let!(:review  ) { create(:minimal_review, work_id: instance.id) }
+      let!(:review) { create(:minimal_review, work_id: instance.id) }
       let!(:playlist) { create(:minimal_playlist) }
-      let!(:mixtape ) { create(:minimal_mixtape, playlist_id: playlist.id) }
+      let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
       before(:each) do
         # TODO let the factory handle this with transient attributes

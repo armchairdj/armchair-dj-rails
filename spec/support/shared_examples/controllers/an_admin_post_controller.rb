@@ -2,7 +2,7 @@
 
 RSpec.shared_examples "an_admin_post_controller" do
   let(:model_class) { described_class.controller_name.classify.constantize }
-  let(:param_key  ) { model_class.model_name.param_key.to_sym }
+  let(:param_key) { model_class.model_name.param_key.to_sym }
 
   let(:templates) { {
     show:    "admin/posts/show",

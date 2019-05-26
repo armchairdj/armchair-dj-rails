@@ -24,7 +24,7 @@ RSpec.describe Article do
     describe "#display_type" do
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.display_type              ).to eq("Article" ) }
+      specify { expect(instance.display_type).to eq("Article") }
       specify { expect(instance.display_type(plural: true)).to eq("Articles") }
     end
   end

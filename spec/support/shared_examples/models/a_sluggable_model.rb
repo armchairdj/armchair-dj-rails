@@ -228,18 +228,18 @@ RSpec.shared_examples "a_sluggable_model" do
           let(:instance) { create_minimal_instance }
 
           before(:each) do
-            allow(instance).to receive(:slug_candidates   ).and_call_original
+            allow(instance).to receive(:slug_candidates).and_call_original
             allow(instance).to receive(:reset_slug_history).and_call_original
           end
 
           context "clear_slug? is true" do
             before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(true)
+              allow(instance).to receive(:should_clear_slug?).and_return(true)
               allow(instance).to receive(:should_reset_slug_history?).and_return(false)
             end
 
             it "resets slug" do
-              expect(instance).to     receive(:slug_candidates   )
+              expect(instance).to     receive(:slug_candidates)
               expect(instance).to_not receive(:reset_slug_history)
 
               instance.save
@@ -248,12 +248,12 @@ RSpec.shared_examples "a_sluggable_model" do
 
           context "should_reset_slug_history? is true" do
             before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(false)
-              allow(instance).to receive(:should_reset_slug_history?).and_return(true )
+              allow(instance).to receive(:should_clear_slug?).and_return(false)
+              allow(instance).to receive(:should_reset_slug_history?).and_return(true)
             end
 
             it "resets slug and slug history" do
-              expect(instance).to receive(:slug_candidates   )
+              expect(instance).to receive(:slug_candidates)
               expect(instance).to receive(:reset_slug_history)
 
               instance.save
@@ -262,12 +262,12 @@ RSpec.shared_examples "a_sluggable_model" do
 
           context "both are false" do
             before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(false)
+              allow(instance).to receive(:should_clear_slug?).and_return(false)
               allow(instance).to receive(:should_reset_slug_history?).and_return(false)
             end
 
             it "does nothing" do
-              expect(instance).to_not receive(:slug_candidates   )
+              expect(instance).to_not receive(:slug_candidates)
               expect(instance).to_not receive(:reset_slug_history)
 
               instance.save
@@ -282,8 +282,8 @@ RSpec.shared_examples "a_sluggable_model" do
         it { is_expected.to eq([:base_slug, :sequenced_slug]) }
 
         describe "calling #base_slug, #sequenced_slug & #normalize_friendly_id" do
-          let(:one  ) { create_minimal_instance }
-          let(:two  ) { create_minimal_instance }
+          let(:one) { create_minimal_instance }
+          let(:two) { create_minimal_instance }
           let(:three) { create_minimal_instance }
 
           describe "basic characters" do
@@ -297,8 +297,8 @@ RSpec.shared_examples "a_sluggable_model" do
               end
             end
 
-            specify { expect(one.slug  ).to eq("foo/bar/bat"  ) }
-            specify { expect(two.slug  ).to eq("foo/bar/bat-2") }
+            specify { expect(one.slug).to eq("foo/bar/bat") }
+            specify { expect(two.slug).to eq("foo/bar/bat-2") }
             specify { expect(three.slug).to eq("foo/bar/bat-3") }
           end
 
@@ -313,8 +313,8 @@ RSpec.shared_examples "a_sluggable_model" do
               end
             end
 
-            specify { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/xxx"  ) }
-            specify { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/xxx-2") }
+            specify { expect(one.slug).to eq("salt_n_pepa/blacks_magic/xxx") }
+            specify { expect(two.slug).to eq("salt_n_pepa/blacks_magic/xxx-2") }
             specify { expect(three.slug).to eq("salt_n_pepa/blacks_magic/xxx-3") }
           end
         end

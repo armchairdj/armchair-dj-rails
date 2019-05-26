@@ -3,7 +3,7 @@
 RSpec::Matchers.define :have_aliased_method do |original, aliased|
   match do |owner|
     expected = owner.method(original.to_sym).source_location
-    actual   = owner.method( aliased.to_sym).source_location
+    actual   = owner.method(aliased.to_sym).source_location
 
     expect(actual).to eq(expected)
   end

@@ -112,7 +112,7 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "PUT #update" do
-      let(:update_params    ) { { title: "New Title" } }
+      let(:update_params) { { title: "New Title" } }
       let(:bad_update_params) { { title: ""          } }
 
       context "with valid params" do
@@ -142,7 +142,7 @@ RSpec.describe Admin::WorksController do
       let!(:instance) do
         create(:junior_boys_like_a_child_c2_remix, source_relationships_attributes: {
           "0" => { connection: "version_of", source_id: source_work.id }
-        } )
+        })
       end
 
       subject { delete :destroy, params: { id: instance.to_param } }

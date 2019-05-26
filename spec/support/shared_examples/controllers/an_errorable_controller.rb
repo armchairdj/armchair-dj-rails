@@ -40,7 +40,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
@@ -59,7 +59,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
@@ -102,7 +102,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
@@ -115,7 +115,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
@@ -158,7 +158,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(404)
+            expect(response).to have_http_status(404)
             expect(response.body).to eq("{}")
           end
         end
@@ -171,7 +171,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(404)
+            expect(response).to have_http_status(404)
             expect(response.body).to eq("{}")
           end
         end
@@ -238,7 +238,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(422)
+            expect(response).to have_http_status(422)
             expect(response.body).to eq("{}")
           end
         end
@@ -251,7 +251,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(422)
+            expect(response).to have_http_status(422)
             expect(response.body).to eq("{}")
           end
         end
@@ -296,7 +296,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(500)
+            expect(response).to have_http_status(500)
             expect(response.body).to eq("{}")
           end
         end
@@ -309,7 +309,7 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(500)
+            expect(response).to have_http_status(500)
             expect(response.body).to eq("{}")
           end
         end

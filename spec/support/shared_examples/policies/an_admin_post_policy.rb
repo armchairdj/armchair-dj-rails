@@ -10,62 +10,62 @@ RSpec.shared_examples "an_admin_post_policy" do
   context "without user" do
     let(:user) { nil }
 
-    it { is_expected.to raise_not_authorized_for(:index   ) }
-    it { is_expected.to raise_not_authorized_for(:show    ) }
-    it { is_expected.to raise_not_authorized_for(:preview ) }
-    it { is_expected.to raise_not_authorized_for(:new     ) }
-    it { is_expected.to raise_not_authorized_for(:create  ) }
-    it { is_expected.to raise_not_authorized_for(:edit    ) }
-    it { is_expected.to raise_not_authorized_for(:update  ) }
+    it { is_expected.to raise_not_authorized_for(:index) }
+    it { is_expected.to raise_not_authorized_for(:show) }
+    it { is_expected.to raise_not_authorized_for(:preview) }
+    it { is_expected.to raise_not_authorized_for(:new) }
+    it { is_expected.to raise_not_authorized_for(:create) }
+    it { is_expected.to raise_not_authorized_for(:edit) }
+    it { is_expected.to raise_not_authorized_for(:update) }
     it { is_expected.to raise_not_authorized_for(:autosave) }
-    it { is_expected.to raise_not_authorized_for(:publish ) }
-    it { is_expected.to raise_not_authorized_for(:destroy ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
   describe "as member" do
     let(:user) { build_stubbed(:member) }
 
-    it { is_expected.to raise_not_authorized_for(:index   ) }
-    it { is_expected.to raise_not_authorized_for(:show    ) }
-    it { is_expected.to raise_not_authorized_for(:preview ) }
-    it { is_expected.to raise_not_authorized_for(:new     ) }
-    it { is_expected.to raise_not_authorized_for(:create  ) }
-    it { is_expected.to raise_not_authorized_for(:edit    ) }
-    it { is_expected.to raise_not_authorized_for(:update  ) }
+    it { is_expected.to raise_not_authorized_for(:index) }
+    it { is_expected.to raise_not_authorized_for(:show) }
+    it { is_expected.to raise_not_authorized_for(:preview) }
+    it { is_expected.to raise_not_authorized_for(:new) }
+    it { is_expected.to raise_not_authorized_for(:create) }
+    it { is_expected.to raise_not_authorized_for(:edit) }
+    it { is_expected.to raise_not_authorized_for(:update) }
     it { is_expected.to raise_not_authorized_for(:autosave) }
-    it { is_expected.to raise_not_authorized_for(:publish ) }
-    it { is_expected.to raise_not_authorized_for(:destroy ) }
+    it { is_expected.to raise_not_authorized_for(:publish) }
+    it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
   describe "as writer" do
     let(:user) { build_stubbed(:writer) }
 
-    it { is_expected.to permit_action(:index   ) }
-    it { is_expected.to permit_action(:show    ) }
-    it { is_expected.to permit_action(:new     ) }
-    it { is_expected.to permit_action(:create  ) }
-    it { is_expected.to permit_action(:preview ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
+    it { is_expected.to permit_action(:new) }
+    it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:preview) }
 
-    it { is_expected.to forbid_action(:edit    ) }
-    it { is_expected.to forbid_action(:update  ) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:autosave) }
-    it { is_expected.to forbid_action(:publish ) }
-    it { is_expected.to forbid_action(:destroy ) }
+    it { is_expected.to forbid_action(:publish) }
+    it { is_expected.to forbid_action(:destroy) }
 
     context "with own record" do
       let(:record) { stub_minimal_instance(author_id: user.id) }
 
-      it { is_expected.to permit_action(:index   ) }
-      it { is_expected.to permit_action(:show    ) }
-      it { is_expected.to permit_action(:preview ) }
-      it { is_expected.to permit_action(:new     ) }
-      it { is_expected.to permit_action(:create  ) }
-      it { is_expected.to permit_action(:edit    ) }
-      it { is_expected.to permit_action(:update  ) }
+      it { is_expected.to permit_action(:index) }
+      it { is_expected.to permit_action(:show) }
+      it { is_expected.to permit_action(:preview) }
+      it { is_expected.to permit_action(:new) }
+      it { is_expected.to permit_action(:create) }
+      it { is_expected.to permit_action(:edit) }
+      it { is_expected.to permit_action(:update) }
       it { is_expected.to permit_action(:autosave) }
 
-      it { is_expected.to forbid_action(:publish ) }
-      it { is_expected.to forbid_action(:destroy ) }
+      it { is_expected.to forbid_action(:publish) }
+      it { is_expected.to forbid_action(:destroy) }
 
       context "published" do
         before(:each) do
@@ -80,17 +80,17 @@ RSpec.shared_examples "an_admin_post_policy" do
   describe "as editor" do
     let(:user) { build_stubbed(:editor) }
 
-    it { is_expected.to permit_action(:index   ) }
-    it { is_expected.to permit_action(:show    ) }
-    it { is_expected.to permit_action(:preview ) }
-    it { is_expected.to permit_action(:new     ) }
-    it { is_expected.to permit_action(:create  ) }
-    it { is_expected.to permit_action(:edit    ) }
-    it { is_expected.to permit_action(:update  ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
+    it { is_expected.to permit_action(:preview) }
+    it { is_expected.to permit_action(:new) }
+    it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:edit) }
+    it { is_expected.to permit_action(:update) }
     it { is_expected.to permit_action(:autosave) }
 
-    it { is_expected.to forbid_action(:publish ) }
-    it { is_expected.to forbid_action(:destroy ) }
+    it { is_expected.to forbid_action(:publish) }
+    it { is_expected.to forbid_action(:destroy) }
 
     context "published" do
       before(:each) do
@@ -104,17 +104,17 @@ RSpec.shared_examples "an_admin_post_policy" do
   describe "as admin" do
     let(:user) { build_stubbed(:admin) }
 
-    it { is_expected.to permit_action(:index   ) }
-    it { is_expected.to permit_action(:show    ) }
-    it { is_expected.to permit_action(:preview ) }
-    it { is_expected.to permit_action(:new     ) }
-    it { is_expected.to permit_action(:create  ) }
-    it { is_expected.to permit_action(:edit    ) }
-    it { is_expected.to permit_action(:update  ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
+    it { is_expected.to permit_action(:preview) }
+    it { is_expected.to permit_action(:new) }
+    it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:edit) }
+    it { is_expected.to permit_action(:update) }
     it { is_expected.to permit_action(:autosave) }
-    it { is_expected.to permit_action(:publish ) }
+    it { is_expected.to permit_action(:publish) }
 
-    it { is_expected.to forbid_action(:destroy ) }
+    it { is_expected.to forbid_action(:destroy) }
 
     context "published" do
       before(:each) do
@@ -128,16 +128,16 @@ RSpec.shared_examples "an_admin_post_policy" do
   context "as root" do
     let(:user) { build_stubbed(:root) }
 
-    it { is_expected.to permit_action(:index   ) }
-    it { is_expected.to permit_action(:show    ) }
-    it { is_expected.to permit_action(:preview ) }
-    it { is_expected.to permit_action(:new     ) }
-    it { is_expected.to permit_action(:create  ) }
-    it { is_expected.to permit_action(:edit    ) }
-    it { is_expected.to permit_action(:update  ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
+    it { is_expected.to permit_action(:preview) }
+    it { is_expected.to permit_action(:new) }
+    it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:edit) }
+    it { is_expected.to permit_action(:update) }
     it { is_expected.to permit_action(:autosave) }
-    it { is_expected.to permit_action(:publish ) }
-    it { is_expected.to permit_action(:destroy ) }
+    it { is_expected.to permit_action(:publish) }
+    it { is_expected.to permit_action(:destroy) }
 
     context "published" do
       before(:each) do

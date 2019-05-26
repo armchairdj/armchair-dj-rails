@@ -13,28 +13,28 @@ RSpec.describe Ginsu::Sorter do
 
       context "single clause, ascending" do
         let(:clauses) { "name" }
-        let(:dir    ) { "ASC" }
+        let(:dir) { "ASC" }
 
         it { is_expected.to eq("name") }
       end
 
       context "multiple clauses, ascending" do
         let(:clauses) { ["name", "created_at"] }
-        let(:dir    ) { "ASC" }
+        let(:dir) { "ASC" }
 
         it { is_expected.to eq("name, created_at") }
       end
 
       context "single clause, descending" do
         let(:clauses) { "name" }
-        let(:dir    ) { "DESC" }
+        let(:dir) { "DESC" }
 
         it { is_expected.to eq("name DESC") }
       end
 
       context "multiple clauses, descending" do
         let(:clauses) { ["name", "created_at"] }
-        let(:dir    ) { "DESC" }
+        let(:dir) { "DESC" }
 
         it { is_expected.to eq("name DESC, created_at") }
       end

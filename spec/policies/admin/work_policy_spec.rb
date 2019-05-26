@@ -7,7 +7,7 @@ RSpec.describe Admin::WorkPolicy do
 
   describe "aliased methods" do
     let(:record) { stub_minimal_instance }
-    let(:user  ) { build_stubbed(:user) }
+    let(:user) { build_stubbed(:user) }
 
     subject { described_class.new(user, record) }
 

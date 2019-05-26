@@ -4,7 +4,7 @@ require "rspec/expectations"
 
 RSpec::Matchers.define :paginate do |displayed|
   match do |actual|
-    expect(actual.size       ).to eq(displayed)
+    expect(actual.size).to eq(displayed)
     expect(actual.total_count).to eq(@total)
   end
 

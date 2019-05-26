@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_public_index" do
-  let(:param_key  ) { described_class.controller_name.to_sym }
-  let(:template   ) { "posts/#{param_key}/index" }
+  let(:param_key) { described_class.controller_name.to_sym }
+  let(:template) { "posts/#{param_key}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }
 
   let(:paginated) { model_class.where(id: ids_for_minimal_list(3)) }
-  let(:none     ) { model_class.none }
+  let(:none) { model_class.none }
 
   context "without records" do
     before(:each) do

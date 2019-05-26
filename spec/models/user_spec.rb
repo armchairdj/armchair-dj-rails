@@ -71,20 +71,20 @@ RSpec.describe User do
 
   describe "scope-related" do
     describe "for public site" do
-      let(:saru   ) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru"   ) }
+      let(:saru) { create(:member, first_name: "Saru",    last_name: "Ramanan", username: "saru") }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman",   username: "monique") }
-      let(:celia  ) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia"  ) }
+      let(:celia) { create(:editor, first_name: "Celia",   last_name: "Esdale",  username: "celia") }
       let(:charlie) { create(:admin,  first_name: "Charlie", last_name: "Smith",   username: "charlie") }
-      let(:brian  ) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian"  ) }
+      let(:brian) { create(:root,   first_name: "Brian",   last_name: "Dillard", username: "brian") }
 
-      let(:ids       ) { [saru, monique, celia, charlie, brian].map(&:id) }
+      let(:ids) { [saru, monique, celia, charlie, brian].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
       before(:each) do
         create(:minimal_article, :draft,     author: monique)
-        create(:minimal_article, :scheduled, author: celia  )
+        create(:minimal_article, :scheduled, author: celia)
         create(:minimal_article, :published, author: charlie)
-        create(:minimal_article, :published, author: brian  )
+        create(:minimal_article, :published, author: brian)
       end
 
       describe "self#for_public" do
@@ -96,11 +96,11 @@ RSpec.describe User do
       end
 
       describe "#published?" do
-        specify { expect(   saru.published?).to eq(false) }
+        specify { expect(saru.published?).to eq(false) }
         specify { expect(monique.published?).to eq(false) }
-        specify { expect(  celia.published?).to eq(false) }
-        specify { expect(charlie.published?).to eq(true ) }
-        specify { expect(  brian.published?).to eq(true ) }
+        specify { expect(celia.published?).to eq(false) }
+        specify { expect(charlie.published?).to eq(true) }
+        specify { expect(brian.published?).to eq(true) }
       end
     end
 
@@ -109,10 +109,10 @@ RSpec.describe User do
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
-      let(:admin_1) { create(:admin ) }
-      let(:admin_2) { create(:admin ) }
-      let(:root_1) { create(:root  ) }
-      let(:root_2) { create(:root  ) }
+      let(:admin_1) { create(:admin) }
+      let(:admin_2) { create(:admin) }
+      let(:root_1) { create(:root) }
+      let(:root_2) { create(:root) }
 
       let!(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
@@ -172,10 +172,10 @@ RSpec.describe User do
   end
 
   describe "associations" do
-   it { is_expected.to have_many(:posts    ).dependent(:nullify) }
-   it { is_expected.to have_many(:articles ).dependent(:nullify) }
-   it { is_expected.to have_many(:reviews  ).dependent(:nullify) }
-   it { is_expected.to have_many(:mixtapes ).dependent(:nullify) }
+   it { is_expected.to have_many(:posts).dependent(:nullify) }
+   it { is_expected.to have_many(:articles).dependent(:nullify) }
+   it { is_expected.to have_many(:reviews).dependent(:nullify) }
+   it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
    it { is_expected.to have_many(:playlists).dependent(:nullify) }
 
    it { is_expected.to have_many(:works).through(:reviews) }
@@ -195,7 +195,7 @@ RSpec.describe User do
     subject { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:first_name) }
-    it { is_expected.to validate_presence_of(:last_name ) }
+    it { is_expected.to validate_presence_of(:last_name) }
 
     it { is_expected.to validate_presence_of(:role) }
 
@@ -203,7 +203,7 @@ RSpec.describe User do
     it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
 
     describe "enforce username format" do
-      it { is_expected.to     allow_value("ArmchairDJ10039" ).for(:username) }
+      it { is_expected.to     allow_value("ArmchairDJ10039").for(:username) }
       it { is_expected.to_not allow_value("Armchair-DJ10039").for(:username) }
       it { is_expected.to_not allow_value("Armchair_DJ10039").for(:username) }
       it { is_expected.to_not allow_value("Armchair/DJ10039").for(:username) }
@@ -263,40 +263,40 @@ RSpec.describe User do
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
-      let(:admin) { create( :admin) }
-      let(:root) { create(  :root) }
+      let(:admin) { create(:admin) }
+      let(:root) { create(:root) }
 
       describe "booleans" do
         describe "#can_write? is true for writers, editors, admins & roots" do
           specify { expect(member.can_write?).to eq(false) }
-          specify { expect(writer.can_write?).to eq(true ) }
-          specify { expect(editor.can_write?).to eq(true ) }
-          specify { expect( admin.can_write?).to eq(true ) }
-          specify { expect(  root.can_write?).to eq(true ) }
+          specify { expect(writer.can_write?).to eq(true) }
+          specify { expect(editor.can_write?).to eq(true) }
+          specify { expect(admin.can_write?).to eq(true) }
+          specify { expect(root.can_write?).to eq(true) }
         end
 
         describe "#can_edit? is true for editors, admins & roots" do
           specify { expect(member.can_edit?).to eq(false) }
           specify { expect(writer.can_edit?).to eq(false) }
-          specify { expect(editor.can_edit?).to eq(true ) }
-          specify { expect( admin.can_edit?).to eq(true ) }
-          specify { expect(  root.can_edit?).to eq(true ) }
+          specify { expect(editor.can_edit?).to eq(true) }
+          specify { expect(admin.can_edit?).to eq(true) }
+          specify { expect(root.can_edit?).to eq(true) }
         end
 
         describe "#can_publish? is true for admins & roots" do
           specify { expect(member.can_publish?).to eq(false) }
           specify { expect(writer.can_publish?).to eq(false) }
           specify { expect(editor.can_publish?).to eq(false) }
-          specify { expect( admin.can_publish?).to eq(true ) }
-          specify { expect(  root.can_publish?).to eq(true ) }
+          specify { expect(admin.can_publish?).to eq(true) }
+          specify { expect(root.can_publish?).to eq(true) }
         end
 
         describe "#can_destroy? is true for roots" do
           specify { expect(member.can_destroy?).to eq(false) }
           specify { expect(writer.can_destroy?).to eq(false) }
           specify { expect(editor.can_destroy?).to eq(false) }
-          specify { expect( admin.can_destroy?).to eq(false) }
-          specify { expect(  root.can_destroy?).to eq(true ) }
+          specify { expect(admin.can_destroy?).to eq(false) }
+          specify { expect(root.can_destroy?).to eq(true) }
         end
       end
 

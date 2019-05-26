@@ -15,7 +15,7 @@ RSpec.describe PostsHelper do
     pending "#post_body"
 
     describe "#post_published_date" do
-      let(:draft    ) { create(:minimal_article, :draft    ) }
+      let(:draft) { create(:minimal_article, :draft) }
       let(:scheduled) { create(:minimal_article, :scheduled) }
       let(:published) { create(:minimal_article, :published) }
 
@@ -27,7 +27,7 @@ RSpec.describe PostsHelper do
         end
       end
 
-      specify { expect(helper.post_published_date(draft    )).to eq(nil) }
+      specify { expect(helper.post_published_date(draft)).to eq(nil) }
       specify { expect(helper.post_published_date(scheduled)).to eq(nil) }
     end
   end

@@ -27,7 +27,7 @@ module ModuleHelper
   def section_header(headline = nil, subhead = nil)
     headlines = []
     headlines << content_tag(:h4, headline) unless headline.blank?
-    headlines << content_tag(:h6, subhead ) unless subhead.blank?
+    headlines << content_tag(:h6, subhead) unless subhead.blank?
 
     return unless headlines.any?
 

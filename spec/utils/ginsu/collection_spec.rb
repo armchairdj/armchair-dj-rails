@@ -144,8 +144,8 @@ RSpec.describe Ginsu::Collection do
     end
 
     describe "#display_count" do
-      let(:relation  ) { Creator.for_list }
-      let(:instance  ) { described_class.new(relation) }
+      let(:relation) { Creator.for_list }
+      let(:instance) { described_class.new(relation) }
       let(:collection) { double }
 
       subject { instance.display_count }

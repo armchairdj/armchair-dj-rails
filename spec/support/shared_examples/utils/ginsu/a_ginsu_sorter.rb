@@ -2,15 +2,15 @@
 
 RSpec.shared_examples "a_ginsu_sorter" do
   let(:model_class) { described_class.new.send(:model_class) }
-  let(:view_path  ) { model_class.model_name.plural }
+  let(:view_path) { model_class.model_name.plural }
 
   allowed_hash = described_class.new.allowed
 
   describe "instance" do
     let(:current_scope) { "All"     }
-    let(:current_sort ) { "Default" }
-    let(:current_dir  ) { "ASC"     }
-    let(:instance     ) { described_class.new(
+    let(:current_sort) { "Default" }
+    let(:current_dir) { "ASC"     }
+    let(:instance) { described_class.new(
       current_scope: current_scope,
       current_sort:  current_sort,
       current_dir:   current_dir

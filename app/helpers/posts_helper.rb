@@ -15,13 +15,13 @@ module PostsHelper
 
   def link_to_post(post, **opts)
     return link_to_article(post, **opts) if post.is_a?(Article)
-    return link_to_review( post, **opts) if post.is_a?(Review)
+    return link_to_review(post, **opts) if post.is_a?(Review)
     return link_to_mixtape(post, **opts) if post.is_a?(Mixtape)
   end
 
   def url_for_post(post, **opts)
     return url_for_article(post, **opts) if post.is_a?(Article)
-    return url_for_review( post, **opts) if post.is_a?(Review)
+    return url_for_review(post, **opts) if post.is_a?(Review)
     return url_for_mixtape(post, **opts) if post.is_a?(Mixtape)
   end
 
@@ -31,13 +31,13 @@ module PostsHelper
 
   def decorated_post_type(post)
     return decorated_article_type(post) if post.is_a?(Article)
-    return decorated_review_type( post) if post.is_a?(Review)
+    return decorated_review_type(post) if post.is_a?(Review)
     return decorated_mixtape_type(post) if post.is_a?(Mixtape)
   end
 
   def post_title(post, **args)
     return article_title(post, **args) if post.is_a?(Article)
-    return review_title( post, **args) if post.is_a?(Review)
+    return review_title(post, **args) if post.is_a?(Review)
     return mixtape_title(post, **args) if post.is_a?(Mixtape)
   end
 

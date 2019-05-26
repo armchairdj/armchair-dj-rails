@@ -10,78 +10,78 @@ RSpec.shared_examples "a_public_policy" do
   context "without user" do
     let(:user) { nil }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
   describe "as member" do
     let(:user) { build_stubbed(:member) }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
   describe "as writer" do
     let(:user) { build_stubbed(:writer) }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
   describe "as editor" do
     let(:user) { build_stubbed(:editor) }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
   describe "as admin" do
     let(:user) { build_stubbed(:admin) }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 
   context "as root" do
     let(:user) { build_stubbed(:root) }
 
-    it { is_expected.to permit_action(:index  ) }
-    it { is_expected.to permit_action(:show   ) }
+    it { is_expected.to permit_action(:index) }
+    it { is_expected.to permit_action(:show) }
 
-    it { is_expected.to forbid_action(:new    ) }
-    it { is_expected.to forbid_action(:create ) }
-    it { is_expected.to forbid_action(:edit   ) }
-    it { is_expected.to forbid_action(:update ) }
+    it { is_expected.to forbid_action(:new) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:edit) }
+    it { is_expected.to forbid_action(:update) }
     it { is_expected.to forbid_action(:destroy) }
   end
 

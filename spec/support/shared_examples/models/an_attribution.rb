@@ -4,14 +4,14 @@ RSpec.shared_examples "an_attribution" do
   describe "included" do
     describe "associations" do
       it { is_expected.to belong_to(:creator) }
-      it { is_expected.to belong_to(:work   ) }
+      it { is_expected.to belong_to(:work) }
     end
 
     describe "validations" do
       subject { build_minimal_instance }
 
       it { is_expected.to validate_presence_of(:creator) }
-      it { is_expected.to validate_presence_of(:work   ) }
+      it { is_expected.to validate_presence_of(:work) }
     end
   end
 

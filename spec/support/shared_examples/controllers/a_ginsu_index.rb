@@ -2,12 +2,12 @@
 
 RSpec.shared_examples "a_ginsu_index" do |template_override|
 
-  let(:param_key  ) { described_class.controller_name.to_sym }
-  let(:template   ) { template_override || "#{described_class.controller_path}/index" }
+  let(:param_key) { described_class.controller_name.to_sym }
+  let(:template) { template_override || "#{described_class.controller_path}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }
 
   let(:paginated) { model_class.where(id: ids_for_minimal_list(3)) }
-  let(:none     ) { model_class.none }
+  let(:none) { model_class.none }
 
   context "without records" do
     before(:each) do

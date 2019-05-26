@@ -27,7 +27,7 @@ RSpec.describe Review do
     describe "#display_type" do
       let(:instance) { create(:never_for_ever_album_review) }
 
-      specify { expect(instance.display_type              ).to eq("Album Review" ) }
+      specify { expect(instance.display_type).to eq("Album Review") }
       specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
     end
   end
@@ -41,11 +41,11 @@ RSpec.describe Review do
 
     it { is_expected.to validate_presence_of(:work) }
 
-    it { is_expected.to have_many(:makers       ).through(:work) }
+    it { is_expected.to have_many(:makers).through(:work) }
     it { is_expected.to have_many(:contributions).through(:work) }
-    it { is_expected.to have_many(:contributors ).through(:work) }
-    it { is_expected.to have_many(:aspects      ).through(:work) }
-    it { is_expected.to have_many(:milestones   ).through(:work) }
+    it { is_expected.to have_many(:contributors).through(:work) }
+    it { is_expected.to have_many(:aspects).through(:work) }
+    it { is_expected.to have_many(:milestones).through(:work) }
   end
 
   describe "sluggable" do

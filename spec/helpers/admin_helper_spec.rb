@@ -102,7 +102,7 @@ RSpec.describe AdminHelper do
       describe "users" do
         describe "published" do
           before(:each) do
-            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
+            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
             expect(helper).to receive(:polymorphic_path).with(instance, format: nil).and_return("path")
           end
 
@@ -130,7 +130,7 @@ RSpec.describe AdminHelper do
       describe "posts" do
         describe "published" do
           before(:each) do
-            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public" )
+            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
             expect(helper).to receive(:article_path).with(instance.slug, format: nil).and_return("path")
           end
 

@@ -84,7 +84,7 @@ FactoryBot.define do
     trait :valid do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }
-      email      { generate(:user_email   ) }
+      email      { generate(:user_email) }
       username   { generate(:user_username) }
       password   "password1234"
     end

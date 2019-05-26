@@ -25,7 +25,7 @@ end
 
 RSpec::Matchers.define :be_draft do
   match do
-    expect(actual.draft?      ).to eq(true)
+    expect(actual.draft?).to eq(true)
     expect(actual.published_at).to eq(nil)
   end
 
@@ -64,7 +64,7 @@ end
 
 RSpec::Matchers.define :be_published do
   match do |actual|
-    expect(actual.published?  ).to eq(true)
+    expect(actual.published?).to eq(true)
     expect(actual.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
   end
 

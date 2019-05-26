@@ -27,7 +27,7 @@ RSpec.describe Mixtape do
     describe "#display_type" do
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.display_type              ).to eq("Mixtape" ) }
+      specify { expect(instance.display_type).to eq("Mixtape") }
       specify { expect(instance.display_type(plural: true)).to eq("Mixtapes") }
     end
   end
@@ -42,13 +42,13 @@ RSpec.describe Mixtape do
     it { is_expected.to validate_presence_of(:playlist) }
 
     it { is_expected.to have_many(:tracks).through(:playlist) }
-    it { is_expected.to have_many(:works ).through(:tracks) }
+    it { is_expected.to have_many(:works).through(:tracks) }
 
-    it { is_expected.to have_many(:makers       ).through(:works) }
+    it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributions).through(:works) }
-    it { is_expected.to have_many(:contributors ).through(:works) }
-    it { is_expected.to have_many(:aspects      ).through(:works) }
-    it { is_expected.to have_many(:milestones   ).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+    it { is_expected.to have_many(:aspects).through(:works) }
+    it { is_expected.to have_many(:milestones).through(:works) }
   end
 
   describe "sluggable" do

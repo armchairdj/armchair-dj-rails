@@ -43,9 +43,9 @@ RSpec.describe Aspect do
 
   describe "scope-related" do
     describe "#for_facet" do
-      let!(:mood_a ) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid" ) }
-      let!(:mood_b ) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
-      let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop" ) }
+      let!(:mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid") }
+      let!(:mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
+      let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop") }
       let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
 
       describe "single facet" do
@@ -71,11 +71,11 @@ RSpec.describe Aspect do
   describe "associations" do
     it { is_expected.to have_and_belong_to_many(:works) }
 
-    it { is_expected.to have_many(:makers      ).through(:works) }
+    it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:playlists   ).through(:works) }
-    it { is_expected.to have_many(:mixtapes    ).through(:works) }
-    it { is_expected.to have_many(:reviews     ).through(:works) }
+    it { is_expected.to have_many(:playlists).through(:works) }
+    it { is_expected.to have_many(:mixtapes).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
   end
 
   describe "attributes" do
@@ -105,8 +105,8 @@ RSpec.describe Aspect do
     describe "#display_name" do
       subject { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
-      specify { expect(subject.display_name                ).to eq("Genre: Trip-Hop") }
-      specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop" ) }
+      specify { expect(subject.display_name).to eq("Genre: Trip-Hop") }
+      specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop") }
     end
   end
 end

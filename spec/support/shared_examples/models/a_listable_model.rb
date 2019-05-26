@@ -8,12 +8,12 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
 
     it "respects scope" do
       expect(primary.maximum(:position)).to eq(primary.length)
-      expect(  other.maximum(:position)).to eq(  other.length)
+      expect(other.maximum(:position)).to eq(other.length)
     end
 
     it "respects top_of_list=1" do
       expect(primary.minimum(:position)).to eq(1)
-      expect(  other.minimum(:position)).to eq(1)
+      expect(other.minimum(:position)).to eq(1)
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
 
           actual = parent.reload.send(association_name).sorted
 
-          expect(actual.ids            ).to eq(reordered_ids)
+          expect(actual.ids).to eq(reordered_ids)
           expect(actual.map(&:position)).to eq((1..primary.length).to_a)
         end
       end
@@ -70,7 +70,7 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
           described_class.where(id: other_ids + primary_ids).sorted
         end
 
-        it { is_expected.to eq( primary.sorted + other.sorted ) }
+        it { is_expected.to eq(primary.sorted + other.sorted) }
       end
     end
   end

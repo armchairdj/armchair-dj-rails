@@ -5,15 +5,15 @@ require "rails_helper"
 RSpec.describe MetaHelper do
   describe "#head_tags" do
     before(:each) do
-      allow(helper).to receive(  :csrf_meta_tags).and_return("csrf")
+      allow(helper).to receive(:csrf_meta_tags).and_return("csrf")
       allow(helper).to receive(:content_type_tag).and_return("content_type")
-      allow(helper).to receive( :description_tag).and_return("description")
-      allow(helper).to receive(  :turbolinks_tag).and_return("turbolinks")
-      allow(helper).to receive(    :viewport_tag).and_return("viewport")
-      allow(helper).to receive(  :apple_icon_tag).and_return("apple_icon")
-      allow(helper).to receive(     :favicon_tag).and_return("favicon")
-      allow(helper).to receive(    :shortcut_tag).and_return("shortcut")
-      allow(helper).to receive(         :rss_tag).and_return("rss")
+      allow(helper).to receive(:description_tag).and_return("description")
+      allow(helper).to receive(:turbolinks_tag).and_return("turbolinks")
+      allow(helper).to receive(:viewport_tag).and_return("viewport")
+      allow(helper).to receive(:apple_icon_tag).and_return("apple_icon")
+      allow(helper).to receive(:favicon_tag).and_return("favicon")
+      allow(helper).to receive(:shortcut_tag).and_return("shortcut")
+      allow(helper).to receive(:rss_tag).and_return("rss")
     end
 
     it "outputs tags for html head" do

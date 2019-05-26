@@ -16,7 +16,7 @@ module JsHelper
 
     opts[:url] = case post.class.name
       when "Article"; autosave_admin_article_path(post)
-      when "Review";  autosave_admin_review_path( post)
+      when "Review";  autosave_admin_review_path(post)
       when "Mixtape"; autosave_admin_mixtape_path(post)
     end
 
