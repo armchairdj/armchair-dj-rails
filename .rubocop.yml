@@ -556,6 +556,8 @@ Layout/SpaceAroundOperators:
   # with an operator on the previous or next line, not counting empty lines
   # or comment lines.
   AllowForAlignment: true
+  Exclude:
+    - "db/seeds.rb"
 
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyle: space
