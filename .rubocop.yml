@@ -411,7 +411,7 @@ Layout/IndentArray:
   #
   # The value `align_brackets` means that the indentation of the first element
   # shall always be relative to the position of the opening bracket.
-  EnforcedStyle: special_inside_parentheses
+  EnforcedStyle: consistent
   SupportedStyles:
     - special_inside_parentheses
     - consistent

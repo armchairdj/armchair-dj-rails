@@ -17,13 +17,17 @@ RSpec.describe LinksHelper do
     context "full collection" do
       let(:links) { Link.where(id: ids_for_minimal_list(3)) }
 
-      it { is_expected.to have_tag("ul", count: 1) }
-      it { is_expected.to have_tag("ul li", count: 3) }
-      it { is_expected.to have_tag("ul li a",  count: 3) }
+      it "has the correct markup" do
+        is_expected.to have_tag("ul", count: 1)
+        is_expected.to have_tag("ul li", count: 3)
+        is_expected.to have_tag("ul li a",  count: 3)
+      end
 
-      it { is_expected.to have_tag("ul li a[href='#{links[0].url}']", text: links[0].description) }
-      it { is_expected.to have_tag("ul li a[href='#{links[1].url}']", text: links[1].description) }
-      it { is_expected.to have_tag("ul li a[href='#{links[2].url}']", text: links[2].description) }
+      it "has the correct urls and text" do
+        is_expected.to have_tag("ul li a[href='#{links[0].url}']", text: links[0].description)
+        is_expected.to have_tag("ul li a[href='#{links[1].url}']", text: links[1].description)
+        is_expected.to have_tag("ul li a[href='#{links[2].url}']", text: links[2].description)
+      end
 
       context "with options" do
         let(:opts) { { class: "foo", id: "bar" } }

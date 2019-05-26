@@ -35,37 +35,49 @@ RSpec.describe ReviewsHelper do
       describe "public" do
         subject { helper.link_to_review(instance, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/reviews/#{instance.slug}'][class='test']",
-          text:  "Kate Bush: Never for Ever: Alternative Version",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/reviews/#{instance.slug}'][class='test']",
+            text:  "Kate Bush: Never for Ever: Alternative Version",
+            count: 1
+          )
+        end
       end
 
       describe "truncated" do
         subject { helper.link_to_review(instance, length: 15, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/reviews/#{instance.slug}'][class='test']",
-          text:  "Kate Bush:…",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/reviews/#{instance.slug}'][class='test']",
+            text:  "Kate Bush:…",
+            count: 1
+          )
+        end
       end
 
       describe "full: false" do
         subject { helper.link_to_review(instance, full: false) }
 
-        it { is_expected.to have_tag("a[href='/reviews/#{instance.slug}']",
-          text:  "Never for Ever: Alternative Version",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/reviews/#{instance.slug}']",
+            text:  "Never for Ever: Alternative Version",
+            count: 1
+          )
+        end
       end
 
       describe "admin" do
         subject { helper.link_to_review(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.to_param}']",
-          text:  "Kate Bush: Never for Ever: Alternative Version",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/admin/reviews/#{instance.to_param}']",
+            text:  "Kate Bush: Never for Ever: Alternative Version",
+            count: 1
+          )
+        end
       end
     end
 
@@ -83,10 +95,13 @@ RSpec.describe ReviewsHelper do
       describe "admin" do
         subject { helper.link_to_review(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/reviews/#{instance.to_param}']",
-          text:  "Kate Bush: Never for Ever: Alternative Version",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/admin/reviews/#{instance.to_param}']",
+            text:  "Kate Bush: Never for Ever: Alternative Version",
+            count: 1
+          )
+        end
       end
     end
   end
