@@ -5,7 +5,7 @@ require "ffaker"
 FactoryBot.define do
 
   sequence :aspect_name do |n|
-    "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+    "Aspect #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
   sequence :creator_name do |n|
@@ -21,7 +21,7 @@ FactoryBot.define do
   end
 
   sequence :tag_name do |n|
-    "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+    "tag #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
   sequence :user_email do |n|

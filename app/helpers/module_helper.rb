@@ -2,7 +2,7 @@
 
 module ModuleHelper
   def adj_module(content = nil, **opts, &block)
-    content = content || capture(&block)
+    content ||= capture(&block)
 
     tag  = opts.delete(:tag) || :section
     opts = combine_attrs(opts, class: "adj-module")
@@ -11,7 +11,7 @@ module ModuleHelper
   end
 
   def admin_section(content = nil, headline: nil, subhead: nil, **opts, &block)
-    content = content || capture(&block)
+    content ||= capture(&block)
 
     return if content.blank?
 

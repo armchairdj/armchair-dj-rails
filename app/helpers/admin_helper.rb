@@ -150,9 +150,9 @@ module AdminHelper
   end
 
   def sortable_link(sorts, name, text: nil)
-    text    = text || content_tag(:span, name)
+    text    ||= content_tag(:span, name)
     props   = sorts[name]
-    classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
+    classes = props[:active?] ? "active #{props[:desc?] ? "desc" : "asc"}" : nil
 
     link_to(text, props[:url], class: classes)
   end
