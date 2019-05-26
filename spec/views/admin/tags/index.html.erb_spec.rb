@@ -9,7 +9,7 @@ RSpec.describe "admin/tags/index" do
     3.times { create(:minimal_tag) }
 
     @model_class = assign(:model_name, Tag)
-    @collection    = assign(:collection, Ginsu::Collection.new(Tag.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Tag.all))
     @tags = assign(:tags, @collection.resolve)
   end
 

@@ -86,9 +86,9 @@ FactoryBot.define do
     trait :with_new_pseudonym do
       primary
 
-      pseudonym_identities_attributes do {
-        "0" => { "pseudonym_id" => create(:minimal_creator, :secondary).id }
-      } end
+      pseudonym_identities_attributes do
+        { "0" => { "pseudonym_id" => create(:minimal_creator, :secondary).id } }
+      end
     end
 
     trait :with_pseudonym do
@@ -112,9 +112,9 @@ FactoryBot.define do
     trait :with_new_real_name do
       secondary
 
-      real_name_identities_attributes do {
-        "0" => { "real_name_id" => create(:minimal_creator, :primary).id }
-      } end
+      real_name_identities_attributes do
+        { "0" => { "real_name_id" => create(:minimal_creator, :primary).id } }
+      end
     end
 
     trait :with_real_name do
@@ -138,9 +138,9 @@ FactoryBot.define do
     trait :with_new_member do
       collective
 
-      member_memberships_attributes do {
-        "0" => { "member_id" => create(:minimal_creator, :individual).id }
-      } end
+      member_memberships_attributes do
+        { "0" => { "member_id" => create(:minimal_creator, :individual).id } }
+      end
     end
 
     trait :with_member do
@@ -164,9 +164,9 @@ FactoryBot.define do
     trait :with_new_group do
       individual
 
-      group_memberships_attributes do {
-        "0" => { "group_id" => create(:minimal_creator, :collective).id }
-      } end
+      group_memberships_attributes do
+        { "0" => { "group_id" => create(:minimal_creator, :collective).id } }
+      end
     end
 
     trait :with_group do

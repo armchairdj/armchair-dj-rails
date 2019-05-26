@@ -9,7 +9,7 @@ RSpec.describe "admin/creators/index" do
     3.times { create(:minimal_creator) }
 
     @model_class = assign(:model_name, Creator)
-    @collection    = assign(:collection, Ginsu::Collection.new(Creator.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Creator.all))
     @creators = assign(:creators, @collection.resolve)
   end
 

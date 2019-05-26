@@ -90,10 +90,10 @@ FactoryBot.define do
   end
 
   trait :with_links do
-    links_attributes do {
-      "0" => attributes_for(:link_for_linkable),
-      "1" => attributes_for(:link_for_linkable),
-      "2" => attributes_for(:link_for_linkable),
-    } end
+    links_attributes do
+      { "0" => attributes_for(:link_for_linkable),
+        "1" => attributes_for(:link_for_linkable),
+        "2" => attributes_for(:link_for_linkable) }
+    end
   end
 end

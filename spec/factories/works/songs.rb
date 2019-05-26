@@ -27,9 +27,9 @@ FactoryBot.define do
         maker_names ["Junior Boys"]
       end
 
-      milestones_attributes do {
-        "0" => attributes_for(:work_milestone_for_work, year: "2006")
-      } end
+      milestones_attributes do
+        { "0" => attributes_for(:work_milestone_for_work, year: "2006") }
+      end
     end
 
     factory :junior_boys_like_a_child_c2_remix, parent: :minimal_song do
@@ -37,9 +37,9 @@ FactoryBot.define do
       subtitle "C2 Remix"
       with_contributions
 
-      milestones_attributes do {
-        "0" => attributes_for(:work_milestone_for_work, year: "2006")
-      } end
+      milestones_attributes do
+        { "0" => attributes_for(:work_milestone_for_work, year: "2006") }
+      end
 
       aspect_ids do [
         create(:aspect, facet: :song_type,     name: "Remix").id,
@@ -60,9 +60,9 @@ FactoryBot.define do
       subtitle "C2 Remix - Clear and Present Re-Edit"
       with_contributions
 
-      milestones_attributes do {
-        "0" => attributes_for(:work_milestone_for_work, year: "2006")
-      } end
+      milestones_attributes do
+        { "0" => attributes_for(:work_milestone_for_work, year: "2006") }
+      end
 
       aspect_ids do [
         create(:aspect, facet: :song_type,     name: "Remix").id,

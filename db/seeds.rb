@@ -356,10 +356,10 @@ kooky_album_unpopular_science          = FactoryBot.create(:minimal_album, :with
 
 ##### TV
 
-joss_whedon    = FactoryBot.create(:minimal_creator, name: "Joss Whedon")
-buffy          = FactoryBot.create(:minimal_tv_show,    :with_specific_creator, release_year: "1997", title: "Buffy the Vampire Slayer",          specific_creator: joss_whedon)
-buffy_season_7 = FactoryBot.create(:minimal_tv_season,  :with_specific_creator, release_year: "2002", title: "Buffy the Vampire Slayer Season 7", specific_creator: joss_whedon)
-conversations  = FactoryBot.create(:minimal_tv_episode, :with_specific_creator, release_year: "2002", title: "Conversations With Dead People",    specific_creator: joss_whedon)
+joss_whedon        = FactoryBot.create(:minimal_creator, name: "Joss Whedon")
+buffy              = FactoryBot.create(:minimal_tv_show,    :with_specific_creator, release_year: "1997", title: "Buffy the Vampire Slayer",          specific_creator: joss_whedon)
+buffy_season_seven = FactoryBot.create(:minimal_tv_season,  :with_specific_creator, release_year: "2002", title: "Buffy the Vampire Slayer Season 7", specific_creator: joss_whedon)
+conversations      = FactoryBot.create(:minimal_tv_episode, :with_specific_creator, release_year: "2002", title: "Conversations With Dead People",    specific_creator: joss_whedon)
 
 ##### POSTS: REVIEWS & STANDALONE
 

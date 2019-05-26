@@ -9,7 +9,7 @@ RSpec.describe "admin/users/index" do
     3.times { create(:minimal_user) }
 
     @model_class = assign(:model_name, User)
-    @collection    = assign(:collection, Ginsu::Collection.new(User.all))
+    @collection = assign(:collection, Ginsu::Collection.new(User.all))
     @users = assign(:users, @collection.resolve)
   end
 

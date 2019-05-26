@@ -9,7 +9,7 @@ RSpec.describe SvgHelper do
 
   describe "#non_semantic_svg_image" do
     it "generates non-aria svg" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment: true,
         aria:      false,
         class:     "scalable-image")
@@ -31,7 +31,7 @@ RSpec.describe SvgHelper do
     end
 
     it "generates aria svg with optional aria attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment: true,
         aria:      true,
         class:     "scalable-image",
@@ -44,7 +44,7 @@ RSpec.describe SvgHelper do
     end
 
     it "accepts extra html attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment:         true,
         aria:              false,
         class:             "scalable-image author",
@@ -66,7 +66,7 @@ RSpec.describe SvgHelper do
 
 
     it "generates aria svg" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment: true,
         aria:      true,
         class:     "scalable-image",
@@ -80,7 +80,7 @@ RSpec.describe SvgHelper do
     end
 
     it "accepts extra html attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment:         true,
         aria:              true,
         class:             "scalable-image author",

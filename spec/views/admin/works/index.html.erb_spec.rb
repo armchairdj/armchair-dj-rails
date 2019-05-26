@@ -9,7 +9,7 @@ RSpec.describe "admin/works/index" do
     3.times { create(:minimal_song) }
 
     @model_class = assign(:model_name, Work)
-    @collection    = assign(:collection, Ginsu::Collection.new(Work.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Work.all))
     @works = assign(:works, @collection.resolve)
   end
 

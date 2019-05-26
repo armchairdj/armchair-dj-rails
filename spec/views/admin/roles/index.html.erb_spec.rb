@@ -9,7 +9,7 @@ RSpec.describe "admin/roles/index" do
     3.times { create(:minimal_role) }
 
     @model_class = assign(:model_name, Role)
-    @collection    = assign(:collection, Ginsu::Collection.new(Role.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Role.all))
     @roles = assign(:roles, @collection.resolve)
   end
 

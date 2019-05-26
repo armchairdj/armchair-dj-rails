@@ -9,7 +9,7 @@ RSpec.describe "admin/aspects/index" do
     3.times { create(:minimal_aspect) }
 
     @model_class = assign(:model_name, Aspect)
-    @collection    = assign(:collection, Ginsu::Collection.new(Aspect.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Aspect.all))
     @aspects = assign(:aspects, @collection.resolve)
   end
 

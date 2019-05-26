@@ -9,7 +9,7 @@ RSpec.describe "admin/playlists/index" do
     3.times { create(:minimal_playlist) }
 
     @model_class = assign(:model_name, Playlist)
-    @collection    = assign(:collection, Ginsu::Collection.new(Playlist.all))
+    @collection = assign(:collection, Ginsu::Collection.new(Playlist.all))
     @playlists = assign(:playlists, @collection.resolve)
   end
 
