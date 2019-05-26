@@ -43,19 +43,19 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
       describe "raises if bad ids" do
         let(:reordered_ids) { other.ids.shuffle }
 
-        specify { expect{ subject }.to raise_exception(ArgumentError) }
+        specify { expect { subject }.to raise_exception(ArgumentError) }
       end
 
       describe "raises if repeated ids" do
         let(:reordered_ids) { primary.ids.shuffle + [primary.ids.first] }
 
-        specify { expect{ subject }.to raise_exception(ArgumentError) }
+        specify { expect { subject }.to raise_exception(ArgumentError) }
       end
 
       describe "raises if not enough ids" do
         let(:reordered_ids) { primary.ids.shuffle - [primary.ids.first] }
 
-        specify { expect{ subject }.to raise_exception(ArgumentError) }
+        specify { expect { subject }.to raise_exception(ArgumentError) }
       end
     end
   end

@@ -86,13 +86,13 @@ RSpec.shared_examples "a_ginsu_sorter" do
       end
 
       describe "active items" do
-        subject { mapped.to_a.map(&:last).map{ |x| x[:active?] }.delete_if{ |x| x == false } }
+        subject { mapped.to_a.map(&:last).map { |x| x[:active?] }.delete_if { |x| x == false } }
 
         it { is_expected.to have(1).item }
       end
 
       describe "descending items" do
-        subject { mapped.to_a.map(&:last).map{ |x| x[:desc?] }.delete_if{ |x| x == false } }
+        subject { mapped.to_a.map(&:last).map { |x| x[:desc?] }.delete_if { |x| x == false } }
 
         context "when current_dir is ASC" do
           let(:mapped) { described_class.new(current_dir: "ASC").map }
@@ -136,13 +136,13 @@ RSpec.shared_examples "a_ginsu_sorter" do
               describe "and dir=ASC" do
                 let(:instance) { described_class.new(current_sort: key, current_dir: "ASC") }
 
-                specify { expect{ subject }.to_not raise_exception }
+                specify { expect { subject }.to_not raise_exception }
               end
 
               describe "and dir=DESC" do
                 let(:instance) { described_class.new(current_sort: key, current_dir: "DESC") }
 
-                specify { expect{ subject }.to_not raise_exception }
+                specify { expect { subject }.to_not raise_exception }
               end
             end
           end
@@ -152,13 +152,13 @@ RSpec.shared_examples "a_ginsu_sorter" do
           context "sort" do
             let(:instance) { described_class.new(current_sort: "NOT_A_VALID_SORT_KEY") }
 
-            specify { expect{ subject }.to raise_exception(Pundit::NotAuthorizedError) }
+            specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
           end
 
           context "dir" do
             let(:instance) { described_class.new(current_dir: "NOT_A_VALID_DIR") }
 
-            specify { expect{ subject }.to raise_exception(Pundit::NotAuthorizedError) }
+            specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
           end
         end
       end

@@ -30,9 +30,11 @@ RSpec.describe UsersHelper do
       describe "admin" do
         let(:opts) { { admin: true } }
 
-        it { is_expected.to have_tag("address.author", count: 1) {
-          with_tag("a[rel='author'][href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
-        } }
+        it "has the correct markup" do
+          is_expected.to have_tag("address.author", count: 1) {
+            with_tag("a[rel='author'][href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+          }
+        end
       end
     end
 
@@ -53,7 +55,9 @@ RSpec.describe UsersHelper do
       before(:each) { create(:minimal_review, :published, author: user); user.reload }
 
       describe "public" do
-        it { is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1) }
+        it "has the correct markup" do
+          is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+        end
       end
 
       describe "admin" do
@@ -77,7 +81,9 @@ RSpec.describe UsersHelper do
       describe "admin" do
         let(:opts) { { admin: true } }
 
-        it { is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text:  "ArmchairDJ", count: 1) }
+        it "has the correct markup" do
+          is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text:  "ArmchairDJ", count: 1)
+        end
       end
     end
   end

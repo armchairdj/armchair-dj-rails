@@ -11,12 +11,16 @@ RSpec.describe AspectsHelper do
     describe "default" do
       let(:aspect) { create(:minimal_aspect, name: "Aspect") }
 
-      it { is_expected.to have_tag("a[href='/admin/aspects/#{aspect.to_param}']", text: "Aspect", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag("a[href='/admin/aspects/#{aspect.to_param}']", text: "Aspect", count: 1)
+      end
 
       describe "with options" do
         let(:opts) { { class: "foo", id: "bar" } }
 
-        it { is_expected.to have_tag("a.foo#bar", count: 1) }
+        it "has the correct markup" do
+          is_expected.to have_tag("a.foo#bar", count: 1)
+        end
       end
     end
   end

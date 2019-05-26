@@ -55,7 +55,7 @@ RSpec.shared_examples "a_medium" do
 
     describe "role methods" do
       let!(:instance   ) { build_minimal_instance }
-      let!(:other_media) { Work.valid_media.reject{ |x| x == instance.medium } }
+      let!(:other_media) { Work.valid_media.reject { |x| x == instance.medium } }
       let!(:good_role_z) { create(:minimal_role, medium: instance.medium, name: "Z") }
       let!(:good_role_a) { create(:minimal_role, medium: instance.medium, name: "A") }
       let!(:bad_role   ) { create(:minimal_role, medium: other_media.sample) }

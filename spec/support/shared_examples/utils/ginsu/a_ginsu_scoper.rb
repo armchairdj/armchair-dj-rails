@@ -64,7 +64,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
       end
 
       describe "active items" do
-        subject { mapped.to_a.map(&:last).map{ |x| x[:active?] }.delete_if{ |x| x == false } }
+        subject { mapped.to_a.map(&:last).map { |x| x[:active?] }.delete_if { |x| x == false } }
 
         it { is_expected.to have(1).item }
       end
@@ -105,7 +105,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
             context "for #{key} scope" do
               let(:instance) { described_class.new(current_scope: key) }
 
-              specify { expect{ subject }.to_not raise_exception }
+              specify { expect { subject }.to_not raise_exception }
             end
           end
         end
@@ -113,7 +113,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
         describe "invalid" do
           let(:instance) { described_class.new(current_scope: "NOT_A_VALID_SCOPE_KEY") }
 
-          specify { expect{ subject }.to raise_exception(Pundit::NotAuthorizedError) }
+          specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
         end
       end
     end

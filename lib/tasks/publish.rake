@@ -15,8 +15,8 @@ namespace :publish do
 
     total         = memo[:all    ].length
     success       = memo[:success].length
-    success_slugs = memo[:success].map{ |x| "  * #{x.slug}" }.join("\n")
-    failure_slugs = memo[:failure].map{ |x| "  * #{x.slug}" }.join("\n")
+    success_slugs = memo[:success].map { |x| "  * #{x.slug}" }.join("\n")
+    failure_slugs = memo[:failure].map { |x| "  * #{x.slug}" }.join("\n")
 
     message = if total.zero?
       I18n.t("rake.publish.scheduled.none")

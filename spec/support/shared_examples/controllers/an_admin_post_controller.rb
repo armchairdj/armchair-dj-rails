@@ -328,7 +328,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       subject { operation }
 
-      it { expect{ subject }.to change(Post, :count).by(-1) }
+      it { expect { subject }.to change(Post, :count).by(-1) }
 
       it { is_expected.to send_user_to(collection_path) }
 

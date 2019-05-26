@@ -25,7 +25,9 @@ RSpec.describe AdminHelper do
 
       let(:selector) { "a.admin-icon.list[title='back to creators list'][href='path']" }
 
-      it { is_expected.to have_tag(selector, text: "list", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag(selector, text: "list", count: 1)
+      end
     end
 
     describe "#admin_view_link" do
@@ -38,7 +40,9 @@ RSpec.describe AdminHelper do
 
       let(:selector) { "a.admin-icon.view[title='view creator'][href='path']" }
 
-      it { is_expected.to have_tag(selector, text: "view", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag(selector, text: "view", count: 1)
+      end
     end
 
     describe "#admin_create_link" do
@@ -51,7 +55,9 @@ RSpec.describe AdminHelper do
 
       let(:selector) { "a.admin-icon.create[title='create creator'][href='path']" }
 
-      it { is_expected.to have_tag(selector, text: "create", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag(selector, text: "create", count: 1)
+      end
     end
 
     describe "#admin_update_link" do
@@ -64,7 +70,9 @@ RSpec.describe AdminHelper do
 
       let(:selector) { "a.admin-icon.update[title='update creator'][href='path']" }
 
-      it { is_expected.to have_tag(selector, text: "update", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag(selector, text: "update", count: 1)
+      end
     end
 
     describe "#admin_destroy_link" do
@@ -77,7 +85,9 @@ RSpec.describe AdminHelper do
 
       let(:selector) { "a.admin-icon.destroy[title='destroy creator'][href='path'][data-method='delete'][data-confirm][rel='nofollow']" }
 
-      it { is_expected.to have_tag(selector, text: "destroy", count: 1) }
+      it "has the correct markup" do
+        is_expected.to have_tag(selector, text: "destroy", count: 1)
+      end
     end
 
     describe "#admin_public_link" do
@@ -99,7 +109,9 @@ RSpec.describe AdminHelper do
           let(:instance) { create(:writer, :with_published_post) }
           let(:selector) { "a.admin-icon.public-view[title='view user on site'][href='path']" }
 
-          it { is_expected.to have_tag(selector, text: "public", count: 1) }
+          it "has the correct markup" do
+            is_expected.to have_tag(selector, text: "public", count: 1)
+          end
         end
 
         describe "unpublished" do
@@ -125,7 +137,9 @@ RSpec.describe AdminHelper do
           let(:instance) { create(:minimal_article, :published) }
           let(:expected) { "a.admin-icon.public-view[title='view article on site'][href='path']" }
 
-          it { is_expected.to have_tag(expected, text: "public", count: 1) }
+          it "has the correct markup" do
+            is_expected.to have_tag(expected, text: "public", count: 1)
+          end
         end
 
         describe "scheduled" do
