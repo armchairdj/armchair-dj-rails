@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 case
 when post.is_a?(Article)
   json.partial! "posts/articles/article", article: post

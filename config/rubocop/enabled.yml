@@ -785,6 +785,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Description: 'Avoid long blocks with many lines.'
   Enabled: true
+  Max: 500
 
 Metrics/BlockNesting:
   Description: 'Avoid excessive block nesting'
@@ -794,6 +795,7 @@ Metrics/BlockNesting:
 Metrics/ClassLength:
   Description: 'Avoid classes longer than 100 lines of code.'
   Enabled: true
+  Max: 500
 
 Metrics/CyclomaticComplexity:
   Description: >-

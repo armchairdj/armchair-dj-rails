@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :validate_urlness_of do |property|
   match do
     property = property.to_sym

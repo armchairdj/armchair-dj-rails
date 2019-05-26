@@ -255,7 +255,7 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
 
   # Static code analysis.
-  gem "rubocop", require: false
+  gem "rubocop", "~> 0.65.0", require: false
   gem "rubocop-rails_config"
   gem "mry"
 end

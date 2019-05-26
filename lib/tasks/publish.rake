@@ -18,7 +18,7 @@ namespace :publish do
     success_slugs = memo[:success].map{ |x| "  * #{x.slug}" }.join("\n")
     failure_slugs = memo[:failure].map{ |x| "  * #{x.slug}" }.join("\n")
 
-    message = if total == 0
+    message = if total.zero?
       I18n.t("rake.publish.scheduled.none")
     elsif total == success
       I18n.t("rake.publish.scheduled.success", total: total, success_slugs: success_slugs)

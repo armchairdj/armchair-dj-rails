@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :video_game, class: "VideoGame" do
     factory :minimal_video_game,  class: "VideoGame", parent: :minimal_work_parent  do; end

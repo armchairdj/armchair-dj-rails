@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModuleHelper
   def adj_module(content = nil, **opts, &block)
     content = content || capture(&block)

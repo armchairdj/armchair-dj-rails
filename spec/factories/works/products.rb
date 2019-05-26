@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :product, class: "Product" do
     factory :minimal_product,  class: "Product", parent: :minimal_work_parent  do; end

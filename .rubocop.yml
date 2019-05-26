@@ -29,6 +29,7 @@ AllCops:
     - '**/*.podspec'
     - '**/*.rabl'
     - '**/*.rake'
+    - '**/*.rb'
     - '**/*.rbuild'
     - '**/*.rbw'
     - '**/*.rbx'
@@ -66,6 +67,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'vendor/**/*'
     - '.git/**/*'
+    - 'lib/templates/**/*'
   # Default formatter will be used if no `-f/--format` option is given.
   DefaultFormatter: progress
   # Cop names are displayed in offense messages by default. Change behavior
@@ -1382,7 +1384,7 @@ Style/StringLiterals:
   ConsistentQuotesInMultiline: false
 
 Style/StringLiteralsInInterpolation:
-  EnforcedStyle: single_quotes
+  EnforcedStyle: double_quotes
   SupportedStyles:
     - single_quotes
     - double_quotes
@@ -1398,8 +1400,8 @@ Style/StringMethods:
     intern: to_sym
 
 Style/SymbolArray:
-  EnforcedStyle: percent
-  MinSize: 0
+  EnforcedStyle: brackets
+  MinSize: 3
   SupportedStyles:
     - percent
     - brackets
@@ -1496,7 +1498,7 @@ Style/TrivialAccessors:
 
 # `WordArray` enforces how array literals of word-like strings should be expressed.
 Style/WordArray:
-  EnforcedStyle: percent
+  EnforcedStyle: brackets
   SupportedStyles:
     # percent style: %w(word1 word2)
     - percent
@@ -1505,17 +1507,17 @@ Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
   # smaller than a certain size.  The rule is only applied to arrays
   # whose element count is greater than or equal to `MinSize`.
-  MinSize: 0
+  MinSize: 3
   # The regular expression `WordRegex` decides what is considered a word.
   WordRegex: !ruby/regexp '/\A[\p{Word}\n\t]+\z/'
 
 Style/YodaCondition:
-  EnforcedStyle: all_comparison_operators
+  EnforcedStyle: forbid_for_all_comparison_operators
   SupportedStyles:
-    # check all comparison operators
-    - all_comparison_operators
-    # check only equality operators: `!=` and `==`
-    - equality_operators_only
+    - forbid_for_all_comparison_operators
+    - forbid_for_equality_operators_only
+    - require_for_all_comparison_operators
+    - require_for_equality_operators_only
 
 #################### Metrics ###############################
 

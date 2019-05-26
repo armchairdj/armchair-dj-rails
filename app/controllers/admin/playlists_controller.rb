@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::PlaylistsController < Ginsu::Controller
   before_action :require_ajax, only: :reorder_tracks
 

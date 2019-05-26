@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::AspectsController < Ginsu::Controller
 
   # POST /admin/aspects

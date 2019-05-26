@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :tv_episode, class: "TvEpisode" do
     factory :minimal_tv_episode,  class: "TvEpisode", parent: :minimal_work_parent  do; end

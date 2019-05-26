@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :graphic_novel, class: "GraphicNovel" do
     factory :minimal_graphic_novel,  class: "GraphicNovel", parent: :minimal_work_parent  do; end
