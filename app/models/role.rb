@@ -18,7 +18,6 @@
 #
 
 class Role < ApplicationRecord
-
   #############################################################################
   # CONCERNING: Name
   #############################################################################
@@ -43,7 +42,7 @@ class Role < ApplicationRecord
       validates :medium, presence: true
       validates :medium, inclusion: { in: Work.valid_media }
 
-      scope :for_medium, -> (medium) { where(medium: medium) }
+      scope :for_medium, ->(medium) { where(medium: medium) }
     end
 
     def display_medium
@@ -70,7 +69,7 @@ class Role < ApplicationRecord
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list,   -> { }
+  scope :for_list,   -> {}
   scope :for_show,   -> { includes(:contributions, :works) }
 
   #############################################################################

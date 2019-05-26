@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -28,7 +29,6 @@
 #
 
 class Contribution < Attribution
-
   #############################################################################
   # CONCERNING: Role.
   #############################################################################
@@ -40,8 +40,7 @@ class Contribution < Attribution
       validates :role_id, presence: true
 
       validates :role_id, inclusion: { allow_blank: true, in:
-        proc { |record| record.work.try(:available_role_ids) || [] }
-      }
+        proc { |record| record.work.try(:available_role_ids) || [] } }
     end
 
     def role_name
@@ -75,6 +74,6 @@ class Contribution < Attribution
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list,  -> { }
+  scope :for_list,  -> {}
   scope :for_show,  -> { includes(:work, :creator, :role) }
 end

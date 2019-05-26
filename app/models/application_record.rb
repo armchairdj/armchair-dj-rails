@@ -23,9 +23,9 @@ class ApplicationRecord < ActiveRecord::Base
   def self.validates_nested_uniqueness_of(*nested_attrs)
     opts      = nested_attrs.extract_options!
     uniq_attr = opts[:uniq_attr]
-    scope     = opts[:scope    ] || []
+    scope     = opts[:scope] || []
     error_key = opts[:error_key] || :nested_taken
-    message   = opts[:message  ] || nil
+    message   = opts[:message] || nil
 
     raise ArgumentError unless uniq_attr.present?
 
@@ -33,7 +33,7 @@ class ApplicationRecord < ActiveRecord::Base
       dupes = Set.new
 
       nested_values.reject(&:marked_for_destruction?).map do |nested_val|
-        dupe            = scope.each.inject({}) { |memo, (k)| memo[k] = nested_val.try(k); memo }
+        dupe            = scope.each.each_with_object({}) { |(k), memo| memo[k] = nested_val.try(k); }
         dupe[uniq_attr] = nested_val.try(uniq_attr)
 
         if dupes.member?(dupe)

@@ -13,9 +13,9 @@ concern :Alphabetizable do
     validate { ensure_alpha }
   end
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
+#############################################################################
+# INSTANCE.
+#############################################################################
 
 private
 
@@ -30,6 +30,6 @@ private
   def ensure_alpha
     return if new_record?
 
-    self.errors.add(:base, :missing_alpha) if alpha.blank?
+    errors.add(:base, :missing_alpha) if alpha.blank?
   end
 end

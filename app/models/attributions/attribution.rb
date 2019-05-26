@@ -28,9 +28,7 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Attribution < ApplicationRecord
-
   #############################################################################
   # CONCERNING: STI subclass contract.
   #############################################################################

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -28,7 +29,6 @@
 #
 
 class Credit < Attribution
-
   #############################################################################
   # CONCERNING: Role.
   #############################################################################
@@ -69,6 +69,6 @@ class Credit < Attribution
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list,  -> { }
+  scope :for_list,  -> {}
   scope :for_show,  -> { includes(:work, :creator) }
 end

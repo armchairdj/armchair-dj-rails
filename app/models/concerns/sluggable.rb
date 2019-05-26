@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 concern :Sluggable do
-
-  WORD_SEPARATOR         =   "_".freeze
-  PART_SEPARATOR         =   "/".freeze
-  VERSION_SEPARATOR      =   "-".freeze
-  EMPTY_PART_REPLACEMENT = "xxx".freeze
+  WORD_SEPARATOR         =   "_"
+  PART_SEPARATOR         =   "/"
+  VERSION_SEPARATOR      =   "-"
+  EMPTY_PART_REPLACEMENT = "xxx"
 
   #############################################################################
   # CLASS.
@@ -110,9 +109,7 @@ private
   ### User-initiated slug regeneration.
 
   def handle_clear_slug_checkbox
-    if should_clear_slug?
-      regenerate_slug
-    end
+    regenerate_slug if should_clear_slug?
   end
 
   def should_clear_slug?
@@ -140,6 +137,6 @@ private
   end
 
   def reset_slug_history
-    self.slugs.clear
+    slugs.clear
   end
 end

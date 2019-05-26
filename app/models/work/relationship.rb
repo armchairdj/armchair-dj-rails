@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: work_relationships
@@ -44,7 +45,7 @@ class Work::Relationship < ApplicationRecord
     def source_and_target_are_different
       return unless source_id == target_id
 
-      self.errors.add(:source_id, :same_as_target)
+      errors.add(:source_id, :same_as_target)
     end
   end
 
@@ -69,16 +70,16 @@ class Work::Relationship < ApplicationRecord
       validates :connection, presence: true
 
       enum connection: {
-        member_of:       100,
+        member_of:      100,
 
-        version_of:      200,
-        performance_of:  201,
+        version_of:     200,
+        performance_of: 201,
 
-        remake_of:       300,
-        sequel_to:       301,
-        spinoff_of:      302,
+        remake_of:      300,
+        sequel_to:      301,
+        spinoff_of:     302,
 
-        borrows_from:    400,
+        borrows_from:   400
       }
 
       improve_enum :connection

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 concern :Listable do
-
   #############################################################################
   # Class.
   #############################################################################
@@ -10,8 +9,9 @@ concern :Listable do
     def acts_as_listable(acts_as_list_scope)
       acts_as_list(scope: acts_as_list_scope, top_of_list: 1)
 
-      scope :sorted, -> { joins(acts_as_list_scope).
-        order(:"#{acts_as_list_scope}_id", :position)
+      scope :sorted, lambda {
+        joins(acts_as_list_scope)
+          .order(:"#{acts_as_list_scope}_id", :position)
       }
     end
 
@@ -65,7 +65,7 @@ concern :Listable do
     def validate!
       return if correct_number_of_ids? && expected_ids_found?
 
-      raise ArgumentError.new(error_message)
+      raise ArgumentError, error_message
     end
 
     def correct_number_of_ids?

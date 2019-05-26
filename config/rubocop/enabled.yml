@@ -53,11 +53,6 @@ Gemspec/RequiredRubyVersion:
 
 #################### Layout ###############################
 
-Layout/AccessModifierIndentation:
-  Description: Check indentation of private/protected visibility modifiers.
-  StyleGuide: '#indent-public-private-protected'
-  Enabled: true
-
 Layout/AlignArray:
   Description: >-
                  Align the elements of an array literal if they span more than

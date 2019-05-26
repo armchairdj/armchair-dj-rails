@@ -43,7 +43,6 @@
 #
 
 class User < ApplicationRecord
-
   #############################################################################
   # PLUGINS.
   #############################################################################
@@ -90,8 +89,8 @@ class User < ApplicationRecord
 
     class_methods do
       def for_cms_user(user)
-        return self.none unless user && user.can_administer?
-        return self.all  if user.root?
+        return none unless user&.can_administer?
+        return all  if user.root?
 
         where("users.role <= ?", user.raw_role).where.not(id: user.id)
       end
@@ -114,16 +113,16 @@ class User < ApplicationRecord
     end
 
     def assignable_role_options
-      return [] unless self.can_administer?
+      return [] unless can_administer?
 
       options = self.class.human_roles
 
-      options.slice(0..options.index { |x| x.last == self.role })
+      options.slice(0..options.index { |x| x.last == role })
     end
 
     def valid_role_assignment_for?(instance)
       return true if instance.role.blank?
-      return true if self.assignable_role_options.map(&:last).include?(instance.role)
+      return true if assignable_role_options.map(&:last).include?(instance.role)
 
       instance.errors.add(:role, :invalid_assignment)
 
@@ -184,7 +183,7 @@ class User < ApplicationRecord
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list, -> { }
+  scope :for_list, -> {}
   scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
 
   #############################################################################

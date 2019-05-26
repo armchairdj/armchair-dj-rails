@@ -19,11 +19,9 @@
 #  index_creators_on_primary     (primary)
 #
 
-
 require "wannabe_bool"
 
 class Creator < ApplicationRecord
-
   #############################################################################
   # CONCERNING: Name.
   #############################################################################
@@ -42,7 +40,7 @@ class Creator < ApplicationRecord
     included do
       attribute :primary, :boolean, default: true
 
-      scope :primary,   -> { where(primary: true ) }
+      scope :primary,   -> { where(primary: true) }
       scope :secondary, -> { where(primary: false) }
 
       after_save :enforce_primariness
@@ -57,7 +55,7 @@ class Creator < ApplicationRecord
 
       return self.class.none unless real_name
 
-      aliases   = self.real_name.pseudonyms.where.not(id: self.id)
+      aliases   = real_name.pseudonyms.where.not(id: id)
       real_name = self.class.where(id: self.real_name.id)
 
       aliases.union_all(real_name).alpha
@@ -66,10 +64,10 @@ class Creator < ApplicationRecord
   private
 
     def enforce_primariness
-      if self.primary?
-        self.real_name_identities.clear
+      if primary?
+        real_name_identities.clear
       else
-        self.pseudonym_identities.clear
+        pseudonym_identities.clear
       end
     end
   end
@@ -80,24 +78,23 @@ class Creator < ApplicationRecord
         foreign_key: :real_name_id, inverse_of: :real_name, dependent: :destroy
 
       has_many :pseudonyms, -> { order("creators.name") },
-        through: :pseudonym_identities, source: :pseudonym
+               through: :pseudonym_identities, source: :pseudonym
 
-      scope :available_pseudonyms, -> {
-        secondary.alpha.left_outer_joins(:real_name_identities).
-        where(creator_identities: { id: nil })
+      scope :available_pseudonyms, lambda {
+        secondary.alpha.left_outer_joins(:real_name_identities)
+                 .where(creator_identities: { id: nil })
       }
 
       accepts_nested_attributes_for(:pseudonym_identities,
-        allow_destroy: true, reject_if: :reject_pseudonym_identity?
-      )
+                                    allow_destroy: true, reject_if: :reject_pseudonym_identity?)
     end
 
     def prepare_pseudonym_identities
-      5.times { self.pseudonym_identities.build }
+      5.times { pseudonym_identities.build }
     end
 
     def available_pseudonyms
-      self.class.available_pseudonyms.union(self.pseudonyms).alpha
+      self.class.available_pseudonyms.union(pseudonyms).alpha
     end
 
   private
@@ -118,21 +115,20 @@ class Creator < ApplicationRecord
         foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
 
       has_many :real_names, -> { order("creators.name") },
-        through: :real_name_identities, source: :real_name
+               through: :real_name_identities, source: :real_name
 
       scope :available_real_names, -> { primary.alpha }
 
       accepts_nested_attributes_for(:real_name_identities,
-        allow_destroy: true, reject_if: :reject_real_name_identity?
-      )
+                                    allow_destroy: true, reject_if: :reject_real_name_identity?)
 
       alias_method :pseudonym?, :secondary?
     end
 
     def prepare_real_name_identities
-      count_needed = 1 - self.real_name_identities.length
+      count_needed = 1 - real_name_identities.length
 
-      count_needed.times { self.real_name_identities.build }
+      count_needed.times { real_name_identities.build }
     end
 
     def secondary?
@@ -181,10 +177,10 @@ class Creator < ApplicationRecord
   private
 
     def enforce_individuality
-      if self.collective?
-        self.group_memberships.clear
+      if collective?
+        group_memberships.clear
       else
-        self.member_memberships.clear
+        member_memberships.clear
       end
     end
   end
@@ -195,19 +191,18 @@ class Creator < ApplicationRecord
         foreign_key: :member_id, inverse_of: :member, dependent: :destroy
 
       has_many :groups, -> { order("creators.name") },
-        through: :group_memberships, source: :group
+               through: :group_memberships, source: :group
 
       scope :individual, -> { where(individual: true) }
 
-      scope :available_groups,  -> { collective.alpha }
+      scope :available_groups, -> { collective.alpha }
 
       accepts_nested_attributes_for(:group_memberships,
-        allow_destroy: true, reject_if: :reject_group_membership?
-      )
+                                    allow_destroy: true, reject_if: :reject_group_membership?)
     end
 
     def prepare_group_memberships
-      5.times { self.group_memberships.build }
+      5.times { group_memberships.build }
     end
 
   private
@@ -228,21 +223,20 @@ class Creator < ApplicationRecord
         foreign_key: :group_id, inverse_of: :group, dependent: :destroy
 
       has_many :members, -> { order("creators.name") },
-        through: :member_memberships, source: :member
+               through: :member_memberships, source: :member
 
       scope :collective, -> { where(individual: false) }
 
       scope :available_members, -> { individual.alpha }
 
       accepts_nested_attributes_for(:member_memberships,
-        allow_destroy: true, reject_if: :reject_member_membership?
-      )
+                                    allow_destroy: true, reject_if: :reject_member_membership?)
 
       alias_method :group?, :collective?
     end
 
     def prepare_member_memberships
-      5.times { self.member_memberships.build }
+      5.times { member_memberships.build }
     end
 
     def collective?
@@ -298,7 +292,6 @@ class Creator < ApplicationRecord
 
   concerning :ContributedAssociations do
     included do
-
       has_many :contributed_works, -> { distinct }, through: :contributions,
         class_name: "Work", source: :work
 
@@ -309,7 +302,7 @@ class Creator < ApplicationRecord
         class_name: "Playlist", source: :playlist
 
       has_many :contributed_roles, -> { includes(contributions: :work) },
-        through: :contributions, class_name: "Role", source: :role
+               through: :contributions, class_name: "Role", source: :role
     end
   end
 
@@ -367,16 +360,18 @@ class Creator < ApplicationRecord
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(
-    :pseudonyms,        :real_names,
-    :members,           :groups,
-    :credits,           :contributions,
-    :credited_works,    :contributed_works,
-    :credited_reviews,  :contributed_reviews,
-    :credited_mixtapes, :contributed_mixtapes,
-    :contributed_roles
-  ) }
+  scope :for_list,  -> {}
+  scope :for_show,  lambda {
+                      includes(
+                        :pseudonyms, :real_names,
+                        :members,           :groups,
+                        :credits,           :contributions,
+                        :credited_works,    :contributed_works,
+                        :credited_reviews,  :contributed_reviews,
+                        :credited_mixtapes, :contributed_mixtapes,
+                        :contributed_roles
+                      )
+                    }
 
   #############################################################################
   # CONCERNING: Alpha.

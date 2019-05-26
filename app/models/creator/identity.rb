@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: creator_identities
@@ -41,7 +42,7 @@ class Creator::Identity < ApplicationRecord
   private
 
     def real_name_is_primary
-      self.errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
+      errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
     end
   end
 
@@ -63,7 +64,7 @@ class Creator::Identity < ApplicationRecord
   private
 
     def pseudonym_is_secondary
-      self.errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+      errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
     end
   end
 end

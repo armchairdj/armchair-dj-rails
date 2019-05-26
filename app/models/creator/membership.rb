@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: creator_memberships
@@ -41,7 +42,7 @@ class Creator::Membership < ApplicationRecord
   private
 
     def group_is_collective
-      self.errors.add :group_id, :not_collective unless group.try(:collective?)
+      errors.add :group_id, :not_collective unless group.try(:collective?)
     end
   end
 
@@ -61,7 +62,7 @@ class Creator::Membership < ApplicationRecord
   private
 
     def member_is_individual
-      self.errors.add :member_id, :not_individual unless member.try(:individual?)
+      errors.add :member_id, :not_individual unless member.try(:individual?)
     end
   end
 end

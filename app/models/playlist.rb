@@ -21,7 +21,6 @@
 #
 
 class Playlist < ApplicationRecord
-
   #############################################################################
   # CONCERNING: Image attachment.
   #############################################################################
@@ -58,12 +57,11 @@ class Playlist < ApplicationRecord
       has_many :works, through: :tracks
 
       accepts_nested_attributes_for(:tracks, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["work_id"].blank? }
-      )
+                                             reject_if:     proc { |attrs| attrs["work_id"].blank? })
     end
 
     def prepare_tracks
-      20.times { self.tracks.build }
+      20.times { tracks.build }
     end
   end
 

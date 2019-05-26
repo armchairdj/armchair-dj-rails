@@ -37,9 +37,7 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Post < ApplicationRecord
-
   #############################################################################
   # CONCERNS.
   #############################################################################
@@ -86,8 +84,8 @@ class Post < ApplicationRecord
   concerning :StateMachine do
     included do
       enum status: {
-        draft:      0,
-        scheduled:  5,
+        draft:     0,
+        scheduled: 5,
         published: 10
       }
 
@@ -174,44 +172,43 @@ class Post < ApplicationRecord
   private
 
     def handle_failed_transition
-      return unless self.errors.any? && changing_publication_status?
+      return unless errors.any? && changing_publication_status?
 
-      case
-      when publishing?;   handle_failed_publish
-      when unpublishing?; handle_failed_unpublish
-      when scheduling?;   handle_failed_schedule
-      when unscheduling?; handle_failed_unschedule
+      if publishing? then handle_failed_publish
+      elsif unpublishing? then handle_failed_unpublish
+      elsif scheduling? then   handle_failed_schedule
+      elsif unscheduling? then handle_failed_unschedule
       end
 
       clear_transition_flags
     end
 
     def handle_failed_publish
-      self.unpublish
-      self.errors.add(:base, :failed_to_publish)
+      unpublish
+      errors.add(:base, :failed_to_publish)
     end
 
     def handle_failed_unpublish
-      self.publish
-      self.errors.add(:base, :failed_to_unpublish)
+      publish
+      errors.add(:base, :failed_to_unpublish)
 
-      self.published_at = self.published_at_was
+      self.published_at = published_at_was
     end
 
     def handle_failed_schedule
-      temp = self.publish_on
+      temp = publish_on
 
-      self.unschedule
-      self.errors.add(:base, :failed_to_schedule)
+      unschedule
+      errors.add(:base, :failed_to_schedule)
 
       self.publish_on = temp
     end
 
     def handle_failed_unschedule
-      self.schedule
-      self.errors.add(:base, :failed_to_unschedule)
+      schedule
+      errors.add(:base, :failed_to_unschedule)
 
-      self.publish_on = self.publish_on_was
+      self.publish_on = publish_on_was
     end
 
     def clear_transition_flags
@@ -246,7 +243,7 @@ class Post < ApplicationRecord
 
   concerning :Scheduling do
     included do
-      scope :scheduled_and_due, -> {
+      scope :scheduled_and_due, lambda {
         scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
       }
     end
@@ -286,7 +283,7 @@ class Post < ApplicationRecord
       validates :publish_on, presence: true, if:     :requires_publish_on?
       validates :publish_on, absence:  true, unless: :requires_publish_on?
 
-      validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
+      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
     end
 
   private
@@ -313,7 +310,7 @@ class Post < ApplicationRecord
       def for_cms_user(user)
         return all                       if user.try(:can_edit?)
         return where(author_id: user.id) if user.try(:can_write?)
-        return none
+        none
       end
     end
   end

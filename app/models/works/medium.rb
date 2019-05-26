@@ -14,7 +14,7 @@ class Medium < Work
       end
 
       def true_model_name
-        ActiveModel::Name.new(self.name.constantize)
+        ActiveModel::Name.new(name.constantize)
       end
 
       def display_medium
@@ -38,7 +38,7 @@ class Medium < Work
 
   concerning :RoleAssociation do
     def available_roles
-      Role.for_medium(self.medium).alpha
+      Role.for_medium(medium).alpha
     end
 
     def available_role_ids

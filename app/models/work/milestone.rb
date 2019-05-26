@@ -61,9 +61,9 @@ class Work::Milestone < ApplicationRecord
       validates :activity, uniqueness: { scope: [:work_id] }
 
       enum activity: {
-        released:    0,
-        published:   1,
-        aired:       2,
+        released:   0,
+        published:  1,
+        aired:      2,
 
         created:    10,
 
