@@ -15,9 +15,9 @@ FactoryBot.define do
       title "76:14"
       with_contributions
 
-      milestones_attributes { {
+      milestones_attributes do {
         "0" => attributes_for(:work_milestone_for_work, year: "1994")
-      } }
+      } end
 
       transient do
         maker_names       ["Global Communication"]

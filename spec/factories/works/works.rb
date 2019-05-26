@@ -8,9 +8,9 @@ FactoryBot.define do
       release_year "1972"
     end
 
-    milestones_attributes { {
+    milestones_attributes do {
       "0" => attributes_for(:work_milestone, activity: :released, year: release_year)
-    } }
+    } end
   end
 
   factory :work do
@@ -111,9 +111,9 @@ FactoryBot.define do
         specific_creator nil
       end
 
-      credits_attributes { {
+      credits_attributes do {
         "0" => attributes_for(:credit, creator_id: specific_creator.id)
-      } }
+      } end
     end
 
     trait :with_specific_contributor do
@@ -121,9 +121,9 @@ FactoryBot.define do
         specific_contributor nil
       end
 
-      contributions_attributes { {
+      contributions_attributes do {
         "0" => attributes_for(:contribution, role_id: create(:minimal_role).id, creator_id: specific_contributor.id)
-      } }
+      } end
     end
 
     ###########################################################################

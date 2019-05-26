@@ -28,14 +28,14 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_2_tracks do
-      tracks_attributes { {
+      tracks_attributes do {
         "0" => attributes_for(:playlist_track, :with_existing_work),
         "1" => attributes_for(:playlist_track, :with_existing_work),
-      } }
+      } end
     end
 
     trait :with_10_tracks do
-      tracks_attributes { {
+      tracks_attributes do {
         "0" => attributes_for(:playlist_track, :with_existing_work),
         "1" => attributes_for(:playlist_track, :with_existing_work),
         "2" => attributes_for(:playlist_track, :with_existing_work),
@@ -46,7 +46,7 @@ FactoryBot.define do
         "7" => attributes_for(:playlist_track, :with_existing_work),
         "8" => attributes_for(:playlist_track, :with_existing_work),
         "9" => attributes_for(:playlist_track, :with_existing_work),
-      } }
+      } end
     end
 
     trait :with_draft_post do

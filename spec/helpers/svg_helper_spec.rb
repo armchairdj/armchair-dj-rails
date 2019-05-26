@@ -12,8 +12,7 @@ RSpec.describe SvgHelper do
       expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment: true,
         aria:      false,
-        class:     "scalable-image"
-      )
+        class:     "scalable-image")
 
       actual = helper.non_semantic_svg_image("image_path")
 
@@ -21,11 +20,10 @@ RSpec.describe SvgHelper do
     end
 
     it "generates non-svg with partial aria attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", 
+      expect(helper).to receive(:inline_svg).with("image_path",
         nocomment: true,
         aria:      false,
-        class:     "scalable-image"
-      )
+        class:     "scalable-image")
 
       actual = helper.non_semantic_svg_image("image_path", title: "title")
 
@@ -38,8 +36,7 @@ RSpec.describe SvgHelper do
         aria:      true,
         class:     "scalable-image",
         title:     "title",
-        desc:      "desc"
-      )
+        desc:      "desc")
 
       actual = helper.non_semantic_svg_image("image_path", title: "title", desc: "desc")
 
@@ -51,8 +48,7 @@ RSpec.describe SvgHelper do
         nocomment:         true,
         aria:              false,
         class:             "scalable-image author",
-        "data-controller": "svg"
-      )
+        "data-controller": "svg")
 
       actual = helper.non_semantic_svg_image("image_path", title: "title", "data-controller": "svg", class: "author")
 
@@ -64,9 +60,8 @@ RSpec.describe SvgHelper do
     it "errors without both aria attributes" do
       expect(helper).to_not receive(:inline_svg)
 
-      expect {
-        helper.semantic_svg_image("image_path", title: "title")
-      }.to raise_exception(ArgumentError)
+      expect { helper.semantic_svg_image("image_path", title: "title") }.
+        to raise_exception(ArgumentError)
     end
 
 

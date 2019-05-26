@@ -30,7 +30,7 @@ RSpec.describe Creator do
 
     it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
-      let(:show_loads) { [
+      let(:show_loads) do [
         :pseudonyms,        :real_names,
         :members,           :groups,
         :credits,           :contributions,
@@ -38,7 +38,7 @@ RSpec.describe Creator do
         :credited_reviews,  :contributed_reviews,
         :credited_mixtapes, :contributed_mixtapes,
         :contributed_roles
-      ] }
+      ] end
     end
 
     describe "nilify_blanks" do
@@ -253,9 +253,9 @@ RSpec.describe Creator do
 
             expect(subject.pseudonym_identities).to have(1).items
 
-            expect {
+            expect do
               subject.update!(primary: false)
-            }.to change { Creator::Identity.count }.by(-1)
+            end.to change { Creator::Identity.count }.by(-1)
 
             expect(subject.reload.pseudonym_identities).to have(0).items
           end
@@ -322,9 +322,9 @@ RSpec.describe Creator do
 
             expect(subject.real_name_identities).to have(1).items
 
-            expect {
+            expect do
               subject.update!(primary: true)
-            }.to change { Creator::Identity.count }.by(-1)
+            end.to change { Creator::Identity.count }.by(-1)
 
             expect(subject.reload.real_name_identities).to have(0).items
           end
@@ -392,9 +392,9 @@ RSpec.describe Creator do
 
             expect(subject.member_memberships).to have(1).items
 
-            expect {
+            expect do
               subject.update!(individual: true)
-            }.to change { Creator::Membership.count }.by(-1)
+            end.to change { Creator::Membership.count }.by(-1)
 
             expect(subject.reload.member_memberships).to have(0).items
           end
@@ -462,9 +462,9 @@ RSpec.describe Creator do
 
             expect(subject.group_memberships).to have(1).items
 
-            expect {
+            expect do
               subject.update!(individual: false)
-            }.to change { Creator::Membership.count }.by(-1)
+            end.to change { Creator::Membership.count }.by(-1)
 
             expect(subject.reload.group_memberships).to have(0).items
           end

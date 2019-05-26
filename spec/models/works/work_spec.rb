@@ -61,19 +61,19 @@ RSpec.describe Work do
         end
 
         context "without dupes" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
             "1" => attributes_for(:minimal_work_relationship, target_id: other_target.id)
-          }}
+          } end
 
           it { is_expected.to be_valid }
         end
 
         context "with dupes" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
             "1" => attributes_for(:minimal_work_relationship, target_id: target.id)
-          }}
+          } end
 
           it "is has the correct error" do
             is_expected.to be_invalid
@@ -83,10 +83,10 @@ RSpec.describe Work do
         end
 
         context "with duplicate targets but different connections" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
             "1" => attributes_for(:minimal_work_relationship, target_id: target.id, connection: "spinoff_of")
-          }}
+          } end
 
           it { is_expected.to be_valid }
         end
@@ -155,19 +155,19 @@ RSpec.describe Work do
         end
 
         context "without dupes" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
             "1" => attributes_for(:minimal_work_relationship, source_id: other_source.id)
-          }}
+          } end
 
           it { is_expected.to be_valid }
         end
 
         context "with dupes" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
             "1" => attributes_for(:minimal_work_relationship, source_id: source.id)
-          }}
+          } end
 
           it "is has the correct error" do
             is_expected.to be_invalid
@@ -177,10 +177,10 @@ RSpec.describe Work do
         end
 
         context "with duplicate sources but different connections" do
-          let(:attributes) { {
+          let(:attributes) do {
             "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
             "1" => attributes_for(:minimal_work_relationship, source_id: source.id, connection: "spinoff_of")
-          }}
+          } end
 
           it { is_expected.to be_valid }
         end
@@ -533,15 +533,15 @@ RSpec.describe Work do
           let(:creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
 
-          let(:good_attributes) { {
+          let(:good_attributes) do {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id),
             "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
-          }}
+          } end
 
-          let(:bad_attributes) { {
+          let(:bad_attributes) do {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator.id)
-          }}
+          } end
 
           it "accepts non-dupes" do
             subject.credits_attributes = good_attributes
@@ -567,15 +567,15 @@ RSpec.describe Work do
           let(:role_1) { create(:minimal_role, medium: "Song") }
           let(:role_2) { create(:minimal_role, medium: "Song") }
 
-          let(:good_attributes) { {
+          let(:good_attributes) do {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_2.id)
-          }}
+          } end
 
-          let(:bad_attributes) { {
+          let(:bad_attributes) do {
             "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
             "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id)
-          }}
+          } end
 
           it "accepts non-dupes" do
             subject.contributions_attributes = good_attributes
@@ -594,15 +594,15 @@ RSpec.describe Work do
         describe "milestones" do
           before(:each) { subject.milestones = [] }
 
-          let(:good_attributes) { {
+          let(:good_attributes) do {
             "0" => attributes_for(:work_milestone, activity: :released,   year: "1977"),
             "1" => attributes_for(:work_milestone, activity: :remastered, year: "2005"),
-          }}
+          } end
 
-          let(:bad_attributes) { {
+          let(:bad_attributes) do {
             "0" => attributes_for(:work_milestone, activity: :released, year: "1977"),
             "1" => attributes_for(:work_milestone, activity: :released, year: "2005"),
-          }}
+          } end
 
           it "accepts non-dupes" do
             subject.milestones_attributes = good_attributes

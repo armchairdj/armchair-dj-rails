@@ -10,11 +10,11 @@ RSpec.shared_examples "a_ginsu_sorter" do
     let(:current_scope) { "All" }
     let(:current_sort) { "Default" }
     let(:current_dir) { "ASC" }
-    let(:instance) { described_class.new(
+    let(:instance) do described_class.new(
       current_scope: current_scope,
       current_sort:  current_sort,
       current_dir:   current_dir
-    ) }
+    ) end
 
     describe "#resolve" do
       before(:each) do
