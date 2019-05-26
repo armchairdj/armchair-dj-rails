@@ -53,7 +53,7 @@ RSpec.describe ApplicationController do
         let(:user) { writer }
 
         before(:each) do
-          expect(controller).to receive(:session).and_return({ "user_return_to" => "articles/foo_bar_bat" })
+          expect(controller).to receive(:session).and_return("user_return_to" => "articles/foo_bar_bat")
         end
 
         it { is_expected.to eq("articles/foo_bar_bat") }

@@ -9,7 +9,7 @@ class PostRenderer < Redcarpet::Render::HTML
   def link(url, title, content)
     link_to(content.html_safe, normalize_url(url), title: title)
   rescue => err
-    log_render_error(err, { url: url, content: content })
+    log_render_error(err, url: url, content: content)
 
     content.html_safe
   end

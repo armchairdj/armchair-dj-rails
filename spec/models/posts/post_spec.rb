@@ -413,11 +413,11 @@ RSpec.describe Post do
     describe "self#publish_scheduled" do
       it "publishes scheduled if publish_on is past" do
         Timecop.freeze(Date.today + 3) do
-          expect(described_class.publish_scheduled).to eq({
+          expect(described_class.publish_scheduled).to eq(
             all:     [past_due, current],
             success: [past_due, current],
             failure: []
-          })
+          )
 
           expect(past_due.reload).to be_published
           expect(current.reload).to be_published
@@ -428,11 +428,11 @@ RSpec.describe Post do
         Timecop.freeze(Date.today + 3) do
           current.update_column(:body, nil)
 
-          expect(described_class.publish_scheduled).to eq({
+          expect(described_class.publish_scheduled).to eq(
             all:     [past_due, current],
             success: [past_due],
             failure: [current]
-          })
+          )
 
           expect(past_due.reload).to be_published
           expect(current.reload).to be_draft

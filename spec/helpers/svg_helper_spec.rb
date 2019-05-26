@@ -9,11 +9,11 @@ RSpec.describe SvgHelper do
 
   describe "#non_semantic_svg_image" do
     it "generates non-aria svg" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment: true,
         aria:      false,
         class:     "scalable-image"
-      })
+      )
 
       actual = helper.non_semantic_svg_image("image_path")
 
@@ -21,11 +21,11 @@ RSpec.describe SvgHelper do
     end
 
     it "generates non-svg with partial aria attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment: true,
         aria:      false,
         class:     "scalable-image"
-      })
+      )
 
       actual = helper.non_semantic_svg_image("image_path", title: "title")
 
@@ -33,13 +33,13 @@ RSpec.describe SvgHelper do
     end
 
     it "generates aria svg with optional aria attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment: true,
         aria:      true,
         class:     "scalable-image",
         title:     "title",
         desc:      "desc"
-      })
+      )
 
       actual = helper.non_semantic_svg_image("image_path", title: "title", desc: "desc")
 
@@ -47,12 +47,12 @@ RSpec.describe SvgHelper do
     end
 
     it "accepts extra html attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment:         true,
         aria:              false,
         class:             "scalable-image author",
         "data-controller": "svg"
-      })
+      )
 
       actual = helper.non_semantic_svg_image("image_path", title: "title", "data-controller": "svg", class: "author")
 
@@ -71,13 +71,13 @@ RSpec.describe SvgHelper do
 
 
     it "generates aria svg" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment: true,
         aria:      true,
         class:     "scalable-image",
         title:     "title",
         desc:      "desc"
-      })
+      )
 
       actual = helper.semantic_svg_image("image_path", title: "title", desc: "desc")
 
@@ -85,14 +85,14 @@ RSpec.describe SvgHelper do
     end
 
     it "accepts extra html attributes" do
-      expect(helper).to receive(:inline_svg).with("image_path", {
+      expect(helper).to receive(:inline_svg).with("image_path", 
         nocomment:         true,
         aria:              true,
         class:             "scalable-image author",
         title:             "title",
         desc:              "desc",
         "data-controller": "svg"
-      })
+      )
 
       actual = helper.semantic_svg_image("image_path", title: "title", desc: "desc", "data-controller": "svg", class: "author")
 

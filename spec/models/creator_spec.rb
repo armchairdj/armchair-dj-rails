@@ -769,10 +769,10 @@ RSpec.describe Creator do
         end
 
         it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
-          is_expected.to eq({
+          is_expected.to eq(
             "Book"    => ["Author",  "Creator",  "Editor"],
             "TV Show" => ["Creator", "Director", "Showrunner"]
-          })
+          )
         end
       end
 

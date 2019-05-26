@@ -9,11 +9,11 @@ module SvgHelper
     }, opts)
 
     unless title.nil? || desc.nil?
-      attrs = attrs.merge({
+      attrs = attrs.merge(
         aria:  true,
         title: title,
         desc:  desc,
-      })
+      )
     end
 
     inline_svg(image_path, attrs)

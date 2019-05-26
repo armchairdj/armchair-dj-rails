@@ -2,10 +2,10 @@
 
 class AspectSorter < Ginsu::Sorter
   def allowed
-    super.merge({
+    super.merge(
       "Facet" => [aspect_facet_sort_sql, name_sort_sql],
       "Name"  => [name_sort_sql, aspect_facet_sort_sql],
-    })
+    )
   end
 
 private

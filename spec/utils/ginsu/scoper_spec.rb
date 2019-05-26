@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe Ginsu::Scoper do
   describe "#constructor" do
     before(:each) do
-      allow_any_instance_of(described_class).to receive(:allowed).and_return({
+      allow_any_instance_of(described_class).to receive(:allowed).and_return(
         "Sorted" => :sorted
-      })
+      )
     end
 
     context "defaults" do

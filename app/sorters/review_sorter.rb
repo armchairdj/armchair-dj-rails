@@ -2,9 +2,9 @@
 
 class ReviewSorter < PostSorter
   def allowed
-    super.merge({
+    super.merge(
       "Medium" => [work_medium_sort_sql, alpha_sort_sql]
-    })
+    )
   end
 
 private

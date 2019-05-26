@@ -439,7 +439,7 @@ Layout/IndentHash:
   #
   # The value `align_braces` means that the indentation of the first key shall
   # always be relative to the position of the opening brace.
-  EnforcedStyle: special_inside_parentheses
+  EnforcedStyle: consistent
   SupportedStyles:
     - special_inside_parentheses
     - consistent

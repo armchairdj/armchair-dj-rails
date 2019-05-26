@@ -25,7 +25,7 @@ RSpec.describe "admin/posts/edit" do
         render
 
         assert_select "form[action=?][method=?]", admin_article_path(@article), "post" do
-          assert_select("div.error-notification", { count: 0 })
+          assert_select("div.error-notification", count: 0)
 
           assert_select("textarea[name=?]", "article[body]")
           assert_select("textarea[name=?]", "article[summary]")
@@ -80,7 +80,7 @@ RSpec.describe "admin/posts/edit" do
         render
 
         assert_select "form[action=?][method=?]", admin_mixtape_path(@mixtape), "post" do
-          assert_select("div.error-notification", { count: 0 })
+          assert_select("div.error-notification", count: 0)
 
           assert_select("textarea[name=?]", "mixtape[body]")
           assert_select("textarea[name=?]", "mixtape[summary]")
@@ -100,7 +100,7 @@ RSpec.describe "admin/posts/edit" do
         render
 
         assert_select "form[action=?][method=?]", admin_mixtape_path(@mixtape), "post" do
-          assert_select("div.error-notification", { count: 1 })
+          assert_select("div.error-notification", count: 1)
 
           assert_select("textarea[name=?]", "mixtape[body]")
           assert_select("textarea[name=?]", "mixtape[summary]")
@@ -136,7 +136,7 @@ RSpec.describe "admin/posts/edit" do
         render
 
         assert_select "form[action=?][method=?]", admin_review_path(@review), "post" do
-          assert_select("div.error-notification", { count: 0 })
+          assert_select("div.error-notification", count: 0)
 
           assert_select("textarea[name=?]", "review[body]")
           assert_select("textarea[name=?]", "review[summary]")
@@ -156,7 +156,7 @@ RSpec.describe "admin/posts/edit" do
         render
 
         assert_select "form[action=?][method=?]", admin_review_path(@review), "post" do
-          assert_select("div.error-notification", { count: 1 })
+          assert_select("div.error-notification", count: 1)
 
           assert_select("textarea[name=?]", "review[body]")
           assert_select("textarea[name=?]", "review[summary]")

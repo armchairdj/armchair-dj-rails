@@ -23,9 +23,9 @@ RSpec.describe "admin/posts/new" do
         render
 
         assert_select "form[action=?][method=?]", admin_articles_path, "post" do
-          assert_select("div.error-notification",               { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
+          assert_select("div.error-notification",               count: 0)
+          assert_select("textarea[name=?]", "mixtape[body]",    count: 0)
+          assert_select("textarea[name=?]", "mixtape[summary]", count: 0)
         end
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe "admin/posts/new" do
           render
 
           assert_select "form[action=?][method=?]", admin_articles_path, "post" do
-            assert_select("div.error-notification", { count: 1 })
+            assert_select("div.error-notification", count: 1)
           end
         end
       end
@@ -70,9 +70,9 @@ RSpec.describe "admin/posts/new" do
         render
 
         assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-          assert_select("div.error-notification",               { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
+          assert_select("div.error-notification",               count: 0)
+          assert_select("textarea[name=?]", "mixtape[body]",    count: 0)
+          assert_select("textarea[name=?]", "mixtape[summary]", count: 0)
         end
       end
     end
@@ -86,7 +86,7 @@ RSpec.describe "admin/posts/new" do
         render
 
         assert_select "form[action=?][method=?]", admin_mixtapes_path, "post" do
-          assert_select("div.error-notification", { count: 1 })
+          assert_select("div.error-notification", count: 1)
         end
       end
     end
@@ -116,9 +116,9 @@ RSpec.describe "admin/posts/new" do
         render
 
         assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
-          assert_select("div.error-notification",               { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[body]",    { count: 0 })
-          assert_select("textarea[name=?]", "mixtape[summary]", { count: 0 })
+          assert_select("div.error-notification",               count: 0)
+          assert_select("textarea[name=?]", "mixtape[body]",    count: 0)
+          assert_select("textarea[name=?]", "mixtape[summary]", count: 0)
         end
       end
     end
@@ -133,7 +133,7 @@ RSpec.describe "admin/posts/new" do
           render
 
           assert_select "form[action=?][method=?]", admin_reviews_path, "post" do
-            assert_select("div.error-notification", { count: 1 })
+            assert_select("div.error-notification", count: 1)
           end
         end
       end

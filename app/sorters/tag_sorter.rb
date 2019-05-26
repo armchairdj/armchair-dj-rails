@@ -2,9 +2,9 @@
 
 class TagSorter < Ginsu::Sorter
   def allowed
-    super.merge({
+    super.merge(
       "Name" => [name_sort_sql]
-    })
+    )
   end
 
 private
