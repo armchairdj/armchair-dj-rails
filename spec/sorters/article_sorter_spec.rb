@@ -18,7 +18,7 @@ RSpec.describe ArticleSorter do
         "ID",
         "Title",
         "Status",
-        "Author",
+        "Author"
       ]) }
     end
 

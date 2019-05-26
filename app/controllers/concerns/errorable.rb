@@ -119,7 +119,7 @@ concern :Errorable do
         loggable_verb,
         loggable_url,
         loggable_user,
-        exception.try(:message),
+        exception.try(:message)
       ].compact.join(" :: ")
     end
 

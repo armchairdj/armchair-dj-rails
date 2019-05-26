@@ -19,7 +19,7 @@ RSpec.describe ReviewSorter do
         "Title",
         "Status",
         "Author",
-        "Medium",
+        "Medium"
       ]) }
     end
 

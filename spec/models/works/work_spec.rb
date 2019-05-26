@@ -245,7 +245,7 @@ RSpec.describe Work do
         is_expected.to eq([
           ["Podcast", [podcast]],
           ["Song",    [song_2, song_1]],
-          ["TV Show", [tv_show]],
+          ["TV Show", [tv_show]]
         ])
       end
     end
@@ -270,7 +270,7 @@ RSpec.describe Work do
           ["TV Episode",    "TvEpisode"],
           ["TV Season",     "TvSeason"],
           ["TV Show",       "TvShow"],
-          ["Video Game",    "VideoGame"],
+          ["Video Game",    "VideoGame"]
         ]
       end
 
@@ -297,7 +297,7 @@ RSpec.describe Work do
           "TvEpisode",
           "TvSeason",
           "TvShow",
-          "VideoGame",
+          "VideoGame"
         ]
       end
 

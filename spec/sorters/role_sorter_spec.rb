@@ -17,7 +17,7 @@ RSpec.describe RoleSorter do
         "Default",
         "ID",
         "Name",
-        "Medium",
+        "Medium"
       ]) }
     end
 

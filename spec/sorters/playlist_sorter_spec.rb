@@ -17,7 +17,7 @@ RSpec.describe PlaylistSorter do
         "Default",
         "ID",
         "Title",
-        "Author",
+        "Author"
       ]) }
     end
 

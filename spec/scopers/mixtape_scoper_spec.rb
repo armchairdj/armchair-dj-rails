@@ -17,7 +17,7 @@ RSpec.describe MixtapeScoper do
         "All",
         "Draft",
         "Scheduled",
-        "Published",
+        "Published"
       ]) }
     end
 

@@ -17,7 +17,7 @@ RSpec.describe ReviewScoper do
         "All",
         "Draft",
         "Scheduled",
-        "Published",
+        "Published"
       ]) }
     end
 

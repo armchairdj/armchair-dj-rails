@@ -96,8 +96,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
           subject { described_class.send(:"human_#{plural}", include_raw: true) }
 
           let(:expected) do
-            [["Initial Humanized Value",    0, "init",],
-             ["Additional Humanized Value", 1, "addl",]]
+            [["Initial Humanized Value",    0, "init"],
+             ["Additional Humanized Value", 1, "addl"]]
           end
 
           it "includes the database integer in each item" do

@@ -26,7 +26,7 @@ RSpec.describe MetaHelper do
         "apple_icon",
         "favicon",
         "shortcut",
-        "rss",
+        "rss"
       ].join("\n"))
     end
 
@@ -41,7 +41,7 @@ RSpec.describe MetaHelper do
         "apple_icon",
         "favicon",
         "shortcut",
-        "rss",
+        "rss"
       ].join("\n"))
     end
   end

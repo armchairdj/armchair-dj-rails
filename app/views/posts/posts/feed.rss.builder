@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-xml.instruct! :xml, :version => "1.0"
-xml.rss :version => "2.0" do
+xml.instruct! :xml, version: "1.0"
+xml.rss version: "2.0" do
   xml.channel do
     xml.title         I18n.t("site.name")
     xml.description   I18n.t("site.tagline")

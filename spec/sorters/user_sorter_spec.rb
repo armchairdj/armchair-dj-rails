@@ -19,7 +19,7 @@ RSpec.describe UserSorter do
         "Name",
         "Username",
         "Email",
-        "Role",
+        "Role"
       ]) }
     end
 

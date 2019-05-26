@@ -16,7 +16,7 @@ RSpec.describe TagSorter do
       it { is_expected.to match_array([
         "Default",
         "ID",
-        "Name",
+        "Name"
       ]) }
     end
 

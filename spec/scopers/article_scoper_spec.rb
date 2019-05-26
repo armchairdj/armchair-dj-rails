@@ -17,7 +17,7 @@ RSpec.describe ArticleScoper do
         "All",
         "Draft",
         "Scheduled",
-        "Published",
+        "Published"
       ]) }
     end
 

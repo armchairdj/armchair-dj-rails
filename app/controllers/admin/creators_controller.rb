@@ -49,31 +49,31 @@ private
       :name,
       :primary,
       :individual,
-      :links_attributes => [
+      links_attributes: [
         :id,
         :_destroy,
         :url,
         :description
       ],
-      :pseudonym_identities_attributes => [
+      pseudonym_identities_attributes: [
         :id,
         :_destroy,
         :real_name_id,
         :pseudonym_id
       ],
-      :real_name_identities_attributes => [
+      real_name_identities_attributes: [
         :id,
         :_destroy,
         :pseudonym_id,
         :real_name_id
       ],
-      :member_memberships_attributes => [
+      member_memberships_attributes: [
         :id,
         :_destroy,
         :group_id,
         :member_id
       ],
-      :group_memberships_attributes => [
+      group_memberships_attributes: [
         :id,
         :_destroy,
         :member_id,

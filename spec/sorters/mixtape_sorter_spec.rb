@@ -18,7 +18,7 @@ RSpec.describe MixtapeSorter do
         "ID",
         "Title",
         "Status",
-        "Author",
+        "Author"
       ]) }
     end
 

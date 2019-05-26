@@ -105,29 +105,29 @@ private
         :_destroy,
         :work_id,
         :creator_id,
-        :role_id,
+        :role_id
       ],
       milestones_attributes: [
         :id,
         :_destroy,
         :work_id,
         :activity,
-        :year,
+        :year
       ],
       source_relationships_attributes: [
         :id,
         :_destroy,
         :target_id,
         :connection,
-        :source_id,
+        :source_id
       ],
       target_relationships_attributes: [
         :id,
         :_destroy,
         :source_id,
         :connection,
-        :target_id,
-      ],
+        :target_id
+      ]
     ])
   end
 end

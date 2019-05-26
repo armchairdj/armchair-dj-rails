@@ -8,7 +8,7 @@ end
 
 namespace :publish do
   desc "Publish scheduled posts once per day."
-  task :scheduled => :environment do
+  task scheduled: :environment do
     log_it I18n.t("rake.publish.scheduled.ready")
 
     memo = Post.publish_scheduled

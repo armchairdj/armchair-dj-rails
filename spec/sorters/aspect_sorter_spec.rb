@@ -17,7 +17,7 @@ RSpec.describe AspectSorter do
         "Default",
         "ID",
         "Facet",
-        "Name",
+        "Name"
       ]) }
     end
 

@@ -26,7 +26,7 @@ module Ginsu
         active = scope == @current_scope
         url    = diced_url(scope, @current_sort, @current_dir)
 
-        memo[scope] = { :active? => active, :url => url }
+        memo[scope] = { active?: active, url: url }
         memo
       end
     end

@@ -55,7 +55,7 @@ module Ginsu
         dir    = active && @current_dir == "ASC" ? "DESC" : "ASC"
         url    = diced_url(@current_scope, sort, dir)
 
-        memo[sort] = { :active? => active, :desc? => desc, :url => url }
+        memo[sort] = { active?: active, desc?: desc, url: url }
         memo
       end
     end

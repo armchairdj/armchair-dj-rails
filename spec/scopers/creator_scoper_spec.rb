@@ -18,7 +18,7 @@ RSpec.describe CreatorScoper do
         "Primary",
         "Secondary",
         "Individual",
-        "Group",
+        "Group"
       ]) }
     end
 

@@ -14,7 +14,7 @@ RSpec.describe RoleScoper do
       subject { instance.allowed.keys }
 
       it { is_expected.to match_array([
-        "All",
+        "All"
       ]) }
     end
 

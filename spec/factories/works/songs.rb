@@ -45,7 +45,7 @@ FactoryBot.define do
         create(:aspect, facet: :song_type,     name: "Remix"     ).id,
         create(:aspect, facet: :musical_genre, name: "Techno"    ).id,
         create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
-        create(:aspect, facet: :music_label,   name: "Domino"    ).id,
+        create(:aspect, facet: :music_label,   name: "Domino"    ).id
       ] }
 
       transient do
@@ -68,7 +68,7 @@ FactoryBot.define do
         create(:aspect, facet: :song_type,     name: "Remix"     ).id,
         create(:aspect, facet: :musical_genre, name: "Techno"    ).id,
         create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
-        create(:aspect, facet: :music_label,   name: "Domino"    ).id,
+        create(:aspect, facet: :music_label,   name: "Domino"    ).id
       ] }
 
       transient do

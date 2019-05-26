@@ -61,7 +61,7 @@ private
       :password,
       :role,
       :bio,
-      :links_attributes => [
+      links_attributes: [
         :id,
         :_destroy,
         :url,

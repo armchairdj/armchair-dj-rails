@@ -11,7 +11,7 @@ module MetaHelper
       apple_icon_tag,
       favicon_tag,
       shortcut_tag,
-      rss_tag,
+      rss_tag
     ].delete_if(&:blank?).join("\n").html_safe
   end
 
