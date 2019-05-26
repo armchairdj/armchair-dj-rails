@@ -164,7 +164,7 @@ Layout/AlignHash:
   # table - left alignment of keys, hash rockets, and values
   #   'a'  => 2
   #   'bb' => 3
-  EnforcedHashRocketStyle: key
+  EnforcedHashRocketStyle: table
   SupportedHashRocketStyles:
     - key
     - separator
@@ -180,7 +180,7 @@ Layout/AlignHash:
   # table - left alignment of keys and values
   #   a:  0
   #   bb: 1
-  EnforcedColonStyle: key
+  EnforcedColonStyle: table
   SupportedColonStyles:
     - key
     - separator
