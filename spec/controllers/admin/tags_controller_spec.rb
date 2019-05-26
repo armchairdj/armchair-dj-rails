@@ -49,12 +49,20 @@ RSpec.describe Admin::TagsController do
       end
 
       context "with invalid params" do
-        subject { post :create, params: { tag: bad_params } }
+        let(:make_request) do
+          post :create, params: { tag: bad_params }
+        end
 
-        it { is_expected.to successfully_render("admin/tags/new") }
+        it { expect(make_request).to successfully_render("admin/tags/new") }
 
-        it { subject; expect(assigns(:tag)).to have_coerced_attributes(bad_params) }
-        it { subject; expect(assigns(:tag)).to be_invalid }
+        it "updates the object but assigns errors" do
+          make_request
+
+          actual = assigns(:tag)
+
+          expect(actual).to have_coerced_attributes(bad_params)
+          expect(actual).to be_invalid
+        end
       end
     end
 

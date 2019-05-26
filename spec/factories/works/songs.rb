@@ -2,17 +2,16 @@
 
 FactoryBot.define do
   factory :song, class: "Song" do
-
     factory :minimal_song, class: "Song", parent: :minimal_work_parent do
-      factory :minimal_work do; end
+      factory :minimal_work
     end
 
     factory :complete_song, class: "Song", parent: :complete_work_parent do
-      factory :complete_work do; end
+      factory :complete_work
     end
 
     factory :stuffed_song, class: "Song", parent: :stuffed_work_parent do
-      factory :stuffed_work do; end
+      factory :stuffed_work
     end
 
     ###########################################################################

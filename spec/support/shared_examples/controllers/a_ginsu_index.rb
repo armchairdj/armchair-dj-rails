@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_ginsu_index" do |template_override|
-
   let(:param_key) { described_class.controller_name.to_sym }
   let(:template) { template_override || "#{described_class.controller_path}/index" }
   let(:model_class) { described_class.new.send(:determine_model_class) }

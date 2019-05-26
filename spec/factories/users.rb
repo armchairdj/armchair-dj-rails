@@ -46,7 +46,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :user do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -97,7 +96,7 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_user, parent: :member do; end
+    factory :minimal_user, parent: :member
 
     factory :complete_user, parent: :minimal_user do
       middle_name "J."

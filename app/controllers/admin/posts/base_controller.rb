@@ -136,9 +136,9 @@ private
 
   def keys_for_status_change
     case @instance.status
-    when "draft";     [:publishing, :scheduling, :publish_on]
-    when "scheduled"; [:publishing, :unscheduling]
-    when "published"; [:unpublishing, :clear_slug]
+    when "draft"     then [:publishing, :scheduling, :publish_on]
+    when "scheduled" then [:publishing, :unscheduling]
+    when "published" then [:unpublishing, :clear_slug]
     end
   end
 
@@ -194,10 +194,10 @@ private
 
   def update_message
     action = case
-      when @instance.publishing?;   "updated & published"
-      when @instance.unpublishing?; "updated & unpublished"
-      when @instance.scheduling?;   "updated & scheduled"
-      when @instance.unscheduling?; "updated & unscheduled"
+      when @instance.publishing?   then "updated & published"
+      when @instance.unpublishing? then "updated & unpublished"
+      when @instance.scheduling?   then "updated & scheduled"
+      when @instance.unscheduling? then "updated & unscheduled"
       else "updated"
     end
 

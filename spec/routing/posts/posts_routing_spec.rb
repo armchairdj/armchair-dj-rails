@@ -15,7 +15,6 @@ RSpec.describe Posts::PostsController do
     it "#feed" do
       expect(get: "/feed.rss").to route_to("posts/posts#feed", format: "rss")
     end
-
   end
 
   describe "does not route to RESTful" do

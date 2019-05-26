@@ -15,9 +15,9 @@ module JsHelper
     return opts unless post.persisted? && post.unpublished?
 
     opts[:url] = case post.class.name
-      when "Article"; autosave_admin_article_path(post)
-      when "Review";  autosave_admin_review_path(post)
-      when "Mixtape"; autosave_admin_mixtape_path(post)
+      when "Article" then autosave_admin_article_path(post)
+      when "Review"  then autosave_admin_review_path(post)
+      when "Mixtape" then autosave_admin_mixtape_path(post)
     end
 
     js_attrs("autosavable", opts)
@@ -31,10 +31,10 @@ module JsHelper
     }
 
     opts["extra-params"] = case scope
-      when "creator[real_name]"; "creator[primary]=true"
-      when "creator[psuedonym]"; "creator[primary]=false"
-      when "creator[member]";    "creator[individual]=true"
-      when "creator[group]";     "creator[individual]=false"
+      when "creator[real_name]" then "creator[primary]=true"
+      when "creator[psuedonym]" then "creator[primary]=false"
+      when "creator[member]"    then "creator[individual]=true"
+      when "creator[group]"     then "creator[individual]=false"
     end
 
     js_attrs("creatable", opts)

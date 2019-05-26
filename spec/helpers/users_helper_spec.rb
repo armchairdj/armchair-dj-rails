@@ -52,7 +52,10 @@ RSpec.describe UsersHelper do
     let(:opts) { {} }
 
     describe "published" do
-      before(:each) { create(:minimal_review, :published, author: user); user.reload }
+      before(:each) do
+        create(:minimal_review, :published, author: user)
+        user.reload
+      end
 
       describe "public" do
         it "has the correct markup" do

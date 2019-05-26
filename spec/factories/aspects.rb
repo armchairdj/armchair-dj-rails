@@ -19,7 +19,6 @@
 
 FactoryBot.define do
   factory :aspect do
-
     facet nil
     name nil
     initialize_with { Aspect.find_or_initialize_by(facet: facet, name: name) }

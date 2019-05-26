@@ -19,7 +19,6 @@
 
 FactoryBot.define do
   factory :role do
-
     medium nil
     name nil
     initialize_with { Role.find_or_initialize_by(medium: medium, name: name) }
@@ -45,6 +44,6 @@ FactoryBot.define do
       with_medium
     end
 
-    factory :complete_role, parent: :minimal_role do; end
+    factory :complete_role, parent: :minimal_role
   end
 end

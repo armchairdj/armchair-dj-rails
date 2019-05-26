@@ -6,7 +6,6 @@
 ################################################################################
 
 concern :Errorable do
-
   #############################################################################
   # INCLUDED.
   #############################################################################
@@ -37,7 +36,11 @@ concern :Errorable do
       return render_error_json(403) if request.xhr?
 
       respond_to do |format|
-        format.html { set_user_return_to; require_login }
+        format.html do
+          set_user_return_to
+          require_login
+        end
+
         format.json { render_error_json(403) }
       end
     end

@@ -24,7 +24,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :work_milestone, class: Work::Milestone do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -52,6 +51,6 @@ FactoryBot.define do
       with_year
     end
 
-    factory :complete_work_milestone, parent: :minimal_work_milestone do; end
+    factory :complete_work_milestone, parent: :minimal_work_milestone
   end
 end
