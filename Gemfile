@@ -33,7 +33,7 @@ gem "facets", require: false
 ###############################################################################
 
 # Use Puma as the app server
-gem "puma", "~> 3.7"
+gem "puma", "~> 3.12.1"
 
 ###############################################################################
 # PLUMBING.
@@ -50,7 +50,7 @@ gem "puma", "~> 3.7"
 gem "aws-sdk-s3", require: false
 
 # Image resizing.
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.9"
 
 ###############################################################################
 # ACCESS CONTROLE.
@@ -243,8 +243,7 @@ group :development, :test do
 
   # System and JS specs.
   gem "capybara"
-  gem "selenium-webdriver"
-  gem "chromedriver-helper"
+  gem "webdrivers"
 
   # Environment variable loader.
   gem "dotenv-rails"
