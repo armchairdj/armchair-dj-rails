@@ -21,12 +21,11 @@ module Ginsu
     end
 
     def map
-      allowed.keys.each.inject({}) do |memo, (scope)|
+      allowed.keys.each.each_with_object({}) do |(scope), memo|
         active = scope == @current_scope
         url    = diced_url(scope, @current_sort, @current_dir)
 
         memo[scope] = { active?: active, url: url }
-        memo
       end
     end
 

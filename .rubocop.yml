@@ -263,7 +263,7 @@ Layout/BlockAlignment:
 
 # Indentation of `when`.
 Layout/CaseIndentation:
-  EnforcedStyle: case
+  EnforcedStyle: end
   SupportedStyles:
     - case
     - end

@@ -13,7 +13,7 @@ RSpec.describe ReviewSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(%w[Default ID Title Status Author Medium]) }
+      it { is_expected.to match_array(["Default", "ID", "Title", "Status", "Author", "Medium"]) }
     end
 
     context "private" do

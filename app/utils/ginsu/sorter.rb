@@ -19,8 +19,8 @@ module Ginsu
     def self.reverse_clause(clause)
       clause = clause.squish
 
-      return clause.gsub("DESC", "ASC") if clause.match(/DESC$/)
-      return clause.gsub("ASC", "DESC") if clause.match(/ASC$/)
+      return clause.gsub("DESC", "ASC") if clause =~ /DESC$/
+      return clause.gsub("ASC", "DESC") if clause =~ /ASC$/
 
       "#{clause} DESC"
     end
@@ -48,14 +48,13 @@ module Ginsu
     end
 
     def map
-      allowed.keys.each.inject({}) do |memo, (sort)|
+      allowed.keys.each.each_with_object({}) do |(sort), memo|
         active = sort == @current_sort
         desc   = active && @current_dir == "DESC"
         dir    = active && @current_dir == "ASC" ? "DESC" : "ASC"
         url    = diced_url(@current_scope, sort, dir)
 
         memo[sort] = { active?: active, desc?: desc, url: url }
-        memo
       end
     end
 

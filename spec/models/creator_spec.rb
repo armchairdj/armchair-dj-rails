@@ -202,7 +202,7 @@ RSpec.describe Creator do
 
         let(:valid_params) { { "0" => { pseudonym_id: valid.id } } }
         let(:bad_params) { { "0" => { pseudonym_id: invalid.id } } }
-        let(:empty_params) { { "0" => {                          } } }
+        let(:empty_params) { { "0" => {} } }
 
         it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }
 
@@ -272,7 +272,7 @@ RSpec.describe Creator do
 
         let(:valid_params) { { "0" => { real_name_id: valid.id } } }
         let(:bad_params) { { "0" => { real_name_id: invalid.id } } }
-        let(:empty_params) { { "0" => {                          } } }
+        let(:empty_params) { { "0" => {} } }
 
         it { is_expected.to accept_nested_attributes_for(:real_name_identities).allow_destroy(true) }
 
@@ -341,7 +341,7 @@ RSpec.describe Creator do
 
         let(:valid_params) { { "0" => { member_id: valid.id } } }
         let(:bad_params) { { "0" => { member_id: invalid.id } } }
-        let(:empty_params) { { "0" => {                       } } }
+        let(:empty_params) { { "0" => {} } }
 
         it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
 
@@ -411,7 +411,7 @@ RSpec.describe Creator do
 
         let(:valid_params) { { "0" => { group_id:   valid.id } } }
         let(:bad_params) { { "0" => { group_id: invalid.id } } }
-        let(:empty_params) { { "0" => {                      } } }
+        let(:empty_params) { { "0" => {} } }
 
         it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
 

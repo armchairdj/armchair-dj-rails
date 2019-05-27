@@ -13,7 +13,7 @@ RSpec.describe WorkSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(%w[Default ID Makers Medium Title]) }
+      it { is_expected.to match_array(["Default", "ID", "Makers", "Medium", "Title"]) }
     end
 
     context "private" do

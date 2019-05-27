@@ -21,15 +21,6 @@ Bundler/InsecureProtocolSource:
     - '**/Gemfile'
     - '**/gems.rb'
 
-Bundler/OrderedGems:
-  Description: >-
-                 Gems within groups in the Gemfile should be alphabetically sorted.
-  Enabled: true
-  Include:
-    - '**/*.gemfile'
-    - '**/Gemfile'
-    - '**/gems.rb'
-
 #################### Gemspec ###############################
 
 Gemspec/DuplicatedAssignment:

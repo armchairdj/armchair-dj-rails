@@ -13,7 +13,7 @@ RSpec.describe PlaylistSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(%w[Default ID Title Author]) }
+      it { is_expected.to match_array(["Default", "ID", "Title", "Author"]) }
     end
 
     context "private" do

@@ -4,8 +4,8 @@ module JsHelper
   def js_attrs(controller, opts = {})
     attrs = { class: opts.delete(:class), "data-controller": controller }
 
-    opts.each.inject(attrs) do |memo, (key, val)|
-      memo["data-#{controller}-#{key}"] = val; memo
+    opts.each.each_with_object(attrs) do |(key, val), memo|
+      memo["data-#{controller}-#{key}"] = val; 
     end
   end
 

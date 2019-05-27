@@ -34,11 +34,11 @@ FactoryBot.define do
       end
 
       credits_attributes do
-        [maker_count, maker_names.length].max.times.inject({}) do |memo, (i)|
+        [maker_count, maker_names.length].max.times.each_with_object({}) do |(i), memo|
           name    = maker_names[i] || generate(:creator_name)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); memo
+          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); 
         end
       end
     end
@@ -53,12 +53,12 @@ FactoryBot.define do
       end
 
       contributions_attributes do
-        [contributor_count, contributor_names.length].max.times.inject({}) do |memo, (i)|
+        [contributor_count, contributor_names.length].max.times.each_with_object({}) do |(i), memo|
           name    = maker_names[i] || generate(:creator_name)
           role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); memo
+          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); 
         end
       end
     end
