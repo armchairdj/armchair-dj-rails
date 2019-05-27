@@ -18,24 +18,23 @@
 #   spec types.
 
 module FactoryHelpers
-  POLICY_OR_HELPER_MATCHER = /sHelper|Policy$/
+  POLICY_OR_HELPER_MATCHER = /sHelper|Policy$/.freeze
 
   def determine_model_class
     # MODELS
-    if described_class.respond_to? :model_name
-      described_class
+    return described_class if described_class.respond_to? :model_name
 
     # CONTROLLERS
-    elsif described_class.respond_to? :controller_name
-      described_class.controller_name.classify.constantize
+    if described_class.respond_to? :controller_name
+      return described_class.controller_name.classify.constantize
+    end
 
     # POLICIES & HELPERS
-    elsif described_class.to_s.match(POLICY_OR_HELPER_MATCHER)
-      described_class.to_s.demodulize.remove(POLICY_OR_HELPER_MATCHER).constantize
-
-    else
-      raise NotImplementedError.new "cannot find model class in this context"
+    if described_class.to_s.match?(POLICY_OR_HELPER_MATCHER)
+      return described_class.to_s.demodulize.remove(POLICY_OR_HELPER_MATCHER).constantize
     end
+
+    raise NotImplementedError, "cannot find model class in this context"
   end
 
   def determine_model_name

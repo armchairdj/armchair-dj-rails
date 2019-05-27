@@ -118,6 +118,10 @@ Layout/EmptyComment:
   Description: 'Checks empty comment.'
   Enabled: true
 
+Layout/EmptyLineAfterGuardClause:
+  Description: 'Add empty line after guard clause.'
+  Enabled: true
+
 Layout/EmptyLineAfterMagicComment:
   Description: 'Add an empty line after magic comments to separate them from code.'
   StyleGuide: '#separate-magic-comments-from-code'
@@ -1576,13 +1580,6 @@ Style/IdenticalConditionalBranches:
 
 Style/IfInsideElse:
   Description: 'Finds if nodes inside else, which can be converted to elsif.'
-  Enabled: true
-
-Style/IfUnlessModifier:
-  Description: >-
-                 Favor modifier if/unless usage when you have a
-                 single-line body.
-  StyleGuide: '#if-as-a-modifier'
   Enabled: true
 
 Style/IfUnlessModifierOfIfUnless:

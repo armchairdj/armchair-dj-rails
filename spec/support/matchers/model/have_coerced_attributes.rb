@@ -7,7 +7,7 @@ RSpec::Matchers.define :have_coerced_attributes do |attributes|
     @values = {}
 
     attributes.each do |key, val|
-      next if key.to_s.match(/password/)
+      next if key.to_s =~ /password/
       next if val.is_a?(Hash)
       next if val.respond_to?(:in_time_zone)
 

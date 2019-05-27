@@ -36,13 +36,13 @@ RSpec.shared_examples "an_admin_post_controller" do
     hash
   end
 
-  def wrap_update_params(instance, params, op = nil)
+  def wrap_update_params(instance, params, operation = nil)
     hash = { "id" => instance.to_param }
 
-    unless op.nil?
+    unless operation.nil?
       params = params.dup
 
-      params[op.to_s] = "1"
+      params[operation.to_s] = "1"
     end
 
     hash[param_key.to_s] = params

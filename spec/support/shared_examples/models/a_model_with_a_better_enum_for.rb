@@ -4,7 +4,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
   missing_translation = /translation missing/i
 
   if enum.is_a?(Hash)
-    attribute  = enum[:attribute ]
+    attribute  = enum[:attribute]
     variations = enum[:variations]
   else
     attribute  = enum
@@ -53,7 +53,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
     before(:each) do
       allow(described_class).to receive(plural).and_return(
         "init" => 0,
-        "addl" => 1,
+        "addl" => 1
       )
 
       allow(I18n).to receive(:t).and_call_original

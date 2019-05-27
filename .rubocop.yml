@@ -1545,6 +1545,7 @@ Metrics/BlockLength:
     - 'spec/**/*_spec.rb'
     - 'spec/support/shared_examples/**/*'
     - 'spec/factories/**/*'
+    - 'spec/support/matchers/**/*'
     - 'app/models/concerns/**/*'
     - 'app/controllers/concerns/**/*'
     - 'lib/tasks/**/*'

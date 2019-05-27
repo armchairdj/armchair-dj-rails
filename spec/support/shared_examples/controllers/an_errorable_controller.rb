@@ -6,7 +6,7 @@ RSpec.shared_examples "an_errorable_controller" do
       allow(Rails.logger).to receive(:error)
     end
 
-    let(:json_headers) { {"HTTP_ACCEPT" => "application/json"} }
+    let(:json_headers) { { "HTTP_ACCEPT" => "application/json" } }
 
     describe "#handle_403_recoverable" do
       controller do

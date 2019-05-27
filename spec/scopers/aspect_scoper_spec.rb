@@ -13,9 +13,7 @@ RSpec.describe AspectScoper do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "All"
-      ]) }
+      it { is_expected.to match_array(["All"]) }
     end
 
     context "private" do

@@ -80,8 +80,11 @@ Style/DocumentationMethod:
     - 'spec/**/*'
     - 'test/**/*'
 
-Layout/EmptyLineAfterGuardClause:
-  Description: 'Add empty line after guard clause.'
+Style/IfUnlessModifier:
+  Description: >-
+                 Favor modifier if/unless usage when you have a
+                 single-line body.
+  StyleGuide: '#if-as-a-modifier'
   Enabled: false
 
 Style/ImplicitRuntimeError:

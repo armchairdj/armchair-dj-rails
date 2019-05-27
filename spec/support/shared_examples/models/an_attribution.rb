@@ -39,11 +39,13 @@ RSpec.shared_examples "an_attribution" do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
 
-      it { is_expected.to eq([
-        instance.work_alpha_parts,
-        instance.role_name,
-        instance.creator_alpha_parts
-      ]) }
+      it {
+        is_expected.to eq([
+          instance.work_alpha_parts,
+          instance.role_name,
+          instance.creator_alpha_parts
+        ])
+      }
     end
   end
 end

@@ -11,7 +11,7 @@ RSpec::Matchers.define :have_flash do |type, key, **replacements|
     key.nil? ? nil : I18n.t(key, **replacements)
   end
 
-  failure_message do |actual|
+  failure_message do |_actual|
     "expected flash[#{type}] to be '#{msg(key, **replacements)}', but it was '#{flash[type.to_sym]}'"
   end
 end
@@ -25,7 +25,7 @@ RSpec::Matchers.define :have_flash_now do |type, key|
     key.nil? ? nil : I18n.t(key, **replacements)
   end
 
-  failure_message do |actual|
+  failure_message do |_actual|
     "expected flash.now[#{type}] to be '#{msg(key, **replacements)}', but it was '#{flash.now[type.to_sym]}'"
   end
 end

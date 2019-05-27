@@ -11,11 +11,13 @@ RSpec.shared_examples "an_application_record" do
 
   describe "class" do
     describe "self#find_by_sorted_ids" do
-      let(:instances) do [
-        create_minimal_instance,
-        create_minimal_instance,
-        create_minimal_instance
-      ] end
+      let(:instances) do
+        [
+          create_minimal_instance,
+          create_minimal_instance,
+          create_minimal_instance
+        ]
+      end
 
       context "with full array of ids" do
         let(:ids) { [instances[1].id, instances[0].id, instances[2].id] }

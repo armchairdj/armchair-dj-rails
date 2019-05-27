@@ -10,11 +10,13 @@ RSpec.shared_examples "a_ginsu_scoper" do
     let(:current_scope) { "All" }
     let(:current_sort) { "Default" }
     let(:current_dir) { "ASC" }
-    let(:instance) do described_class.new(
-      current_scope: current_scope,
-      current_sort:  current_sort,
-      current_dir:   current_dir
-    ) end
+    let(:instance) do
+      described_class.new(
+        current_scope: current_scope,
+        current_sort:  current_sort,
+        current_dir:   current_dir
+      )
+    end
 
     describe "#resolve" do
       subject { instance.resolve }
@@ -57,7 +59,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
             end
 
             describe ":url" do
-              it { expect(value[:url]).to match(/\/admin\/\w+\?.+=.+(&.+=.+)*/) }
+              it { expect(value[:url]).to match(%r{/admin/\w+\?.+=.+(&.+=.+)*}) }
             end
           end
         end
