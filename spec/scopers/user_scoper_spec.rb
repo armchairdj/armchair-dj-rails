@@ -13,7 +13,7 @@ RSpec.describe UserScoper do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(['All', 'Member', 'Writer', 'Editor', 'Admin', 'Root']) }
+      it { is_expected.to match_array(["All", "Member", "Writer", "Editor", "Admin", "Root"]) }
     end
 
     context "private" do

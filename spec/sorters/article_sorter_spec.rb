@@ -13,7 +13,7 @@ RSpec.describe ArticleSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(['Default', 'ID', 'Title', 'Status', 'Author']) }
+      it { is_expected.to match_array(["Default", "ID", "Title", "Status", "Author"]) }
     end
 
     context "private" do
