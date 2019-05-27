@@ -18,8 +18,7 @@ SimpleForm.setup do |config|
   config.wrappers(:default,
     class:       "form-field",
     hint_class:  "with-hint",
-    error_class: "with-error"
-  ) do |b|
+    error_class: "with-error") do |b|
     b.use :html5
     b.use :placeholder
 
@@ -41,8 +40,7 @@ SimpleForm.setup do |config|
   config.wrappers(:custom_checkbox,
     class:       "form-field",
     hint_class:  "with-hint",
-    error_class: "with-error"
-  ) do |b|
+    error_class: "with-error") do |b|
     b.use :html5
 
     b.wrapper tag: "label" do |item|

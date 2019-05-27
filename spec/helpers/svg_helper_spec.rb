@@ -71,8 +71,7 @@ RSpec.describe SvgHelper do
         aria:      true,
         class:     "scalable-image",
         title:     "title",
-        desc:      "desc"
-      )
+        desc:      "desc")
 
       actual = helper.semantic_svg_image("image_path", title: "title", desc: "desc")
 
@@ -86,8 +85,7 @@ RSpec.describe SvgHelper do
         class:             "scalable-image author",
         title:             "title",
         desc:              "desc",
-        "data-controller": "svg"
-      )
+        "data-controller": "svg")
 
       actual = helper.semantic_svg_image("image_path", title: "title", desc: "desc", "data-controller": "svg", class: "author")
 

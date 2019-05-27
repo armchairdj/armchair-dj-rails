@@ -7,7 +7,7 @@ RSpec.describe WorksHelper do
     let(:instance) do
       create(:minimal_book, title: "Vacuum Flowers", credits_attributes: {
         "0" => { creator_id: create(:minimal_creator, name: "Michael Swanwick").id }
-      } )
+      })
     end
 
     describe "default" do

@@ -13,11 +13,7 @@ module SimpleForm
     def render
       return unless errors?
 
-      content = [template.content_tag(:p, error_message)]
-      content += object.errors[:base].map { |e| template.content_tag(:div, e, class: "error") }
-      content.compact!
-
-      template.content_tag(error_notification_tag, content.join.html_safe, html_options)
+      template.content_tag(error_notification_tag, error_markup, html_options)
     end
 
   protected
@@ -28,6 +24,15 @@ module SimpleForm
 
     def errors?
       object&.respond_to?(:errors) && errors.present?
+    end
+
+    def error_markup
+      content = object.errors[:base].map { |e| template.content_tag(:div, e, class: "error") }
+      content = [template.content_tag(:p, error_message)] + content
+
+      content.compact!
+
+      content.join.html_safe
     end
 
     def error_message

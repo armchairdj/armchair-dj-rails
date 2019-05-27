@@ -287,7 +287,7 @@ Layout/DefEndAlignment:
 
 # Multi-line method chaining should be done with leading dots.
 Layout/DotPosition:
-  EnforcedStyle: leading
+  EnforcedStyle: trailing
   SupportedStyles:
     - leading
     - trailing
@@ -337,7 +337,7 @@ Layout/EndAlignment:
   # situations, `end` should still be aligned with the keyword.
   # The value `start_of_line` means that `end` should be aligned with the start
   # of the line which the matching keyword appears on.
-  EnforcedStyleAlignWith: keyword
+  EnforcedStyleAlignWith: start_of_line
   SupportedStylesAlignWith:
     - keyword
     - variable
@@ -1534,6 +1534,8 @@ Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be an Integer or
   # a Float.
   Max: 15
+  Exclude:
+    - 'db/migrate/**/*'
 
 Metrics/BlockLength:
   CountComments: false  # count full line comments?
@@ -1545,6 +1547,7 @@ Metrics/BlockLength:
     - 'spec/factories/**/*'
     - 'app/models/concerns/**/*'
     - 'app/controllers/concerns/**/*'
+    - 'lib/tasks/**/*'
 
 Metrics/BlockNesting:
   CountBlocks: false

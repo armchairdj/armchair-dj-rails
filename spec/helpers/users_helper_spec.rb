@@ -17,9 +17,11 @@ RSpec.describe UsersHelper do
     describe "published" do
       before(:each) { allow(author).to receive(:published?).and_return(true) }
 
-      it { is_expected.to have_tag("address.author", count: 1) {
-        with_tag("a[rel='author'][href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
-      } }
+      it "has the correct layout" do
+        is_expected.to have_tag("address.author", count: 1) do
+          with_tag("a[rel='author'][href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+        end
+      end
 
       describe "with options" do
         let(:opts) { { class: "foo", id: "bar" } }
