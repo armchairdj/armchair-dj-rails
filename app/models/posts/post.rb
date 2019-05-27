@@ -169,7 +169,7 @@ class Post < ApplicationRecord
       unpublishing? || publishing? || unscheduling? || scheduling?
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def handle_failed_transition
       return unless errors.any? && changing_publication_status?
@@ -286,7 +286,7 @@ class Post < ApplicationRecord
       validates_date :publish_on, after: -> { Date.current }, allow_blank: true
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def requires_body?
       published? || publishing? || scheduled? || scheduling?
@@ -326,7 +326,7 @@ class Post < ApplicationRecord
       renderer.render(body).html_safe
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def renderer
       @renderer ||= Redcarpet::Markdown.new(PostRenderer)

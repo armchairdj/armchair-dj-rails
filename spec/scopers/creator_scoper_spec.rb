@@ -13,13 +13,7 @@ RSpec.describe CreatorScoper do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "All",
-        "Primary",
-        "Secondary",
-        "Individual",
-        "Group"
-      ]) }
+      it { is_expected.to match_array(['All', 'Primary', 'Secondary', 'Individual', 'Group']) }
     end
 
     context "private" do

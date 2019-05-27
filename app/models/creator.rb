@@ -61,7 +61,7 @@ class Creator < ApplicationRecord
       aliases.union_all(real_name).alpha
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def enforce_primariness
       if primary?
@@ -97,7 +97,7 @@ class Creator < ApplicationRecord
       self.class.available_pseudonyms.union(pseudonyms).alpha
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_pseudonym_identity?(attrs)
       key = attrs["pseudonym_id"]
@@ -139,7 +139,7 @@ class Creator < ApplicationRecord
       real_names.first
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_real_name_identity?(attrs)
       key = attrs["real_name_id"]
@@ -174,7 +174,7 @@ class Creator < ApplicationRecord
       Creator.where(id: ids).alpha
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def enforce_individuality
       if collective?
@@ -205,7 +205,7 @@ class Creator < ApplicationRecord
       5.times { group_memberships.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_group_membership?(attrs)
       key = attrs["group_id"]
@@ -243,7 +243,7 @@ class Creator < ApplicationRecord
       !individual?
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_member_membership?(attrs)
       key = attrs["member_id"]

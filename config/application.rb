@@ -13,9 +13,9 @@ module ArmchairDjRails
 
     config.time_zone = "Pacific Time (US & Canada)"
 
-    config.autoload_paths += %W(#{config.root}/app/models/attributions)
-    config.autoload_paths += %W(#{config.root}/app/models/posts)
-    config.autoload_paths += %W(#{config.root}/app/models/works)
+    config.autoload_paths += ["#{config.root}/app/models/attributions"]
+    config.autoload_paths += ["#{config.root}/app/models/posts"]
+    config.autoload_paths += ["#{config.root}/app/models/works"]
 
     # config.active_storage.variant_processor = :vips
 

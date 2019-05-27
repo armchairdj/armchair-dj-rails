@@ -143,7 +143,7 @@ class Work < ApplicationRecord
       milestones.first.activity = :released if milestones.first.new_record?
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def has_released_milestone
       return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
@@ -194,7 +194,7 @@ class Work < ApplicationRecord
       3.times { credits.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def memoize_display_makers
       self.display_makers = collect_makers
@@ -252,7 +252,7 @@ class Work < ApplicationRecord
       5.times { source_relationships.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_source_relationship?(attrs)
       attrs["source_id"].blank?
@@ -282,7 +282,7 @@ class Work < ApplicationRecord
       5.times { target_relationships.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_target_relationship?(attrs)
       attrs["target_id"].blank?

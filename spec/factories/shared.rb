@@ -3,7 +3,7 @@
 require "ffaker"
 
 FactoryBot.define do
-  sequence :aspect_name do |n|
+  sequence :aspect_name do |_n|
     "Aspect #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
@@ -19,7 +19,7 @@ FactoryBot.define do
     "Role #{n}"
   end
 
-  sequence :tag_name do |n|
+  sequence :tag_name do |_n|
     "tag #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
@@ -31,7 +31,7 @@ FactoryBot.define do
     "realcoolperson#{n}"
   end
 
-  sequence :year do |n|
+  sequence :year do |_n|
     rand(1..2020)
   end
 

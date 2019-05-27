@@ -675,7 +675,7 @@ RSpec.describe Work do
       let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
       before(:each) do
-        # TODO let the factory handle this with transient attributes
+        # TODO: let the factory handle this with transient attributes
         playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
       end
 

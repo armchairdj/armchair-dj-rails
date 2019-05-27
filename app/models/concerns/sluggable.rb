@@ -35,7 +35,8 @@ concern :Sluggable do
 
     def fix_non_words(str)
       str = str.gsub(/[[:punct:]|[:blank:]]/, WORD_SEPARATOR)
-      str = str.remove(/[^[:word:]]/)
+
+      str.remove(/[^[:word:]]/)
     end
 
     def compact_word_separators(str)
@@ -43,7 +44,8 @@ concern :Sluggable do
 
       str = str.gsub(/#{quoted}+/, WORD_SEPARATOR)
       str = str.remove(/^#{quoted}/)
-      str = str.remove(/#{quoted}$/)
+
+      str.remove(/#{quoted}$/)
     end
   end
 

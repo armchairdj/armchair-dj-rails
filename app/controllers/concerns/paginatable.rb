@@ -20,7 +20,7 @@ private
 
     model_class = determine_model_class
 
-    # TODO Generalize logic for figuring out route namespace.
+    # TODO: Generalize logic for figuring out route namespace.
     #      We can't just use the controller namespace because the
     #      route namespace may be different & polymorphic_path
     #      relies on routes, not controllers.

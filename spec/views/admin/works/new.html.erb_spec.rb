@@ -23,7 +23,7 @@ RSpec.describe "admin/works/new" do
       render
 
       assert_select "form[action=?][method=?]", admin_works_path, "post" do
-        # TODO assert only one field
+        # TODO: assert only one field
       end
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe "admin/works/new" do
       render
 
       assert_select "form[action=?][method=?]", admin_works_path, "post" do
-        # TODO assert all fields
+        # TODO: assert all fields
       end
     end
   end

@@ -59,7 +59,7 @@ class Creator::Membership < ApplicationRecord
       validate { member_is_individual }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def member_is_individual
       errors.add :member_id, :not_individual unless member.try(:individual?)

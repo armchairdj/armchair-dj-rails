@@ -61,7 +61,7 @@ class Creator::Identity < ApplicationRecord
       validate { pseudonym_is_secondary }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def pseudonym_is_secondary
       errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)

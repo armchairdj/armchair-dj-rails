@@ -27,14 +27,17 @@ RSpec.describe Admin::PlaylistsController do
     end
 
     describe "GET #new" do
-      let(:operation) { get :new }
+      let(:send_request) { get :new }
 
-      subject { operation }
+      subject { send_request }
 
       it { is_expected.to successfully_render("admin/playlists/new") }
 
       describe "instance" do
-        subject { operation; assigns(:playlist) }
+        subject do
+          send_request
+          assigns(:playlist)
+        end
 
         it { is_expected.to be_a_new(Playlist) }
       end
@@ -48,7 +51,7 @@ RSpec.describe Admin::PlaylistsController do
       context "with min valid params" do
         subject { post :create, params: { playlist: min_params } }
 
-        it { expect { subject }.to change { Playlist.count }.by(1) }
+        it { expect { subject }.to change(Playlist, :count).by(1) }
 
         it { is_expected.to assign(Playlist.last, :playlist).with_attributes(min_params).and_be_valid }
 
@@ -62,7 +65,7 @@ RSpec.describe Admin::PlaylistsController do
       context "with max valid params" do
         subject { post :create, params: { playlist: max_params } }
 
-        it { expect { subject }.to change { Playlist.count }.by(1) }
+        it { expect { subject }.to change(Playlist, :count).by(1) }
 
         it { is_expected.to assign(Playlist.last, :playlist).with_attributes(max_params).and_be_valid }
 
@@ -74,21 +77,29 @@ RSpec.describe Admin::PlaylistsController do
       end
 
       context "with invalid params" do
-        let(:operation) { post :create, params: { playlist: bad_params } }
+        let(:send_request) do
+          post :create, params: { playlist: bad_params }
+        end
 
-        subject { operation }
+        subject { send_request }
 
         it { is_expected.to successfully_render("admin/playlists/new") }
 
         describe "instance" do
-          subject { operation; assigns(:playlist) }
+          subject do
+            send_request
+            assigns(:playlist)
+          end
 
           it { is_expected.to have_coerced_attributes(bad_params) }
           it { is_expected.to be_invalid }
         end
 
         describe "assigns" do
-          subject { operation; assigns(:works) }
+          subject do
+            send_request
+            assigns(:works)
+          end
 
           it { is_expected.to be_a_kind_of(Array) }
         end
@@ -119,18 +130,21 @@ RSpec.describe Admin::PlaylistsController do
       end
 
       context "with invalid params" do
-        let(:operation) do
+        let(:send_request) do
           put :update, params: { id: instance.to_param, playlist: bad_update_params }
         end
 
-        subject { operation }
+        subject { send_request }
 
         it { is_expected.to successfully_render("admin/playlists/edit") }
 
         it { is_expected.to assign(instance, :playlist).with_attributes(bad_update_params).and_be_invalid }
 
         describe "assigns" do
-          subject { operation; assigns(:works) }
+          subject do
+            send_request
+            assigns(:works)
+          end
 
           it { is_expected.to be_a_kind_of(Array) }
         end
@@ -162,16 +176,19 @@ RSpec.describe Admin::PlaylistsController do
       end
 
       describe "xhr" do
-        let(:operation) do
+        let(:send_request) do
           post :reorder_tracks, xhr: true, params: { id: instance.to_param, track_ids: shuffled }
         end
 
-        subject { operation }
+        subject { send_request }
 
         it { expect(response).to have_http_status(200) }
 
         describe "reordering" do
-          subject { operation; instance.reload.tracks.ids }
+          subject do
+            send_request
+            instance.reload.tracks.ids
+          end
 
           it { is_expected.to eq(shuffled) }
         end

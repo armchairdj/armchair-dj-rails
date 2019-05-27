@@ -13,13 +13,15 @@ RSpec.describe CreatorSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "Default",
-        "ID",
-        "Name",
-        "Creator Type",
-        "Identity Type"
-      ]) }
+      it do
+        is_expected.to match_array([
+          "Default",
+          "ID",
+          "Name",
+          "Creator Type",
+          "Identity Type"
+        ])
+      end
     end
 
     context "private" do

@@ -8,7 +8,7 @@ private
     [:title]
   end
 
-  # TODO BJD Find a more elegant way to include extra permitted
+  # TODO: BJD Find a more elegant way to include extra permitted
   # params for particular post types
   def keys_for_update
     [:body, :summary, :hero_image, {

@@ -13,12 +13,7 @@ RSpec.describe MixtapeScoper do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "All",
-        "Draft",
-        "Scheduled",
-        "Published"
-      ]) }
+      it { is_expected.to match_array(['All', 'Draft', 'Scheduled', 'Published']) }
     end
 
     context "private" do

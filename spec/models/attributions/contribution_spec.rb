@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -42,7 +43,7 @@ RSpec.describe Contribution do
       let(:show_loads) { [:work, :role, :creator] }
     end
 
-    # TODO uncomment the optional call after updating shoulda-matchers
+    # TODO: uncomment the optional call after updating shoulda-matchers
     # https://github.com/thoughtbot/shoulda-matchers/issues/870
     it { is_expected.to belong_to(:role) } #.optional(true) }
 

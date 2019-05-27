@@ -10,8 +10,7 @@ concern :Listable do
       acts_as_list(scope: acts_as_list_scope, top_of_list: 1)
 
       scope :sorted, lambda {
-        joins(acts_as_list_scope)
-          .order(:"#{acts_as_list_scope}_id", :position)
+        joins(acts_as_list_scope).order(:"#{acts_as_list_scope}_id", :position)
       }
     end
 
