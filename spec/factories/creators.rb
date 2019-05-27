@@ -334,7 +334,8 @@ FactoryBot.define do
             create(:fred_giannelli_with_pseudonyms),
             create(:richie_hawtin_with_pseudonyms),
             create(:dan_bell_with_pseudonyms)
-          ] end
+          ]
+end          
         end
 
         with_specific_members

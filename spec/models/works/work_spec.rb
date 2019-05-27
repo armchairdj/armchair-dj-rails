@@ -35,10 +35,7 @@ RSpec.describe Work do
       let!(:song) { create(:minimal_song) }
       let!(:album) { create(:minimal_album) }
 
-      it { is_expected.to eq([
-        ["Album", [album]],
-        ["Song",  [song]]
-      ]) }
+      it { is_expected.to eq([["Album", [album]], ["Song",  [song]]]) }
     end
 
     describe "as source" do
@@ -775,10 +772,10 @@ RSpec.describe Work do
       let(:instance) do
         create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id)
         }, contributions_attributes: {
           "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id),
+          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id)
         })
       end
 

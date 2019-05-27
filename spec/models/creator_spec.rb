@@ -30,15 +30,17 @@ RSpec.describe Creator do
 
     it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [] }
-      let(:show_loads) do [
-        :pseudonyms,        :real_names,
-        :members,           :groups,
-        :credits,           :contributions,
-        :credited_works,    :contributed_works,
-        :credited_reviews,  :contributed_reviews,
-        :credited_mixtapes, :contributed_mixtapes,
-        :contributed_roles
-      ] end
+      let(:show_loads) do
+        [
+          :pseudonyms,        :real_names,
+          :members,           :groups,
+          :credits,           :contributions,
+          :credited_works,    :contributed_works,
+          :credited_reviews,  :contributed_reviews,
+          :credited_mixtapes, :contributed_mixtapes,
+          :contributed_roles
+        ]
+      end
     end
 
     describe "nilify_blanks" do
@@ -725,7 +727,7 @@ RSpec.describe Creator do
           create(:playlist, :with_author, title: "Title", tracks_attributes: {
             "0" => attributes_for(:playlist_track, work_id: created.id),
             "1" => attributes_for(:playlist_track, work_id: contributed.id),
-            "2" => attributes_for(:playlist_track, work_id: both.id),
+            "2" => attributes_for(:playlist_track, work_id: both.id)
           })
         end
 

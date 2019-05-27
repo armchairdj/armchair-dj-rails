@@ -45,7 +45,8 @@ FactoryBot.define do
         create(:aspect, facet: :musical_genre, name: "Techno").id,
         create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
         create(:aspect, facet: :music_label,   name: "Domino").id
-      ] end
+      ]
+end      
 
       transient do
         maker_names       ["Junior Boys"]
@@ -68,7 +69,8 @@ FactoryBot.define do
         create(:aspect, facet: :musical_genre, name: "Techno").id,
         create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
         create(:aspect, facet: :music_label,   name: "Domino").id
-      ] end
+      ]
+end      
 
       transient do
         maker_names       ["Junior Boys"]

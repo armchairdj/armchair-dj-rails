@@ -27,7 +27,7 @@ module JsHelper
     opts = {
       url:   admin_creators_path,
       scope: scope,
-      param: "creator[name]",
+      param: "creator[name]"
     }
 
     opts["extra-params"] = case scope
@@ -45,7 +45,7 @@ module JsHelper
       "url":         admin_roles_path,
       "scope":       "role",
       "param":       "role[name]",
-      "form-params": "role[medium]=work[medium]",
+      "form-params": "role[medium]=work[medium]"
     }
 
     js_attrs("creatable", opts)
@@ -56,7 +56,7 @@ module JsHelper
       "url":          admin_aspects_path,
       "scope":        "aspect[facet=#{facet}]",
       "param":        "aspect[name]",
-      "extra-params": "aspect[facet]=#{facet}",
+      "extra-params": "aspect[facet]=#{facet}"
     }
 
     js_attrs("creatable", opts).merge(multiple: true)
@@ -66,7 +66,7 @@ module JsHelper
     opts = {
       url:   admin_tags_path,
       scope: "tag",
-      param: "tag[name]",
+      param: "tag[name]"
     }
 
     js_attrs("creatable", opts).merge(multiple: true)
@@ -76,7 +76,7 @@ module JsHelper
     opts = {
       "tab-name":        "article-new-work",
       "title-selector":  "#article_work_attributes_title",
-      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id",
+      "artist-selector": "#article_work_attributes_credits_attributes_0_creator_id"
     }
 
     js_attrs("selectable-prepare-work", opts)
@@ -86,7 +86,7 @@ module JsHelper
     opts = {
       url:   reorder_tracks_admin_playlist_path(playlist),
       param: "track_ids",
-      class: "numbered js-sortable",
+      class: "numbered js-sortable"
     }
 
     js_attrs("sortable", opts)
@@ -96,7 +96,7 @@ module JsHelper
     opts = {
       url:   reorder_credits_admin_work_path(work),
       param: "credit_ids",
-      class: "numbered sortable",
+      class: "numbered sortable"
     }
 
     js_attrs("sortable", opts)
@@ -115,7 +115,7 @@ module JsHelper
     opts = {
       "data-action":   "tabbable#activate",
       "data-target":   "tabbable.all",
-      "data-tab-name": tab_name,
+      "data-tab-name": tab_name
     }
 
     link_to(text, "##{tab_name}", opts)
@@ -126,7 +126,7 @@ module JsHelper
       "id":            tab_name,
       "data-tab-name": tab_name,
       "data-target":   "tabbable.all",
-      "class":         "tab",
+      "class":         "tab"
     }
   end
 

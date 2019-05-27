@@ -81,7 +81,7 @@ RSpec.describe Playlist do
             create(:minimal_playlist, tracks_attributes: {
               "0" => attributes_for(:minimal_playlist_track, work_id: create(:minimal_song).id),
               "1" => attributes_for(:minimal_playlist_track, work_id: create(:minimal_song).id),
-              "2" => attributes_for(:minimal_playlist_track, work_id: nil),
+              "2" => attributes_for(:minimal_playlist_track, work_id: nil)
             })
           end
 
@@ -173,23 +173,23 @@ RSpec.describe Playlist do
       let(:track_1) do
         create(:minimal_song, credits_attributes: {
           "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id)
         }, contributions_attributes: {
           "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id),
+          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id)
         })
       end
 
       let(:track_2) do
         create(:minimal_song, credits_attributes: {
-          "0" => attributes_for(:minimal_credit, creator_id: creator_4.id),
+          "0" => attributes_for(:minimal_credit, creator_id: creator_4.id)
         })
       end
 
       let(:instance) do
         create(:minimal_playlist, tracks_attributes: {
           "0" => attributes_for(:minimal_playlist_track, work_id: track_1.id),
-          "1" => attributes_for(:minimal_playlist_track, work_id: track_2.id),
+          "1" => attributes_for(:minimal_playlist_track, work_id: track_2.id)
         })
       end
 
