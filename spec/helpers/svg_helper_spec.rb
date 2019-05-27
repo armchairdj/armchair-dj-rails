@@ -64,7 +64,6 @@ RSpec.describe SvgHelper do
         to raise_exception(ArgumentError)
     end
 
-
     it "generates aria svg" do
       expect(helper).to receive(:inline_svg).with("image_path",
         nocomment: true,

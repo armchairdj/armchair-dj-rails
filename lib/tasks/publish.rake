@@ -13,7 +13,7 @@ namespace :publish do
 
     memo = Post.publish_scheduled
 
-    total         = memo[:all    ].length
+    total         = memo[:all].length
     success       = memo[:success].length
     success_slugs = memo[:success].map { |x| "  * #{x.slug}" }.join("\n")
     failure_slugs = memo[:failure].map { |x| "  * #{x.slug}" }.join("\n")

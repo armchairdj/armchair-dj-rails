@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::RolesController < Ginsu::Controller
-
   # POST /admin/roles
   # POST /admin/roles.json
   def create

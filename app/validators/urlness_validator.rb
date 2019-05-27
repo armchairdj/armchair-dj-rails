@@ -5,7 +5,7 @@ class UrlnessValidator < ActiveModel::EachValidator
     return if value.blank?
 
     begin
-      valid_url = URI.parse(value).kind_of?(URI::HTTP)
+      valid_url = URI.parse(value).is_a?(URI::HTTP)
     rescue URI::InvalidURIError
       valid_url = false
     ensure

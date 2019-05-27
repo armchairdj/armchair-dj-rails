@@ -524,7 +524,7 @@ RSpec.describe Work do
     end
 
     describe "custom" do
-      describe "#has_released_milestone" do
+      describe "#presence_of_released_milestone" do
         subject do
           build_minimal_instance(milestones_attributes: {
             "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")

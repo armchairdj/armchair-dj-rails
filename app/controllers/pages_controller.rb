@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-
   # GET /about
   # GET /contact
   # GET /credits

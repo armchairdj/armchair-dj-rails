@@ -1542,13 +1542,14 @@ Metrics/BlockLength:
   Max: 25
   ExcludedMethods: []
   Exclude:
+    - 'app/controllers/concerns/**/*'
+    - 'app/models/concerns/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/**/*'
     - 'spec/**/*_spec.rb'
-    - 'spec/support/shared_examples/**/*'
     - 'spec/factories/**/*'
     - 'spec/support/matchers/**/*'
-    - 'app/models/concerns/**/*'
-    - 'app/controllers/concerns/**/*'
-    - 'lib/tasks/**/*'
+    - 'spec/support/shared_examples/**/*'
 
 Metrics/BlockNesting:
   CountBlocks: false
@@ -1585,7 +1586,8 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   CountComments: false  # count full line comments?
-  Max: 500
+  Exclude:
+    - "app/models/**/*"
 
 Metrics/ParameterLists:
   Max: 5

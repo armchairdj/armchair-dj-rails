@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::TagsController < Ginsu::Controller
-
   # POST /admin/tags
   # POST /admin/tags.json
   def create

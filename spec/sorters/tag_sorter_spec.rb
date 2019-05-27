@@ -13,11 +13,7 @@ RSpec.describe TagSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "Default",
-        "ID",
-        "Name"
-      ]) }
+      it { is_expected.to match_array(%w[Default ID Name]) }
     end
 
     context "private" do

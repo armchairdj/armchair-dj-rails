@@ -130,7 +130,7 @@ class Work < ApplicationRecord
 
       validates_nested_uniqueness_of :milestones, uniq_attr: :activity
 
-      validate { has_released_milestone }
+      validate { presence_of_released_milestone }
     end
 
     def display_milestones
@@ -145,7 +145,7 @@ class Work < ApplicationRecord
 
     private # rubocop:disable Lint/UselessAccessModifier
 
-    def has_released_milestone
+    def presence_of_released_milestone
       return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
 
       errors.add(:milestones, :blank)
