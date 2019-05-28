@@ -33,7 +33,7 @@ module Ginsu
       { "All" => :all }
     end
 
-  private
+    private
 
     def valid?
       allowed.key?(@current_scope)

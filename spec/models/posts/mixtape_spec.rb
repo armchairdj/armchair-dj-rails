@@ -35,7 +35,7 @@ RSpec.describe Mixtape do
   end
 
   describe "playlist" do
-    it { is_expected.to belong_to(:playlist) }
+    it { is_expected.to belong_to(:playlist).required }
 
     it { is_expected.to validate_presence_of(:playlist) }
 

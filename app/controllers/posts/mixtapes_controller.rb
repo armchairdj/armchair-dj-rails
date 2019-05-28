@@ -2,7 +2,7 @@
 
 module Posts
   class MixtapesController < Posts::BaseController
-  private
+    private
 
     def set_section
       @section = :mixtapes

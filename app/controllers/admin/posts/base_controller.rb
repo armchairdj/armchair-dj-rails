@@ -77,7 +77,7 @@ module Admin
         end
       end
 
-    private
+      private
 
       #############################################################################
       # Find, build & authorize.

@@ -124,7 +124,7 @@ class Post < ApplicationRecord
       end
     end
 
-  private
+    private
 
     def set_published_at
       self.published_at = Time.zone.now

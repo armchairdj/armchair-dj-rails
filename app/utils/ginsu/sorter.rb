@@ -65,7 +65,7 @@ module Ginsu
       }
     end
 
-  private
+    private
 
     def valid?
       return false unless allowed.key?(@current_sort)

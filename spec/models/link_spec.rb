@@ -29,7 +29,7 @@ RSpec.describe Link do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:linkable) }
+    it { is_expected.to belong_to(:linkable).required }
   end
 
   describe "validations" do

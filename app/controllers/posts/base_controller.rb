@@ -34,7 +34,7 @@ module Posts
     # GET /<plural_param_key>/friendly_id.json
     def show; end
 
-  private
+    private
 
     def find_collection
       collection = policy_scope(@model_class).for_list.page(params[:page])

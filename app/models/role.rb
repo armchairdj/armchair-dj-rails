@@ -18,10 +18,6 @@
 #
 
 class Role < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Name
-  #############################################################################
-
   concerning :NameAttribute do
     included do
       validates :name, presence: true
@@ -32,10 +28,6 @@ class Role < ApplicationRecord
       full ? [display_medium, name].join(": ") : name
     end
   end
-
-  #############################################################################
-  # CONCERNING: Medium
-  #############################################################################
 
   concerning :MediumAssociation do
     included do
@@ -52,10 +44,6 @@ class Role < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Contributions
-  #############################################################################
-
   concerning :AttributionAssociations do
     included do
       has_many :attributions,  dependent: :destroy
@@ -65,17 +53,6 @@ class Role < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,   -> {}
-  scope :for_show,   -> { includes(:contributions, :works) }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -83,6 +60,13 @@ class Role < ApplicationRecord
 
     def alpha_parts
       [display_medium, name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:contributions, :works) }
     end
   end
 end

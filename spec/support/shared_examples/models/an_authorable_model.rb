@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.shared_examples "an_authorable_model" do
   describe "associations" do
-    it { is_expected.to belong_to(:author) }
+    it { is_expected.to belong_to(:author).required }
   end
 
   describe "validations" do

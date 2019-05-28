@@ -2,7 +2,7 @@
 
 module Posts
   class ReviewsController < Posts::BaseController
-  private
+    private
 
     def set_section
       @section = :reviews

@@ -21,31 +21,14 @@
 #
 
 class Playlist < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
   include Imageable
-
-  #############################################################################
-  # CONCERNING: Authorable.
-  #############################################################################
-
   include Authorable
-
-  #############################################################################
-  # CONCERNING: Title.
-  #############################################################################
 
   concerning :TitleAttribute do
     included do
       validates :title, presence: true
     end
   end
-
-  #############################################################################
-  # CONCERNING: Tracks.
-  #############################################################################
 
   concerning :TrackAssociations do
     included do
@@ -65,10 +48,6 @@ class Playlist < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Works.
-  #############################################################################
-
   concerning :CreatorAssociations do
     included do
       has_many :makers,       -> { distinct }, through: :works
@@ -83,10 +62,6 @@ class Playlist < ApplicationRecord
       works.map(&:creator_ids).flatten.uniq
     end
   end
-
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
 
   concerning :PostAssociations do
     included do
@@ -104,17 +79,6 @@ class Playlist < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> { includes(:author).references(:author) }
-  scope :for_show,  -> { includes(:author, :tracks, :works) }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -122,6 +86,13 @@ class Playlist < ApplicationRecord
 
     def alpha_parts
       [title]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> { includes(:author).references(:author) }
+      scope :for_show, -> { includes(:author, :tracks, :works) }
     end
   end
 end

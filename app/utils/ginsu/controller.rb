@@ -59,7 +59,7 @@ module Ginsu
       render_edit
     end
 
-  private
+    private
 
     #############################################################################
     # Find & build.

@@ -22,19 +22,13 @@
 require "wannabe_bool"
 
 class Creator < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
+  include Booletania
 
   concerning :NameAttribute do
     included do
       validates :name, presence: true
     end
   end
-
-  #############################################################################
-  # CONCERNING: Primariness & Identities
-  #############################################################################
 
   concerning :PrimaryAttribute do
     included do
@@ -151,10 +145,6 @@ class Creator < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Individuality & Memberships.
-  #############################################################################
-
   concerning :IndividualAttribute do
     included do
       attribute :individual, :boolean, default: true
@@ -255,10 +245,6 @@ class Creator < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Attributions, credits & contributions.
-  #############################################################################
-
   concerning :AttributionAssociations do
     included do
       has_many :attributions,  inverse_of: :creator, dependent: :destroy
@@ -306,10 +292,6 @@ class Creator < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
-
   concerning :PostAssociations do
     included do
       has_many :credited_reviews, -> { distinct }, through: :credited_works,
@@ -337,12 +319,6 @@ class Creator < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Editing.
-  #############################################################################
-
-  include Booletania
-
   concerning :Editing do
     included do
       booletania_columns :primary, :individual
@@ -356,27 +332,6 @@ class Creator < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> {}
-  scope :for_show,  lambda {
-                      includes(
-                        :pseudonyms, :real_names,
-                        :members,           :groups,
-                        :credits,           :contributions,
-                        :credited_works,    :contributed_works,
-                        :credited_reviews,  :contributed_reviews,
-                        :credited_mixtapes, :contributed_mixtapes,
-                        :contributed_roles
-                      )
-                    }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -384,6 +339,23 @@ class Creator < ApplicationRecord
 
     def alpha_parts
       [name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, lambda {
+        includes(
+          :pseudonyms,        :real_names,
+          :members,           :groups,
+          :credits,           :contributions,
+          :credited_works,    :contributed_works,
+          :credited_reviews,  :contributed_reviews,
+          :credited_mixtapes, :contributed_mixtapes,
+          :contributed_roles
+        )
+      }
     end
   end
 end

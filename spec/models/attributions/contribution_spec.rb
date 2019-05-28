@@ -51,9 +51,9 @@ RSpec.describe Contribution do
 
   specify { expect(described_class.superclass).to eq(Attribution) }
 
-  # TODO: uncomment the optional call after updating shoulda-matchers
-  # https://github.com/thoughtbot/shoulda-matchers/issues/870
-  it { is_expected.to belong_to(:role) } # .optional(true) }
+  describe "associations" do
+    it { is_expected.to belong_to(:role).required }
+  end
 
   describe "validations" do
     subject { build_minimal_instance }

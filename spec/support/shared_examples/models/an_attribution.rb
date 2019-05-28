@@ -3,8 +3,8 @@
 RSpec.shared_examples "an_attribution" do
   describe "included" do
     describe "associations" do
-      it { is_expected.to belong_to(:creator) }
-      it { is_expected.to belong_to(:work) }
+      it { is_expected.to belong_to(:creator).required }
+      it { is_expected.to belong_to(:work).required }
     end
 
     describe "validations" do

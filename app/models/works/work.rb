@@ -107,7 +107,7 @@ class Work < ApplicationRecord
       aspects.group_by(&:human_facet).to_a
     end
 
-  private
+    private
 
     def only_available_aspects
       candidates = aspects.reject(&:marked_for_destruction?)

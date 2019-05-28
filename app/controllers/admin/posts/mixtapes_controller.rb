@@ -3,7 +3,7 @@
 module Admin
   module Posts
     class MixtapesController < Admin::Posts::BaseController
-    private
+      private
 
       def keys_for_create
         [:playlist_id]

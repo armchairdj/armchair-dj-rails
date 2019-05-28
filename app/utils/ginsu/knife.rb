@@ -34,7 +34,7 @@ module Ginsu
       @current_dir   = current_dir
     end
 
-  private
+    private
 
     def diced_url(*args)
       self.class.diced_url(model_class, *args)

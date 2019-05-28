@@ -43,7 +43,7 @@ concern :Listable do
       trigger_parent_hooks
     end
 
-  private
+    private
 
     ### Bootstrapping.
 

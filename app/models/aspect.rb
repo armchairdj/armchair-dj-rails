@@ -18,10 +18,6 @@
 #
 
 class Aspect < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Facet.
-  #############################################################################
-
   concerning :FacetAttribute do
     included do
       scope :for_facet, ->(*facets) { where(facet: facets.flatten.compact) }
@@ -61,10 +57,6 @@ class Aspect < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
-
   concerning :NameAttribute do
     included do
       validates :name, presence: true
@@ -76,10 +68,6 @@ class Aspect < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Works.
-  #############################################################################
-
   concerning :WorksAssociation do
     included do
       has_and_belongs_to_many :works, -> { distinct }
@@ -89,10 +77,6 @@ class Aspect < ApplicationRecord
       has_many :contributors, -> { distinct }, through: :works
     end
   end
-
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
 
   concerning :PostsAssociation do
     included do
@@ -109,17 +93,6 @@ class Aspect < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> {}
-  scope :for_show,  -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -127,6 +100,13 @@ class Aspect < ApplicationRecord
 
     def alpha_parts
       [human_facet, name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
     end
   end
 end

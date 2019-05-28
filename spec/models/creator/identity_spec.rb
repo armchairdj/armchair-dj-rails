@@ -29,7 +29,7 @@ RSpec.describe Creator::Identity do
   describe "real_name" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:real_name).class_name("Creator") }
+    it { is_expected.to belong_to(:real_name).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:real_name) }
 
@@ -58,7 +58,7 @@ RSpec.describe Creator::Identity do
   describe "pseudonym" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
+    it { is_expected.to belong_to(:pseudonym).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:pseudonym) }
 

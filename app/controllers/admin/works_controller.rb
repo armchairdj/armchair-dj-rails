@@ -56,7 +56,7 @@ module Admin
       render json: {}, status: :ok
     end
 
-  private
+    private
 
     def build_new_instance
       @instance = @work = Work.new(medium: params[:work].try(:[], :medium))

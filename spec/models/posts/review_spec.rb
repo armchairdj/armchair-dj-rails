@@ -35,7 +35,7 @@ RSpec.describe Review do
   end
 
   describe "work" do
-    it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:work).required }
 
     it { is_expected.to validate_presence_of(:work) }
 

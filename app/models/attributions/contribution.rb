@@ -35,7 +35,7 @@ class Contribution < Attribution
 
   concerning :RoleAssociation do
     included do
-      belongs_to :role, required: true
+      belongs_to :role
 
       validates :role_id, presence: true
 

@@ -43,10 +43,6 @@
 #
 
 class User < ApplicationRecord
-  #############################################################################
-  # PLUGINS.
-  #############################################################################
-
   devise(
     :confirmable,
     :database_authenticatable,
@@ -58,15 +54,7 @@ class User < ApplicationRecord
     :validatable
   )
 
-  #############################################################################
-  # CONCERNING: Links.
-  #############################################################################
-
   include Linkable
-
-  #############################################################################
-  # CONCERNING: Roles.
-  #############################################################################
 
   concerning :RoleAttribute do
     included do
@@ -130,10 +118,6 @@ class User < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
-
   concerning :NameAttributes do
     included do
       validates :first_name, presence: true
@@ -152,10 +136,6 @@ class User < ApplicationRecord
       username
     end
   end
-
-  #############################################################################
-  # CONCERNING: Contributing posts and playlists.
-  #############################################################################
 
   concerning :PostAssociations do
     included do
@@ -179,17 +159,6 @@ class User < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list, -> {}
-  scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -197,6 +166,13 @@ class User < ApplicationRecord
 
     def alpha_parts
       [last_name, first_name, middle_name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
     end
   end
 end

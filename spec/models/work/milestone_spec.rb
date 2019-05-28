@@ -38,7 +38,7 @@ RSpec.describe Work::Milestone do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:work).required }
   end
 
   describe "attributes" do

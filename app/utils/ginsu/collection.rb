@@ -36,7 +36,7 @@ module Ginsu
       "#{count} #{pluralized}"
     end
 
-  private
+    private
 
     def prepare_relation
       @relation.send(@scoper.resolved).order(@sorter.resolved)

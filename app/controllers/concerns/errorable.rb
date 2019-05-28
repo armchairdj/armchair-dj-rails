@@ -6,10 +6,6 @@
 ################################################################################
 
 concern :Errorable do
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     # 500: Global fallback must come first irst
     unless Rails.application.config.consider_all_requests_local
@@ -30,7 +26,7 @@ concern :Errorable do
     rescue_from ActionController::InvalidAuthenticityToken, with: :handle_422
     rescue_from ActionController::UnpermittedParameters,    with: :handle_422
 
-  protected
+    protected
 
     def handle_403_recoverable(_exception = nil)
       return render_error_json(403) if request.xhr?
@@ -88,7 +84,7 @@ concern :Errorable do
       render json: {}, status: status
     end
 
-  private
+    private
 
     def set_user_return_to
       return unless request.get? && !request.xhr?

@@ -59,8 +59,8 @@ RSpec.describe Playlist::Track do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:playlist) }
-    it { is_expected.to belong_to(:work) }
+    it { is_expected.to belong_to(:playlist).required }
+    it { is_expected.to belong_to(:work).required }
   end
 
   describe "validations" do

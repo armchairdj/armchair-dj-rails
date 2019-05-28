@@ -16,36 +16,17 @@
 #
 
 class Tag < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
-
   concerning :NameAttribute do
     included do
       validates :name, presence: true
     end
   end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
-
   concerning :PostAssociations do
     included do
       has_and_belongs_to_many :posts, -> { distinct }
     end
   end
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> {}
-  scope :for_show,  -> { includes(:posts) }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
 
   concerning :Alphabetization do
     included do
@@ -54,6 +35,13 @@ class Tag < ApplicationRecord
 
     def alpha_parts
       [name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:posts) }
     end
   end
 end

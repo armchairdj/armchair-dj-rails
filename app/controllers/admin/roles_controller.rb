@@ -43,7 +43,7 @@ module Admin
       end
     end
 
-  private
+    private
 
     def instance_params
       params.fetch(:role, {}).permit(

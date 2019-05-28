@@ -52,7 +52,7 @@ module Admin
       render json: {}, status: :ok
     end
 
-  private
+    private
 
     def instance_params
       fetched = params.fetch(:playlist, {}).permit(

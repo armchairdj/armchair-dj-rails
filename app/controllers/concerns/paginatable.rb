@@ -1,19 +1,11 @@
 # frozen_string_literal: true
 
 concern :Paginatable do
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     prepend_before_action :prevent_duplicate_first_page, only: [:index]
   end
 
-#############################################################################
-# INSTANCE.
-#############################################################################
-
-private
+  private
 
   def prevent_duplicate_first_page
     return unless (params[:page] || "").to_s == "1"

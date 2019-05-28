@@ -29,7 +29,7 @@ RSpec.describe Creator::Membership do
   describe "group" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:group).class_name("Creator") }
+    it { is_expected.to belong_to(:group).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:group) }
 
@@ -58,7 +58,7 @@ RSpec.describe Creator::Membership do
   describe "member" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:member).class_name("Creator") }
+    it { is_expected.to belong_to(:member).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:member) }
 

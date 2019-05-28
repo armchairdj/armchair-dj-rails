@@ -34,6 +34,13 @@ class Credit < Attribution
   #############################################################################
 
   concerning :RoleAssociation do
+    included do
+      # Contributions belong_to role; Credits don't, really.
+      # This is just here to allow us to do an attribution scope that
+      # joins on :roles.
+      belongs_to :role, required: false
+    end
+
     def role_name
       "Creator"
     end
