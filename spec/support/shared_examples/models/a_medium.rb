@@ -20,7 +20,10 @@ RSpec.shared_examples "a_medium" do
         let!(:bad_aspect) { create(:minimal_aspect, facet:  bad_facet) }
 
         context "valid" do
-          before(:each) { subject.aspect_ids = [good_aspect.id]; subject.valid? }
+          before(:each) do
+            subject.aspect_ids = [good_aspect.id]
+            subject.valid?
+          end
 
           specify { expect(subject).to be_valid }
         end

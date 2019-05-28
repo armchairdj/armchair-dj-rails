@@ -12,7 +12,7 @@ module SvgHelper
       attrs = attrs.merge(
         aria:  true,
         title: title,
-        desc:  desc,
+        desc:  desc
       )
     end
 

@@ -32,7 +32,7 @@ concern :Errorable do
 
   protected
 
-    def handle_403_recoverable(exception = nil)
+    def handle_403_recoverable(_exception = nil)
       return render_error_json(403) if request.xhr?
 
       respond_to do |format|

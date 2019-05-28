@@ -65,7 +65,7 @@ private
         :_destroy,
         :url,
         :description
-      ],
+      ]
     )
   end
 

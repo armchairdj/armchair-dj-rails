@@ -36,7 +36,7 @@ module ArmchairDjRails
     end
 
     # Custom error pages.
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
     # Raise errors on non-whitelisted mass-assignment params.
     config.action_controller.action_on_unpermitted_parameters = :raise

@@ -44,8 +44,8 @@ RSpec.describe Ginsu::Collection do
       context "STI" do
         context "with multiple subclasses but one controller" do
           before(:each) do
-             expect(WorkScoper).to receive(:new)
-             expect(WorkSorter).to receive(:new)
+            expect(WorkScoper).to receive(:new)
+            expect(WorkSorter).to receive(:new)
           end
 
           it "builds scopers and sorters based on the relation's superclass" do
@@ -55,8 +55,8 @@ RSpec.describe Ginsu::Collection do
 
         context "with multiple subclasses and controllers" do
           before(:each) do
-             expect(ArticleScoper).to receive(:new)
-             expect(ArticleSorter).to receive(:new)
+            expect(ArticleScoper).to receive(:new)
+            expect(ArticleSorter).to receive(:new)
           end
 
           it "builds scopers and sorters based on the relation's class" do

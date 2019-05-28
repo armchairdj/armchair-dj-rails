@@ -4,11 +4,11 @@ class PostRenderer < Redcarpet::Render::HTML
   include ActionView::Helpers::UrlHelper
 
   INTERNAL_REGEXP = /^internal:/.freeze
-  LINK_REGEXP     = /^internal:(\w+)\/(\d+)/.freeze
+  LINK_REGEXP     = %r{^internal:(\w+)/(\d+)}.freeze
 
   def link(url, title, content)
     link_to(content.html_safe, normalize_url(url), title: title)
-  rescue => err
+  rescue StandardError => err
     log_render_error(err, url: url, content: content)
 
     content.html_safe

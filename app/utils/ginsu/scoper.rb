@@ -36,7 +36,7 @@ module Ginsu
   private
 
     def valid?
-      allowed.keys.include?(@current_scope)
+      allowed.key?(@current_scope)
     end
 
     def invalid_msg

@@ -75,9 +75,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # GET /users/change_password
-  def edit_password
-
-  end
+  def edit_password; end
 
   # PUT /users/change_password
   def update_password
@@ -138,7 +136,7 @@ protected
     end
   end
 
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     articles_path
   end
 

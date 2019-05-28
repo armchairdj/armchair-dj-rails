@@ -39,7 +39,7 @@ RSpec.describe Work::Relationship do
 
   describe "connection" do
     it_behaves_like "a_model_with_a_better_enum_for",
-      attribute: :connection,
+      attribute:  :connection,
       variations: [:source, :target]
 
     it { is_expected.to validate_presence_of(:connection) }

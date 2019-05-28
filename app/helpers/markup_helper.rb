@@ -14,7 +14,7 @@ module MarkupHelper
     caption = [content_tag(:strong, author)]
     caption << content_tag(:cite, cite) unless cite.nil?
 
-    content_tag(:figcaption, caption.join().html_safe)
+    content_tag(:figcaption, caption.join.html_safe)
   end
 
   def combine_attrs(first, last)
@@ -52,7 +52,7 @@ module MarkupHelper
   def paragraphs(str, extra = nil)
     return if str.blank?
 
-    ps = str.split(/[\r\n]+ *[\r\n]+/).map { |p| p.squish }.delete_if(&:blank?)
+    ps = str.split(/[\r\n]+ *[\r\n]+/).map(&:squish).delete_if(&:blank?)
 
     ps[ps.length - 1] = "#{ps.last} #{extra}".html_safe unless extra.nil?
 

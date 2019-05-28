@@ -3,9 +3,9 @@
 class PostSorter < Ginsu::Sorter
   def allowed
     super.merge(
-      "Title"   => alpha_sort_sql,
-      "Status"  => [post_status_sort_sql, alpha_sort_sql],
-      "Author"  => [author_sort_sql,      alpha_sort_sql],
+      "Title"  => alpha_sort_sql,
+      "Status" => [post_status_sort_sql, alpha_sort_sql],
+      "Author" => [author_sort_sql,      alpha_sort_sql]
     )
   end
 

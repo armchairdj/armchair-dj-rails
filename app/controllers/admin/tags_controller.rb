@@ -46,7 +46,7 @@ private
 
   def instance_params
     params.fetch(:tag, {}).permit(
-      :name,
+      :name
     )
   end
 end

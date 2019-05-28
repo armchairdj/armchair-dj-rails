@@ -61,7 +61,7 @@ class Creator < ApplicationRecord
       aliases.union_all(real_name).alpha
     end
 
-    private # rubocop:disable Lint/UselessAccessModifier
+    private
 
     def enforce_primariness
       if primary?
@@ -78,15 +78,15 @@ class Creator < ApplicationRecord
         foreign_key: :real_name_id, inverse_of: :real_name, dependent: :destroy
 
       has_many :pseudonyms, -> { order("creators.name") },
-               through: :pseudonym_identities, source: :pseudonym
+        through: :pseudonym_identities, source: :pseudonym
 
       scope :available_pseudonyms, lambda {
-        secondary.alpha.left_outer_joins(:real_name_identities)
-                 .where(creator_identities: { id: nil })
+        secondary.alpha.left_outer_joins(:real_name_identities).
+          where(creator_identities: { id: nil })
       }
 
       accepts_nested_attributes_for(:pseudonym_identities,
-                                    allow_destroy: true, reject_if: :reject_pseudonym_identity?)
+        allow_destroy: true, reject_if: :reject_pseudonym_identity?)
     end
 
     def prepare_pseudonym_identities
@@ -115,12 +115,12 @@ class Creator < ApplicationRecord
         foreign_key: :pseudonym_id, inverse_of: :pseudonym, dependent: :destroy
 
       has_many :real_names, -> { order("creators.name") },
-               through: :real_name_identities, source: :real_name
+        through: :real_name_identities, source: :real_name
 
       scope :available_real_names, -> { primary.alpha }
 
       accepts_nested_attributes_for(:real_name_identities,
-                                    allow_destroy: true, reject_if: :reject_real_name_identity?)
+        allow_destroy: true, reject_if: :reject_real_name_identity?)
 
       alias_method :pseudonym?, :secondary?
     end
@@ -191,14 +191,14 @@ class Creator < ApplicationRecord
         foreign_key: :member_id, inverse_of: :member, dependent: :destroy
 
       has_many :groups, -> { order("creators.name") },
-               through: :group_memberships, source: :group
+        through: :group_memberships, source: :group
 
       scope :individual, -> { where(individual: true) }
 
       scope :available_groups, -> { collective.alpha }
 
       accepts_nested_attributes_for(:group_memberships,
-                                    allow_destroy: true, reject_if: :reject_group_membership?)
+        allow_destroy: true, reject_if: :reject_group_membership?)
     end
 
     def prepare_group_memberships
@@ -223,14 +223,14 @@ class Creator < ApplicationRecord
         foreign_key: :group_id, inverse_of: :group, dependent: :destroy
 
       has_many :members, -> { order("creators.name") },
-               through: :member_memberships, source: :member
+        through: :member_memberships, source: :member
 
       scope :collective, -> { where(individual: false) }
 
       scope :available_members, -> { individual.alpha }
 
       accepts_nested_attributes_for(:member_memberships,
-                                    allow_destroy: true, reject_if: :reject_member_membership?)
+        allow_destroy: true, reject_if: :reject_member_membership?)
 
       alias_method :group?, :collective?
     end
@@ -302,7 +302,7 @@ class Creator < ApplicationRecord
         class_name: "Playlist", source: :playlist
 
       has_many :contributed_roles, -> { includes(contributions: :work) },
-               through: :contributions, class_name: "Role", source: :role
+        through: :contributions, class_name: "Role", source: :role
     end
   end
 

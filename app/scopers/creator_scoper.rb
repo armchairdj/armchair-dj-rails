@@ -6,7 +6,7 @@ class CreatorScoper < Ginsu::Scoper
       "Primary"    => :primary,
       "Secondary"  => :secondary,
       "Individual" => :individual,
-      "Group"      => :collective,
+      "Group"      => :collective
     )
   end
 

@@ -49,7 +49,7 @@ private
       :name,
       :primary,
       :individual,
-      links_attributes: [
+      links_attributes:                [
         :id,
         :_destroy,
         :url,
@@ -67,13 +67,13 @@ private
         :pseudonym_id,
         :real_name_id
       ],
-      member_memberships_attributes: [
+      member_memberships_attributes:   [
         :id,
         :_destroy,
         :group_id,
         :member_id
       ],
-      group_memberships_attributes: [
+      group_memberships_attributes:    [
         :id,
         :_destroy,
         :member_id,

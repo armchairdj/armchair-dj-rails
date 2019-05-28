@@ -5,7 +5,7 @@ module JsHelper
     attrs = { class: opts.delete(:class), "data-controller": controller }
 
     opts.each.each_with_object(attrs) do |(key, val), memo|
-      memo["data-#{controller}-#{key}"] = val; 
+      memo["data-#{controller}-#{key}"] = val
     end
   end
 
@@ -15,9 +15,9 @@ module JsHelper
     return opts unless post.persisted? && post.unpublished?
 
     opts[:url] = case post.class.name
-      when "Article" then autosave_admin_article_path(post)
-      when "Review"  then autosave_admin_review_path(post)
-      when "Mixtape" then autosave_admin_mixtape_path(post)
+    when "Article" then autosave_admin_article_path(post)
+    when "Review"  then autosave_admin_review_path(post)
+    when "Mixtape" then autosave_admin_mixtape_path(post)
     end
 
     js_attrs("autosavable", opts)
@@ -31,10 +31,10 @@ module JsHelper
     }
 
     opts["extra-params"] = case scope
-      when "creator[real_name]" then "creator[primary]=true"
-      when "creator[psuedonym]" then "creator[primary]=false"
-      when "creator[member]"    then "creator[individual]=true"
-      when "creator[group]"     then "creator[individual]=false"
+    when "creator[real_name]" then "creator[primary]=true"
+    when "creator[psuedonym]" then "creator[primary]=false"
+    when "creator[member]"    then "creator[individual]=true"
+    when "creator[group]"     then "creator[individual]=false"
     end
 
     js_attrs("creatable", opts)
@@ -144,7 +144,7 @@ module JsHelper
         "data-controller": "unmaskable",
         "class":           "js-unmaskable"
       },
-      input_html: {
+      input_html:   {
         "data-target": "unmaskable.field",
         "data-action": "keydown->unmaskable#enable"
       }

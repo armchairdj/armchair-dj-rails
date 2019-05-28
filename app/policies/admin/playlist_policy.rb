@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Admin::PlaylistPolicy < Admin::BasePolicy
-  alias_method :reorder_tracks?, :update?
+  alias reorder_tracks? update?
 end

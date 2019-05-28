@@ -4,7 +4,7 @@ class RoleSorter < Ginsu::Sorter
   def allowed
     super.merge(
       "Name"   => [name_sort_sql, role_medium_sort_sql],
-      "Medium" => [role_medium_sort_sql, name_sort_sql],
+      "Medium" => [role_medium_sort_sql, name_sort_sql]
     )
   end
 

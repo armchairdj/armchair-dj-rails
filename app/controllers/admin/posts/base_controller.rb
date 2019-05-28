@@ -193,12 +193,11 @@ private
   end
 
   def update_message
-    action = case
-      when @instance.publishing?   then "updated & published"
-      when @instance.unpublishing? then "updated & unpublished"
-      when @instance.scheduling?   then "updated & scheduled"
-      when @instance.unscheduling? then "updated & unscheduled"
-      else "updated"
+    action = if @instance.publishing? then "updated & published"
+    elsif @instance.unpublishing? then "updated & unpublished"
+    elsif @instance.scheduling?   then "updated & scheduled"
+    elsif @instance.unscheduling? then "updated & unscheduled"
+    else "updated"
     end
 
     I18n.t("admin.flash.posts.success.update", action: action)

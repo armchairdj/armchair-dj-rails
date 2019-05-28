@@ -310,6 +310,7 @@ class Post < ApplicationRecord
       def for_cms_user(user)
         return all                       if user.try(:can_edit?)
         return where(author_id: user.id) if user.try(:can_write?)
+
         none
       end
     end

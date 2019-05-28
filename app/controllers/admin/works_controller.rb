@@ -86,28 +86,28 @@ private
       :title,
       :subtitle,
       :hero_image,
-      additional_images: [],
-      aspect_ids: [],
-      links_attributes: [
+      additional_images:               [],
+      aspect_ids:                      [],
+      links_attributes:                [
         :id,
         :_destroy,
         :url,
         :description
       ],
-      credits_attributes: [
+      credits_attributes:              [
         :id,
         :_destroy,
         :work_id,
         :creator_id
       ],
-      contributions_attributes: [
+      contributions_attributes:        [
         :id,
         :_destroy,
         :work_id,
         :creator_id,
         :role_id
       ],
-      milestones_attributes: [
+      milestones_attributes:           [
         :id,
         :_destroy,
         :work_id,

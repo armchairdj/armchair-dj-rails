@@ -221,7 +221,7 @@ class Work < ApplicationRecord
                                                     reject_if:     proc { |attrs| attrs["creator_id"].blank? })
 
       validates_nested_uniqueness_of(:contributions,
-                                     uniq_attr: :creator_id, scope: [:role_id])
+        uniq_attr: :creator_id, scope: [:role_id])
     end
 
     def prepare_contributions
@@ -239,13 +239,13 @@ class Work < ApplicationRecord
         foreign_key: :target_id, inverse_of: :target, dependent: :destroy
 
       has_many :source_works, -> { order("works.title") },
-               through: :source_relationships, source: :source
+        through: :source_relationships, source: :source
 
       accepts_nested_attributes_for(:source_relationships,
-                                    allow_destroy: true, reject_if: :reject_source_relationship?)
+        allow_destroy: true, reject_if: :reject_source_relationship?)
 
       validates_nested_uniqueness_of(:source_relationships,
-                                     uniq_attr: :source_id, scope: [:connection])
+        uniq_attr: :source_id, scope: [:connection])
     end
 
     def prepare_source_relationships
@@ -269,13 +269,13 @@ class Work < ApplicationRecord
         foreign_key: :source_id, inverse_of: :source, dependent: :destroy
 
       has_many :target_works, -> { order("works.title") },
-               through: :target_relationships, source: :target
+        through: :target_relationships, source: :target
 
       accepts_nested_attributes_for(:target_relationships,
-                                    allow_destroy: true, reject_if: :reject_target_relationship?)
+        allow_destroy: true, reject_if: :reject_target_relationship?)
 
       validates_nested_uniqueness_of(:target_relationships,
-                                     uniq_attr: :target_id, scope: [:connection])
+        uniq_attr: :target_id, scope: [:connection])
     end
 
     def prepare_target_relationships

@@ -67,10 +67,10 @@ private
   def build_collection
     @collection = Ginsu::Collection.new(
       policy_scope(@model_class).for_list,
-      scope:  params[:scope],
-      sort:   params[:sort ],
-      dir:    params[:dir  ],
-      page:   params[:page ]
+      scope: params[:scope],
+      sort:  params[:sort],
+      dir:   params[:dir],
+      page:  params[:page]
     )
   end
 
@@ -141,6 +141,7 @@ private
   end
 
   def prepare_form; end
+
   def prepare_show; end
 
   #############################################################################
