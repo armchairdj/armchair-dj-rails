@@ -59,7 +59,7 @@ RSpec.describe Article do
       end
 
       it "removes all old slugs so they can be reused" do
-        expect { call_method }.to change { instance.slugs.count }.from(3).to(0)
+        expect { call_method }.to change(instance.slugs, :count).from(3).to(0)
       end
     end
   end

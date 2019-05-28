@@ -378,7 +378,7 @@ RSpec.describe Work do
               "1" => attributes_for(:credit, creator_id: nil)
             })
 
-            expect { instance.save }.to change { Credit.count }.by(1)
+            expect { instance.save }.to change(Credit, :count).by(1)
 
             expect(instance.credits).to have(1).items
           end
@@ -416,7 +416,7 @@ RSpec.describe Work do
 
           let(:role) { create(:minimal_role, medium: "Song") }
 
-          specify { expect { instance.save }.to change { Contribution.count }.by(1) }
+          specify { expect { instance.save }.to change(Contribution, :count).by(1) }
 
           specify { expect(instance.contributions).to have(1).items }
         end
@@ -451,7 +451,7 @@ RSpec.describe Work do
             })
           end
 
-          specify { expect { instance.save }.to change { Work::Milestone.count }.by(1) }
+          specify { expect { instance.save }.to change(Work::Milestone, :count).by(1) }
 
           specify { expect(instance.milestones).to have(1).items }
         end

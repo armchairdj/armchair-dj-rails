@@ -117,7 +117,7 @@ RSpec.shared_examples "a_ginsu_sorter" do
           it "is a sql string or an array of sql strings" do
             actual = [*value]
 
-            actual.each { |str| expect(str).to be_a_kind_of(String) }
+            expect(actual).to all(be_a_kind_of(String))
           end
         end
       end

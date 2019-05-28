@@ -50,10 +50,10 @@ RSpec.describe Playlist::Track do
       let(:playlist_2) { create(:complete_playlist,                       title: "A") }
 
       let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
-      let(:items) { Playlist::Track.where(playlist_id: parent_ids) }
+      let(:items) { described_class.where(playlist_id: parent_ids) }
 
       let(:ids) { items.map(&:id).shuffle }
-      let(:collection) { Playlist::Track.where(id: ids) }
+      let(:collection) { described_class.where(id: ids) }
 
       it "sorts by playlist name and position" do
         expected = playlist_2.tracks.map(&:id) + playlist_1.tracks.map(&:id)

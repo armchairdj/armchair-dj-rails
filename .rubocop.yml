@@ -1867,14 +1867,17 @@ RSpec/InstanceVariable:
   Exclude:
     - "spec/views/**/*"
 
+RSpec/LetSetup:
+  Enabled: false
+
 RSpec/MessageSpies:
   Enabled: false
 
 RSpec/MultipleExpectations:
-  Max: 8
+  Max: 10
 
 RSpec/NestedGroups:
-  Max: 4
+  Max: 6 # TODO: Reduce this
 
 RSpec/NotToNot:
   EnforcedStyle: to_not

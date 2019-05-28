@@ -60,23 +60,20 @@ RSpec.shared_examples "an_alphabetizable_model" do
       end
 
       describe "validations" do
-        subject(:instance) { create_minimal_instance }
+        let(:instance) { create_minimal_instance }
 
         describe "#ensure_alpha" do
-          describe "with alpha" do
-            it { is_expected.to be_valid }
+          it "does nothing when alpha is not nil" do
+            expect(instance).to be_valid
           end
 
-          describe "without alpha" do
-            before do
-              allow(instance).to receive(:alpha).and_return(nil)
+          it "sets error when alpha is nil" do
+            allow(instance).to receive(:alpha).and_return(nil)
 
-              instance.valid?
-            end
+            instance.valid?
 
-            it { is_expected.to be_invalid }
-
-            it { is_expected.to have_error(base: :missing_alpha) }
+            expect(instance).to be_invalid
+            expect(instance).to have_error(base: :missing_alpha)
           end
         end
       end

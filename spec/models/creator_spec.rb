@@ -225,7 +225,7 @@ RSpec.describe Creator do
           instance.pseudonym_identities_attributes = valid_params
 
           expect(instance.pseudonym_identities).to have(1).items
-          expect(instance.pseudonyms).to eq(Creator.none) # TODO
+          expect(instance.pseudonyms).to eq(described_class.none) # TODO
 
           instance.save!
           instance.reload
@@ -255,7 +255,7 @@ RSpec.describe Creator do
             expect(instance.pseudonym_identities).to have(1).items
 
             expect { instance.update!(primary: false) }.
-              to change(Creator::Identity, :count).by(-1)
+              to change(described_class::Identity, :count).by(-1)
 
             expect(instance.reload.pseudonym_identities).to have(0).items
           end
@@ -293,7 +293,7 @@ RSpec.describe Creator do
           instance.real_name_identities_attributes = valid_params
 
           expect(instance.real_name_identities).to have(1).items
-          expect(instance.real_names).to eq(Creator.none) # TODO
+          expect(instance.real_names).to eq(described_class.none) # TODO
 
           instance.save!
           instance.reload
@@ -323,7 +323,7 @@ RSpec.describe Creator do
             expect(instance.real_name_identities).to have(1).items
 
             expect { instance.update!(primary: true) }.
-              to change(Creator::Identity, :count).by(-1)
+              to change(described_class::Identity, :count).by(-1)
 
             expect(instance.reload.real_name_identities).to have(0).items
           end
@@ -362,7 +362,7 @@ RSpec.describe Creator do
           instance.member_memberships_attributes = valid_params
 
           expect(instance.member_memberships).to have(1).items
-          expect(instance.members).to eq(Creator.none) # TODO
+          expect(instance.members).to eq(described_class.none) # TODO
 
           instance.save!
           instance.reload
@@ -392,7 +392,7 @@ RSpec.describe Creator do
             expect(instance.member_memberships).to have(1).items
 
             expect { instance.update!(individual: true) }.
-              to change(Creator::Membership, :count).by(-1)
+              to change(described_class::Membership, :count).by(-1)
 
             expect(instance.reload.member_memberships).to have(0).items
           end
@@ -431,7 +431,7 @@ RSpec.describe Creator do
           instance.group_memberships_attributes = valid_params
 
           expect(instance.group_memberships).to have(1).items
-          expect(instance.groups).to eq(Creator.none) # TODO
+          expect(instance.groups).to eq(described_class.none) # TODO
 
           instance.save!
           instance.reload
@@ -461,7 +461,7 @@ RSpec.describe Creator do
             expect(instance.group_memberships).to have(1).items
 
             expect { instance.update!(individual: false) }.
-              to change(Creator::Membership, :count).by(-1)
+              to change(described_class::Membership, :count).by(-1)
 
             expect(instance.reload.group_memberships).to have(0).items
           end
@@ -529,263 +529,261 @@ RSpec.describe Creator do
     it { is_expected.to be_individual }
   end
 
-  describe "instance" do
-    describe "identities" do
-      describe "#identities, #pseudonyms, #pseudonym_identities, #real_names, #real_name & #personae" do
-        context "without identities" do
-          let!(:kate_bush) { create(:kate_bush) }
-          let!(:gas) { create(:gas) }
+  describe "identity associations and methods" do
+    context "without identities" do
+      let!(:kate_bush) { create(:kate_bush) }
+      let!(:gas) { create(:gas) }
 
-          specify "primary" do
-            expect(kate_bush.pseudonym_identities).to eq(Creator::Identity.none)
-            expect(kate_bush.pseudonyms).to eq(Creator.none)
-            expect(kate_bush.personae).to eq(Creator.none)
+      specify "are set up properly for primary" do
+        expect(kate_bush.pseudonym_identities).to eq(described_class::Identity.none)
+        expect(kate_bush.pseudonyms).to eq(described_class.none)
+        expect(kate_bush.personae).to eq(described_class.none)
 
-            expect(kate_bush.real_name_identities).to eq(Creator::Identity.none)
-            expect(kate_bush.real_names).to eq(Creator.none)
-            expect(kate_bush.real_name).to eq(nil)
-          end
+        expect(kate_bush.real_name_identities).to eq(described_class::Identity.none)
+        expect(kate_bush.real_names).to eq(described_class.none)
+        expect(kate_bush.real_name).to eq(nil)
+      end
 
-          specify "secondary" do
-            expect(gas.pseudonym_identities).to eq(Creator::Identity.none)
-            expect(gas.pseudonyms).to eq(Creator.none)
-            expect(gas.personae).to eq(Creator.none)
+      specify "are set up properly for secondary" do
+        expect(gas.pseudonym_identities).to eq(described_class::Identity.none)
+        expect(gas.pseudonyms).to eq(described_class.none)
+        expect(gas.personae).to eq(described_class.none)
 
-            expect(gas.real_name_identities).to eq(Creator::Identity.none)
-            expect(gas.real_names).to eq(Creator.none)
-            expect(gas.real_name).to eq(nil)
-          end
-        end
-
-        context "with identities" do
-          let!(:richie) { create(:richie_hawtin_with_pseudonyms) }
-          let!(:plastikman) { described_class.find_by(name: "Plastikman") }
-          let!(:fuse) { described_class.find_by(name: "F.U.S.E.") }
-
-          specify "primary" do
-            expect(richie.pseudonym_identities).to have(2).items
-            expect(richie.pseudonyms).to eq([fuse, plastikman])
-            expect(richie.personae).to eq([fuse, plastikman])
-
-            expect(richie.real_name_identities).to eq(Creator::Identity.none)
-            expect(richie.real_names).to eq(Creator.none)
-            expect(richie.real_name).to eq(nil)
-          end
-
-          specify "secondary" do
-            expect(plastikman.pseudonym_identities).to eq(Creator::Identity.none)
-            expect(plastikman.pseudonyms).to eq([])
-            expect(plastikman.personae).to eq([fuse, richie])
-
-            expect(plastikman.real_name_identities).to have(1).items
-            expect(plastikman.real_names).to eq([richie])
-            expect(plastikman.real_name).to eq(richie)
-
-            expect(fuse.pseudonym_identities).to eq(Creator::Identity.none)
-            expect(fuse.pseudonyms).to eq([])
-            expect(fuse.personae).to eq([plastikman, richie])
-
-            expect(fuse.real_name_identities).to have(1).items
-            expect(fuse.real_names).to eq([richie])
-            expect(fuse.real_name).to eq(richie)
-          end
-        end
+        expect(gas.real_name_identities).to eq(described_class::Identity.none)
+        expect(gas.real_names).to eq(described_class.none)
+        expect(gas.real_name).to eq(nil)
       end
     end
 
-    describe "memberships" do
-      describe "#member_memberships, #members, #group_memberships, #groups, #colleagues" do
-        context "without members" do
-          let!(:band) { create(:spawn) }
-          let!(:solo) { create(:wolfgang_voigt) }
+    context "with identities" do
+      let!(:richie) { create(:richie_hawtin_with_pseudonyms) }
+      let!(:plastikman) { described_class.find_by(name: "Plastikman") }
+      let!(:fuse) { described_class.find_by(name: "F.U.S.E.") }
 
-          specify "collective" do
-            expect(band.member_memberships).to eq(Creator::Membership.none)
-            expect(band.members).to eq(Creator.none)
+      specify "are set up properly for primary" do
+        expect(richie.pseudonym_identities).to have(2).items
+        expect(richie.pseudonyms).to eq([fuse, plastikman])
+        expect(richie.personae).to eq([fuse, plastikman])
 
-            expect(band.group_memberships).to eq(Creator::Membership.none)
-            expect(band.groups).to eq(Creator.none)
-            expect(band.colleagues).to eq(Creator.none)
-          end
+        expect(richie.real_name_identities).to eq(described_class::Identity.none)
+        expect(richie.real_names).to eq(described_class.none)
+        expect(richie.real_name).to eq(nil)
+      end
 
-          specify "individual" do
-            expect(solo.member_memberships).to eq(Creator::Membership.none)
-            expect(solo.members).to eq(Creator.none)
+      specify "are set up properly for secondary pseudonyms" do
+        expect(plastikman.pseudonym_identities).to eq(described_class::Identity.none)
+        expect(plastikman.pseudonyms).to eq([])
+        expect(plastikman.personae).to eq([fuse, richie])
 
-            expect(solo.group_memberships).to eq(Creator::Membership.none)
-            expect(solo.groups).to eq(Creator.none)
-            expect(solo.colleagues).to eq(Creator.none)
-          end
-        end
+        expect(fuse.pseudonym_identities).to eq(described_class::Identity.none)
+        expect(fuse.pseudonyms).to eq([])
+        expect(fuse.personae).to eq([plastikman, richie])
+      end
 
-        context "with a single band" do
-          let!(:band) { create(:spawn_with_members) }
-          let!(:richie) { described_class.find_by(name: "Richie Hawtin") }
-          let!(:fred) { described_class.find_by(name: "Fred Giannelli") }
-          let!(:dan) { described_class.find_by(name: "Dan Bell") }
+      specify "are set up properly for secondary real_names" do
+        expect(plastikman.real_name_identities).to have(1).items
+        expect(plastikman.real_names).to eq([richie])
+        expect(plastikman.real_name).to eq(richie)
 
-          specify "collective" do
-            expect(band.member_memberships).to have(3).items
-            expect(band.members).to eq([dan, fred, richie])
+        expect(fuse.real_name_identities).to have(1).items
+        expect(fuse.real_names).to eq([richie])
+        expect(fuse.real_name).to eq(richie)
+      end
+    end
+  end
 
-            expect(band.group_memberships).to eq(Creator::Membership.none)
-            expect(band.groups).to eq(Creator.none)
-            expect(band.colleagues).to eq(Creator.none)
-          end
+  describe "membership associations and methods" do
+    context "without members" do
+      let!(:band) { create(:spawn) }
+      let!(:solo) { create(:wolfgang_voigt) }
 
-          specify "individual" do
-            expect(richie.member_memberships).to eq(Creator::Membership.none)
-            expect(richie.members).to eq(Creator.none)
+      specify "are set up properly for collective" do
+        expect(band.member_memberships).to eq(described_class::Membership.none)
+        expect(band.members).to eq(described_class.none)
 
-            expect(richie.group_memberships).to have(1).items
-            expect(richie.groups).to eq([band])
-            expect(richie.colleagues).to eq([dan, fred])
+        expect(band.group_memberships).to eq(described_class::Membership.none)
+        expect(band.groups).to eq(described_class.none)
+        expect(band.colleagues).to eq(described_class.none)
+      end
 
-            expect(fred.member_memberships).to eq(Creator::Membership.none)
-            expect(fred.members).to eq(Creator.none)
+      specify "are set up properly for individual" do
+        expect(solo.member_memberships).to eq(described_class::Membership.none)
+        expect(solo.members).to eq(described_class.none)
 
-            expect(fred.group_memberships).to have(1).items
-            expect(fred.groups).to eq([band])
-            expect(fred.colleagues).to eq([dan, richie])
-
-            expect(dan.member_memberships).to eq(Creator::Membership.none)
-            expect(dan.members).to eq(Creator.none)
-
-            expect(dan.group_memberships).to have(1).items
-            expect(dan.groups).to eq([band])
-            expect(dan.colleagues).to eq([fred, richie])
-          end
-        end
-
-        context "with multiple bands" do
-          let!(:band) { create(:fleetwood_mac_with_members) }
-          let!(:stevie) { described_class.find_by(name: "Stevie Nicks") }
-          let!(:lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
-          let!(:christine) { described_class.find_by(name: "Christine McVie") }
-          let!(:mick) { described_class.find_by(name: "Mick Fleetwood") }
-          let!(:john) { described_class.find_by(name: "John McVie") }
-
-          let!(:imaginary) { create(:minimal_creator, :primary, name: "Imaginary") }
-
-          let!(:other_band) do
-            other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
-
-            create(:minimal_creator_membership, group: other_band, member: lindsay)
-            create(:minimal_creator_membership, group: other_band, member: stevie)
-            create(:minimal_creator_membership, group: other_band, member: imaginary)
-
-            other_band
-          end
-
-          specify "#members" do
-            expect(band.members).to eq([christine, john, lindsay, mick, stevie])
-            expect(other_band.members).to eq([imaginary, lindsay, stevie])
-          end
-
-          specify "#groups" do
-            expect(christine.groups).to eq([band])
-            expect(imaginary.groups).to eq([other_band])
-            expect(john.groups).to eq([band])
-            expect(lindsay.groups).to eq([other_band, band])
-            expect(mick.groups).to eq([band])
-            expect(stevie.groups).to eq([other_band, band])
-          end
-
-          specify "#colleagues" do
-            expect(christine.colleagues).to eq([john, lindsay, mick, stevie])
-            expect(imaginary.colleagues).to eq([lindsay,       stevie])
-            expect(john.colleagues).to eq([christine, lindsay, mick, stevie])
-            expect(lindsay.colleagues).to eq([christine, imaginary, john, mick, stevie])
-            expect(mick.colleagues).to eq([christine, john, lindsay, stevie])
-            expect(stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick])
-          end
-        end
+        expect(solo.group_memberships).to eq(described_class::Membership.none)
+        expect(solo.groups).to eq(described_class.none)
+        expect(solo.colleagues).to eq(described_class.none)
       end
     end
 
-    describe "composite methods" do
-      let!(:instance) { create_minimal_instance }
-      let!(:created) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
-      let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }
-      let!(:both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
+    context "with a single band" do
+      let!(:band) { create(:spawn_with_members) }
+      let!(:richie) { described_class.find_by(name: "Richie Hawtin") }
+      let!(:fred) { described_class.find_by(name: "Fred Giannelli") }
+      let!(:dan) { described_class.find_by(name: "Dan Bell") }
 
-      describe "#works" do
-        subject(:work_ids) { instance.works.ids }
+      specify "are set up properly for collective" do
+        expect(band.member_memberships).to have(3).items
+        expect(band.members).to eq([dan, fred, richie])
 
-        let(:expected) { [created, contributed, both].map(&:id) }
-
-        it { is_expected.to match_array(expected) }
+        expect(band.group_memberships).to eq(described_class::Membership.none)
+        expect(band.groups).to eq(described_class.none)
+        expect(band.colleagues).to eq(described_class.none)
       end
 
-      describe "#posts" do
-        subject(:post_ids) { instance.posts.ids }
+      specify "are set up properly for individual members and memberships" do
+        expect(richie.member_memberships).to eq(described_class::Membership.none)
+        expect(richie.members).to eq(described_class.none)
 
-        let!(:playlist) do
-          create(:playlist, :with_author, title: "Title", tracks_attributes: {
-            "0" => attributes_for(:playlist_track, work_id: created.id),
-            "1" => attributes_for(:playlist_track, work_id: contributed.id),
-            "2" => attributes_for(:playlist_track, work_id: both.id)
-          })
-        end
+        expect(fred.member_memberships).to eq(described_class::Membership.none)
+        expect(fred.members).to eq(described_class.none)
 
-        let!(:credited_review) { create(:minimal_review, work_id: created.id) }
-        let!(:contributed_review) { create(:minimal_review, work_id:  contributed.id) }
-        let!(:both_review) { create(:minimal_review, work_id:         both.id) }
-        let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
-
-        let(:expected) { [mixtape, both_review, contributed_review, credited_review].map(&:id) }
-
-        it "finds all distinct created and contributed posts" do
-          is_expected.to match_array(expected)
-        end
-      end
-    end
-
-    describe "#display_roles" do
-      subject(:display_roles) { instance.display_roles }
-
-      let(:instance) { create_minimal_instance }
-
-      context "with credits and contributions" do
-        let(:editor) { create(:minimal_role, medium: "Book",   name: "Editor") }
-        let(:author) { create(:minimal_role, medium: "Book",   name: "Author") }
-        let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
-        let(:director) { create(:minimal_role, medium: "TvShow", name: "Director") }
-
-        let(:tv_show) { create(:minimal_tv_show) }
-        let(:book) { create(:minimal_book) }
-
-        before do
-          instance.credits.create(work: tv_show)
-          instance.credits.create(work: book)
-
-          instance.contributions.create(work: tv_show, role: showrunner)
-          instance.contributions.create(work: tv_show, role: director)
-          instance.contributions.create(work: book,    role: editor)
-          instance.contributions.create(work: book,    role: author)
-        end
-
-        it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
-          is_expected.to eq(
-            "Book"    => ["Author",  "Creator",  "Editor"],
-            "TV Show" => ["Creator", "Director", "Showrunner"]
-          )
-        end
+        expect(dan.member_memberships).to eq(described_class::Membership.none)
+        expect(dan.members).to eq(described_class.none)
       end
 
-      context "without credits or contributions" do
-        it "returns an empty hash" do
-          is_expected.to eq({})
-        end
+      specify "are set up properly for individual group_memberships and groups" do
+        expect(richie.group_memberships).to have(1).items
+        expect(richie.groups).to eq([band])
+        expect(richie.colleagues).to eq([dan, fred])
+
+        expect(fred.group_memberships).to have(1).items
+        expect(fred.groups).to eq([band])
+        expect(fred.colleagues).to eq([dan, richie])
+
+        expect(dan.group_memberships).to have(1).items
+        expect(dan.groups).to eq([band])
+        expect(dan.colleagues).to eq([fred, richie])
       end
     end
 
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
+    context "with multiple bands" do
+      let!(:band) { create(:fleetwood_mac_with_members) }
+      let!(:stevie) { described_class.find_by(name: "Stevie Nicks") }
+      let!(:lindsay) { described_class.find_by(name: "Lindsay Buckingham") }
+      let!(:christine) { described_class.find_by(name: "Christine McVie") }
+      let!(:mick) { described_class.find_by(name: "Mick Fleetwood") }
+      let!(:john) { described_class.find_by(name: "John McVie") }
 
-      let(:instance) { build_minimal_instance }
+      let!(:imaginary) { create(:minimal_creator, :primary, name: "Imaginary") }
 
-      it { is_expected.to eq([instance.name]) }
+      let!(:other_band) do
+        other_band = create(:collective_creator, :primary, name: "Buckingham Nicks")
+
+        create(:minimal_creator_membership, group: other_band, member: lindsay)
+        create(:minimal_creator_membership, group: other_band, member: stevie)
+        create(:minimal_creator_membership, group: other_band, member: imaginary)
+
+        other_band
+      end
+
+      specify "#members" do
+        expect(band.members).to eq([christine, john, lindsay, mick, stevie])
+        expect(other_band.members).to eq([imaginary, lindsay, stevie])
+      end
+
+      specify "#groups" do
+        expect(christine.groups).to eq([band])
+        expect(imaginary.groups).to eq([other_band])
+        expect(john.groups).to eq([band])
+        expect(lindsay.groups).to eq([other_band, band])
+        expect(mick.groups).to eq([band])
+        expect(stevie.groups).to eq([other_band, band])
+      end
+
+      specify "#colleagues" do
+        expect(christine.colleagues).to eq([john, lindsay, mick, stevie])
+        expect(imaginary.colleagues).to eq([lindsay, stevie])
+        expect(john.colleagues).to eq([christine, lindsay, mick, stevie])
+        expect(lindsay.colleagues).to eq([christine, imaginary, john, mick, stevie])
+        expect(mick.colleagues).to eq([christine, john, lindsay, stevie])
+        expect(stevie.colleagues).to eq([christine, imaginary, john, lindsay, mick])
+      end
     end
+  end
+
+  describe "composite methods" do
+    let!(:instance) { create_minimal_instance }
+    let!(:created) { create(:minimal_work, :with_specific_creator, specific_creator: instance) }
+    let!(:contributed) { create(:minimal_work, :with_specific_contributor, specific_contributor: instance) }
+    let!(:both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
+
+    describe "#works" do
+      subject(:work_ids) { instance.works.ids }
+
+      let(:expected) { [created, contributed, both].map(&:id) }
+
+      it { is_expected.to match_array(expected) }
+    end
+
+    describe "#posts" do
+      subject(:post_ids) { instance.posts.ids }
+
+      let!(:playlist) do
+        create(:playlist, :with_author, title: "Title", tracks_attributes: {
+          "0" => attributes_for(:playlist_track, work_id: created.id),
+          "1" => attributes_for(:playlist_track, work_id: contributed.id),
+          "2" => attributes_for(:playlist_track, work_id: both.id)
+        })
+      end
+
+      let!(:credited_review) { create(:minimal_review, work_id: created.id) }
+      let!(:contributed_review) { create(:minimal_review, work_id:  contributed.id) }
+      let!(:both_review) { create(:minimal_review, work_id:         both.id) }
+      let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
+
+      let(:expected) { [mixtape, both_review, contributed_review, credited_review].map(&:id) }
+
+      it "finds all distinct created and contributed posts" do
+        is_expected.to match_array(expected)
+      end
+    end
+  end
+
+  describe "#display_roles" do
+    subject(:display_roles) { instance.display_roles }
+
+    let(:instance) { create_minimal_instance }
+
+    context "with credits and contributions" do
+      let(:editor) { create(:minimal_role, medium: "Book",   name: "Editor") }
+      let(:author) { create(:minimal_role, medium: "Book",   name: "Author") }
+      let(:showrunner) { create(:minimal_role, medium: "TvShow", name: "Showrunner") }
+      let(:director) { create(:minimal_role, medium: "TvShow", name: "Director") }
+
+      let(:tv_show) { create(:minimal_tv_show) }
+      let(:book) { create(:minimal_book) }
+
+      before do
+        instance.credits.create(work: tv_show)
+        instance.credits.create(work: book)
+
+        instance.contributions.create(work: tv_show, role: showrunner)
+        instance.contributions.create(work: tv_show, role: director)
+        instance.contributions.create(work: book,    role: editor)
+        instance.contributions.create(work: book,    role: author)
+      end
+
+      it "returns hash of credits and contributions sorted alphabetically and grouped by medium" do
+        is_expected.to eq(
+          "Book"    => ["Author",  "Creator",  "Editor"],
+          "TV Show" => ["Creator", "Director", "Showrunner"]
+        )
+      end
+    end
+
+    context "without credits or contributions" do
+      it "returns an empty hash" do
+        is_expected.to eq({})
+      end
+    end
+  end
+
+  describe "#alpha_parts" do
+    subject(:alpha_parts) { instance.alpha_parts }
+
+    let(:instance) { build_minimal_instance }
+
+    it { is_expected.to eq([instance.name]) }
   end
 end

@@ -29,7 +29,7 @@ RSpec.describe Creator::Identity do
   end
 
   describe "real_name" do
-    subject(:instance) { build_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to belong_to(:real_name).class_name("Creator") }
 
@@ -38,25 +38,27 @@ RSpec.describe Creator::Identity do
     it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
     describe "validates #real_name_is_primary" do
+      let(:instance) { build_minimal_instance }
+
       before do
         expect(instance).to receive(:real_name_is_primary).and_call_original
       end
 
       specify "valid" do
-        is_expected.to be_valid
+        expect(instance).to be_valid
       end
 
       specify "invalid" do
         instance.real_name = create(:secondary_creator)
 
-        is_expected.to_not be_valid
-        is_expected.to have_error(real_name_id: :not_primary)
+        expect(instance).to_not be_valid
+        expect(instance).to have_error(real_name_id: :not_primary)
       end
     end
   end
 
   describe "pseudonym" do
-    subject(:instance) { build_minimal_instance }
+    subject { build_minimal_instance }
 
     it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
 
@@ -65,20 +67,21 @@ RSpec.describe Creator::Identity do
     it { is_expected.to validate_uniqueness_of(:pseudonym_id) }
 
     describe "validates #pseudonym_is_secondary" do
+      let(:instance) { build_minimal_instance }
+
       before do
         expect(instance).to receive(:pseudonym_is_secondary).and_call_original
       end
 
       specify "valid" do
-        is_expected.to be_valid
+        expect(instance).to be_valid
       end
 
       specify "invalid" do
         instance.pseudonym = create(:primary_creator)
 
-        is_expected.to_not be_valid
-
-        is_expected.to have_error(pseudonym_id: :not_secondary)
+        expect(instance).to_not be_valid
+        expect(instance).to have_error(pseudonym_id: :not_secondary)
       end
     end
   end

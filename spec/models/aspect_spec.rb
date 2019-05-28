@@ -95,9 +95,9 @@ RSpec.describe Aspect do
 
   describe "instance" do
     describe "#alpha_parts" do
-      let(:instance) { build_minimal_instance }
-
       subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.human_facet, instance.name]) }
     end

@@ -107,30 +107,28 @@ RSpec.describe Post do
             it { is_expected.to contain_exactly(draft, scheduled) }
           end
 
-          describe "booleans" do
-            describe "#draft?" do
-              specify { expect(draft.draft?).to eq(true) }
-              specify { expect(scheduled.draft?).to eq(false) }
-              specify { expect(published.draft?).to eq(false) }
-            end
+          describe "#draft?" do
+            specify { expect(draft.draft?).to eq(true) }
+            specify { expect(scheduled.draft?).to eq(false) }
+            specify { expect(published.draft?).to eq(false) }
+          end
 
-            describe "#scheduled?" do
-              specify { expect(draft.scheduled?).to eq(false) }
-              specify { expect(scheduled.scheduled?).to eq(true) }
-              specify { expect(published.scheduled?).to eq(false) }
-            end
+          describe "#scheduled?" do
+            specify { expect(draft.scheduled?).to eq(false) }
+            specify { expect(scheduled.scheduled?).to eq(true) }
+            specify { expect(published.scheduled?).to eq(false) }
+          end
 
-            describe "#published?" do
-              specify { expect(draft.published?).to eq(false) }
-              specify { expect(scheduled.published?).to eq(false) }
-              specify { expect(published.published?).to eq(true) }
-            end
+          describe "#published?" do
+            specify { expect(draft.published?).to eq(false) }
+            specify { expect(scheduled.published?).to eq(false) }
+            specify { expect(published.published?).to eq(true) }
+          end
 
-            describe "#unpublished?" do
-              specify { expect(draft.unpublished?).to eq(true) }
-              specify { expect(scheduled.unpublished?).to eq(true) }
-              specify { expect(published.unpublished?).to eq(false) }
-            end
+          describe "#unpublished?" do
+            specify { expect(draft.unpublished?).to eq(true) }
+            specify { expect(scheduled.unpublished?).to eq(true) }
+            specify { expect(published.unpublished?).to eq(false) }
           end
         end
       end
