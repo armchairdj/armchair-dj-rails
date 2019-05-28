@@ -88,5 +88,5 @@ RSpec.describe MixtapesHelper do
     end
   end
 
-  pending "#url_for_mixtape"
+  pending "#uri_for_mixtape"
 end

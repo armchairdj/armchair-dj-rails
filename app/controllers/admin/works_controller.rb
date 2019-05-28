@@ -74,11 +74,11 @@ module Admin
 
       @media = Work.media
 
-      if @work.medium.present?
-        @creators  = Creator.all.alpha
-        @roles     = @work.available_roles
-        @relatives = @work.available_relatives
-      end
+      return unless @work.medium.present?
+
+      @creators  = Creator.all.alpha
+      @roles     = @work.available_roles
+      @relatives = @work.available_relatives
     end
 
     def instance_params

@@ -15,22 +15,30 @@ module ArticlesHelper
   end
 
   def link_to_article(article, admin: false, full_url: false, text: nil, length: nil, **opts)
-    return unless (url = url_for_article(article, admin: admin, full_url: full_url))
+    return unless (url = uri_for_article(article, admin: admin, full_url: full_url))
 
     text ||= article_title(article, length: length)
 
     link_to(text, url, **opts)
   end
 
-  def url_for_article(article, admin: false, full_url: false, format: nil)
+  def uri_for_article(article, admin: false, **opts)
     if admin
-      return admin_article_url(article, format: format) if full_url
-      return admin_article_path(article, format: format)
+      uri_for_admin_article(article, **opts)
+    elsif article.published?
+      uri_for_public_article(article, **opts)
     end
+  end
 
-    if article.published?
-      return article_url(article.slug, format: format) if full_url
-      return article_path(article.slug, format: format)
-    end
+  def uri_for_admin_article(article, full_url: false, format: nil)
+    return admin_article_url(article, format: format) if full_url
+
+    admin_article_path(article, format: format)
+  end
+
+  def uri_for_public_article(article, full_url: false, format: nil)
+    return article_url(article.slug, format: format) if full_url
+
+    article_path(article.slug, format: format)
   end
 end

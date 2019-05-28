@@ -22,7 +22,9 @@ module FactoryHelpers
 
   def determine_model_class
     # MODELS
-    return described_class if described_class.respond_to? :model_name
+    if described_class.respond_to? :model_name
+      return described_class
+    end
 
     # CONTROLLERS
     if described_class.respond_to? :controller_name

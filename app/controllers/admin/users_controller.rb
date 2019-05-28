@@ -52,7 +52,7 @@ module Admin
     end
 
     def instance_params
-      fetched = params.fetch(:user, {}).permit(
+      params.fetch(:user, {}).permit(
         :first_name,
         :last_name,
         :middle_name,

@@ -20,9 +20,9 @@ module PostsHelper
   end
 
   def url_for_post(post, **opts)
-    return url_for_article(post, **opts) if post.is_a?(Article)
-    return url_for_review(post, **opts) if post.is_a?(Review)
-    return url_for_mixtape(post, **opts) if post.is_a?(Mixtape)
+    return uri_for_article(post, **opts) if post.is_a?(Article)
+    return uri_for_review(post, **opts) if post.is_a?(Review)
+    return uri_for_mixtape(post, **opts) if post.is_a?(Mixtape)
   end
 
   #############################################################################

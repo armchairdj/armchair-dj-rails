@@ -87,5 +87,5 @@ RSpec.describe ArticlesHelper do
     end
   end
 
-  pending "#url_for_article"
+  pending "#uri_for_article"
 end

@@ -106,5 +106,5 @@ RSpec.describe ReviewsHelper do
     end
   end
 
-  pending "#url_for_review"
+  pending "#uri_for_review"
 end

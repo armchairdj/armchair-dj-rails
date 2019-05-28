@@ -15,26 +15,30 @@ module MixtapesHelper
   end
 
   def link_to_mixtape(mixtape, admin: false, full_url: false, text: nil, length: nil, **opts)
-    return unless url = url_for_mixtape(mixtape, admin: admin, full_url: full_url)
+    return unless (url = uri_for_mixtape(mixtape, admin: admin, full_url: full_url))
 
     text ||= mixtape_title(mixtape, length: length)
 
     link_to(text, url, **opts)
   end
 
-  def url_for_mixtape(mixtape, admin: false, full_url: false, format: nil)
+  def uri_for_mixtape(mixtape, admin: false, **opts)
     if admin
-      if full_url
-        admin_mixtape_url(mixtape, format: format)
-      else
-        admin_mixtape_path(mixtape, format: format)
-      end
+      uri_for_admin_mixtape(mixtape, **opts)
     elsif mixtape.published?
-      if full_url
-        mixtape_url(mixtape.slug, format: format)
-      else
-        mixtape_path(mixtape.slug, format: format)
-      end
+      uri_for_public_mixtape(mixtape, **opts)
     end
+  end
+
+  def uri_for_admin_mixtape(mixtape, full_url: false, format: nil)
+    return admin_mixtape_url(mixtape, format: format) if full_url
+
+    admin_mixtape_path(mixtape, format: format)
+  end
+
+  def uri_for_public_mixtape(mixtape, full_url: false, format: nil)
+    return mixtape_url(mixtape.slug, format: format) if full_url
+
+    mixtape_path(mixtape.slug, format: format)
   end
 end
