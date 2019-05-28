@@ -20,14 +20,12 @@
 require "rails_helper"
 
 RSpec.describe Link do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
 
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "associations" do

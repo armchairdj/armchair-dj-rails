@@ -5,9 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::PlaylistsController do
   let(:instance) { create(:minimal_playlist) }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
   context "with root user" do
     login_root

@@ -5,20 +5,18 @@ require "rails_helper"
 RSpec.describe Post do
   subject(:instance) { create_minimal_instance }
 
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
 
-      # Must specify individual fields for STI models.
-      it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
-      it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
-      it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
-      it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
-      it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
-      it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
-    end
+    # Must specify individual fields for STI models.
+    it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
+    it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
+    it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
+    it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
+    it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
+    it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
   end
 
   describe "status" do
@@ -46,7 +44,7 @@ RSpec.describe Post do
         it { is_expected.to validate_presence_of(:publish_on) }
         it { is_expected.to validate_absence_of(:published_at) }
 
-        describe "when publish_on is in the past" do
+        context "when publish_on is in the past" do
           before do
             instance.publish_on = Date.today - 1
             instance.valid?

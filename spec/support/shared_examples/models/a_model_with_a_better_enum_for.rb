@@ -105,7 +105,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
           end
         end
 
-        describe "with a variation keyword argument" do
+        context "with a variation keyword argument" do
           subject { described_class.send(:"human_#{plural}", variation: :short) }
 
           let(:expected) do

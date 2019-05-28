@@ -31,33 +31,29 @@
 require "rails_helper"
 
 RSpec.describe Contribution do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "an_attribution"
+  it_behaves_like "an_attribution"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:work, :role, :creator] }
-    end
-
-    # TODO: uncomment the optional call after updating shoulda-matchers
-    # https://github.com/thoughtbot/shoulda-matchers/issues/870
-    it { is_expected.to belong_to(:role) } # .optional(true) }
-
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
-
-      # Must specify individual fields for STI models.
-      it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:work, :role, :creator] }
   end
 
-  describe "class" do
-    specify { expect(described_class.superclass).to eq(Attribution) }
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
+
+    # Must specify individual fields for STI models.
+    it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
   end
+
+  specify { expect(described_class.superclass).to eq(Attribution) }
+
+  # TODO: uncomment the optional call after updating shoulda-matchers
+  # https://github.com/thoughtbot/shoulda-matchers/issues/870
+  it { is_expected.to belong_to(:role) } # .optional(true) }
 
   describe "validations" do
     subject { build_minimal_instance }

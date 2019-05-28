@@ -79,10 +79,10 @@ class Attribution < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  include Alphabetizable
-
   concerning :Alphabetization do
     included do
+      include Alphabetizable
+
       delegate :alpha_parts, to: :work,    allow_nil: true, prefix: true
       delegate :alpha_parts, to: :creator, allow_nil: true, prefix: true
 

@@ -20,26 +20,20 @@
 require "rails_helper"
 
 RSpec.describe Playlist::Track do
-  describe "concerns" do
-    it_behaves_like "a_listable_model", :playlist, :tracks do
-      let(:primary) { create(:complete_playlist).tracks.sorted }
-      let(:other) { create(:complete_playlist).tracks.sorted }
-    end
-
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:playlist, :work] }
-    end
-
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+  it_behaves_like "a_listable_model", :playlist, :tracks do
+    let(:primary) { create(:complete_playlist).tracks.sorted }
+    let(:other) { create(:complete_playlist).tracks.sorted }
   end
 
-  describe "class" do
-    # Nothing so far.
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:playlist, :work] }
+  end
+
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
+
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "scope-related" do

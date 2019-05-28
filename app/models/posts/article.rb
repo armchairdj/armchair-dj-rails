@@ -73,6 +73,10 @@ class Article < Post
   #############################################################################
 
   concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
     def alpha_parts
       [title]
     end

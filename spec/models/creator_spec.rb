@@ -22,35 +22,29 @@
 require "rails_helper"
 
 RSpec.describe Creator do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) do
-        [
-          :pseudonyms,        :real_names,
-          :members,           :groups,
-          :credits,           :contributions,
-          :credited_works,    :contributed_works,
-          :credited_reviews,  :contributed_reviews,
-          :credited_mixtapes, :contributed_mixtapes,
-          :contributed_roles
-        ]
-      end
-    end
-
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) do
+      [
+        :pseudonyms,        :real_names,
+        :members,           :groups,
+        :credits,           :contributions,
+        :credited_works,    :contributed_works,
+        :credited_reviews,  :contributed_reviews,
+        :credited_mixtapes, :contributed_mixtapes,
+        :contributed_roles
+      ]
     end
   end
 
-  describe "class" do
-    # Nothing so far.
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
+
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "scope-related" do
@@ -468,18 +462,20 @@ RSpec.describe Creator do
         end
       end
 
-      describe "booletania" do
-        describe "class" do
-          specify "self#individual_options" do
+      describe "booletania integration" do
+        describe ".individual_options" do
+          it "contains the correct labels and values" do
             expect(described_class.individual_options).to match_array([
               [a_string_matching(/^This is an individual/), true],
-              [a_string_matching(/^This is a group/),       false]
+              [a_string_matching(/^This is a group/), false]
             ])
           end
+        end
 
-          specify "self#collective_options" do
+        describe ".collective_options" do
+          it "contains the correct labels and values" do
             expect(described_class.primary_options).to match_array([
-              [a_string_matching(/^This is a primary/),   true],
+              [a_string_matching(/^This is a primary/), true],
               [a_string_matching(/^This is a secondary/), false]
             ])
           end

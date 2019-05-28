@@ -8,11 +8,9 @@ RSpec.describe Mixtape do
     pending "delegate additional_images to playlist"
   end
 
-  describe "concerns" do
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [:author, :playlist] }
-      let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [:author, :playlist] }
+    let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
   end
 
   describe "STI inheritance" do

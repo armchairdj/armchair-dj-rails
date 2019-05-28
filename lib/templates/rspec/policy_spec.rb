@@ -9,25 +9,25 @@ RSpec.describe <%= class_name %>Policy do
     pending "works without user"
   end
 
-  describe "with member" do
+  context "with member" do
     let(:user) { create(:member) }
 
     pending "works with member"
   end
 
-  describe "with writer" do
+  context "with writer" do
     let(:user) { create(:writer) }
 
     pending "works with writer"
   end
 
-  describe "with editor" do
+  context "with editor" do
     let(:user) { create(:editor) }
 
     pending "works with editor"
   end
 
-  describe "with admin" do
+  context "with admin" do
     let(:user) { create(:admin) }
 
     pending "works with admin"
@@ -48,13 +48,13 @@ RSpec.describe <%= class_name %>Policy do
       expect(model_class).to receive(:all).and_call_original
     end
 
-    describe "with user" do
+    context "with user" do
       let(:user) { create(:member) }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
     end
 
-    describe "without user" do
+    context "without user" do
       let(:user) { nil }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }

@@ -377,9 +377,11 @@ class Creator < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  include Alphabetizable
-
   concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
     def alpha_parts
       [name]
     end

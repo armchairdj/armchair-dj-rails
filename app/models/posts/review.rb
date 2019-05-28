@@ -101,6 +101,8 @@ class Review < Post
 
   concerning :Alphabetization do
     included do
+      include Alphabetizable
+
       delegate :alpha_parts, to: :work, allow_nil: true
     end
   end

@@ -3,28 +3,26 @@
 require "rails_helper"
 
 RSpec.describe Work do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:aspects, :milestones, :playlists, :reviews, :mixtapes, :credits, :makers, :contributions, :contributors] }
+  end
 
-    it_behaves_like "an_imageable_model"
+  it_behaves_like "an_imageable_model"
 
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
 
-      # Must specify individual fields for STI models.
-      it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
-      it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
-      it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
-      it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
-      it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
-    end
+    # Must specify individual fields for STI models.
+    it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
+    it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
+    it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
+    it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
+    it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
   end
 
   describe "relationships" do
@@ -38,7 +36,7 @@ RSpec.describe Work do
       it { is_expected.to eq([["Album", [album]], ["Song", [song]]]) }
     end
 
-    describe "with source" do
+    context "with source" do
       describe "has associations" do
         subject(:instance) { build_minimal_instance }
 
@@ -113,7 +111,7 @@ RSpec.describe Work do
             it { is_expected.to have(5).items }
           end
 
-          describe "with prior associations" do
+          context "with prior associations" do
             let(:instance) { create_minimal_instance(target_relationships_attributes: valid_params) }
 
             it { is_expected.to have(6).items }
@@ -138,7 +136,7 @@ RSpec.describe Work do
       end
     end
 
-    describe "with target" do
+    context "with target" do
       describe "has associations" do
         subject(:instance) { build_minimal_instance }
 
@@ -213,7 +211,7 @@ RSpec.describe Work do
             it { is_expected.to have(5).items }
           end
 
-          describe "with prior associations" do
+          context "with prior associations" do
             let(:instance) { create_minimal_instance(source_relationships_attributes: valid_params) }
 
             it { is_expected.to have(6).items }
@@ -239,111 +237,109 @@ RSpec.describe Work do
     end
   end
 
-  describe "class" do
-    describe ".grouped_by_medium" do
-      subject(:association) { described_class.where(id: ids).grouped_by_medium }
+  describe ".grouped_by_medium" do
+    subject(:association) { described_class.where(id: ids).grouped_by_medium }
 
-      let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
-      let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
-      let(:tv_show) { create(:minimal_tv_show) }
-      let(:podcast) { create(:minimal_podcast) }
+    let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
+    let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
+    let(:tv_show) { create(:minimal_tv_show) }
+    let(:podcast) { create(:minimal_podcast) }
 
-      let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
+    let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
 
-      it "groups by type and alphabetizes" do
-        is_expected.to eq([
-          ["Podcast", [podcast]],
-          ["Song",    [song_2, song_1]],
-          ["TV Show", [tv_show]]
-        ])
+    it "groups by type and alphabetizes" do
+      is_expected.to eq([
+        ["Podcast", [podcast]],
+        ["Song",    [song_2, song_1]],
+        ["TV Show", [tv_show]]
+      ])
+    end
+  end
+
+  describe ".media" do
+    subject(:association) { described_class.media }
+
+    let(:expected) do
+      [
+        ["Album",         "Album"],
+        ["App",           "App"],
+        ["Book",          "Book"],
+        ["Comic Book",    "ComicBook"],
+        ["Gadget",        "Gadget"],
+        ["Graphic Novel", "GraphicNovel"],
+        ["Movie",         "Movie"],
+        ["Podcast",       "Podcast"],
+        ["Product",       "Product"],
+        ["Publication",   "Publication"],
+        ["Radio Show",    "RadioShow"],
+        ["Song",          "Song"],
+        ["TV Episode",    "TvEpisode"],
+        ["TV Season",     "TvSeason"],
+        ["TV Show",       "TvShow"],
+        ["Video Game",    "VideoGame"]
+      ]
+    end
+
+    it { is_expected.to eq(expected) }
+  end
+
+  describe ".valid_media" do
+    subject(:association) { described_class.valid_media }
+
+    let(:expected) do
+      [
+        "Album",
+        "App",
+        "Book",
+        "ComicBook",
+        "Gadget",
+        "GraphicNovel",
+        "Movie",
+        "Podcast",
+        "Product",
+        "Publication",
+        "RadioShow",
+        "Song",
+        "TvEpisode",
+        "TvSeason",
+        "TvShow",
+        "VideoGame"
+      ]
+    end
+
+    it { is_expected.to eq(expected) }
+  end
+
+  describe ".load_descendants" do
+    before { allow(File).to receive(:basename) }
+
+    context "when in test environment" do
+      before { allow(Rails).to receive(:env).and_return("test".inquiry) }
+
+      it "loads" do
+        expect(File).to receive(:basename)
+
+        described_class.load_descendants
       end
     end
 
-    describe ".media" do
-      subject(:association) { described_class.media }
+    context "when in development environment" do
+      before { allow(Rails).to receive(:env).and_return("development".inquiry) }
 
-      let(:expected) do
-        [
-          ["Album",         "Album"],
-          ["App",           "App"],
-          ["Book",          "Book"],
-          ["Comic Book",    "ComicBook"],
-          ["Gadget",        "Gadget"],
-          ["Graphic Novel", "GraphicNovel"],
-          ["Movie",         "Movie"],
-          ["Podcast",       "Podcast"],
-          ["Product",       "Product"],
-          ["Publication",   "Publication"],
-          ["Radio Show",    "RadioShow"],
-          ["Song",          "Song"],
-          ["TV Episode",    "TvEpisode"],
-          ["TV Season",     "TvSeason"],
-          ["TV Show",       "TvShow"],
-          ["Video Game",    "VideoGame"]
-        ]
+      it "loads" do
+        expect(File).to receive(:basename)
+
+        described_class.load_descendants
       end
-
-      it { is_expected.to eq(expected) }
     end
 
-    describe ".valid_media" do
-      subject(:association) { described_class.valid_media }
+    context "when in production environment" do
+      before { allow(Rails).to receive(:env).and_return("production".inquiry) }
 
-      let(:expected) do
-        [
-          "Album",
-          "App",
-          "Book",
-          "ComicBook",
-          "Gadget",
-          "GraphicNovel",
-          "Movie",
-          "Podcast",
-          "Product",
-          "Publication",
-          "RadioShow",
-          "Song",
-          "TvEpisode",
-          "TvSeason",
-          "TvShow",
-          "VideoGame"
-        ]
-      end
+      it "does not load" do
+        expect(File).to_not receive(:basename)
 
-      it { is_expected.to eq(expected) }
-    end
-
-    describe ".load_descendants" do
-      before { allow(File).to receive(:basename) }
-
-      context "when in test environment" do
-        before { allow(Rails).to receive(:env).and_return("test".inquiry) }
-
-        it "loads" do
-          expect(File).to receive(:basename)
-
-          described_class.load_descendants
-        end
-      end
-
-      context "when in development environment" do
-        before { allow(Rails).to receive(:env).and_return("development".inquiry) }
-
-        it "loads" do
-          expect(File).to receive(:basename)
-
-          described_class.load_descendants
-        end
-      end
-
-      context "when in production environment" do
-        before { allow(Rails).to receive(:env).and_return("production".inquiry) }
-
-        it "does not load" do
-          expect(File).to_not receive(:basename)
-
-          described_class.load_descendants
-        end
+        described_class.load_descendants
       end
     end
   end

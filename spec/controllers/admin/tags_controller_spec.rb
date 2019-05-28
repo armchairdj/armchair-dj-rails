@@ -5,9 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::TagsController do
   let(:tag) { create(:minimal_tag) }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
   context "with root user" do
     login_root

@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 concern :Alphabetizable do
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     scope :alpha, -> { order(:alpha) }
 
@@ -13,11 +9,7 @@ concern :Alphabetizable do
     validate { ensure_alpha }
   end
 
-#############################################################################
-# INSTANCE.
-#############################################################################
-
-private
+  private
 
   def set_alpha
     self.alpha = calculate_alpha_string

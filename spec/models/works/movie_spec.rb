@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Movie do
-  describe "concerns" do
-    it_behaves_like "a_medium"
-  end
+  it_behaves_like "a_medium"
 
   describe "STI" do
     describe "class" do

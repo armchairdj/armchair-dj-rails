@@ -42,7 +42,6 @@ class Post < ApplicationRecord
   # CONCERNS.
   #############################################################################
 
-  include Alphabetizable
   include Authorable
   include Linkable
   include Sluggable

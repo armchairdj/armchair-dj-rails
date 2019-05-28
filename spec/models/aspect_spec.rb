@@ -20,25 +20,19 @@
 require "rails_helper"
 
 RSpec.describe Aspect do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
-    end
-
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
   end
 
-  describe "class" do
-    # Nothing so far.
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
+
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "scope-related" do

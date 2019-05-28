@@ -23,31 +23,21 @@
 require "rails_helper"
 
 RSpec.describe Playlist do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_authorable_model"
+  it_behaves_like "an_authorable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [:author] }
-      let(:show_loads) { [:author, :tracks, :works] }
-    end
-
-    it_behaves_like "an_imageable_model"
-
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [:author] }
+    let(:show_loads) { [:author, :tracks, :works] }
   end
 
-  describe "class" do
-    # Nothing so far.
-  end
+  it_behaves_like "an_imageable_model"
 
-  describe "scope-related" do
-    # Nothing so far.
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
+
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "associations" do

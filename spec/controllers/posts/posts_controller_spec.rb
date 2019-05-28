@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Posts::PostsController do
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
   describe "GET #index" do
     it_behaves_like "a_public_index"

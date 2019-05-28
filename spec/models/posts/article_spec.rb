@@ -3,14 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Article do
-  describe "concerns" do
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [:author] }
-      let(:show_loads) { [:author, :links, :tags] }
-    end
-
-    it_behaves_like "an_imageable_model"
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [:author] }
+    let(:show_loads) { [:author, :links, :tags] }
   end
+
+  it_behaves_like "an_imageable_model"
 
   describe "STI inheritance" do
     specify { expect(described_class.superclass).to eq(Post) }

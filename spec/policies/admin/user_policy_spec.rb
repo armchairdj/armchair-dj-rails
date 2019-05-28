@@ -19,7 +19,7 @@ RSpec.describe Admin::UserPolicy do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "with member" do
+  context "with member" do
     let(:user) { build_stubbed(:member) }
 
     it { is_expected.to raise_not_authorized_for(:index) }
@@ -31,7 +31,7 @@ RSpec.describe Admin::UserPolicy do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "with writer" do
+  context "with writer" do
     let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to raise_not_authorized_for(:index) }
@@ -43,7 +43,7 @@ RSpec.describe Admin::UserPolicy do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "with editor" do
+  context "with editor" do
     let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to raise_not_authorized_for(:index) }
@@ -55,7 +55,7 @@ RSpec.describe Admin::UserPolicy do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "with admin" do
+  context "with admin" do
     let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:index) }
@@ -89,13 +89,13 @@ RSpec.describe Admin::UserPolicy do
       expect(model_class).to receive(:for_cms_user).with(user).and_call_original
     end
 
-    describe "with user" do
+    context "with user" do
       let(:user) { build_stubbed(:writer) }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
     end
 
-    describe "without user" do
+    context "without user" do
       let(:user) { nil }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }

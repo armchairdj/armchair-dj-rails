@@ -115,9 +115,11 @@ class Playlist < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  include Alphabetizable
-
   concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
     def alpha_parts
       [title]
     end

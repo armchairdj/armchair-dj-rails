@@ -11,25 +11,25 @@ RSpec.shared_examples "a_feedable_policy" do
     it { is_expected.to permit_action(:feed) }
   end
 
-  describe "with member" do
+  context "with member" do
     let(:user) { build_stubbed(:member) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
-  describe "with writer" do
+  context "with writer" do
     let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
-  describe "with editor" do
+  context "with editor" do
     let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to permit_action(:feed) }
   end
 
-  describe "with admin" do
+  context "with admin" do
     let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:feed) }

@@ -45,27 +45,21 @@
 require "rails_helper"
 
 RSpec.describe User do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
-    end
-
-    it_behaves_like "a_linkable_model"
-
-    describe "nilify_blanks" do
-      subject(:instance) { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
   end
 
-  describe "class" do
-    # Nothing so far.
+  it_behaves_like "a_linkable_model"
+
+  describe "nilify_blanks" do
+    subject(:instance) { build_minimal_instance }
+
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "scope-related" do
@@ -211,25 +205,25 @@ RSpec.describe User do
     end
 
     describe "conditional" do
-      describe "with member" do
+      context "with member" do
         subject(:instance) { create(:member) }
 
         it { is_expected.to validate_absence_of(:bio) }
       end
 
-      describe "with writer" do
+      context "with writer" do
         subject(:instance) { create(:writer) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      describe "with editor" do
+      context "with editor" do
         subject(:instance) { create(:editor) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      describe "with admin" do
+      context "with admin" do
         subject(:instance) { create(:admin) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
@@ -482,7 +476,7 @@ RSpec.describe User do
     describe "#display_name" do
       subject(:display_name) { instance.display_name }
 
-      describe "without middle name" do
+      context "without middle name" do
         let(:instance) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
 
         it { is_expected.to eq("Derrick May") }

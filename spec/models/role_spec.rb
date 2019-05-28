@@ -20,29 +20,19 @@
 require "rails_helper"
 
 RSpec.describe Role do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:contributions, :works] }
-    end
-
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:contributions, :works] }
   end
 
-  describe "class" do
-    # Nothing so far.
-  end
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
 
-  describe "scope-related" do
-    # Nothing so far.
+    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "associations" do

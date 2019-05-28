@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ReviewScoper do
-  describe "concerns" do
-    it_behaves_like "a_ginsu_scoper"
-  end
+  it_behaves_like "a_ginsu_scoper"
 
   describe "instance" do
     let(:instance) { described_class.new }

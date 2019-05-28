@@ -6,9 +6,7 @@ RSpec.describe Admin::RolesController do
   let(:media) { Work.media }
   let(:role) { create(:minimal_role, medium: media.first.last) }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
   context "with root user" do
     login_root

@@ -15,7 +15,7 @@ RSpec.describe AspectsHelper do
         is_expected.to have_tag("a[href='/admin/aspects/#{aspect.to_param}']", text: "Aspect", count: 1)
       end
 
-      describe "with options" do
+      context "with options" do
         let(:opts) { { class: "foo", id: "bar" } }
 
         it "has the correct markup" do

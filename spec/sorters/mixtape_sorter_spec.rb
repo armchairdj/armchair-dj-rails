@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe MixtapeSorter do
-  describe "concerns" do
-    it_behaves_like "a_ginsu_sorter"
-  end
+  it_behaves_like "a_ginsu_sorter"
 
   describe "instance" do
     let(:instance) { described_class.new }

@@ -190,9 +190,11 @@ class User < ApplicationRecord
   # CONCERNING: Alpha.
   #############################################################################
 
-  include Alphabetizable
-
   concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
     def alpha_parts
       [last_name, first_name, middle_name]
     end
