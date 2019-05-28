@@ -17,41 +17,43 @@
 #  index_playlist_tracks_on_work_id      (work_id)
 #
 
-class Playlist::Track < ApplicationRecord
-  self.table_name = "playlist_tracks"
+class Playlist
+  class Track < ApplicationRecord
+    self.table_name = "playlist_tracks"
 
-  #############################################################################
-  # CONCERNING: Playlist.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Playlist.
+    #############################################################################
 
-  include Listable
+    include Listable
 
-  concerning :PlaylistAssociation do
-    included do
-      belongs_to :playlist, inverse_of: :tracks
+    concerning :PlaylistAssociation do
+      included do
+        belongs_to :playlist, inverse_of: :tracks
 
-      validates :playlist, presence: true
+        validates :playlist, presence: true
 
-      acts_as_listable(:playlist)
+        acts_as_listable(:playlist)
+      end
     end
-  end
 
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Work.
+    #############################################################################
 
-  concerning :WorkAssociation do
-    included do
-      belongs_to :work, inverse_of: :playlistings
+    concerning :WorkAssociation do
+      included do
+        belongs_to :work, inverse_of: :playlistings
 
-      validates :work, presence: true
+        validates :work, presence: true
+      end
     end
+
+    #############################################################################
+    # CONCERNING: Ginsu.
+    #############################################################################
+
+    scope :for_list, -> { sorted }
+    scope :for_show, -> { sorted.includes(:playlist, :work) }
   end
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list, -> { sorted }
-  scope :for_show, -> { sorted.includes(:playlist, :work) }
 end

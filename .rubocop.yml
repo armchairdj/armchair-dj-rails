@@ -735,7 +735,7 @@ Naming/FileName:
 
 Naming/HeredocDelimiterNaming:
   Blacklist:
-    - !ruby/regexp "/(^|\s)(EO[A-Z]{1}|END)(\s|$)/"
+    - !ruby/regexp '/(^|\s)(EO[A-Z]{1}|END)(\s|$)/'
 
 Naming/HeredocDelimiterCase:
   EnforcedStyle: uppercase
@@ -1022,7 +1022,7 @@ Style/ConditionalAssignment:
 #   AutocorrectNotice: "# Copyright (c) 2015 Yahoo! Inc."
 #
 Style/Copyright:
-  Notice: "^Copyright (\(c\) )?2[0-9]{3} .+"
+  Notice: '^Copyright (\(c\) )?2[0-9]{3} .+'
   AutocorrectNotice: ""
 
 Style/DocumentationMethod:
@@ -1526,7 +1526,7 @@ Style/WordArray:
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
   # The regular expression `WordRegex` decides what is considered a word.
-  WordRegex: !ruby/regexp "/\A[\p{Word}\n\t]+\z/"
+  WordRegex: !ruby/regexp '/\A[\p{Word}\n\t]+\z/'
 
 Style/YodaCondition:
   EnforcedStyle: forbid_for_all_comparison_operators
@@ -1541,7 +1541,7 @@ Style/YodaCondition:
 Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be an Integer or
   # a Float.
-  Max: 15
+  Max: 20 # TODO: Lower this over time.
   Exclude:
     - "db/migrate/**/*"
 
@@ -1551,7 +1551,7 @@ Metrics/BlockLength:
   ExcludedMethods: []
   Exclude:
     - "app/controllers/concerns/**/*"
-    - "app/models/concerns/**/*"
+    - "app/models/**/*"
     - "config/**/*"
     - "lib/tasks/**/*"
     - "spec/**/*_spec.rb"
@@ -1565,7 +1565,7 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   CountComments: false  # count full line comments?
-  Max: 100
+  Max: 250
 
 # Avoid complex methods.
 Metrics/CyclomaticComplexity:

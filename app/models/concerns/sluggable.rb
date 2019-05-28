@@ -127,11 +127,10 @@ private
   ### Automatic slug regeneration.
 
   def clear_slug_and_history_if_unpublished
-    if should_reset_slug_history?
-      reset_slug_history
+    return unless should_reset_slug_history?
 
-      regenerate_slug
-    end
+    reset_slug_history
+    regenerate_slug
   end
 
   def should_reset_slug_history?

@@ -25,12 +25,12 @@ module Ginsu
       @page = page || "1"
     end
 
-    def resolve
+    def resolved
       @resolved ||= prepare_relation.page(@page)
     end
 
     def display_count
-      count      = resolve.total_count
+      count      = resolved.total_count
       pluralized = "Total Record".pluralize(count)
 
       "#{count} #{pluralized}"
@@ -39,7 +39,7 @@ module Ginsu
   private
 
     def prepare_relation
-      @relation.send(@scoper.resolve).order(@sorter.resolve)
+      @relation.send(@scoper.resolved).order(@sorter.resolved)
     end
 
     def determine_model_class_even_with_sti

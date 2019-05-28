@@ -13,7 +13,7 @@ RSpec.describe "admin/posts/index" do
       3.times { create(:minimal_article) }
 
       @collection = assign(:collection, Ginsu::Collection.new(Article.all))
-      @articles   = assign(:articles, @collection.resolve)
+      @articles   = assign(:articles, @collection.resolved)
 
       allow(controller).to receive(:params).and_return(
         action:     "index",
@@ -35,7 +35,7 @@ RSpec.describe "admin/posts/index" do
       3.times { create(:minimal_mixtape) }
 
       @collection = assign(:collection, Ginsu::Collection.new(Mixtape.all))
-      @mixtapes   = assign(:mixtapes, @collection.resolve)
+      @mixtapes   = assign(:mixtapes, @collection.resolved)
 
       allow(controller).to receive(:params).and_return(
         action:     "index",
@@ -57,7 +57,7 @@ RSpec.describe "admin/posts/index" do
       3.times { create(:minimal_review) }
 
       @collection = assign(:collection, Ginsu::Collection.new(Review.all))
-      @reviews    = assign(:reviews, @collection.resolve)
+      @reviews    = assign(:reviews, @collection.resolved)
 
       allow(controller).to receive(:params).and_return(
         action:     "index",

@@ -175,7 +175,7 @@ class User < ApplicationRecord
     end
 
     def published?
-      can_write? && posts.published.count > 0
+      can_write? && posts.published.count.positive?
     end
   end
 

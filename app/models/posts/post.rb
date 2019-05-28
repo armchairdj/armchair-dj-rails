@@ -174,13 +174,16 @@ class Post < ApplicationRecord
     def handle_failed_transition
       return unless errors.any? && changing_publication_status?
 
-      if publishing? then handle_failed_publish
-      elsif unpublishing? then handle_failed_unpublish
-      elsif scheduling? then   handle_failed_schedule
-      elsif unscheduling? then handle_failed_unschedule
-      end
+      handle_failure
 
       clear_transition_flags
+    end
+
+    def handle_failure
+      return handle_failed_publish if publishing?
+      return handle_failed_unpublish if unpublishing?
+      return handle_failed_schedule if scheduling?
+      return handle_failed_unschedule if unscheduling?
     end
 
     def handle_failed_publish

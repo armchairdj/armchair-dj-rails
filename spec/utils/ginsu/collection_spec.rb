@@ -111,29 +111,29 @@ RSpec.describe Ginsu::Collection do
   end
 
   describe "instance" do
-    describe "#resolve" do
+    describe "#resolved" do
       let(:relation) { Creator.for_list }
       let(:instance) { described_class.new(relation, page: "2") }
 
-      subject { instance.resolve }
+      subject { instance.resolved }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
       it "resolves the scoper" do
-        expect(instance.scoper).to receive(:resolve).and_call_original
+        expect(instance.scoper).to receive(:resolved).and_call_original
 
         subject
       end
 
       it "resolves the sorter" do
-        expect(instance.sorter).to receive(:resolve).and_call_original
+        expect(instance.sorter).to receive(:resolved).and_call_original
 
         subject
       end
 
       it "rolls it all up and paginates" do
-        allow(instance.scoper).to receive(:resolve).and_return(:all)
-        allow(instance.sorter).to receive(:resolve).and_return("created_at DESC")
+        allow(instance.scoper).to receive(:resolved).and_return(:all)
+        allow(instance.sorter).to receive(:resolved).and_return("created_at DESC")
 
         expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with("created_at DESC").and_call_original
         expect(Creator).to receive(:all).at_least(:once).and_call_original
@@ -151,7 +151,7 @@ RSpec.describe Ginsu::Collection do
       subject { instance.display_count }
 
       before(:each) do
-        allow(instance).to receive(:resolve).and_return(collection)
+        allow(instance).to receive(:resolved).and_return(collection)
       end
 
       context "0 records" do

@@ -10,7 +10,7 @@ RSpec.describe "admin/works/index" do
 
     @model_class = assign(:model_name, Work)
     @collection = assign(:collection, Ginsu::Collection.new(Work.all))
-    @works = assign(:works, @collection.resolve)
+    @works = assign(:works, @collection.resolved)
   end
 
   it "renders a list of works" do

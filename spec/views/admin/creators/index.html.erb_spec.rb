@@ -10,7 +10,7 @@ RSpec.describe "admin/creators/index" do
 
     @model_class = assign(:model_name, Creator)
     @collection = assign(:collection, Ginsu::Collection.new(Creator.all))
-    @creators = assign(:creators, @collection.resolve)
+    @creators = assign(:creators, @collection.resolved)
   end
 
   it "renders a list of creators" do

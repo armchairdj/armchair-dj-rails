@@ -220,8 +220,7 @@ class Work < ApplicationRecord
       accepts_nested_attributes_for(:contributions, allow_destroy: true,
                                                     reject_if:     proc { |attrs| attrs["creator_id"].blank? })
 
-      validates_nested_uniqueness_of(:contributions,
-        uniq_attr: :creator_id, scope: [:role_id])
+      validates_nested_uniqueness_of(:contributions, uniq_attr: :creator_id, scope: [:role_id])
     end
 
     def prepare_contributions
@@ -244,8 +243,7 @@ class Work < ApplicationRecord
       accepts_nested_attributes_for(:source_relationships,
         allow_destroy: true, reject_if: :reject_source_relationship?)
 
-      validates_nested_uniqueness_of(:source_relationships,
-        uniq_attr: :source_id, scope: [:connection])
+      validates_nested_uniqueness_of(:source_relationships, uniq_attr: :source_id, scope: [:connection])
     end
 
     def prepare_source_relationships
@@ -274,8 +272,7 @@ class Work < ApplicationRecord
       accepts_nested_attributes_for(:target_relationships,
         allow_destroy: true, reject_if: :reject_target_relationship?)
 
-      validates_nested_uniqueness_of(:target_relationships,
-        uniq_attr: :target_id, scope: [:connection])
+      validates_nested_uniqueness_of(:target_relationships, uniq_attr: :target_id, scope: [:connection])
     end
 
     def prepare_target_relationships

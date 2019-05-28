@@ -18,8 +18,8 @@ RSpec.shared_examples "a_ginsu_scoper" do
       )
     end
 
-    describe "#resolve" do
-      subject { instance.resolve }
+    describe "#resolved" do
+      subject { instance.resolved }
 
       context "basics" do
         before(:each) do

@@ -23,15 +23,15 @@ private
   end
 
   def normalize_url(url)
-    is_internal_url(url) ? transform_internal_url(url) : url
+    internal_url?(url) ? transform_internal_url(url) : url
   end
 
-  def is_internal_url(url)
+  def internal_url?(url)
     url.match(INTERNAL_REGEXP)
   end
 
   def transform_internal_url(url)
-    match, model_name, id = url.match(LINK_REGEXP).to_a
+    _match, model_name, id = url.match(LINK_REGEXP).to_a
 
     raise ArgumentError unless model_name && id
 

@@ -10,7 +10,7 @@ RSpec.describe "admin/tags/index" do
 
     @model_class = assign(:model_name, Tag)
     @collection = assign(:collection, Ginsu::Collection.new(Tag.all))
-    @tags = assign(:tags, @collection.resolve)
+    @tags = assign(:tags, @collection.resolved)
   end
 
   it "renders a list of tags" do

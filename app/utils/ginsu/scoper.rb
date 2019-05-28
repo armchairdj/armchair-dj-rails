@@ -14,7 +14,7 @@ module Ginsu
       super(current_scope: current_scope, current_sort: current_sort, current_dir: current_dir)
     end
 
-    def resolve
+    def resolved
       validate
 
       allowed[@current_scope]

@@ -32,7 +32,7 @@ private
 
   def determine_model_class
     @model_class ||= controller_name.classify.constantize
-  rescue NameError => e
+  rescue NameError
     @model_class = nil
   end
 

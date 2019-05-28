@@ -10,7 +10,7 @@ RSpec.describe "admin/roles/index" do
 
     @model_class = assign(:model_name, Role)
     @collection = assign(:collection, Ginsu::Collection.new(Role.all))
-    @roles = assign(:roles, @collection.resolve)
+    @roles = assign(:roles, @collection.resolved)
   end
 
   it "renders a list of roles" do
