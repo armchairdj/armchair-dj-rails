@@ -105,7 +105,7 @@ RSpec.shared_examples "a_ginsu_sorter" do
         context "when current_dir is DESC" do
           let(:mapped) { described_class.new(current_dir: "DESC").map }
 
-          it { mapped; is_expected.to have(1).items }
+          it { is_expected.to have(1).items }
         end
       end
     end
