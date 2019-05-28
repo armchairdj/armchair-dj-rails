@@ -37,9 +37,9 @@ RSpec.describe Admin::AspectsController do
       let(:bad_params) { attributes_for(:minimal_aspect).except(:name) }
 
       context "with min valid params" do
-        subject { post :create, params: { aspect: min_params } }
+        subject(:send_request) { post :create, params: { aspect: min_params } }
 
-        it { expect { subject }.to change(Aspect, :count).by(1) }
+        it { expect { send_request }.to change(Aspect, :count).by(1) }
 
         it { is_expected.to assign(Aspect.last, :aspect).with_attributes(min_params).and_be_valid }
 
@@ -49,27 +49,23 @@ RSpec.describe Admin::AspectsController do
       end
 
       context "with invalid params" do
-        subject { send_request }
-
-        let(:send_request) { post :create, params: { aspect: bad_params } }
+        subject(:send_request) { post :create, params: { aspect: bad_params } }
 
         it { is_expected.to successfully_render("admin/aspects/new") }
 
-        describe "instance" do
-          subject do
-            send_request
-            assigns(:aspect)
-          end
+        it "assigns ivars" do
+          send_request
 
-          it { is_expected.to be_invalid }
+          actual = assigns(:aspect)
 
-          it { is_expected.to have_coerced_attributes(bad_params) }
+          expect(actual).to be_invalid
+          expect(actual).to have_coerced_attributes(bad_params)
         end
       end
     end
 
     describe "GET #edit" do
-      before { get :edit, params: { id: instance.to_param } }
+      subject(:send_request) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/aspects/edit") }
 
@@ -81,7 +77,7 @@ RSpec.describe Admin::AspectsController do
       let(:bad_update_params) { { name: "" } }
 
       context "with valid params" do
-        before do
+        subject(:send_requst) do
           put :update, params: { id: instance.to_param, aspect: update_params }
         end
 
@@ -93,7 +89,7 @@ RSpec.describe Admin::AspectsController do
       end
 
       context "with invalid params" do
-        before do
+        subject(:send_requst) do
           put :update, params: { id: instance.to_param, aspect: bad_update_params }
         end
 
@@ -104,11 +100,11 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "DELETE #destroy" do
-      subject { delete :destroy, params: { id: instance.to_param } }
+      subject(:send_request) { delete :destroy, params: { id: instance.to_param } }
 
       let!(:instance) { create(:minimal_aspect) }
 
-      it { expect { subject }.to change(Aspect, :count).by(-1) }
+      it { expect { send_request }.to change(Aspect, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_aspects_path) }
 

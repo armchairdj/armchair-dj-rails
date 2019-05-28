@@ -6,7 +6,7 @@ RSpec.describe "admin/tags/index" do
   login_root
 
   before do
-    3.times { create(:minimal_tag) }
+    create_list(:minimal_tag, 3)
 
     @model_class = assign(:model_name, Tag)
     @collection = assign(:collection, Ginsu::Collection.new(Tag.all))

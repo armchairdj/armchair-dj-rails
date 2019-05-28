@@ -1839,14 +1839,32 @@ Rails/Validation:
 
 #################### Rspec ###########################
 
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - "spec/views/**/*"
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
 RSpec/ExampleLength:
   Max: 20
 
 RSpec/ExpectInHook:
   Enabled: false
 
+RSpec/FilePath:
+  Exclude:
+    - "spec/routing/**/*"
+
 RSpec/ImplicitSubject:
   Enabled: false
+
+RSpec/InstanceVariable:
+  Exclude:
+    - "spec/views/**/*"
 
 RSpec/MessageSpies:
   Enabled: false

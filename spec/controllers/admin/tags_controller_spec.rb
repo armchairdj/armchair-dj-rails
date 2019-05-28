@@ -25,12 +25,12 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "GET #new" do
-      subject { get :new }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/tags/new") }
 
       it "assigns ivars" do
-        subject
+        send_request
         expect(assigns(:tag)).to be_a_new(Tag)
       end
     end
@@ -40,9 +40,9 @@ RSpec.describe Admin::TagsController do
       let(:bad_params) { attributes_for(:minimal_tag).except(:name) }
 
       context "with min valid params" do
-        subject { post :create, params: { tag: min_params } }
+        subject(:send_request) { post :create, params: { tag: min_params } }
 
-        it { expect { subject }.to change(Tag, :count).by(1) }
+        it { expect { send_request }.to change(Tag, :count).by(1) }
 
         it { is_expected.to assign(Tag.last, :tag).with_attributes(min_params).and_be_valid }
 
@@ -105,11 +105,11 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "DELETE #destroy" do
-      subject { delete :destroy, params: { id: tag.to_param } }
+      subject(:send_request) { delete :destroy, params: { id: tag.to_param } }
 
       let!(:tag) { create(:minimal_tag) }
 
-      it { expect { subject }.to change(Tag, :count).by(-1) }
+      it { expect { send_request }.to change(Tag, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_tags_path) }
 

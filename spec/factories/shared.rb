@@ -83,9 +83,7 @@ FactoryBot.define do
       tag_count { 3 }
     end
 
-    tag_ids do
-      create_list(:minimal_tag, 3).map(&:id)
-    end
+    tag_ids { create_list(:minimal_tag, 3).map(&:id) }
   end
 
   trait :with_links do

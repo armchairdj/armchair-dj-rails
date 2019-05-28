@@ -6,7 +6,7 @@ RSpec.describe "admin/roles/index" do
   login_root
 
   before do
-    3.times { create(:minimal_role) }
+    create_list(:minimal_role, 3)
 
     @model_class = assign(:model_name, Role)
     @collection = assign(:collection, Ginsu::Collection.new(Role.all))

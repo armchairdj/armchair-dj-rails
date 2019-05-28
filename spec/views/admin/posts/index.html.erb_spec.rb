@@ -10,7 +10,7 @@ RSpec.describe "admin/posts/index" do
       @view_path   = assign(:view_path, "articles")
       @model_class = assign(:model_name, Article)
 
-      3.times { create(:minimal_article) }
+      create_list(:minimal_article, 3)
 
       @collection = assign(:collection, Ginsu::Collection.new(Article.all))
       @articles   = assign(:articles, @collection.resolved)
@@ -32,7 +32,7 @@ RSpec.describe "admin/posts/index" do
       @view_path   = assign(:view_path, "mixtapes")
       @model_class = assign(:model_name, Mixtape)
 
-      3.times { create(:minimal_mixtape) }
+      create_list(:minimal_mixtape, 3)
 
       @collection = assign(:collection, Ginsu::Collection.new(Mixtape.all))
       @mixtapes   = assign(:mixtapes, @collection.resolved)
@@ -54,7 +54,7 @@ RSpec.describe "admin/posts/index" do
       @view_path   = assign(:view_path, "reviews")
       @model_class = assign(:model_name, Review)
 
-      3.times { create(:minimal_review) }
+      create_list(:minimal_review, 3)
 
       @collection = assign(:collection, Ginsu::Collection.new(Review.all))
       @reviews    = assign(:reviews, @collection.resolved)

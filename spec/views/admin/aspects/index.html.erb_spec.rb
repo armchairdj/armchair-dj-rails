@@ -6,7 +6,7 @@ RSpec.describe "admin/aspects/index" do
   login_root
 
   before do
-    3.times { create(:minimal_aspect) }
+    create_list(:minimal_aspect, 3)
 
     @model_class = assign(:model_name, Aspect)
     @collection = assign(:collection, Ginsu::Collection.new(Aspect.all))

@@ -28,24 +28,24 @@ RSpec.describe UrlnessValidator do
 
   describe "invalid" do
     context "with a non-URI" do
-      subject { ClassWithUrl.new(url: "not a url") }
+      subject(:instance) { ClassWithUrl.new(url: "not a url") }
 
       it { is_expected.to_not be_valid }
 
       it "has error message" do
-        subject.valid?
+        instance.valid?
 
         is_expected.to have_error(url: :not_a_url)
       end
     end
 
     context "with a non-URL URI" do
-      subject { ClassWithUrl.new(url: "protocol://foo/bar/bat") }
+      subject(:instance) { ClassWithUrl.new(url: "protocol://foo/bar/bat") }
 
       it { is_expected.to_not be_valid }
 
       it "has error message" do
-        subject.valid?
+        instance.valid?
 
         is_expected.to have_error(url: :not_a_url)
       end

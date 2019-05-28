@@ -6,7 +6,7 @@ RSpec.describe "admin/creators/index" do
   login_root
 
   before do
-    3.times { create(:minimal_creator) }
+    create_list(:minimal_creator, 3)
 
     @model_class = assign(:model_name, Creator)
     @collection = assign(:collection, Ginsu::Collection.new(Creator.all))

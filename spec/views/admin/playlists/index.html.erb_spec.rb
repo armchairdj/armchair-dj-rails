@@ -6,7 +6,7 @@ RSpec.describe "admin/playlists/index" do
   login_root
 
   before do
-    3.times { create(:minimal_playlist) }
+    create_list(:minimal_playlist, 3)
 
     @model_class = assign(:model_name, Playlist)
     @collection = assign(:collection, Ginsu::Collection.new(Playlist.all))

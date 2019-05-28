@@ -6,7 +6,7 @@ RSpec.describe "admin/works/index" do
   login_root
 
   before do
-    3.times { create(:minimal_song) }
+    create_list(:minimal_song, 3)
 
     @model_class = assign(:model_name, Work)
     @collection = assign(:collection, Ginsu::Collection.new(Work.all))

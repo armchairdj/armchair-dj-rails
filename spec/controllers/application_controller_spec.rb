@@ -6,9 +6,7 @@ RSpec.describe ApplicationController do
   class PostsController < ApplicationController; end
   class FoosController < ApplicationController; end
 
-  describe "concerns" do
-    it_behaves_like "an_errorable_controller"
-  end
+  it_behaves_like "an_errorable_controller"
 
   describe "Pundit integration" do
     it "includes pundit" do
@@ -67,89 +65,83 @@ RSpec.describe ApplicationController do
     end
   end
 
-  describe "included" do
-    describe "add_flash_types" do
-      describe "error" do
-        controller do
-          def index
-            redirect_to "/", error: "error"
-          end
-        end
-
-        it "is available" do
-          get :index
-
-          expect(controller).to set_flash[:error].to("error")
+  describe "flash types" do
+    describe "error" do
+      controller do
+        def index
+          redirect_to "/", error: "error"
         end
       end
 
-      describe "success" do
-        controller do
-          def index
-            redirect_to "/", success: "success"
-          end
-        end
+      it "is available" do
+        get :index
 
-        it "is available" do
-          get :index
+        expect(controller).to set_flash[:error].to("error")
+      end
+    end
 
-          expect(controller).to set_flash[:success].to("success")
+    describe "success" do
+      controller do
+        def index
+          redirect_to "/", success: "success"
         end
       end
 
-      describe "info" do
-        controller do
-          def index
-            redirect_to "/", info: "info"
-          end
-        end
+      it "is available" do
+        get :index
 
-        it "is available" do
-          get :index
+        expect(controller).to set_flash[:success].to("success")
+      end
+    end
 
-          expect(controller).to set_flash[:info].to("info")
+    describe "info" do
+      controller do
+        def index
+          redirect_to "/", info: "info"
         end
+      end
+
+      it "is available" do
+        get :index
+
+        expect(controller).to set_flash[:info].to("info")
       end
     end
   end
 
-  describe "instance" do
-    describe "private" do
-      describe "#determine_model_class" do
-        context "with model-backed controllers" do
-          subject { PostsController.new.send(:determine_model_class) }
+  describe "#determine_model_class" do
+    context "with model-backed controllers" do
+      subject { PostsController.new.send(:determine_model_class) }
 
-          it { is_expected.to eq(Post) }
-        end
+      it { is_expected.to eq(Post) }
+    end
 
-        context "with non-model-backed controllers" do
-          subject { FoosController.new.send(:determine_model_class) }
+    context "with non-model-backed controllers" do
+      subject { FoosController.new.send(:determine_model_class) }
 
-          it { is_expected.to eq(nil) }
-        end
+      it { is_expected.to eq(nil) }
+    end
 
-        describe "before_action" do
-          controller do
-            def index
-              render json: {}, status: :ok
-            end
-          end
-
-          it "is called automatically" do
-            expect(controller).to receive(:determine_model_class)
-
-            get :index
-          end
+    describe "before_action" do
+      controller do
+        def index
+          render json: {}, status: :ok
         end
       end
 
-      describe "#determine_layout" do
-        subject { controller.send(:determine_layout) }
+      it "is called automatically" do
+        expect(controller).to receive(:determine_model_class)
 
-        it "sets the default layout" do
-          is_expected.to eq("public")
-        end
+        get :index
       end
+    end
+  end
+
+  describe "#determine_layout" do
+    subject { controller.send(:determine_layout) }
+
+    it "sets the default layout" do
+      is_expected.to eq("public")
     end
   end
 end

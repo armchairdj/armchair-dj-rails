@@ -52,24 +52,24 @@ RSpec.describe YearnessValidator do
 
   describe "invalid" do
     context "with a negative year" do
-      subject { ClassWithYear.new(year: "-911") }
+      subject(:instance) { ClassWithYear.new(year: "-911") }
 
       it { is_expected.to_not be_valid }
 
       it "has error message" do
-        subject.valid?
+        instance.valid?
 
         is_expected.to have_error(year: :not_a_year)
       end
     end
 
     context "with a string" do
-      subject { ClassWithYear.new(year: "foo") }
+      subject(:instance) { ClassWithYear.new(year: "foo") }
 
       it { is_expected.to_not be_valid }
 
       it "has error message" do
-        subject.valid?
+        instance.valid?
 
         is_expected.to have_error(year: :not_a_year)
       end

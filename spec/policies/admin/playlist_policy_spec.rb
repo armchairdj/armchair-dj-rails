@@ -11,6 +11,6 @@ RSpec.describe Admin::PlaylistPolicy do
     let(:record) { stub_minimal_instance }
     let(:user) { build_stubbed(:user) }
 
-    it { should have_aliased_method(:update?, :reorder_tracks?) }
+    it { is_expected.to have_aliased_method(:update?, :reorder_tracks?) }
   end
 end

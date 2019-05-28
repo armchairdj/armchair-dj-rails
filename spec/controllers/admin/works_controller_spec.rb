@@ -17,21 +17,22 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "GET #show" do
-      subject { get :show, params: { id: instance.to_param } }
+      subject(:send_request) { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/works/show") }
       it { is_expected.to assign(instance, :work) }
     end
 
     describe "GET #new" do
-      subject { get :new }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/works/new") }
 
       it { is_expected.to prepare_the_initial_form }
 
       it "assigns ivars" do
-        subject
+        send_request
+
         expect(assigns(:work)).to be_a_new(Work)
       end
     end
@@ -56,12 +57,12 @@ RSpec.describe Admin::WorksController do
       let(:bad_params) { attributes_for(:junior_boys_like_a_child_c2_remix, medium: "Song").except(:title) }
 
       context "with initial params" do
-        subject { post :create, params: { step: "select_medium", work: initial_params } }
+        subject(:send_request) { post :create, params: { step: "select_medium", work: initial_params } }
 
         it { is_expected.to successfully_render("admin/works/new") }
 
         it "sets up the work" do
-          subject
+          send_request
 
           actual = assigns(:work)
 
@@ -73,13 +74,13 @@ RSpec.describe Admin::WorksController do
       end
 
       context "with valid params" do
-        subject { post :create, params: { work: max_params } }
+        subject(:send_request) { post :create, params: { work: max_params } }
 
-        it { expect { subject }.to change(Work,               :count).by(1) }
-        it { expect { subject }.to change(Work::Relationship, :count).by(2) }
-        it { expect { subject }.to change(Work::Milestone,    :count).by(1) }
-        it { expect { subject }.to change(Credit,             :count).by(1) }
-        it { expect { subject }.to change(Contribution,       :count).by(1) }
+        it { expect { send_request }.to change(Work,               :count).by(1) }
+        it { expect { send_request }.to change(Work::Relationship, :count).by(2) }
+        it { expect { send_request }.to change(Work::Milestone,    :count).by(1) }
+        it { expect { send_request }.to change(Credit,             :count).by(1) }
+        it { expect { send_request }.to change(Contribution,       :count).by(1) }
 
         it { is_expected.to assign(Work.last, :work).with_attributes(max_params).and_be_valid }
 
@@ -89,31 +90,26 @@ RSpec.describe Admin::WorksController do
       end
 
       context "with invalid params" do
-        let(:send_request) { post :create, params: { work: bad_params } }
+        subject(:send_request) { post :create, params: { work: bad_params } }
 
         it { expect { send_request }.to_not change(Work, :count) }
 
-        describe "response" do
-          subject { send_request }
+        it { is_expected.to successfully_render("admin/works/new") }
+        it { is_expected.to prepare_the_complete_form }
 
-          it { is_expected.to successfully_render("admin/works/new") }
-          it { is_expected.to prepare_the_complete_form }
-        end
+        it "sets invalid params" do
+          send_request
 
-        describe "instance" do
-          subject do
-            send_request
-            assigns(:work)
-          end
+          actual = assigns(:work)
 
-          it { is_expected.to have_coerced_attributes(bad_params) }
-          it { is_expected.to be_invalid }
+          expect(actual).to have_coerced_attributes(bad_params)
+          expect(actual).to be_invalid
         end
       end
     end
 
     describe "GET #edit" do
-      subject { get :edit, params: { id: instance.to_param } }
+      subject(:send_request) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/works/edit") }
 
@@ -127,7 +123,7 @@ RSpec.describe Admin::WorksController do
       let(:bad_update_params) { { title: "" } }
 
       context "with valid params" do
-        subject { put :update, params: { id: instance.to_param, work: update_params } }
+        subject(:send_request) { put :update, params: { id: instance.to_param, work: update_params } }
 
         it { is_expected.to assign(instance, :work).with_attributes(update_params).and_be_valid }
 
@@ -137,7 +133,7 @@ RSpec.describe Admin::WorksController do
       end
 
       context "with invalid params" do
-        subject { put :update, params: { id: instance.to_param, work: bad_update_params } }
+        subject(:send_request) { put :update, params: { id: instance.to_param, work: bad_update_params } }
 
         it { is_expected.to successfully_render("admin/works/edit") }
 
@@ -148,7 +144,7 @@ RSpec.describe Admin::WorksController do
     end
 
     describe "DELETE #destroy" do
-      subject { delete :destroy, params: { id: instance.to_param } }
+      subject(:send_request) { delete :destroy, params: { id: instance.to_param } }
 
       let!(:source_work) { create(:junior_boys_like_a_child) }
 
@@ -158,11 +154,11 @@ RSpec.describe Admin::WorksController do
         })
       end
 
-      it { expect { subject }.to change(Work,               :count).by(-1) }
-      it { expect { subject }.to change(Work::Milestone,    :count).by(-1) }
-      it { expect { subject }.to change(Work::Relationship, :count).by(-1) }
-      it { expect { subject }.to change(Credit,             :count).by(-1) }
-      it { expect { subject }.to change(Contribution,       :count).by(-1) }
+      it { expect { send_request }.to change(Work,               :count).by(-1) }
+      it { expect { send_request }.to change(Work::Milestone,    :count).by(-1) }
+      it { expect { send_request }.to change(Work::Relationship, :count).by(-1) }
+      it { expect { send_request }.to change(Credit,             :count).by(-1) }
+      it { expect { send_request }.to change(Contribution,       :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_works_path) }
 
@@ -174,7 +170,7 @@ RSpec.describe Admin::WorksController do
       let(:shuffled) { instance.credits.ids.shuffle }
 
       describe "non-xhr" do
-        subject do
+        subject(:send_request) do
           post :reorder_credits, params: { id: instance.to_param, credit_ids: shuffled }
         end
 
@@ -182,21 +178,18 @@ RSpec.describe Admin::WorksController do
       end
 
       describe "xhr" do
-        subject { send_request }
-
-        let(:send_request) do
+        subject(:send_request) do
           post :reorder_credits, xhr: true, params: { id: instance.to_param, credit_ids: shuffled }
         end
 
         it { expect(response).to have_http_status(200) }
 
-        describe "reordering" do
-          subject do
-            send_request
-            instance.reload.credits.ids
-          end
+        it "reorders" do
+          send_request
 
-          it { is_expected.to eq(shuffled) }
+          actual = instance.reload.credits.ids
+
+          expect(actual).to eq(shuffled)
         end
       end
     end

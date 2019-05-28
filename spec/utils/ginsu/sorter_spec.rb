@@ -91,9 +91,7 @@ RSpec.describe Ginsu::Sorter do
 
   describe "#constructor" do
     before do
-      allow_any_instance_of(described_class).to receive(:allowed).and_return(
-        "Default" => "created_at DESC"
-      )
+      allow_any_instance_of(described_class).to receive(:allowed).and_return("Default" => "created_at DESC")
     end
 
     context "with defaults" do

@@ -10,7 +10,7 @@ RSpec.describe "admin/posts/edit" do
       @view_path   = assign(:view_path, "articles")
       @model_class = assign(:model_name, Article)
 
-      3.times { create(:minimal_tag) }
+      create_list(:minimal_tag, 3)
 
       @tags = assign(:tags, Tag.all.alpha)
 

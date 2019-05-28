@@ -15,7 +15,7 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "GET #show" do
-      subject { get :show, params: { id: user.to_param } }
+      subject(:send_request) { get :show, params: { id: user.to_param } }
 
       let(:user) { create(:minimal_user) }
 
@@ -24,12 +24,13 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "GET #new" do
-      subject { get :new }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/users/new") }
 
       it "assigns ivars" do
-        subject
+        send_request
+
         expect(assigns(:user)).to be_a_new(User)
       end
     end
@@ -39,9 +40,9 @@ RSpec.describe Admin::UsersController do
       let(:bad_params) { attributes_for(:complete_user).except(:first_name) }
 
       context "with valid params" do
-        subject { post :create, params: { user: valid_params } }
+        subject(:send_request) { post :create, params: { user: valid_params } }
 
-        it { expect { subject }.to change(User, :count).by(1) }
+        it { expect { send_request }.to change(User, :count).by(1) }
 
         it { is_expected.to assign(User.last, :user).with_attributes(valid_params).and_be_valid }
 
@@ -51,12 +52,12 @@ RSpec.describe Admin::UsersController do
       end
 
       context "with invalid params" do
-        subject { post :create, params: { user: bad_params } }
+        subject(:send_request) { post :create, params: { user: bad_params } }
 
         it { is_expected.to successfully_render("admin/users/new") }
 
         it "persists invalid user" do
-          subject
+          send_request
 
           actual = assigns(:user)
 
@@ -67,7 +68,7 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "GET #edit" do
-      subject { get :edit, params: { id: user.to_param } }
+      subject(:send_request) { get :edit, params: { id: user.to_param } }
 
       let(:user) { create(:minimal_user) }
 
@@ -83,7 +84,7 @@ RSpec.describe Admin::UsersController do
       let(:bad_params) { { first_name: "" } }
 
       context "with valid params" do
-        subject do
+        subject(:send_request) do
           put :update, params: { id: user.to_param, user: valid_params }
         end
 
@@ -95,7 +96,7 @@ RSpec.describe Admin::UsersController do
       end
 
       context "with invalid params" do
-        subject do
+        subject(:send_request) do
           put :update, params: { id: user.to_param, user: bad_params }
         end
 
@@ -106,11 +107,11 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "DELETE #destroy" do
-      subject { delete :destroy, params: { id: user.to_param } }
+      subject(:send_request) { delete :destroy, params: { id: user.to_param } }
 
       let!(:user) { create(:minimal_user) }
 
-      it { expect { subject }.to change(User, :count).by(-1) }
+      it { expect { send_request }.to change(User, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_users_path) }
 

@@ -13,9 +13,9 @@ RSpec.describe Posts::PostsController do
 
   describe "GET #feed" do
     before do
-      34.times { create(:minimal_article, :published) }
-      34.times { create(:minimal_review,  :published) }
-      34.times { create(:minimal_mixtape, :published) }
+      create_list(:minimal_article, 34, :published)
+      create_list(:minimal_review, 34, :published)
+      create_list(:minimal_mixtape, 34, :published)
     end
 
     it "renders last 100 published posts as rss" do

@@ -39,27 +39,25 @@ RSpec.describe Ginsu::Collection do
       end
     end
 
-    context "with an STI model" do
-      context "with multiple subclasses but one controller" do
-        before do
-          expect(WorkScoper).to receive(:new)
-          expect(WorkSorter).to receive(:new)
-        end
-
-        it "builds scopers and sorters based on the relation's superclass" do
-          described_class.new(Song.for_list)
-        end
+    context "with and STI model with multiple subclasses but one controller" do
+      before do
+        expect(WorkScoper).to receive(:new)
+        expect(WorkSorter).to receive(:new)
       end
 
-      context "with multiple subclasses and controllers" do
-        before do
-          expect(ArticleScoper).to receive(:new)
-          expect(ArticleSorter).to receive(:new)
-        end
+      it "builds scopers and sorters based on the relation's superclass" do
+        described_class.new(Song.for_list)
+      end
+    end
 
-        it "builds scopers and sorters based on the relation's class" do
-          described_class.new(Article.for_list)
-        end
+    context "with and STI model with multiple subclasses and controllers" do
+      before do
+        expect(ArticleScoper).to receive(:new)
+        expect(ArticleSorter).to receive(:new)
+      end
+
+      it "builds scopers and sorters based on the relation's class" do
+        described_class.new(Article.for_list)
       end
     end
 
@@ -94,80 +92,81 @@ RSpec.describe Ginsu::Collection do
       describe "@page" do
         subject { instance.instance_variable_get(:"@page") }
 
-        context "with default value" do
-          it { is_expected.to eq("1") }
+        it "uses default value" do
+          is_expected.to eq("1")
         end
 
-        context "with specific value" do
-          let(:instance) { described_class.new(relation, page: "2") }
+        it "allows specific value" do
+          instance = described_class.new(relation, page: "2")
 
-          it { is_expected.to eq("2") }
+          actual = instance.instance_variable_get(:"@page")
+
+          expect(actual).to eq("2")
         end
       end
     end
   end
 
-  describe "instance" do
-    describe "#resolved" do
-      subject { instance.resolved }
+  describe "#resolved" do
+    subject(:call_method) { instance.resolved }
 
-      let(:relation) { Creator.for_list }
-      let(:instance) { described_class.new(relation, page: "2") }
+    let(:relation) { Creator.for_list }
+    let(:instance) { described_class.new(relation, page: "2") }
 
-      it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
+    it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
-      it "resolves the scoper" do
-        expect(instance.scoper).to receive(:resolved).and_call_original
+    it "resolves the scoper" do
+      expect(instance.scoper).to receive(:resolved).and_call_original
 
-        subject
-      end
-
-      it "resolves the sorter" do
-        expect(instance.sorter).to receive(:resolved).and_call_original
-
-        subject
-      end
-
-      it "rolls it all up and paginates" do
-        allow(instance.scoper).to receive(:resolved).and_return(:all)
-        allow(instance.sorter).to receive(:resolved).and_return("created_at DESC")
-
-        expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with("created_at DESC").and_call_original
-        expect(Creator).to receive(:all).at_least(:once).and_call_original
-        expect(Creator).to receive(:page).with("2").and_call_original
-
-        subject
-      end
+      call_method
     end
 
-    describe "#display_count" do
-      subject { instance.display_count }
+    it "resolves the sorter" do
+      expect(instance.sorter).to receive(:resolved).and_call_original
 
-      let(:relation) { Creator.for_list }
-      let(:instance) { described_class.new(relation) }
-      let(:collection) { double }
+      call_method
+    end
 
-      before do
-        allow(instance).to receive(:resolved).and_return(collection)
-      end
+    it "rolls it all up and paginates" do
+      allow(instance.scoper).to receive(:resolved).and_return(:all)
+      allow(instance.sorter).to receive(:resolved).and_return("created_at DESC")
 
-      context "with 0 records" do
-        before { allow(collection).to receive(:total_count).and_return(0) }
+      expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with("created_at DESC").and_call_original
 
-        it { is_expected.to eq("0 Total Records") }
-      end
+      expect(Creator).to receive(:all).at_least(:once).and_call_original
+      expect(Creator).to receive(:page).with("2").and_call_original
 
-      context "with 1 record" do
-        before { allow(collection).to receive(:total_count).and_return(1) }
+      call_method
+    end
+  end
 
-        it { is_expected.to eq("1 Total Record") }
-      end
+  describe "#display_count" do
+    subject { instance.display_count }
 
-      context "with >1 records" do
-        before { allow(collection).to receive(:total_count).and_return(2) }
+    let(:relation) { Creator.for_list }
+    let(:instance) { described_class.new(relation) }
+    let(:collection) { double }
 
-        it { is_expected.to eq("2 Total Records") }
-      end
+    before do
+      allow(instance).to receive(:resolved).and_return(collection)
+    end
+
+    context "with 0 records" do
+      before { allow(collection).to receive(:total_count).and_return(0) }
+
+      it { is_expected.to eq("0 Total Records") }
+    end
+
+    context "with 1 record" do
+      before { allow(collection).to receive(:total_count).and_return(1) }
+
+      it { is_expected.to eq("1 Total Record") }
+    end
+
+    context "with >1 records" do
+      before { allow(collection).to receive(:total_count).and_return(2) }
+
+      it { is_expected.to eq("2 Total Records") }
     end
   end
 end

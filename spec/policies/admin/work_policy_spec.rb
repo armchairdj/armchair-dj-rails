@@ -11,6 +11,6 @@ RSpec.describe Admin::WorkPolicy do
     let(:record) { stub_minimal_instance }
     let(:user) { build_stubbed(:user) }
 
-    it { should have_aliased_method(:update?, :reorder_credits?) }
+    it { is_expected.to have_aliased_method(:update?, :reorder_credits?) }
   end
 end
