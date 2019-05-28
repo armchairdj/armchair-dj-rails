@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/creators/new" do
   login_root
 
-  before(:each) do
+  before do
     2.times do
       create(:minimal_creator, :primary,   :collective)
       create(:minimal_creator, :primary,   :individual)

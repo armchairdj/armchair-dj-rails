@@ -149,13 +149,13 @@ RSpec.shared_examples "a_sluggable_model" do
             end
 
             describe "false even if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
+              before { instance.clear_slug = true }
 
               it { is_expected.to eq(false) }
             end
 
             describe "false even if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
+              before { instance.clear_slug = "1" }
 
               it { is_expected.to eq(false) }
             end
@@ -169,13 +169,13 @@ RSpec.shared_examples "a_sluggable_model" do
             end
 
             describe "false even if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
+              before { instance.clear_slug = true }
 
               it { is_expected.to eq(false) }
             end
 
             describe "false even if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
+              before { instance.clear_slug = "1" }
 
               it { is_expected.to eq(false) }
             end
@@ -189,13 +189,13 @@ RSpec.shared_examples "a_sluggable_model" do
             end
 
             describe "true if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
+              before { instance.clear_slug = true }
 
               it { is_expected.to eq(true) }
             end
 
             describe "true if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
+              before { instance.clear_slug = "1" }
 
               it { is_expected.to eq(true) }
             end
@@ -227,13 +227,13 @@ RSpec.shared_examples "a_sluggable_model" do
         describe "slug regeneration (#handle_clear_slug_checkbox and #clear_slug_and_history_if_unpublished" do
           let(:instance) { create_minimal_instance }
 
-          before(:each) do
+          before do
             allow(instance).to receive(:slug_candidates).and_call_original
             allow(instance).to receive(:reset_slug_history).and_call_original
           end
 
           context "clear_slug? is true" do
-            before(:each) do
+            before do
               allow(instance).to receive(:should_clear_slug?).and_return(true)
               allow(instance).to receive(:should_reset_slug_history?).and_return(false)
             end
@@ -247,7 +247,7 @@ RSpec.shared_examples "a_sluggable_model" do
           end
 
           context "should_reset_slug_history? is true" do
-            before(:each) do
+            before do
               allow(instance).to receive(:should_clear_slug?).and_return(false)
               allow(instance).to receive(:should_reset_slug_history?).and_return(true)
             end
@@ -261,7 +261,7 @@ RSpec.shared_examples "a_sluggable_model" do
           end
 
           context "both are false" do
-            before(:each) do
+            before do
               allow(instance).to receive(:should_clear_slug?).and_return(false)
               allow(instance).to receive(:should_reset_slug_history?).and_return(false)
             end
@@ -289,7 +289,7 @@ RSpec.shared_examples "a_sluggable_model" do
           describe "basic characters" do
             let!(:instances) { [one, two, three] }
 
-            before(:each) do
+            before do
               instances.each do |instance|
                 allow(instance).to receive(:sluggable_parts).and_return(["foo", "bar", "bat"])
 
@@ -305,7 +305,7 @@ RSpec.shared_examples "a_sluggable_model" do
           describe "special characters" do
             let!(:instances) { [one, two, three] }
 
-            before(:each) do
+            before do
               instances.each do |instance|
                 allow(instance).to receive(:sluggable_parts).and_return(["Salt-n-Pepa", "Blacks' Magic", "???"])
 

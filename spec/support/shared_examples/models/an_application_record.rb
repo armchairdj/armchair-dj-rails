@@ -20,9 +20,9 @@ RSpec.shared_examples "an_application_record" do
       end
 
       context "with full array of ids" do
+        subject { described_class.find_by_sorted_ids(ids) }
         let(:ids) { [instances[1].id, instances[0].id, instances[2].id] }
 
-        subject { described_class.find_by_sorted_ids(ids) }
 
         it "gives relation ordered by array order" do
           is_expected.to be_a_kind_of(ActiveRecord::Relation)
@@ -36,9 +36,9 @@ RSpec.shared_examples "an_application_record" do
       end
 
       context "with empty array of ids" do
+        subject { described_class.find_by_sorted_ids(ids) }
         let(:ids) { [] }
 
-        subject { described_class.find_by_sorted_ids(ids) }
 
         it "gives empty relation" do
           is_expected.to eq(described_class.none)

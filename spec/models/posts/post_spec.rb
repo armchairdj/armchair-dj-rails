@@ -23,9 +23,9 @@ RSpec.describe Post do
 
   describe "status" do
     describe "default value" do
+      subject { instance.status }
       let(:instance) { described_class.new }
 
-      subject { instance.status }
 
       it { is_expected.to eq("draft") }
     end
@@ -47,7 +47,7 @@ RSpec.describe Post do
         it { is_expected.to validate_absence_of(:published_at) }
 
         describe "when publish_on is in the past" do
-          before(:each) do
+          before do
             subject.publish_on = Date.today - 1
             subject.valid?
           end
@@ -147,7 +147,7 @@ RSpec.describe Post do
 
       let(:renderer) { double }
 
-      before(:each) do
+      before do
         allow(instance).to receive(:renderer).and_return(renderer)
         allow(renderer).to receive(:render).and_return("rendered markdown")
       end
@@ -317,6 +317,7 @@ RSpec.describe Post do
 
   describe "public vs. admin" do
     describe "self#for_public" do
+      subject { collection.for_public }
       let(:draft) { create_minimal_instance(:draft) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
       let(:published) { create_minimal_instance(:published) }
@@ -324,12 +325,12 @@ RSpec.describe Post do
       let!(:ids) { [draft, scheduled, published].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
-      subject { collection.for_public }
 
       it { is_expected.to eq [published] }
     end
 
     describe "self#for_cms_user" do
+      subject { collection.for_cms_user(instance) }
       let!(:no_user) { nil }
       let!(:member) { create(:member) }
       let!(:writer) { create(:writer) }
@@ -345,7 +346,6 @@ RSpec.describe Post do
       let!(:ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
-      subject { collection.for_cms_user(instance) }
 
       context "with nil user" do
         let(:instance) { no_user }

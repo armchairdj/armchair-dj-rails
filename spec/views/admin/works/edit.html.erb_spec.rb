@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/works/edit" do
   login_root
 
-  before(:each) do
+  before do
     3.times do
       create(:minimal_creator)
       create(:minimal_role)

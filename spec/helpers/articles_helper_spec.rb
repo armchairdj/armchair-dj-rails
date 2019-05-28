@@ -21,7 +21,7 @@ RSpec.describe ArticlesHelper do
 
   describe "#link_to_article" do
     describe "published" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(true)
       end
 
@@ -63,7 +63,7 @@ RSpec.describe ArticlesHelper do
     end
 
     describe "unpublished" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(false)
       end
 

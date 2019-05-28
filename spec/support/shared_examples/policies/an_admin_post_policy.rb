@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.shared_examples "an_admin_post_policy" do
+  subject { described_class.new(user, record) }
   let(:record) { stub_minimal_instance(:draft) }
 
-  subject { described_class.new(user, record) }
 
   context "without user" do
     let(:user) { nil }
@@ -68,7 +68,7 @@ RSpec.shared_examples "an_admin_post_policy" do
       it { is_expected.to forbid_action(:destroy) }
 
       context "published" do
-        before(:each) do
+        before do
           expect(record).to receive(:unpublished?).and_return(false)
         end
 
@@ -93,7 +93,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to forbid_action(:destroy) }
 
     context "published" do
-      before(:each) do
+      before do
         expect(record).to receive(:unpublished?).and_return(false)
       end
 
@@ -117,7 +117,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to forbid_action(:destroy) }
 
     context "published" do
-      before(:each) do
+      before do
         expect(record).to receive(:unpublished?).and_return(false)
       end
 
@@ -140,7 +140,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to permit_action(:destroy) }
 
     context "published" do
-      before(:each) do
+      before do
         expect(record).to receive(:unpublished?).and_return(false)
       end
 
@@ -149,11 +149,11 @@ RSpec.shared_examples "an_admin_post_policy" do
   end
 
   describe "scope" do
+    subject { described_class::Scope.new(user, model_class).resolve }
     let(:model_class) { determine_model_class }
 
-    subject { described_class::Scope.new(user, model_class).resolve }
 
-    before(:each) do
+    before do
       expect(model_class).to receive(:for_cms_user).with(user).and_call_original
     end
 

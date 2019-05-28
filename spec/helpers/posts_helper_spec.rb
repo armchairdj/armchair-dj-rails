@@ -34,7 +34,7 @@ RSpec.describe PostsHelper do
 
   describe "icon methods" do
     describe "#post_status_icon" do
-      before(:each) do
+      before do
         allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-locked.svg",   anything).and_return("locked")
         allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-unlocked.svg", anything).and_return("unlocked")
         allow(helper).to receive(:semantic_svg_image).with("open_iconic/clock.svg",         anything).and_return("clock")

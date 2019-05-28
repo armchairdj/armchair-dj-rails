@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/reviews/index" do
-  before(:each) do
+  before do
     3.times { create(:minimal_review, :published) }
 
     @reviews = assign(:reviews, Review.for_public.page(1))

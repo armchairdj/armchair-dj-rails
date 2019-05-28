@@ -14,7 +14,7 @@ RSpec.shared_examples "an_authorable_model" do
       describe "#author_can_write" do
         subject { create_minimal_instance }
 
-        before(:each) do
+        before do
           expect(subject).to receive(:author_can_write).and_call_original
         end
 

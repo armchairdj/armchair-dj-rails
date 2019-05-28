@@ -58,10 +58,10 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #show" do
+      subject { send_request }
       let(:instance) { create_minimal_instance(:draft) }
       let(:send_request) { get :show, params: { id: instance.to_param } }
 
-      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:show]) }
 
@@ -69,9 +69,9 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #new" do
+      subject { send_request }
       let(:send_request) { get :new }
 
-      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:new]) }
 
@@ -86,9 +86,9 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "POST #create" do
+      subject { send_request }
       let(:send_request) { post :create, params: wrap_create_params(params) }
 
-      subject { send_request }
 
       context "success" do
         let(:params) { min_create_params }
@@ -130,10 +130,10 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #edit" do
+      subject { send_request }
       let(:instance) { create_minimal_instance(:draft) }
       let(:send_request) { get :edit, params: { id: instance.to_param } }
 
-      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:edit]) }
 
@@ -146,7 +146,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       context "basics" do
         let(:instance) { create_minimal_instance(:draft) }
 
-        before(:each) do
+        before do
           put :update, params: wrap_update_params(instance, params)
         end
 
@@ -182,7 +182,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       end
 
       context "status updates" do
-        before(:each) do
+        before do
           put :update, params: wrap_update_params(instance, params, transformation)
         end
 
@@ -268,7 +268,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       context "published" do
         let(:instance) { create_minimal_instance(:published) }
 
-        before(:each) do
+        before do
           put :update, params: wrap_update_params(instance, params)
         end
 
@@ -283,11 +283,11 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "PUT #autosave" do
+      subject { send_request }
       let!(:instance) { create_minimal_instance(:draft) }
       let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
       let(:send_request) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
 
-      subject { send_request }
 
       context "with valid params" do
         let(:params) { autosave_params }
@@ -316,7 +316,7 @@ RSpec.shared_examples "an_admin_post_controller" do
       context "with failed save" do
         let(:params) { autosave_params }
 
-        before(:each) do
+        before do
           allow_any_instance_of(Post).to receive(:save!).and_raise(StandardError)
         end
 
@@ -334,10 +334,10 @@ RSpec.shared_examples "an_admin_post_controller" do
     pending "PUT #preview"
 
     describe "DELETE #destroy" do
+      subject { send_request }
       let!(:instance) { create_minimal_instance }
       let(:send_request) { delete :destroy, params: { id: instance.to_param } }
 
-      subject { send_request }
 
       it { expect { subject }.to change(Post, :count).by(-1) }
 

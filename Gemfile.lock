@@ -327,6 +327,8 @@ GEM
     rubocop-rails_config (0.5.1)
       railties (>= 3.0)
       rubocop (~> 0.60)
+    rubocop-rspec (1.33.0)
+      rubocop (>= 0.60.0)
     ruby-progressbar (1.10.0)
     ruby-vips (2.0.13)
       ffi (~> 1.9)
@@ -471,6 +473,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop (~> 0.65.0)
   rubocop-rails_config
+  rubocop-rspec
   sassc-rails
   shoulda-matchers!
   simple_form

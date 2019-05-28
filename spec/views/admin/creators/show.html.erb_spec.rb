@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/creators/show" do
   login_root
 
-  before(:each) do
+  before do
     @model_class = assign(:model_name, Creator)
     @creator     = assign(:creator, creator)
   end

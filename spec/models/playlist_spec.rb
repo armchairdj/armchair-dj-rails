@@ -55,9 +55,9 @@ RSpec.describe Playlist do
       it { is_expected.to have_many(:tracks).dependent(:destroy) }
 
       describe "ordering" do
+        subject { instance.tracks.map(&:position) }
         let(:instance) { create_minimal_instance }
 
-        subject { instance.tracks.map(&:position) }
 
         it { is_expected.to eq((1..2).to_a) }
       end
@@ -145,7 +145,7 @@ RSpec.describe Playlist do
       let!(:review) { create(:minimal_review, work_id: work.id) }
       let!(:mixtape) { create(:minimal_mixtape, playlist_id: instance.id) }
 
-      before(:each) do
+      before do
         # TODO: let the factory handle this with transient attributes
         instance.tracks << create(:minimal_playlist_track, work_id: work.id)
       end

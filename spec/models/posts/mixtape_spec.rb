@@ -55,9 +55,9 @@ RSpec.describe Mixtape do
     it_behaves_like "a_sluggable_model"
 
     describe "#sluggable_parts" do
+      subject { instance.sluggable_parts }
       let(:instance) { build_minimal_instance }
 
-      subject { instance.sluggable_parts }
 
       it { is_expected.to eq([instance.playlist.title]) }
     end
@@ -86,9 +86,9 @@ RSpec.describe Mixtape do
 
   describe "alpha" do
     describe "#alpha_parts" do
+      subject { instance.alpha_parts }
       let(:instance) { build_minimal_instance }
 
-      subject { instance.alpha_parts }
 
       it { is_expected.to eq([instance.playlist.title]) }
     end

@@ -17,7 +17,7 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "GET #show" do
-      before(:each) { get :show, params: { id: instance.to_param } }
+      before { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/aspects/show") }
 
@@ -25,7 +25,7 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "GET #new" do
-      before(:each) { get :new }
+      before { get :new }
 
       it { is_expected.to successfully_render("admin/aspects/new") }
 
@@ -49,9 +49,9 @@ RSpec.describe Admin::AspectsController do
       end
 
       context "with invalid params" do
+        subject { send_request }
         let(:send_request) { post :create, params: { aspect: bad_params } }
 
-        subject { send_request }
 
         it { is_expected.to successfully_render("admin/aspects/new") }
 
@@ -69,7 +69,7 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "GET #edit" do
-      before(:each) { get :edit, params: { id: instance.to_param } }
+      before { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/aspects/edit") }
 
@@ -81,7 +81,7 @@ RSpec.describe Admin::AspectsController do
       let(:bad_update_params) { { name: "" } }
 
       context "with valid params" do
-        before(:each) do
+        before do
           put :update, params: { id: instance.to_param, aspect: update_params }
         end
 
@@ -93,7 +93,7 @@ RSpec.describe Admin::AspectsController do
       end
 
       context "with invalid params" do
-        before(:each) do
+        before do
           put :update, params: { id: instance.to_param, aspect: bad_update_params }
         end
 
@@ -104,9 +104,9 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "DELETE #destroy" do
+      subject { delete :destroy, params: { id: instance.to_param } }
       let!(:instance) { create(:minimal_aspect) }
 
-      subject { delete :destroy, params: { id: instance.to_param } }
 
       it { expect { subject }.to change(Aspect, :count).by(-1) }
 

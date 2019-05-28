@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/articles/show" do
-  before(:each) do
+  before do
     @article = assign(:article, create(:complete_article))
   end
 

@@ -9,7 +9,7 @@ RSpec.shared_examples "a_public_index" do
   let(:none) { model_class.none }
 
   context "without records" do
-    before(:each) do
+    before do
       allow(model_class).to receive(:for_public).and_return(none)
 
       get :index
@@ -21,10 +21,10 @@ RSpec.shared_examples "a_public_index" do
   end
 
   context "with records" do
-    before(:each) { allow(model_class).to receive(:for_public).and_return(paginated) }
+    before { allow(model_class).to receive(:for_public).and_return(paginated) }
 
     context "page 1" do
-      before(:each) { get :index }
+      before { get :index }
 
       it { is_expected.to successfully_render(template) }
 
@@ -32,7 +32,7 @@ RSpec.shared_examples "a_public_index" do
     end
 
     context "page 2" do
-      before(:each) { get :index, params: { page: "2" } }
+      before { get :index, params: { page: "2" } }
 
       it { is_expected.to successfully_render(template) }
 

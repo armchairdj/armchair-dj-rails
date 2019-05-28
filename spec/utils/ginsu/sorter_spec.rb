@@ -7,7 +7,7 @@ RSpec.describe Ginsu::Sorter do
     describe "#prepare_clause" do
       subject { described_class.prepare_clause(clauses, dir) }
 
-      before(:each) do
+      before do
         expect(Arel).to receive(:sql).and_call_original
       end
 
@@ -90,7 +90,7 @@ RSpec.describe Ginsu::Sorter do
   end
 
   describe "#constructor" do
-    before(:each) do
+    before do
       allow_any_instance_of(described_class).to receive(:allowed).and_return(
         "Default" => "created_at DESC"
       )

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/roles/index" do
   login_root
 
-  before(:each) do
+  before do
     3.times { create(:minimal_role) }
 
     @model_class = assign(:model_name, Role)

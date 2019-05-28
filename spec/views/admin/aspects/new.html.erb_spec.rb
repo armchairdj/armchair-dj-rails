@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/aspects/new" do
   login_root
 
-  before(:each) do
+  before do
     @model_class = assign(:model_name, Aspect)
     @aspect      = assign(:aspect, build(:aspect))
   end

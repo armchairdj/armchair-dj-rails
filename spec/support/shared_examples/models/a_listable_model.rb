@@ -23,9 +23,9 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
     it { is_expected.to respond_to(:acts_as_list_no_update) }
 
     describe "#reorder_for!" do
+      subject { described_class.reorder_for!(parent, reordered_ids) }
       let(:parent) { primary.first.send(scope) }
 
-      subject { described_class.reorder_for!(parent, reordered_ids) }
 
       describe "success" do
         let(:reordered_ids) { primary.ids.shuffle }

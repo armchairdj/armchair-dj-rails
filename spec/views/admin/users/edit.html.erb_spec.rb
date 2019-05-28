@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/users/edit" do
   login_root
 
-  before(:each) do
+  before do
     @model_class = assign(:model_name, User)
     @user        = assign(:user, create(:minimal_user, :with_published_post))
     @roles       = assign(:roles, create(:root).assignable_role_options)

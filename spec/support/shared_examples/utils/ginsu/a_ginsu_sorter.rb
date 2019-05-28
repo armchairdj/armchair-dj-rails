@@ -19,14 +19,14 @@ RSpec.shared_examples "a_ginsu_sorter" do
     end
 
     describe "#resolved" do
-      before(:each) do
+      subject { instance.resolved }
+      before do
         allow(described_class).to receive(:reverse_clause).and_call_original
       end
 
-      subject { instance.resolved }
 
       context "basics" do
-        before(:each) do
+        before do
           expect(instance).to receive(:validate)
         end
 
@@ -40,7 +40,7 @@ RSpec.shared_examples "a_ginsu_sorter" do
           describe "with dir=ASC" do
             let(:instance) { described_class.new(current_sort: key, current_dir: "ASC") }
 
-            before(:each) { expect(described_class).to_not receive(:reverse_clause) }
+            before { expect(described_class).to_not receive(:reverse_clause) }
 
             it "returns a sort clause" do
               is_expected.to be_a_kind_of(String)
@@ -50,7 +50,7 @@ RSpec.shared_examples "a_ginsu_sorter" do
           describe "with dir=DESC" do
             let(:instance) { described_class.new(current_sort: key, current_dir: "DESC") }
 
-            before(:each) { expect(described_class).to receive(:reverse_clause) }
+            before { expect(described_class).to receive(:reverse_clause) }
 
             it "returns a sort clause" do
               is_expected.to be_a_kind_of(String)

@@ -6,7 +6,7 @@ RSpec.describe "admin/posts/new" do
   login_root
 
   context "article" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "articles")
       @model_class = assign(:model_name, Article)
 
@@ -32,7 +32,7 @@ RSpec.describe "admin/posts/new" do
 
     context "with errors" do
       describe "blank form submitted" do
-        before(:each) do
+        before do
           @article.valid?
         end
 
@@ -48,7 +48,7 @@ RSpec.describe "admin/posts/new" do
   end
 
   context "mixtape" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "mixtapes")
       @model_class = assign(:model_name, Mixtape)
 
@@ -78,7 +78,7 @@ RSpec.describe "admin/posts/new" do
     end
 
     context "with errors" do
-      before(:each) do
+      before do
         @mixtape.valid?
       end
 
@@ -93,7 +93,7 @@ RSpec.describe "admin/posts/new" do
   end
 
   context "review" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "reviews")
       @model_class = assign(:model_name, Review)
 
@@ -125,7 +125,7 @@ RSpec.describe "admin/posts/new" do
 
     context "with errors" do
       describe "blank form submitted" do
-        before(:each) do
+        before do
           @review.valid?
         end
 

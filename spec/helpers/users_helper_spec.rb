@@ -6,16 +6,16 @@ RSpec.describe UsersHelper do
   include MarkupHelper
 
   describe "#link_to_author_of" do
+    subject { link_to_author_of(obj, opts) }
     let(:author) { create(:writer, username: "ArmchairDJ") }
     let(:obj) { double }
     let(:opts) { {} }
 
-    before(:each) { allow(obj).to receive(:author).and_return(author) }
+    before { allow(obj).to receive(:author).and_return(author) }
 
-    subject { link_to_author_of(obj, opts) }
 
     describe "published" do
-      before(:each) { allow(author).to receive(:published?).and_return(true) }
+      before { allow(author).to receive(:published?).and_return(true) }
 
       it "has the correct layout" do
         is_expected.to have_tag("address.author", count: 1) do
@@ -41,7 +41,7 @@ RSpec.describe UsersHelper do
     end
 
     describe "unpublished" do
-      before(:each) { allow(author).to receive(:published?).and_return(false) }
+      before { allow(author).to receive(:published?).and_return(false) }
 
       it { is_expected.to eq(nil) }
     end
@@ -54,7 +54,7 @@ RSpec.describe UsersHelper do
     let(:opts) { {} }
 
     describe "published" do
-      before(:each) do
+      before do
         create(:minimal_review, :published, author: user)
         user.reload
       end

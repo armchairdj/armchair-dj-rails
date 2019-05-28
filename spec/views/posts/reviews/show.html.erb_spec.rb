@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/reviews/show" do
-  before(:each) do
+  before do
     @review = assign(:review, create(:complete_review))
   end
 

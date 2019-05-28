@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/works/new" do
   login_root
 
-  before(:each) do
+  before do
     3.times do
       create(:minimal_creator)
       create(:minimal_role)
@@ -13,7 +13,7 @@ RSpec.describe "admin/works/new" do
   end
 
   describe "initial state" do
-    before(:each) do
+    before do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:work))
       @media       = assign(:types, Work.media)
@@ -29,7 +29,7 @@ RSpec.describe "admin/works/new" do
   end
 
   context "with populated type" do
-    before(:each) do
+    before do
       @model_class = assign(:model_name, Work)
       @work        = assign(:work, build(:song))
       @media       = assign(:types, Work.media)

@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Admin::UserPolicy do
+  subject { described_class.new(user, record) }
   let(:record) { build_stubbed(:minimal_user) }
 
-  subject { described_class.new(user, record) }
 
   context "without user" do
     let(:user) { nil }
@@ -81,11 +81,11 @@ RSpec.describe Admin::UserPolicy do
   end
 
   describe "scope" do
+    subject { described_class::Scope.new(user, model_class).resolve }
     let(:model_class) { determine_model_class }
 
-    subject { described_class::Scope.new(user, model_class).resolve }
 
-    before(:each) do
+    before do
       expect(model_class).to receive(:for_cms_user).with(user).and_call_original
     end
 

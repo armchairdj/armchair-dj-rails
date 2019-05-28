@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/posts/index" do
-  before(:each) do
+  before do
     create(:minimal_article, :published)
     create(:minimal_review,  :published)
     create(:minimal_mixtape, :published)

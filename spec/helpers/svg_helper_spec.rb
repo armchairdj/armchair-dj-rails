@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe SvgHelper do
-  before(:each) do
+  before do
     allow(helper).to receive(:inline_svg).and_return("inlined_svg")
   end
 
@@ -93,7 +93,7 @@ RSpec.describe SvgHelper do
   end
 
   describe "#wrapped_icon" do
-    before(:each) do
+    before do
       expect(helper).to receive(:semantic_svg_image).with("open_iconic/icon.svg", title: "title", desc: "desc").and_call_original
     end
 

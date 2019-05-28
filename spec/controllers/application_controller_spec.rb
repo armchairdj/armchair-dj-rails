@@ -18,7 +18,7 @@ RSpec.describe ApplicationController do
     describe "#authorize_model" do
       let(:fake) { PostsController.new }
 
-      before(:each) do
+      before do
         fake.send(:determine_model_class)
       end
 
@@ -32,10 +32,10 @@ RSpec.describe ApplicationController do
 
   describe "Devise integration" do
     describe "#after_sign_in_path_for" do
+      subject { controller.send(:after_sign_in_path_for, user) }
       let(:member) { build_stubbed(:member) }
       let(:writer) { build_stubbed(:writer) }
 
-      subject { controller.send(:after_sign_in_path_for, user) }
 
       context "with member" do
         let(:user) { member }
@@ -52,7 +52,7 @@ RSpec.describe ApplicationController do
       context "with session variable" do
         let(:user) { writer }
 
-        before(:each) do
+        before do
           expect(controller).to receive(:session).and_return("user_return_to" => "articles/foo_bar_bat")
         end
 

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/mixtapes/show" do
-  before(:each) do
+  before do
     @mixtape = assign(:mixtape, create(:complete_mixtape))
   end
 

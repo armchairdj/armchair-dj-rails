@@ -79,7 +79,7 @@ RSpec.describe User do
       let(:ids) { [saru, monique, celia, charlie, brian].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
-      before(:each) do
+      before do
         create(:minimal_article, :draft,     author: monique)
         create(:minimal_article, :scheduled, author: celia)
         create(:minimal_article, :published, author: charlie)
@@ -104,6 +104,7 @@ RSpec.describe User do
     end
 
     describe "self#for_cms_user" do
+      subject { collection.for_cms_user(instance) }
       let(:no_user) { nil }
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
@@ -116,7 +117,6 @@ RSpec.describe User do
       let!(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
 
-      subject { collection.for_cms_user(instance) }
 
       context "when passed a nil user" do
         let(:instance) { no_user }
@@ -245,9 +245,9 @@ RSpec.describe User do
 
   describe "hooks" do
     describe "after_initialize" do
+      subject { instance.role }
       let(:instance) { build_minimal_instance }
 
-      subject { instance.role }
 
       it "database sets the default role to member" do
         is_expected.to eq("member")
@@ -498,9 +498,9 @@ RSpec.describe User do
     end
 
     describe "#alpha_parts" do
+      subject { instance.alpha_parts }
       let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
 
-      subject { instance.alpha_parts }
 
       it "uses full name with middle at end so that Brian Dillard and Brian J. Dillard show up consecutively" do
         is_expected.to eq(["Dillard", "Brian", "J"])

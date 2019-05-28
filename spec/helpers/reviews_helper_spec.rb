@@ -28,7 +28,7 @@ RSpec.describe ReviewsHelper do
 
   describe "#link_to_review" do
     describe "published" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(true)
       end
 
@@ -82,7 +82,7 @@ RSpec.describe ReviewsHelper do
     end
 
     describe "unpublished" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(false)
       end
 

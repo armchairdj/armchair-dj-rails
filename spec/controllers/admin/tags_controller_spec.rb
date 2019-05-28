@@ -105,9 +105,9 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "DELETE #destroy" do
+      subject { delete :destroy, params: { id: tag.to_param } }
       let!(:tag) { create(:minimal_tag) }
 
-      subject { delete :destroy, params: { id: tag.to_param } }
 
       it { expect { subject }.to change(Tag, :count).by(-1) }
 

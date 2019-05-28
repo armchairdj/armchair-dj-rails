@@ -257,6 +257,7 @@ group :development, :test do
   # Static code analysis.
   gem "rubocop", "~> 0.65.0", require: false
   gem "rubocop-rails_config"
+  gem "rubocop-rspec"
   gem "mry"
 end
 

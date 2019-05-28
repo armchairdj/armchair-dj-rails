@@ -15,9 +15,9 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "GET #show" do
+      subject { get :show, params: { id: user.to_param } }
       let(:user) { create(:minimal_user) }
 
-      subject { get :show, params: { id: user.to_param } }
 
       it { is_expected.to successfully_render("admin/users/show") }
       it { is_expected.to assign(user, :user) }
@@ -67,9 +67,9 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "GET #edit" do
+      subject { get :edit, params: { id: user.to_param } }
       let(:user) { create(:minimal_user) }
 
-      subject { get :edit, params: { id: user.to_param } }
 
       it { is_expected.to successfully_render("admin/users/edit") }
 
@@ -106,9 +106,9 @@ RSpec.describe Admin::UsersController do
     end
 
     describe "DELETE #destroy" do
+      subject { delete :destroy, params: { id: user.to_param } }
       let!(:user) { create(:minimal_user) }
 
-      subject { delete :destroy, params: { id: user.to_param } }
 
       it { expect { subject }.to change(User, :count).by(-1) }
 

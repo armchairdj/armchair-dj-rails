@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/tags/new" do
   login_root
 
-  before(:each) do
+  before do
     @model_class = assign(:model_name, Tag)
     @tag         = assign(:tag, build(:tag))
   end

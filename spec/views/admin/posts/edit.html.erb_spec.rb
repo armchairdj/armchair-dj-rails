@@ -6,7 +6,7 @@ RSpec.describe "admin/posts/edit" do
   login_root
 
   context "article" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "articles")
       @model_class = assign(:model_name, Article)
 
@@ -36,7 +36,7 @@ RSpec.describe "admin/posts/edit" do
     end
 
     context "with errors" do
-      before(:each) do
+      before do
         @article.summary = "too short"
         @article.valid?
       end
@@ -57,7 +57,7 @@ RSpec.describe "admin/posts/edit" do
   end
 
   context "mixtape" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "mixtapes")
       @model_class = assign(:model_name, Mixtape)
 
@@ -91,7 +91,7 @@ RSpec.describe "admin/posts/edit" do
     end
 
     context "with errors" do
-      before(:each) do
+      before do
         @mixtape.summary = "too short"
         @mixtape.valid?
       end
@@ -112,7 +112,7 @@ RSpec.describe "admin/posts/edit" do
   end
 
   context "review" do
-    before(:each) do
+    before do
       @view_path   = assign(:view_path, "reviews")
       @model_class = assign(:model_name, Review)
 
@@ -147,7 +147,7 @@ RSpec.describe "admin/posts/edit" do
     end
 
     context "with errors" do
-      before(:each) do
+      before do
         @review.summary = "too short"
         @review.valid?
       end

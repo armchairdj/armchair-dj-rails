@@ -22,7 +22,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
       subject { instance.resolved }
 
       context "basics" do
-        before(:each) do
+        before do
           expect(instance).to receive(:validate)
         end
 

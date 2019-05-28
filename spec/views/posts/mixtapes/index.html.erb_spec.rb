@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/mixtapes/index" do
-  before(:each) do
+  before do
     3.times { create(:minimal_mixtape, :published) }
 
     @mixtapes = assign(:mixtapes, Mixtape.for_public.page(1))

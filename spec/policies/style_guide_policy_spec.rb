@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe StyleGuidePolicy do
+  subject { described_class.new(user, record) }
   let(:record) { double }
 
-  subject { described_class.new(user, record) }
 
   context "without user" do
     let(:user) { nil }

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/playlists/index" do
   login_root
 
-  before(:each) do
+  before do
     3.times { create(:minimal_playlist) }
 
     @model_class = assign(:model_name, Playlist)

@@ -1,11 +1,13 @@
-inherit_from:
-  - .rubocop_todo.yml
-  - config/rubocop/enabled.yml
-  - config/rubocop/disabled.yml
+require: rubocop-rspec
 
 inherit_gem:
   rubocop-rails_config:
     - config/rails.yml
+
+inherit_from:
+  - .rubocop_todo.yml
+  - config/rubocop/enabled.yml
+  - config/rubocop/disabled.yml
 
 # This is the default configuration file. Enabling and disabling is configured
 # in separate files. This file adds all other parameters apart from Enabled.
@@ -1832,3 +1834,6 @@ Bundler/OrderedGems:
 
 Gemspec/OrderedDependencies:
   TreatCommentsAsGroupSeparators: true
+
+RSpec/ImplicitSubject:
+  Enabled: false

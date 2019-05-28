@@ -12,7 +12,7 @@ RSpec.describe Posts::PostsController do
   end
 
   describe "GET #feed" do
-    before(:each) do
+    before do
       34.times { create(:minimal_article, :published) }
       34.times { create(:minimal_review,  :published) }
       34.times { create(:minimal_mixtape, :published) }

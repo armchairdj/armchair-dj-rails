@@ -2,7 +2,7 @@
 
 RSpec.shared_examples "an_errorable_controller" do
   describe "protected" do
-    before(:each) do
+    before do
       allow(Rails.logger).to receive(:error)
     end
 
@@ -46,7 +46,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -66,7 +66,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_403_recoverable)
         end
 
@@ -86,7 +86,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -108,7 +108,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -122,7 +122,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_403)
         end
 
@@ -142,7 +142,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -164,7 +164,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -178,7 +178,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_404)
         end
 
@@ -222,7 +222,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -244,7 +244,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -258,7 +258,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_422)
         end
 
@@ -280,7 +280,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -302,7 +302,7 @@ RSpec.shared_examples "an_errorable_controller" do
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -316,7 +316,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_500)
         end
 

@@ -53,7 +53,7 @@ RSpec.describe Work do
         let(:target) { create_minimal_instance }
         let(:other_target) { create_minimal_instance }
 
-        before(:each) do
+        before do
           subject.target_relationships_attributes = attributes
         end
 
@@ -105,7 +105,7 @@ RSpec.describe Work do
         describe "#prepare_target_relationships" do
           subject { instance.target_relationships }
 
-          before(:each) { instance.prepare_target_relationships }
+          before { instance.prepare_target_relationships }
 
           describe "initial state" do
             let(:instance) { build_minimal_instance }
@@ -153,7 +153,7 @@ RSpec.describe Work do
         let(:source) { create_minimal_instance }
         let(:other_source) { create_minimal_instance }
 
-        before(:each) do
+        before do
           subject.source_relationships_attributes = attributes
         end
 
@@ -205,7 +205,7 @@ RSpec.describe Work do
         describe "#prepare_source_relationships" do
           subject { instance.source_relationships }
 
-          before(:each) { instance.prepare_source_relationships }
+          before { instance.prepare_source_relationships }
 
           describe "initial state" do
             let(:instance) { build_minimal_instance }
@@ -241,6 +241,7 @@ RSpec.describe Work do
 
   describe "class" do
     describe "self#grouped_by_medium" do
+      subject { described_class.where(id: ids).grouped_by_medium }
       let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
       let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show) }
@@ -248,7 +249,6 @@ RSpec.describe Work do
 
       let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
 
-      subject { described_class.where(id: ids).grouped_by_medium }
 
       it "groups by type and alphabetizes" do
         is_expected.to eq([
@@ -314,10 +314,10 @@ RSpec.describe Work do
     end
 
     describe "self#load_descendants" do
-      before(:each) { allow(File).to receive(:basename) }
+      before { allow(File).to receive(:basename) }
 
       context "in test environment" do
-        before(:each) { allow(Rails).to receive(:env).and_return("test".inquiry) }
+        before { allow(Rails).to receive(:env).and_return("test".inquiry) }
 
         it "loads" do
           expect(File).to receive(:basename)
@@ -327,7 +327,7 @@ RSpec.describe Work do
       end
 
       context "in development environment" do
-        before(:each) { allow(Rails).to receive(:env).and_return("development".inquiry) }
+        before { allow(Rails).to receive(:env).and_return("development".inquiry) }
 
         it "loads" do
           expect(File).to receive(:basename)
@@ -337,7 +337,7 @@ RSpec.describe Work do
       end
 
       context "in production environment" do
-        before(:each) { allow(Rails).to receive(:env).and_return("production".inquiry) }
+        before { allow(Rails).to receive(:env).and_return("production".inquiry) }
 
         it "does not load" do
           expect(File).to_not receive(:basename)
@@ -387,7 +387,7 @@ RSpec.describe Work do
         describe "#prepare_credits" do
           subject { instance.credits }
 
-          before(:each) { instance.prepare_credits }
+          before { instance.prepare_credits }
 
           describe "new instance" do
             let(:instance) { described_class.new }
@@ -407,14 +407,14 @@ RSpec.describe Work do
         it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
-          let(:role) { create(:minimal_role, medium: "Song") }
-
           subject do
             build(:minimal_song, contributions_attributes: {
               "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
               "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
             })
           end
+          let(:role) { create(:minimal_role, medium: "Song") }
+
 
           specify { expect { subject.save }.to change { Contribution.count }.by(1) }
 
@@ -424,7 +424,7 @@ RSpec.describe Work do
         describe "#prepare_contributions" do
           subject { instance.contributions }
 
-          before(:each) { instance.prepare_contributions }
+          before { instance.prepare_contributions }
 
           describe "new instance" do
             let(:instance) { described_class.new }
@@ -459,7 +459,7 @@ RSpec.describe Work do
         describe "#prepare_milestones" do
           subject { instance.milestones }
 
-          before(:each) { instance.prepare_milestones }
+          before { instance.prepare_milestones }
 
           describe "new instance" do
             let(:instance) { described_class.new }
@@ -479,11 +479,11 @@ RSpec.describe Work do
     end
 
     describe "#prepare_for_editing" do
+      subject { instance.prepare_for_editing }
       let(:instance) { build_minimal_instance }
 
-      subject { instance.prepare_for_editing }
 
-      before(:each) do
+      before do
         expect(instance).to receive(:prepare_credits)
         expect(instance).to receive(:prepare_contributions)
         expect(instance).to receive(:prepare_milestones)
@@ -528,7 +528,7 @@ RSpec.describe Work do
           })
         end
 
-        before(:each) { subject.valid? }
+        before { subject.valid? }
 
         it { is_expected.to have_error(milestones: :blank) }
       end
@@ -537,7 +537,7 @@ RSpec.describe Work do
         subject { build_minimal_instance }
 
         describe "credits" do
-          before(:each) { subject.credits = [] }
+          before { subject.credits = [] }
 
           let(:creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
@@ -572,9 +572,9 @@ RSpec.describe Work do
         end
 
         describe "contributions" do
-          before(:each) { subject.contributions = [] }
-
           subject { build(:minimal_song) }
+          before { subject.contributions = [] }
+
 
           let(:creator) { create(:minimal_creator) }
           let(:role_1) { create(:minimal_role, medium: "Song") }
@@ -609,7 +609,7 @@ RSpec.describe Work do
         end
 
         describe "milestones" do
-          before(:each) { subject.milestones = [] }
+          before { subject.milestones = [] }
 
           let(:good_attributes) do
             {
@@ -645,11 +645,11 @@ RSpec.describe Work do
   describe "hooks" do
     describe "#before_save" do
       describe "#memoize_display_makers" do
+        subject { instance.display_makers }
         let(:instance) { build_minimal_instance }
 
-        subject { instance.display_makers }
 
-        before(:each) do
+        before do
           allow(instance).to receive(:collect_makers).and_return("collected")
 
           expect(instance).to receive(:memoize_display_makers).and_call_original
@@ -671,7 +671,7 @@ RSpec.describe Work do
       let!(:playlist) { create(:minimal_playlist) }
       let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
-      before(:each) do
+      before do
         # TODO: let the factory handle this with transient attributes
         playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
       end
@@ -794,19 +794,19 @@ RSpec.describe Work do
     end
 
     describe "#sluggable_parts" do
+      subject { instance.sluggable_parts }
       let(:instance) do
         create_minimal_instance(title: "Don't Give Up", subtitle: "Single Edit", maker_names: ["Kate Bush", "Peter Gabriel"])
       end
 
-      subject { instance.sluggable_parts }
 
       it { is_expected.to eq(["Songs", "Kate Bush & Peter Gabriel", "Don't Give Up", "Single Edit"]) }
     end
 
     describe "#alpha_parts" do
+      subject { instance.alpha_parts }
       let(:instance) { create_complete_instance }
 
-      subject { instance.alpha_parts }
 
       it { is_expected.to eq([instance.display_makers, instance.title, instance.subtitle]) }
     end

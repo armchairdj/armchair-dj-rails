@@ -7,7 +7,7 @@ RSpec.describe Ginsu::Collection do
     context "arguments" do
       let(:relation) { Tag.for_list }
 
-      before(:each) do
+      before do
         expect(TagScoper).to receive(:new)
         expect(TagSorter).to receive(:new).with(**expected_args)
       end
@@ -31,7 +31,7 @@ RSpec.describe Ginsu::Collection do
 
     context "with a model that is" do
       context "vanilla" do
-        before(:each) do
+        before do
           expect(AspectScoper).to receive(:new)
           expect(AspectSorter).to receive(:new)
         end
@@ -43,7 +43,7 @@ RSpec.describe Ginsu::Collection do
 
       context "STI" do
         context "with multiple subclasses but one controller" do
-          before(:each) do
+          before do
             expect(WorkScoper).to receive(:new)
             expect(WorkSorter).to receive(:new)
           end
@@ -54,7 +54,7 @@ RSpec.describe Ginsu::Collection do
         end
 
         context "with multiple subclasses and controllers" do
-          before(:each) do
+          before do
             expect(ArticleScoper).to receive(:new)
             expect(ArticleSorter).to receive(:new)
           end
@@ -112,10 +112,10 @@ RSpec.describe Ginsu::Collection do
 
   describe "instance" do
     describe "#resolved" do
+      subject { instance.resolved }
       let(:relation) { Creator.for_list }
       let(:instance) { described_class.new(relation, page: "2") }
 
-      subject { instance.resolved }
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
@@ -144,30 +144,30 @@ RSpec.describe Ginsu::Collection do
     end
 
     describe "#display_count" do
+      subject { instance.display_count }
       let(:relation) { Creator.for_list }
       let(:instance) { described_class.new(relation) }
       let(:collection) { double }
 
-      subject { instance.display_count }
 
-      before(:each) do
+      before do
         allow(instance).to receive(:resolved).and_return(collection)
       end
 
       context "0 records" do
-        before(:each) { allow(collection).to receive(:total_count).and_return(0) }
+        before { allow(collection).to receive(:total_count).and_return(0) }
 
         it { is_expected.to eq("0 Total Records") }
       end
 
       context "1 record" do
-        before(:each) { allow(collection).to receive(:total_count).and_return(1) }
+        before { allow(collection).to receive(:total_count).and_return(1) }
 
         it { is_expected.to eq("1 Total Record") }
       end
 
       context ">1 records" do
-        before(:each) { allow(collection).to receive(:total_count).and_return(2) }
+        before { allow(collection).to receive(:total_count).and_return(2) }
 
         it { is_expected.to eq("2 Total Records") }
       end

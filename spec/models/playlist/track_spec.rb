@@ -44,6 +44,7 @@ RSpec.describe Playlist::Track do
 
   describe "scope-related" do
     describe "self#sorted" do
+      subject { collection.sorted }
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z") }
       let(:playlist_2) { create(:complete_playlist,                       title: "A") }
 
@@ -53,7 +54,6 @@ RSpec.describe Playlist::Track do
       let(:ids) { items.map(&:id).shuffle }
       let(:collection) { Playlist::Track.where(id: ids) }
 
-      subject { collection.sorted }
 
       it "sorts by playlist name and position" do
         expected = playlist_2.tracks.map(&:id) + playlist_1.tracks.map(&:id)

@@ -27,7 +27,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
         describe "#set_alpha" do
           subject { instance.alpha }
 
-          before(:each) do
+          before do
             allow(instance).to receive(:alpha_parts).and_return(parts)
 
             instance.send(:set_alpha)
@@ -68,7 +68,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
           end
 
           describe "without alpha" do
-            before(:each) do
+            before do
               allow(subject).to receive(:alpha).and_return(nil)
 
               subject.valid?

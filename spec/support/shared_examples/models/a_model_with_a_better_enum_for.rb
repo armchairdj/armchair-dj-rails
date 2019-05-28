@@ -50,7 +50,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
   end
 
   describe "dynamically defined methods for #{single}" do
-    before(:each) do
+    before do
       allow(described_class).to receive(plural).and_return(
         "init" => 0,
         "addl" => 1
@@ -191,7 +191,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
     describe "at the instance level" do
       let(:instance) { create_minimal_instance }
 
-      before(:each) { allow(instance).to receive(single).and_return("addl") }
+      before { allow(instance).to receive(single).and_return("addl") }
 
       describe "#human_#{single}" do
         context "default behavior" do
@@ -212,9 +212,9 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
       end
 
       describe "#raw_#{single}" do
+        subject { instance.send(:"raw_#{single}") }
         let(:instance) { create_minimal_instance }
 
-        subject { instance.send(:"raw_#{single}") }
 
         it "returns raw integer value" do
           is_expected.to be_a_kind_of(Integer)
