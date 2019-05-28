@@ -113,9 +113,9 @@ RSpec.describe Ginsu::Collection do
   describe "instance" do
     describe "#resolved" do
       subject { instance.resolved }
+
       let(:relation) { Creator.for_list }
       let(:instance) { described_class.new(relation, page: "2") }
-
 
       it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
 
@@ -145,10 +145,10 @@ RSpec.describe Ginsu::Collection do
 
     describe "#display_count" do
       subject { instance.display_count }
+
       let(:relation) { Creator.for_list }
       let(:instance) { described_class.new(relation) }
       let(:collection) { double }
-
 
       before do
         allow(instance).to receive(:resolved).and_return(collection)

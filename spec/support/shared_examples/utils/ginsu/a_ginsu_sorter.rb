@@ -20,10 +20,10 @@ RSpec.shared_examples "a_ginsu_sorter" do
 
     describe "#resolved" do
       subject { instance.resolved }
+
       before do
         allow(described_class).to receive(:reverse_clause).and_call_original
       end
-
 
       context "basics" do
         before do

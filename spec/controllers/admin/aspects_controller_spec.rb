@@ -50,8 +50,8 @@ RSpec.describe Admin::AspectsController do
 
       context "with invalid params" do
         subject { send_request }
-        let(:send_request) { post :create, params: { aspect: bad_params } }
 
+        let(:send_request) { post :create, params: { aspect: bad_params } }
 
         it { is_expected.to successfully_render("admin/aspects/new") }
 
@@ -105,8 +105,8 @@ RSpec.describe Admin::AspectsController do
 
     describe "DELETE #destroy" do
       subject { delete :destroy, params: { id: instance.to_param } }
-      let!(:instance) { create(:minimal_aspect) }
 
+      let!(:instance) { create(:minimal_aspect) }
 
       it { expect { subject }.to change(Aspect, :count).by(-1) }
 

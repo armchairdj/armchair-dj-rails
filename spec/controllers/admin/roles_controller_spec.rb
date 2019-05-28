@@ -129,8 +129,8 @@ RSpec.describe Admin::RolesController do
 
     describe "DELETE #destroy" do
       subject { delete :destroy, params: { id: role.to_param } }
-      let!(:role) { create(:minimal_role) }
 
+      let!(:role) { create(:minimal_role) }
 
       it { expect { subject }.to change(Role, :count).by(-1) }
 

@@ -213,8 +213,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
 
       describe "#raw_#{single}" do
         subject { instance.send(:"raw_#{single}") }
-        let(:instance) { create_minimal_instance }
 
+        let(:instance) { create_minimal_instance }
 
         it "returns raw integer value" do
           is_expected.to be_a_kind_of(Integer)

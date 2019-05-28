@@ -242,13 +242,13 @@ RSpec.describe Work do
   describe "class" do
     describe "self#grouped_by_medium" do
       subject { described_class.where(id: ids).grouped_by_medium }
+
       let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
       let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
       let(:tv_show) { create(:minimal_tv_show) }
       let(:podcast) { create(:minimal_podcast) }
 
       let(:ids) { [song_1, song_2, tv_show, podcast].map(&:id) }
-
 
       it "groups by type and alphabetizes" do
         is_expected.to eq([
@@ -413,8 +413,8 @@ RSpec.describe Work do
               "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
             })
           end
-          let(:role) { create(:minimal_role, medium: "Song") }
 
+          let(:role) { create(:minimal_role, medium: "Song") }
 
           specify { expect { subject.save }.to change { Contribution.count }.by(1) }
 
@@ -480,8 +480,8 @@ RSpec.describe Work do
 
     describe "#prepare_for_editing" do
       subject { instance.prepare_for_editing }
-      let(:instance) { build_minimal_instance }
 
+      let(:instance) { build_minimal_instance }
 
       before do
         expect(instance).to receive(:prepare_credits)
@@ -573,8 +573,8 @@ RSpec.describe Work do
 
         describe "contributions" do
           subject { build(:minimal_song) }
-          before { subject.contributions = [] }
 
+          before { subject.contributions = [] }
 
           let(:creator) { create(:minimal_creator) }
           let(:role_1) { create(:minimal_role, medium: "Song") }
@@ -646,8 +646,8 @@ RSpec.describe Work do
     describe "#before_save" do
       describe "#memoize_display_makers" do
         subject { instance.display_makers }
-        let(:instance) { build_minimal_instance }
 
+        let(:instance) { build_minimal_instance }
 
         before do
           allow(instance).to receive(:collect_makers).and_return("collected")
@@ -795,18 +795,18 @@ RSpec.describe Work do
 
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
+
       let(:instance) do
         create_minimal_instance(title: "Don't Give Up", subtitle: "Single Edit", maker_names: ["Kate Bush", "Peter Gabriel"])
       end
-
 
       it { is_expected.to eq(["Songs", "Kate Bush & Peter Gabriel", "Don't Give Up", "Single Edit"]) }
     end
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
-      let(:instance) { create_complete_instance }
 
+      let(:instance) { create_complete_instance }
 
       it { is_expected.to eq([instance.display_makers, instance.title, instance.subtitle]) }
     end

@@ -56,8 +56,8 @@ RSpec.describe Playlist do
 
       describe "ordering" do
         subject { instance.tracks.map(&:position) }
-        let(:instance) { create_minimal_instance }
 
+        let(:instance) { create_minimal_instance }
 
         it { is_expected.to eq((1..2).to_a) }
       end

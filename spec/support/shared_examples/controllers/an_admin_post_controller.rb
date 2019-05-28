@@ -59,9 +59,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "GET #show" do
       subject { send_request }
+
       let(:instance) { create_minimal_instance(:draft) }
       let(:send_request) { get :show, params: { id: instance.to_param } }
-
 
       it { is_expected.to successfully_render(templates[:show]) }
 
@@ -70,8 +70,8 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "GET #new" do
       subject { send_request }
-      let(:send_request) { get :new }
 
+      let(:send_request) { get :new }
 
       it { is_expected.to successfully_render(templates[:new]) }
 
@@ -87,8 +87,8 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "POST #create" do
       subject { send_request }
-      let(:send_request) { post :create, params: wrap_create_params(params) }
 
+      let(:send_request) { post :create, params: wrap_create_params(params) }
 
       context "success" do
         let(:params) { min_create_params }
@@ -131,9 +131,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "GET #edit" do
       subject { send_request }
+
       let(:instance) { create_minimal_instance(:draft) }
       let(:send_request) { get :edit, params: { id: instance.to_param } }
-
 
       it { is_expected.to successfully_render(templates[:edit]) }
 
@@ -284,10 +284,10 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "PUT #autosave" do
       subject { send_request }
+
       let!(:instance) { create_minimal_instance(:draft) }
       let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
       let(:send_request) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
-
 
       context "with valid params" do
         let(:params) { autosave_params }
@@ -335,9 +335,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "DELETE #destroy" do
       subject { send_request }
+
       let!(:instance) { create_minimal_instance }
       let(:send_request) { delete :destroy, params: { id: instance.to_param } }
-
 
       it { expect { subject }.to change(Post, :count).by(-1) }
 

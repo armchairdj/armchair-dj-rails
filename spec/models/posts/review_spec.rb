@@ -99,8 +99,8 @@ RSpec.describe Review do
   describe "alpha" do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
-      let(:instance) { build_minimal_instance }
 
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq(instance.work.alpha_parts) }
     end

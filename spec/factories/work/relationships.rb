@@ -26,7 +26,7 @@ FactoryBot.define do
   factory :work_relationship, class: "Work::Relationship" do
     factory :minimal_work_relationship do
       association :target, factory: :minimal_song
-      connection :member_of
+      connection { :member_of }
       association :source, factory: :minimal_album
     end
   end

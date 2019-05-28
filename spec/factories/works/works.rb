@@ -5,7 +5,7 @@ require "ffaker"
 FactoryBot.define do
   trait :with_milestone do
     transient do
-      release_year "1972"
+      release_year { "1972" }
     end
 
     milestones_attributes do
@@ -23,14 +23,14 @@ FactoryBot.define do
     end
 
     trait :with_subtitle do
-      subtitle "Subtitle"
+      subtitle { "Subtitle" }
     end
 
     trait :with_credits do
       transient do
-        maker_names []
+        maker_names { [] }
 
-        maker_count 1
+        maker_count { 1 }
       end
 
       credits_attributes do
@@ -45,11 +45,11 @@ FactoryBot.define do
 
     trait :with_contributions do
       transient do
-        contributor_names []
+        contributor_names { [] }
 
-        contributor_count 1
+        contributor_count { 1 }
 
-        role_medium "Song"
+        role_medium { "Song" }
       end
 
       contributions_attributes do
@@ -89,7 +89,7 @@ FactoryBot.define do
 
     trait :with_children do
       transient do
-        child_count 1
+        child_count { 1 }
       end
 
       after(:create) do |work, evaluator|
@@ -107,7 +107,7 @@ FactoryBot.define do
 
     trait :with_specific_creator do
       transient do
-        specific_creator nil
+        specific_creator { nil }
       end
 
       credits_attributes do
@@ -117,7 +117,7 @@ FactoryBot.define do
 
     trait :with_specific_contributor do
       transient do
-        specific_contributor nil
+        specific_contributor { nil }
       end
 
       contributions_attributes do
@@ -142,8 +142,8 @@ FactoryBot.define do
 
     factory :stuffed_work_parent, parent: :complete_work_parent do
       transient do
-        maker_count 3
-        contributor_count 3
+        maker_count { 3 }
+        contributor_count { 3 }
       end
     end
   end

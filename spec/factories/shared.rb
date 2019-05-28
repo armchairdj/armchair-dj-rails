@@ -44,7 +44,7 @@ FactoryBot.define do
   end
 
   trait :with_summary do
-    summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
+    summary { FFaker::HipsterIpsum.paragraphs(1).first.truncate(200) }
   end
 
   trait :with_author do
@@ -58,12 +58,12 @@ FactoryBot.define do
   trait :scheduled do
     with_body
     publish_on { 3.weeks.from_now }
-    scheduling true
+    scheduling { true }
   end
 
   trait :published do
     with_body
-    publishing true
+    publishing { true }
   end
 
   trait :with_creator do
@@ -80,7 +80,7 @@ FactoryBot.define do
 
   trait :with_tags do
     transient do
-      tag_count 3
+      tag_count { 3 }
     end
 
     tag_ids do

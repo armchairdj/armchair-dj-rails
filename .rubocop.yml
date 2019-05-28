@@ -144,6 +144,14 @@ AllCops:
   # as the default.
   TargetRailsVersion: ~
 
+#################### Bundler ###########################
+
+Bundler/OrderedGems:
+  TreatCommentsAsGroupSeparators: true
+
+Gemspec/OrderedDependencies:
+  TreatCommentsAsGroupSeparators: true
+
 #################### Layout ###########################
 
 # Indent private/protected/public as deep as method definitions
@@ -1829,11 +1837,22 @@ Rails/Validation:
   Include:
     - app/models/**/*.rb
 
-Bundler/OrderedGems:
-  TreatCommentsAsGroupSeparators: true
+#################### Rspec ###########################
 
-Gemspec/OrderedDependencies:
-  TreatCommentsAsGroupSeparators: true
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/ExpectInHook:
+  Enabled: false
 
 RSpec/ImplicitSubject:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 8
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/NotToNot:
+  EnforcedStyle: to_not

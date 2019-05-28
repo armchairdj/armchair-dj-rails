@@ -24,8 +24,8 @@ RSpec.shared_examples "a_listable_model" do |scope, association_name|
 
     describe "#reorder_for!" do
       subject { described_class.reorder_for!(parent, reordered_ids) }
-      let(:parent) { primary.first.send(scope) }
 
+      let(:parent) { primary.first.send(scope) }
 
       describe "success" do
         let(:reordered_ids) { primary.ids.shuffle }

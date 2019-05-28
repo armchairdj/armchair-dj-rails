@@ -149,6 +149,7 @@ RSpec.describe Admin::WorksController do
 
     describe "DELETE #destroy" do
       subject { delete :destroy, params: { id: instance.to_param } }
+
       let!(:source_work) { create(:junior_boys_like_a_child) }
 
       let!(:instance) do
@@ -156,7 +157,6 @@ RSpec.describe Admin::WorksController do
           "0" => { connection: "version_of", source_id: source_work.id }
         })
       end
-
 
       it { expect { subject }.to change(Work,               :count).by(-1) }
       it { expect { subject }.to change(Work::Milestone,    :count).by(-1) }
@@ -183,10 +183,10 @@ RSpec.describe Admin::WorksController do
 
       describe "xhr" do
         subject { send_request }
+
         let(:send_request) do
           post :reorder_credits, xhr: true, params: { id: instance.to_param, credit_ids: shuffled }
         end
-
 
         it { expect(response).to have_http_status(200) }
 

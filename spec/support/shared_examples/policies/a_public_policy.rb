@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.shared_examples "a_public_policy" do
   subject { described_class.new(user, record) }
-  let(:record) { stub_minimal_instance }
 
+  let(:record) { stub_minimal_instance }
 
   context "without user" do
     let(:user) { nil }
@@ -87,8 +87,8 @@ RSpec.shared_examples "a_public_policy" do
 
   describe "scope" do
     subject { described_class::Scope.new(user, model_class).resolve }
-    let(:model_class) { determine_model_class }
 
+    let(:model_class) { determine_model_class }
 
     before do
       expect(model_class).to receive(:for_public).and_call_original

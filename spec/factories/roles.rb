@@ -19,8 +19,8 @@
 
 FactoryBot.define do
   factory :role do
-    medium nil
-    name nil
+    medium { nil }
+    name { nil }
     initialize_with { Role.find_or_initialize_by(medium: medium, name: name) }
 
     ###########################################################################
@@ -32,7 +32,7 @@ FactoryBot.define do
     end
 
     trait :with_medium do
-      medium "Song"
+      medium { "Song" }
     end
 
     ###########################################################################

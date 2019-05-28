@@ -33,9 +33,9 @@ RSpec.describe ApplicationController do
   describe "Devise integration" do
     describe "#after_sign_in_path_for" do
       subject { controller.send(:after_sign_in_path_for, user) }
+
       let(:member) { build_stubbed(:member) }
       let(:writer) { build_stubbed(:writer) }
-
 
       context "with member" do
         let(:user) { member }

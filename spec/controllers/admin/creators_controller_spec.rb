@@ -26,8 +26,8 @@ RSpec.describe Admin::CreatorsController do
 
     describe "GET #new" do
       subject { send_request }
-      let(:send_request) { get :new }
 
+      let(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/creators/new") }
 
@@ -91,8 +91,8 @@ RSpec.describe Admin::CreatorsController do
 
       context "with invalid params" do
         subject { send_request }
-        let(:send_request) { post :create, params: { creator: bad_params } }
 
+        let(:send_request) { post :create, params: { creator: bad_params } }
 
         it { is_expected.to successfully_render("admin/creators/new") }
 
@@ -157,10 +157,10 @@ RSpec.describe Admin::CreatorsController do
 
       context "with invalid params" do
         subject { send_request }
+
         let(:send_request) do
           put :update, params: { id: instance.to_param, creator: bad_params }
         end
-
 
         it { is_expected.to successfully_render("admin/creators/edit") }
 
@@ -180,8 +180,8 @@ RSpec.describe Admin::CreatorsController do
 
     describe "DELETE #destroy" do
       subject { delete :destroy, params: { id: instance.to_param } }
-      let!(:instance) { create(:minimal_creator) }
 
+      let!(:instance) { create(:minimal_creator) }
 
       context "single creator" do
         it { expect { subject }.to change(Creator, :count).by(-1) }

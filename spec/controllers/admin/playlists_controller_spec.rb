@@ -28,8 +28,8 @@ RSpec.describe Admin::PlaylistsController do
 
     describe "GET #new" do
       subject { send_request }
-      let(:send_request) { get :new }
 
+      let(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/playlists/new") }
 
@@ -84,10 +84,10 @@ RSpec.describe Admin::PlaylistsController do
 
       context "with invalid params" do
         subject { send_request }
+
         let(:send_request) do
           post :create, params: { playlist: bad_params }
         end
-
 
         it { is_expected.to successfully_render("admin/playlists/new") }
 
@@ -137,10 +137,10 @@ RSpec.describe Admin::PlaylistsController do
 
       context "with invalid params" do
         subject { send_request }
+
         let(:send_request) do
           put :update, params: { id: instance.to_param, playlist: bad_update_params }
         end
-
 
         it { is_expected.to successfully_render("admin/playlists/edit") }
 
@@ -159,8 +159,8 @@ RSpec.describe Admin::PlaylistsController do
 
     describe "DELETE #destroy" do
       subject { delete :destroy, params: { id: instance.to_param } }
-      let!(:instance) { create(:minimal_playlist) }
 
+      let!(:instance) { create(:minimal_playlist) }
 
       it { expect { subject }.to change(Playlist, :count).by(-1) }
 
@@ -183,10 +183,10 @@ RSpec.describe Admin::PlaylistsController do
 
       describe "xhr" do
         subject { send_request }
+
         let(:send_request) do
           post :reorder_tracks, xhr: true, params: { id: instance.to_param, track_ids: shuffled }
         end
-
 
         it { expect(response).to have_http_status(200) }
 

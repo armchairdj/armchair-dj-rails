@@ -7,12 +7,12 @@ RSpec.describe UsersHelper do
 
   describe "#link_to_author_of" do
     subject { link_to_author_of(obj, opts) }
+
     let(:author) { create(:writer, username: "ArmchairDJ") }
     let(:obj) { double }
     let(:opts) { {} }
 
     before { allow(obj).to receive(:author).and_return(author) }
-
 
     describe "published" do
       before { allow(author).to receive(:published?).and_return(true) }

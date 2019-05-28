@@ -23,7 +23,7 @@ require "ffaker"
 
 FactoryBot.define do
   factory :creator do
-    name nil
+    name { nil }
     initialize_with { Creator.find_or_initialize_by(name: name) }
 
     ###########################################################################
@@ -67,19 +67,19 @@ FactoryBot.define do
     end
 
     trait :primary do
-      primary true
+      primary { true }
     end
 
     trait :secondary do
-      primary false
+      primary { false }
     end
 
     trait :individual do
-      individual true
+      individual { true }
     end
 
     trait :collective do
-      individual false
+      individual { false }
     end
 
     trait :with_new_pseudonym do
@@ -219,13 +219,13 @@ FactoryBot.define do
     factory :kate_bush do
       primary
       individual
-      name "Kate Bush"
+      name { "Kate Bush" }
     end
 
     factory :wolfgang_voigt do
       primary
       individual
-      name "Wolfgang Voigt"
+      name { "Wolfgang Voigt" }
 
       factory :wolfgang_voigt_with_pseudonyms do
         transient do
@@ -239,43 +239,43 @@ FactoryBot.define do
     factory :gas do
       secondary
       individual
-      name "Gas"
+      name { "Gas" }
     end
 
     factory :dbx do
       secondary
       individual
-      name "DBX"
+      name { "DBX" }
     end
 
     factory :the_kooky_scientist do
       secondary
       individual
-      name "The Kooky Scientist"
+      name { "The Kooky Scientist" }
     end
 
     factory :plastikman do
       secondary
       individual
-      name "Plastikman"
+      name { "Plastikman" }
     end
 
     factory :fuse do
       secondary
       individual
-      name "F.U.S.E."
+      name { "F.U.S.E." }
     end
 
     factory :robotman do
       secondary
       individual
-      name "Robotman"
+      name { "Robotman" }
     end
 
     factory :richie_hawtin do
       primary
       individual
-      name "Richie Hawtin"
+      name { "Richie Hawtin" }
 
       factory :richie_hawtin_with_pseudonyms do
         transient do
@@ -289,7 +289,7 @@ FactoryBot.define do
     factory :dan_bell do
       primary
       individual
-      name "Dan Bell"
+      name { "Dan Bell" }
 
       factory :dan_bell_with_pseudonyms do
         transient do
@@ -303,7 +303,7 @@ FactoryBot.define do
     factory :fred_giannelli do
       primary
       individual
-      name "Fred Giannelli"
+      name { "Fred Giannelli" }
 
       factory :fred_giannelli_with_pseudonyms do
         transient do
@@ -317,7 +317,7 @@ FactoryBot.define do
     factory :spawn do
       primary
       collective
-      name "Spawn"
+      name { "Spawn" }
 
       factory :spawn_with_members do
         transient do
@@ -345,37 +345,37 @@ FactoryBot.define do
     factory :stevie_nicks do
       primary
       individual
-      name "Stevie Nicks"
+      name { "Stevie Nicks" }
     end
 
     factory :lindsay_buckingham do
       primary
       individual
-      name "Lindsay Buckingham"
+      name { "Lindsay Buckingham" }
     end
 
     factory :christine_mcvie do
       primary
       individual
-      name "Christine McVie"
+      name { "Christine McVie" }
     end
 
     factory :john_mcvie do
       primary
       individual
-      name "John McVie"
+      name { "John McVie" }
     end
 
     factory :mick_fleetwood do
       primary
       individual
-      name "Mick Fleetwood"
+      name { "Mick Fleetwood" }
     end
 
     factory :fleetwood_mac do
       primary
       collective
-      name "Fleetwood Mac"
+      name { "Fleetwood Mac" }
 
       factory :fleetwood_mac_with_members do
         transient do

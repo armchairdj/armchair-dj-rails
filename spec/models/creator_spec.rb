@@ -723,6 +723,7 @@ RSpec.describe Creator do
 
       describe "#posts" do
         subject { instance.posts.ids }
+
         let!(:playlist) do
           create(:playlist, :with_author, title: "Title", tracks_attributes: {
             "0" => attributes_for(:playlist_track, work_id: created.id),
@@ -736,7 +737,6 @@ RSpec.describe Creator do
         let!(:both_review) { create(:minimal_review, work_id:         both.id) }
         let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
 
-
         let(:expected) { [mixtape, both_review, contributed_review, credited_review].map(&:id) }
 
         it "finds all distinct created and contributed posts" do
@@ -747,8 +747,8 @@ RSpec.describe Creator do
 
     describe "#display_roles" do
       subject { instance.display_roles }
-      let(:instance) { create_minimal_instance }
 
+      let(:instance) { create_minimal_instance }
 
       context "with credits and contributions" do
         let(:editor) { create(:minimal_role, medium: "Book",   name: "Editor") }
@@ -786,8 +786,8 @@ RSpec.describe Creator do
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
-      let(:instance) { build_minimal_instance }
 
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.name]) }
     end

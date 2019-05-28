@@ -42,8 +42,8 @@ RSpec.describe Article do
 
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
-      let(:instance) { build_minimal_instance }
 
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.title]) }
     end
@@ -67,8 +67,8 @@ RSpec.describe Article do
   describe "alpha" do
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
-      let(:instance) { build_minimal_instance }
 
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.title]) }
     end

@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.shared_examples "an_admin_post_policy" do
   subject { described_class.new(user, record) }
-  let(:record) { stub_minimal_instance(:draft) }
 
+  let(:record) { stub_minimal_instance(:draft) }
 
   context "without user" do
     let(:user) { nil }
@@ -150,8 +150,8 @@ RSpec.shared_examples "an_admin_post_policy" do
 
   describe "scope" do
     subject { described_class::Scope.new(user, model_class).resolve }
-    let(:model_class) { determine_model_class }
 
+    let(:model_class) { determine_model_class }
 
     before do
       expect(model_class).to receive(:for_cms_user).with(user).and_call_original

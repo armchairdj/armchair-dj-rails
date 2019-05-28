@@ -17,11 +17,11 @@ RSpec.describe AdminHelper do
 
     describe "#admin_list_link" do
       subject { helper.admin_list_link(model) }
+
       before do
         expect(helper).to receive(:semantic_svg_image).with("open_iconic/list.svg", anything).and_return("list")
         expect(helper).to receive(:polymorphic_path).with([:admin, model]).and_return("path")
       end
-
 
       let(:selector) { "a.admin-icon.list[title='back to creators list'][href='path']" }
 
@@ -32,11 +32,11 @@ RSpec.describe AdminHelper do
 
     describe "#admin_view_link" do
       subject { helper.admin_view_link(instance) }
+
       before do
         expect(helper).to receive(:semantic_svg_image).with("open_iconic/eye.svg", anything).and_return("view")
         expect(helper).to receive(:polymorphic_path).with([:admin, instance]).and_return("path")
       end
-
 
       let(:selector) { "a.admin-icon.view[title='view creator'][href='path']" }
 
@@ -47,11 +47,11 @@ RSpec.describe AdminHelper do
 
     describe "#admin_create_link" do
       subject { helper.admin_create_link(model) }
+
       before do
         expect(helper).to receive(:semantic_svg_image).with("open_iconic/plus.svg", anything).and_return("create")
         expect(helper).to receive(:new_polymorphic_path).with([:admin, model]).and_return("path")
       end
-
 
       let(:selector) { "a.admin-icon.create[title='create creator'][href='path']" }
 
@@ -62,11 +62,11 @@ RSpec.describe AdminHelper do
 
     describe "#admin_update_link" do
       subject { helper.admin_update_link(instance) }
+
       before do
         expect(helper).to receive(:semantic_svg_image).with("open_iconic/pencil.svg", anything).and_return("update")
         expect(helper).to receive(:edit_polymorphic_path).with([:admin, instance]).and_return("path")
       end
-
 
       let(:selector) { "a.admin-icon.update[title='update creator'][href='path']" }
 
