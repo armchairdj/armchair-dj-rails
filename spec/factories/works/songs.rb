@@ -40,13 +40,14 @@ FactoryBot.define do
         { "0" => attributes_for(:work_milestone_for_work, year: "2006") }
       end
 
-      aspect_ids do [
-        create(:aspect, facet: :song_type,     name: "Remix").id,
-        create(:aspect, facet: :musical_genre, name: "Techno").id,
-        create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
-        create(:aspect, facet: :music_label,   name: "Domino").id
-      ]
-end      
+      aspect_ids do
+        [
+          create(:aspect, facet: :song_type,     name: "Remix"),
+          create(:aspect, facet: :musical_genre, name: "Techno"),
+          create(:aspect, facet: :musical_mood,  name: "Melancholy"),
+          create(:aspect, facet: :music_label,   name: "Domino")
+        ].map(&:id)
+      end
 
       transient do
         maker_names       ["Junior Boys"]
@@ -64,13 +65,14 @@ end
         { "0" => attributes_for(:work_milestone_for_work, year: "2006") }
       end
 
-      aspect_ids do [
-        create(:aspect, facet: :song_type,     name: "Remix").id,
-        create(:aspect, facet: :musical_genre, name: "Techno").id,
-        create(:aspect, facet: :musical_mood,  name: "Melancholy").id,
-        create(:aspect, facet: :music_label,   name: "Domino").id
-      ]
-end      
+      aspect_ids do
+        [
+          create(:aspect, facet: :song_type,     name: "Remix"),
+          create(:aspect, facet: :musical_genre, name: "Techno"),
+          create(:aspect, facet: :musical_mood,  name: "Melancholy"),
+          create(:aspect, facet: :music_label,   name: "Domino")
+        ].map(&:id)
+      end
 
       transient do
         maker_names       ["Junior Boys"]

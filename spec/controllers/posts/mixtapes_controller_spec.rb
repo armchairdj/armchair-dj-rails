@@ -15,11 +15,11 @@ RSpec.describe Posts::MixtapesController do
     let(:mixtape) { create(:minimal_mixtape, :published) }
 
     it "renders" do
-        get :show, params: { slug: mixtape.slug }
+      get :show, params: { slug: mixtape.slug }
 
-        is_expected.to successfully_render("posts/mixtapes/show")
+      is_expected.to successfully_render("posts/mixtapes/show")
 
-        expect(assigns(:mixtape)).to eq(mixtape)
+      expect(assigns(:mixtape)).to eq(mixtape)
     end
   end
 end

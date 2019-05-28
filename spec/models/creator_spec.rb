@@ -19,7 +19,6 @@
 #  index_creators_on_primary     (primary)
 #
 
-
 require "rails_helper"
 
 RSpec.describe Creator do

@@ -19,7 +19,6 @@
 #  index_creators_on_primary     (primary)
 #
 
-
 require "ffaker"
 
 FactoryBot.define do
@@ -330,12 +329,13 @@ FactoryBot.define do
 
       factory :complete_spawn do
         transient do
-          members do [
-            create(:fred_giannelli_with_pseudonyms),
-            create(:richie_hawtin_with_pseudonyms),
-            create(:dan_bell_with_pseudonyms)
-          ]
-end          
+          members do
+            [
+              create(:fred_giannelli_with_pseudonyms),
+              create(:richie_hawtin_with_pseudonyms),
+              create(:dan_bell_with_pseudonyms)
+            ]
+          end
         end
 
         with_specific_members

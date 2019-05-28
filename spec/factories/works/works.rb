@@ -38,7 +38,7 @@ FactoryBot.define do
           name    = maker_names[i] || generate(:creator_name)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); 
+          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id)
         end
       end
     end
@@ -58,7 +58,7 @@ FactoryBot.define do
           role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); 
+          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id)
         end
       end
     end

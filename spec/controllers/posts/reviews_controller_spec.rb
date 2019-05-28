@@ -15,11 +15,11 @@ RSpec.describe Posts::ReviewsController do
     let(:review) { create(:minimal_review, :published) }
 
     it "renders" do
-        get :show, params: { slug: review.slug }
+      get :show, params: { slug: review.slug }
 
-        is_expected.to successfully_render("posts/reviews/show")
+      is_expected.to successfully_render("posts/reviews/show")
 
-        expect(assigns(:review)).to eq(review)
+      expect(assigns(:review)).to eq(review)
     end
   end
 end

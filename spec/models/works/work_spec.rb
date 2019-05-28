@@ -35,7 +35,7 @@ RSpec.describe Work do
       let!(:song) { create(:minimal_song) }
       let!(:album) { create(:minimal_album) }
 
-      it { is_expected.to eq([["Album", [album]], ["Song",  [song]]]) }
+      it { is_expected.to eq([["Album", [album]], ["Song", [song]]]) }
     end
 
     describe "as source" do

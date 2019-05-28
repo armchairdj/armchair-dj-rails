@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 class Admin::UserPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve

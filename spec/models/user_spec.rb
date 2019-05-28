@@ -42,7 +42,6 @@
 #  index_users_on_username              (username) UNIQUE
 #
 
-
 require "rails_helper"
 
 RSpec.describe User do
@@ -303,11 +302,13 @@ RSpec.describe User do
       describe "methods" do
         describe "#assignable_role_options" do
           let(:options) do
-            [["Member", "member"],
+            [
+              ["Member", "member"],
               ["Writer", "writer"],
               ["Editor", "editor"],
               ["Admin",  "admin"],
-              ["Root",   "root"]]
+              ["Root",   "root"]
+            ]
           end
 
           it "is empty for members" do
