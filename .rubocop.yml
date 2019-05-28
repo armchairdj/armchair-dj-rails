@@ -1848,6 +1848,9 @@ RSpec/ExpectInHook:
 RSpec/ImplicitSubject:
   Enabled: false
 
+RSpec/MessageSpies:
+  Enabled: false
+
 RSpec/MultipleExpectations:
   Max: 8
 

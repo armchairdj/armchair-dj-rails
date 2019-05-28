@@ -10,7 +10,7 @@ RSpec.describe Ginsu::Scoper do
       )
     end
 
-    context "defaults" do
+    context "with defaults" do
       let(:instance) { described_class.new(current_scope: "", current_sort: "", current_dir: "") }
 
       describe "sets current_scope to default" do
@@ -32,7 +32,7 @@ RSpec.describe Ginsu::Scoper do
       end
     end
 
-    context "explicit values" do
+    context "with explicit values" do
       let(:instance) { described_class.new(current_scope: "All", current_sort: "ID", current_dir: "DESC") }
 
       describe "sets current_scope" do

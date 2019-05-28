@@ -20,7 +20,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  describe "as member" do
+  describe "with member" do
     let(:user) { build_stubbed(:member) }
 
     it { is_expected.to permit_action(:index) }
@@ -33,7 +33,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  describe "as writer" do
+  describe "with writer" do
     let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to permit_action(:index) }
@@ -46,7 +46,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  describe "as editor" do
+  describe "with editor" do
     let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to permit_action(:index) }
@@ -59,7 +59,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  describe "as admin" do
+  describe "with admin" do
     let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:index) }
@@ -72,7 +72,7 @@ RSpec.shared_examples "a_public_policy" do
     it { is_expected.to forbid_action(:destroy) }
   end
 
-  context "as root" do
+  context "with root user" do
     let(:user) { build_stubbed(:root) }
 
     it { is_expected.to permit_action(:index) }

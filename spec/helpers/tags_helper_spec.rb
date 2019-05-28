@@ -30,13 +30,13 @@ RSpec.describe TagsHelper do
 
     let(:opts) { {} }
 
-    context "empty collection" do
+    context "with empty collection" do
       let(:tags) { Tag.none }
 
       it { is_expected.to eq(nil) }
     end
 
-    context "full collection" do
+    context "with full collection" do
       let(:tags) { Tag.where(id: ids_for_minimal_list(3)) }
 
       it { is_expected.to_not have_tag("a") }

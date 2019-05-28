@@ -7,7 +7,7 @@ RSpec.describe Admin::UsersController do
     it_behaves_like "a_paginatable_controller"
   end
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do

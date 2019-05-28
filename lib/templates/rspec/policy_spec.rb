@@ -9,31 +9,31 @@ RSpec.describe <%= class_name %>Policy do
     pending "works without user"
   end
 
-  describe "as member" do
+  describe "with member" do
     let(:user) { create(:member) }
 
     pending "works with member"
   end
 
-  describe "as writer" do
+  describe "with writer" do
     let(:user) { create(:writer) }
 
     pending "works with writer"
   end
 
-  describe "as editor" do
+  describe "with editor" do
     let(:user) { create(:editor) }
 
     pending "works with editor"
   end
 
-  describe "as admin" do
+  describe "with admin" do
     let(:user) { create(:admin) }
 
     pending "works with admin"
   end
 
-  context "as root" do
+  context "with root user" do
     let(:user) { create(:root) }
 
     pending "works with root"

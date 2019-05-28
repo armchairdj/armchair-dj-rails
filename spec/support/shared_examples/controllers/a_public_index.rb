@@ -23,7 +23,7 @@ RSpec.shared_examples "a_public_index" do
   context "with records" do
     before { allow(model_class).to receive(:for_public).and_return(paginated) }
 
-    context "page 1" do
+    context "with page 1" do
       before { get :index }
 
       it { is_expected.to successfully_render(template) }
@@ -31,7 +31,7 @@ RSpec.shared_examples "a_public_index" do
       specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
 
-    context "page 2" do
+    context "with page 2" do
       before { get :index, params: { page: "2" } }
 
       it { is_expected.to successfully_render(template) }

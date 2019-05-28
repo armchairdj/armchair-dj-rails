@@ -16,12 +16,10 @@ RSpec.describe PlaylistScoper do
       it { is_expected.to match_array(["All"]) }
     end
 
-    context "private" do
-      describe "#model_class" do
-        subject { instance.send(:model_class) }
+    describe "#model_class" do
+      subject { instance.send(:model_class) }
 
-        it { is_expected.to eq(Playlist) }
-      end
+      it { is_expected.to eq(Playlist) }
     end
   end
 end

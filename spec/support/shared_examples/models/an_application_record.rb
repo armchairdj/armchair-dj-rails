@@ -10,7 +10,7 @@ RSpec.shared_examples "an_application_record" do
   end
 
   describe "class" do
-    describe "self#find_by_sorted_ids" do
+    describe ".find_by_sorted_ids" do
       let(:instances) do
         [
           create_minimal_instance,
@@ -46,7 +46,7 @@ RSpec.shared_examples "an_application_record" do
       end
     end
 
-    describe "self#validates_nested_uniqueness_of" do
+    describe ".validates_nested_uniqueness_of" do
       it "is defined" do
         expect(described_class).to respond_to(:validates_nested_uniqueness_of)
       end

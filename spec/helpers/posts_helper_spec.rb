@@ -34,25 +34,25 @@ RSpec.describe PostsHelper do
 
   describe "icon methods" do
     describe "#post_status_icon" do
-      before do
-        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-locked.svg",   anything).and_return("locked")
-        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-unlocked.svg", anything).and_return("unlocked")
-        allow(helper).to receive(:semantic_svg_image).with("open_iconic/clock.svg",         anything).and_return("clock")
-      end
+      it "calls #post_draft_icon when draft" do
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-locked.svg", anything).and_return("locked")
 
-      specify "calls #post_draft_icon" do
         expect(helper.post_status_icon(create(:minimal_article, :draft))).to eq(
           '<span class="svg-icon post-draft">locked</span>'
         )
       end
 
-      specify "calls #post_status_icon" do
+      it "calls #post_status_icon when scheduled" do
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/clock.svg", anything).and_return("clock")
+
         expect(helper.post_status_icon(create(:minimal_mixtape, :scheduled))).to eq(
           '<span class="svg-icon post-scheduled">clock</span>'
         )
       end
 
-      specify "calls #post_status_icon" do
+      it "calls #post_status_icon when published" do
+        allow(helper).to receive(:semantic_svg_image).with("open_iconic/lock-unlocked.svg", anything).and_return("unlocked")
+
         expect(helper.post_status_icon(create(:minimal_review, :published))).to eq(
           '<span class="svg-icon post-published">unlocked</span>'
         )

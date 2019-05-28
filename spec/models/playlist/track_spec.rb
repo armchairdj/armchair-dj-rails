@@ -43,7 +43,7 @@ RSpec.describe Playlist::Track do
   end
 
   describe "scope-related" do
-    describe "self#sorted" do
+    describe ".sorted" do
       subject { collection.sorted }
 
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z") }

@@ -23,7 +23,7 @@ RSpec.shared_examples "a_ginsu_index" do |template_override|
   context "with records" do
     before { allow_any_instance_of(Ginsu::Collection).to receive(:prepare_relation).and_return(paginated) }
 
-    context "page 1" do
+    context "with page 1" do
       before { get :index }
 
       it { is_expected.to successfully_render(template) }
@@ -31,7 +31,7 @@ RSpec.shared_examples "a_ginsu_index" do |template_override|
       specify { expect(assigns(param_key)).to paginate(2).of_total_records(3) }
     end
 
-    context "page 2" do
+    context "with page 2" do
       before { get :index, params: { page: "2" } }
 
       it { is_expected.to successfully_render(template) }

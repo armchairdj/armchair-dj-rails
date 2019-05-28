@@ -22,7 +22,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "as member" do
+  describe "with member" do
     let(:user) { build_stubbed(:member) }
 
     it { is_expected.to raise_not_authorized_for(:index) }
@@ -37,7 +37,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to raise_not_authorized_for(:destroy) }
   end
 
-  describe "as writer" do
+  describe "with writer" do
     let(:user) { build_stubbed(:writer) }
 
     it { is_expected.to permit_action(:index) }
@@ -67,7 +67,7 @@ RSpec.shared_examples "an_admin_post_policy" do
       it { is_expected.to forbid_action(:publish) }
       it { is_expected.to forbid_action(:destroy) }
 
-      context "published" do
+      context "when published" do
         before do
           expect(record).to receive(:unpublished?).and_return(false)
         end
@@ -77,7 +77,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     end
   end
 
-  describe "as editor" do
+  context "with editor" do
     let(:user) { build_stubbed(:editor) }
 
     it { is_expected.to permit_action(:index) }
@@ -92,7 +92,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to forbid_action(:publish) }
     it { is_expected.to forbid_action(:destroy) }
 
-    context "published" do
+    context "when published" do
       before do
         expect(record).to receive(:unpublished?).and_return(false)
       end
@@ -101,7 +101,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     end
   end
 
-  describe "as admin" do
+  describe "with admin" do
     let(:user) { build_stubbed(:admin) }
 
     it { is_expected.to permit_action(:index) }
@@ -116,7 +116,7 @@ RSpec.shared_examples "an_admin_post_policy" do
 
     it { is_expected.to forbid_action(:destroy) }
 
-    context "published" do
+    context "when published" do
       before do
         expect(record).to receive(:unpublished?).and_return(false)
       end
@@ -125,7 +125,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     end
   end
 
-  context "as root" do
+  context "with root user" do
     let(:user) { build_stubbed(:root) }
 
     it { is_expected.to permit_action(:index) }
@@ -139,7 +139,7 @@ RSpec.shared_examples "an_admin_post_policy" do
     it { is_expected.to permit_action(:publish) }
     it { is_expected.to permit_action(:destroy) }
 
-    context "published" do
+    context "when published" do
       before do
         expect(record).to receive(:unpublished?).and_return(false)
       end

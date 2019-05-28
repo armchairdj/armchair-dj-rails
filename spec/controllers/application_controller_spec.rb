@@ -116,18 +116,16 @@ RSpec.describe ApplicationController do
   describe "instance" do
     describe "private" do
       describe "#determine_model_class" do
-        context "sets an instance variable" do
-          describe "for model-backed controllers" do
-            subject { PostsController.new.send(:determine_model_class) }
+        context "with model-backed controllers" do
+          subject { PostsController.new.send(:determine_model_class) }
 
-            it { is_expected.to eq(Post) }
-          end
+          it { is_expected.to eq(Post) }
+        end
 
-          describe "for non-model-backed controllers" do
-            subject { FoosController.new.send(:determine_model_class) }
+        context "with non-model-backed controllers" do
+          subject { FoosController.new.send(:determine_model_class) }
 
-            it { is_expected.to eq(nil) }
-          end
+          it { is_expected.to eq(nil) }
         end
 
         describe "before_action" do

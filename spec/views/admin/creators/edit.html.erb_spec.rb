@@ -22,7 +22,7 @@ RSpec.describe "admin/creators/edit" do
     @available_groups     = assign(:available_groups,     Creator.available_groups)
   end
 
-  context "primary individual creator" do
+  context "with primary individual creator" do
     let(:creator) { create(:minimal_creator, :primary, :individual) }
 
     it "renders edit creator form" do
@@ -34,7 +34,7 @@ RSpec.describe "admin/creators/edit" do
     end
   end
 
-  context "secondary creator" do
+  context "with secondary creator" do
     let(:creator) { create(:minimal_creator, :secondary) }
 
     it "renders edit creator form" do
@@ -46,7 +46,7 @@ RSpec.describe "admin/creators/edit" do
     end
   end
 
-  context "collective creator" do
+  context "with collective creator" do
     let(:creator) { create(:minimal_creator, :collective) }
 
     it "renders edit creator form" do

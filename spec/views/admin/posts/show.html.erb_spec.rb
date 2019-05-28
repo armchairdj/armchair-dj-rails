@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "admin/posts/show" do
   login_root
 
-  context "article" do
+  context "with article" do
     before do
       @view_path   = assign(:view_path, "articles")
       @model_class = assign(:model_name, Article)
@@ -20,7 +20,7 @@ RSpec.describe "admin/posts/show" do
     end
   end
 
-  context "mixtape" do
+  context "with mixtape" do
     before do
       @view_path   = assign(:view_path, "mixtapes")
       @model_class = assign(:model_name, Mixtape)
@@ -35,7 +35,7 @@ RSpec.describe "admin/posts/show" do
     end
   end
 
-  context "review" do
+  context "with review" do
     before do
       @view_path   = assign(:view_path, "reviews")
       @model_class = assign(:model_name, Review)

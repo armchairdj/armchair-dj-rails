@@ -86,7 +86,7 @@ RSpec.describe User do
         create(:minimal_article, :published, author: brian)
       end
 
-      describe "self#for_public" do
+      describe ".for_public" do
         subject { collection.for_public }
 
         it "includes only published writers" do
@@ -103,7 +103,7 @@ RSpec.describe User do
       end
     end
 
-    describe "self#for_cms_user" do
+    describe ".for_cms_user" do
       subject { collection.for_cms_user(instance) }
 
       let(:no_user) { nil }
@@ -211,31 +211,31 @@ RSpec.describe User do
     end
 
     describe "conditional" do
-      describe "as member" do
+      describe "with member" do
         subject { create(:member) }
 
         it { is_expected.to validate_absence_of(:bio) }
       end
 
-      describe "as writer" do
+      describe "with writer" do
         subject { create(:writer) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      describe "as editor" do
+      describe "with editor" do
         subject { create(:editor) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      describe "as admin" do
+      describe "with admin" do
         subject { create(:admin) }
 
         it { is_expected.to_not validate_absence_of(:bio) }
       end
 
-      context "as root" do
+      context "with root user" do
         subject { create(:root) }
 
         it { is_expected.to_not validate_absence_of(:bio) }

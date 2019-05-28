@@ -59,13 +59,13 @@ RSpec.describe Creator do
         let!(:primary) { create(:primary_creator) }
         let!(:secondary) { create(:secondary_creator) }
 
-        describe "self#primary" do
+        describe ".primary" do
           subject { described_class.primary }
 
           it { is_expected.to contain_exactly(primary) }
         end
 
-        describe "self#secondary" do
+        describe ".secondary" do
           subject { described_class.secondary }
 
           it { is_expected.to contain_exactly(secondary) }
@@ -90,7 +90,7 @@ RSpec.describe Creator do
         let!(:gas) { create(:gas) }
         let!(:identity) { create(:minimal_creator_identity, real_name: richie, pseudonym: fuse) }
 
-        describe "self#available_pseudonyms" do
+        describe ".available_pseudonyms" do
           subject { described_class.available_pseudonyms }
 
           it "excludes used pseudonyms and alphabetizes" do
@@ -113,13 +113,13 @@ RSpec.describe Creator do
         let!(:individual) { create(:individual_creator) }
         let!(:collective) { create(:collective_creator) }
 
-        describe "self#individual" do
+        describe ".individual" do
           subject { described_class.individual }
 
           it { is_expected.to eq([individual]) }
         end
 
-        describe "self#collective" do
+        describe ".collective" do
           subject { described_class.collective }
 
           it { is_expected.to eq([collective]) }
@@ -137,7 +137,7 @@ RSpec.describe Creator do
       end
 
       describe "collections" do
-        describe "self#available_members" do
+        describe ".available_members" do
           subject { described_class.available_members }
 
           let!(:band) { create(:fleetwood_mac) }

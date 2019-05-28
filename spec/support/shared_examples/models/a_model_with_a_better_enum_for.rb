@@ -22,7 +22,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
 
     it { is_expected.to respond_to(:improve_enum) }
 
-    describe "self#better_enums" do
+    describe ".better_enums" do
       subject { described_class.better_enums }
 
       it "reports which attributes have been defined" do
@@ -65,8 +65,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
     end
 
     describe "at the class level" do
-      describe "self#human_#{plural}" do
-        context "default behavior" do
+      describe ".human_#{plural}" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{plural}") }
 
           let(:expected) do
@@ -119,8 +119,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#human_#{single}" do
-        context "default behavior" do
+      describe ".human_#{single}" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{single}", "init") }
 
           it "translates the attribute" do
@@ -137,8 +137,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#human_#{single}_order_clause" do
-        context "default behavior" do
+      describe ".human_#{single}_order_clause" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{single}_order_clause") }
 
           let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
@@ -159,10 +159,10 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#sorted_by_human_#{single}" do
+      describe ".sorted_by_human_#{single}" do
         subject { described_class }
 
-        context "default behavior" do
+        context "with default behavior" do
           let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
 
           it "orders by humanized values" do
@@ -194,7 +194,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
       before { allow(instance).to receive(single).and_return("addl") }
 
       describe "#human_#{single}" do
-        context "default behavior" do
+        context "with default behavior" do
           subject { instance.send(:"human_#{single}") }
 
           it "translates the attribute" do

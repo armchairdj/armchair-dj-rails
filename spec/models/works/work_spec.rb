@@ -38,7 +38,7 @@ RSpec.describe Work do
       it { is_expected.to eq([["Album", [album]], ["Song", [song]]]) }
     end
 
-    describe "as source" do
+    describe "with source" do
       describe "has associations" do
         subject { build_minimal_instance }
 
@@ -138,7 +138,7 @@ RSpec.describe Work do
       end
     end
 
-    describe "as target" do
+    describe "with target" do
       describe "has associations" do
         subject { build_minimal_instance }
 
@@ -240,7 +240,7 @@ RSpec.describe Work do
   end
 
   describe "class" do
-    describe "self#grouped_by_medium" do
+    describe ".grouped_by_medium" do
       subject { described_class.where(id: ids).grouped_by_medium }
 
       let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
@@ -259,7 +259,7 @@ RSpec.describe Work do
       end
     end
 
-    describe "self#media" do
+    describe ".media" do
       subject { described_class.media }
 
       let(:expected) do
@@ -286,7 +286,7 @@ RSpec.describe Work do
       it { is_expected.to eq(expected) }
     end
 
-    describe "self#valid_media" do
+    describe ".valid_media" do
       subject { described_class.valid_media }
 
       let(:expected) do
@@ -313,10 +313,10 @@ RSpec.describe Work do
       it { is_expected.to eq(expected) }
     end
 
-    describe "self#load_descendants" do
+    describe ".load_descendants" do
       before { allow(File).to receive(:basename) }
 
-      context "in test environment" do
+      context "when in test environment" do
         before { allow(Rails).to receive(:env).and_return("test".inquiry) }
 
         it "loads" do
@@ -326,7 +326,7 @@ RSpec.describe Work do
         end
       end
 
-      context "in development environment" do
+      context "when in development environment" do
         before { allow(Rails).to receive(:env).and_return("development".inquiry) }
 
         it "loads" do
@@ -336,7 +336,7 @@ RSpec.describe Work do
         end
       end
 
-      context "in production environment" do
+      context "when in production environment" do
         before { allow(Rails).to receive(:env).and_return("production".inquiry) }
 
         it "does not load" do
@@ -728,34 +728,34 @@ RSpec.describe Work do
     describe "#collect_makers" do
       subject { instance.send(:collect_makers) }
 
-      context "unsaved" do
-        context "no credits" do
+      context "when unsaved" do
+        context "with no credits" do
           let(:instance) { build(:work) }
 
           it { is_expected.to eq(nil) }
         end
 
-        context "one credit" do
+        context "with one credit" do
           let(:instance) { build(:kate_bush_never_for_ever) }
 
           it { is_expected.to eq("Kate Bush") }
         end
 
-        context "multiple credits" do
+        context "with multiple credits" do
           let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
           it { is_expected.to eq("Carl Craig & Green Velvet") }
         end
       end
 
-      context "saved" do
-        context "one credit" do
+      context "when saved" do
+        context "with one credit" do
           let(:instance) { create(:kate_bush_never_for_ever) }
 
           it { is_expected.to eq("Kate Bush") }
         end
 
-        context "multiple credits" do
+        context "with multiple credits" do
           let(:instance) { create(:carl_craig_and_green_velvet_unity) }
 
           it { is_expected.to eq("Carl Craig & Green Velvet") }

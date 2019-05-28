@@ -9,7 +9,7 @@ RSpec.describe Admin::CreatorsController do
     it_behaves_like "a_paginatable_controller"
   end
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
@@ -183,7 +183,7 @@ RSpec.describe Admin::CreatorsController do
 
       let!(:instance) { create(:minimal_creator) }
 
-      context "single creator" do
+      context "with single creator" do
         it { expect { subject }.to change(Creator, :count).by(-1) }
 
         it { is_expected.to send_user_to(admin_creators_path) }

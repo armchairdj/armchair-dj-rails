@@ -99,60 +99,56 @@ RSpec.describe AdminHelper do
         it { is_expected.to eq(nil) }
       end
 
-      describe "users" do
-        describe "published" do
-          before do
-            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
-            expect(helper).to receive(:polymorphic_path).with(instance, format: nil).and_return("path")
-          end
-
-          let(:instance) { create(:writer, :with_published_post) }
-          let(:selector) { "a.admin-icon.public-view[title='view user on site'][href='path']" }
-
-          it "has the correct markup" do
-            is_expected.to have_tag(selector, text: "public", count: 1)
-          end
+      describe "published users" do
+        before do
+          expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
+          expect(helper).to receive(:polymorphic_path).with(instance, format: nil).and_return("path")
         end
 
-        describe "unpublished" do
-          let(:instance) { create(:writer, :with_draft_post) }
+        let(:instance) { create(:writer, :with_published_post) }
+        let(:selector) { "a.admin-icon.public-view[title='view user on site'][href='path']" }
 
-          it { is_expected.to eq(nil) }
-        end
-
-        describe "non-writer" do
-          let(:instance) { create(:member) }
-
-          it { is_expected.to eq(nil) }
+        it "has the correct markup" do
+          is_expected.to have_tag(selector, text: "public", count: 1)
         end
       end
 
-      describe "posts" do
-        describe "published" do
-          before do
-            expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
-            expect(helper).to receive(:article_path).with(instance.slug, format: nil).and_return("path")
-          end
+      describe "unpublished users" do
+        let(:instance) { create(:writer, :with_draft_post) }
 
-          let(:instance) { create(:minimal_article, :published) }
-          let(:expected) { "a.admin-icon.public-view[title='view article on site'][href='path']" }
+        it { is_expected.to eq(nil) }
+      end
 
-          it "has the correct markup" do
-            is_expected.to have_tag(expected, text: "public", count: 1)
-          end
+      describe "non-writer users" do
+        let(:instance) { create(:member) }
+
+        it { is_expected.to eq(nil) }
+      end
+
+      describe "published posts" do
+        before do
+          expect(helper).to receive(:semantic_svg_image).with("open_iconic/link-intact.svg", anything).and_return("public")
+          expect(helper).to receive(:article_path).with(instance.slug, format: nil).and_return("path")
         end
 
-        describe "scheduled" do
-          let(:instance) { create(:minimal_article, :scheduled) }
+        let(:instance) { create(:minimal_article, :published) }
+        let(:expected) { "a.admin-icon.public-view[title='view article on site'][href='path']" }
 
-          it { is_expected.to eq(nil) }
+        it "has the correct markup" do
+          is_expected.to have_tag(expected, text: "public", count: 1)
         end
+      end
 
-        describe "draft" do
-          let(:instance) { create(:minimal_article, :draft) }
+      describe "scheduled posts" do
+        let(:instance) { create(:minimal_article, :scheduled) }
 
-          it { is_expected.to eq(nil) }
-        end
+        it { is_expected.to eq(nil) }
+      end
+
+      describe "draft posts" do
+        let(:instance) { create(:minimal_article, :draft) }
+
+        it { is_expected.to eq(nil) }
       end
     end
   end

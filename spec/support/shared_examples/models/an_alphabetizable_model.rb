@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.shared_examples "an_alphabetizable_model" do
   describe "included" do
     describe "scope-related" do
-      describe "self#alpha" do
+      describe ".alpha" do
         it "orders by alpha column" do
           expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with(:alpha)
 

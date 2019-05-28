@@ -7,7 +7,7 @@ RSpec.shared_examples "a_ginsu_model" do
 
   let!(:collection) { described_class.where(id: ids_for_minimal_list(3)) }
 
-  describe "self#for_list" do
+  describe ".for_list" do
     subject { collection.for_list }
 
     it { is_expected.to eager_load(list_loads) }
@@ -17,7 +17,7 @@ RSpec.shared_examples "a_ginsu_model" do
     end
   end
 
-  describe "self#for_show" do
+  describe ".for_show" do
     subject { collection.for_show }
 
     it { is_expected.to eager_load(show_loads) }

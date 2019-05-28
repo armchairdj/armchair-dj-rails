@@ -9,11 +9,11 @@ RSpec.describe PostRenderer do
     end
 
     describe "internal links" do
-      context "success" do
+      context "when successful" do
         pending "captures internal links and turns them into real links"
       end
 
-      context "failure" do
+      context "when failed" do
         pending "renders unlinked text"
         pending "logs failure"
       end

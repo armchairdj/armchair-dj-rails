@@ -7,37 +7,20 @@ RSpec.shared_examples "a_ginsu_scoper" do
   allowed_hash = described_class.new.allowed
 
   describe "instance" do
-    let(:current_scope) { "All" }
-    let(:current_sort) { "Default" }
-    let(:current_dir) { "ASC" }
-    let(:instance) do
-      described_class.new(
-        current_scope: current_scope,
-        current_sort:  current_sort,
-        current_dir:   current_dir
-      )
-    end
-
     describe "#resolved" do
-      subject { instance.resolved }
+      it "validates" do
+        instance = described_class.new(current_scope: "All", current_sort: "Default", current_dir: "ASC")
 
-      context "basics" do
-        before do
-          expect(instance).to receive(:validate)
-        end
+        expect(instance).to receive(:validate)
 
-        it "validates" do
-          is_expected.to eq(instance.allowed[current_scope])
-        end
+        expect(instance.resolved).to eq(instance.allowed["All"])
       end
 
       allowed_hash.keys.each do |key|
-        context "for #{key} scope" do
-          let(:instance) { described_class.new(current_scope: key) }
+        it "returns a scope for #{key}" do
+          instance = described_class.new(current_scope: key)
 
-          it "returns a scope" do
-            is_expected.to eq(instance.allowed[key])
-          end
+          expect(instance.resolved).to eq(instance.allowed[key])
         end
       end
     end
@@ -51,7 +34,7 @@ RSpec.shared_examples "a_ginsu_scoper" do
 
       describe "individual items" do
         described_class.new.map.each do |key, value|
-          context "for key #{key}" do
+          context "with key #{key}" do
             it { expect(value).to be_a_kind_of(Hash) }
 
             describe ":active?" do
@@ -98,13 +81,12 @@ RSpec.shared_examples "a_ginsu_scoper" do
       end
     end
 
-    context "private" do
-      describe "#validate" do
+    describe "#validate" do
         subject { instance.send(:validate) }
 
         describe "valid" do
           allowed_hash.keys.each do |key|
-            context "for #{key} scope" do
+            context "with #{key} scope" do
               let(:instance) { described_class.new(current_scope: key) }
 
               specify { expect { subject }.to_not raise_exception }
@@ -118,6 +100,5 @@ RSpec.shared_examples "a_ginsu_scoper" do
           specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
         end
       end
-    end
   end
 end

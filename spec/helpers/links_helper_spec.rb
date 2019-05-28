@@ -8,13 +8,13 @@ RSpec.describe LinksHelper do
 
     let(:opts) { {} }
 
-    context "empty collection" do
+    context "with empty collection" do
       let(:links) { Link.none }
 
       it { is_expected.to eq(nil) }
     end
 
-    context "full collection" do
+    context "with full collection" do
       let(:links) { Link.where(id: ids_for_minimal_list(3)) }
 
       it "has the correct markup" do

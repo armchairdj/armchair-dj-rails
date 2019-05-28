@@ -50,7 +50,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     hash
   end
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
@@ -90,7 +90,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       let(:send_request) { post :create, params: wrap_create_params(params) }
 
-      context "success" do
+      context "when success" do
         let(:params) { min_create_params }
 
         it { expect { subject }.to change(Post, :count).by(1) }
@@ -111,7 +111,7 @@ RSpec.shared_examples "an_admin_post_controller" do
         end
       end
 
-      context "failure" do
+      context "with failure" do
         let(:params) { bad_create_params }
 
         it { is_expected.to successfully_render(templates[:new]) }
@@ -143,7 +143,7 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "PUT #update" do
-      context "basics" do
+      context "with basics" do
         let(:instance) { create_minimal_instance(:draft) }
 
         before do
@@ -181,16 +181,16 @@ RSpec.shared_examples "an_admin_post_controller" do
         end
       end
 
-      context "status updates" do
+      context "with status updates" do
         before do
           put :update, params: wrap_update_params(instance, params, transformation)
         end
 
-        context "publishing" do
+        context "when publishing" do
           let(:instance) { create_minimal_instance(:draft) }
           let(:transformation) { :publishing }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -205,11 +205,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "unpublishing" do
+        context "when unpublishing" do
           let(:instance) { create_minimal_instance(:published) }
           let(:transformation) { :unpublishing }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -224,11 +224,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "scheduling" do
+        context "when scheduling" do
           let(:instance) { create_minimal_instance(:draft) }
           let(:transformation) { :scheduling }
 
-          context "valid" do
+          context "when valid" do
             let(:publish_on) { 3.weeks.from_now }
 
             let(:params) { { "body" => "body", "publish_on" => publish_on } }
@@ -245,11 +245,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "unscheduling" do
+        context "when unscheduling" do
           let(:instance) { create_minimal_instance(:scheduled) }
           let(:transformation) { :unscheduling }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -261,18 +261,18 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_draft }
           end
 
-          pending "invalid"
+          pending "when invalid"
         end
       end
 
-      context "published" do
+      context "when published" do
         let(:instance) { create_minimal_instance(:published) }
 
         before do
           put :update, params: wrap_update_params(instance, params)
         end
 
-        context "replacing slug" do
+        context "when replacing slug" do
           let(:params) { { "clear_slug" => "1" } }
 
           it { is_expected.to send_user_to(show_path(instance)) }
@@ -323,7 +323,7 @@ RSpec.shared_examples "an_admin_post_controller" do
         it { is_expected.to render_empty_json_500 }
       end
 
-      context "non-xhr" do
+      context "with non-xhr" do
         let(:params) { autosave_params }
         let(:send_request) { put :autosave, params: wrap_update_params(instance, params) }
 
@@ -347,16 +347,16 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
   end
 
-  context "as admin" do
+  context "with admin" do
     pending "cannot destroy"
   end
 
-  context "as editor" do
+  context "with editor" do
     pending "cannot destroy"
     pending "cannot publish"
   end
 
-  context "as writer" do
+  context "with writer" do
     pending "cannot destroy"
     pending "cannot publish"
     pending "cannot access others' posts"

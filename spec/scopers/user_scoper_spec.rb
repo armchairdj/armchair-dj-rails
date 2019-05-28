@@ -16,12 +16,10 @@ RSpec.describe UserScoper do
       it { is_expected.to match_array(["All", "Member", "Writer", "Editor", "Admin", "Root"]) }
     end
 
-    context "private" do
-      describe "#model_class" do
-        subject { instance.send(:model_class) }
+    describe "#model_class" do
+      subject { instance.send(:model_class) }
 
-        it { is_expected.to eq(User) }
-      end
+      it { is_expected.to eq(User) }
     end
   end
 end

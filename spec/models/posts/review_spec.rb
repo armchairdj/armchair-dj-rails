@@ -54,20 +54,20 @@ RSpec.describe Review do
     describe "#sluggable_parts" do
       subject { instance.sluggable_parts }
 
-      context "for review" do
+      context "with review" do
         let(:instance) { create(:never_for_ever_album_review) }
 
         it { is_expected.to eq(["Albums", "Kate Bush", "Never for Ever", nil]) }
       end
 
-      context "for review of work with subtitle" do
+      context "with review of work with subtitle" do
         let(:work) { create(:minimal_album, title: "Title", subtitle: "Subtitle", maker_names: ["Artist"]) }
         let(:instance) { create_minimal_instance(work: work) }
 
         it { is_expected.to eq(["Albums", "Artist", "Title", "Subtitle"]) }
       end
 
-      context "for review of collaborative work" do
+      context "with review of collaborative work" do
         let(:instance) { create(:unity_album_review) }
 
         it { is_expected.to eq(["Albums", "Carl Craig & Green Velvet", "Unity", nil]) }

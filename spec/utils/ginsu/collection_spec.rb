@@ -4,69 +4,66 @@ require "rails_helper"
 
 RSpec.describe Ginsu::Collection do
   describe "constructor" do
-    context "arguments" do
-      let(:relation) { Tag.for_list }
+    let(:relation) { Tag.for_list }
 
-      before do
+    context "without keyword arguments" do
+      let(:expected_args) { { current_scope: nil, current_sort: nil, current_dir: nil } }
+
+      it "builds utility classes correctly" do
         expect(TagScoper).to receive(:new)
         expect(TagSorter).to receive(:new).with(**expected_args)
-      end
 
-      context "without keyword arguments" do
-        let(:expected_args) { { current_scope: nil, current_sort: nil, current_dir: nil } }
-
-        it "builds utility classes correctly" do
-          described_class.new(relation)
-        end
-      end
-
-      context "with keyword arguments" do
-        let(:expected_args) { { current_scope: "scope", current_sort: "sort", current_dir: "dir" } }
-
-        it "builds utility classes correctly" do
-          described_class.new(relation, scope: "scope", sort: "sort", dir: "dir", page: "page")
-        end
+        described_class.new(relation)
       end
     end
 
-    context "with a model that is" do
-      context "vanilla" do
+    context "with keyword arguments" do
+      let(:expected_args) { { current_scope: "scope", current_sort: "sort", current_dir: "dir" } }
+
+      it "builds utility classes correctly" do
+        expect(TagScoper).to receive(:new)
+        expect(TagSorter).to receive(:new).with(**expected_args)
+
+        described_class.new(relation, scope: "scope", sort: "sort", dir: "dir", page: "page")
+      end
+    end
+
+    context "with a vanilla model" do
+      before do
+        expect(AspectScoper).to receive(:new)
+        expect(AspectSorter).to receive(:new)
+      end
+
+      it "builds scopers and sorters based on the relation's class" do
+        described_class.new(Aspect.for_list)
+      end
+    end
+
+    context "with an STI model" do
+      context "with multiple subclasses but one controller" do
         before do
-          expect(AspectScoper).to receive(:new)
-          expect(AspectSorter).to receive(:new)
+          expect(WorkScoper).to receive(:new)
+          expect(WorkSorter).to receive(:new)
+        end
+
+        it "builds scopers and sorters based on the relation's superclass" do
+          described_class.new(Song.for_list)
+        end
+      end
+
+      context "with multiple subclasses and controllers" do
+        before do
+          expect(ArticleScoper).to receive(:new)
+          expect(ArticleSorter).to receive(:new)
         end
 
         it "builds scopers and sorters based on the relation's class" do
-          described_class.new(Aspect.for_list)
-        end
-      end
-
-      context "STI" do
-        context "with multiple subclasses but one controller" do
-          before do
-            expect(WorkScoper).to receive(:new)
-            expect(WorkSorter).to receive(:new)
-          end
-
-          it "builds scopers and sorters based on the relation's superclass" do
-            described_class.new(Song.for_list)
-          end
-        end
-
-        context "with multiple subclasses and controllers" do
-          before do
-            expect(ArticleScoper).to receive(:new)
-            expect(ArticleSorter).to receive(:new)
-          end
-
-          it "builds scopers and sorters based on the relation's class" do
-            described_class.new(Article.for_list)
-          end
+          described_class.new(Article.for_list)
         end
       end
     end
 
-    context "instance variables" do
+    describe "instance variables" do
       let(:relation) { Tag.for_list }
       let(:instance) { described_class.new(relation) }
 
@@ -97,11 +94,11 @@ RSpec.describe Ginsu::Collection do
       describe "@page" do
         subject { instance.instance_variable_get(:"@page") }
 
-        context "default" do
+        context "with default value" do
           it { is_expected.to eq("1") }
         end
 
-        context "specific" do
+        context "with specific value" do
           let(:instance) { described_class.new(relation, page: "2") }
 
           it { is_expected.to eq("2") }
@@ -154,19 +151,19 @@ RSpec.describe Ginsu::Collection do
         allow(instance).to receive(:resolved).and_return(collection)
       end
 
-      context "0 records" do
+      context "with 0 records" do
         before { allow(collection).to receive(:total_count).and_return(0) }
 
         it { is_expected.to eq("0 Total Records") }
       end
 
-      context "1 record" do
+      context "with 1 record" do
         before { allow(collection).to receive(:total_count).and_return(1) }
 
         it { is_expected.to eq("1 Total Record") }
       end
 
-      context ">1 records" do
+      context "with >1 records" do
         before { allow(collection).to receive(:total_count).and_return(2) }
 
         it { is_expected.to eq("2 Total Records") }

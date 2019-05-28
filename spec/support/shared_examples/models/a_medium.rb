@@ -19,7 +19,7 @@ RSpec.shared_examples "a_medium" do
         let!(:good_aspect) { create(:minimal_aspect, facet: good_facet) }
         let!(:bad_aspect) { create(:minimal_aspect, facet:  bad_facet) }
 
-        context "valid" do
+        context "when valid" do
           before do
             subject.aspect_ids = [good_aspect.id]
             subject.valid?
@@ -28,7 +28,7 @@ RSpec.shared_examples "a_medium" do
           specify { expect(subject).to be_valid }
         end
 
-        context "invalid" do
+        context "when invalid" do
           before { subject.aspect_ids = [bad_aspect.id] }
 
           it "has the right error" do

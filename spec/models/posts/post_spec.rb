@@ -74,7 +74,7 @@ RSpec.describe Post do
         let(:ids) { [draft, scheduled, published].map(&:id) }
         let(:collection) { described_class.where(id: ids) }
 
-        describe "self#reverse_cron" do
+        describe ".reverse_cron" do
           subject { collection.reverse_cron }
 
           it "includes all, ordered descending by published_at, published_on, updated_at" do
@@ -83,25 +83,25 @@ RSpec.describe Post do
         end
 
         describe "for status" do
-          describe "self#draft" do
+          describe ".draft" do
             subject { collection.draft }
 
             it { is_expected.to contain_exactly(draft) }
           end
 
-          describe "self#scheduled" do
+          describe ".scheduled" do
             subject { collection.scheduled }
 
             it { is_expected.to contain_exactly(scheduled) }
           end
 
-          describe "self#published" do
+          describe ".published" do
             subject { collection.published }
 
             it { is_expected.to contain_exactly(published) }
           end
 
-          describe "self#unpublished" do
+          describe ".unpublished" do
             subject { collection.unpublished }
 
             it { is_expected.to contain_exactly(draft, scheduled) }
@@ -152,13 +152,13 @@ RSpec.describe Post do
         allow(renderer).to receive(:render).and_return("rendered markdown")
       end
 
-      context "happy path" do
+      context "when on happy path" do
         let(:instance) { build_minimal_instance(body: "markdown") }
 
         it { is_expected.to eq("rendered markdown".html_safe) }
       end
 
-      context "nil body" do
+      context "with nil body" do
         let(:instance) { build_minimal_instance(body: nil) }
 
         it { is_expected.to eq(nil) }
@@ -210,14 +210,14 @@ RSpec.describe Post do
       end
 
       describe "publish" do
-        context "draft" do
+        context "when draft" do
           specify do
             expect(draft.publish!).to eq(true)
             expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
           end
         end
 
-        context "scheduled" do
+        context "when scheduled" do
           specify do
             expect(scheduled.publish!).to eq(true)
             expect(scheduled.publish_on).to eq(nil)
@@ -316,7 +316,7 @@ RSpec.describe Post do
   end
 
   describe "public vs. admin" do
-    describe "self#for_public" do
+    describe ".for_public" do
       subject { collection.for_public }
 
       let(:draft) { create_minimal_instance(:draft) }
@@ -329,7 +329,7 @@ RSpec.describe Post do
       it { is_expected.to eq [published] }
     end
 
-    describe "self#for_cms_user" do
+    describe ".for_cms_user" do
       subject { collection.for_cms_user(instance) }
 
       let!(:no_user) { nil }
@@ -402,7 +402,7 @@ RSpec.describe Post do
     let!(:current) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
     let!(:past_due) { create_minimal_instance(:scheduled, publish_on: 1.days.from_now) }
 
-    describe "self#scheduled_and_due" do
+    describe ".scheduled_and_due" do
       it "includes only scheduled that have come due, ordered by schedule date" do
         Timecop.freeze(Date.today + 3) do
           expect(described_class.scheduled_and_due).to eq([
@@ -413,7 +413,7 @@ RSpec.describe Post do
       end
     end
 
-    describe "self#publish_scheduled" do
+    describe ".publish_scheduled" do
       it "publishes scheduled if publish_on is past" do
         Timecop.freeze(Date.today + 3) do
           expect(described_class.publish_scheduled).to eq(
