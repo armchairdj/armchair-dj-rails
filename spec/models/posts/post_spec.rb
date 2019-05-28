@@ -47,7 +47,10 @@ RSpec.describe Post do
         it { is_expected.to validate_absence_of(:published_at) }
 
         describe "when publish_on is in the past" do
-          before(:each) { subject.publish_on = Date.today - 1; subject.valid? }
+          before(:each) do
+            subject.publish_on = Date.today - 1
+            subject.valid?
+          end
 
           it { is_expected.to have_error(:publish_on, :after) }
         end

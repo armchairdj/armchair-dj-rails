@@ -17,7 +17,7 @@ module ModuleHelper
 
     attrs = combine_attrs(opts, class: "admin-section")
 
-    if header = section_header(headline, subhead)
+    if (header = section_header(headline, subhead))
       content = (header + content).html_safe
     end
 

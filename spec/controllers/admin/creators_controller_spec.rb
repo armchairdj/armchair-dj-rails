@@ -25,16 +25,19 @@ RSpec.describe Admin::CreatorsController do
     end
 
     describe "GET #new" do
-      let(:operation) { get :new }
+      let(:send_request) { get :new }
 
-      subject { operation }
+      subject { send_request }
 
       it { is_expected.to successfully_render("admin/creators/new") }
 
       it { is_expected.to prepare_identity_and_membership_dropdowns }
 
       describe "instance" do
-        subject { operation; assigns(:creator) }
+        subject do
+          send_request
+          assigns(:creator)
+        end
 
         it { is_expected.to be_a_populated_new_creator }
       end
@@ -87,16 +90,19 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with invalid params" do
-        let(:operation) { post :create, params: { creator: bad_params } }
+        let(:send_request) { post :create, params: { creator: bad_params } }
 
-        subject { operation }
+        subject { send_request }
 
         it { is_expected.to successfully_render("admin/creators/new") }
 
         it { is_expected.to prepare_identity_and_membership_dropdowns }
 
         describe "instance" do
-          subject { operation; assigns(:creator) }
+          subject do
+            send_request
+            assigns(:creator)
+          end
 
           it { is_expected.to be_a_populated_new_creator }
           it { is_expected.to have_coerced_attributes(bad_params) }
@@ -150,18 +156,21 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with invalid params" do
-        let(:operation) do
+        let(:send_request) do
           put :update, params: { id: instance.to_param, creator: bad_params }
         end
 
-        subject { operation }
+        subject { send_request }
 
         it { is_expected.to successfully_render("admin/creators/edit") }
 
         it { is_expected.to prepare_identity_and_membership_dropdowns }
 
         describe "instance" do
-          subject { operation; assigns(:creator) }
+          subject do
+            send_request
+            assigns(:creator)
+          end
 
           it { is_expected.to eq(instance) }
           it { is_expected.to be_invalid }

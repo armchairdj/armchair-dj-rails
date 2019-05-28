@@ -32,7 +32,7 @@ RSpec.describe UrlnessValidator do
 
       it { is_expected.to_not be_valid }
 
-      it "should have error message" do
+      it "has error message" do
         subject.valid?
 
         is_expected.to have_error(url: :not_a_url)
@@ -44,7 +44,7 @@ RSpec.describe UrlnessValidator do
 
       it { is_expected.to_not be_valid }
 
-      it "should have error message" do
+      it "has error message" do
         subject.valid?
 
         is_expected.to have_error(url: :not_a_url)

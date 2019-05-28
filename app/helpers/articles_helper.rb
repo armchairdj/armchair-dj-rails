@@ -9,6 +9,8 @@ module ArticlesHelper
   end
 
   def article_title(article, length: nil, full: true)
+    return article.title if full
+
     smart_truncate(article.title, length: length)
   end
 

@@ -30,9 +30,12 @@ RSpec.describe Admin::RolesController do
 
       it { is_expected.to successfully_render("admin/roles/new") }
 
-      it { subject; expect(assigns(:role)).to be_a_new(Role) }
+      it "assigns ivars" do
+        subject
 
-      it { subject; expect(assigns(:media)).to match_array(media) }
+        expect(assigns(:role)).to be_a_new(Role)
+        expect(assigns(:media)).to match_array(media)
+      end
     end
 
     describe "POST #create" do
@@ -69,10 +72,13 @@ RSpec.describe Admin::RolesController do
 
         it { is_expected.to successfully_render("admin/roles/new") }
 
-        it { subject; expect(assigns(:role)).to have_coerced_attributes(bad_params) }
-        it { subject; expect(assigns(:role)).to be_invalid }
+        it "assigns ivars" do
+          subject
 
-        it { subject; expect(assigns(:media)).to match_array(media) }
+          expect(assigns(:role)).to have_coerced_attributes(bad_params)
+          expect(assigns(:role)).to be_invalid
+          expect(assigns(:media)).to match_array(media)
+        end
       end
     end
 
@@ -83,7 +89,10 @@ RSpec.describe Admin::RolesController do
 
       it { is_expected.to assign(role, :role) }
 
-      it { subject; expect(assigns(:media)).to match_array(media) }
+      it "assigns ivars" do
+        subject
+        expect(assigns(:media)).to match_array(media)
+      end
     end
 
     describe "PUT #update" do
@@ -111,7 +120,10 @@ RSpec.describe Admin::RolesController do
 
         it { is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid }
 
-        it { subject; expect(assigns(:media)).to match_array(media) }
+        it "assigns ivars" do
+          subject
+          expect(assigns(:media)).to match_array(media)
+        end
       end
     end
 

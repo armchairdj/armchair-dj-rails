@@ -30,7 +30,10 @@ RSpec.describe Admin::WorksController do
 
       it { is_expected.to prepare_the_initial_form }
 
-      it { subject; expect(assigns(:work)).to be_a_new(Work) }
+      it "assigns ivars" do
+        subject
+        expect(assigns(:work)).to be_a_new(Work)
+      end
     end
 
     describe "POST #create" do
@@ -57,9 +60,14 @@ RSpec.describe Admin::WorksController do
 
         it { is_expected.to successfully_render("admin/works/new") }
 
-        it { subject; expect(assigns(:work)).to have_coerced_attributes(initial_params) }
+        it "sets up the work" do
+          subject
 
-        it { subject; expect(assigns(:work).errors).to match_array([]) }
+          actual = assigns(:work)
+
+          expect(actual).to have_coerced_attributes(initial_params)
+          expect(actual.errors).to match_array([])
+        end
 
         it { is_expected.to prepare_the_complete_form }
       end
@@ -81,22 +89,25 @@ RSpec.describe Admin::WorksController do
       end
 
       context "with invalid params" do
-        let(:operation) { post :create, params: { work: bad_params } }
+        let(:send_request) { post :create, params: { work: bad_params } }
 
-        it { expect { operation }.to_not change(Work, :count) }
+        it { expect { send_request }.to_not change(Work, :count) }
 
         describe "response" do
-          subject { operation }
+          subject { send_request }
 
           it { is_expected.to successfully_render("admin/works/new") }
           it { is_expected.to prepare_the_complete_form }
+        end
 
-          describe "instance" do
-            subject { operation; assigns(:work) }
-
-            it { is_expected.to have_coerced_attributes(bad_params) }
-            it { is_expected.to be_invalid }
+        describe "instance" do
+          subject do
+            send_request
+            assigns(:work)
           end
+
+          it { is_expected.to have_coerced_attributes(bad_params) }
+          it { is_expected.to be_invalid }
         end
       end
     end
@@ -171,16 +182,19 @@ RSpec.describe Admin::WorksController do
       end
 
       describe "xhr" do
-        let(:operation) do
+        let(:send_request) do
           post :reorder_credits, xhr: true, params: { id: instance.to_param, credit_ids: shuffled }
         end
 
-        subject { operation }
+        subject { send_request }
 
         it { expect(response).to have_http_status(200) }
 
         describe "reordering" do
-          subject { operation; instance.reload.credits.ids }
+          subject do
+            send_request
+            instance.reload.credits.ids
+          end
 
           it { is_expected.to eq(shuffled) }
         end

@@ -1179,6 +1179,10 @@ Style/MixinGrouping:
     - separated
     - grouped
 
+Style/MixinUsage:
+  Exclude:
+    - "bin/*"
+
 Style/ModuleFunction:
   EnforcedStyle: module_function
   SupportedStyles:

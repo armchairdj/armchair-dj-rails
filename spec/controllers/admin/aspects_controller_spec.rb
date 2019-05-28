@@ -49,14 +49,17 @@ RSpec.describe Admin::AspectsController do
       end
 
       context "with invalid params" do
-        let(:operation) { post :create, params: { aspect: bad_params } }
+        let(:send_request) { post :create, params: { aspect: bad_params } }
 
-        subject { operation }
+        subject { send_request }
 
         it { is_expected.to successfully_render("admin/aspects/new") }
 
         describe "instance" do
-          subject { operation; assigns(:aspect) }
+          subject do
+            send_request
+            assigns(:aspect)
+          end
 
           it { is_expected.to be_invalid }
 

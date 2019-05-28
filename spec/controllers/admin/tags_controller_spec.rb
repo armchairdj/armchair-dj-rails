@@ -29,7 +29,10 @@ RSpec.describe Admin::TagsController do
 
       it { is_expected.to successfully_render("admin/tags/new") }
 
-      it { subject; expect(assigns(:tag)).to be_a_new(Tag) }
+      it "assigns ivars" do
+        subject
+        expect(assigns(:tag)).to be_a_new(Tag)
+      end
     end
 
     describe "POST #create" do

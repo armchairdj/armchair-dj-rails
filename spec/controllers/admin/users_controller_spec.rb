@@ -28,7 +28,10 @@ RSpec.describe Admin::UsersController do
 
       it { is_expected.to successfully_render("admin/users/new") }
 
-      it { subject; expect(assigns(:user)).to be_a_new(User) }
+      it "assigns ivars" do
+        subject
+        expect(assigns(:user)).to be_a_new(User)
+      end
     end
 
     describe "POST #create" do
@@ -52,8 +55,14 @@ RSpec.describe Admin::UsersController do
 
         it { is_expected.to successfully_render("admin/users/new") }
 
-        it { subject; expect(assigns(:user)).to have_coerced_attributes(bad_params) }
-        it { subject; expect(assigns(:user)).to be_invalid }
+        it "persists invalid user" do
+          subject
+
+          actual = assigns(:user)
+
+          expect(actual).to have_coerced_attributes(bad_params)
+          expect(actual).to be_invalid
+        end
       end
     end
 

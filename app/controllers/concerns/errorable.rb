@@ -91,9 +91,9 @@ concern :Errorable do
   private
 
     def set_user_return_to
-      if request.get? && !request.xhr?
-        session["user_return_to"] = request.url
-      end
+      return unless request.get? && !request.xhr?
+
+      session["user_return_to"] = request.url
     end
 
     def require_login

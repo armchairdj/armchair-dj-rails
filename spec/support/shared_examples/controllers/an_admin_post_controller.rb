@@ -59,9 +59,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "GET #show" do
       let(:instance) { create_minimal_instance(:draft) }
-      let(:operation) { get :show, params: { id: instance.to_param } }
+      let(:send_request) { get :show, params: { id: instance.to_param } }
 
-      subject { operation }
+      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:show]) }
 
@@ -69,23 +69,26 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #new" do
-      let(:operation) { get :new }
+      let(:send_request) { get :new }
 
-      subject { operation }
+      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:new]) }
 
       describe "instance" do
-        subject { operation; assigns(:post) }
+        subject do
+          send_request
+          assigns(:post)
+        end
 
         it { is_expected.to be_a_populated_new_post(param_key) }
       end
     end
 
     describe "POST #create" do
-      let(:operation) { post :create, params: wrap_create_params(params) }
+      let(:send_request) { post :create, params: wrap_create_params(params) }
 
-      subject { operation }
+      subject { send_request }
 
       context "success" do
         let(:params) { min_create_params }
@@ -98,10 +101,13 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         it { is_expected.to assign(Post.last, :post).with_attributes(params).and_be_valid }
 
-        describe "instance" do
-          subject { operation; Post.last }
+        describe "author" do
+          subject do
+            send_request
+            Post.last.author
+          end
 
-          it { expect(subject.author).to eq(controller.current_user) }
+          it { is_expected.to eq(controller.current_user) }
         end
       end
 
@@ -111,7 +117,10 @@ RSpec.shared_examples "an_admin_post_controller" do
         it { is_expected.to successfully_render(templates[:new]) }
 
         describe "instance" do
-          subject { operation; assigns(:post) }
+          subject do
+            send_request
+            assigns(:post)
+          end
 
           it { is_expected.to be_a_populated_new_post(param_key) }
 
@@ -122,9 +131,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "GET #edit" do
       let(:instance) { create_minimal_instance(:draft) }
-      let(:operation) { get :edit, params: { id: instance.to_param } }
+      let(:send_request) { get :edit, params: { id: instance.to_param } }
 
-      subject { operation }
+      subject { send_request }
 
       it { is_expected.to successfully_render(templates[:edit]) }
 
@@ -276,9 +285,9 @@ RSpec.shared_examples "an_admin_post_controller" do
     describe "PUT #autosave" do
       let!(:instance) { create_minimal_instance(:draft) }
       let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
-      let(:operation) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
+      let(:send_request) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
 
-      subject { operation }
+      subject { send_request }
 
       context "with valid params" do
         let(:params) { autosave_params }
@@ -316,7 +325,7 @@ RSpec.shared_examples "an_admin_post_controller" do
 
       context "non-xhr" do
         let(:params) { autosave_params }
-        let(:operation) { put :autosave, params: wrap_update_params(instance, params) }
+        let(:send_request) { put :autosave, params: wrap_update_params(instance, params) }
 
         it { is_expected.to render_bad_request }
       end
@@ -326,9 +335,9 @@ RSpec.shared_examples "an_admin_post_controller" do
 
     describe "DELETE #destroy" do
       let!(:instance) { create_minimal_instance }
-      let(:operation) { delete :destroy, params: { id: instance.to_param } }
+      let(:send_request) { delete :destroy, params: { id: instance.to_param } }
 
-      subject { operation }
+      subject { send_request }
 
       it { expect { subject }.to change(Post, :count).by(-1) }
 

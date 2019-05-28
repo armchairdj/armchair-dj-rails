@@ -13,7 +13,7 @@ module ReviewsHelper
   end
 
   def link_to_review(review, admin: false, full_url: false, text: nil, full: true, length: nil, **opts)
-    return unless url = url_for_review(review, admin: admin, full_url: full_url)
+    return unless (url = url_for_review(review, admin: admin, full_url: full_url))
 
     text ||= review_title(review, full: full, length: length)
 

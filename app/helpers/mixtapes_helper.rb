@@ -9,6 +9,8 @@ module MixtapesHelper
   end
 
   def mixtape_title(mixtape, length: nil, full: true)
+    return mixtape.playlist.title if full
+
     smart_truncate(mixtape.playlist.title, length: length)
   end
 

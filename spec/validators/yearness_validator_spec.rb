@@ -56,7 +56,7 @@ RSpec.describe YearnessValidator do
 
       it { is_expected.to_not be_valid }
 
-      it "should have error message" do
+      it "has error message" do
         subject.valid?
 
         is_expected.to have_error(year: :not_a_year)
@@ -68,7 +68,7 @@ RSpec.describe YearnessValidator do
 
       it { is_expected.to_not be_valid }
 
-      it "should have error message" do
+      it "has error message" do
         subject.valid?
 
         is_expected.to have_error(year: :not_a_year)
