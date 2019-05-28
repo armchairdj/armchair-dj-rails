@@ -16,7 +16,7 @@ RSpec.describe Work do
     it_behaves_like "an_imageable_model"
 
     describe "nilify_blanks" do
-      subject { build_minimal_instance }
+      subject(:instance) { build_minimal_instance }
 
       # Must specify individual fields for STI models.
       it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
@@ -29,7 +29,7 @@ RSpec.describe Work do
 
   describe "relationships" do
     describe "#available_relatives" do
-      subject { instance.available_relatives }
+      subject(:array_for_dropdown) { instance.available_relatives }
 
       let(:instance) { create(:minimal_song) }
       let!(:song) { create(:minimal_song) }
@@ -40,7 +40,7 @@ RSpec.describe Work do
 
     describe "with source" do
       describe "has associations" do
-        subject { build_minimal_instance }
+        subject(:instance) { build_minimal_instance }
 
         it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
 
@@ -48,13 +48,13 @@ RSpec.describe Work do
       end
 
       describe "validates nested uniqueness" do
-        subject { build_minimal_instance }
+        subject(:instance) { build_minimal_instance }
 
         let(:target) { create_minimal_instance }
         let(:other_target) { create_minimal_instance }
 
         before do
-          subject.target_relationships_attributes = attributes
+          instance.target_relationships_attributes = attributes
         end
 
         context "without dupes" do
@@ -103,7 +103,7 @@ RSpec.describe Work do
         it { is_expected.to accept_nested_attributes_for(:target_relationships).allow_destroy(true) }
 
         describe "#prepare_target_relationships" do
-          subject { instance.target_relationships }
+          subject(:target_relationships) { instance.target_relationships }
 
           before { instance.prepare_target_relationships }
 
@@ -121,7 +121,7 @@ RSpec.describe Work do
         end
 
         describe "#reject_target_relationship?" do
-          subject { instance.target_relationships }
+          subject(:target_relationships) { instance.target_relationships }
 
           describe "accepts if target_id is present" do
             let(:instance) { build_minimal_instance(target_relationships_attributes: valid_params) }
@@ -140,7 +140,7 @@ RSpec.describe Work do
 
     describe "with target" do
       describe "has associations" do
-        subject { build_minimal_instance }
+        subject(:instance) { build_minimal_instance }
 
         it { is_expected.to have_many(:source_relationships).dependent(:destroy) }
 
@@ -148,13 +148,13 @@ RSpec.describe Work do
       end
 
       describe "validates nested uniqueness" do
-        subject { build_minimal_instance }
+        subject(:instance) { build_minimal_instance }
 
         let(:source) { create_minimal_instance }
         let(:other_source) { create_minimal_instance }
 
         before do
-          subject.source_relationships_attributes = attributes
+          instance.source_relationships_attributes = attributes
         end
 
         context "without dupes" do
@@ -203,7 +203,7 @@ RSpec.describe Work do
         it { is_expected.to accept_nested_attributes_for(:source_relationships).allow_destroy(true) }
 
         describe "#prepare_source_relationships" do
-          subject { instance.source_relationships }
+          subject(:source_relationships) { instance.source_relationships }
 
           before { instance.prepare_source_relationships }
 
@@ -221,7 +221,7 @@ RSpec.describe Work do
         end
 
         describe "#reject_source_relationship?" do
-          subject { instance.source_relationships }
+          subject(:source_relationships) { instance.source_relationships }
 
           describe "accepts if source_id is present" do
             let(:instance) { build_minimal_instance(source_relationships_attributes: valid_params) }
@@ -241,7 +241,7 @@ RSpec.describe Work do
 
   describe "class" do
     describe ".grouped_by_medium" do
-      subject { described_class.where(id: ids).grouped_by_medium }
+      subject(:association) { described_class.where(id: ids).grouped_by_medium }
 
       let(:song_1) { create(:minimal_song, maker_names: ["Wilco"]) }
       let(:song_2) { create(:minimal_song, maker_names: ["Annie"]) }
@@ -260,7 +260,7 @@ RSpec.describe Work do
     end
 
     describe ".media" do
-      subject { described_class.media }
+      subject(:association) { described_class.media }
 
       let(:expected) do
         [
@@ -287,7 +287,7 @@ RSpec.describe Work do
     end
 
     describe ".valid_media" do
-      subject { described_class.valid_media }
+      subject(:association) { described_class.valid_media }
 
       let(:expected) do
         [
@@ -385,7 +385,7 @@ RSpec.describe Work do
         end
 
         describe "#prepare_credits" do
-          subject { instance.credits }
+          subject(:credits) { instance.credits }
 
           before { instance.prepare_credits }
 
@@ -407,7 +407,7 @@ RSpec.describe Work do
         it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
 
         describe "reject_if" do
-          subject do
+          subject(:instance) do
             build(:minimal_song, contributions_attributes: {
               "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
               "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
@@ -416,13 +416,13 @@ RSpec.describe Work do
 
           let(:role) { create(:minimal_role, medium: "Song") }
 
-          specify { expect { subject.save }.to change { Contribution.count }.by(1) }
+          specify { expect { instance.save }.to change { Contribution.count }.by(1) }
 
-          specify { expect(subject.contributions).to have(1).items }
+          specify { expect(instance.contributions).to have(1).items }
         end
 
         describe "#prepare_contributions" do
-          subject { instance.contributions }
+          subject(:contributions) { instance.contributions }
 
           before { instance.prepare_contributions }
 
@@ -444,20 +444,20 @@ RSpec.describe Work do
         it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
 
         describe "reject_if" do
-          subject do
+          subject(:instance) do
             build(:minimal_song, milestones_attributes: {
               "0" => attributes_for(:work_milestone_for_work, year: "1981"),
               "1" => attributes_for(:work_milestone_for_work, year: "")
             })
           end
 
-          specify { expect { subject.save }.to change { Work::Milestone.count }.by(1) }
+          specify { expect { instance.save }.to change { Work::Milestone.count }.by(1) }
 
-          specify { expect(subject.milestones).to have(1).items }
+          specify { expect(instance.milestones).to have(1).items }
         end
 
         describe "#prepare_milestones" do
-          subject { instance.milestones }
+          subject(:milestones) { instance.milestones }
 
           before { instance.prepare_milestones }
 
@@ -466,7 +466,7 @@ RSpec.describe Work do
 
             it { is_expected.to have(5).items }
 
-            specify { expect(subject.map(&:activity)).to eq(["released", nil, nil, nil, nil]) }
+            specify { expect(milestones.map(&:activity)).to eq(["released", nil, nil, nil, nil]) }
           end
 
           describe "saved instance" do
@@ -479,40 +479,38 @@ RSpec.describe Work do
     end
 
     describe "#prepare_for_editing" do
-      subject { instance.prepare_for_editing }
+      subject(:call_method) { instance.prepare_for_editing }
 
       let(:instance) { build_minimal_instance }
 
-      before do
+      it "prepares all nested associations" do
         expect(instance).to receive(:prepare_credits)
         expect(instance).to receive(:prepare_contributions)
         expect(instance).to receive(:prepare_milestones)
         expect(instance).to receive(:prepare_source_relationships)
         expect(instance).to receive(:prepare_target_relationships)
-      end
 
-      it "prepares all nested associations" do
-        subject
+        call_method
       end
     end
   end
 
   describe "validations" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:medium) }
 
     it { is_expected.to validate_presence_of(:title) }
 
     describe "credits" do
-      subject { build(:minimal_song) }
+      subject(:instance) { build(:minimal_song) }
 
       specify "valid" do
         is_expected.to be_valid
       end
 
       specify "invalid" do
-        subject.credits = []
+        instance.credits = []
 
         is_expected.to_not be_valid
 
@@ -522,22 +520,22 @@ RSpec.describe Work do
 
     describe "custom" do
       describe "#presence_of_released_milestone" do
-        subject do
+        subject(:instance) do
           build_minimal_instance(milestones_attributes: {
             "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")
           })
         end
 
-        before { subject.valid? }
+        before { instance.valid? }
 
         it { is_expected.to have_error(milestones: :blank) }
       end
 
       describe "validates_nested_uniqueness_of" do
-        subject { build_minimal_instance }
+        subject(:instance) { build_minimal_instance }
 
         describe "credits" do
-          before { subject.credits = [] }
+          before { instance.credits = [] }
 
           let(:creator) { create(:minimal_creator) }
           let(:other_creator) { create(:minimal_creator) }
@@ -557,13 +555,13 @@ RSpec.describe Work do
           end
 
           it "accepts non-dupes" do
-            subject.credits_attributes = good_attributes
+            instance.credits_attributes = good_attributes
 
             is_expected.to be_valid
           end
 
           it "rejects dupes" do
-            subject.credits_attributes = bad_attributes
+            instance.credits_attributes = bad_attributes
 
             is_expected.to be_invalid
 
@@ -572,9 +570,9 @@ RSpec.describe Work do
         end
 
         describe "contributions" do
-          subject { build(:minimal_song) }
+          subject(:instance) { build(:minimal_song) }
 
-          before { subject.contributions = [] }
+          before { instance.contributions = [] }
 
           let(:creator) { create(:minimal_creator) }
           let(:role_1) { create(:minimal_role, medium: "Song") }
@@ -595,13 +593,13 @@ RSpec.describe Work do
           end
 
           it "accepts non-dupes" do
-            subject.contributions_attributes = good_attributes
+            instance.contributions_attributes = good_attributes
 
             is_expected.to be_valid
           end
 
           it "rejects dupes" do
-            subject.contributions_attributes = bad_attributes
+            instance.contributions_attributes = bad_attributes
 
             is_expected.to be_invalid
             is_expected.to have_error(:contributions, :nested_taken)
@@ -609,7 +607,7 @@ RSpec.describe Work do
         end
 
         describe "milestones" do
-          before { subject.milestones = [] }
+          before { instance.milestones = [] }
 
           let(:good_attributes) do
             {
@@ -626,13 +624,13 @@ RSpec.describe Work do
           end
 
           it "accepts non-dupes" do
-            subject.milestones_attributes = good_attributes
+            instance.milestones_attributes = good_attributes
 
             is_expected.to be_valid
           end
 
           it "rejects dupes" do
-            subject.milestones_attributes = bad_attributes
+            instance.milestones_attributes = bad_attributes
 
             is_expected.to be_invalid
             is_expected.to have_error(:milestones, :nested_taken)
@@ -645,7 +643,7 @@ RSpec.describe Work do
   describe "hooks" do
     describe "#before_save" do
       describe "#memoize_display_makers" do
-        subject { instance.display_makers }
+        subject(:display_makers) { instance.display_makers }
 
         let(:instance) { build_minimal_instance }
 
@@ -677,13 +675,13 @@ RSpec.describe Work do
       end
 
       describe "post_ids" do
-        subject { instance.post_ids }
+        subject(:post_ids) { instance.post_ids }
 
         it { is_expected.to contain_exactly(review.id, mixtape.id) }
       end
 
       describe "posts" do
-        subject { instance.posts }
+        subject(:posts) { instance.posts }
 
         it { is_expected.to contain_exactly(review, mixtape) }
       end
@@ -726,7 +724,7 @@ RSpec.describe Work do
     end
 
     describe "#collect_makers" do
-      subject { instance.send(:collect_makers) }
+      subject(:call_method) { instance.send(:collect_makers) }
 
       context "when unsaved" do
         context "with no credits" do
@@ -780,13 +778,13 @@ RSpec.describe Work do
       end
 
       describe "#creator_ids" do
-        subject { instance.creator_ids }
+        subject(:creator_ids) { instance.creator_ids }
 
         it { is_expected.to match_array([creator_1.id, creator_2.id, creator_3.id]) }
       end
 
       describe "#creators" do
-        subject { instance.creators }
+        subject(:creators) { instance.creators }
 
         it { is_expected.to match_array([creator_1, creator_2, creator_3]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
@@ -794,7 +792,7 @@ RSpec.describe Work do
     end
 
     describe "#sluggable_parts" do
-      subject { instance.sluggable_parts }
+      subject(:sluggable_parts) { instance.sluggable_parts }
 
       let(:instance) do
         create_minimal_instance(title: "Don't Give Up", subtitle: "Single Edit", maker_names: ["Kate Bush", "Peter Gabriel"])
@@ -804,7 +802,7 @@ RSpec.describe Work do
     end
 
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      subject(:alpha_parts) { instance.alpha_parts }
 
       let(:instance) { create_complete_instance }
 

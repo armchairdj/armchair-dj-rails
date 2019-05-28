@@ -19,7 +19,7 @@ RSpec.describe Review do
     specify { expect(described_class.superclass).to eq(Post) }
 
     describe "type" do
-      subject { described_class.new.type }
+      subject(:instance) { described_class.new.type }
 
       it { is_expected.to eq("Review") }
     end
@@ -52,7 +52,7 @@ RSpec.describe Review do
     it_behaves_like "a_sluggable_model"
 
     describe "#sluggable_parts" do
-      subject { instance.sluggable_parts }
+      subject(:sluggable_parts) { instance.sluggable_parts }
 
       context "with review" do
         let(:instance) { create(:never_for_ever_album_review) }
@@ -75,7 +75,7 @@ RSpec.describe Review do
     end
 
     describe "#reset_slug_history" do
-      subject { instance.send(:reset_slug_history) }
+      subject(:call_method) { instance.send(:reset_slug_history) }
 
       let(:instance) do
         work     = create(:minimal_work, title: "foo")
@@ -91,14 +91,14 @@ RSpec.describe Review do
       end
 
       it "removes all old slugs so they can be reused" do
-        expect { subject }.to change { instance.slugs.count }.from(3).to(0)
+        expect { call_method }.to change { instance.slugs.count }.from(3).to(0)
       end
     end
   end
 
   describe "alpha" do
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      subject(:alpha_parts) { instance.alpha_parts }
 
       let(:instance) { build_minimal_instance }
 

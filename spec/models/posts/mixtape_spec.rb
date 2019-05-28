@@ -63,7 +63,7 @@ RSpec.describe Mixtape do
     end
 
     describe "#reset_slug_history" do
-      subject { instance.send(:reset_slug_history) }
+      subject(:call_method) { instance.send(:reset_slug_history) }
 
       let(:instance) do
         playlist = create(:minimal_playlist, title: "foo")
@@ -79,7 +79,7 @@ RSpec.describe Mixtape do
       end
 
       it "removes all old slugs so they can be reused" do
-        expect { subject }.to change { instance.slugs.count }.from(3).to(0)
+        expect { call_method }.to change { instance.slugs.count }.from(3).to(0)
       end
     end
   end

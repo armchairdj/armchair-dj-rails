@@ -29,7 +29,7 @@ RSpec.describe Creator::Identity do
   end
 
   describe "real_name" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to belong_to(:real_name).class_name("Creator") }
 
@@ -39,7 +39,7 @@ RSpec.describe Creator::Identity do
 
     describe "validates #real_name_is_primary" do
       before do
-        expect(subject).to receive(:real_name_is_primary).and_call_original
+        expect(instance).to receive(:real_name_is_primary).and_call_original
       end
 
       specify "valid" do
@@ -47,17 +47,16 @@ RSpec.describe Creator::Identity do
       end
 
       specify "invalid" do
-        subject.real_name = create(:secondary_creator)
+        instance.real_name = create(:secondary_creator)
 
         is_expected.to_not be_valid
-
         is_expected.to have_error(real_name_id: :not_primary)
       end
     end
   end
 
   describe "pseudonym" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
 
@@ -67,7 +66,7 @@ RSpec.describe Creator::Identity do
 
     describe "validates #pseudonym_is_secondary" do
       before do
-        expect(subject).to receive(:pseudonym_is_secondary).and_call_original
+        expect(instance).to receive(:pseudonym_is_secondary).and_call_original
       end
 
       specify "valid" do
@@ -75,7 +74,7 @@ RSpec.describe Creator::Identity do
       end
 
       specify "invalid" do
-        subject.pseudonym = create(:primary_creator)
+        instance.pseudonym = create(:primary_creator)
 
         is_expected.to_not be_valid
 

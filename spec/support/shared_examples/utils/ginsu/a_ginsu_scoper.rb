@@ -82,23 +82,23 @@ RSpec.shared_examples "a_ginsu_scoper" do
     end
 
     describe "#validate" do
-        subject { instance.send(:validate) }
+      subject { instance.send(:validate) }
 
-        describe "valid" do
-          allowed_hash.keys.each do |key|
-            context "with #{key} scope" do
-              let(:instance) { described_class.new(current_scope: key) }
+      describe "valid" do
+        allowed_hash.keys.each do |key|
+          context "with #{key} scope" do
+            let(:instance) { described_class.new(current_scope: key) }
 
-              specify { expect { subject }.to_not raise_exception }
-            end
+            specify { expect { subject }.to_not raise_exception }
           end
         end
-
-        describe "invalid" do
-          let(:instance) { described_class.new(current_scope: "NOT_A_VALID_SCOPE_KEY") }
-
-          specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
-        end
       end
+
+      describe "invalid" do
+        let(:instance) { described_class.new(current_scope: "NOT_A_VALID_SCOPE_KEY") }
+
+        specify { expect { subject }.to raise_exception(Pundit::NotAuthorizedError) }
+      end
+    end
   end
 end

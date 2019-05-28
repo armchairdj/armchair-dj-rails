@@ -29,7 +29,7 @@ RSpec.describe Creator::Membership do
   end
 
   describe "group" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to belong_to(:group).class_name("Creator") }
 
@@ -39,7 +39,7 @@ RSpec.describe Creator::Membership do
 
     describe "validates #group_is_collective" do
       before do
-        expect(subject).to receive(:group_is_collective).and_call_original
+        expect(instance).to receive(:group_is_collective).and_call_original
       end
 
       specify "valid" do
@@ -47,7 +47,7 @@ RSpec.describe Creator::Membership do
       end
 
       specify "invalid" do
-        subject.group = create(:individual_creator)
+        instance.group = create(:individual_creator)
 
         is_expected.to_not be_valid
 
@@ -57,7 +57,7 @@ RSpec.describe Creator::Membership do
   end
 
   describe "member" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to belong_to(:member).class_name("Creator") }
 
@@ -65,7 +65,7 @@ RSpec.describe Creator::Membership do
 
     describe "validates #member_is_individual" do
       before do
-        expect(subject).to receive(:member_is_individual).and_call_original
+        expect(instance).to receive(:member_is_individual).and_call_original
       end
 
       specify "valid" do
@@ -73,7 +73,7 @@ RSpec.describe Creator::Membership do
       end
 
       specify "invalid" do
-        subject.member = create(:collective_creator)
+        instance.member = create(:collective_creator)
 
         is_expected.to_not be_valid
 

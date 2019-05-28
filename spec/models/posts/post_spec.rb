@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Post do
-  subject { create_minimal_instance }
+  subject(:instance) { create_minimal_instance }
 
   describe "concerns" do
     it_behaves_like "an_application_record"
@@ -23,7 +23,7 @@ RSpec.describe Post do
 
   describe "status" do
     describe "default value" do
-      subject { instance.status }
+      subject(:status) { instance.status }
 
       let(:instance) { described_class.new }
 
@@ -32,7 +32,7 @@ RSpec.describe Post do
 
     describe "triggers conditional validation" do
       describe "on draft" do
-        subject { build_minimal_instance(:draft) }
+        subject(:instance) { build_minimal_instance(:draft) }
 
         it { is_expected.to_not validate_presence_of(:body) }
         it { is_expected.to     validate_absence_of(:publish_on) }
@@ -40,7 +40,7 @@ RSpec.describe Post do
       end
 
       describe "on scheduled" do
-        subject { create_minimal_instance(:scheduled) }
+        subject(:instance) { create_minimal_instance(:scheduled) }
 
         it { is_expected.to validate_presence_of(:body) }
         it { is_expected.to validate_presence_of(:publish_on) }
@@ -48,8 +48,8 @@ RSpec.describe Post do
 
         describe "when publish_on is in the past" do
           before do
-            subject.publish_on = Date.today - 1
-            subject.valid?
+            instance.publish_on = Date.today - 1
+            instance.valid?
           end
 
           it { is_expected.to have_error(:publish_on, :after) }
@@ -57,7 +57,7 @@ RSpec.describe Post do
       end
 
       describe "on published" do
-        subject { create_minimal_instance(:published) }
+        subject(:instance) { create_minimal_instance(:published) }
 
         it { is_expected.to validate_presence_of(:body) }
         it { is_expected.to validate_absence_of(:publish_on) }
@@ -75,7 +75,7 @@ RSpec.describe Post do
         let(:collection) { described_class.where(id: ids) }
 
         describe ".reverse_cron" do
-          subject { collection.reverse_cron }
+          subject(:association) { collection.reverse_cron }
 
           it "includes all, ordered descending by published_at, published_on, updated_at" do
             is_expected.to eq([draft, scheduled, published])
@@ -84,25 +84,25 @@ RSpec.describe Post do
 
         describe "for status" do
           describe ".draft" do
-            subject { collection.draft }
+            subject(:association) { collection.draft }
 
             it { is_expected.to contain_exactly(draft) }
           end
 
           describe ".scheduled" do
-            subject { collection.scheduled }
+            subject(:association) { collection.scheduled }
 
             it { is_expected.to contain_exactly(scheduled) }
           end
 
           describe ".published" do
-            subject { collection.published }
+            subject(:association) { collection.published }
 
             it { is_expected.to contain_exactly(published) }
           end
 
           describe ".unpublished" do
-            subject { collection.unpublished }
+            subject(:association) { collection.unpublished }
 
             it { is_expected.to contain_exactly(draft, scheduled) }
           end
@@ -143,7 +143,7 @@ RSpec.describe Post do
 
   describe "body" do
     describe "#formatted_body" do
-      subject { instance.formatted_body }
+      subject(:formatted_body) { instance.formatted_body }
 
       let(:renderer) { double }
 
@@ -317,7 +317,7 @@ RSpec.describe Post do
 
   describe "public vs. admin" do
     describe ".for_public" do
-      subject { collection.for_public }
+      subject(:association) { collection.for_public }
 
       let(:draft) { create_minimal_instance(:draft) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
@@ -330,7 +330,7 @@ RSpec.describe Post do
     end
 
     describe ".for_cms_user" do
-      subject { collection.for_cms_user(instance) }
+      subject(:association) { collection.for_cms_user(instance) }
 
       let!(:no_user) { nil }
       let!(:member) { create(:member) }

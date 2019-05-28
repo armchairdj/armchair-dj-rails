@@ -1845,6 +1845,7 @@ RSpec/AnyInstance:
 RSpec/DescribeClass:
   Exclude:
     - "spec/views/**/*"
+    - "spec/system/**/*"
 
 RSpec/EmptyExampleGroup:
   Enabled: false

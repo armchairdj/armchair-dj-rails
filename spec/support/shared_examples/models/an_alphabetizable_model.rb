@@ -25,7 +25,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
         end
 
         describe "#set_alpha" do
-          subject { instance.alpha }
+          subject(:alpha) { instance.alpha }
 
           before do
             allow(instance).to receive(:alpha_parts).and_return(parts)
@@ -60,7 +60,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
       end
 
       describe "validations" do
-        subject { create_minimal_instance }
+        subject(:instance) { create_minimal_instance }
 
         describe "#ensure_alpha" do
           describe "with alpha" do
@@ -69,9 +69,9 @@ RSpec.shared_examples "an_alphabetizable_model" do
 
           describe "without alpha" do
             before do
-              allow(subject).to receive(:alpha).and_return(nil)
+              allow(instance).to receive(:alpha).and_return(nil)
 
-              subject.valid?
+              instance.valid?
             end
 
             it { is_expected.to be_invalid }
@@ -84,7 +84,7 @@ RSpec.shared_examples "an_alphabetizable_model" do
   end
 
   describe "instance" do
-    subject { create_minimal_instance.alpha_parts }
+    subject(:alpha_parts) { create_minimal_instance.alpha_parts }
 
     it { is_expected.to be_a_kind_of(Array) }
   end

@@ -43,7 +43,7 @@ RSpec.describe Creator do
     end
 
     describe "nilify_blanks" do
-      subject { build_minimal_instance }
+      subject(:instance) { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -60,23 +60,23 @@ RSpec.describe Creator do
         let!(:secondary) { create(:secondary_creator) }
 
         describe ".primary" do
-          subject { described_class.primary }
+          subject(:association) { described_class.primary }
 
           it { is_expected.to contain_exactly(primary) }
         end
 
         describe ".secondary" do
-          subject { described_class.secondary }
+          subject(:association) { described_class.secondary }
 
           it { is_expected.to contain_exactly(secondary) }
         end
 
-        specify "#primary?" do
+        specify "#primary? returns the correct boolean" do
           expect(primary.primary?).to eq(true)
           expect(secondary.primary?).to eq(false)
         end
 
-        specify "#secondary?" do
+        specify "#secondary? returns the correct boolean" do
           expect(primary.secondary?).to eq(false)
           expect(secondary.secondary?).to eq(true)
         end
@@ -91,7 +91,7 @@ RSpec.describe Creator do
         let!(:identity) { create(:minimal_creator_identity, real_name: richie, pseudonym: fuse) }
 
         describe ".available_pseudonyms" do
-          subject { described_class.available_pseudonyms }
+          subject(:available_pseudonyms) { described_class.available_pseudonyms }
 
           it "excludes used pseudonyms and alphabetizes" do
             is_expected.to eq([gas, plastikman, robotman])
@@ -99,7 +99,7 @@ RSpec.describe Creator do
         end
 
         describe "#available_pseudonyms" do
-          subject { richie.available_pseudonyms }
+          subject(:available_pseudonyms) { richie.available_pseudonyms }
 
           it "includes own pseudonyms, alphabetically" do
             is_expected.to eq([fuse, gas, plastikman, robotman])
@@ -114,13 +114,13 @@ RSpec.describe Creator do
         let!(:collective) { create(:collective_creator) }
 
         describe ".individual" do
-          subject { described_class.individual }
+          subject(:association) { described_class.individual }
 
           it { is_expected.to eq([individual]) }
         end
 
         describe ".collective" do
-          subject { described_class.collective }
+          subject(:association) { described_class.collective }
 
           it { is_expected.to eq([collective]) }
         end
@@ -138,7 +138,7 @@ RSpec.describe Creator do
 
       describe "collections" do
         describe ".available_members" do
-          subject { described_class.available_members }
+          subject(:association) { described_class.available_members }
 
           let!(:band) { create(:fleetwood_mac) }
           let!(:stevie) { create(:stevie_nicks) }
@@ -194,7 +194,7 @@ RSpec.describe Creator do
   describe "attributes" do
     describe "nested" do
       describe "pseudonym_identities" do
-        subject { create(:primary_creator) }
+        subject(:instance) { create(:primary_creator) }
 
         let(:valid) { create(:secondary_creator) }
         let(:invalid) { create(:primary_creator) }
@@ -207,64 +207,63 @@ RSpec.describe Creator do
 
         describe "#prepare_pseudonym_identities" do
           it "builds 5 initially" do
-            subject.prepare_pseudonym_identities
+            instance.prepare_pseudonym_identities
 
-            expect(subject.pseudonym_identities).to have(5).items
+            expect(instance.pseudonym_identities).to have(5).items
           end
 
           it "builds 5 more" do
-            subject.update!(pseudonym_identities_attributes: valid_params)
+            instance.update!(pseudonym_identities_attributes: valid_params)
 
-            subject.prepare_pseudonym_identities
+            instance.prepare_pseudonym_identities
 
-            expect(subject.pseudonym_identities).to have(6).items
+            expect(instance.pseudonym_identities).to have(6).items
           end
         end
 
         specify "accepts" do
-          subject.pseudonym_identities_attributes = valid_params
+          instance.pseudonym_identities_attributes = valid_params
 
-          expect(subject.pseudonym_identities).to have(1).items
-          expect(subject.pseudonyms).to eq(Creator.none) # TODO
+          expect(instance.pseudonym_identities).to have(1).items
+          expect(instance.pseudonyms).to eq(Creator.none) # TODO
 
-          subject.save!
-          subject.reload
+          instance.save!
+          instance.reload
 
-          expect(subject.pseudonym_identities).to have(1).items
-          expect(subject.pseudonyms).to eq([valid])
+          expect(instance.pseudonym_identities).to have(1).items
+          expect(instance.pseudonyms).to eq([valid])
         end
 
         describe "rejects if #reject_pseudonym_identity?" do
           specify "blank" do
-            subject.pseudonym_identities_attributes = empty_params
+            instance.pseudonym_identities_attributes = empty_params
 
-            expect(subject.pseudonym_identities).to have(0).items
+            expect(instance.pseudonym_identities).to have(0).items
           end
 
           specify "primary" do
-            subject.pseudonym_identities_attributes = bad_params
+            instance.pseudonym_identities_attributes = bad_params
 
-            expect(subject.pseudonym_identities).to have(0).items
+            expect(instance.pseudonym_identities).to have(0).items
           end
         end
 
         describe "after_save callbacks" do
           specify "#enforce_primariness" do
-            subject.update!(pseudonym_identities_attributes: valid_params)
+            instance.update!(pseudonym_identities_attributes: valid_params)
 
-            expect(subject.pseudonym_identities).to have(1).items
+            expect(instance.pseudonym_identities).to have(1).items
 
-            expect do
-              subject.update!(primary: false)
-            end.to change { Creator::Identity.count }.by(-1)
+            expect { instance.update!(primary: false) }.
+              to change(Creator::Identity, :count).by(-1)
 
-            expect(subject.reload.pseudonym_identities).to have(0).items
+            expect(instance.reload.pseudonym_identities).to have(0).items
           end
         end
       end
 
       describe "real_name_identities" do
-        subject { create(:secondary_creator) }
+        subject(:instance) { create(:secondary_creator) }
 
         let(:valid) { create(:primary_creator) }
         let(:invalid) { create(:secondary_creator) }
@@ -277,63 +276,62 @@ RSpec.describe Creator do
 
         describe "#prepare_real_name_identities" do
           it "builds 1 initially" do
-            subject.prepare_real_name_identities
+            instance.prepare_real_name_identities
 
-            expect(subject.real_name_identities).to have(1).items
+            expect(instance.real_name_identities).to have(1).items
           end
 
           it "never builds more than 1" do
-            subject.update!(real_name_identities_attributes: valid_params)
-            subject.prepare_real_name_identities
+            instance.update!(real_name_identities_attributes: valid_params)
+            instance.prepare_real_name_identities
 
-            expect(subject.real_name_identities).to have(1).items
+            expect(instance.real_name_identities).to have(1).items
           end
         end
 
         specify "accepts" do
-          subject.real_name_identities_attributes = valid_params
+          instance.real_name_identities_attributes = valid_params
 
-          expect(subject.real_name_identities).to have(1).items
-          expect(subject.real_names).to eq(Creator.none) # TODO
+          expect(instance.real_name_identities).to have(1).items
+          expect(instance.real_names).to eq(Creator.none) # TODO
 
-          subject.save!
-          subject.reload
+          instance.save!
+          instance.reload
 
-          expect(subject.real_name_identities).to have(1).items
-          expect(subject.real_names).to eq([valid])
+          expect(instance.real_name_identities).to have(1).items
+          expect(instance.real_names).to eq([valid])
         end
 
         describe "rejects if #reject_real_name_identity?" do
           specify "blank" do
-            subject.real_name_identities_attributes = empty_params
+            instance.real_name_identities_attributes = empty_params
 
-            expect(subject.real_name_identities).to have(0).items
+            expect(instance.real_name_identities).to have(0).items
           end
 
           specify "secondary" do
-            subject.real_name_identities_attributes = bad_params
+            instance.real_name_identities_attributes = bad_params
 
-            expect(subject.real_name_identities).to have(0).items
+            expect(instance.real_name_identities).to have(0).items
           end
         end
 
         describe "after_save callbacks" do
           specify "#enforce_primariness" do
-            subject.update!(real_name_identities_attributes: valid_params)
+            instance.update!(real_name_identities_attributes: valid_params)
 
-            expect(subject.real_name_identities).to have(1).items
+            expect(instance.real_name_identities).to have(1).items
 
-            expect do
-              subject.update!(primary: true)
-            end.to change { Creator::Identity.count }.by(-1)
+            expect { instance.update!(primary: true) }.
+              to change(Creator::Identity, :count).by(-1)
 
-            expect(subject.reload.real_name_identities).to have(0).items
+            expect(instance.reload.real_name_identities).to have(0).items
           end
         end
       end
 
       describe "member_memberships" do
-        subject { create(:collective_creator) }
+        subject(:instance) { create(:collective_creator) }
 
         let(:valid) { create(:individual_creator) }
         let(:invalid) { create(:collective_creator) }
@@ -346,64 +344,63 @@ RSpec.describe Creator do
 
         describe "#prepare_member_memberships" do
           it "builds 5 initially" do
-            subject.prepare_member_memberships
+            instance.prepare_member_memberships
 
-            expect(subject.member_memberships).to have(5).items
+            expect(instance.member_memberships).to have(5).items
           end
 
           it "builds 5 more" do
-            subject.update!(member_memberships_attributes: valid_params)
+            instance.update!(member_memberships_attributes: valid_params)
 
-            subject.prepare_member_memberships
+            instance.prepare_member_memberships
 
-            expect(subject.member_memberships).to have(6).items
+            expect(instance.member_memberships).to have(6).items
           end
         end
 
         specify "accepts" do
-          subject.member_memberships_attributes = valid_params
+          instance.member_memberships_attributes = valid_params
 
-          expect(subject.member_memberships).to have(1).items
-          expect(subject.members).to eq(Creator.none) # TODO
+          expect(instance.member_memberships).to have(1).items
+          expect(instance.members).to eq(Creator.none) # TODO
 
-          subject.save!
-          subject.reload
+          instance.save!
+          instance.reload
 
-          expect(subject.member_memberships).to have(1).items
-          expect(subject.members).to eq([valid])
+          expect(instance.member_memberships).to have(1).items
+          expect(instance.members).to eq([valid])
         end
 
         describe "rejects if #reject_member_membership?" do
           specify "blank" do
-            subject.member_memberships_attributes = empty_params
+            instance.member_memberships_attributes = empty_params
 
-            expect(subject.member_memberships).to have(0).items
+            expect(instance.member_memberships).to have(0).items
           end
 
           specify "collective" do
-            subject.member_memberships_attributes = bad_params
+            instance.member_memberships_attributes = bad_params
 
-            expect(subject.member_memberships).to have(0).items
+            expect(instance.member_memberships).to have(0).items
           end
         end
 
         describe "after_save callbacks" do
           specify "#enforce_primariness" do
-            subject.update!(member_memberships_attributes: valid_params)
+            instance.update!(member_memberships_attributes: valid_params)
 
-            expect(subject.member_memberships).to have(1).items
+            expect(instance.member_memberships).to have(1).items
 
-            expect do
-              subject.update!(individual: true)
-            end.to change { Creator::Membership.count }.by(-1)
+            expect { instance.update!(individual: true) }.
+              to change(Creator::Membership, :count).by(-1)
 
-            expect(subject.reload.member_memberships).to have(0).items
+            expect(instance.reload.member_memberships).to have(0).items
           end
         end
       end
 
       describe "group_memberships" do
-        subject { create(:individual_creator) }
+        subject(:instance) { create(:individual_creator) }
 
         let(:valid) { create(:collective_creator) }
         let(:invalid) { create(:individual_creator) }
@@ -416,58 +413,57 @@ RSpec.describe Creator do
 
         describe "#prepare_group_memberships" do
           it "builds 5 initially" do
-            subject.prepare_group_memberships
+            instance.prepare_group_memberships
 
-            expect(subject.group_memberships).to have(5).items
+            expect(instance.group_memberships).to have(5).items
           end
 
           it "builds 5 more" do
-            subject.update!(group_memberships_attributes: valid_params)
+            instance.update!(group_memberships_attributes: valid_params)
 
-            subject.prepare_group_memberships
+            instance.prepare_group_memberships
 
-            expect(subject.group_memberships).to have(6).items
+            expect(instance.group_memberships).to have(6).items
           end
         end
 
         specify "accepts" do
-          subject.group_memberships_attributes = valid_params
+          instance.group_memberships_attributes = valid_params
 
-          expect(subject.group_memberships).to have(1).items
-          expect(subject.groups).to eq(Creator.none) # TODO
+          expect(instance.group_memberships).to have(1).items
+          expect(instance.groups).to eq(Creator.none) # TODO
 
-          subject.save!
-          subject.reload
+          instance.save!
+          instance.reload
 
-          expect(subject.group_memberships).to have(1).items
-          expect(subject.groups).to eq([valid])
+          expect(instance.group_memberships).to have(1).items
+          expect(instance.groups).to eq([valid])
         end
 
         describe "rejects if #reject_group_membership?" do
           specify "blank" do
-            subject.group_memberships_attributes = empty_params
+            instance.group_memberships_attributes = empty_params
 
-            expect(subject.group_memberships).to have(0).items
+            expect(instance.group_memberships).to have(0).items
           end
 
           specify "individual" do
-            subject.group_memberships_attributes = bad_params
+            instance.group_memberships_attributes = bad_params
 
-            expect(subject.group_memberships).to have(0).items
+            expect(instance.group_memberships).to have(0).items
           end
         end
 
         describe "after_save callbacks" do
           specify "#enforce_primariness" do
-            subject.update!(group_memberships_attributes: valid_params)
+            instance.update!(group_memberships_attributes: valid_params)
 
-            expect(subject.group_memberships).to have(1).items
+            expect(instance.group_memberships).to have(1).items
 
-            expect do
-              subject.update!(individual: false)
-            end.to change { Creator::Membership.count }.by(-1)
+            expect { instance.update!(individual: false) }.
+              to change(Creator::Membership, :count).by(-1)
 
-            expect(subject.reload.group_memberships).to have(0).items
+            expect(instance.reload.group_memberships).to have(0).items
           end
         end
       end
@@ -490,33 +486,33 @@ RSpec.describe Creator do
         end
 
         describe "instance" do
-          subject { build_minimal_instance }
+          subject(:instance) { build_minimal_instance }
 
           describe "#individual_text" do
             specify "individual" do
-              subject.individual = true
+              instance.individual = true
 
-              expect(subject.individual_text).to match(/^This is an individual/)
+              expect(instance.individual_text).to match(/^This is an individual/)
             end
 
             specify "collective" do
-              subject.individual = false
+              instance.individual = false
 
-              expect(subject.individual_text).to match(/^This is a group/)
+              expect(instance.individual_text).to match(/^This is a group/)
             end
           end
 
           describe "#primary_text" do
             specify "primary" do
-              subject.primary = true
+              instance.primary = true
 
-              expect(subject.primary_text).to match(/^This is a primary/)
+              expect(instance.primary_text).to match(/^This is a primary/)
             end
 
             specify "secondary" do
-              subject.primary = false
+              instance.primary = false
 
-              expect(subject.primary_text).to match(/^This is a secondary/)
+              expect(instance.primary_text).to match(/^This is a secondary/)
             end
           end
         end
@@ -525,7 +521,7 @@ RSpec.describe Creator do
   end
 
   describe "validations" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:name) }
 
@@ -714,7 +710,7 @@ RSpec.describe Creator do
       let!(:both) { create(:minimal_work, :with_specific_creator, :with_specific_contributor, specific_creator: instance, specific_contributor: instance) }
 
       describe "#works" do
-        subject { instance.works.ids }
+        subject(:work_ids) { instance.works.ids }
 
         let(:expected) { [created, contributed, both].map(&:id) }
 
@@ -722,7 +718,7 @@ RSpec.describe Creator do
       end
 
       describe "#posts" do
-        subject { instance.posts.ids }
+        subject(:post_ids) { instance.posts.ids }
 
         let!(:playlist) do
           create(:playlist, :with_author, title: "Title", tracks_attributes: {
@@ -746,7 +742,7 @@ RSpec.describe Creator do
     end
 
     describe "#display_roles" do
-      subject { instance.display_roles }
+      subject(:display_roles) { instance.display_roles }
 
       let(:instance) { create_minimal_instance }
 
@@ -785,7 +781,7 @@ RSpec.describe Creator do
     end
 
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      subject(:alpha_parts) { instance.alpha_parts }
 
       let(:instance) { build_minimal_instance }
 

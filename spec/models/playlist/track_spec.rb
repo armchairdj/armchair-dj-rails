@@ -32,7 +32,7 @@ RSpec.describe Playlist::Track do
     end
 
     describe "nilify_blanks" do
-      subject { build_minimal_instance }
+      subject(:instance) { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -44,7 +44,7 @@ RSpec.describe Playlist::Track do
 
   describe "scope-related" do
     describe ".sorted" do
-      subject { collection.sorted }
+      subject(:association) { collection.sorted }
 
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z") }
       let(:playlist_2) { create(:complete_playlist,                       title: "A") }
@@ -57,7 +57,7 @@ RSpec.describe Playlist::Track do
 
       it "sorts by playlist name and position" do
         expected = playlist_2.tracks.map(&:id) + playlist_1.tracks.map(&:id)
-        actual   = subject.map(&:id)
+        actual   = association.map(&:id)
 
         expect(actual).to eq(expected)
       end
@@ -70,7 +70,7 @@ RSpec.describe Playlist::Track do
   end
 
   describe "validations" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:playlist) }
     it { is_expected.to validate_presence_of(:work) }

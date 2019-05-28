@@ -31,7 +31,7 @@ RSpec.describe Aspect do
     end
 
     describe "nilify_blanks" do
-      subject { build_minimal_instance }
+      subject(:instance) { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -48,20 +48,20 @@ RSpec.describe Aspect do
       let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop") }
       let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
 
-      describe "single facet" do
-        subject { described_class.for_facet(:musical_mood) }
+      context "with single facet" do
+        subject(:association) { described_class.for_facet(:musical_mood) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b) }
       end
 
-      describe "multiple facets" do
-        subject { described_class.for_facet(:musical_mood, :musical_genre) }
+      context "with multiple facets" do
+        subject(:association) { described_class.for_facet(:musical_mood, :musical_genre) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b, genre_a, genre_b) }
       end
 
-      describe "no facets" do
-        subject { described_class.for_facet(nil) }
+      context "with no facets" do
+        subject(:association) { described_class.for_facet(nil) }
 
         it { is_expected.to be_empty }
       end
@@ -85,7 +85,7 @@ RSpec.describe Aspect do
   end
 
   describe "validations" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:facet) }
 
@@ -94,19 +94,19 @@ RSpec.describe Aspect do
   end
 
   describe "instance" do
-    let(:instance) { build_minimal_instance }
-
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      let(:instance) { build_minimal_instance }
+
+      subject(:alpha_parts) { instance.alpha_parts }
 
       it { is_expected.to eq([instance.human_facet, instance.name]) }
     end
 
     describe "#display_name" do
-      subject { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
+      subject(:instance) { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
 
-      specify { expect(subject.display_name).to eq("Genre: Trip-Hop") }
-      specify { expect(subject.display_name(connector: "/")).to eq("Genre/Trip-Hop") }
+      specify { expect(instance.display_name).to eq("Genre: Trip-Hop") }
+      specify { expect(instance.display_name(connector: "/")).to eq("Genre/Trip-Hop") }
     end
   end
 end

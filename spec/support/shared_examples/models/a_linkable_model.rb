@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_linkable_model" do
-  subject { create_minimal_instance }
+  subject(:instance) { create_minimal_instance }
 
   describe "included" do
     describe "associations" do

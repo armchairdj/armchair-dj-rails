@@ -36,7 +36,7 @@ RSpec.describe Playlist do
     it_behaves_like "an_imageable_model"
 
     describe "nilify_blanks" do
-      subject { build_minimal_instance }
+      subject(:instance) { build_minimal_instance }
 
       it { is_expected.to nilify_blanks(before: :validation) }
     end
@@ -55,7 +55,7 @@ RSpec.describe Playlist do
       it { is_expected.to have_many(:tracks).dependent(:destroy) }
 
       describe "ordering" do
-        subject { instance.tracks.map(&:position) }
+        subject(:positions) { instance.tracks.map(&:position) }
 
         let(:instance) { create_minimal_instance }
 
@@ -93,13 +93,13 @@ RSpec.describe Playlist do
         end
 
         describe "#prepare_tracks" do
-          subject { instance.prepare_tracks }
+          subject(:call_method) { instance.prepare_tracks }
 
           describe "new instance" do
             let(:instance) { described_class.new }
 
             it "builds 20 tracks" do
-              expect { subject }.to change { instance.tracks.length }.from(0).to(20)
+              expect { call_method }.to change { instance.tracks.length }.from(0).to(20)
             end
           end
 
@@ -107,7 +107,7 @@ RSpec.describe Playlist do
             let(:instance) { create(:minimal_playlist) }
 
             it "builds 20 more tracks" do
-              expect { subject }.to change { instance.tracks.length }.from(2).to(22)
+              expect { call_method }.to change { instance.tracks.length }.from(2).to(22)
             end
           end
         end
@@ -116,18 +116,18 @@ RSpec.describe Playlist do
   end
 
   describe "validations" do
-    subject { build_minimal_instance }
+    subject(:instance) { build_minimal_instance }
 
     it { is_expected.to validate_presence_of(:title) }
 
     describe "is_expected.to validate_length_of(:tracks).is_at_least(2)" do
-      subject { create_minimal_instance }
+      subject(:instance) { create_minimal_instance }
 
       it { is_expected.to be_valid }
 
       specify "invalid" do
-        subject.tracks.first.destroy
-        subject.reload
+        instance.tracks.first.destroy
+        instance.reload
 
         is_expected.to_not be_valid
 
@@ -151,13 +151,13 @@ RSpec.describe Playlist do
       end
 
       describe "post_ids" do
-        subject { instance.post_ids }
+        subject(:post_ids) { instance.post_ids }
 
         it { is_expected.to contain_exactly(review.id, mixtape.id) }
       end
 
       describe "posts" do
-        subject { instance.posts }
+        subject(:posts) { instance.posts }
 
         it { is_expected.to contain_exactly(review, mixtape) }
       end
@@ -194,13 +194,13 @@ RSpec.describe Playlist do
       end
 
       describe "#creator_ids" do
-        subject { instance.creator_ids }
+        subject(:creator_ids) { instance.creator_ids }
 
         it { is_expected.to match_array([creator_1.id, creator_2.id, creator_3.id, creator_4.id]) }
       end
 
       describe "#creators" do
-        subject { instance.creators }
+        subject(:creators) { instance.creators }
 
         it { is_expected.to match_array([creator_1, creator_2, creator_3, creator_4]) }
         it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
@@ -208,7 +208,7 @@ RSpec.describe Playlist do
     end
 
     describe "#alpha_parts" do
-      subject { instance.alpha_parts }
+      subject(:alpha_parts) { instance.alpha_parts }
 
       it { is_expected.to eq([instance.title]) }
     end
