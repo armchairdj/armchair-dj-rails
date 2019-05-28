@@ -128,7 +128,7 @@ class Post < ApplicationRecord
   private
 
     def set_published_at
-      self.published_at = DateTime.now
+      self.published_at = Time.zone.now
     end
 
     def clear_published_at
@@ -244,7 +244,7 @@ class Post < ApplicationRecord
   concerning :Scheduling do
     included do
       scope :scheduled_and_due, lambda {
-        scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
       }
     end
 

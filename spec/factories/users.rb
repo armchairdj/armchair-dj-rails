@@ -89,7 +89,7 @@ FactoryBot.define do
     end
 
     trait :confirmed do
-      confirmed_at DateTime.now
+      confirmed_at Time.zone.now
     end
 
     ###########################################################################

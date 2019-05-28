@@ -87,7 +87,7 @@ RSpec.describe MarkupHelper do
   describe "#date_tag" do
     it "formats dates consistently" do
       Timecop.freeze(2050, 3, 3) do
-        expect(helper.date_tag(DateTime.now)).to eq(
+        expect(helper.date_tag(Time.zone.now)).to eq(
           '<time datetime="2050-03-03T00:00:00-08:00">03/03/2050 at 12:00AM</time>'
         )
       end

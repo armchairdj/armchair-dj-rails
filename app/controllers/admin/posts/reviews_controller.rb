@@ -14,6 +14,6 @@ module Admin
 
         @works = Work.grouped_by_medium
       end
-      end
+    end
   end
 end

@@ -2,8 +2,6 @@
 
 module Admin
   class WorksController < Ginsu::Controller
-    before_action :require_ajax, only: :reorder_credits
-
     # POST /works
     # POST /works.json
     def create
@@ -51,6 +49,8 @@ module Admin
 
     # POST /admin/works/1/reorder_credits
     def reorder_credits
+      require_ajax
+
       Credit.reorder_for!(@work, params[:credit_ids])
 
       render json: {}, status: :ok
