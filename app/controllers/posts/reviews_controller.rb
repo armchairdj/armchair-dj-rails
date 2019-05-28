@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-class Posts::ReviewsController < Posts::BaseController
-private
+module Posts
+  class ReviewsController < Posts::BaseController
+  private
 
-  def set_section
-    @section = :reviews
+    def set_section
+      @section = :reviews
+    end
   end
 end

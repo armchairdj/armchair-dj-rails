@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class Admin::CreatorPolicy < Admin::BasePolicy; end
+module Admin
+  class CreatorPolicy < Admin::BasePolicy; end
+end

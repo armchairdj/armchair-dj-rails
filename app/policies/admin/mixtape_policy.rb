@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class Admin::MixtapePolicy < Admin::PostPolicy; end
+module Admin
+  class MixtapePolicy < Admin::PostPolicy; end
+end

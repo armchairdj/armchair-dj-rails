@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class Admin::AspectPolicy < Admin::BasePolicy; end
+module Admin
+  class AspectPolicy < Admin::BasePolicy; end
+end

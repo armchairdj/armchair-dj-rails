@@ -1588,6 +1588,7 @@ Metrics/ModuleLength:
   CountComments: false  # count full line comments?
   Exclude:
     - "app/models/**/*"
+    - "app/helpers/**/*"
 
 Metrics/ParameterLists:
   Max: 5
