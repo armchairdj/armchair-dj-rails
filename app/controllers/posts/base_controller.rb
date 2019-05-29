@@ -4,35 +4,27 @@ module Posts
   class BaseController < ApplicationController
     include Paginatable
 
-    before_action :authorize_model, only: [
-      :index
-    ]
-
-    before_action :find_collection, only: [
-      :index
-    ]
-
-    before_action :find_instance, only: [
-      :show
-    ]
-
-    before_action :authorize_instance, only: [
-      :show
-    ]
-
-    before_action :set_meta_tags, only: [
-      :show
-    ]
-
-    before_action :set_section
-
     # GET /<plural_param_key>
     # GET /<plural_param_key>.json
-    def index; end
+    def index
+      set_section
+
+      authorize_model
+
+      @collection = find_collection
+    end
 
     # GET /<plural_param_key>/friendly_id
     # GET /<plural_param_key>/friendly_id.json
-    def show; end
+    def show
+      set_section
+
+      @post = @instance = find_instance
+
+      authorize @instance
+
+      @meta_description = @instance.summary
+    end
 
     private
 
@@ -40,20 +32,16 @@ module Posts
       collection = policy_scope(@model_class).for_list.page(params[:page])
 
       instance_variable_set(:"@#{controller_name}", collection)
+
+      collection
     end
 
     def find_instance
-      @post = @instance = policy_scope(@model_class).for_show.find_by(slug: params[:slug])
+      instance = policy_scope(@model_class).for_show.find_by(slug: params[:slug])
 
-      instance_variable_set(:"@#{controller_name.singularize}", @instance)
-    end
+      instance_variable_set(:"@#{controller_name.singularize}", instance)
 
-    def authorize_instance
-      authorize @instance
-    end
-
-    def set_meta_tags
-      @meta_description = @instance.summary
+      instance
     end
 
     def set_section

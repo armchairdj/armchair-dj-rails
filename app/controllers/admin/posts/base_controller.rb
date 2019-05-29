@@ -3,8 +3,6 @@
 module Admin
   module Posts
     class BaseController < Ginsu::Controller
-      before_action :require_ajax, only: :autosave
-
       before_action :set_view_path
 
       # GET /admin/{collection}/new
@@ -59,6 +57,8 @@ module Admin
 
       # PATCH/PUT /admin/{collection}/1/autosave.json
       def autosave
+        require_ajax
+
         @instance.attributes = post_params_for_autosave
 
         @instance.save!(validate: false)

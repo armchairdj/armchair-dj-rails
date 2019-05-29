@@ -2,8 +2,6 @@
 
 module Admin
   class PlaylistsController < Ginsu::Controller
-    before_action :require_ajax, only: :reorder_tracks
-
     # POST /admin/playlists
     # POST /admin/playlists.json
     def create
@@ -47,6 +45,8 @@ module Admin
 
     # POST /admin/playlists/1/reorder_tracks
     def reorder_tracks
+      require_ajax
+
       Playlist::Track.reorder_for!(@playlist, params[:track_ids])
 
       render json: {}, status: :ok
