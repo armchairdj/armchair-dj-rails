@@ -19,9 +19,9 @@ GEM
   specs:
     aasm (5.0.0)
       concurrent-ruby (~> 1.0)
-    accept_values_for (0.4.3)
-      activemodel (>= 3.0.0)
-      rspec
+    accept_values_for (0.7.5)
+      activemodel (>= 4.2, < 6.0)
+      rspec (>= 2.0, < 4.0)
     actioncable (5.2.3)
       actionpack (= 5.2.3)
       nio4r (~> 2.0)
@@ -351,6 +351,8 @@ GEM
     selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
+    shoulda-callback-matchers (1.1.4)
+      activesupport (>= 3)
     simple_form (4.0.0)
       actionpack (> 4)
       activemodel (> 4)
@@ -475,6 +477,7 @@ DEPENDENCIES
   rubocop-rails_config
   rubocop-rspec
   sassc-rails
+  shoulda-callback-matchers
   shoulda-matchers!
   simple_form
   simpleconfig

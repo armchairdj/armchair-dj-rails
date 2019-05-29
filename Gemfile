@@ -239,7 +239,7 @@ group :development, :test do
   gem "rspec-html-matchers"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "master"
-  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
+  gem "shoulda-callback-matchers"
 
   # System and JS specs.
   gem "capybara"
