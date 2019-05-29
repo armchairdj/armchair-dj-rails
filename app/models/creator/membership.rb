@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: creator_memberships
@@ -20,48 +21,50 @@
 #  fk_rails_...  (member_id => creators.id)
 #
 
-class Creator::Membership < ApplicationRecord
-  self.table_name = "creator_memberships"
+class Creator
+  class Membership < ApplicationRecord
+    self.table_name = "creator_memberships"
 
-  #############################################################################
-  # CONCERNING: Group.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Group.
+    #############################################################################
 
-  belongs_to :group, class_name: "Creator", foreign_key: :group_id
+    concerning :GroupAssociation do
+      included do
+        belongs_to :group, class_name: "Creator", foreign_key: :group_id
 
-  concerning :GroupValidation do
-    included do
-      validates :group, presence: true
+        validates :group, presence: true
 
-      validates :group_id, uniqueness: { scope: [:member_id] }
+        validates :group_id, uniqueness: { scope: [:member_id] }
 
-      validate { group_is_collective }
+        validate { group_is_collective }
+      end
+
+    private
+
+      def group_is_collective
+        errors.add :group_id, :not_collective unless group.try(:collective?)
+      end
     end
 
-  private
+    #############################################################################
+    # CONCERNING: Member.
+    #############################################################################
 
-    def group_is_collective
-      self.errors.add :group_id, :not_collective unless group.try(:collective?)
-    end
-  end
+    concerning :MemberAssociation do
+      included do
+        belongs_to :member, class_name: "Creator", foreign_key: :member_id
 
-  #############################################################################
-  # CONCERNING: Member.
-  #############################################################################
+        validates :member, presence: true
 
-  belongs_to :member, class_name: "Creator", foreign_key: :member_id
+        validate { member_is_individual }
+      end
 
-  concerning :MemberValidation do
-    included do
-      validates :member, presence: true
+      private # rubocop:disable Lint/UselessAccessModifier
 
-      validate { member_is_individual }
-    end
-
-  private
-
-    def member_is_individual
-      self.errors.add :member_id, :not_individual unless member.try(:individual?)
+      def member_is_individual
+        errors.add :member_id, :not_individual unless member.try(:individual?)
+      end
     end
   end
 end

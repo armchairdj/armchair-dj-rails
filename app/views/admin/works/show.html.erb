@@ -9,13 +9,13 @@
 <%= render "admin/shared/show",
   record: @work,
   rows: [
-    { name: "ID",       method: :id },
+    { name: "ID",       method: :id, class: "nowrap" },
     { name: "Medium",   method: :display_medium },
     { name: "Title",    method: :title },
     { name: "Subtitle", method: :subtitle },
     { name: "Makers",   method: :display_makers },
-    { name: "Created",  date: true, method: :created_at },
-    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Created",  method: :created_at, date: true },
+    { name: "Updated",  method: :updated_at, date: true },
     { name: "Alpha",    method: :alpha },
   ]
 %>
@@ -69,3 +69,5 @@
 
 <%= render partial: "admin/posts/list",     as: "posts",     object: @work.posts.reverse_cron %>
 <%= render partial: "admin/playlists/list", as: "playlists", object: @work.playlists.alpha %>
+<%= render partial: "admin/images/list",    as: "imageable", object: @work %>
+

@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "admin/tags/index" do
   login_root
 
-  before(:each) do
-    3.times { create(:minimal_tag) }
+  before do
+    create_list(:minimal_tag, 3)
 
     @model_class = assign(:model_name, Tag)
-    @collection    = assign(:collection, Ginsu::Collection.new(Tag.all))
-    @tags        = assign(:tags, @collection.resolve)
+    @collection = assign(:collection, Ginsu::Collection.new(Tag.all))
+    @tags = assign(:tags, @collection.resolved)
   end
 
   it "renders a list of tags" do

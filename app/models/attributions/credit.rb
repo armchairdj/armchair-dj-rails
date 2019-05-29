@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -28,41 +29,53 @@
 #
 
 class Credit < Attribution
+  #############################################################################
+  # CONCERNING: Role.
+  #############################################################################
+
+  concerning :RoleAssociation do
+    included do
+      # Contributions belong_to role; Credits don't, really.
+      # This is just here to allow us to do an attribution scope that
+      # joins on :roles.
+      belongs_to :role, required: false
+    end
+
+    def role_name
+      "Creator"
+    end
+  end
 
   #############################################################################
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work, inverse_of: :credits
+  include Listable
+
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :credits
+
+      acts_as_listable(:work)
+    end
+  end
 
   #############################################################################
   # CONCERNING: Creator.
   #############################################################################
 
-  belongs_to :creator, inverse_of: :credits
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :credits
 
-  validates :creator_id, uniqueness: { scope: [:work_id] }
-
-  #############################################################################
-  # Concerning: Role.
-  #############################################################################
-
-  def role_name
-    "Creator"
+      validates :creator_id, uniqueness: { scope: [:work_id] }
+    end
   end
-
-  #############################################################################
-  # Concerning: Acts As List.
-  #############################################################################
-
-  include Listable
-
-  acts_as_listable(:work)
 
   #############################################################################
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list,  -> { }
+  scope :for_list,  -> {}
   scope :for_show,  -> { includes(:work, :creator) }
 end

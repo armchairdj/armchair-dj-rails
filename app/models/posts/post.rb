@@ -37,8 +37,14 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Post < ApplicationRecord
+  #############################################################################
+  # CONCERNS.
+  #############################################################################
+
+  include Authorable
+  include Linkable
+  include Sluggable
 
   #############################################################################
   # CONCERNING: STI subclass contract.
@@ -61,176 +67,12 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Alpha.
+  # CONCERNING: Tags.
   #############################################################################
 
-  include Alphabetizable
-
-  #############################################################################
-  # CONCERNING: Author.
-  #############################################################################
-
-  include Authorable
-
-  #############################################################################
-  # CONCERNING: Links.
-  #############################################################################
-
-  include Linkable
-
-  #############################################################################
-  # CONCERNING: Slugs.
-  #############################################################################
-
-  include Sluggable
-
-  #############################################################################
-  # CONCERNING: Status.
-  #############################################################################
-
-  concerning :Status do
+  concerning :TagAssociation do
     included do
-      enum status: {
-        draft:      0,
-        scheduled:  5,
-        published: 10
-      }
-
-      improve_enum :status
-
-      validates :status, presence: true
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Triggering status changes with virtual attributes.
-  #############################################################################
-
-  concerning :Triggerable do
-    included do
-      ### Virtual attributes.
-
-      attribute :publishing,   :boolean, default: false
-      attribute :unpublishing, :boolean, default: false
-      attribute :scheduling,   :boolean, default: false
-      attribute :unscheduling, :boolean, default: false
-
-      ### Hooks.
-
-      before_validation :unpublish,  if: :unpublishing?
-      before_validation :unschedule, if: :unscheduling?
-      before_validation :publish,    if: :publishing?
-      before_validation :schedule,   if: :scheduling?
-
-      after_validation :handle_failed_transition
-
-      after_save :clear_transition_flags
-    end
-
-    def changing_publication_status?
-      unpublishing? || publishing? || unscheduling? || scheduling?
-    end
-
-  private
-
-    def handle_failed_transition
-      return unless self.errors.any? && changing_publication_status?
-
-      case
-      when publishing?;   handle_failed_publish
-      when unpublishing?; handle_failed_unpublish
-      when scheduling?;   handle_failed_schedule
-      when unscheduling?; handle_failed_unschedule
-      end
-
-      clear_transition_flags
-    end
-
-    def handle_failed_publish
-      self.unpublish
-      self.errors.add(:base, :failed_to_publish)
-    end
-
-    def handle_failed_unpublish
-      self.publish
-      self.errors.add(:base, :failed_to_unpublish)
-
-      self.published_at = self.published_at_was
-    end
-
-    def handle_failed_schedule
-      temp = self.publish_on
-
-      self.unschedule
-      self.errors.add(:base, :failed_to_schedule)
-
-      self.publish_on = temp
-    end
-
-    def handle_failed_unschedule
-      self.schedule
-      self.errors.add(:base, :failed_to_unschedule)
-
-      self.publish_on = self.publish_on_was
-    end
-
-    def clear_transition_flags
-      self.publishing   = false
-      self.unpublishing = false
-      self.scheduling   = false
-      self.unscheduling = false
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Conditional validation based on status.
-  #############################################################################
-
-  concerning :Validateable do
-    included do
-      validates :summary, length: { in: 40..320 }, allow_blank: true
-
-      validates :body, presence: true, if: :requires_body?
-
-      validates :published_at, presence: true, if:     :requires_published_at?
-      validates :published_at, absence:  true, unless: :requires_published_at?
-
-      validates :publish_on, presence: true, if:     :requires_publish_on?
-      validates :publish_on, absence:  true, unless: :requires_publish_on?
-
-      validates_date :publish_on, after: lambda { Date.current }, allow_blank: true
-    end
-
-  private
-
-    def requires_body?
-      published? || publishing? || scheduled? || scheduling?
-    end
-
-    def requires_publish_on?
-      scheduled? || scheduling?
-    end
-
-    def requires_published_at?
-      published? || publishing?
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Publishable.
-  #############################################################################
-
-  concerning :Publishable do
-    included do
-      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-      scope :for_public, -> { published.reverse_cron }
-
-      scope :unpublished, -> { where.not(status: :published) }
-    end
-
-    def unpublished?
-      draft? || scheduled?
+      has_and_belongs_to_many :tags, -> { order("tags.name") }
     end
   end
 
@@ -238,8 +80,18 @@ class Post < ApplicationRecord
   # CONCERNING: State Machine.
   #############################################################################
 
-  concerning :Transitionable do
+  concerning :StateMachine do
     included do
+      enum status: {
+        draft:     0,
+        scheduled: 5,
+        published: 10
+      }
+
+      improve_enum :status
+
+      validates :status, presence: true
+
       include AASM
 
       aasm(
@@ -272,10 +124,10 @@ class Post < ApplicationRecord
       end
     end
 
-  private
+    private
 
     def set_published_at
-      self.published_at = DateTime.now
+      self.published_at = Time.zone.now
     end
 
     def clear_published_at
@@ -288,13 +140,113 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
+  # CONCERNING: Triggering status changes with virtual attributes.
+  #############################################################################
+
+  concerning :Transitioning do
+    included do
+      ### Virtual attributes.
+
+      attribute :publishing,   :boolean, default: false
+      attribute :unpublishing, :boolean, default: false
+      attribute :scheduling,   :boolean, default: false
+      attribute :unscheduling, :boolean, default: false
+
+      ### Hooks.
+
+      before_validation :unpublish,  if: :unpublishing?
+      before_validation :unschedule, if: :unscheduling?
+      before_validation :publish,    if: :publishing?
+      before_validation :schedule,   if: :scheduling?
+
+      after_validation :handle_failed_transition
+
+      after_save :clear_transition_flags
+    end
+
+    def changing_publication_status?
+      unpublishing? || publishing? || unscheduling? || scheduling?
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def handle_failed_transition
+      return unless errors.any? && changing_publication_status?
+
+      handle_failure
+
+      clear_transition_flags
+    end
+
+    def handle_failure
+      return handle_failed_publish if publishing?
+      return handle_failed_unpublish if unpublishing?
+      return handle_failed_schedule if scheduling?
+      return handle_failed_unschedule if unscheduling?
+    end
+
+    def handle_failed_publish
+      unpublish
+      errors.add(:base, :failed_to_publish)
+    end
+
+    def handle_failed_unpublish
+      publish
+      errors.add(:base, :failed_to_unpublish)
+
+      self.published_at = published_at_was
+    end
+
+    def handle_failed_schedule
+      temp = publish_on
+
+      unschedule
+      errors.add(:base, :failed_to_schedule)
+
+      self.publish_on = temp
+    end
+
+    def handle_failed_unschedule
+      schedule
+      errors.add(:base, :failed_to_unschedule)
+
+      self.publish_on = publish_on_was
+    end
+
+    def clear_transition_flags
+      self.publishing   = false
+      self.unpublishing = false
+      self.scheduling   = false
+      self.unscheduling = false
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Publishing.
+  #############################################################################
+
+  concerning :Publishing do
+    included do
+      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+
+      scope :for_public, -> { published.reverse_cron }
+
+      scope :unpublished, -> { where.not(status: :published) }
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+  end
+
+  #############################################################################
   # CONCERNING: Publishing of scheduled posts.
   #############################################################################
 
-  concerning :Scheduleable do
+  concerning :Scheduling do
     included do
-      scope :scheduled_and_due, -> {
-        scheduled.order(:publish_on).where("posts.publish_on <= ?", DateTime.now)
+      scope :scheduled_and_due, lambda {
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
       }
     end
 
@@ -318,20 +270,36 @@ class Post < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Markdown.
+  # CONCERNING: Validation.
   #############################################################################
 
-  concerning :Markdownable do
-    def formatted_body
-      return unless body.present?
+  concerning :ValidatedAttributes do
+    included do
+      validates :summary, length: { in: 40..320 }, allow_blank: true
 
-      renderer.render(body).html_safe
+      validates :body, presence: true, if: :requires_body?
+
+      validates :published_at, presence: true, if:     :requires_published_at?
+      validates :published_at, absence:  true, unless: :requires_published_at?
+
+      validates :publish_on, presence: true, if:     :requires_publish_on?
+      validates :publish_on, absence:  true, unless: :requires_publish_on?
+
+      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
-    def renderer
-      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
+    def requires_body?
+      published? || publishing? || scheduled? || scheduling?
+    end
+
+    def requires_publish_on?
+      scheduled? || scheduling?
+    end
+
+    def requires_published_at?
+      published? || publishing?
     end
   end
 
@@ -339,20 +307,32 @@ class Post < ApplicationRecord
   # CONCERNING: Access control.
   #############################################################################
 
-  concerning :Editable do
+  concerning :Editing do
     class_methods do
       def for_cms_user(user)
-        return self.none unless user && user.can_access_cms?
-        return self.all  if user.can_edit?
+        return all                       if user.try(:can_edit?)
+        return where(author_id: user.id) if user.try(:can_write?)
 
-        where(author_id: user.id)
+        none
       end
     end
   end
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Markdown.
   #############################################################################
 
-  has_and_belongs_to_many :tags, -> { order("tags.name") }
+  concerning :Rendering do
+    def formatted_body
+      return unless body.present?
+
+      renderer.render(body).html_safe
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def renderer
+      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
+    end
+  end
 end

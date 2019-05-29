@@ -1,16 +1,19 @@
 # frozen_string_literal: true
 
-class Admin::Posts::MixtapesController < Admin::Posts::BaseController
+module Admin
+  module Posts
+    class MixtapesController < Admin::Posts::BaseController
+      private
 
-private
+      def keys_for_create
+        [:playlist_id]
+      end
 
-  def keys_for_create
-    [:playlist_id]
-  end
+      def prepare_form
+        super
 
-  def prepare_form
-    super
-
-    @playlists = Playlist.alpha
+        @playlists = Playlist.alpha
+      end
+    end
   end
 end

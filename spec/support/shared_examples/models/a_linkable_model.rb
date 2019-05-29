@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_linkable_model" do
-  subject { create_minimal_instance }
+  subject(:instance) { create_minimal_instance }
 
   describe "included" do
     describe "associations" do
@@ -36,7 +36,7 @@ RSpec.shared_examples "a_linkable_model" do
           subject { build_minimal_instance(links_attributes: { "0" => attributes_for(:minimal_link, url: "") }) }
 
           it "rejects link with blank url" do
-            expect { subject.save! }.to_not change { Link.count }
+            expect { subject.save! }.to_not change(Link, :count)
 
             expect(subject.links).to eq([])
           end

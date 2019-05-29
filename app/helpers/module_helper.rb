@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module ModuleHelper
   def adj_module(content = nil, **opts, &block)
-    content = content || capture(&block)
+    content ||= capture(&block)
 
     tag  = opts.delete(:tag) || :section
     opts = combine_attrs(opts, class: "adj-module")
@@ -9,13 +11,13 @@ module ModuleHelper
   end
 
   def admin_section(content = nil, headline: nil, subhead: nil, **opts, &block)
-    content = content || capture(&block)
+    content ||= capture(&block)
 
     return if content.blank?
 
     attrs = combine_attrs(opts, class: "admin-section")
 
-    if header = section_header(headline, subhead)
+    if (header = section_header(headline, subhead))
       content = (header + content).html_safe
     end
 
@@ -25,7 +27,7 @@ module ModuleHelper
   def section_header(headline = nil, subhead = nil)
     headlines = []
     headlines << content_tag(:h4, headline) unless headline.blank?
-    headlines << content_tag(:h6, subhead ) unless subhead.blank?
+    headlines << content_tag(:h6, subhead) unless subhead.blank?
 
     return unless headlines.any?
 

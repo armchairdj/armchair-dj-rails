@@ -9,10 +9,13 @@ RSpec.describe PlaylistsHelper do
     describe "default" do
       subject { helper.link_to_playlist(instance, admin: true) }
 
-      it { is_expected.to have_tag("a[href='/admin/playlists/#{instance.to_param}']",
-        text:  "Playlist",
-        count: 1
-      ) }
+      it "has the correct markup" do
+        is_expected.to have_tag(
+          "a[href='/admin/playlists/#{instance.to_param}']",
+          text:  "Playlist",
+          count: 1
+        )
+      end
     end
   end
 end

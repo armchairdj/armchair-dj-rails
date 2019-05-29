@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class Admin::TagPolicy < Admin::BasePolicy; end
+module Admin
+  class TagPolicy < Admin::BasePolicy; end
+end

@@ -133,7 +133,7 @@
 
   .optgroup-header {
     padding-top: 7px;
-    font-weight: bold;
+    font-weight: $font-weight-normal;
     font-size: 0.85rem;
     color: #303030;
     background: $white;
@@ -296,7 +296,6 @@
         display: inline-block;
         font-size: 2em;
         line-height: 1rem;
-        @include normal();
         @include underline-never();
       }
 

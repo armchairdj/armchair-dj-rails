@@ -1,0 +1,7 @@
+<%= content_tag(:dt, facet_name) %>
+
+<% aspects.each do |aspect| %>
+  <%= content_tag(:dd) do %>
+    <%= link_to_aspect(aspect) %>
+  <% end %>
+<% end %>

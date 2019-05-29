@@ -17,7 +17,7 @@ env_config: &env_config
     # APP SERVER.
     ############################################################################
 
-    - image: circleci/ruby:2.4.1-node-browsers
+    - image: circleci/ruby:2.6.3-node-browsers
       environment:
         TZ: "/usr/share/zoneinfo/America/Los_Angeles"
         BUNDLE_JOBS: 3

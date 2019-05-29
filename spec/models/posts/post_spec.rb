@@ -3,36 +3,34 @@
 require "rails_helper"
 
 RSpec.describe Post do
-  subject { create_minimal_instance }
+  subject(:instance) { create_minimal_instance }
 
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
 
-      # Must specify individual fields for STI models.
-      it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
-      it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
-      it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
-      it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
-      it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
-      it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
-    end
+    # Must specify individual fields for STI models.
+    it { is_expected.to nilify_blanks_for(:alpha,   before: :validation) }
+    it { is_expected.to nilify_blanks_for(:body,    before: :validation) }
+    it { is_expected.to nilify_blanks_for(:slug,    before: :validation) }
+    it { is_expected.to nilify_blanks_for(:summary, before: :validation) }
+    it { is_expected.to nilify_blanks_for(:title,   before: :validation) }
+    it { is_expected.to nilify_blanks_for(:type,    before: :validation) }
   end
 
   describe "status" do
     describe "default value" do
-      let(:instance) { described_class.new }
+      subject(:status) { instance.status }
 
-      subject { instance.status }
+      let(:instance) { described_class.new }
 
       it { is_expected.to eq("draft") }
     end
 
     describe "triggers conditional validation" do
       describe "on draft" do
-        subject { build_minimal_instance(:draft) }
+        subject(:instance) { build_minimal_instance(:draft) }
 
         it { is_expected.to_not validate_presence_of(:body) }
         it { is_expected.to     validate_absence_of(:publish_on) }
@@ -40,21 +38,24 @@ RSpec.describe Post do
       end
 
       describe "on scheduled" do
-        subject { create_minimal_instance(:scheduled) }
+        subject(:instance) { create_minimal_instance(:scheduled) }
 
         it { is_expected.to validate_presence_of(:body) }
         it { is_expected.to validate_presence_of(:publish_on) }
         it { is_expected.to validate_absence_of(:published_at) }
 
-        describe "when publish_on is in the past" do
-          before(:each) { subject.publish_on = Date.today - 1; subject.valid? }
+        context "when publish_on is in the past" do
+          before do
+            instance.publish_on = Date.today - 1
+            instance.valid?
+          end
 
           it { is_expected.to have_error(:publish_on, :after) }
         end
       end
 
       describe "on published" do
-        subject { create_minimal_instance(:published) }
+        subject(:instance) { create_minimal_instance(:published) }
 
         it { is_expected.to validate_presence_of(:body) }
         it { is_expected.to validate_absence_of(:publish_on) }
@@ -64,15 +65,15 @@ RSpec.describe Post do
 
     describe "scope-related" do
       describe "for sorting and status" do
-        let(:draft    ) { create_minimal_instance(:draft    ) }
+        let(:draft) { create_minimal_instance(:draft) }
         let(:scheduled) { create_minimal_instance(:scheduled) }
         let(:published) { create_minimal_instance(:published) }
 
-        let(:ids       ) { [draft, scheduled, published].map(&:id) }
+        let(:ids) { [draft, scheduled, published].map(&:id) }
         let(:collection) { described_class.where(id: ids) }
 
-        describe "self#reverse_cron" do
-          subject { collection.reverse_cron }
+        describe ".reverse_cron" do
+          subject(:association) { collection.reverse_cron }
 
           it "includes all, ordered descending by published_at, published_on, updated_at" do
             is_expected.to eq([draft, scheduled, published])
@@ -80,54 +81,52 @@ RSpec.describe Post do
         end
 
         describe "for status" do
-          describe "self#draft" do
-            subject { collection.draft }
+          describe ".draft" do
+            subject(:association) { collection.draft }
 
             it { is_expected.to contain_exactly(draft) }
           end
 
-          describe "self#scheduled" do
-            subject { collection.scheduled }
+          describe ".scheduled" do
+            subject(:association) { collection.scheduled }
 
             it { is_expected.to contain_exactly(scheduled) }
           end
 
-          describe "self#published" do
-            subject { collection.published }
+          describe ".published" do
+            subject(:association) { collection.published }
 
             it { is_expected.to contain_exactly(published) }
           end
 
-          describe "self#unpublished" do
-            subject { collection.unpublished }
+          describe ".unpublished" do
+            subject(:association) { collection.unpublished }
 
             it { is_expected.to contain_exactly(draft, scheduled) }
           end
 
-          describe "booleans" do
-            describe "#draft?" do
-              specify { expect(    draft.draft?).to eq(true ) }
-              specify { expect(scheduled.draft?).to eq(false) }
-              specify { expect(published.draft?).to eq(false) }
-            end
+          describe "#draft?" do
+            specify { expect(draft.draft?).to eq(true) }
+            specify { expect(scheduled.draft?).to eq(false) }
+            specify { expect(published.draft?).to eq(false) }
+          end
 
-            describe "#scheduled?" do
-              specify { expect(    draft.scheduled?).to eq(false) }
-              specify { expect(scheduled.scheduled?).to eq(true ) }
-              specify { expect(published.scheduled?).to eq(false) }
-            end
+          describe "#scheduled?" do
+            specify { expect(draft.scheduled?).to eq(false) }
+            specify { expect(scheduled.scheduled?).to eq(true) }
+            specify { expect(published.scheduled?).to eq(false) }
+          end
 
-            describe "#published?" do
-              specify { expect(    draft.published?).to eq(false) }
-              specify { expect(scheduled.published?).to eq(false ) }
-              specify { expect(published.published?).to eq(true ) }
-            end
+          describe "#published?" do
+            specify { expect(draft.published?).to eq(false) }
+            specify { expect(scheduled.published?).to eq(false) }
+            specify { expect(published.published?).to eq(true) }
+          end
 
-            describe "#unpublished?" do
-              specify { expect(    draft.unpublished?).to eq(true ) }
-              specify { expect(scheduled.unpublished?).to eq(true ) }
-              specify { expect(published.unpublished?).to eq(false) }
-            end
+          describe "#unpublished?" do
+            specify { expect(draft.unpublished?).to eq(true) }
+            specify { expect(scheduled.unpublished?).to eq(true) }
+            specify { expect(published.unpublished?).to eq(false) }
           end
         end
       end
@@ -140,22 +139,22 @@ RSpec.describe Post do
 
   describe "body" do
     describe "#formatted_body" do
-      subject { instance.formatted_body }
+      subject(:formatted_body) { instance.formatted_body }
 
       let(:renderer) { double }
 
-      before(:each) do
+      before do
         allow(instance).to receive(:renderer).and_return(renderer)
-        allow(renderer).to receive(:render  ).and_return("rendered markdown")
+        allow(renderer).to receive(:render).and_return("rendered markdown")
       end
 
-      context "happy path" do
+      context "when on happy path" do
         let(:instance) { build_minimal_instance(body: "markdown") }
 
         it { is_expected.to eq("rendered markdown".html_safe) }
       end
 
-      context "nil body" do
+      context "with nil body" do
         let(:instance) { build_minimal_instance(body: nil) }
 
         it { is_expected.to eq(nil) }
@@ -178,14 +177,14 @@ RSpec.describe Post do
   end
 
   describe "state machine" do
-    let(:virgin   ) { described_class.new }
-    let(:draft    ) { create_minimal_instance(:draft) }
+    let(:virgin) { described_class.new }
+    let(:draft) { create_minimal_instance(:draft) }
     let(:scheduled) { create_minimal_instance(:scheduled) }
     let(:published) { create_minimal_instance(:published) }
 
     describe "states" do
-      specify { expect(virgin   ).to have_state(:draft) }
-      specify { expect(draft    ).to have_state(:draft) }
+      specify { expect(virgin).to have_state(:draft) }
+      specify { expect(draft).to have_state(:draft) }
       specify { expect(scheduled).to have_state(:scheduled) }
       specify { expect(published).to have_state(:published) }
     end
@@ -207,14 +206,14 @@ RSpec.describe Post do
       end
 
       describe "publish" do
-        context "draft" do
+        context "when draft" do
           specify do
             expect(draft.publish!).to eq(true)
             expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
           end
         end
 
-        context "scheduled" do
+        context "when scheduled" do
           specify do
             expect(scheduled.publish!).to eq(true)
             expect(scheduled.publish_on).to eq(nil)
@@ -291,19 +290,19 @@ RSpec.describe Post do
 
     describe "transitions" do
       describe "to draft" do
-        specify { expect(    draft).to_not allow_transition_to(:draft) }
+        specify { expect(draft).to_not allow_transition_to(:draft) }
         specify { expect(scheduled).to     allow_transition_to(:draft) }
         specify { expect(published).to     allow_transition_to(:draft) }
       end
 
       describe "to scheduled" do
-        specify { expect(    draft).to     allow_transition_to(:scheduled) }
+        specify { expect(draft).to allow_transition_to(:scheduled) }
         specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
         specify { expect(published).to_not allow_transition_to(:scheduled) }
       end
 
       describe "to published" do
-        specify { expect(    draft).to     allow_transition_to(:published) }
+        specify { expect(draft).to allow_transition_to(:published) }
         specify { expect(scheduled).to     allow_transition_to(:published) }
         specify { expect(published).to_not allow_transition_to(:published) }
       end
@@ -313,36 +312,36 @@ RSpec.describe Post do
   end
 
   describe "public vs. admin" do
-    describe "self#for_public" do
-      let(:draft    ) { create_minimal_instance(:draft    ) }
+    describe ".for_public" do
+      subject(:association) { collection.for_public }
+
+      let(:draft) { create_minimal_instance(:draft) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
       let(:published) { create_minimal_instance(:published) }
 
-      let!(:ids       ) { [draft, scheduled, published].map(&:id) }
+      let!(:ids) { [draft, scheduled, published].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
-
-      subject { collection.for_public }
 
       it { is_expected.to eq [published] }
     end
 
-    describe "self#for_cms_user" do
+    describe ".for_cms_user" do
+      subject(:association) { collection.for_cms_user(instance) }
+
       let!(:no_user) { nil }
-      let!(:member ) { create(:member) }
-      let!(:writer ) { create(:writer) }
-      let!(:editor ) { create(:editor) }
-      let!(:admin  ) { create(:admin ) }
-      let!(:root   ) { create(:root  ) }
+      let!(:member) { create(:member) }
+      let!(:writer) { create(:writer) }
+      let!(:editor) { create(:editor) }
+      let!(:admin) { create(:admin) }
+      let!(:root) { create(:root) }
 
       let(:writer_post) { create(:minimal_post, author: writer) }
       let(:editor_post) { create(:minimal_post, author: editor) }
-      let(:admin_post ) { create(:minimal_post, author: admin ) }
-      let(:root_post  ) { create(:minimal_post, author: root  ) }
+      let(:admin_post) { create(:minimal_post, author: admin) }
+      let(:root_post) { create(:minimal_post, author: root) }
 
       let!(:ids) { [writer_post, editor_post, admin_post, root_post].map(&:id) }
       let!(:collection) { described_class.where(id: ids) }
-
-      subject { collection.for_cms_user(instance) }
 
       context "with nil user" do
         let(:instance) { no_user }
@@ -395,11 +394,11 @@ RSpec.describe Post do
   end
 
   describe "scheduling" do
-    let!(:future  ) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
-    let!(:current ) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
+    let!(:future) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
+    let!(:current) { create_minimal_instance(:scheduled, publish_on: 2.days.from_now) }
     let!(:past_due) { create_minimal_instance(:scheduled, publish_on: 1.days.from_now) }
 
-    describe "self#scheduled_and_due" do
+    describe ".scheduled_and_due" do
       it "includes only scheduled that have come due, ordered by schedule date" do
         Timecop.freeze(Date.today + 3) do
           expect(described_class.scheduled_and_due).to eq([
@@ -410,17 +409,17 @@ RSpec.describe Post do
       end
     end
 
-    describe "self#publish_scheduled" do
+    describe ".publish_scheduled" do
       it "publishes scheduled if publish_on is past" do
         Timecop.freeze(Date.today + 3) do
-          expect(described_class.publish_scheduled).to eq({
+          expect(described_class.publish_scheduled).to eq(
             all:     [past_due, current],
             success: [past_due, current],
             failure: []
-          })
+          )
 
           expect(past_due.reload).to be_published
-          expect( current.reload).to be_published
+          expect(current.reload).to be_published
         end
       end
 
@@ -428,14 +427,14 @@ RSpec.describe Post do
         Timecop.freeze(Date.today + 3) do
           current.update_column(:body, nil)
 
-          expect(described_class.publish_scheduled).to eq({
+          expect(described_class.publish_scheduled).to eq(
             all:     [past_due, current],
             success: [past_due],
             failure: [current]
-          })
+          )
 
           expect(past_due.reload).to be_published
-          expect( current.reload).to be_draft
+          expect(current.reload).to be_draft
         end
       end
 

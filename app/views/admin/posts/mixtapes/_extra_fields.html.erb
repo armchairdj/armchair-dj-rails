@@ -1,0 +1,8 @@
+<%= f.input :playlist_id, as: :select,
+  collection:    @playlists,
+  required:      true,
+  label_method:  :title,
+  value_method:  :id,
+  include_blank: :translate,
+  input_html:    { "data-controller": "selectable" }
+%>

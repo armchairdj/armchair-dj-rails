@@ -53,6 +53,7 @@
               <%= content_tag(:td, class: "actions") do %>
                 <%= content_tag(:span, "Actions", class: "identifier") %>
                 <%= admin_public_link( record) %>
+                <%= admin_preview_link(record) %>
                 <%= admin_view_link(   record) %>
                 <%= admin_update_link( record) %>
                 <%= admin_destroy_link(record) %>

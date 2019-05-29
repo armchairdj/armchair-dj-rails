@@ -8,11 +8,16 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+ruby "2.6.3"
+
 ###############################################################################
 # CORE.
 ###############################################################################
 
-gem "rails", "5.2.0"
+gem "rails", "5.2.3"
+
+# Required for Rails console.
+gem "rb-readline"
 
 # Postgres for ActiveRecord.
 gem "pg"
@@ -28,7 +33,7 @@ gem "facets", require: false
 ###############################################################################
 
 # Use Puma as the app server
-gem "puma", "~> 3.7"
+gem "puma", "~> 3.12.1"
 
 ###############################################################################
 # PLUMBING.
@@ -36,6 +41,16 @@ gem "puma", "~> 3.7"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 3.0"
+
+###############################################################################
+# ACTIVE STORAGE.
+###############################################################################
+
+# AWS S3.
+gem "aws-sdk-s3", require: false
+
+# Image resizing.
+gem "image_processing", "~> 1.9"
 
 ###############################################################################
 # ACCESS CONTROLE.
@@ -73,8 +88,9 @@ gem "validates_timeliness", "~> 4.0"
 # Join scopes into one query.
 gem "active_record_union"
 
-# Friendly URL slugs.
+# Friendly URL slugs (requires unidecoder).
 gem "friendly_id"
+gem "unidecoder"
 
 ###############################################################################
 # CONTROLLERS.
@@ -96,9 +112,6 @@ gem "kaminari"
 # VIEWS.
 ###############################################################################
 
-# International character translator.
-gem "unidecoder"
-
 # Form renderer.
 gem "simple_form"
 
@@ -116,7 +129,7 @@ gem "jbuilder", "~> 2.5"
 ###############################################################################
 
 # Use SCSS for stylesheets
-gem "sass-rails", "~> 5.0"
+gem "sassc-rails"
 
 # Bourbon CSS toolbox + its offspring.
 gem "bourbon"
@@ -226,12 +239,11 @@ group :development, :test do
   gem "rspec-html-matchers"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "master"
-  # gem "shoulda-callback-matchers" # Causes pundit-matchers to blow up
+  gem "shoulda-callback-matchers"
 
   # System and JS specs.
   gem "capybara"
-  gem "selenium-webdriver"
-  gem "chromedriver-helper"
+  gem "webdrivers"
 
   # Environment variable loader.
   gem "dotenv-rails"
@@ -243,8 +255,9 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
 
   # Static code analysis.
-  gem "rubocop", require: false
+  gem "rubocop", "~> 0.65.0", require: false
   gem "rubocop-rails_config"
+  gem "rubocop-rspec"
   gem "mry"
 end
 

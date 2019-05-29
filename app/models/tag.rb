@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: tags
@@ -14,33 +16,32 @@
 #
 
 class Tag < ApplicationRecord
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [name]
+  concerning :NameAttribute do
+    included do
+      validates :name, presence: true
+    end
   end
 
-  #############################################################################
-  # CONCERNING: Name.
-  #############################################################################
+  concerning :PostAssociations do
+    included do
+      has_and_belongs_to_many :posts, -> { distinct }
+    end
+  end
 
-  validates :name, presence: true
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
+    def alpha_parts
+      [name]
+    end
+  end
 
-  has_and_belongs_to_many :posts, -> { distinct }
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> { }
-  scope :for_show,  -> { includes(:posts) }
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:posts) }
+    end
+  end
 end

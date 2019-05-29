@@ -6,22 +6,24 @@ RSpec.describe UsersHelper do
   include MarkupHelper
 
   describe "#link_to_author_of" do
+    subject { link_to_author_of(obj, opts) }
+
     let(:author) { create(:writer, username: "ArmchairDJ") }
     let(:obj) { double }
     let(:opts) { {} }
 
-    before(:each) { allow(obj).to receive(:author).and_return(author) }
-
-    subject { link_to_author_of(obj, opts) }
+    before { allow(obj).to receive(:author).and_return(author) }
 
     describe "published" do
-      before(:each) { allow(author).to receive(:published?).and_return(true) }
+      before { allow(author).to receive(:published?).and_return(true) }
 
-      it { is_expected.to have_tag("address.author", count: 1) {
-        with_tag("a[rel='author'][href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
-      } }
+      it "has the correct layout" do
+        is_expected.to have_tag("address.author", count: 1) do
+          with_tag("a[rel='author'][href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+        end
+      end
 
-      describe "with options" do
+      context "with options" do
         let(:opts) { { class: "foo", id: "bar" } }
 
         it { is_expected.to have_tag("address.author.foo#bar", count: 1) }
@@ -30,14 +32,16 @@ RSpec.describe UsersHelper do
       describe "admin" do
         let(:opts) { { admin: true } }
 
-        it { is_expected.to have_tag("address.author", count: 1) {
-          with_tag("a[rel='author'][href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
-        } }
+        it "has the correct markup" do
+          is_expected.to have_tag("address.author", count: 1) {
+            with_tag("a[rel='author'][href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+          }
+        end
       end
     end
 
     describe "unpublished" do
-      before(:each) { allow(author).to receive(:published?).and_return(false) }
+      before { allow(author).to receive(:published?).and_return(false) }
 
       it { is_expected.to eq(nil) }
     end
@@ -50,10 +54,15 @@ RSpec.describe UsersHelper do
     let(:opts) { {} }
 
     describe "published" do
-      before(:each) { create(:minimal_review, :published, author: user); user.reload }
+      before do
+        create(:minimal_review, :published, author: user)
+        user.reload
+      end
 
       describe "public" do
-        it { is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1) }
+        it "has the correct markup" do
+          is_expected.to have_tag("a[href='/profile/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+        end
       end
 
       describe "admin" do
@@ -62,7 +71,7 @@ RSpec.describe UsersHelper do
         it { is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1) }
       end
 
-      describe "with options" do
+      context "with options" do
         let(:opts) { { class: "foo", id: "bar" } }
 
         it { is_expected.to have_tag("a.foo#bar", count: 1) }
@@ -77,7 +86,9 @@ RSpec.describe UsersHelper do
       describe "admin" do
         let(:opts) { { admin: true } }
 
-        it { is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text:  "ArmchairDJ", count: 1) }
+        it "has the correct markup" do
+          is_expected.to have_tag("a[href='/admin/users/ArmchairDJ']", text: "ArmchairDJ", count: 1)
+        end
       end
     end
   end

@@ -1,0 +1,15 @@
+<%= content_tag(:div, class: "tabgroup") do %>
+  <%= content_tag(:ul, class: "tabs") do %>
+    <% if selected_tab == :settings %>
+      <%= content_tag(:li, content_tag(:span, "Settings", class: "tab-active")) %>
+      <%= content_tag(:li, link_to("Password", settings_password_path)) %>
+    <% else %>
+      <%= content_tag(:li, link_to("Settings", settings_path)) %>
+      <%= content_tag(:li, content_tag(:span, "Password", class: "tab-active")) %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "tab") do %>
+    <%= yield %>
+  <% end %>
+<% end %>

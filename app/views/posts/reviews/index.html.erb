@@ -1,12 +1,12 @@
 <%
-  @headline = @title = "Reviews"
+  @title = "Reviews"
 %>
 
 <% if @reviews.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
   <%= content_tag(:dl) do %>
-    <%= render partial: "shared/playback/post", collection: @reviews %>
+    <%= render partial: "posts/card", collection: @reviews, as: :post %>
   <% end %>
 
   <%= paginate @reviews %>

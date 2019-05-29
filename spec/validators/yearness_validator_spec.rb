@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe YearnessValidator do
@@ -50,24 +52,24 @@ RSpec.describe YearnessValidator do
 
   describe "invalid" do
     context "with a negative year" do
-      subject { ClassWithYear.new(year: "-911") }
+      subject(:instance) { ClassWithYear.new(year: "-911") }
 
-      it { is_expected.to_not  be_valid }
+      it { is_expected.to_not be_valid }
 
-      it "should have error message" do
-        subject.valid?
+      it "has error message" do
+        instance.valid?
 
         is_expected.to have_error(year: :not_a_year)
       end
     end
 
     context "with a string" do
-      subject { ClassWithYear.new(year: "foo") }
+      subject(:instance) { ClassWithYear.new(year: "foo") }
 
-      it { is_expected.to_not  be_valid }
+      it { is_expected.to_not be_valid }
 
-      it "should have error message" do
-        subject.valid?
+      it "has error message" do
+        instance.valid?
 
         is_expected.to have_error(year: :not_a_year)
       end

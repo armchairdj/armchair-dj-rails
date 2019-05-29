@@ -21,15 +21,6 @@ Bundler/InsecureProtocolSource:
     - '**/Gemfile'
     - '**/gems.rb'
 
-Bundler/OrderedGems:
-  Description: >-
-                 Gems within groups in the Gemfile should be alphabetically sorted.
-  Enabled: true
-  Include:
-    - '**/*.gemfile'
-    - '**/Gemfile'
-    - '**/gems.rb'
-
 #################### Gemspec ###############################
 
 Gemspec/DuplicatedAssignment:
@@ -52,11 +43,6 @@ Gemspec/RequiredRubyVersion:
     - '**/*.gemspec'
 
 #################### Layout ###############################
-
-Layout/AccessModifierIndentation:
-  Description: Check indentation of private/protected visibility modifiers.
-  StyleGuide: '#indent-public-private-protected'
-  Enabled: true
 
 Layout/AlignArray:
   Description: >-
@@ -121,6 +107,10 @@ Layout/ElseAlignment:
 
 Layout/EmptyComment:
   Description: 'Checks empty comment.'
+  Enabled: true
+
+Layout/EmptyLineAfterGuardClause:
+  Description: 'Add empty line after guard clause.'
   Enabled: true
 
 Layout/EmptyLineAfterMagicComment:
@@ -513,6 +503,11 @@ Lint/EnsureReturn:
   StyleGuide: '#no-return-ensure'
   Enabled: true
 
+Lint/FlipFlop:
+  Description: 'Checks for flip flops'
+  StyleGuide: '#no-flip-flops'
+  Enabled: true
+
 Lint/FloatOutOfRange:
   Description: >-
                  Catches floating-point literals too large or small for Ruby to
@@ -785,6 +780,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Description: 'Avoid long blocks with many lines.'
   Enabled: true
+  Max: 500
 
 Metrics/BlockNesting:
   Description: 'Avoid excessive block nesting'
@@ -794,6 +790,7 @@ Metrics/BlockNesting:
 Metrics/ClassLength:
   Description: 'Avoid classes longer than 100 lines of code.'
   Enabled: true
+  Max: 500
 
 Metrics/CyclomaticComplexity:
   Description: >-
@@ -1463,13 +1460,6 @@ Style/Dir:
                  absolute path to the current file.
   Enabled: true
 
-Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
-  Enabled: true
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-
 Style/DoubleNegation:
   Description: 'Checks for uses of double negation (!!).'
   StyleGuide: '#no-bang-bang'
@@ -1534,11 +1524,6 @@ Style/ExpandPathArguments:
   Description: "Use `expand_path(__dir__)` instead of `expand_path('..', __FILE__)`."
   Enabled: true
 
-Style/FlipFlop:
-  Description: 'Checks for flip flops'
-  StyleGuide: '#no-flip-flops'
-  Enabled: true
-
 Style/For:
   Description: 'Checks use of for or each in multiline loops.'
   StyleGuide: '#no-for-loops'
@@ -1586,13 +1571,6 @@ Style/IdenticalConditionalBranches:
 
 Style/IfInsideElse:
   Description: 'Finds if nodes inside else, which can be converted to elsif.'
-  Enabled: true
-
-Style/IfUnlessModifier:
-  Description: >-
-                 Favor modifier if/unless usage when you have a
-                 single-line body.
-  StyleGuide: '#if-as-a-modifier'
   Enabled: true
 
 Style/IfUnlessModifierOfIfUnless:

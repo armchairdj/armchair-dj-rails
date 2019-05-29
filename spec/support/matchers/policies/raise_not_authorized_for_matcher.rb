@@ -2,8 +2,8 @@
 
 RSpec::Matchers.define :raise_not_authorized_for do |method|
   match do
-    expect {
-      subject.send("#{method.to_s}?")
-    }.to raise_error(Pundit::NotAuthorizedError)
+    expect do
+      subject.send("#{method}?")
+    end.to raise_error(Pundit::NotAuthorizedError)
   end
 end

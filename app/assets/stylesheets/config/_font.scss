@@ -1,1 +1,24 @@
-$raleway-font-stack: "Raleway", Helvetica, sans-serif;
+$poppins-font-stack: "Poppins", sans-serif; //300, 500
+$libre-baskerville-font-stack: "Libre Baskerville", sans-serif; //700
+$source-code-pro-font-stack: "Source Code Pro", monospace;//400
+
+@mixin normal() {
+  font-family: $poppins-font-stack;
+  font-weight: 300;
+}
+
+@mixin bold() {
+  font-family: $poppins-font-stack;
+  font-weight: 500;
+}
+
+@mixin display() {
+  font-family: $libre-baskerville-font-stack;
+  font-weight: 700;
+}
+
+@mixin monospace() {
+  font-family: $source-code-pro-font-stack;
+  font-weight: 400;
+}
+

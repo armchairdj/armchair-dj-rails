@@ -2,11 +2,11 @@
 
 RSpec.shared_examples "an_errorable_controller" do
   describe "protected" do
-    before(:each) do
+    before do
       allow(Rails.logger).to receive(:error)
     end
 
-    let(:json_headers) { {"HTTP_ACCEPT" => "application/json"} }
+    let(:json_headers) { { "HTTP_ACCEPT" => "application/json" } }
 
     describe "#handle_403_recoverable" do
       controller do
@@ -40,13 +40,13 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
@@ -59,14 +59,14 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_403_recoverable)
         end
 
@@ -86,7 +86,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -102,27 +102,27 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(403)
+            expect(response).to have_http_status(403)
             expect(response.body).to eq("{}")
           end
         end
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_403)
         end
 
@@ -142,7 +142,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -158,27 +158,27 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(404)
+            expect(response).to have_http_status(404)
             expect(response.body).to eq("{}")
           end
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(404)
+            expect(response).to have_http_status(404)
             expect(response.body).to eq("{}")
           end
         end
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_404)
         end
 
@@ -222,7 +222,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -238,27 +238,27 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(422)
+            expect(response).to have_http_status(422)
             expect(response.body).to eq("{}")
           end
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(422)
+            expect(response).to have_http_status(422)
             expect(response.body).to eq("{}")
           end
         end
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_422)
         end
 
@@ -280,7 +280,7 @@ RSpec.shared_examples "an_errorable_controller" do
       end
 
       describe "behavior" do
-        before(:each) do
+        before do
           expect(Rails.logger).to receive(:error)
         end
 
@@ -296,27 +296,27 @@ RSpec.shared_examples "an_errorable_controller" do
           it "renders json" do
             get :index, xhr: true
 
-            expect(response     ).to have_http_status(500)
+            expect(response).to have_http_status(500)
             expect(response.body).to eq("{}")
           end
         end
 
         describe "json" do
-          before(:each) do
+          before do
             request.headers.merge! json_headers
           end
 
           it "renders json" do
             get :index
 
-            expect(response     ).to have_http_status(500)
+            expect(response).to have_http_status(500)
             expect(response.body).to eq("{}")
           end
         end
       end
 
       describe "rescue_from" do
-        before(:each) do
+        before do
           expect(controller).to receive(:handle_500)
         end
 

@@ -11,7 +11,6 @@
 #   - easily retrieve raw enum values?
 
 concern :BetterEnums do
-
   #############################################################################
   # INCLUDED.
   #############################################################################
@@ -36,7 +35,6 @@ concern :BetterEnums do
   #############################################################################
 
   class_methods do
-
     ##############
     ### PUBLIC ###
     ##############
@@ -44,7 +42,7 @@ concern :BetterEnums do
     def improve_enum(attribute)
       lazy_load_better_enums
 
-      self._better_enums << attribute.to_sym
+      _better_enums << attribute.to_sym
 
       single_attr = attribute.to_s
       plural_attr = attribute.to_s.pluralize
@@ -56,7 +54,7 @@ concern :BetterEnums do
     def better_enums
       lazy_load_better_enums
 
-      self._better_enums
+      _better_enums
     end
 
     ###############
@@ -91,18 +89,18 @@ concern :BetterEnums do
       end
     end
 
-    def define_better_enum_instance_methods(single_attr, plural_attr)
-      self.class_eval do
+    def define_better_enum_instance_methods(single_attr, _plural_attr)
+      class_eval do
         # user#human_activity
         define_method :"human_#{single_attr}" do |**opts|
-          val = self.send(single_attr)
+          val = send(single_attr)
 
           self.class.send(:human_enum_member, single_attr, val, **opts)
         end
 
         # user#raw_activity
         define_method :"raw_#{single_attr}" do
-          val = self.send(single_attr)
+          val = send(single_attr)
 
           self.class.send(:raw_enum_member, single_attr, val)
         end
@@ -128,7 +126,7 @@ concern :BetterEnums do
       lookups.each do |lookup|
         humanized = I18n.t lookup
 
-        break unless humanized.match(/translation missing/i)
+        break unless humanized =~ /translation missing/i
       end
 
       humanized
@@ -163,7 +161,7 @@ concern :BetterEnums do
 
       humanized = human_enum(attribute, **opts)
 
-      whens = humanized.map.with_index do |(humanized, raw, val), index|
+      whens = humanized.map.with_index do |(_human, raw, _val), index|
         "WHEN #{attribute}=#{raw} THEN #{index}"
       end
 

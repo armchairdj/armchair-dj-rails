@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -44,13 +46,12 @@ require "ffaker"
 
 FactoryBot.define do
   factory :user do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
     trait :with_draft_post do
-      role :writer
+      role { :writer }
 
       after(:create) do |user|
         create(:minimal_article, :draft, author: user)
@@ -58,7 +59,7 @@ FactoryBot.define do
     end
 
     trait :with_scheduled_post do
-      role :writer
+      role { :writer }
 
       after(:create) do |user|
         create(:minimal_article, :scheduled, author: user)
@@ -66,7 +67,7 @@ FactoryBot.define do
     end
 
     trait :with_published_post do
-      role :writer
+      role { :writer }
 
       after(:create) do |user|
         create(:minimal_article, :published, author: user)
@@ -82,27 +83,27 @@ FactoryBot.define do
     trait :valid do
       first_name { FFaker::Name.first_name }
       last_name  { FFaker::Name.last_name }
-      email      { generate(:user_email   ) }
+      email      { generate(:user_email) }
       username   { generate(:user_username) }
-      password   "password1234"
+      password   { "password1234" }
     end
 
     trait :confirmed do
-      confirmed_at DateTime.now
+      confirmed_at { Time.zone.now }
     end
 
     ###########################################################################
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_user, parent: :member do; end
+    factory :minimal_user, parent: :member
 
     factory :complete_user, parent: :minimal_user do
-      middle_name "J."
+      middle_name { "J." }
     end
 
     factory :member do
-      role :member
+      role { :member }
       valid
     end
 
@@ -111,8 +112,8 @@ FactoryBot.define do
     end
 
     factory :writer do
-      role :writer
-      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      role { :writer }
+      bio { FFaker::HipsterIpsum.paragraphs(3).join("\n\n") }
       valid
     end
 
@@ -121,8 +122,8 @@ FactoryBot.define do
     end
 
     factory :editor do
-      role :editor
-      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      role { :editor }
+      bio { FFaker::HipsterIpsum.paragraphs(3).join("\n\n") }
       valid
     end
 
@@ -131,8 +132,8 @@ FactoryBot.define do
     end
 
     factory :admin do
-      role :admin
-      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      role { :admin }
+      bio { FFaker::HipsterIpsum.paragraphs(3).join("\n\n") }
       valid
     end
 
@@ -141,8 +142,8 @@ FactoryBot.define do
     end
 
     factory :root do
-      role :root
-      bio FFaker::HipsterIpsum.paragraphs(3).join("\n\n")
+      role { :root }
+      bio { FFaker::HipsterIpsum.paragraphs(3).join("\n\n") }
       valid
     end
 

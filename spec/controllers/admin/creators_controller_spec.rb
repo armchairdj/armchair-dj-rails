@@ -5,11 +5,9 @@ require "rails_helper"
 RSpec.describe Admin::CreatorsController do
   let(:instance) { create_minimal_instance }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
@@ -17,7 +15,7 @@ RSpec.describe Admin::CreatorsController do
     end
 
     describe "GET #show" do
-      subject { get :show, params: { id: instance.to_param } }
+      subject(:send_request) { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/creators/show") }
 
@@ -25,18 +23,18 @@ RSpec.describe Admin::CreatorsController do
     end
 
     describe "GET #new" do
-      let(:operation) { get :new }
-
-      subject { operation }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/creators/new") }
 
       it { is_expected.to prepare_identity_and_membership_dropdowns }
 
-      describe "instance" do
-        subject { operation; assigns(:creator) }
+      it "populates ivars" do
+        send_request
 
-        it { is_expected.to be_a_populated_new_creator }
+        actual = assigns(:creator)
+
+        expect(actual).to be_a_populated_new_creator
       end
     end
 
@@ -47,9 +45,9 @@ RSpec.describe Admin::CreatorsController do
       let(:bad_params) { attributes_for(:minimal_creator).except(:name) }
 
       context "with min valid params" do
-        subject { post :create, params: { creator: min_params } }
+        subject(:send_request) { post :create, params: { creator: min_params } }
 
-        it { expect { subject }.to change(Creator, :count).by(1) }
+        it { expect { send_request }.to change(Creator, :count).by(1) }
 
         it { is_expected.to assign(Creator.last, :creator).with_attributes(min_params).and_be_valid }
 
@@ -59,11 +57,11 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with max valid params including memeber and pseudonym" do
-        subject { post :create, params: { creator: max_params } }
+        subject(:send_request) { post :create, params: { creator: max_params } }
 
-        it { expect { subject }.to change(Creator,             :count).by(3) }
-        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
-        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
+        it { expect { send_request }.to change(Creator,             :count).by(3) }
+        it { expect { send_request }.to change(Creator::Identity,   :count).by(1) }
+        it { expect { send_request }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(Creator.last, :creator).with_attributes(max_params).and_be_valid }
 
@@ -73,11 +71,11 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with max valid params including group and real_name" do
-        subject { post :create, params: { creator: alt_params } }
+        subject(:send_request) { post :create, params: { creator: alt_params } }
 
-        it { expect { subject }.to change(Creator,             :count).by(3) }
-        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
-        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
+        it { expect { send_request }.to change(Creator,             :count).by(3) }
+        it { expect { send_request }.to change(Creator::Identity,   :count).by(1) }
+        it { expect { send_request }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(Creator.last, :creator).with_attributes(alt_params).and_be_valid }
 
@@ -87,25 +85,25 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with invalid params" do
-        let(:operation) { post :create, params: { creator: bad_params } }
-
-        subject { operation }
+        subject(:send_request) { post :create, params: { creator: bad_params } }
 
         it { is_expected.to successfully_render("admin/creators/new") }
 
         it { is_expected.to prepare_identity_and_membership_dropdowns }
 
-        describe "instance" do
-          subject { operation; assigns(:creator) }
+        it "populates ivars" do
+          send_request
 
-          it { is_expected.to be_a_populated_new_creator }
-          it { is_expected.to have_coerced_attributes(bad_params) }
+          actual = assigns(:creator)
+
+          expect(actual).to be_a_populated_new_creator
+          expect(actual).to have_coerced_attributes(bad_params)
         end
       end
     end
 
     describe "GET #edit" do
-      subject { get :edit, params: { id: instance.to_param } }
+      subject(:send_request) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render("admin/creators/edit") }
 
@@ -122,7 +120,7 @@ RSpec.describe Admin::CreatorsController do
       let(:max_params) { attributes_for(:minimal_creator, :with_new_member, :with_new_pseudonym) }
 
       context "with min valid params" do
-        subject do
+        subject(:send_request) do
           put :update, params: { id: instance.to_param, creator: min_params }
         end
 
@@ -134,13 +132,13 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with max valid params" do
-        subject do
+        subject(:send_request) do
           put :update, params: { id: instance.to_param, creator: max_params }
         end
 
-        it { expect { subject }.to change(Creator::Identity,   :count).by(1) }
+        it { expect { send_request }.to change(Creator::Identity,   :count).by(1) }
 
-        it { expect { subject }.to change(Creator::Membership, :count).by(1) }
+        it { expect { send_request }.to change(Creator::Membership, :count).by(1) }
 
         it { is_expected.to assign(instance, :creator).with_attributes(max_params).and_be_valid }
 
@@ -150,37 +148,35 @@ RSpec.describe Admin::CreatorsController do
       end
 
       context "with invalid params" do
-        let(:operation) do
+        subject(:send_request) do
           put :update, params: { id: instance.to_param, creator: bad_params }
         end
-
-        subject { operation }
 
         it { is_expected.to successfully_render("admin/creators/edit") }
 
         it { is_expected.to prepare_identity_and_membership_dropdowns }
 
-        describe "instance" do
-          subject { operation; assigns(:creator) }
+        it "populates ivars" do
+          send_request
 
-          it { is_expected.to eq(instance) }
-          it { is_expected.to be_invalid }
+          actual = assigns(:creator)
+
+          expect(actual).to eq(instance)
+          expect(actual).to be_invalid
         end
       end
     end
 
     describe "DELETE #destroy" do
+      subject(:send_request) { delete :destroy, params: { id: instance.to_param } }
+
       let!(:instance) { create(:minimal_creator) }
 
-      subject { delete :destroy, params: { id: instance.to_param } }
+      it { expect { send_request }.to change(Creator, :count).by(-1) }
 
-      context "single creator" do
-        it { expect { subject }.to change(Creator, :count).by(-1) }
+      it { is_expected.to send_user_to(admin_creators_path) }
 
-        it { is_expected.to send_user_to(admin_creators_path) }
-
-        it { is_expected.to have_flash(:success, "admin.flash.creators.success.destroy") }
-      end
+      it { is_expected.to have_flash(:success, "admin.flash.creators.success.destroy") }
     end
   end
 end

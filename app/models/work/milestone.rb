@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: work_milestones
@@ -19,63 +21,81 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-class Work::Milestone < ApplicationRecord
-  self.table_name = "work_milestones"
+class Work
+  class Milestone < ApplicationRecord
+    self.table_name = "work_milestones"
 
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Work.
+    #############################################################################
 
-  belongs_to :work
+    concerning :WorkAssociation do
+      included do
+        belongs_to :work
 
-  has_many :makers,       -> { distinct }, through: :work
-  has_many :contributors, -> { distinct }, through: :work
+        has_many :makers,       -> { distinct }, through: :work
+        has_many :contributors, -> { distinct }, through: :work
 
-  validates :work, presence: true
+        validates :work, presence: true
+      end
+    end
 
-  #############################################################################
-  # CONCERNING: Activity.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Posts.
+    #############################################################################
 
-  validates :activity, presence: true
-  validates :activity, uniqueness: { scope: [:work_id] }
+    concerning :PostAssociation do
+      included do
+        has_many :playlists, through: :work
+        has_many :mixtapes,  through: :work
+        has_many :reviews,   through: :work
+      end
+    end
 
-  enum activity: {
-    released:    0,
-    published:   1,
-    aired:       2,
+    #############################################################################
+    # CONCERNING: Activity.
+    #############################################################################
 
-    created:    10,
+    concerning :ActivityAttribute do
+      included do
+        validates :activity, presence: true
+        validates :activity, uniqueness: { scope: [:work_id] }
 
-    reissued:   20,
-    rereleased: 21,
-    remastered: 22,
-    recut:      23,
-    remixed:    24
-  }
+        enum activity: {
+          released:   0,
+          published:  1,
+          aired:      2,
 
-  improve_enum :activity
+          created:    10,
 
-  #############################################################################
-  # CONCERNING: Year.
-  #############################################################################
+          reissued:   20,
+          rereleased: 21,
+          remastered: 22,
+          recut:      23,
+          remixed:    24
+        }
 
-  validates :year, presence: true, yearness: true
+        improve_enum :activity
+      end
+    end
 
-  scope :sorted, -> { order(:year) }
+    #############################################################################
+    # CONCERNING: Year.
+    #############################################################################
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
+    concerning :YearAttribute do
+      included do
+        validates :year, presence: true, yearness: true
 
-  has_many :playlists, through: :work
-  has_many :mixtapes,  through: :work
-  has_many :reviews,   through: :work
+        scope :sorted, -> { order(:year) }
+      end
+    end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Ginsu.
+    #############################################################################
 
-  scope :for_list, -> { sorted }
-  scope :for_show, -> { sorted.includes(:work) }
+    scope :for_list, -> { sorted }
+    scope :for_show, -> { sorted.includes(:work) }
+  end
 end

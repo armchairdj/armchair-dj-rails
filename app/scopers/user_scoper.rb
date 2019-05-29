@@ -2,13 +2,13 @@
 
 class UserScoper < Ginsu::Scoper
   def allowed
-    super.merge({
+    super.merge(
       "Member" => :member,
       "Writer" => :writer,
       "Editor" => :editor,
       "Admin"  => :admin,
       "Root"   => :root
-    })
+    )
   end
 
 private

@@ -3,9 +3,8 @@
 require "ffaker"
 
 FactoryBot.define do
-
-  sequence :aspect_name do |n|
-    "Aspect #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+  sequence :aspect_name do |_n|
+    "Aspect #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
   sequence :creator_name do |n|
@@ -20,8 +19,8 @@ FactoryBot.define do
     "Role #{n}"
   end
 
-  sequence :tag_name do |n|
-    "tag #{(0...8).map { ('a'..'z').to_a[rand(26)] }.join}"
+  sequence :tag_name do |_n|
+    "tag #{(0...8).map { ("a".."z").to_a[rand(26)] }.join}"
   end
 
   sequence :user_email do |n|
@@ -32,7 +31,7 @@ FactoryBot.define do
     "realcoolperson#{n}"
   end
 
-  sequence :year do |n|
+  sequence :year do |_n|
     rand(1..2020)
   end
 
@@ -45,7 +44,7 @@ FactoryBot.define do
   end
 
   trait :with_summary do
-    summary FFaker::HipsterIpsum.paragraphs(1).first.truncate(200)
+    summary { FFaker::HipsterIpsum.paragraphs(1).first.truncate(200) }
   end
 
   trait :with_author do
@@ -59,12 +58,12 @@ FactoryBot.define do
   trait :scheduled do
     with_body
     publish_on { 3.weeks.from_now }
-    scheduling true
+    scheduling { true }
   end
 
   trait :published do
     with_body
-    publishing true
+    publishing { true }
   end
 
   trait :with_creator do
@@ -81,19 +80,17 @@ FactoryBot.define do
 
   trait :with_tags do
     transient do
-      tag_count 3
+      tag_count { 3 }
     end
 
-    tag_ids do
-      create_list(:minimal_tag, 3).map(&:id)
-    end
+    tag_ids { create_list(:minimal_tag, 3).map(&:id) }
   end
 
   trait :with_links do
-    links_attributes { {
-      "0" => attributes_for(:link_for_linkable),
-      "1" => attributes_for(:link_for_linkable),
-      "2" => attributes_for(:link_for_linkable),
-    } }
+    links_attributes do
+      { "0" => attributes_for(:link_for_linkable),
+        "1" => attributes_for(:link_for_linkable),
+        "2" => attributes_for(:link_for_linkable) }
+    end
   end
 end

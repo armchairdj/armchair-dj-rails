@@ -1,8 +1,19 @@
 header.standard-page-header {
-  @include bottom-margin-only();
+  @include bottom-margin-only(1.5rem);
   @include clearfix();
+  text-align: center;
 
   h1 {
     text-transform: uppercase;
+    color: $bone;
+
+    @include inline-block-svg() {
+      @include square($h1-font-size * .75);
+      @include svg-path-fill($bone);
+    }
+  }
+
+  h2 {
+    color: $white;
   }
 }

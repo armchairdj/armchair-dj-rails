@@ -1,0 +1,5 @@
+input[type=file] {
+  @include no-appearance();
+  margin-bottom: .5rem;
+  width: 100%;
+}

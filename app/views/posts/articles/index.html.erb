@@ -1,13 +1,11 @@
 <%
-  @headline = @title = "Articles"
+  @title = "Articles"
 %>
 
 <% if @articles.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= content_tag(:dl) do %>
-    <%= render partial: "shared/playback/post", collection: @articles %>
-  <% end %>
+  <%= render partial: "posts/card", collection: @articles, as: :post %>
 
   <%= paginate @articles %>
 <% end %>

@@ -4,12 +4,12 @@ class PostRenderer < Redcarpet::Render::HTML
   include ActionView::Helpers::UrlHelper
 
   INTERNAL_REGEXP = /^internal:/.freeze
-  LINK_REGEXP     = /^internal:(\w+)\/(\d+)/.freeze
+  LINK_REGEXP     = %r{^internal:(\w+)/(\d+)}.freeze
 
   def link(url, title, content)
     link_to(content.html_safe, normalize_url(url), title: title)
-  rescue => err
-    log_render_error(err, { url: url, content: content })
+  rescue StandardError => err
+    log_render_error(err, url: url, content: content)
 
     content.html_safe
   end
@@ -23,15 +23,15 @@ private
   end
 
   def normalize_url(url)
-    is_internal_url(url) ? transform_internal_url(url) : url
+    internal_url?(url) ? transform_internal_url(url) : url
   end
 
-  def is_internal_url(url)
+  def internal_url?(url)
     url.match(INTERNAL_REGEXP)
   end
 
   def transform_internal_url(url)
-    match, model_name, id = url.match(LINK_REGEXP).to_a
+    _match, model_name, id = url.match(LINK_REGEXP).to_a
 
     raise ArgumentError unless model_name && id
 

@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 concern :Sluggable do
-
-  WORD_SEPARATOR         =   "_".freeze
-  PART_SEPARATOR         =   "/".freeze
-  VERSION_SEPARATOR      =   "-".freeze
-  EMPTY_PART_REPLACEMENT = "xxx".freeze
+  WORD_SEPARATOR         =   "_"
+  PART_SEPARATOR         =   "/"
+  VERSION_SEPARATOR      =   "-"
+  EMPTY_PART_REPLACEMENT = "xxx"
 
   #############################################################################
   # CLASS.
@@ -36,7 +35,8 @@ concern :Sluggable do
 
     def fix_non_words(str)
       str = str.gsub(/[[:punct:]|[:blank:]]/, WORD_SEPARATOR)
-      str = str.remove(/[^[:word:]]/)
+
+      str.remove(/[^[:word:]]/)
     end
 
     def compact_word_separators(str)
@@ -44,7 +44,8 @@ concern :Sluggable do
 
       str = str.gsub(/#{quoted}+/, WORD_SEPARATOR)
       str = str.remove(/^#{quoted}/)
-      str = str.remove(/#{quoted}$/)
+
+      str.remove(/#{quoted}$/)
     end
   end
 
@@ -110,9 +111,7 @@ private
   ### User-initiated slug regeneration.
 
   def handle_clear_slug_checkbox
-    if should_clear_slug?
-      regenerate_slug
-    end
+    regenerate_slug if should_clear_slug?
   end
 
   def should_clear_slug?
@@ -128,11 +127,10 @@ private
   ### Automatic slug regeneration.
 
   def clear_slug_and_history_if_unpublished
-    if should_reset_slug_history?
-      reset_slug_history
+    return unless should_reset_slug_history?
 
-      regenerate_slug
-    end
+    reset_slug_history
+    regenerate_slug
   end
 
   def should_reset_slug_history?
@@ -140,6 +138,6 @@ private
   end
 
   def reset_slug_history
-    self.slugs.clear
+    slugs.clear
   end
 end

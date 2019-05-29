@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-class Admin::ArticlePolicy < Admin::PostPolicy; end
+module Admin
+  class ArticlePolicy < Admin::PostPolicy; end
+end

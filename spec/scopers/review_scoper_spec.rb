@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ReviewScoper do
-  describe "concerns" do
-    it_behaves_like "a_ginsu_scoper"
-  end
+  it_behaves_like "a_ginsu_scoper"
 
   describe "instance" do
     let(:instance) { described_class.new }
@@ -13,20 +11,13 @@ RSpec.describe ReviewScoper do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array([
-        "All",
-        "Draft",
-        "Scheduled",
-        "Published",
-      ]) }
+      it { is_expected.to match_array(["All", "Draft", "Scheduled", "Published"]) }
     end
 
-    context "private" do
-      describe "#model_class" do
-        subject { instance.send(:model_class) }
+    describe "#model_class" do
+      subject { instance.send(:model_class) }
 
-        it { is_expected.to eq(Review) }
-      end
+      it { is_expected.to eq(Review) }
     end
   end
 end

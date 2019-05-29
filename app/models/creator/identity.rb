@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: creator_identities
@@ -20,50 +21,52 @@
 #  fk_rails_...  (real_name_id => creators.id)
 #
 
-class Creator::Identity < ApplicationRecord
-  self.table_name = "creator_identities"
+class Creator
+  class Identity < ApplicationRecord
+    self.table_name = "creator_identities"
 
-  #############################################################################
-  # CONCERNING: Real name.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Real name.
+    #############################################################################
 
-  belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
+    concerning :RealNameAssociation do
+      included do
+        belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
 
-  concerning :RealNameValidation do
-    included do
-      validates :real_name, presence: true
+        validates :real_name, presence: true
 
-      validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
+        validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
 
-      validate { real_name_is_primary }
+        validate { real_name_is_primary }
+      end
+
+    private
+
+      def real_name_is_primary
+        errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
+      end
     end
 
-  private
+    #############################################################################
+    # CONCERNING: Pseudonym.
+    #############################################################################
 
-    def real_name_is_primary
-      self.errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
-    end
-  end
+    concerning :PseudonymAssociation do
+      included do
+        belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
 
-  #############################################################################
-  # CONCERNING: Pseudonym.
-  #############################################################################
+        validates :pseudonym,  presence: true
 
-  belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
+        validates :pseudonym_id, uniqueness: true
 
-  concerning :PseudonymValidation do
-    included do
-      validates :pseudonym,  presence: true
+        validate { pseudonym_is_secondary }
+      end
 
-      validates :pseudonym_id, uniqueness: true
+      private # rubocop:disable Lint/UselessAccessModifier
 
-      validate { pseudonym_is_secondary }
-    end
-
-  private
-
-    def pseudonym_is_secondary
-      self.errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+      def pseudonym_is_secondary
+        errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+      end
     end
   end
 end

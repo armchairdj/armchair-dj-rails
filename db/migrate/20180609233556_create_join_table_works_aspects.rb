@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJoinTableWorksAspects < ActiveRecord::Migration[5.2]
   def change
     create_join_table :works, :aspects do |t|

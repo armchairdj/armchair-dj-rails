@@ -28,49 +28,57 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Attribution < ApplicationRecord
-
   #############################################################################
   # CONCERNING: STI subclass contract.
   #############################################################################
 
-  validates :type, presence: true
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  delegate :alpha_parts, to: :work,    allow_nil: true, prefix: true
-  delegate :alpha_parts, to: :creator, allow_nil: true, prefix: true
-
-  def alpha_parts
-    [work_alpha_parts, role_name, creator_alpha_parts]
+  concerning :Subclassable do
+    included do
+      validates :type, presence: true
+    end
   end
 
   #############################################################################
   # CONCERNING: Work.
   #############################################################################
 
-  belongs_to :work, inverse_of: :attributions
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :attributions
 
-  validates :work, presence: true
+      validates :work, presence: true
 
-  delegate :display_medium, to: :work, allow_nil: true
+      delegate :display_medium, to: :work, allow_nil: true
+    end
+  end
 
   #############################################################################
   # CONCERNING: Creator.
   #############################################################################
 
-  belongs_to :creator, inverse_of: :attributions
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :attributions
 
-  validates :creator, presence: true
+      validates :creator, presence: true
+    end
+  end
 
   #############################################################################
-  # CONCERNING: Role.
+  # CONCERNING: Alpha.
   #############################################################################
 
-  belongs_to :role, required: false
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+
+      delegate :alpha_parts, to: :work,    allow_nil: true, prefix: true
+      delegate :alpha_parts, to: :creator, allow_nil: true, prefix: true
+
+      def alpha_parts
+        [work_alpha_parts, role_name, creator_alpha_parts]
+      end
+    end
+  end
 end

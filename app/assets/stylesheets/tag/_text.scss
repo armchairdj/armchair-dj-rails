@@ -4,10 +4,9 @@ h3,
 h4,
 h5,
 h6 {
-  @include bottom-margin-only();
   @include bold();
-  color: $bone;
   line-height: $readable;
+  @include bottom-margin-only();
 }
 
 h1 {

@@ -76,7 +76,6 @@
     position: relative;
 
     span.label-text {
-      @include light();
       font-size: .8rem;
     }
   }

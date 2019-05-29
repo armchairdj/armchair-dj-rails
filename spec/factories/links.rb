@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: links
@@ -17,7 +19,6 @@
 
 FactoryBot.define do
   factory :link do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -27,7 +28,7 @@ FactoryBot.define do
     end
 
     trait :with_description do
-      description "link description"
+      description { "link description" }
     end
 
     trait :with_article do

@@ -37,20 +37,23 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Mixtape < Post
-
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  delegate :alpha_parts, to: :playlist, allow_nil: true
-
-  #############################################################################
-  # CONCERNING: STI Subclassed.
+  # CONCERNING: Image attachment.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :ImageAttachment do
+    included do
+      delegate :hero_image,        to: :playlist
+      delegate :additional_images, to: :playlist
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: STI Subclass.
+  #############################################################################
+
+  concerning :Subclassed do
     class_methods do
       def for_list
         super.includes(:playlist).references(:playlist)
@@ -60,38 +63,46 @@ class Mixtape < Post
         super.includes(:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones)
       end
     end
+
+    def display_type(plural: false)
+      plural ? "Mixtapes" : "Mixtape"
+    end
   end
 
   #############################################################################
-  # ASSOCIATIONS.
+  # CONCERNING: Playlist.
   #############################################################################
 
-  belongs_to :playlist
+  concerning :PlaylistAssociation do
+    included do
+      belongs_to :playlist
 
-  has_many :tracks, through: :playlist
-  has_many :works,  through: :tracks
+      validates :playlist, presence: true
 
-  has_many :makers,        through: :works
-  has_many :contributions, through: :works
-  has_many :contributors,  through: :works
-  has_many :aspects,       through: :works
-  has_many :milestones,    through: :works
+      has_many :tracks, through: :playlist
+      has_many :works,  through: :tracks
 
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
+      has_many :makers,        through: :works
+      has_many :contributions, through: :works
+      has_many :contributors,  through: :works
+      has_many :aspects,       through: :works
+      has_many :milestones,    through: :works
+    end
 
-  validates :playlist, presence: true
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def sluggable_parts
-    [ playlist.try(:title) ]
+    def sluggable_parts
+      [playlist.try(:title)]
+    end
   end
 
-  def display_type(plural: false)
-    plural ? "Mixtapes" : "Mixtape"
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+
+      delegate :alpha_parts, to: :playlist, allow_nil: true
+    end
   end
 end

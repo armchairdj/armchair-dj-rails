@@ -1,5 +1,19 @@
 # These are all the cops that are disabled in the default configuration.
 
+Bundler/OrderedGems:
+  Description: >-
+                 Gems within groups in the Gemfile should be alphabetically sorted.
+  Enabled: false
+  Include:
+    - '**/*.gemfile'
+    - '**/Gemfile'
+    - '**/gems.rb'
+
+Layout/AccessModifierIndentation:
+  Description: Check indentation of private/protected visibility modifiers.
+  StyleGuide: '#indent-public-private-protected'
+  Enabled: false
+
 Layout/ClassStructure:
   Description: 'Enforces a configured order of definitions within a class body.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#consistent-classes'
@@ -61,6 +75,13 @@ Style/Copyright:
   Description: 'Include a copyright notice in each file before any code.'
   Enabled: false
 
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+
 Style/DocumentationMethod:
   Description: 'Public methods.'
   Enabled: false
@@ -68,8 +89,11 @@ Style/DocumentationMethod:
     - 'spec/**/*'
     - 'test/**/*'
 
-Style/EmptyLineAfterGuardClause:
-  Description: 'Add empty line after guard clause.'
+Style/IfUnlessModifier:
+  Description: >-
+                 Favor modifier if/unless usage when you have a
+                 single-line body.
+  StyleGuide: '#if-as-a-modifier'
   Enabled: false
 
 Style/ImplicitRuntimeError:

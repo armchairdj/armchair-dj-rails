@@ -1,0 +1,13 @@
+<%
+  @title = [
+    I18n.t("content.posts.show.title.#{@view_path}"),
+    @post.display_author,
+    post_title(@post)
+  ]
+%>
+
+<%= render "admin/shared/header", action: :show, instance: @post,
+  headline: @title.first
+%>
+
+<%= render "admin/posts/#{@view_path}/show" %>

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: works
@@ -19,6 +20,11 @@
 #
 
 class Work < ApplicationRecord
+  #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  include Imageable
 
   #############################################################################
   # CONCERNING: STI subclass contract.
@@ -29,6 +35,8 @@ class Work < ApplicationRecord
       self.inheritance_column = :medium
 
       validates :medium, presence: true
+
+      class_attribute :available_facets, default: []
     end
 
     class_methods do
@@ -61,43 +69,35 @@ class Work < ApplicationRecord
   end
 
   #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [display_makers, title, subtitle]
-  end
-
-  #############################################################################
   # CONCERNING: Title.
   #############################################################################
 
-  validates :title, presence: true
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
 
-  def display_title(full: false)
-    return unless persisted?
+    def display_title(full: false)
+      return unless persisted?
 
-    parts = [title, subtitle]
+      parts = [title, subtitle]
 
-    parts.unshift(display_makers) if full
+      parts.unshift(display_makers) if full
 
-    parts.compact.join(": ")
-  end
+      parts.compact.join(": ")
+    end
 
-  def full_display_title
-    display_title(full: true)
+    def full_display_title
+      display_title(full: true)
+    end
   end
 
   #############################################################################
   # CONCERNING: Aspects.
   #############################################################################
 
-  concerning :Aspects do
+  concerning :AspectsAssociation do
     included do
-      class_attribute :available_facets, default: []
-
       has_and_belongs_to_many :aspects, -> { distinct }
 
       validate { only_available_aspects }
@@ -107,13 +107,13 @@ class Work < ApplicationRecord
       aspects.group_by(&:human_facet).to_a
     end
 
-  private
+    private
 
     def only_available_aspects
       candidates = aspects.reject(&:marked_for_destruction?)
       disallowed = candidates.reject { |x| available_facets.include?(x.facet.to_sym) }
 
-      self.errors.add(:aspects, :invalid) if disallowed.any?
+      errors.add(:aspects, :invalid) if disallowed.any?
     end
   end
 
@@ -121,19 +121,16 @@ class Work < ApplicationRecord
   # CONCERNING: Milestones.
   #############################################################################
 
-  has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
-
-  concerning :Milestones do
-    MAX_MILESTONES_AT_ONCE = 5.freeze
-
+  concerning :MilestonesAssociation do
     included do
+      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
+
       accepts_nested_attributes_for(:milestones, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["year"].blank? }
-      )
+                                                 reject_if:     proc { |attrs| attrs["year"].blank? })
 
       validates_nested_uniqueness_of :milestones, uniq_attr: :activity
 
-      validate { has_released_milestone }
+      validate { presence_of_released_milestone }
     end
 
     def display_milestones
@@ -141,19 +138,17 @@ class Work < ApplicationRecord
     end
 
     def prepare_milestones
-      MAX_MILESTONES_AT_ONCE.times { self.milestones.build }
+      5.times { milestones.build }
 
-      if milestones.first.new_record?
-        milestones.first.activity = :released
-      end
+      milestones.first.activity = :released if milestones.first.new_record?
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
-    def has_released_milestone
+    def presence_of_released_milestone
       return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
 
-      self.errors.add(:milestones, :blank)
+      errors.add(:milestones, :blank)
     end
   end
 
@@ -161,31 +156,32 @@ class Work < ApplicationRecord
   # CONCERNING: Attributions.
   #############################################################################
 
-  has_many :attributions, inverse_of: :work, dependent: :destroy
+  concerning :AttributionAssociations do
+    included do
+      has_many :attributions, inverse_of: :work, dependent: :destroy
+    end
 
-  def creators
-    Creator.where(id: creator_ids)
-  end
+    def creators
+      Creator.where(id: creator_ids)
+    end
 
-  def creator_ids
-    attributions.map(&:creator_id).uniq
+    def creator_ids
+      attributions.map(&:creator_id).uniq
+    end
   end
 
   #############################################################################
   # CONCERNING: Credits.
   #############################################################################
 
-  has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
-
-  has_many :makers, through: :credits, source: :creator, class_name: "Creator"
-
-  concerning :NestedCredits do
-    MAX_CREDITS_AT_ONCE = 3.freeze
-
+  concerning :CreditAssociations do
     included do
+      has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
+
+      has_many :makers, through: :credits, source: :creator, class_name: "Creator"
+
       accepts_nested_attributes_for(:credits, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["creator_id"].blank? }
-      )
+                                              reject_if:     proc { |attrs| attrs["creator_id"].blank? })
 
       validates :credits, length: { minimum: 1 }
 
@@ -195,10 +191,10 @@ class Work < ApplicationRecord
     end
 
     def prepare_credits
-      MAX_CREDITS_AT_ONCE.times { self.credits.build }
+      3.times { credits.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def memoize_display_makers
       self.display_makers = collect_makers
@@ -215,90 +211,75 @@ class Work < ApplicationRecord
   # CONCERNING: Contributions.
   #############################################################################
 
-  has_many :contributions, inverse_of: :work, dependent: :destroy
-
-  has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
-
-  concerning :NestedContributions do
-    MAX_CONTRIBUTIONS_AT_ONCE = 10.freeze
-
+  concerning :ContributionAssociations do
     included do
-      accepts_nested_attributes_for(:contributions, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["creator_id"].blank? }
-      )
+      has_many :contributions, inverse_of: :work, dependent: :destroy
 
-      validates_nested_uniqueness_of(:contributions,
-        uniq_attr: :creator_id, scope: [:role_id]
-      )
+      has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
+
+      accepts_nested_attributes_for(:contributions, allow_destroy: true,
+                                                    reject_if:     proc { |attrs| attrs["creator_id"].blank? })
+
+      validates_nested_uniqueness_of(:contributions, uniq_attr: :creator_id, scope: [:role_id])
     end
 
     def prepare_contributions
-      MAX_CONTRIBUTIONS_AT_ONCE.times { self.contributions.build }
+      10.times { contributions.build }
     end
   end
 
   #############################################################################
-  # CONCERNING: Relationships to other works.
+  # CONCERNING: Source relationships.
   #############################################################################
 
-  has_many :source_relationships, class_name: "Work::Relationship",
-    foreign_key: :target_id, inverse_of: :target, dependent: :destroy
-
-  has_many :source_works, -> { order("works.title") },
-    through: :source_relationships, source: :source
-
-  has_many :target_relationships, class_name: "Work::Relationship",
-    foreign_key: :source_id, inverse_of: :source, dependent: :destroy
-
-  has_many :target_works, -> { order("works.title") },
-    through: :target_relationships, source: :target
-
-  def available_relatives
-    Work.where.not(id: self.id).grouped_by_medium
-  end
-
-  concerning :NestedSourceRelationships do
-    MAX_SOURCE_RELATIONSHIPS_AT_ONCE = 5.freeze
-
+  concerning :SourceAssociations do
     included do
-      accepts_nested_attributes_for(:source_relationships,
-        allow_destroy: true, reject_if: :reject_source_relationship?
-      )
+      has_many :source_relationships, class_name: "Work::Relationship",
+        foreign_key: :target_id, inverse_of: :target, dependent: :destroy
 
-      validates_nested_uniqueness_of(:source_relationships,
-        uniq_attr: :source_id, scope: [:connection]
-      )
+      has_many :source_works, -> { order("works.title") },
+        through: :source_relationships, source: :source
+
+      accepts_nested_attributes_for(:source_relationships,
+        allow_destroy: true, reject_if: :reject_source_relationship?)
+
+      validates_nested_uniqueness_of(:source_relationships, uniq_attr: :source_id, scope: [:connection])
     end
 
     def prepare_source_relationships
-      MAX_SOURCE_RELATIONSHIPS_AT_ONCE.times { self.source_relationships.build }
+      5.times { source_relationships.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_source_relationship?(attrs)
       attrs["source_id"].blank?
     end
   end
 
-  concerning :NestedTargetRelationships do
-    MAX_TARGET_RELATIONSHIPS_AT_ONCE = 5.freeze
+  #############################################################################
+  # CONCERNING: Target relationships.
+  #############################################################################
 
+  concerning :TargetAssociations do
     included do
-      accepts_nested_attributes_for(:target_relationships,
-        allow_destroy: true, reject_if: :reject_target_relationship?
-      )
+      has_many :target_relationships, class_name: "Work::Relationship",
+        foreign_key: :source_id, inverse_of: :source, dependent: :destroy
 
-      validates_nested_uniqueness_of(:target_relationships,
-        uniq_attr: :target_id, scope: [:connection]
-      )
+      has_many :target_works, -> { order("works.title") },
+        through: :target_relationships, source: :target
+
+      accepts_nested_attributes_for(:target_relationships,
+        allow_destroy: true, reject_if: :reject_target_relationship?)
+
+      validates_nested_uniqueness_of(:target_relationships, uniq_attr: :target_id, scope: [:connection])
     end
 
     def prepare_target_relationships
-      MAX_TARGET_RELATIONSHIPS_AT_ONCE.times { self.target_relationships.build }
+      5.times { target_relationships.build }
     end
 
-  private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def reject_target_relationship?(attrs)
       attrs["target_id"].blank?
@@ -309,43 +290,69 @@ class Work < ApplicationRecord
   # CONCERNING: Posts.
   #############################################################################
 
-  has_many :reviews, dependent: :nullify
+  concerning :PostAssociations do
+    included do
+      has_many :reviews, dependent: :nullify
 
-  has_many :playlistings, class_name: "Playlist::Track",
-    inverse_of: :work, foreign_key: :work_id, dependent: :nullify
+      has_many :playlistings, class_name: "Playlist::Track",
+        inverse_of: :work, foreign_key: :work_id, dependent: :nullify
 
-  has_many :playlists, through: :playlistings
-  has_many :mixtapes,  through: :playlists
+      has_many :playlists, through: :playlistings
+      has_many :mixtapes,  through: :playlists
+    end
 
-  def posts
-    Post.where(id: post_ids)
-  end
+    def posts
+      Post.where(id: post_ids)
+    end
 
-  def post_ids
-    reviews.ids + mixtapes.ids
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
   end
 
   #############################################################################
   # CONCERNING: Editing.
   #############################################################################
 
-  def prepare_for_editing
-    return unless medium.present?
+  concerning :Editing do
+    def available_relatives
+      Work.where.not(id: id).grouped_by_medium
+    end
 
-    prepare_credits
-    prepare_contributions
-    prepare_milestones
-    prepare_source_relationships
-    prepare_target_relationships
+    def prepare_for_editing
+      return unless medium.present?
+
+      prepare_credits
+      prepare_contributions
+      prepare_milestones
+      prepare_source_relationships
+      prepare_target_relationships
+    end
   end
 
   #############################################################################
   # CONCERNING: Ginsu.
   #############################################################################
 
-  scope :for_list, -> { }
-  scope :for_show, -> { includes(
-    :aspects, :milestones, :playlists, :reviews, :mixtapes,
-    :credits, :makers, :contributions, :contributors
-  ) }
+  scope :for_list, -> {}
+  scope :for_show, lambda {
+                     includes(
+                       :aspects, :milestones, :playlists, :reviews, :mixtapes,
+                       :credits, :makers, :contributions, :contributors
+                     )
+                   }
+
+  #############################################################################
+  # CONCERNING: Alpha.
+  #############################################################################
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [display_makers, title, subtitle]
+    end
+  end
 end

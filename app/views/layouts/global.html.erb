@@ -17,11 +17,13 @@
     <%= content_tag(:div, class: "constrain") do %>
       <%= content_tag(page_container_tag, class: page_container_classes) do %>
         <%= content_for_unless_empty :pre_header %>
+
         <%= render "layouts/global/header" %>
-        <%= content_for_unless_empty :article_header %>
 
         <%= content_for_unless_empty :pre_main %>
+
         <%= yield %>
+
         <%= content_for_unless_empty :article_main %>
       <% end %>
     <% end %>

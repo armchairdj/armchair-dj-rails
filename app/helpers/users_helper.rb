@@ -2,13 +2,13 @@
 
 module UsersHelper
   def link_to_author_of(obj, admin: false, **opts)
-    return unless link = link_to_user(obj.author, admin: admin, rel: "author")
+    return unless (link = link_to_user(obj.author, admin: admin, rel: "author"))
 
     content_tag(:address, link, **combine_attrs(opts, class: "author"))
   end
 
   def link_to_user(user, admin: false, full_url: false, text: nil, **opts)
-    return unless url = url_for_user(user, admin: admin, full_url: full_url)
+    return unless (url = url_for_user(user, admin: admin, full_url: full_url))
 
     text ||= user.username
 

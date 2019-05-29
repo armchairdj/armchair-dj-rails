@@ -2,12 +2,12 @@
 
 class CreatorScoper < Ginsu::Scoper
   def allowed
-    super.reverse_merge({
+    super.reverse_merge(
       "Primary"    => :primary,
       "Secondary"  => :secondary,
       "Individual" => :individual,
-      "Group"      => :collective,
-    })
+      "Group"      => :collective
+    )
   end
 
 private

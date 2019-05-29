@@ -1,6 +1,5 @@
 @mixin button-text {
   font-size: $button-font-size;
-  font-family: $raleway-font-stack;
   @include bold();
 }
 

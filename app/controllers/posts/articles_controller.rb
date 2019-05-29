@@ -1,3 +1,11 @@
 # frozen_string_literal: true
 
-class Posts::ArticlesController < Posts::BaseController; end
+module Posts
+  class ArticlesController < Posts::BaseController
+    private
+
+    def set_section
+      @section = :articles
+    end
+  end
+end

@@ -1,0 +1,24 @@
+<%
+  @title = [I18n.t("content.posts.preview.title.#{@view_path}"), post_title(@post)]
+%>
+
+<% content_for :post_preview do %>
+  <%= render "posts/#{@view_path}/show" %>
+<% end %>
+
+<%= render "admin/shared/header", action: :preview, instance: @post,
+  headline: @title.first
+%>
+
+<%= content_tag(:p, class: "form-instructions") do %>
+  <% if @post.published? %>
+    <%= I18n.t("content.posts.preview.instructions.published") %>
+  <% else %>
+    <%= I18n.t("content.posts.preview.instructions.unpublished") %>
+  <% end %>
+<% end %>
+
+<%= adj_module do %>
+  <%= content_for :public_header %>
+  <%= content_for :post_preview %>
+<% end %>

@@ -11,9 +11,9 @@
   collection: @collection,
   records: @works,
   columns: [
-    { name: "ID",     method: :id                    },
+    { name: "ID",     method: :id, class: "nowrap" },
     { name: "Medium", method: :display_medium },
-    { name: "Title",  method: :title                 },
-    { name: "Makers", method: :display_makers        },
+    { name: "Title",  method: :title },
+    { name: "Makers", method: :display_makers },
   ]
 %>

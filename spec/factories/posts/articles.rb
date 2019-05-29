@@ -4,7 +4,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :article do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -16,13 +15,13 @@ FactoryBot.define do
     factory :minimal_article, class: "Article", parent: :minimal_post_parent do
       with_title
 
-      factory :minimal_post do; end
+      factory :minimal_post
     end
 
     factory :complete_article, class: "Article", parent: :complete_post_parent do
       with_title
 
-      factory :complete_post do; end
+      factory :complete_post
     end
   end
 end

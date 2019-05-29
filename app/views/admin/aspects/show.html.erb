@@ -9,11 +9,11 @@
 <%= render "admin/shared/show",
   record: @aspect,
   rows: [
-    { name: "ID",       method: :id },
+    { name: "ID",       method: :id, class: "nowrap" },
     { name: "Facet",    method: :human_facet },
     { name: "Name",     method: :name },
-    { name: "Created",  date: true, method: :created_at },
-    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Created",  method: :created_at, date: true },
+    { name: "Updated",  method: :updated_at, date: true },
     { name: "Alpha",    method: :alpha },
   ]
 %>

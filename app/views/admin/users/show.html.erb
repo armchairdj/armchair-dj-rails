@@ -9,15 +9,15 @@
 <%= render "admin/shared/show",
   record: @user,
   rows: [
-    { name: "ID",       method: :id },
+    { name: "ID",       method: :id, class: "nowrap" },
     { name: "Role",     method: :human_role },
     { name: "Name",     method: :display_name },
     { name: "Username", method: :username },
     { name: "Email",    method: :email },
     { name: "Bio",      method: -> (x) { paragraphs(x.bio) } },
     { name: "Links",    method: -> (x) { link_list(x.links) } },
-    { name: "Created",  date: true, method: :created_at },
-    { name: "Updated",  date: true, method: :updated_at },
+    { name: "Created",  method: :created_at, date: true },
+    { name: "Updated",  method: :updated_at, date: true },
     { name: "Alpha",    method: :alpha },
   ]
 %>

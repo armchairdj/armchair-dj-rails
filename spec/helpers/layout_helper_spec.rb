@@ -108,9 +108,9 @@ RSpec.describe LayoutHelper do
     end
 
     it "raises without instance variable" do
-      expect {
+      expect do
         helper.page_title
-      }.to raise_exception(NoMethodError)
+      end.to raise_exception(NoMethodError)
     end
 
     it "uses default on homepage" do

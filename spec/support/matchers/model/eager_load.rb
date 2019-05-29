@@ -21,11 +21,11 @@ RSpec::Matchers.define :eager_load do |*associations|
     end
   end
 
-  failure_message do |actual|
+  failure_message do |_actual|
     "expected #{subject} to eager-load #{associations.inspect} but did not"
   end
 
-  failure_message_when_negated do |actual|
+  failure_message_when_negated do |_actual|
     "expected #{subject} not to eager-load #{associations.inspect} but did"
   end
 end

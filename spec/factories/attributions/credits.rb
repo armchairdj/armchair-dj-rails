@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -31,7 +32,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :credit, class: "Credit" do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -40,7 +40,7 @@ FactoryBot.define do
     # FACTORIES.
     ###########################################################################
 
-    factory :minimal_credit, parent: :credit_with_creator do; end
+    factory :minimal_credit, parent: :credit_with_creator
 
     factory :credit_without_creator do
       with_work

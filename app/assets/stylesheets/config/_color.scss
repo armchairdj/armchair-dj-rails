@@ -31,11 +31,12 @@ $error-color:            #dd1c1a;
 
 /* Body. */
 
-$body-bg-color: scale-color($armchair-blacktop, $lightness: 5%);
+$body-bg-color: $black;
 $masthead-bg-color: $black;
-$flash-bg-color: $body-bg-color;
-$footer-bg-color: $body-bg-color;
-
+$navbar-bg-color: scale-color($armchair-blacktop, $lightness: 5%);
+$flash-bg-color: scale-color($armchair-blacktop, $lightness: 5%);
+$footer-bg-color: $black;
+$module-bg-color: #0f0f0f;
 
 /* Text. */
 

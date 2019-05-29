@@ -2,7 +2,6 @@
 
 module Ginsu
   class Scoper < Knife
-
     ###########################################################################
     # INSTANCE.
     ###########################################################################
@@ -15,19 +14,18 @@ module Ginsu
       super(current_scope: current_scope, current_sort: current_sort, current_dir: current_dir)
     end
 
-    def resolve
+    def resolved
       validate
 
       allowed[@current_scope]
     end
 
     def map
-      allowed.keys.each.inject({}) do |memo, (scope)|
+      allowed.keys.each.each_with_object({}) do |(scope), memo|
         active = scope == @current_scope
         url    = diced_url(scope, @current_sort, @current_dir)
 
-        memo[scope] = { :active? => active, :url => url }
-        memo
+        memo[scope] = { active?: active, url: url }
       end
     end
 
@@ -35,10 +33,10 @@ module Ginsu
       { "All" => :all }
     end
 
-  private
+    private
 
     def valid?
-      allowed.keys.include?(@current_scope)
+      allowed.key?(@current_scope)
     end
 
     def invalid_msg

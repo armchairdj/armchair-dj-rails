@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -29,34 +31,30 @@
 require "rails_helper"
 
 RSpec.describe Credit do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
+  it_behaves_like "an_application_record"
 
-    it_behaves_like "an_alphabetizable_model"
+  it_behaves_like "an_alphabetizable_model"
 
-    it_behaves_like "an_attribution"
+  it_behaves_like "an_attribution"
 
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) { [:work, :creator] }
-    end
-
-    it_behaves_like "a_listable_model", :work, :credits do
-      let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
-      let(:other  ) { create(:minimal_work, maker_count: 5).credits.sorted }
-    end
-
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
-
-      # Must specify individual fields for STI models.
-      it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
-    end
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [] }
+    let(:show_loads) { [:work, :creator] }
   end
 
-  describe "class" do
-    specify { expect(described_class.superclass).to eq(Attribution) }
+  it_behaves_like "a_listable_model", :work, :credits do
+    let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
+    let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
   end
+
+  describe "nilify_blanks" do
+    subject { build_minimal_instance }
+
+    # Must specify individual fields for STI models.
+    it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
+  end
+
+  specify { expect(described_class.superclass).to eq(Attribution) }
 
   describe "scope-related" do
     # Nothing so far.

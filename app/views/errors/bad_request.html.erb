@@ -1,3 +1,31 @@
 <%
-  @headline = @title = "Not So Fast!"
+  @title = "Huh?"
 %>
+
+<%= content_for :public_header do %>
+  <%= content_tag(:header, class: "standard-page-header") do %>
+    <%= content_tag(:h1) do %>
+      <%= semantic_icon("warning", title: "bad request error", desc: "warning icon") %>
+      <%= @title %>
+    <% end %>
+
+    <%= content_tag(:h3, "We can't do that.") %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "error-page") do %>
+  <%= content_tag(:p) do %>
+    Our server can't process your request.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Like the confused <%= link_to "Minogue", "https://en.wikipedia.org/wiki/Kylie_Minogue" %> fans who couldn't accept
+      <%= link_to "SexyKylie&trade;".html_safe, "https://en.wikipedia.org/wiki/Kylie_Minogue_(album)" %>,
+      <%= link_to "IndieKylie&trade;".html_safe, "https://en.wikipedia.org/wiki/Impossible_Princess" %>,
+      <%= link_to "ElectroKylie&trade;".html_safe, "https://en.wikipedia.org/wiki/Body_Language_(Kylie_Minogue_album)" %> or
+      <%= link_to "CountryKylie&trade;".html_safe, "https://en.wikipedia.org/wiki/Golden_(Kylie_Minogue_album)" %>,
+    we don't understand what you're trying to do.
+  <% end %>
+
+  <%= image_tag "errors/kylie.jpg", alt: "Kylie Minogue" %>
+<% end %>

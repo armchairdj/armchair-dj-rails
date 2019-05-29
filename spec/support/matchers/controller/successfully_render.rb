@@ -9,6 +9,6 @@ RSpec::Matchers.define :successfully_render do |template|
   end
 
   failure_message do
-    message = "expected to successfully render template #{template}, but did not"
+    "expected to successfully render template #{template}, but did not"
   end
 end

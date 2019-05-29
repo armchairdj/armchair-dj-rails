@@ -7,34 +7,34 @@ RSpec.describe Ginsu::Sorter do
     describe "#prepare_clause" do
       subject { described_class.prepare_clause(clauses, dir) }
 
-      before(:each) do
+      before do
         expect(Arel).to receive(:sql).and_call_original
       end
 
-      context "single clause, ascending" do
+      context "with a single clause, ascending" do
         let(:clauses) { "name" }
-        let(:dir    ) { "ASC" }
+        let(:dir) { "ASC" }
 
         it { is_expected.to eq("name") }
       end
 
-      context "multiple clauses, ascending" do
+      context "with multiple clauses, ascending" do
         let(:clauses) { ["name", "created_at"] }
-        let(:dir    ) { "ASC" }
+        let(:dir) { "ASC" }
 
         it { is_expected.to eq("name, created_at") }
       end
 
-      context "single clause, descending" do
+      context "with a single clause, descending" do
         let(:clauses) { "name" }
-        let(:dir    ) { "DESC" }
+        let(:dir) { "DESC" }
 
         it { is_expected.to eq("name DESC") }
       end
 
-      context "multiple clauses, descending" do
+      context "with multiple clauses, descending" do
         let(:clauses) { ["name", "created_at"] }
-        let(:dir    ) { "DESC" }
+        let(:dir) { "DESC" }
 
         it { is_expected.to eq("name DESC, created_at") }
       end
@@ -43,7 +43,7 @@ RSpec.describe Ginsu::Sorter do
     describe "#combine_clauses" do
       subject { described_class.combine_clauses(clauses) }
 
-      context "with multiple clause" do
+      context "with multiple clauses" do
         let(:clauses) { [" name ASC ", " created_at  DESC "] }
 
         it "squishes and joins" do
@@ -51,7 +51,7 @@ RSpec.describe Ginsu::Sorter do
         end
       end
 
-      context "with single clause" do
+      context "with a single clause" do
         let(:clauses) { [" name  ASC "] }
 
         it "squishes" do
@@ -90,13 +90,11 @@ RSpec.describe Ginsu::Sorter do
   end
 
   describe "#constructor" do
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:allowed).and_return({
-        "Default" => "created_at DESC"
-      })
+    before do
+      allow_any_instance_of(described_class).to receive(:allowed).and_return("Default" => "created_at DESC")
     end
 
-    context "defaults" do
+    context "with defaults" do
       let(:instance) { described_class.new(current_scope: "", current_sort: "", current_dir: "") }
 
       describe "sets current_scope to nil" do
@@ -118,7 +116,7 @@ RSpec.describe Ginsu::Sorter do
       end
     end
 
-    context "explicit values" do
+    context "with explicit values" do
       let(:instance) { described_class.new(current_scope: "All", current_sort: "ID", current_dir: "DESC") }
 
       describe "sets current_scope" do

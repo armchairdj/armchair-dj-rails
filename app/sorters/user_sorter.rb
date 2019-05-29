@@ -2,12 +2,12 @@
 
 class UserSorter < Ginsu::Sorter
   def allowed
-    super.merge({
+    super.merge(
       "Name"     => alpha_sort_sql,
       "Username" => author_sort_sql,
       "Email"    => user_email_sort_sql,
-      "Role"     => [user_role_sort_sql, alpha_sort_sql],
-    })
+      "Role"     => [user_role_sort_sql, alpha_sort_sql]
+    )
   end
 
 private

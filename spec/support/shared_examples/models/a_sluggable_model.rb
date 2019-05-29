@@ -3,127 +3,125 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_sluggable_model" do
-  describe "class" do
-    describe "self#prepare_parts" do
-      subject { described_class.prepare_parts(parts) }
+  describe ".prepare_parts" do
+    subject { described_class.prepare_parts(parts) }
 
-      describe "basics" do
-        let(:parts) { ["Kate Bush", "Hounds of Love", "Remastered Version"] }
+    describe "basics" do
+      let(:parts) { ["Kate Bush", "Hounds of Love", "Remastered Version"] }
 
-        it { is_expected.to eq(["kate_bush", "hounds_of_love", "remastered_version"]) }
-      end
-
-      describe "nil parts" do
-        let(:parts) { ["Kate Bush", "Hounds of Love", nil] }
-
-        it { is_expected.to eq(["kate_bush", "hounds_of_love"]) }
-      end
-
-      describe "blankable parts" do
-        let(:parts) { ["Talk Talk", "?", nil] }
-
-        it { is_expected.to eq(["talk_talk", "xxx"]) }
-      end
-
-      describe "blankable parts redux" do
-        let(:parts) { ["Glass Candy", "///", nil] }
-
-        it { is_expected.to eq(["glass_candy", "xxx"]) }
-      end
+      it { is_expected.to eq(["kate_bush", "hounds_of_love", "remastered_version"]) }
     end
 
-    describe "self#prepare_part" do
-      subject { described_class.prepare_part(part) }
+    describe "nil parts" do
+      let(:parts) { ["Kate Bush", "Hounds of Love", nil] }
 
-      describe "underscores and lowercases" do
-        let(:part) { "Ray of Light" }
+      it { is_expected.to eq(["kate_bush", "hounds_of_love"]) }
+    end
 
-        it { is_expected.to eq("ray_of_light") }
-      end
+    describe "blankable parts" do
+      let(:parts) { ["Talk Talk", "?", nil] }
 
-      describe "replaces &" do
-        let(:part) { "Key & Peele" }
+      it { is_expected.to eq(["talk_talk", "xxx"]) }
+    end
 
-        it { is_expected.to eq("key_and_peele") }
-      end
+    describe "blankable parts redux" do
+      let(:parts) { ["Glass Candy", "///", nil] }
 
-      describe "replaces & in the middle of a word" do
-        let(:part) { "Key&Peele" }
+      it { is_expected.to eq(["glass_candy", "xxx"]) }
+    end
+  end
 
-        it { is_expected.to eq("key_and_peele") }
-      end
+  describe ".prepare_part" do
+    subject { described_class.prepare_part(part) }
 
-      describe "replaces apostrophes" do
-        let(:part) { "Jane's Addiction" }
+    describe "underscores and lowercases" do
+      let(:part) { "Ray of Light" }
 
-        it { is_expected.to eq("janes_addiction") }
-      end
+      it { is_expected.to eq("ray_of_light") }
+    end
 
-      describe "replaces curly apostrophes" do
-        let(:part) { "Jane’s Addiction" }
+    describe "replaces &" do
+      let(:part) { "Key & Peele" }
 
-        it { is_expected.to eq("janes_addiction") }
-      end
+      it { is_expected.to eq("key_and_peele") }
+    end
 
-      describe "replaces single curly quotes" do
-        let(:part) { "‘Heroes’" }
+    describe "replaces & in the middle of a word" do
+      let(:part) { "Key&Peele" }
 
-        it { is_expected.to eq("heroes") }
-      end
+      it { is_expected.to eq("key_and_peele") }
+    end
 
-      describe "replaces single straight quotes" do
-        let(:part) { "'Heroes'" }
+    describe "replaces apostrophes" do
+      let(:part) { "Jane's Addiction" }
 
-        it { is_expected.to eq("heroes") }
-      end
+      it { is_expected.to eq("janes_addiction") }
+    end
 
-      describe "replaces double curly quotes" do
-        let(:part) { "“Heroes”" }
+    describe "replaces curly apostrophes" do
+      let(:part) { "Jane’s Addiction" }
 
-        it { is_expected.to eq("heroes") }
-      end
+      it { is_expected.to eq("janes_addiction") }
+    end
 
-      describe "replaces double straight quotes" do
-        let(:part) { '"Heroes"' }
+    describe "replaces single curly quotes" do
+      let(:part) { "‘Heroes’" }
 
-        it { is_expected.to eq("heroes") }
-      end
+      it { is_expected.to eq("heroes") }
+    end
 
-      describe "replaces punctuation" do
-        let(:part) { "Damn. I love it! Yeah" }
+    describe "replaces single straight quotes" do
+      let(:part) { "'Heroes'" }
 
-        it { is_expected.to eq("damn_i_love_it_yeah") }
-      end
+      it { is_expected.to eq("heroes") }
+    end
 
-      describe "replaces and collapses whitespace" do
-        let(:part) { "what    is \n\n\t\t\t all this whitespace" }
+    describe "replaces double curly quotes" do
+      let(:part) { "“Heroes”" }
 
-        it { is_expected.to eq("what_is_all_this_whitespace") }
-      end
+      it { is_expected.to eq("heroes") }
+    end
 
-      describe "replaces non-word characters" do
-        let(:part) { "What-Am-I-Worth" }
+    describe "replaces double straight quotes" do
+      let(:part) { '"Heroes"' }
 
-        it { is_expected.to eq("what_am_i_worth") }
-      end
+      it { is_expected.to eq("heroes") }
+    end
 
-      describe "does not leave leading or trailing underscores" do
-        let(:part) { "_Super_Collider_" }
+    describe "replaces punctuation" do
+      let(:part) { "Damn. I love it! Yeah" }
 
-        it { is_expected.to eq("super_collider") }
-      end
+      it { is_expected.to eq("damn_i_love_it_yeah") }
+    end
 
-      describe "collapses underscores" do
-        let(:part) { "_____Who? What?When? Where?__ why? How?____" }
+    describe "replaces and collapses whitespace" do
+      let(:part) { "what    is \n\n\t\t\t all this whitespace" }
 
-        it { is_expected.to eq("who_what_when_where_why_how") }
-      end
+      it { is_expected.to eq("what_is_all_this_whitespace") }
+    end
 
-      describe "ASCII-fies non-ASCII word characters" do
-        let(:part) { "Sigur Rós" }
+    describe "replaces non-word characters" do
+      let(:part) { "What-Am-I-Worth" }
 
-        it { is_expected.to eq("sigur_ros") }
-      end
+      it { is_expected.to eq("what_am_i_worth") }
+    end
+
+    describe "does not leave leading or trailing underscores" do
+      let(:part) { "_Super_Collider_" }
+
+      it { is_expected.to eq("super_collider") }
+    end
+
+    describe "collapses underscores" do
+      let(:part) { "_____Who? What?When? Where?__ why? How?____" }
+
+      it { is_expected.to eq("who_what_when_where_why_how") }
+    end
+
+    describe "ASCII-fies non-ASCII word characters" do
+      let(:part) { "Sigur Rós" }
+
+      it { is_expected.to eq("sigur_ros") }
     end
   end
 
@@ -136,187 +134,185 @@ RSpec.shared_examples "a_sluggable_model" do
       it { is_expected.to be_a_kind_of(Array) }
     end
 
-    context "private" do
-      describe "generating new slug" do
-        describe "#should_clear_slug?" do
-          subject { instance.send(:should_clear_slug?) }
+    describe "generating new slug" do
+      describe "#should_clear_slug?" do
+        subject { instance.send(:should_clear_slug?) }
 
-          context "draft" do
-            let(:instance) { create_minimal_instance(:draft) }
+        context "when draft" do
+          let(:instance) { create_minimal_instance(:draft) }
 
-            describe "false by default" do
-              it { is_expected.to eq(false) }
-            end
-
-            describe "false even if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
-
-              it { is_expected.to eq(false) }
-            end
-
-            describe "false even if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
-
-              it { is_expected.to eq(false) }
-            end
+          describe "false by default" do
+            it { is_expected.to eq(false) }
           end
 
-          context "scheduled" do
-            let(:instance) { create_minimal_instance(:scheduled) }
+          describe "false even if clear_slug=true" do
+            before { instance.clear_slug = true }
 
-            describe "false by default" do
-              it { is_expected.to eq(false) }
-            end
-
-            describe "false even if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
-
-              it { is_expected.to eq(false) }
-            end
-
-            describe "false even if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
-
-              it { is_expected.to eq(false) }
-            end
+            it { is_expected.to eq(false) }
           end
 
-          context "published" do
-            let(:instance) { create_minimal_instance(:published) }
-
-            describe "false by default" do
-              it { is_expected.to eq(false) }
-            end
-
-            describe "true if clear_slug=true" do
-              before(:each) { instance.clear_slug = true }
-
-              it { is_expected.to eq(true) }
-            end
-
-            describe "true if clear_slug=1" do
-              before(:each) { instance.clear_slug = "1" }
-
-              it { is_expected.to eq(true) }
-            end
-          end
-        end
-
-        describe "#should_reset_slug_history?" do
-          subject { instance.send(:should_reset_slug_history?) }
-
-          context "draft" do
-            let(:instance) { create_minimal_instance(:draft) }
-
-            it { is_expected.to eq(true) }
-          end
-
-          context "scheduled" do
-            let(:instance) { create_minimal_instance(:scheduled) }
-
-            it { is_expected.to eq(true) }
-          end
-
-          context "published" do
-            let(:instance) { create_minimal_instance(:published) }
+          describe "false even if clear_slug=1" do
+            before { instance.clear_slug = "1" }
 
             it { is_expected.to eq(false) }
           end
         end
 
-        describe "slug regeneration (#handle_clear_slug_checkbox and #clear_slug_and_history_if_unpublished" do
-          let(:instance) { create_minimal_instance }
+        context "when scheduled" do
+          let(:instance) { create_minimal_instance(:scheduled) }
 
-          before(:each) do
-            allow(instance).to receive(:slug_candidates   ).and_call_original
-            allow(instance).to receive(:reset_slug_history).and_call_original
+          describe "false by default" do
+            it { is_expected.to eq(false) }
           end
 
-          context "clear_slug? is true" do
-            before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(true)
-              allow(instance).to receive(:should_reset_slug_history?).and_return(false)
-            end
+          describe "false even if clear_slug=true" do
+            before { instance.clear_slug = true }
 
-            it "resets slug" do
-              expect(instance).to     receive(:slug_candidates   )
-              expect(instance).to_not receive(:reset_slug_history)
-
-              instance.save
-            end
+            it { is_expected.to eq(false) }
           end
 
-          context "should_reset_slug_history? is true" do
-            before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(false)
-              allow(instance).to receive(:should_reset_slug_history?).and_return(true )
-            end
+          describe "false even if clear_slug=1" do
+            before { instance.clear_slug = "1" }
 
-            it "resets slug and slug history" do
-              expect(instance).to receive(:slug_candidates   )
-              expect(instance).to receive(:reset_slug_history)
+            it { is_expected.to eq(false) }
+          end
+        end
 
-              instance.save
-            end
+        context "when published" do
+          let(:instance) { create_minimal_instance(:published) }
+
+          describe "false by default" do
+            it { is_expected.to eq(false) }
           end
 
-          context "both are false" do
-            before(:each) do
-              allow(instance).to receive(:should_clear_slug?        ).and_return(false)
-              allow(instance).to receive(:should_reset_slug_history?).and_return(false)
-            end
+          describe "true if clear_slug=true" do
+            before { instance.clear_slug = true }
 
-            it "does nothing" do
-              expect(instance).to_not receive(:slug_candidates   )
-              expect(instance).to_not receive(:reset_slug_history)
+            it { is_expected.to eq(true) }
+          end
 
-              instance.save
-            end
+          describe "true if clear_slug=1" do
+            before { instance.clear_slug = "1" }
+
+            it { is_expected.to eq(true) }
           end
         end
       end
 
-      describe "#slug_candidates" do
-        subject { instance.send(:slug_candidates) }
+      describe "#should_reset_slug_history?" do
+        subject { instance.send(:should_reset_slug_history?) }
 
-        it { is_expected.to eq([:base_slug, :sequenced_slug]) }
+        context "when draft" do
+          let(:instance) { create_minimal_instance(:draft) }
 
-        describe "calling #base_slug, #sequenced_slug & #normalize_friendly_id" do
-          let(:one  ) { create_minimal_instance }
-          let(:two  ) { create_minimal_instance }
-          let(:three) { create_minimal_instance }
+          it { is_expected.to eq(true) }
+        end
 
-          describe "basic characters" do
-            let!(:instances) { [one, two, three] }
+        context "when scheduled" do
+          let(:instance) { create_minimal_instance(:scheduled) }
 
-            before(:each) do
-              instances.each do |instance|
-                allow(instance).to receive(:sluggable_parts).and_return(["foo", "bar", "bat"])
+          it { is_expected.to eq(true) }
+        end
 
-                instance.save
-              end
-            end
+        context "when published" do
+          let(:instance) { create_minimal_instance(:published) }
 
-            specify { expect(one.slug  ).to eq("foo/bar/bat"  ) }
-            specify { expect(two.slug  ).to eq("foo/bar/bat-2") }
-            specify { expect(three.slug).to eq("foo/bar/bat-3") }
+          it { is_expected.to eq(false) }
+        end
+      end
+
+      describe "slug regeneration (#handle_clear_slug_checkbox and #clear_slug_and_history_if_unpublished" do
+        let(:instance) { create_minimal_instance }
+
+        before do
+          allow(instance).to receive(:slug_candidates).and_call_original
+          allow(instance).to receive(:reset_slug_history).and_call_original
+        end
+
+        context "when clear_slug? is true" do
+          before do
+            allow(instance).to receive(:should_clear_slug?).and_return(true)
+            allow(instance).to receive(:should_reset_slug_history?).and_return(false)
           end
 
-          describe "special characters" do
-            let!(:instances) { [one, two, three] }
+          it "resets slug" do
+            expect(instance).to     receive(:slug_candidates)
+            expect(instance).to_not receive(:reset_slug_history)
 
-            before(:each) do
-              instances.each do |instance|
-                allow(instance).to receive(:sluggable_parts).and_return(["Salt-n-Pepa", "Blacks' Magic", "???"])
-
-                instance.save
-              end
-            end
-
-            specify { expect(  one.slug).to eq("salt_n_pepa/blacks_magic/xxx"  ) }
-            specify { expect(  two.slug).to eq("salt_n_pepa/blacks_magic/xxx-2") }
-            specify { expect(three.slug).to eq("salt_n_pepa/blacks_magic/xxx-3") }
+            instance.save
           end
+        end
+
+        context "when should_reset_slug_history? is true" do
+          before do
+            allow(instance).to receive(:should_clear_slug?).and_return(false)
+            allow(instance).to receive(:should_reset_slug_history?).and_return(true)
+          end
+
+          it "resets slug and slug history" do
+            expect(instance).to receive(:slug_candidates)
+            expect(instance).to receive(:reset_slug_history)
+
+            instance.save
+          end
+        end
+
+        context "when both are false" do
+          before do
+            allow(instance).to receive(:should_clear_slug?).and_return(false)
+            allow(instance).to receive(:should_reset_slug_history?).and_return(false)
+          end
+
+          it "does nothing" do
+            expect(instance).to_not receive(:slug_candidates)
+            expect(instance).to_not receive(:reset_slug_history)
+
+            instance.save
+          end
+        end
+      end
+    end
+
+    describe "#slug_candidates" do
+      subject { instance.send(:slug_candidates) }
+
+      it { is_expected.to eq([:base_slug, :sequenced_slug]) }
+
+      describe "calling #base_slug, #sequenced_slug & #normalize_friendly_id" do
+        let(:one) { create_minimal_instance }
+        let(:two) { create_minimal_instance }
+        let(:three) { create_minimal_instance }
+
+        describe "basic characters" do
+          let!(:instances) { [one, two, three] }
+
+          before do
+            instances.each do |instance|
+              allow(instance).to receive(:sluggable_parts).and_return(["foo", "bar", "bat"])
+
+              instance.save
+            end
+          end
+
+          specify { expect(one.slug).to eq("foo/bar/bat") }
+          specify { expect(two.slug).to eq("foo/bar/bat-2") }
+          specify { expect(three.slug).to eq("foo/bar/bat-3") }
+        end
+
+        describe "special characters" do
+          let!(:instances) { [one, two, three] }
+
+          before do
+            instances.each do |instance|
+              allow(instance).to receive(:sluggable_parts).and_return(["Salt-n-Pepa", "Blacks' Magic", "???"])
+
+              instance.save
+            end
+          end
+
+          specify { expect(one.slug).to eq("salt_n_pepa/blacks_magic/xxx") }
+          specify { expect(two.slug).to eq("salt_n_pepa/blacks_magic/xxx-2") }
+          specify { expect(three.slug).to eq("salt_n_pepa/blacks_magic/xxx-3") }
         end
       end
     end

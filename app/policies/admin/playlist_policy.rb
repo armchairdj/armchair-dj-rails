@@ -1,3 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::PlaylistPolicy < Admin::BasePolicy; end
+module Admin
+  class PlaylistPolicy < Admin::BasePolicy
+    alias reorder_tracks? update?
+  end
+end

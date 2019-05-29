@@ -1,3 +1,36 @@
 <%
-  @headline = @title = "What Now?"
+  @title = "Hmmmmm."
 %>
+
+<%= content_for :public_header do %>
+  <%= content_tag(:header, class: "standard-page-header") do %>
+    <%= content_tag(:h1) do %>
+      <%= semantic_icon("circle-x", title: "not found error", desc: "broken link icon") %>
+      <%= @title %>
+    <% end %>
+
+    <%= content_tag(:h3, "We can't find that.") %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "error-page") do %>
+  <%= content_tag(:p) do %>
+    Sorry, but that page doesn't exist.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Perhaps, like seasons 13-15 of the classic radio melodrama <%= link_to "The Shadow", "https://en.wikipedia.org/wiki/List_of_The_Shadow_episodes#Season_13:_(1949%E2%80%931950)" %>, it's simply lost to the mists of time.
+    Or maybe it's been erased from existence, like The Framework from Marvel's <%= link_to "Agents of S.H.I.E.L.D.", "https://en.wikipedia.org/wiki/Agents_of_S.H.I.E.L.D." %>
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Most likely, though, you typed the URL wrong.
+    According to Brian Eno's <%= link_to "oblique strategies", "https://en.wikipedia.org/wiki/Oblique_Strategies" %>, you should &ldquo;honour thy error as a hidden intention.&rdquo;
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Feel free to browse our <%= link_to "reviews", reviews_path %>, <%= link_to "mixtapes", mixtapes_path %> and <%= link_to "articles", articles_path %> to find something unexpected.
+  <% end %>
+
+  <%= image_tag "errors/the_shadow.jpg", alt: "The Shadow" %>
+<% end %>

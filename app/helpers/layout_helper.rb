@@ -7,7 +7,7 @@ module LayoutHelper
 
   def copyright_notice(english: false)
     start       = "1996"
-    now         = DateTime.now.strftime "%Y"
+    now         = Time.zone.now.strftime "%Y"
     daterange   = start == now ? start : "#{start}-#{now}"
     declaration = english ? "Copyright" : "&copy;"
 

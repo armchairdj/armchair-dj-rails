@@ -5,11 +5,9 @@ require "rails_helper"
 RSpec.describe Admin::TagsController do
   let(:tag) { create(:minimal_tag) }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
@@ -25,11 +23,14 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "GET #new" do
-      subject { get :new }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/tags/new") }
 
-      it { subject; expect(assigns(:tag)).to be_a_new(Tag) }
+      it "assigns ivars" do
+        send_request
+        expect(assigns(:tag)).to be_a_new(Tag)
+      end
     end
 
     describe "POST #create" do
@@ -37,9 +38,9 @@ RSpec.describe Admin::TagsController do
       let(:bad_params) { attributes_for(:minimal_tag).except(:name) }
 
       context "with min valid params" do
-        subject { post :create, params: { tag: min_params } }
+        subject(:send_request) { post :create, params: { tag: min_params } }
 
-        it { expect { subject }.to change(Tag, :count).by(1) }
+        it { expect { send_request }.to change(Tag, :count).by(1) }
 
         it { is_expected.to assign(Tag.last, :tag).with_attributes(min_params).and_be_valid }
 
@@ -49,12 +50,20 @@ RSpec.describe Admin::TagsController do
       end
 
       context "with invalid params" do
-        subject { post :create, params: { tag: bad_params } }
+        let(:make_request) do
+          post :create, params: { tag: bad_params }
+        end
 
-        it { is_expected.to successfully_render("admin/tags/new") }
+        it { expect(make_request).to successfully_render("admin/tags/new") }
 
-        it { subject; expect(assigns(:tag)).to have_coerced_attributes(bad_params) }
-        it { subject; expect(assigns(:tag)).to be_invalid }
+        it "updates the object but assigns errors" do
+          make_request
+
+          actual = assigns(:tag)
+
+          expect(actual).to have_coerced_attributes(bad_params)
+          expect(actual).to be_invalid
+        end
       end
     end
 
@@ -68,7 +77,7 @@ RSpec.describe Admin::TagsController do
 
     describe "PUT #update" do
       let(:update_params) { { name: "New Name" } }
-      let(:bad_update_params) { { name: ""         } }
+      let(:bad_update_params) { { name: "" } }
 
       context "with valid params" do
         subject do
@@ -94,11 +103,11 @@ RSpec.describe Admin::TagsController do
     end
 
     describe "DELETE #destroy" do
+      subject(:send_request) { delete :destroy, params: { id: tag.to_param } }
+
       let!(:tag) { create(:minimal_tag) }
 
-      subject { delete :destroy, params: { id: tag.to_param } }
-
-      it { expect { subject }.to change(Tag, :count).by(-1) }
+      it { expect { send_request }.to change(Tag, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_tags_path) }
 

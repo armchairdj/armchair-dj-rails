@@ -4,17 +4,17 @@ class Medium < Work
   self.abstract_class = true
 
   #############################################################################
-  # CONCERNING: STI Subclassed.
+  # CONCERNING: STI Subclass.
   #############################################################################
 
-  concerning :Subclassing do
+  concerning :Subclassable do
     class_methods do
       def model_name
         Work.model_name
       end
 
       def true_model_name
-        ActiveModel::Name.new(self.name.constantize)
+        ActiveModel::Name.new(name.constantize)
       end
 
       def display_medium
@@ -26,25 +26,23 @@ class Medium < Work
       delegate :true_model_name, to: :class
       delegate :display_medium,  to: :class
     end
+
+    def sluggable_parts
+      [display_medium.pluralize, display_makers, title, subtitle]
+    end
   end
 
   #############################################################################
   # CONCERNING: Roles.
   #############################################################################
 
-  def available_roles
-    Role.for_medium(self.medium).alpha
-  end
+  concerning :RoleAssociation do
+    def available_roles
+      Role.for_medium(medium).alpha
+    end
 
-  def available_role_ids
-    available_roles.ids
-  end
-
-  #############################################################################
-  # Instance: Roles.
-  #############################################################################
-
-  def sluggable_parts
-    [display_medium.pluralize, display_makers, title, subtitle]
+    def available_role_ids
+      available_roles.ids
+    end
   end
 end

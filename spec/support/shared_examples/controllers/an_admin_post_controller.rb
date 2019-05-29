@@ -2,14 +2,16 @@
 
 RSpec.shared_examples "an_admin_post_controller" do
   let(:model_class) { described_class.controller_name.classify.constantize }
-  let(:view_path) { described_class.controller_name.to_sym }
   let(:param_key) { model_class.model_name.param_key.to_sym }
 
-  let(:templates) { {
-    show: "admin/posts/#{view_path}/show",
-    new:  "admin/posts/#{view_path}/new",
-    edit: "admin/posts/#{view_path}/edit",
-  } }
+  let(:templates) do
+    {
+      show:    "admin/posts/show",
+      new:     "admin/posts/new",
+      edit:    "admin/posts/edit",
+      preview: "admin/posts/preview"
+    }
+  end
 
   def edit_path(instance)
     controller.send(:"edit_admin_#{param_key}_path", instance)
@@ -20,7 +22,7 @@ RSpec.shared_examples "an_admin_post_controller" do
   end
 
   def collection_path
-    controller.send(:"admin_#{view_path}_path")
+    controller.send(:"admin_#{described_class.controller_name}_path")
   end
 
   let(:min_create_params) { attributes_for_minimal_instance.except(:author_id) }
@@ -34,13 +36,13 @@ RSpec.shared_examples "an_admin_post_controller" do
     hash
   end
 
-  def wrap_update_params(instance, params, op = nil)
+  def wrap_update_params(instance, params, operation = nil)
     hash = { "id" => instance.to_param }
 
-    unless op.nil?
+    unless operation.nil?
       params = params.dup
 
-      params[op.to_s] = "1"
+      params[operation.to_s] = "1"
     end
 
     hash[param_key.to_s] = params
@@ -48,18 +50,18 @@ RSpec.shared_examples "an_admin_post_controller" do
     hash
   end
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
-      it_behaves_like "a_ginsu_index"
+      it_behaves_like "a_ginsu_index", "admin/posts/index"
     end
 
     describe "GET #show" do
-      let(:instance) { create_minimal_instance(:draft) }
-      let(:operation) { get :show, params: { id: instance.to_param } }
+      subject { send_request }
 
-      subject { operation }
+      let(:instance) { create_minimal_instance(:draft) }
+      let(:send_request) { get :show, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render(templates[:show]) }
 
@@ -67,25 +69,28 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #new" do
-      let(:operation) { get :new }
+      subject { send_request }
 
-      subject { operation }
+      let(:send_request) { get :new }
 
       it { is_expected.to successfully_render(templates[:new]) }
 
       describe "instance" do
-        subject { operation; assigns(:post) }
+        subject do
+          send_request
+          assigns(:post)
+        end
 
         it { is_expected.to be_a_populated_new_post(param_key) }
       end
     end
 
     describe "POST #create" do
-      let(:operation) { post :create, params: wrap_create_params(params) }
+      subject { send_request }
 
-      subject { operation }
+      let(:send_request) { post :create, params: wrap_create_params(params) }
 
-      context "success" do
+      context "when success" do
         let(:params) { min_create_params }
 
         it { expect { subject }.to change(Post, :count).by(1) }
@@ -96,20 +101,26 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         it { is_expected.to assign(Post.last, :post).with_attributes(params).and_be_valid }
 
-        describe "instance" do
-          subject { operation; Post.last }
+        describe "author" do
+          subject do
+            send_request
+            Post.last.author
+          end
 
-          it { expect(subject.author).to eq(controller.current_user) }
+          it { is_expected.to eq(controller.current_user) }
         end
       end
 
-      context "failure" do
+      context "with failure" do
         let(:params) { bad_create_params }
 
         it { is_expected.to successfully_render(templates[:new]) }
 
         describe "instance" do
-          subject { operation; assigns(:post) }
+          subject do
+            send_request
+            assigns(:post)
+          end
 
           it { is_expected.to be_a_populated_new_post(param_key) }
 
@@ -119,10 +130,10 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "GET #edit" do
-      let(:instance) { create_minimal_instance(:draft) }
-      let(:operation) { get :edit, params: { id: instance.to_param } }
+      subject { send_request }
 
-      subject { operation }
+      let(:instance) { create_minimal_instance(:draft) }
+      let(:send_request) { get :edit, params: { id: instance.to_param } }
 
       it { is_expected.to successfully_render(templates[:edit]) }
 
@@ -132,10 +143,10 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "PUT #update" do
-      context "basics" do
+      context "with basics" do
         let(:instance) { create_minimal_instance(:draft) }
 
-        before(:each) do
+        before do
           put :update, params: wrap_update_params(instance, params)
         end
 
@@ -170,16 +181,16 @@ RSpec.shared_examples "an_admin_post_controller" do
         end
       end
 
-      context "status updates" do
-        before(:each) do
+      context "with status updates" do
+        before do
           put :update, params: wrap_update_params(instance, params, transformation)
         end
 
-        context "publishing" do
+        context "when publishing" do
           let(:instance) { create_minimal_instance(:draft) }
           let(:transformation) { :publishing }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -194,11 +205,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "unpublishing" do
+        context "when unpublishing" do
           let(:instance) { create_minimal_instance(:published) }
           let(:transformation) { :unpublishing }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -213,11 +224,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "scheduling" do
+        context "when scheduling" do
           let(:instance) { create_minimal_instance(:draft) }
           let(:transformation) { :scheduling }
 
-          context "valid" do
+          context "when valid" do
             let(:publish_on) { 3.weeks.from_now }
 
             let(:params) { { "body" => "body", "publish_on" => publish_on } }
@@ -234,11 +245,11 @@ RSpec.shared_examples "an_admin_post_controller" do
           pending "invalid"
         end
 
-        context "unscheduling" do
+        context "when unscheduling" do
           let(:instance) { create_minimal_instance(:scheduled) }
           let(:transformation) { :unscheduling }
 
-          context "valid" do
+          context "when valid" do
             let(:params) { { "body" => "body" } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
@@ -250,18 +261,18 @@ RSpec.shared_examples "an_admin_post_controller" do
             specify { expect(instance.reload).to be_draft }
           end
 
-          pending "invalid"
+          pending "when invalid"
         end
       end
 
-      context "published" do
+      context "when published" do
         let(:instance) { create_minimal_instance(:published) }
 
-        before(:each) do
+        before do
           put :update, params: wrap_update_params(instance, params)
         end
 
-        context "replacing slug" do
+        context "when replacing slug" do
           let(:params) { { "clear_slug" => "1" } }
 
           it { is_expected.to send_user_to(show_path(instance)) }
@@ -272,11 +283,11 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
 
     describe "PUT #autosave" do
+      subject { send_request }
+
       let!(:instance) { create_minimal_instance(:draft) }
       let(:autosave_params) { { "body" => "autosaved", "summary" => "autosaved" } }
-      let(:operation) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
-
-      subject { operation }
+      let(:send_request) { put :autosave, xhr: true, params: wrap_update_params(instance, params) }
 
       context "with valid params" do
         let(:params) { autosave_params }
@@ -305,28 +316,30 @@ RSpec.shared_examples "an_admin_post_controller" do
       context "with failed save" do
         let(:params) { autosave_params }
 
-        before(:each) do
+        before do
           allow_any_instance_of(Post).to receive(:save!).and_raise(StandardError)
         end
 
         it { is_expected.to render_empty_json_500 }
       end
 
-      context "non-xhr" do
+      context "with non-xhr" do
         let(:params) { autosave_params }
-        let(:operation) { put :autosave, params: wrap_update_params(instance, params) }
+        let(:send_request) { put :autosave, params: wrap_update_params(instance, params) }
 
         it { is_expected.to render_bad_request }
       end
     end
 
+    pending "PUT #preview"
+
     describe "DELETE #destroy" do
+      subject { send_request }
+
       let!(:instance) { create_minimal_instance }
-      let(:operation) { delete :destroy, params: { id: instance.to_param } }
+      let(:send_request) { delete :destroy, params: { id: instance.to_param } }
 
-      subject { operation }
-
-      it { expect{ subject }.to change(Post, :count).by(-1) }
+      it { expect { subject }.to change(Post, :count).by(-1) }
 
       it { is_expected.to send_user_to(collection_path) }
 
@@ -334,16 +347,16 @@ RSpec.shared_examples "an_admin_post_controller" do
     end
   end
 
-  context "as admin" do
+  context "with admin" do
     pending "cannot destroy"
   end
 
-  context "as editor" do
+  context "with editor" do
     pending "cannot destroy"
     pending "cannot publish"
   end
 
-  context "as writer" do
+  context "with writer" do
     pending "cannot destroy"
     pending "cannot publish"
     pending "cannot access others' posts"

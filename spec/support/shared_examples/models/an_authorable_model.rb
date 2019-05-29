@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.shared_examples "an_authorable_model" do
   describe "associations" do
-    it { is_expected.to belong_to(:author) }
+    it { is_expected.to belong_to(:author).required }
   end
 
   describe "validations" do
@@ -12,42 +12,42 @@ RSpec.shared_examples "an_authorable_model" do
 
     describe "custom" do
       describe "#author_can_write" do
-        subject { create_minimal_instance }
+        let(:instance) { create_minimal_instance }
 
-        before(:each) do
-          expect(subject).to receive(:author_can_write).and_call_original
+        before do
+          expect(instance).to receive(:author_can_write).and_call_original
         end
 
         specify "root" do
-          subject.author = create(:root)
+          instance.author = create(:root)
 
-          expect(subject).to be_valid
+          expect(instance).to be_valid
         end
 
         specify "admin" do
-          subject.author = create(:admin)
+          instance.author = create(:admin)
 
-          expect(subject).to be_valid
+          expect(instance).to be_valid
         end
 
         specify "editor" do
-          subject.author = create(:editor)
+          instance.author = create(:editor)
 
-          expect(subject).to be_valid
+          expect(instance).to be_valid
         end
 
         specify "writer" do
-          subject.author = create(:editor)
+          instance.author = create(:writer)
 
-          expect(subject).to be_valid
+          expect(instance).to be_valid
         end
 
         specify "member" do
-          subject.author = create(:member)
+          instance.author = create(:member)
 
-          expect(subject).to_not be_valid
+          expect(instance).to_not be_valid
 
-          expect(subject).to have_error(author: :invalid_author)
+          expect(instance).to have_error(author: :invalid_author)
         end
       end
     end

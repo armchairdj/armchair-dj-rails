@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "posts/posts/feed.rss.builder" do
-  before(:each) do
+  before do
     create(:complete_article, :published)
     create(:complete_review,  :published)
     create(:complete_mixtape, :published)

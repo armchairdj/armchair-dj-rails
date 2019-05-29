@@ -19,11 +19,19 @@
       <%= admin_list_link    @model_class %>
     <% when :edit %>
       <%= admin_public_link  instance     %>
+      <%= admin_preview_link instance     %>
       <%= admin_view_link    instance     %>
       <%= admin_destroy_link instance     %>
       <%= admin_list_link    @model_class %>
     <% when :show %>
       <%= admin_public_link  instance     %>
+      <%= admin_preview_link instance     %>
+      <%= admin_update_link  instance     %>
+      <%= admin_destroy_link instance     %>
+      <%= admin_list_link    @model_class %>
+    <% when :preview %>
+      <%= admin_public_link  instance     %>
+      <%= admin_view_link    instance     %>
       <%= admin_update_link  instance     %>
       <%= admin_destroy_link instance     %>
       <%= admin_list_link    @model_class %>

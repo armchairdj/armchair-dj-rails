@@ -1,11 +1,13 @@
-inherit_from:
-  - .rubocop_todo.yml
-  - config/rubocop/enabled.yml
-  - config/rubocop/disabled.yml
+require: rubocop-rspec
 
 inherit_gem:
   rubocop-rails_config:
     - config/rails.yml
+
+inherit_from:
+  - .rubocop_todo.yml
+  - config/rubocop/enabled.yml
+  - config/rubocop/disabled.yml
 
 # This is the default configuration file. Enabling and disabling is configured
 # in separate files. This file adds all other parameters apart from Enabled.
@@ -14,58 +16,61 @@ inherit_gem:
 AllCops:
   # Include common Ruby source files.
   Include:
-    - '**/*.arb'
-    - '**/*.axlsx'
-    - '**/*.builder'
-    - '**/*.fcgi'
-    - '**/*.gemfile'
-    - '**/*.gemspec'
-    - '**/*.god'
-    - '**/*.jb'
-    - '**/*.jbuilder'
-    - '**/*.mspec'
-    - '**/*.opal'
-    - '**/*.pluginspec'
-    - '**/*.podspec'
-    - '**/*.rabl'
-    - '**/*.rake'
-    - '**/*.rbuild'
-    - '**/*.rbw'
-    - '**/*.rbx'
-    - '**/*.ru'
-    - '**/*.ruby'
-    - '**/*.spec'
-    - '**/*.thor'
-    - '**/*.watchr'
-    - '**/.irbrc'
-    - '**/.pryrc'
-    - '**/buildfile'
-    - '**/config.ru'
-    - '**/Appraisals'
-    - '**/Berksfile'
-    - '**/Brewfile'
-    - '**/Buildfile'
-    - '**/Capfile'
-    - '**/Cheffile'
-    - '**/Dangerfile'
-    - '**/Deliverfile'
-    - '**/Fastfile'
-    - '**/*Fastfile'
-    - '**/Gemfile'
-    - '**/Guardfile'
-    - '**/Jarfile'
-    - '**/Mavenfile'
-    - '**/Podfile'
-    - '**/Puppetfile'
-    - '**/Rakefile'
-    - '**/Snapfile'
-    - '**/Thorfile'
-    - '**/Vagabondfile'
-    - '**/Vagrantfile'
+    - "**/*.arb"
+    - "**/*.axlsx"
+    - "**/*.builder"
+    - "**/*.fcgi"
+    - "**/*.gemfile"
+    - "**/*.gemspec"
+    - "**/*.god"
+    - "**/*.jb"
+    - "**/*.jbuilder"
+    - "**/*.mspec"
+    - "**/*.opal"
+    - "**/*.pluginspec"
+    - "**/*.podspec"
+    - "**/*.rabl"
+    - "**/*.rake"
+    - "**/*.rb"
+    - "**/*.rbuild"
+    - "**/*.rbw"
+    - "**/*.rbx"
+    - "**/*.ru"
+    - "**/*.ruby"
+    - "**/*.spec"
+    - "**/*.thor"
+    - "**/*.watchr"
+    - "**/.irbrc"
+    - "**/.pryrc"
+    - "**/buildfile"
+    - "**/config.ru"
+    - "**/Appraisals"
+    - "**/Berksfile"
+    - "**/Brewfile"
+    - "**/Buildfile"
+    - "**/Capfile"
+    - "**/Cheffile"
+    - "**/Dangerfile"
+    - "**/Deliverfile"
+    - "**/Fastfile"
+    - "**/*Fastfile"
+    - "**/Gemfile"
+    - "**/Guardfile"
+    - "**/Jarfile"
+    - "**/Mavenfile"
+    - "**/Podfile"
+    - "**/Puppetfile"
+    - "**/Rakefile"
+    - "**/Snapfile"
+    - "**/Thorfile"
+    - "**/Vagabondfile"
+    - "**/Vagrantfile"
   Exclude:
-    - 'node_modules/**/*'
-    - 'vendor/**/*'
-    - '.git/**/*'
+    - "node_modules/**/*"
+    - "vendor/**/*"
+    - ".git/**/*"
+    - "lib/templates/**/*"
+    - "db/schema.rb"
   # Default formatter will be used if no `-f/--format` option is given.
   DefaultFormatter: progress
   # Cop names are displayed in offense messages by default. Change behavior
@@ -92,7 +97,7 @@ AllCops:
   # When `DisabledByDefault` is `true`, all cops in the default configuration
   # are disabled, and only cops in user configuration are enabled. This makes
   # cops opt-in instead of opt-out. Note that when `DisabledByDefault` is `true`,
-  # cops in user configuration will be enabled even if they don't set the
+  # cops in user configuration will be enabled even if they don"t set the
   # Enabled parameter.
   # When `EnabledByDefault` is `true`, all cops, even those in disabled.yml,
   # are enabled by default.  Cops can still be disabled in user configuration.
@@ -139,6 +144,14 @@ AllCops:
   # as the default.
   TargetRailsVersion: ~
 
+#################### Bundler ###########################
+
+Bundler/OrderedGems:
+  TreatCommentsAsGroupSeparators: true
+
+Gemspec/OrderedDependencies:
+  TreatCommentsAsGroupSeparators: true
+
 #################### Layout ###########################
 
 # Indent private/protected/public as deep as method definitions
@@ -156,15 +169,15 @@ Layout/AlignHash:
   # Alignment of entries using hash rocket as separator. Valid values are:
   #
   # key - left alignment of keys
-  #   'a' => 2
-  #   'bb' => 3
+  #   "a" => 2
+  #   "bb" => 3
   # separator - alignment of hash rockets, keys are right aligned
-  #    'a' => 2
-  #   'bb' => 3
+  #    "a" => 2
+  #   "bb" => 3
   # table - left alignment of keys, hash rockets, and values
-  #   'a'  => 2
-  #   'bb' => 3
-  EnforcedHashRocketStyle: key
+  #   "a"  => 2
+  #   "bb" => 3
+  EnforcedHashRocketStyle: table
   SupportedHashRocketStyles:
     - key
     - separator
@@ -180,7 +193,7 @@ Layout/AlignHash:
   # table - left alignment of keys and values
   #   a:  0
   #   bb: 1
-  EnforcedColonStyle: key
+  EnforcedColonStyle: table
   SupportedColonStyles:
     - key
     - separator
@@ -237,7 +250,7 @@ Layout/AlignParameters:
   #
   #     method_call(a,
   #       b)
-  EnforcedStyle: with_first_parameter
+  EnforcedStyle: with_fixed_indentation
   SupportedStyles:
     - with_first_parameter
     - with_fixed_indentation
@@ -260,7 +273,7 @@ Layout/BlockAlignment:
 
 # Indentation of `when`.
 Layout/CaseIndentation:
-  EnforcedStyle: case
+  EnforcedStyle: end
   SupportedStyles:
     - case
     - end
@@ -284,7 +297,7 @@ Layout/DefEndAlignment:
 
 # Multi-line method chaining should be done with leading dots.
 Layout/DotPosition:
-  EnforcedStyle: leading
+  EnforcedStyle: trailing
   SupportedStyles:
     - leading
     - trailing
@@ -295,7 +308,7 @@ Layout/EmptyComment:
 
 # Use empty lines between defs.
 Layout/EmptyLineBetweenDefs:
-  # If `true`, this parameter means that single line method definitions don't
+  # If `true`, this parameter means that single line method definitions don"t
   # need an empty line between them.
   AllowAdjacentOneLineDefs: false
   # Can be array to specify minimum and maximum number of empty lines, e.g. [1, 2]
@@ -334,7 +347,7 @@ Layout/EndAlignment:
   # situations, `end` should still be aligned with the keyword.
   # The value `start_of_line` means that `end` should be aligned with the start
   # of the line which the matching keyword appears on.
-  EnforcedStyleAlignWith: keyword
+  EnforcedStyleAlignWith: start_of_line
   SupportedStylesAlignWith:
     - keyword
     - variable
@@ -408,7 +421,7 @@ Layout/IndentArray:
   #
   # The value `align_brackets` means that the indentation of the first element
   # shall always be relative to the position of the opening bracket.
-  EnforcedStyle: special_inside_parentheses
+  EnforcedStyle: consistent
   SupportedStyles:
     - special_inside_parentheses
     - consistent
@@ -436,7 +449,7 @@ Layout/IndentHash:
   #
   # The value `align_braces` means that the indentation of the first key shall
   # always be relative to the position of the opening brace.
-  EnforcedStyle: special_inside_parentheses
+  EnforcedStyle: consistent
   SupportedStyles:
     - special_inside_parentheses
     - consistent
@@ -554,6 +567,8 @@ Layout/SpaceAroundOperators:
   # with an operator on the previous or next line, not counting empty lines
   # or comment lines.
   AllowForAlignment: true
+  Exclude:
+    - "db/seeds.rb"
 
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyle: space
@@ -576,7 +591,7 @@ Layout/SpaceInsideArrayLiteralBrackets:
   SupportedStyles:
     - space
     - no_space
-    # 'compact' normally requires a space inside the brackets, with the exception
+    # "compact" normally requires a space inside the brackets, with the exception
     # that successive left brackets or right brackets are collapsed together
     - compact
   EnforcedStyleForEmptyBrackets: no_space
@@ -601,7 +616,7 @@ Layout/SpaceInsideHashLiteralBraces:
   SupportedStyles:
     - space
     - no_space
-    # 'compact' normally requires a space inside hash braces, with the exception
+    # "compact" normally requires a space inside hash braces, with the exception
     # that successive left braces or right braces are collapsed together
     - compact
   EnforcedStyleForEmptyBraces: no_space
@@ -661,6 +676,10 @@ Layout/TrailingBlankLines:
 
 Layout/TrailingWhitespace:
   AllowInHeredoc: false
+
+Lint/UselessAssignment:
+  Exclude:
+    - "db/seeds.rb"
 
 #################### Naming ##########################
 
@@ -762,7 +781,9 @@ Naming/PredicateName:
   # Exclude Rspec specs because there is a strong convention to write spec
   # helpers in the form of `have_something` or `be_something`.
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*_spec.rb"
+    - "spec/support/shared_examples/**/*"
+    - "spec/factories/**/*"
 
 Naming/UncommunicativeBlockParamName:
   # Parameter names may be equal to or greater than this value
@@ -783,7 +804,7 @@ Naming/UncommunicativeMethodParamName:
     - id
     - to
     - by
-    - 'on'
+    - "on"
     - in
     - at
   # Blacklisted names that will register an offense
@@ -876,7 +897,7 @@ Style/BlockDelimiters:
     #   let(:foo) { Foo.new }
     #
     # Here, the return value of `Foo.new` is used to define a `foo` helper but
-    # doesn't appear to be used from the return value of `let`.
+    # doesn"t appear to be used from the return value of `let`.
     - let
     - let!
     - subject
@@ -905,10 +926,10 @@ Style/BracesAroundHashParameters:
     # The `braces` style enforces braces around all method parameters that are
     # hashes.
     - braces
-    # The `no_braces` style checks that the last parameter doesn't have braces
+    # The `no_braces` style checks that the last parameter doesn"t have braces
     # around it.
     - no_braces
-    # The `context_dependent` style checks that the last parameter doesn't have
+    # The `context_dependent` style checks that the last parameter doesn"t have
     # braces around it, but requires braces if the second to last parameter is
     # also a hash literal.
     - context_dependent
@@ -949,13 +970,13 @@ Style/CollectionMethods:
   #   PreferredMethods:
   #     find: detect
   PreferredMethods:
-    collect: 'map'
-    collect!: 'map!'
-    inject: 'reduce'
-    detect: 'find'
-    find_all: 'select'
+    collect: "map"
+    collect!: "map!"
+    inject: "reduce"
+    detect: "find"
+    find_all: "select"
 
-# Use '`' or '%x' around command literals.
+# Use "`" or "%x" around command literals.
 Style/CommandLiteral:
   EnforcedStyle: backticks
   # backticks: Always use backticks.
@@ -1007,12 +1028,12 @@ Style/ConditionalAssignment:
 #
 # Style/Copyright:
 #   Enabled: true
-#   Notice: 'Copyright (\(c\) )?2015 Yahoo! Inc'
-#   AutocorrectNotice: '# Copyright (c) 2015 Yahoo! Inc.'
+#   Notice: "Copyright (\(c\) )?2015 Yahoo! Inc"
+#   AutocorrectNotice: "# Copyright (c) 2015 Yahoo! Inc."
 #
 Style/Copyright:
   Notice: '^Copyright (\(c\) )?2[0-9]{3} .+'
-  AutocorrectNotice: ''
+  AutocorrectNotice: ""
 
 Style/DocumentationMethod:
   RequireForNonPublicMethods: false
@@ -1168,6 +1189,10 @@ Style/MixinGrouping:
     - separated
     - grouped
 
+Style/MixinUsage:
+  Exclude:
+    - "bin/*"
+
 Style/ModuleFunction:
   EnforcedStyle: module_function
   SupportedStyles:
@@ -1213,7 +1238,7 @@ Style/NestedParenthesizedCalls:
 Style/Next:
   # With `always` all conditions at the end of an iteration needs to be
   # replaced by next - with `skip_modifier_ifs` the modifier if like this one
-  # are ignored: [1, 2].each { |a| return 'yes' if a == 1 }
+  # are ignored: [1, 2].each { |a| return "yes" if a == 1 }
   EnforcedStyle: skip_modifier_ifs
   # `MinBodyLength` defines the number of lines of the a body of an `if` or `unless`
   # needs to have to trigger this cop
@@ -1249,7 +1274,7 @@ Style/NumericPredicate:
   # Exclude RSpec specs because assertions like `expect(1).to be > 0` cause
   # false positives.
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Style/OptionHash:
   # A list of parameter names that will be flagged by this cop.
@@ -1266,16 +1291,16 @@ Style/ParenthesesAroundCondition:
   AllowInMultilineConditions: false
 
 Style/PercentLiteralDelimiters:
-  # Specify the default preferred delimiter for all types with the 'default' key
+  # Specify the default preferred delimiter for all types with the "default" key
   # Override individual delimiters (even with default specified) by specifying
   # an individual key
   PreferredDelimiters:
     default: ()
-    '%i': '[]'
-    '%I': '[]'
-    '%r': '{}'
-    '%w': '[]'
-    '%W': '[]'
+    "%i": "[]"
+    "%I": "[]"
+    "%r": "{}"
+    "%w": "[]"
+    "%W": "[]"
 
 Style/PercentQLiterals:
   EnforcedStyle: lower_case_q
@@ -1382,7 +1407,7 @@ Style/StringLiterals:
   ConsistentQuotesInMultiline: false
 
 Style/StringLiteralsInInterpolation:
-  EnforcedStyle: single_quotes
+  EnforcedStyle: double_quotes
   SupportedStyles:
     - single_quotes
     - double_quotes
@@ -1397,16 +1422,20 @@ Style/StringMethods:
   PreferredMethods:
     intern: to_sym
 
+Style/StructInheritance:
+  Exclude:
+    - "app/policies/**/*"
+
 Style/SymbolArray:
-  EnforcedStyle: percent
-  MinSize: 0
+  EnforcedStyle: brackets
+  MinSize: 3
   SupportedStyles:
     - percent
     - brackets
 
 Style/SymbolProc:
   # A list of method names to be ignored by the check.
-  # The names should be fairly unique, otherwise you'll end up ignoring lots of code.
+  # The names should be fairly unique, otherwise you"ll end up ignoring lots of code.
   IgnoredMethods:
     - respond_to
     - define_method
@@ -1452,7 +1481,7 @@ Style/TrailingCommaInHashLiteral:
     - consistent_comma
     - no_comma
 
-# `TrivialAccessors` requires exact name matches and doesn't allow
+# `TrivialAccessors` requires exact name matches and doesn"t allow
 # predicated methods by default.
 Style/TrivialAccessors:
   # When set to `false` the cop will suggest the use of accessor methods
@@ -1465,7 +1494,7 @@ Style/TrivialAccessors:
   # This way you can uncover "hidden" attributes in your code.
   ExactNameMatch: true
   AllowPredicates: true
-  # Allows trivial writers that don't end in an equal sign. e.g.
+  # Allows trivial writers that don"t end in an equal sign. e.g.
   #
   # def on_exception(action)
   #   @on_exception=action
@@ -1496,38 +1525,49 @@ Style/TrivialAccessors:
 
 # `WordArray` enforces how array literals of word-like strings should be expressed.
 Style/WordArray:
-  EnforcedStyle: percent
+  EnforcedStyle: brackets
   SupportedStyles:
     # percent style: %w(word1 word2)
     - percent
-    # bracket style: ['word1', 'word2']
+    # bracket style: ["word1", "word2"]
     - brackets
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
   # smaller than a certain size.  The rule is only applied to arrays
   # whose element count is greater than or equal to `MinSize`.
-  MinSize: 0
+  MinSize: 3
   # The regular expression `WordRegex` decides what is considered a word.
   WordRegex: !ruby/regexp '/\A[\p{Word}\n\t]+\z/'
 
 Style/YodaCondition:
-  EnforcedStyle: all_comparison_operators
+  EnforcedStyle: forbid_for_all_comparison_operators
   SupportedStyles:
-    # check all comparison operators
-    - all_comparison_operators
-    # check only equality operators: `!=` and `==`
-    - equality_operators_only
+    - forbid_for_all_comparison_operators
+    - forbid_for_equality_operators_only
+    - require_for_all_comparison_operators
+    - require_for_equality_operators_only
 
 #################### Metrics ###############################
 
 Metrics/AbcSize:
   # The ABC size is a calculated magnitude, so this number can be an Integer or
   # a Float.
-  Max: 15
+  Max: 20 # TODO: Lower this over time.
+  Exclude:
+    - "db/migrate/**/*"
 
 Metrics/BlockLength:
   CountComments: false  # count full line comments?
   Max: 25
   ExcludedMethods: []
+  Exclude:
+    - "app/controllers/concerns/**/*"
+    - "app/models/**/*"
+    - "config/**/*"
+    - "lib/tasks/**/*"
+    - "spec/**/*_spec.rb"
+    - "spec/factories/**/*"
+    - "spec/support/matchers/**/*"
+    - "spec/support/shared_examples/**/*"
 
 Metrics/BlockNesting:
   CountBlocks: false
@@ -1535,14 +1575,14 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   CountComments: false  # count full line comments?
-  Max: 100
+  Max: 250
 
 # Avoid complex methods.
 Metrics/CyclomaticComplexity:
   Max: 6
 
 Metrics/LineLength:
-  Max: 80
+  Max: 120
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true
@@ -1551,7 +1591,7 @@ Metrics/LineLength:
     - http
     - https
   # The IgnoreCopDirectives option causes the LineLength rule to ignore cop
-  # directives like '# rubocop: enable ...' when calculating a line's length.
+  # directives like "# rubocop: enable ..." when calculating a line's length.
   IgnoreCopDirectives: false
   # The IgnoredPatterns option is a list of !ruby/regexp and/or string
   # elements. Strings will be converted to Regexp objects. A line that matches
@@ -1560,15 +1600,21 @@ Metrics/LineLength:
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
-  Max: 10
+  Max: 20
+  ExcludedMethods:
+    - "instance_params"
 
 Metrics/ModuleLength:
   CountComments: false  # count full line comments?
-  Max: 100
+  Exclude:
+    - "app/models/**/*"
+    - "app/helpers/**/*"
 
 Metrics/ParameterLists:
   Max: 5
   CountKeywordArgs: true
+  Exclude:
+    - "app/helpers/**/*"
 
 Metrics/PerceivedComplexity:
   Max: 7
@@ -1643,7 +1689,7 @@ Rails/ActionFilter:
 
 Rails/AssertNot:
   Include:
-    - '**/test/**/*'
+    - "**/test/**/*"
 
 Rails/CreateTableWithTimestamps:
   Include:
@@ -1729,7 +1775,7 @@ Rails/ReadWriteAttribute:
 
 Rails/RefuteMethods:
   Include:
-    - '**/test/**/*'
+    - "**/test/**/*"
 
 Rails/RequestReferer:
   EnforcedStyle: referer
@@ -1755,7 +1801,7 @@ Rails/ScopeArgs:
 Rails/TimeZone:
   # The value `strict` means that `Time` should be used with `zone`.
   # The value `flexible` allows usage of `in_time_zone` instead of `zone`.
-  EnforcedStyle: flexible
+  EnforcedStyle: strict
   SupportedStyles:
     - strict
     - flexible
@@ -1791,8 +1837,47 @@ Rails/Validation:
   Include:
     - app/models/**/*.rb
 
-Bundler/OrderedGems:
-  TreatCommentsAsGroupSeparators: true
+#################### Rspec ###########################
 
-Gemspec/OrderedDependencies:
-  TreatCommentsAsGroupSeparators: true
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - "spec/views/**/*"
+    - "spec/system/**/*"
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/FilePath:
+  Exclude:
+    - "spec/routing/**/*"
+
+RSpec/ImplicitSubject:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Exclude:
+    - "spec/views/**/*"
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 10
+
+RSpec/NestedGroups:
+  Max: 6 # TODO: Reduce this
+
+RSpec/NotToNot:
+  EnforcedStyle: to_not

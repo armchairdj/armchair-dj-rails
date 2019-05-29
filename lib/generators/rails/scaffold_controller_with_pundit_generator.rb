@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-class Rails::ScaffoldControllerWithPunditGenerator < Rails::Generators::ScaffoldControllerGenerator
-  class_option :pundit, type: :boolean
+module Rails
+  class ScaffoldControllerWithPunditGenerator < Rails::Generators::ScaffoldControllerGenerator
+    class_option :pundit, type: :boolean
 
-  hook_for :pundit, as: :policy
+    hook_for :pundit, as: :policy
+  end
 end

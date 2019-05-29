@@ -3,7 +3,6 @@
 # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
 Rails.application.routes.draw do
-
   #############################################################################
   # CONCERNS.
   #############################################################################
@@ -14,6 +13,10 @@ Rails.application.routes.draw do
 
   concern :autosaveable do
     match "autosave", on: :member, action: :autosave, via: [:patch, :put]
+  end
+
+  concern :previewable do
+    match "preview", on: :member, action: :preview, via: [:get]
   end
 
   #############################################################################
@@ -89,11 +92,13 @@ Rails.application.routes.draw do
   # ADMIN.
   #############################################################################
 
+  get "/admin", to: redirect("/admin/reviews", status: 302)
+
   namespace :admin do
     scope module: :posts do
-      resources :articles, concerns: [:paginatable, :autosaveable]
-      resources :reviews,  concerns: [:paginatable, :autosaveable]
-      resources :mixtapes, concerns: [:paginatable, :autosaveable]
+      resources :articles, concerns: [:paginatable, :previewable, :autosaveable]
+      resources :reviews,  concerns: [:paginatable, :previewable, :autosaveable]
+      resources :mixtapes, concerns: [:paginatable, :previewable, :autosaveable]
     end
 
     resources :users,    concerns: :paginatable

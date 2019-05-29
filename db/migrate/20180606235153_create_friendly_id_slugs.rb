@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 migration_class =
   if ActiveRecord::VERSION::MAJOR >= 5
     ActiveRecord::Migration[4.2]
@@ -8,9 +10,9 @@ migration_class =
 class CreateFriendlyIdSlugs < migration_class
   def change
     create_table :friendly_id_slugs do |t|
-      t.string   :slug,           :null => false
-      t.integer  :sluggable_id,   :null => false
-      t.string   :sluggable_type, :limit => 50
+      t.string   :slug,           null: false
+      t.integer  :sluggable_id,   null: false
+      t.string   :sluggable_type, limit: 50
       t.string   :scope
       t.datetime :created_at
     end

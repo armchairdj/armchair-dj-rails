@@ -1,0 +1,9 @@
+<%
+  @title = [I18n.t("content.posts.edit.title.#{@view_path}"), post_title(@post)]
+%>
+
+<%= render "admin/shared/header", action: :edit, instance: @post,
+  headline: @title.first
+%>
+
+<%= render "admin/posts/form" %>

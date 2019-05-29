@@ -22,40 +22,49 @@ RSpec.describe MixtapesHelper do
 
   describe "#link_to_mixtape" do
     describe "published" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(true)
       end
 
       describe "public" do
         subject { helper.link_to_mixtape(instance, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/mixtapes/#{instance.slug}'][class='test']",
-          text:  "This Is the Title",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/mixtapes/#{instance.slug}'][class='test']",
+            text:  "This Is the Title",
+            count: 1
+          )
+        end
       end
 
       describe "truncated" do
         subject { helper.link_to_mixtape(instance, length: 15, class: "test") }
 
-        it { is_expected.to have_tag("a[href='/mixtapes/#{instance.slug}'][class='test']",
-          text:  "This Is the…",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/mixtapes/#{instance.slug}'][class='test']",
+            text:  "This Is the…",
+            count: 1
+          )
+        end
       end
 
       describe "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",
-          text:  "This Is the Title",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/admin/mixtapes/#{instance.to_param}']",
+            text:  "This Is the Title",
+            count: 1
+          )
+        end
       end
     end
 
     describe "unpublished" do
-      before(:each) do
+      before do
         allow(instance).to receive(:published?).and_return(false)
       end
 
@@ -68,13 +77,16 @@ RSpec.describe MixtapesHelper do
       describe "admin" do
         subject { helper.link_to_mixtape(instance, admin: true) }
 
-        it { is_expected.to have_tag("a[href='/admin/mixtapes/#{instance.to_param}']",
-          text:  "This Is the Title",
-          count: 1
-        ) }
+        it "has the correct markup" do
+          is_expected.to have_tag(
+            "a[href='/admin/mixtapes/#{instance.to_param}']",
+            text:  "This Is the Title",
+            count: 1
+          )
+        end
       end
     end
   end
 
-  pending "#url_for_mixtape"
+  pending "#uri_for_mixtape"
 end

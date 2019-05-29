@@ -11,8 +11,8 @@
   collection: @collection,
   records: @playlists,
   columns: [
-    { name: "ID",      method: :id             },
-    { name: "Title",   method: :title          },
+    { name: "ID",      method: :id, class: "nowrap" },
+    { name: "Title",   method: :title },
     { name: "Author",  method: :display_author },
   ]
 %>

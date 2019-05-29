@@ -1,29 +1,31 @@
 <%
-  @headline = @title = "Settings"
+  @title = "Settings"
 %>
 
-<%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
-  <%= f.error_notification %>
+<%= render "users/shared/settings_tabs", selected_tab: :settings do %>
+  <%= simple_form_for(@user, url: edit_user_registration_path, html: { method: :put }) do |f| %>
+    <%= f.error_notification %>
 
-  <%= form_inputs do %>
-    <%= render "admin/users/form_fields",
-      f:             f,
-      show_bio:      @user.can_write?,
-      show_links:    @user.can_write?,
-      show_password: false,
-      show_role:     false
-    %>
+    <%= form_inputs do %>
+      <%= render "admin/users/form_fields",
+        f:             f,
+        show_bio:      @user.can_write?,
+        show_links:    @user.can_write?,
+        show_password: false,
+        show_role:     false
+      %>
 
-    <%= adj_module do %>
-      <%= f.input :current_password, required: true, hint: true, **js_unmaskable_attrs %>
+      <%= adj_module do %>
+        <%= f.input :current_password, required: true, hint: true, **js_unmaskable_attrs %>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <% if @user.pending_reconfirmation? %>
-    <%= adj_module do %>
-      <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
+    <% if @user.pending_reconfirmation? %>
+      <%= adj_module do %>
+        <p>Currently waiting confirmation for: <%= @user.unconfirmed_email %></p>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <%= button_group submit_button(@user, "Update") %>
+    <%= button_group submit_button(@user, "Update") %>
+  <% end %>
 <% end %>

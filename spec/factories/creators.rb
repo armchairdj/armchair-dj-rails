@@ -19,12 +19,11 @@
 #  index_creators_on_primary     (primary)
 #
 
-
 require "ffaker"
 
 FactoryBot.define do
   factory :creator do
-    name nil
+    name { nil }
     initialize_with { Creator.find_or_initialize_by(name: name) }
 
     ###########################################################################
@@ -68,27 +67,27 @@ FactoryBot.define do
     end
 
     trait :primary do
-      primary true
+      primary { true }
     end
 
     trait :secondary do
-      primary false
+      primary { false }
     end
 
     trait :individual do
-      individual true
+      individual { true }
     end
 
     trait :collective do
-      individual false
+      individual { false }
     end
 
     trait :with_new_pseudonym do
       primary
 
-      pseudonym_identities_attributes { {
-        "0" => { "pseudonym_id" => create(:minimal_creator, :secondary).id }
-      } }
+      pseudonym_identities_attributes do
+        { "0" => { "pseudonym_id" => create(:minimal_creator, :secondary).id } }
+      end
     end
 
     trait :with_pseudonym do
@@ -112,9 +111,9 @@ FactoryBot.define do
     trait :with_new_real_name do
       secondary
 
-      real_name_identities_attributes { {
-        "0" => { "real_name_id" => create(:minimal_creator, :primary).id }
-      } }
+      real_name_identities_attributes do
+        { "0" => { "real_name_id" => create(:minimal_creator, :primary).id } }
+      end
     end
 
     trait :with_real_name do
@@ -138,9 +137,9 @@ FactoryBot.define do
     trait :with_new_member do
       collective
 
-      member_memberships_attributes { {
-        "0" => { "member_id" => create(:minimal_creator, :individual).id }
-      } }
+      member_memberships_attributes do
+        { "0" => { "member_id" => create(:minimal_creator, :individual).id } }
+      end
     end
 
     trait :with_member do
@@ -164,9 +163,9 @@ FactoryBot.define do
     trait :with_new_group do
       individual
 
-      group_memberships_attributes { {
-        "0" => { "group_id" => create(:minimal_creator, :collective).id }
-      } }
+      group_memberships_attributes do
+        { "0" => { "group_id" => create(:minimal_creator, :collective).id } }
+      end
     end
 
     trait :with_group do
@@ -220,17 +219,17 @@ FactoryBot.define do
     factory :kate_bush do
       primary
       individual
-      name "Kate Bush"
+      name { "Kate Bush" }
     end
 
     factory :wolfgang_voigt do
       primary
       individual
-      name "Wolfgang Voigt"
+      name { "Wolfgang Voigt" }
 
       factory :wolfgang_voigt_with_pseudonyms do
         transient do
-          pseudonyms { [create(:gas) ] }
+          pseudonyms { [create(:gas)] }
         end
 
         with_specific_pseudonyms
@@ -240,47 +239,47 @@ FactoryBot.define do
     factory :gas do
       secondary
       individual
-      name "Gas"
+      name { "Gas" }
     end
 
     factory :dbx do
       secondary
       individual
-      name "DBX"
+      name { "DBX" }
     end
 
     factory :the_kooky_scientist do
       secondary
       individual
-      name "The Kooky Scientist"
+      name { "The Kooky Scientist" }
     end
 
     factory :plastikman do
       secondary
       individual
-      name "Plastikman"
+      name { "Plastikman" }
     end
 
     factory :fuse do
       secondary
       individual
-      name "F.U.S.E."
+      name { "F.U.S.E." }
     end
 
     factory :robotman do
       secondary
       individual
-      name "Robotman"
+      name { "Robotman" }
     end
 
     factory :richie_hawtin do
       primary
       individual
-      name "Richie Hawtin"
+      name { "Richie Hawtin" }
 
       factory :richie_hawtin_with_pseudonyms do
         transient do
-          pseudonyms { [create(:plastikman), create(:fuse) ] }
+          pseudonyms { [create(:plastikman), create(:fuse)] }
         end
 
         with_specific_pseudonyms
@@ -290,11 +289,11 @@ FactoryBot.define do
     factory :dan_bell do
       primary
       individual
-      name "Dan Bell"
+      name { "Dan Bell" }
 
       factory :dan_bell_with_pseudonyms do
         transient do
-          pseudonyms { [create(:dbx) ] }
+          pseudonyms { [create(:dbx)] }
         end
 
         with_specific_pseudonyms
@@ -304,11 +303,11 @@ FactoryBot.define do
     factory :fred_giannelli do
       primary
       individual
-      name "Fred Giannelli"
+      name { "Fred Giannelli" }
 
       factory :fred_giannelli_with_pseudonyms do
         transient do
-          pseudonyms { [create(:the_kooky_scientist) ] }
+          pseudonyms { [create(:the_kooky_scientist)] }
         end
 
         with_specific_pseudonyms
@@ -318,11 +317,11 @@ FactoryBot.define do
     factory :spawn do
       primary
       collective
-      name "Spawn"
+      name { "Spawn" }
 
       factory :spawn_with_members do
         transient do
-          members { [create(:fred_giannelli), create(:richie_hawtin), create(:dan_bell) ] }
+          members { [create(:fred_giannelli), create(:richie_hawtin), create(:dan_bell)] }
         end
 
         with_specific_members
@@ -330,11 +329,13 @@ FactoryBot.define do
 
       factory :complete_spawn do
         transient do
-          members { [
-            create(:fred_giannelli_with_pseudonyms),
-            create(:richie_hawtin_with_pseudonyms),
-            create(:dan_bell_with_pseudonyms)
-          ] }
+          members do
+            [
+              create(:fred_giannelli_with_pseudonyms),
+              create(:richie_hawtin_with_pseudonyms),
+              create(:dan_bell_with_pseudonyms)
+            ]
+          end
         end
 
         with_specific_members
@@ -344,37 +345,37 @@ FactoryBot.define do
     factory :stevie_nicks do
       primary
       individual
-      name "Stevie Nicks"
+      name { "Stevie Nicks" }
     end
 
     factory :lindsay_buckingham do
       primary
       individual
-      name "Lindsay Buckingham"
+      name { "Lindsay Buckingham" }
     end
 
     factory :christine_mcvie do
       primary
       individual
-      name "Christine McVie"
+      name { "Christine McVie" }
     end
 
     factory :john_mcvie do
       primary
       individual
-      name "John McVie"
+      name { "John McVie" }
     end
 
     factory :mick_fleetwood do
       primary
       individual
-      name "Mick Fleetwood"
+      name { "Mick Fleetwood" }
     end
 
     factory :fleetwood_mac do
       primary
       collective
-      name "Fleetwood Mac"
+      name { "Fleetwood Mac" }
 
       factory :fleetwood_mac_with_members do
         transient do

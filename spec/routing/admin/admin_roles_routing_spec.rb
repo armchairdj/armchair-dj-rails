@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Admin::RolesController do
@@ -33,6 +35,5 @@ RSpec.describe Admin::RolesController do
     it "#destroy" do
       expect(delete: "/admin/roles/1").to route_to("admin/roles#destroy", id: "1")
     end
-
   end
 end

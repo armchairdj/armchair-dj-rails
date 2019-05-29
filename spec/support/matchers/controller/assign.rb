@@ -37,6 +37,7 @@ RSpec::Matchers.define :assign do |instance, sym|
     message += " and be valid"               if @valid
     message += " and be invalid"             if @invalid
     message += " and have errors #{@errors}" if @errors
-    message += ", but failed"
+
+    message + ", but failed"
   end
 end

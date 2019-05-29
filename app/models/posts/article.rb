@@ -37,32 +37,48 @@
 #  fk_rails_...  (work_id => works.id)
 #
 
-
 class Article < Post
+  #############################################################################
+  # CONCERNING: Image attachment.
+  #############################################################################
+
+  include Imageable
+
+  #############################################################################
+  # CONCERNING: STI Subclass.
+  #############################################################################
+
+  concerning :Subclassed do
+    def display_type(plural: false)
+      plural ? "Articles" : "Article"
+    end
+  end
+
+  #############################################################################
+  # CONCERNING: Title.
+  #############################################################################
+
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
+
+    def sluggable_parts
+      [title]
+    end
+  end
 
   #############################################################################
   # CONCERNING: Alpha.
   #############################################################################
 
-  def alpha_parts
-    [ title ]
-  end
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
 
-  #############################################################################
-  # VALIDATIONS.
-  #############################################################################
-
-  validates :title, presence: true
-
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-  def display_type(plural: false)
-    plural ? "Articles" : "Article"
-  end
-
-  def sluggable_parts
-    [ title ]
+    def alpha_parts
+      [title]
+    end
   end
 end

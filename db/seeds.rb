@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "ffaker"
 
 def self.random_paragraphs
@@ -22,73 +24,71 @@ brian = User.create_with(
   middle_name: "J.",
   last_name:   "Dillard",
   password:    "password1234"
-).find_or_create_by(email: "armchairdj@gmail.com") do |user|
-  user.skip_confirmation!
-end
+).find_or_create_by(email: "armchairdj@gmail.com", &:skip_confirmation!)
 
 ##### ASPECTS
 
-album_formats        = [
+album_formats = [
   FactoryBot.create(:aspect, facet: :album_format, name: "LP"),
   FactoryBot.create(:aspect, facet: :album_format, name: "EP"),
   FactoryBot.create(:aspect, facet: :album_format, name: "Single"),
   FactoryBot.create(:aspect, facet: :album_format, name: "Boxed Set"),
-  FactoryBot.create(:aspect, facet: :album_format, name: "Download"),
+  FactoryBot.create(:aspect, facet: :album_format, name: "Download")
 ]
 
 audio_show_formats = [
   FactoryBot.create(:aspect, facet: :audio_show_format, name: "Interview"),
   FactoryBot.create(:aspect, facet: :audio_show_format, name: "Discussion"),
   FactoryBot.create(:aspect, facet: :audio_show_format, name: "Narrative"),
-  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Documentary"),
+  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Documentary")
 ]
 
-device_types       = [
+device_types = [
   FactoryBot.create(:aspect, facet: :device_type, name: "Phone"),
   FactoryBot.create(:aspect, facet: :device_type, name: "Computer"),
   FactoryBot.create(:aspect, facet: :device_type, name: "Accessory"),
-  FactoryBot.create(:aspect, facet: :device_type, name: "Router"),
+  FactoryBot.create(:aspect, facet: :device_type, name: "Router")
 ]
 
-game_mechanics     = [
+game_mechanics = [
   FactoryBot.create(:aspect, facet: :game_mechanic, name: "First-Person Shooter"),
   FactoryBot.create(:aspect, facet: :game_mechanic, name: "Couch Co-Op"),
-  FactoryBot.create(:aspect, facet: :game_mechanic, name: "MMORPG"),
+  FactoryBot.create(:aspect, facet: :game_mechanic, name: "MMORPG")
 ]
 
-game_studios       = [
+game_studios = [
   FactoryBot.create(:aspect, facet: :game_studio, name: "Capcom"),
-  FactoryBot.create(:aspect, facet: :game_studio, name: "Blizzard"),
+  FactoryBot.create(:aspect, facet: :game_studio, name: "Blizzard")
 ]
 
-hollywood_studios  = [
+hollywood_studios = [
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Netflix"),
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Amazon"),
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Hulu"),
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Disney"),
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Fox"),
   FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Sony"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Universal"),
+  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Universal")
 ]
 
-manufacturers      = [
+manufacturers = [
   FactoryBot.create(:aspect, facet: :manufacturer, name: "Unilever"),
   FactoryBot.create(:aspect, facet: :manufacturer, name: "Proctor & Gamble"),
   FactoryBot.create(:aspect, facet: :manufacturer, name: "Amazon Basics"),
   FactoryBot.create(:aspect, facet: :manufacturer, name: "Tom Bihn"),
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "The North Face"),
+  FactoryBot.create(:aspect, facet: :manufacturer, name: "The North Face")
 ]
 
-music_labels       = [
+music_labels = [
   FactoryBot.create(:aspect, facet: :music_label, name: "Warp"),
   FactoryBot.create(:aspect, facet: :music_label, name: "Soul Jazz"),
   FactoryBot.create(:aspect, facet: :music_label, name: "Plus 8"),
   FactoryBot.create(:aspect, facet: :music_label, name: "Planet E"),
   FactoryBot.create(:aspect, facet: :music_label, name: "Hyperdub"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Island"),
+  FactoryBot.create(:aspect, facet: :music_label, name: "Island")
 ]
 
-musical_genres     = [
+musical_genres = [
   FactoryBot.create(:aspect, facet: :musical_genre, name: "AOR"),
   FactoryBot.create(:aspect, facet: :musical_genre, name: "Ambient"),
   FactoryBot.create(:aspect, facet: :musical_genre, name: "Chamber Pop"),
@@ -126,59 +126,59 @@ musical_genres     = [
   FactoryBot.create(:aspect, facet: :musical_genre, name: "Synth-Pop"),
   FactoryBot.create(:aspect, facet: :musical_genre, name: "Synthwave"),
   FactoryBot.create(:aspect, facet: :musical_genre, name: "Techno"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Vocals"),
+  FactoryBot.create(:aspect, facet: :musical_genre, name: "Vocals")
 ]
 
-narrative_genres   = [
+narrative_genres = [
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Action"),
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Adventure"),
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Horror"),
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Sci-Fi"),
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Fantasy"),
   FactoryBot.create(:aspect, facet: :narrative_genre, name: "Comedy"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Drama"),
+  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Drama")
 ]
 
-product_types      = [
+product_types = [
   FactoryBot.create(:aspect, facet: :product_type, name: "Clothing"),
   FactoryBot.create(:aspect, facet: :product_type, name: "Moisturizer"),
-  FactoryBot.create(:aspect, facet: :product_type, name: "Body Wash"),
+  FactoryBot.create(:aspect, facet: :product_type, name: "Body Wash")
 ]
 
-publication_types  = [
+publication_types = [
   FactoryBot.create(:aspect, facet: :publication_type, name: "Magazine"),
   FactoryBot.create(:aspect, facet: :publication_type, name: "Newspaper"),
-  FactoryBot.create(:aspect, facet: :publication_type, name: "Website"),
+  FactoryBot.create(:aspect, facet: :publication_type, name: "Website")
 ]
 
-publishers         = [
+publishers = [
   FactoryBot.create(:aspect, facet: :publisher, name: "Conde Nast"),
   FactoryBot.create(:aspect, facet: :publisher, name: "Vox Media"),
   FactoryBot.create(:aspect, facet: :publisher, name: "Marvel Comics"),
   FactoryBot.create(:aspect, facet: :publisher, name: "DC Comics"),
-  FactoryBot.create(:aspect, facet: :publisher, name: "Vertigo"),
+  FactoryBot.create(:aspect, facet: :publisher, name: "Vertigo")
 ]
 
-radio_networks     = [
+radio_networks = [
   FactoryBot.create(:aspect, facet: :radio_network, name: "NPR"),
   FactoryBot.create(:aspect, facet: :radio_network, name: "PRI"),
-  FactoryBot.create(:aspect, facet: :radio_network, name: "Sirius XM"),
+  FactoryBot.create(:aspect, facet: :radio_network, name: "Sirius XM")
 ]
 
-song_types         = [
+song_types = [
   FactoryBot.create(:aspect, facet: :song_type, name: "Studio"),
   FactoryBot.create(:aspect, facet: :song_type, name: "Remix"),
-  FactoryBot.create(:aspect, facet: :song_type, name: "Live"),
+  FactoryBot.create(:aspect, facet: :song_type, name: "Live")
 ]
 
-tech_platforms      = [
+tech_platforms = [
   FactoryBot.create(:aspect, facet: :tech_platform, name: "iOS"),
   FactoryBot.create(:aspect, facet: :tech_platform, name: "macOS"),
   FactoryBot.create(:aspect, facet: :tech_platform, name: "PS4"),
-  FactoryBot.create(:aspect, facet: :tech_platform, name: "Web"),
+  FactoryBot.create(:aspect, facet: :tech_platform, name: "Web")
 ]
 
-tv_networks        = [
+tv_networks = [
   FactoryBot.create(:aspect, facet: :tv_network, name: "ABC"),
   FactoryBot.create(:aspect, facet: :tv_network, name: "CBS"),
   FactoryBot.create(:aspect, facet: :tv_network, name: "NBC"),
@@ -195,16 +195,16 @@ tv_networks        = [
 
   FactoryBot.create(:aspect, facet: :tv_network, name: "Amazon"),
   FactoryBot.create(:aspect, facet: :tv_network, name: "Hulu"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Netflix"),
+  FactoryBot.create(:aspect, facet: :tv_network, name: "Netflix")
 ]
 
-tech_companies     = [
+tech_companies = [
   FactoryBot.create(:aspect, facet: :tech_company, name: "Rogue Amoeba"),
   FactoryBot.create(:aspect, facet: :tech_company, name: "Many Tricks"),
   FactoryBot.create(:aspect, facet: :tech_company, name: "Apple"),
   FactoryBot.create(:aspect, facet: :tech_company, name: "Google"),
   FactoryBot.create(:aspect, facet: :tech_company, name: "Facebook"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Amazon"),
+  FactoryBot.create(:aspect, facet: :tech_company, name: "Amazon")
 ]
 
 ##### ROLES
@@ -356,10 +356,10 @@ kooky_album_unpopular_science          = FactoryBot.create(:minimal_album, :with
 
 ##### TV
 
-joss_whedon    = FactoryBot.create(:minimal_creator, name: "Joss Whedon")
-buffy          = FactoryBot.create(:minimal_tv_show,    :with_specific_creator, release_year: "1997", title: "Buffy the Vampire Slayer",          specific_creator: joss_whedon)
-buffy_season_7 = FactoryBot.create(:minimal_tv_season,  :with_specific_creator, release_year: "2002", title: "Buffy the Vampire Slayer Season 7", specific_creator: joss_whedon)
-conversations  = FactoryBot.create(:minimal_tv_episode, :with_specific_creator, release_year: "2002", title: "Conversations With Dead People",    specific_creator: joss_whedon)
+joss_whedon        = FactoryBot.create(:minimal_creator, name: "Joss Whedon")
+buffy              = FactoryBot.create(:minimal_tv_show,    :with_specific_creator, release_year: "1997", title: "Buffy the Vampire Slayer",          specific_creator: joss_whedon)
+buffy_season_seven = FactoryBot.create(:minimal_tv_season,  :with_specific_creator, release_year: "2002", title: "Buffy the Vampire Slayer Season 7", specific_creator: joss_whedon)
+conversations      = FactoryBot.create(:minimal_tv_episode, :with_specific_creator, release_year: "2002", title: "Conversations With Dead People",    specific_creator: joss_whedon)
 
 ##### POSTS: REVIEWS & STANDALONE
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # FriendlyId Global Configuration
 #
 # Use this to set up shared configuration options for your entire application.
@@ -16,9 +18,8 @@ FriendlyId.defaults do |config|
   # undesirable to allow as slugs. Edit this list as needed for your app.
   config.use :reserved
 
-  config.reserved_words = %w(new edit index session login logout users admin
-    stylesheets assets javascripts images)
-    
+  config.reserved_words = ["new", "edit", "index", "session", "login", "logout", "users", "admin", "stylesheets", "assets", "javascripts", "images"]
+
   # This adds an option to to treat reserved words as conflicts rather than exceptions.
   # When there is no good candidate, a UUID will be appended, matching the existing
   # conflict behavior.
@@ -67,7 +68,7 @@ FriendlyId.defaults do |config|
   # separator. If you're upgrading from FriendlyId 4, you may wish to replace this
   # with two dashes.
 
-  config.sequence_separator = '/'
+  config.sequence_separator = "/"
 
   # Note that you must use the :slugged addon **prior** to the line which
   # configures the sequence separator, or else FriendlyId will raise an undefined

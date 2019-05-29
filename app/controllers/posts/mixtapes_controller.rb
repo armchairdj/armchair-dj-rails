@@ -1,3 +1,11 @@
 # frozen_string_literal: true
 
-class Posts::MixtapesController < Posts::BaseController; end
+module Posts
+  class MixtapesController < Posts::BaseController
+    private
+
+    def set_section
+      @section = :mixtapes
+    end
+  end
+end

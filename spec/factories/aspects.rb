@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: aspects
@@ -17,9 +19,8 @@
 
 FactoryBot.define do
   factory :aspect do
-
-    facet nil
-    name nil
+    facet { nil }
+    name { nil }
     initialize_with { Aspect.find_or_initialize_by(facet: facet, name: name) }
 
     ###########################################################################
@@ -27,7 +28,7 @@ FactoryBot.define do
     ###########################################################################
 
     trait :with_facet do
-      facet :song_type
+      facet { :song_type }
     end
 
     trait :with_name do

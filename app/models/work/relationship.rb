@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: work_relationships
@@ -21,59 +22,69 @@
 #  fk_rails_...  (target_id => works.id)
 #
 
-class Work::Relationship < ApplicationRecord
-  self.table_name = "work_relationships"
+class Work
+  class Relationship < ApplicationRecord
+    self.table_name = "work_relationships"
 
-  #############################################################################
-  # CONCERNING: Target.
-  #############################################################################
+    #############################################################################
+    # CONCERNING: Source.
+    #############################################################################
 
-  belongs_to :target, class_name: "Work", foreign_key: :target_id
+    concerning :SourceAssociation do
+      included do
+        belongs_to :source, class_name: "Work", foreign_key: :source_id
 
-  validates :target, presence: true
+        validates :source, presence: true
 
-  #############################################################################
-  # CONCERNING: Connection.
-  #############################################################################
+        validates :source_id, uniqueness: { scope: [:target_id, :connection] }
 
-  validates :connection, presence: true
+        validate { source_and_target_are_different }
+      end
 
-  enum connection: {
-    member_of:       100,
+    private
 
-    version_of:      200,
-    performance_of:  201,
+      def source_and_target_are_different
+        return unless source_id == target_id
 
-    remake_of:       300,
-    sequel_to:       301,
-    spinoff_of:      302,
+        errors.add(:source_id, :same_as_target)
+      end
+    end
 
-    borrows_from:    400,
-  }
+    #############################################################################
+    # CONCERNING: Target.
+    #############################################################################
 
-  improve_enum :connection
+    concerning :TargetAssociation do
+      included do
+        belongs_to :target, class_name: "Work", foreign_key: :target_id
 
-  #############################################################################
-  # CONCERNING: Source.
-  #############################################################################
+        validates :target, presence: true
+      end
+    end
 
-  belongs_to :source, class_name: "Work", foreign_key: :source_id
+    #############################################################################
+    # CONCERNING: Connection.
+    #############################################################################
 
-  validates :source, presence: true
+    concerning :ConnectionAttribute do
+      included do
+        validates :connection, presence: true
 
-  validates :source_id, uniqueness: { scope: [:target_id, :connection] }
+        enum connection: {
+          member_of:      100,
 
-  #############################################################################
-  # CONCERNING: Self-referentiality.
-  #############################################################################
+          version_of:     200,
+          performance_of: 201,
 
-  validate { source_and_target_are_different }
+          remake_of:      300,
+          sequel_to:      301,
+          spinoff_of:     302,
 
-private
+          borrows_from:   400
+        }
 
-  def source_and_target_are_different
-    return unless source_id == target_id
-
-    self.errors.add(:source_id, :same_as_target)
+        improve_enum :connection
+      end
+    end
   end
 end

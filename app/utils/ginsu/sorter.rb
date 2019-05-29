@@ -2,7 +2,6 @@
 
 module Ginsu
   class Sorter < Knife
-
     #############################################################################
     # CLASS.
     #############################################################################
@@ -20,8 +19,8 @@ module Ginsu
     def self.reverse_clause(clause)
       clause = clause.squish
 
-      return clause.gsub("DESC", "ASC") if clause.match(/DESC$/)
-      return clause.gsub("ASC", "DESC") if clause.match(/ASC$/)
+      return clause.gsub("DESC", "ASC") if clause =~ /DESC$/
+      return clause.gsub("ASC", "DESC") if clause =~ /ASC$/
 
       "#{clause} DESC"
     end
@@ -42,21 +41,20 @@ module Ginsu
       super(current_scope: current_scope, current_sort: current_sort, current_dir: current_dir)
     end
 
-    def resolve
+    def resolved
       validate
 
       self.class.prepare_clause(allowed[@current_sort], @current_dir)
     end
 
     def map
-      allowed.keys.each.inject({}) do |memo, (sort)|
+      allowed.keys.each.each_with_object({}) do |(sort), memo|
         active = sort == @current_sort
         desc   = active && @current_dir == "DESC"
         dir    = active && @current_dir == "ASC" ? "DESC" : "ASC"
         url    = diced_url(@current_scope, sort, dir)
 
-        memo[sort] = { :active? => active, :desc? => desc, :url => url }
-        memo
+        memo[sort] = { active?: active, desc?: desc, url: url }
       end
     end
 
@@ -67,10 +65,10 @@ module Ginsu
       }
     end
 
-  private
+    private
 
     def valid?
-      return false unless    allowed.keys.include?(@current_sort)
+      return false unless allowed.key?(@current_sort)
       return false unless ["ASC", "DESC"].include?(@current_dir)
 
       true

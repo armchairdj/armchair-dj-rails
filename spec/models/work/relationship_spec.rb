@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: work_relationships
@@ -25,9 +27,7 @@ require "rails_helper"
 RSpec.describe Work::Relationship do
   subject { build_minimal_instance }
 
-  describe "concerns" do
-    it_behaves_like "an_application_record"
-  end
+  it_behaves_like "an_application_record"
 
   describe "target" do
     it { is_expected.to belong_to(:target).class_name("Work") }
@@ -36,10 +36,9 @@ RSpec.describe Work::Relationship do
   end
 
   describe "connection" do
-    it_behaves_like "a_model_with_a_better_enum_for", {
-      attribute: :connection,
+    it_behaves_like "a_model_with_a_better_enum_for",
+      attribute:  :connection,
       variations: [:source, :target]
-    }
 
     it { is_expected.to validate_presence_of(:connection) }
   end

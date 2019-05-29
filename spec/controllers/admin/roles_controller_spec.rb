@@ -6,11 +6,9 @@ RSpec.describe Admin::RolesController do
   let(:media) { Work.media }
   let(:role) { create(:minimal_role, medium: media.first.last) }
 
-  describe "concerns" do
-    it_behaves_like "a_paginatable_controller"
-  end
+  it_behaves_like "a_paginatable_controller"
 
-  context "as root" do
+  context "with root user" do
     login_root
 
     describe "GET #index" do
@@ -26,13 +24,16 @@ RSpec.describe Admin::RolesController do
     end
 
     describe "GET #new" do
-      subject { get :new }
+      subject(:send_request) { get :new }
 
       it { is_expected.to successfully_render("admin/roles/new") }
 
-      it { subject; expect(assigns(:role)).to be_a_new(Role) }
+      it "assigns ivars" do
+        send_request
 
-      it { subject; expect(assigns(:media)).to match_array(media) }
+        expect(assigns(:role)).to be_a_new(Role)
+        expect(assigns(:media)).to match_array(media)
+      end
     end
 
     describe "POST #create" do
@@ -41,9 +42,9 @@ RSpec.describe Admin::RolesController do
       let(:bad_params) { attributes_for(:minimal_role).except(:name) }
 
       context "with min valid params" do
-        subject { post :create, params: { role: min_params } }
+        subject(:send_request) { post :create, params: { role: min_params } }
 
-        it { expect { subject }.to change(Role, :count).by(1) }
+        it { expect { send_request }.to change(Role, :count).by(1) }
 
         it { is_expected.to assign(Role.last, :role).with_attributes(min_params).and_be_valid }
 
@@ -53,9 +54,9 @@ RSpec.describe Admin::RolesController do
       end
 
       context "with max valid params" do
-        subject { post :create, params: { role: max_params } }
+        subject(:send_request) { post :create, params: { role: max_params } }
 
-        it { expect { subject }.to change(Role, :count).by(1) }
+        it { expect { send_request }.to change(Role, :count).by(1) }
 
         it { is_expected.to assign(Role.last, :role).with_attributes(max_params).and_be_valid }
 
@@ -65,30 +66,37 @@ RSpec.describe Admin::RolesController do
       end
 
       context "with invalid params" do
-        subject { post :create, params: { role: bad_params } }
+        subject(:send_request) { post :create, params: { role: bad_params } }
 
         it { is_expected.to successfully_render("admin/roles/new") }
 
-        it { subject; expect(assigns(:role)).to have_coerced_attributes(bad_params) }
-        it { subject; expect(assigns(:role)).to be_invalid }
+        it "assigns ivars" do
+          send_request
 
-        it { subject; expect(assigns(:media)).to match_array(media) }
+          expect(assigns(:role)).to have_coerced_attributes(bad_params)
+          expect(assigns(:role)).to be_invalid
+          expect(assigns(:media)).to match_array(media)
+        end
       end
     end
 
     describe "GET #edit" do
-      subject { get :edit, params: { id: role.to_param } }
+      subject(:send_request) { get :edit, params: { id: role.to_param } }
 
       it { is_expected.to successfully_render("admin/roles/edit") }
 
       it { is_expected.to assign(role, :role) }
 
-      it { subject; expect(assigns(:media)).to match_array(media) }
+      it "assigns ivars" do
+        send_request
+
+        expect(assigns(:media)).to match_array(media)
+      end
     end
 
     describe "PUT #update" do
       let(:update_params) { { name: "New Name" } }
-      let(:bad_update_params) { { name: ""         } }
+      let(:bad_update_params) { { name: "" } }
 
       context "with valid params" do
         subject do
@@ -103,7 +111,7 @@ RSpec.describe Admin::RolesController do
       end
 
       context "with invalid params" do
-        subject do
+        subject(:send_request) do
           put :update, params: { id: role.to_param, role: bad_update_params }
         end
 
@@ -111,16 +119,20 @@ RSpec.describe Admin::RolesController do
 
         it { is_expected.to assign(role, :role).with_attributes(bad_update_params).and_be_invalid }
 
-        it { subject; expect(assigns(:media)).to match_array(media) }
+        it "assigns ivars" do
+          send_request
+
+          expect(assigns(:media)).to match_array(media)
+        end
       end
     end
 
     describe "DELETE #destroy" do
+      subject(:send_request) { delete :destroy, params: { id: role.to_param } }
+
       let!(:role) { create(:minimal_role) }
 
-      subject { delete :destroy, params: { id: role.to_param } }
-
-      it { expect { subject }.to change(Role, :count).by(-1) }
+      it { expect { send_request }.to change(Role, :count).by(-1) }
 
       it { is_expected.to send_user_to(admin_roles_path) }
 

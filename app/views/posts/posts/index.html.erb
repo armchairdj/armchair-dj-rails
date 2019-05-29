@@ -1,13 +1,11 @@
 <%
-  @title = "Latest Posts"
+  @title = "All Posts"
 %>
 
 <% if @posts.empty? %>
   <%= content_tag(:p, "Nothing so far.") %>
 <% else %>
-  <%= content_tag(:dl) do %>
-    <%= render partial: "shared/playback/post", collection: @posts %>
-  <% end %>
+  <%= render partial: "posts/card", collection: @posts, as: :post %>
 
   <%= paginate @posts %>
 <% end %>

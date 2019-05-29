@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: work_milestones
@@ -24,13 +25,12 @@ require "ffaker"
 
 FactoryBot.define do
   factory :work_milestone, class: Work::Milestone do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
     trait :with_activity do
-      activity :created
+      activity { :created }
     end
 
     trait :with_year do
@@ -42,7 +42,7 @@ FactoryBot.define do
     ###########################################################################
 
     factory :work_milestone_for_work do
-      activity :released
+      activity { :released }
       with_year
     end
 
@@ -52,6 +52,6 @@ FactoryBot.define do
       with_year
     end
 
-    factory :complete_work_milestone, parent: :minimal_work_milestone do; end
+    factory :complete_work_milestone, parent: :minimal_work_milestone
   end
 end

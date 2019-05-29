@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe StyleGuidesController do
-  context "as root" do
+  context "with root user" do
     login_writer
 
     describe "GET #index" do

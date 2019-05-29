@@ -10,8 +10,8 @@ class YearnessValidator < ActiveModel::EachValidator
     good_format = value.to_s.match(/\d{1,4}/i)
     good_year   = (YEAR_MIN..YEAR_MAX).to_a.include?(value.to_i)
 
-    unless good_format && good_year
-      record.errors.add(attribute, :not_a_year, year_min: YEAR_MIN, year_max: YEAR_MAX)
-    end
+    return if good_format && good_year
+
+    record.errors.add(attribute, :not_a_year, year_min: YEAR_MIN, year_max: YEAR_MAX)
   end
 end

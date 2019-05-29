@@ -11,14 +11,12 @@
 
 @mixin hint-text {
   font-size: $hint-font-size;
-  @include light();
 }
 
 @mixin input-text {
   font-size: $input-font-size;
-  font-family: $raleway-font-stack;
-  @include light();
   @include luxurious();
+  @include normal();
 }
 
 @mixin form-field() {

@@ -9,11 +9,11 @@ module SvgHelper
     }, opts)
 
     unless title.nil? || desc.nil?
-      attrs = attrs.merge({
+      attrs = attrs.merge(
         aria:  true,
         title: title,
-        desc:  desc,
-      })
+        desc:  desc
+      )
     end
 
     inline_svg(image_path, attrs)
@@ -23,9 +23,15 @@ module SvgHelper
     non_semantic_svg_image(image_path, title: title, desc: desc, **opts)
   end
 
-  def svg_icon(icon, tag: :span, wrapper_class: nil, **opts)
+  def semantic_icon(icon, title:, desc:, **opts)
+    image_path = "open_iconic/#{icon}.svg"
+
+    semantic_svg_image(image_path, title: title, desc: desc, **opts)
+  end
+
+  def wrapped_icon(icon, tag: :span, wrapper_class: nil, **opts)
     wrapper_class = combine_classes("svg-icon", wrapper_class)
-    svg           = semantic_svg_image("open_iconic/#{icon}.svg", opts)
+    svg           = semantic_icon(icon, opts)
 
     content_tag(tag, svg, class: wrapper_class)
   end

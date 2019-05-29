@@ -2,22 +2,43 @@ $footer-logo-width: 100px;
 $footer-logo-radius: $footer-logo-width / 2;
 
 footer#page-footer {
-  background-color: $flash-bg-color;
-  padding: (2rem) 0;
+  @include normal();
+  background-color: $footer-bg-color;
+  border-top: 1px solid $darkest-grey;
+  padding: 3rem 0;
   text-align: center;
+
+  a {
+    @include underline-never();
+  }
+
+  li {
+    line-height: 2rem;
+  }
 
   nav.links {
     ul,
-    .copyright {
-      @include bottom-margin(1.2rem);
+    .copyright,
+    .rss {
+      @include bottom-margin(2rem);
     }
 
     ul {
-      font-size: .8rem;
+      &.primary-links {
+        @include chunkable-list($font-size: 1.2rem, $breakpoint: medium);
+      }
+
+      &.secondary-links {
+        @include chunkable-list($font-size: 1rem, $breakpoint: medium);
+      }
+
+      &.tertiary-links {
+        @include chunkable-list($font-size: .8rem, $breakpoint: large);
+      }
     }
 
     .copyright {
-      font-size: .7rem;
+      font-size: .8rem;
       color: $medium-grey;
     }
   }

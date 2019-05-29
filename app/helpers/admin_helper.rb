@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AdminHelper
-
   #############################################################################
   # FORMATTING.
   #############################################################################
@@ -56,8 +55,7 @@ module AdminHelper
   #############################################################################
 
   def admin_icon_link(icon, path, title, desc, **opts)
-    svg = semantic_svg_image("open_iconic/#{icon}.svg", title: title, desc: desc)
-
+    svg   = semantic_icon(icon, title: title, desc: desc)
     attrs = combine_attrs(opts, class: "admin-icon")
 
     link_to(svg, path, title: title, **attrs)
@@ -126,6 +124,19 @@ module AdminHelper
     admin_icon_link(icon, path, title, desc, class: "public-view")
   end
 
+  def admin_preview_link(instance)
+    return unless instance.is_a?(Post)
+    return unless instance.unpublished?
+
+    path = preview_admin_post_path(instance)
+
+    title = "preview #{instance.model_name.singular} as it will appear on site"
+    desc  = "preview icon"
+    icon  = "link-broken"
+
+    admin_icon_link(icon, path, title, desc, class: "public-view")
+  end
+
   def should_link_to_admin_users?
     Pundit.policy!(current_user, [:admin, User]).index?
   end
@@ -135,13 +146,15 @@ module AdminHelper
   #############################################################################
 
   def status_icon_header
-    svg_icon("eye", title: "Post Status", desc: "eye icon", wrapper_class: "admin-column-header")
+    wrapped_icon("eye", title: "Post Status", desc: "eye icon", wrapper_class: "admin-column-header")
   end
 
   def sortable_link(sorts, name, text: nil)
-    text    = text || content_tag(:span, name)
+    text ||= content_tag(:span, name)
+
     props   = sorts[name]
-    classes = props[:active?] ? "active #{props[:desc?] ? 'desc' : 'asc'}" : nil
+    classes = nil
+    classes = "active #{props[:desc?] ? "desc" : "asc"}" if props[:active?]
 
     link_to(text, props[:url], class: classes)
   end

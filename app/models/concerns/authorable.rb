@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 concern :Authorable do
-
   #############################################################################
   # INCLUDED.
   #############################################################################
@@ -25,8 +24,6 @@ concern :Authorable do
 private
 
   def author_can_write
-    if author.present? && !author.can_write?
-      self.errors.add(:author, :invalid_author)
-    end
+    errors.add(:author, :invalid_author) if author.present? && !author.can_write?
   end
 end

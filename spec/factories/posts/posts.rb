@@ -4,13 +4,12 @@ require "ffaker"
 
 FactoryBot.define do
   factory :post do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
     trait :with_body do
-      body "Give me body!"
+      body { "Give me body!" }
     end
 
     trait :with_published_post do

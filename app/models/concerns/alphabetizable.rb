@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 concern :Alphabetizable do
-  ALPHA_CONNECTOR = " "
-
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     scope :alpha, -> { order(:alpha) }
 
@@ -15,23 +9,19 @@ concern :Alphabetizable do
     validate { ensure_alpha }
   end
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
-private
+  private
 
   def set_alpha
     self.alpha = calculate_alpha_string
   end
 
   def calculate_alpha_string
-    [*alpha_parts].compact.join(ALPHA_CONNECTOR).downcase.squish
+    [*alpha_parts].compact.join(" ").downcase.squish
   end
 
   def ensure_alpha
     return if new_record?
 
-    self.errors.add(:base, :missing_alpha) if alpha.blank?
+    errors.add(:base, :missing_alpha) if alpha.blank?
   end
 end

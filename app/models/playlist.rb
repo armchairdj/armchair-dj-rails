@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: playlists
@@ -19,89 +21,78 @@
 #
 
 class Playlist < ApplicationRecord
-
-  #############################################################################
-  # CONCERNING: Authorable.
-  #############################################################################
-
+  include Imageable
   include Authorable
 
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  include Alphabetizable
-
-  def alpha_parts
-    [title]
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
+    end
   end
 
-  #############################################################################
-  # CONCERNING: Title.
-  #############################################################################
-
-  validates :title, presence: true
-
-  #############################################################################
-  # CONCERNING: Tracks.
-  #############################################################################
-
-  has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
-    class_name: "Playlist::Track", dependent: :destroy
-
-  validates :tracks, length: { minimum: 2 }
-
-  concerning :NestedTracks do
-    MAX_TRACKS_AT_ONCE = 20.freeze
-
+  concerning :TrackAssociations do
     included do
+      has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
+        class_name: "Playlist::Track", dependent: :destroy
+
+      validates :tracks, length: { minimum: 2 }
+
+      has_many :works, through: :tracks
+
       accepts_nested_attributes_for(:tracks, allow_destroy: true,
-        reject_if: proc { |attrs| attrs["work_id"].blank? }
-      )
+                                             reject_if:     proc { |attrs| attrs["work_id"].blank? })
     end
 
     def prepare_tracks
-      MAX_TRACKS_AT_ONCE.times { self.tracks.build }
+      20.times { tracks.build }
     end
   end
 
-  #############################################################################
-  # CONCERNING: Works.
-  #############################################################################
+  concerning :CreatorAssociations do
+    included do
+      has_many :makers,       -> { distinct }, through: :works
+      has_many :contributors, -> { distinct }, through: :works
+    end
 
-  has_many :works, through: :tracks
+    def creators
+      Creator.where(id: creator_ids)
+    end
 
-  has_many :makers,       -> { distinct }, through: :works
-  has_many :contributors, -> { distinct }, through: :works
-
-  def creators
-    Creator.where(id: creator_ids)
+    def creator_ids
+      works.map(&:creator_ids).flatten.uniq
+    end
   end
 
-  def creator_ids
-    works.map(&:creator_ids).flatten.uniq
+  concerning :PostAssociations do
+    included do
+      has_many :mixtapes, dependent: :nullify
+
+      has_many :reviews, through: :works
+    end
+
+    def posts
+      Post.where(id: post_ids)
+    end
+
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
   end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
 
-  has_many :mixtapes, dependent: :nullify
-
-  has_many :reviews, through: :works
-
-  def posts
-    Post.where(id: post_ids)
+    def alpha_parts
+      [title]
+    end
   end
 
-  def post_ids
-    reviews.ids + mixtapes.ids
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> { includes(:author).references(:author) }
+      scope :for_show, -> { includes(:author, :tracks, :works) }
+    end
   end
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> { includes(:author).references(:author) }
-  scope :for_show,  -> { includes(:author, :tracks, :works) }
 end

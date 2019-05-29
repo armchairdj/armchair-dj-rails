@@ -1,0 +1,60 @@
+.card {
+  @include bottom-margin(3rem);
+  background-color: $module-bg-color;
+  padding: 1rem;
+  border-radius: $standard-border-radius;
+
+  header {
+    @include bottom-margin(.5rem);
+
+    h3 {
+      @include bottom-margin(.5rem);
+      font-size: 1.2rem;
+      line-height: $spacious;
+
+      a {
+        @include underline-never();
+      }
+    }
+  }
+
+  p {
+    a.read-more {
+      @include svg-link();
+      @include inline-block-svg() {
+        @include square(1rem);
+        margin: 0 0 -.2rem .3rem;
+      }
+    }
+  }
+
+  &.review {}
+
+  &.article {}
+
+  &.mixtape {}
+
+  img {
+    display: block;
+    @include bottom-margin(.5rem);
+  }
+}
+
+@include breakpoint(medium) {
+  .card {
+    padding: 2rem;
+    img {
+      float: right;
+      margin: .3rem 0 .5rem 1rem;
+      @include square(150px);
+    }
+  }
+}
+
+@include breakpoint(large) {
+  .card {
+    img {
+      @include square(200px);
+    }
+  }
+}

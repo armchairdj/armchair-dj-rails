@@ -5,16 +5,15 @@ require "ffaker"
 FactoryBot.define do
   trait :with_milestone do
     transient do
-      release_year "1972"
+      release_year { "1972" }
     end
 
-    milestones_attributes { {
-      "0" => attributes_for(:work_milestone, activity: :released, year: release_year)
-    } }
+    milestones_attributes do
+      { "0" => attributes_for(:work_milestone, activity: :released, year: release_year) }
+    end
   end
 
   factory :work do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
@@ -24,42 +23,42 @@ FactoryBot.define do
     end
 
     trait :with_subtitle do
-      subtitle "Subtitle"
+      subtitle { "Subtitle" }
     end
 
     trait :with_credits do
       transient do
-        maker_names []
+        maker_names { [] }
 
-        maker_count 1
+        maker_count { 1 }
       end
 
       credits_attributes do
-        [maker_count, maker_names.length].max.times.inject({}) do |memo, (i)|
+        [maker_count, maker_names.length].max.times.each_with_object({}) do |(i), memo|
           name    = maker_names[i] || generate(:creator_name)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id); memo
+          memo[i.to_s] = attributes_for(:minimal_credit, creator_id: creator.id)
         end
       end
     end
 
     trait :with_contributions do
       transient do
-        contributor_names []
+        contributor_names { [] }
 
-        contributor_count 1
+        contributor_count { 1 }
 
-        role_medium "Song"
+        role_medium { "Song" }
       end
 
       contributions_attributes do
-        [contributor_count, contributor_names.length].max.times.inject({}) do |memo, (i)|
+        [contributor_count, contributor_names.length].max.times.each_with_object({}) do |(i), memo|
           name    = maker_names[i] || generate(:creator_name)
           role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)
 
-          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id); memo
+          memo[i.to_s] = attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator.id)
         end
       end
     end
@@ -90,7 +89,7 @@ FactoryBot.define do
 
     trait :with_children do
       transient do
-        child_count 1
+        child_count { 1 }
       end
 
       after(:create) do |work, evaluator|
@@ -108,22 +107,22 @@ FactoryBot.define do
 
     trait :with_specific_creator do
       transient do
-        specific_creator nil
+        specific_creator { nil }
       end
 
-      credits_attributes { {
-        "0" => attributes_for(:credit, creator_id: specific_creator.id)
-      } }
+      credits_attributes do
+        { "0" => attributes_for(:credit, creator_id: specific_creator.id) }
+      end
     end
 
     trait :with_specific_contributor do
       transient do
-        specific_contributor nil
+        specific_contributor { nil }
       end
 
-      contributions_attributes { {
-        "0" => attributes_for(:contribution, role_id: create(:minimal_role).id, creator_id: specific_contributor.id)
-      } }
+      contributions_attributes do
+        { "0" => attributes_for(:contribution, role_id: create(:minimal_role).id, creator_id: specific_contributor.id) }
+      end
     end
 
     ###########################################################################
@@ -143,8 +142,8 @@ FactoryBot.define do
 
     factory :stuffed_work_parent, parent: :complete_work_parent do
       transient do
-        maker_count 3
-        contributor_count 3
+        maker_count { 3 }
+        contributor_count { 3 }
       end
     end
   end

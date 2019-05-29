@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: playlist_tracks
@@ -17,7 +19,6 @@
 
 FactoryBot.define do
   factory :playlist_track, class: "Playlist::Track" do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################

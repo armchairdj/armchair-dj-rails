@@ -3,11 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Mixtape do
-  describe "admin" do
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [:author, :playlist] }
-      let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
-    end
+  describe "image attachments" do
+    pending "delegate hero_image to playlist"
+    pending "delegate additional_images to playlist"
+  end
+
+  it_behaves_like "a_ginsu_model" do
+    let(:list_loads) { [:author, :playlist] }
+    let(:show_loads) { [:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones] }
   end
 
   describe "STI inheritance" do
@@ -22,7 +25,7 @@ RSpec.describe Mixtape do
     describe "#display_type" do
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.display_type              ).to eq("Mixtape" ) }
+      specify { expect(instance.display_type).to eq("Mixtape") }
       specify { expect(instance.display_type(plural: true)).to eq("Mixtapes") }
     end
   end
@@ -32,33 +35,33 @@ RSpec.describe Mixtape do
   end
 
   describe "playlist" do
-    it { is_expected.to belong_to(:playlist) }
+    it { is_expected.to belong_to(:playlist).required }
 
     it { is_expected.to validate_presence_of(:playlist) }
 
     it { is_expected.to have_many(:tracks).through(:playlist) }
-    it { is_expected.to have_many(:works ).through(:tracks) }
+    it { is_expected.to have_many(:works).through(:tracks) }
 
-    it { is_expected.to have_many(:makers       ).through(:works) }
+    it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributions).through(:works) }
-    it { is_expected.to have_many(:contributors ).through(:works) }
-    it { is_expected.to have_many(:aspects      ).through(:works) }
-    it { is_expected.to have_many(:milestones   ).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+    it { is_expected.to have_many(:aspects).through(:works) }
+    it { is_expected.to have_many(:milestones).through(:works) }
   end
 
   describe "sluggable" do
     it_behaves_like "a_sluggable_model"
 
     describe "#sluggable_parts" do
-      let(:instance) { build_minimal_instance }
-
       subject { instance.sluggable_parts }
+
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.playlist.title]) }
     end
 
     describe "#reset_slug_history" do
-      subject { instance.send(:reset_slug_history) }
+      subject(:call_method) { instance.send(:reset_slug_history) }
 
       let(:instance) do
         playlist = create(:minimal_playlist, title: "foo")
@@ -74,16 +77,16 @@ RSpec.describe Mixtape do
       end
 
       it "removes all old slugs so they can be reused" do
-        expect { subject }.to change { instance.slugs.count }.from(3).to(0)
+        expect { call_method }.to change(instance.slugs, :count).from(3).to(0)
       end
     end
   end
 
   describe "alpha" do
     describe "#alpha_parts" do
-      let(:instance) { build_minimal_instance }
-
       subject { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
 
       it { is_expected.to eq([instance.playlist.title]) }
     end

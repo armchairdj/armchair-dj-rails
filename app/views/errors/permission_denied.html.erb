@@ -1,3 +1,37 @@
 <%
-  @headline = @title = "Whoa There!"
+  @title = "Whoa There!"
 %>
+
+<%= content_for :public_header do %>
+  <%= content_tag(:header, class: "standard-page-header") do %>
+    <%= content_tag(:h1) do %>
+      <%= semantic_icon("ban", title: "permission denied error", desc: "ban icon") %>
+      <%= @title %>
+    <% end %>
+
+    <%= content_tag(:h3, "That's not for you.") %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "error-page") do %>
+  <%= content_tag(:p) do %>
+    You don't have access to the page you're requesting.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Perhaps you're a <%= link_to "console cowboy", "https://en.wikipedia.org/wiki/Neuromancer" %> trying to break some black ice.
+    Or maybe, like <%= link_to "Willow Rosenberg", "https://www.syfy.com/syfywire/willow-rosenberg-addiction-and-the-illusion-of-control" %>, you're a rank, arrogant amateur messing with ferocious, primal magicks you can't hope to understand.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    One more possible explanation:
+
+    <% if user_signed_in? %>
+      You need an admin to upgrade your permissions. It can't hurt to ask.
+    <% else %>
+      You forgot to <%= link_to("log in", new_user_session_path) %>.
+    <% end %>
+  <% end %>
+
+  <%= image_tag "errors/willow.jpg", alt: "Willow Rosenberg" %>
+<% end %>

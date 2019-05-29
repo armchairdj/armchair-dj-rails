@@ -36,7 +36,6 @@
       font-size: 1.1em;
       display: inline-block;
       margin: 0 .5em;
-      @include light();
     }
 
     &:last-child:after {
@@ -46,24 +45,52 @@
   }
 }
 
-@mixin arrowed-list {
-  margin: 0 0 .5em;
+@mixin chunkable-list($separator: "\2194", $font-size: 1rem, $font-size-big: false, $spread: .5em, $breakpoint: medium, $separator-color: $standard-text-color) {
+  font-size: 0;
+
+  span {
+    display: block;
+  }
+
+  li,
+  li+li:before,
+  span+span:before {
+    font-size: $font-size;
+  }
 
   li {
     display: inline-block;
     margin-top: -.25em;
     margin-bottom: .5em;
+  }
 
-    &:after {
-      content: "\00A0\2194";
-      display: inline-block;
-      margin: 0 .25em;
-      @include light();
+  li+li:before {
+    color: $separator-color;
+    content: $separator;
+    display: inline-block;
+    margin: 0 $spread;
+  }
+
+  @include breakpoint($breakpoint) {
+    @if $font-size-big == false {
+
+    } else {
+      li,
+      li+li:before,
+      span+span:before {
+        font-size: $font-size-big;
+      }
     }
 
-    &:last-child:after {
-      content: "";
-      margin: 0;
+    span {
+      display: inline-block;
+    }
+
+    span+span:before {
+      color: $separator-color;
+      content: $separator;
+      display: inline-block;
+      margin: 0 $spread;
     }
   }
 }

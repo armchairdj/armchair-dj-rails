@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attributions
@@ -31,7 +32,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :contribution, class: "Contribution" do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################

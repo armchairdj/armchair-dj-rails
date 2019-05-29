@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: playlists
@@ -20,31 +22,30 @@
 
 FactoryBot.define do
   factory :playlist do
-
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
     trait :with_2_tracks do
-      tracks_attributes { {
-        "0" => attributes_for(:playlist_track, :with_existing_work),
-        "1" => attributes_for(:playlist_track, :with_existing_work),
-      } }
+      tracks_attributes do
+        { "0" => attributes_for(:playlist_track, :with_existing_work),
+          "1" => attributes_for(:playlist_track, :with_existing_work) }
+      end
     end
 
     trait :with_10_tracks do
-      tracks_attributes { {
-        "0" => attributes_for(:playlist_track, :with_existing_work),
-        "1" => attributes_for(:playlist_track, :with_existing_work),
-        "2" => attributes_for(:playlist_track, :with_existing_work),
-        "3" => attributes_for(:playlist_track, :with_existing_work),
-        "4" => attributes_for(:playlist_track, :with_existing_work),
-        "5" => attributes_for(:playlist_track, :with_existing_work),
-        "6" => attributes_for(:playlist_track, :with_existing_work),
-        "7" => attributes_for(:playlist_track, :with_existing_work),
-        "8" => attributes_for(:playlist_track, :with_existing_work),
-        "9" => attributes_for(:playlist_track, :with_existing_work),
-      } }
+      tracks_attributes do
+        { "0" => attributes_for(:playlist_track, :with_existing_work),
+          "1" => attributes_for(:playlist_track, :with_existing_work),
+          "2" => attributes_for(:playlist_track, :with_existing_work),
+          "3" => attributes_for(:playlist_track, :with_existing_work),
+          "4" => attributes_for(:playlist_track, :with_existing_work),
+          "5" => attributes_for(:playlist_track, :with_existing_work),
+          "6" => attributes_for(:playlist_track, :with_existing_work),
+          "7" => attributes_for(:playlist_track, :with_existing_work),
+          "8" => attributes_for(:playlist_track, :with_existing_work),
+          "9" => attributes_for(:playlist_track, :with_existing_work) }
+      end
     end
 
     trait :with_draft_post do

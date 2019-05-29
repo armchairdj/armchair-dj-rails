@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
-  MISSING_TRANSLATION = /translation missing/i
+  missing_translation = /translation missing/i
 
   if enum.is_a?(Hash)
-    attribute  = enum[:attribute ]
+    attribute  = enum[:attribute]
     variations = enum[:variations]
   else
     attribute  = enum
@@ -22,7 +22,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
 
     it { is_expected.to respond_to(:improve_enum) }
 
-    describe "self#better_enums" do
+    describe ".better_enums" do
       subject { described_class.better_enums }
 
       it "reports which attributes have been defined" do
@@ -36,25 +36,25 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
       it "has a localized string for #{val}" do
         actual = described_class.send(:"human_#{single}", val)
 
-        expect(actual).to_not match(MISSING_TRANSLATION)
+        expect(actual).to_not match(missing_translation)
       end
 
       variations.each do |variation|
         it "has a localized string for #{val} with variation #{variation}" do
           actual = described_class.send(:"human_#{single}", val, variation: variation)
 
-          expect(actual).to_not match(MISSING_TRANSLATION)
+          expect(actual).to_not match(missing_translation)
         end
       end
     end
   end
 
   describe "dynamically defined methods for #{single}" do
-    before(:each) do
-      allow(described_class).to receive(plural).and_return({
+    before do
+      allow(described_class).to receive(plural).and_return(
         "init" => 0,
-        "addl" => 1,
-      })
+        "addl" => 1
+      )
 
       allow(I18n).to receive(:t).and_call_original
       allow(I18n).to receive(:t).with("#{i18n_key}.init").and_return("Initial Humanized Value")
@@ -65,8 +65,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
     end
 
     describe "at the class level" do
-      describe "self#human_#{plural}" do
-        context "default behavior" do
+      describe ".human_#{plural}" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{plural}") }
 
           let(:expected) do
@@ -96,8 +96,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
           subject { described_class.send(:"human_#{plural}", include_raw: true) }
 
           let(:expected) do
-            [["Initial Humanized Value",    0, "init",],
-             ["Additional Humanized Value", 1, "addl",]]
+            [["Initial Humanized Value",    0, "init"],
+             ["Additional Humanized Value", 1, "addl"]]
           end
 
           it "includes the database integer in each item" do
@@ -105,7 +105,7 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
           end
         end
 
-        describe "with a variation keyword argument" do
+        context "with a variation keyword argument" do
           subject { described_class.send(:"human_#{plural}", variation: :short) }
 
           let(:expected) do
@@ -119,8 +119,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#human_#{single}" do
-        context "default behavior" do
+      describe ".human_#{single}" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{single}", "init") }
 
           it "translates the attribute" do
@@ -137,8 +137,8 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#human_#{single}_order_clause" do
-        context "default behavior" do
+      describe ".human_#{single}_order_clause" do
+        context "with default behavior" do
           subject { described_class.send(:"human_#{single}_order_clause") }
 
           let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
@@ -159,10 +159,10 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
         end
       end
 
-      describe "self#sorted_by_human_#{single}" do
+      describe ".sorted_by_human_#{single}" do
         subject { described_class }
 
-        context "default behavior" do
+        context "with default behavior" do
           let(:expected) { "CASE WHEN #{single}=1 THEN 0 WHEN #{single}=0 THEN 1 END" }
 
           it "orders by humanized values" do
@@ -191,10 +191,10 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
     describe "at the instance level" do
       let(:instance) { create_minimal_instance }
 
-      before(:each) { allow(instance).to receive(single).and_return("addl") }
+      before { allow(instance).to receive(single).and_return("addl") }
 
       describe "#human_#{single}" do
-        context "default behavior" do
+        context "with default behavior" do
           subject { instance.send(:"human_#{single}") }
 
           it "translates the attribute" do
@@ -212,9 +212,9 @@ RSpec.shared_examples "a_model_with_a_better_enum_for" do |enum|
       end
 
       describe "#raw_#{single}" do
-        let(:instance) { create_minimal_instance }
-
         subject { instance.send(:"raw_#{single}") }
+
+        let(:instance) { create_minimal_instance }
 
         it "returns raw integer value" do
           is_expected.to be_a_kind_of(Integer)

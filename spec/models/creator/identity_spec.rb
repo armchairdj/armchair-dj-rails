@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: creator_identities
@@ -23,34 +24,33 @@
 require "rails_helper"
 
 RSpec.describe Creator::Identity do
-  describe "concerns" do
-    it_behaves_like "an_application_record"
-  end
+  it_behaves_like "an_application_record"
 
   describe "real_name" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:real_name).class_name("Creator") }
+    it { is_expected.to belong_to(:real_name).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:real_name) }
 
     it { is_expected.to validate_uniqueness_of(:real_name_id).scoped_to(:pseudonym_id) }
 
     describe "validates #real_name_is_primary" do
-      before(:each) do
-        expect(subject).to receive(:real_name_is_primary).and_call_original
+      let(:instance) { build_minimal_instance }
+
+      before do
+        expect(instance).to receive(:real_name_is_primary).and_call_original
       end
 
       specify "valid" do
-        is_expected.to be_valid
+        expect(instance).to be_valid
       end
 
       specify "invalid" do
-        subject.real_name = create(:secondary_creator)
+        instance.real_name = create(:secondary_creator)
 
-        is_expected.to_not be_valid
-
-        is_expected.to have_error(real_name_id: :not_primary)
+        expect(instance).to_not be_valid
+        expect(instance).to have_error(real_name_id: :not_primary)
       end
     end
   end
@@ -58,27 +58,28 @@ RSpec.describe Creator::Identity do
   describe "pseudonym" do
     subject { build_minimal_instance }
 
-    it { is_expected.to belong_to(:pseudonym).class_name("Creator") }
+    it { is_expected.to belong_to(:pseudonym).class_name("Creator").required }
 
     it { is_expected.to validate_presence_of(:pseudonym) }
 
     it { is_expected.to validate_uniqueness_of(:pseudonym_id) }
 
     describe "validates #pseudonym_is_secondary" do
-      before(:each) do
-        expect(subject).to receive(:pseudonym_is_secondary).and_call_original
+      let(:instance) { build_minimal_instance }
+
+      before do
+        expect(instance).to receive(:pseudonym_is_secondary).and_call_original
       end
 
       specify "valid" do
-        is_expected.to be_valid
+        expect(instance).to be_valid
       end
 
       specify "invalid" do
-        subject.pseudonym = create(:primary_creator)
+        instance.pseudonym = create(:primary_creator)
 
-        is_expected.to_not be_valid
-
-        is_expected.to have_error(pseudonym_id: :not_secondary)
+        expect(instance).to_not be_valid
+        expect(instance).to have_error(pseudonym_id: :not_secondary)
       end
     end
   end

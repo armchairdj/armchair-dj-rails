@@ -18,8 +18,7 @@ SimpleForm.setup do |config|
   config.wrappers(:default,
     class:       "form-field",
     hint_class:  "with-hint",
-    error_class: "with-error"
-  ) do |b|
+    error_class: "with-error") do |b|
     b.use :html5
     b.use :placeholder
 
@@ -27,7 +26,7 @@ SimpleForm.setup do |config|
 
     ## Inputs
     b.use :label
-    b.use :hint,  wrap_with: { tag: :div, class: "hint" }
+    b.use :hint, wrap_with: { tag: :div, class: "hint" }
     b.use :input
     b.use :error, wrap_with: { tag: :div, class: "error" }
 
@@ -41,8 +40,7 @@ SimpleForm.setup do |config|
   config.wrappers(:custom_checkbox,
     class:       "form-field",
     hint_class:  "with-hint",
-    error_class: "with-error"
-  ) do |b|
+    error_class: "with-error") do |b|
     b.use :html5
 
     b.wrapper tag: "label" do |item|
@@ -82,7 +80,7 @@ SimpleForm.setup do |config|
   # config.item_wrapper_class = nil
 
   # How the label text should be generated altogether with the required text.
-  config.label_text = lambda { |label, required, explicit_label| "#{label} #{required}" }
+  config.label_text = ->(label, required, _explicit_label) { "#{label} #{required}" }
 
   # You can define the class to use on all labels. Default is nil.
   # config.label_class = nil

@@ -1,0 +1,10 @@
+<%= adj_module do %>
+  <%= content_tag(:fieldset) do %>
+    <%= content_tag(:legend) do %>
+      Images
+    <% end %>
+    
+    <%= f.input :hero_image, input_html: { direct_upload: true } %>
+    <%= f.input :additional_images, input_html: { direct_upload: true, multiple: true } %>
+  <% end %>
+<% end %>

@@ -1,3 +1,35 @@
 <%
-  @headline = @title = "Whoops."
+  @title = "Whoops."
 %>
+
+<%= content_for :public_header do %>
+  <%= content_tag(:header, class: "standard-page-header") do %>
+    <%= content_tag(:h1) do %>
+      <%= semantic_icon("bug", title: "internal server error", desc: "bug icon") %>
+      <%= @title %>
+    <% end %>
+
+    <%= content_tag(:h3, "You found a bug.") %>
+  <% end %>
+<% end %>
+
+<%= content_tag(:section, class: "error-page") do %>
+  <%= content_tag(:p) do %>
+    Something unexpected went wrong on our end.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Perhaps, like the tinny mastering on Kate Bush's 1993 album <%= link_to "The Red Shoes", "https://en.wikipedia.org/wiki/The_Red_Shoes_(album)" %>, our mistake was entirely avoidable.
+    But maybe it's not our fault. Could it be that sinister forces are conspiring against us, as in John Carpenter's seminal <%= link_to "They Live", "https://en.wikipedia.org/wiki/They_Live" %>?
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    Either way, we're as sorry as <%= link_to "Stefan Salvatore", "https://vampirediaries.fandom.com/wiki/Stefan_Salvatore" %> was for murdering all those innocent flappers.
+  <% end %>
+
+  <%= content_tag(:p) do %>
+    The <%= link_to "Tech-Savvy At-Risk Youth", "https://thequestionclub.livejournal.com/78178471.html" %> will try to fix this as soon as possible.
+  <% end %>
+
+  <%= image_tag "errors/they_live.jpg", alt: "They Live" %>
+<% end %>

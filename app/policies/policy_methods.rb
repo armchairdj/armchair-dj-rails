@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PolicyMethods
-
 protected
 
   def logged_in?
@@ -11,19 +10,19 @@ protected
   end
 
   def logged_in_as_cms_user?
-    return true if user && user.can_write?
+    return true if user&.can_write?
 
     raise Pundit::NotAuthorizedError, "current user does not have permission"
   end
 
   def logged_in_as_admin_or_root?
-    return true if user && user.can_administer?
+    return true if user&.can_administer?
 
     raise Pundit::NotAuthorizedError, "current user does not have permission"
   end
 
   def logged_in_as_root?
-    return true if user && user.root?
+    return true if user&.root?
 
     raise Pundit::NotAuthorizedError, "current user does not have permission"
   end

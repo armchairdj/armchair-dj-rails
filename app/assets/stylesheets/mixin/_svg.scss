@@ -27,6 +27,18 @@
   }
 }
 
+@mixin svg-link() {
+  @include svg() {
+    @include svg-path-fill($link-color);
+  }
+
+  &:hover {
+    @include svg() {
+      @include svg-path-fill($link-color-hover);
+    }
+  }
+}
+
 @mixin svg-fill($color) {
   fill: $color;
 }

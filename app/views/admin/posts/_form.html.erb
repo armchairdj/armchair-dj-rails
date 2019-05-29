@@ -6,18 +6,32 @@
   end
 %>
 
+<%= content_tag(:p, class: "form-instructions") do %>
+  <% if @post.new_record? %>
+    <%= I18n.t("content.posts.new.instructions.#{@view_path}") %>
+  <% elsif @post.published? %>
+    <%= I18n.t("content.posts.edit.instructions.published") %>
+  <% else %>
+    <%= I18n.t("content.posts.edit.instructions.unpublished") %>
+  <% end %>
+<% end %>
+
 <%= simple_form_for([:admin, @post], html: html_opts) do |f| %>
   <%= f.error_notification %>
 
   <%= form_inputs do %>
     <%= adj_module do %>
       <%= content_tag(:fieldset) do %>
-        <%= yield f %>
+        <%= render "admin/posts/#{@view_path}/extra_fields", f: f %>
 
         <% unless @post.new_record? %>
           <%= render "admin/posts/standard_fields", f: f %>
         <% end %>
       <% end %>
+    <% end %>
+
+    <% if @post.is_a?(Article) %>
+      <%= render "shared/forms/imageable_fieldset", f: f %>
     <% end %>
 
     <% unless @post.new_record? %>
@@ -26,5 +40,14 @@
     <% end %>
   <% end %>
 
-  <%= button_group submit_button(@post) %>
+  <%= button_group do %>
+    <%= submit_button(@post) %>
+
+    <% if false %>
+      <%= submit_button @post, "Preview", name: "step", value: "preview", class: "tertiary",
+        "data-controller": "previewable",
+        "data-action":     "previewable#preview"
+      %>
+    <% end %>
+  <% end %>
 <% end %>
