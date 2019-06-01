@@ -10,8 +10,6 @@
   Posted by <%= link_to_author_of(@mixtape) %> on <%= post_published_date(@mixtape) %>
 <% end %>
 
-<%= content_tag(:aside, class: "post-tags") do %>
-  <%= render "shared/playback/tags", tags: @mixtape.tags %>
-<% end %>
+<%= render "shared/playback/tags", tags: @mixtape.tags %>
 
 <%= render "shared/playback/links", links: @mixtape.links %>

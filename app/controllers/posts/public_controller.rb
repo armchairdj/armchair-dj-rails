@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
-  class BaseController < ApplicationController
+  class PublicController < ApplicationController
     include Paginatable
 
     # GET /<plural_param_key>

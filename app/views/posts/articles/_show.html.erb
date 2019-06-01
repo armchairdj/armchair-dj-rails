@@ -4,14 +4,18 @@
   <% end %>
 <% end %>
 
-<%= post_body @article %>
+<%= content_tag(:div, class: "post-wrapper") do %>
+  <%= content_tag(:div, class: "post-content") do %>
+    <%= post_body @article %>
 
-<%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_author_of(@article) %> on <%= post_published_date(@article) %>
+    <%= content_tag(:footer, class: "post-byline") do %>
+      Posted by <%= link_to_author_of(@article) %> on <%= post_published_date(@article) %>
+    <% end %>
+  <% end %>
+
+  <%= content_tag(:div, class: "post-extras") do %>
+    <%= render "shared/playback/tags", tags: @article.tags %>
+
+    <%= render "shared/playback/links", links: @article.links %>
+  <% end %>
 <% end %>
-
-<%= content_tag(:aside, class: "post-tags") do %>
-  <%= render "shared/playback/tags", tags: @article.tags %>
-<% end %>
-
-<%= render "shared/playback/links", links: @article.links %>

@@ -42,6 +42,36 @@ ol {
   }
 }
 
+dl.inline {
+  dd+dt:before {
+    content: "";
+    display: block;
+    height: .8rem;
+  }
+
+  dt,
+  dd {
+    display: inline;
+  }
+
+  dt {
+    text-transform: uppercase;
+
+    &:after {
+      content: ":";
+      margin-right: .25rem;
+    }
+  }
+  dd+dd {
+    &:before {
+      content: "\2219";
+      margin: 0 .25rem;
+    }
+  }
+}
+
+
+
 dl {
   @include bottom-margin();
   line-height: $spacious;

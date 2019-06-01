@@ -1,3 +1,45 @@
+header.post-header {
+  @include bottom-margin-only();
+  @include clearfix();
+
+  h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
+
+    span {
+      display: block;
+      font-size: 1.4rem;
+
+      &.creators {
+        font-size: 1.2rem;
+      }
+
+      &.title {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+      }
+
+      &.subtitle {
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
+
+footer.post-byline {
+  @include bottom-margin();
+  font-size: .9rem;
+
+  address {
+    display: inline;
+  }
+}
+
 .post-type-identifier {
   @include bottom-margin(.5rem);
   @include post-type-identifier();
@@ -13,4 +55,25 @@
   ol {
     @include numbered-list();
   }
+}
+
+@include breakpoint(large) {
+  .post-wrapper {
+    display: grid;
+    grid-template-areas: "content . extras";
+    grid-template-columns: 3fr 50px 2fr;
+    grid-template-rows: auto;
+
+    .post-content {
+      grid-area: content;
+    }
+
+    .post-extras {
+      grid-area: extras;
+    }
+  }
+}
+
+aside.post-extra {
+  @include bottom-margin();
 }
