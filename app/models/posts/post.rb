@@ -271,10 +271,6 @@ class Post < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Access control.
-  #############################################################################
-
   concerning :Editing do
     class_methods do
       def for_cms_user(user)
@@ -285,10 +281,6 @@ class Post < ApplicationRecord
       end
     end
   end
-
-  #############################################################################
-  # CONCERNING: Markdown.
-  #############################################################################
 
   concerning :Rendering do
     def formatted_body

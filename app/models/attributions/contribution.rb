@@ -29,10 +29,6 @@
 #
 
 class Contribution < Attribution
-  #############################################################################
-  # CONCERNING: Role.
-  #############################################################################
-
   concerning :RoleAssociation do
     included do
       belongs_to :role
@@ -50,19 +46,11 @@ class Contribution < Attribution
     end
   end
 
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
-
   concerning :WorkAssociation do
     included do
       belongs_to :work, inverse_of: :contributions
     end
   end
-
-  #############################################################################
-  # CONCERNING: Creator.
-  #############################################################################
 
   concerning :CreatorAssociation do
     included do
@@ -72,10 +60,10 @@ class Contribution < Attribution
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> {}
-  scope :for_show,  -> { includes(:work, :creator, :role) }
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list,  -> {}
+      scope :for_show,  -> { includes(:work, :creator, :role) }
+    end
+  end
 end

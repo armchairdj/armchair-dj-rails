@@ -29,19 +29,11 @@
 #
 
 class Attribution < ApplicationRecord
-  #############################################################################
-  # CONCERNING: STI subclass contract.
-  #############################################################################
-
   concerning :Subclassable do
     included do
       validates :type, presence: true
     end
   end
-
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
 
   concerning :WorkAssociation do
     included do
@@ -53,10 +45,6 @@ class Attribution < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Creator.
-  #############################################################################
-
   concerning :CreatorAssociation do
     included do
       belongs_to :creator, inverse_of: :attributions
@@ -64,10 +52,6 @@ class Attribution < ApplicationRecord
       validates :creator, presence: true
     end
   end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
 
   concerning :Alphabetization do
     included do

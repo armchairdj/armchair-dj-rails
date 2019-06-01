@@ -25,10 +25,6 @@ class Creator
   class Identity < ApplicationRecord
     self.table_name = "creator_identities"
 
-    #############################################################################
-    # CONCERNING: Real name.
-    #############################################################################
-
     concerning :RealNameAssociation do
       included do
         belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
@@ -40,16 +36,12 @@ class Creator
         validate { real_name_is_primary }
       end
 
-    private
+      private
 
       def real_name_is_primary
         errors.add :real_name_id, :not_primary unless real_name&.primary?
       end
     end
-
-    #############################################################################
-    # CONCERNING: Pseudonym.
-    #############################################################################
 
     concerning :PseudonymAssociation do
       included do

@@ -25,10 +25,6 @@ class Creator
   class Membership < ApplicationRecord
     self.table_name = "creator_memberships"
 
-    #############################################################################
-    # CONCERNING: Group.
-    #############################################################################
-
     concerning :GroupAssociation do
       included do
         belongs_to :group, class_name: "Creator", foreign_key: :group_id
@@ -40,16 +36,12 @@ class Creator
         validate { group_is_collective }
       end
 
-    private
+      private
 
       def group_is_collective
         errors.add :group_id, :not_collective unless group&.collective?
       end
     end
-
-    #############################################################################
-    # CONCERNING: Member.
-    #############################################################################
 
     concerning :MemberAssociation do
       included do

@@ -20,15 +20,7 @@
 #
 
 class Work < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
   include Imageable
-
-  #############################################################################
-  # CONCERNING: STI subclass contract.
-  #############################################################################
 
   concerning :Subclassable do
     included do
@@ -68,10 +60,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Title.
-  #############################################################################
-
   concerning :TitleAttribute do
     included do
       validates :title, presence: true
@@ -91,10 +79,6 @@ class Work < ApplicationRecord
       display_title(full: true)
     end
   end
-
-  #############################################################################
-  # CONCERNING: Aspects.
-  #############################################################################
 
   concerning :AspectsAssociation do
     included do
@@ -116,10 +100,6 @@ class Work < ApplicationRecord
       errors.add(:aspects, :invalid) if disallowed.any?
     end
   end
-
-  #############################################################################
-  # CONCERNING: Milestones.
-  #############################################################################
 
   concerning :MilestonesAssociation do
     included do
@@ -152,10 +132,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Attributions.
-  #############################################################################
-
   concerning :AttributionAssociations do
     included do
       has_many :attributions, inverse_of: :work, dependent: :destroy
@@ -169,10 +145,6 @@ class Work < ApplicationRecord
       attributions.map(&:creator_id).uniq
     end
   end
-
-  #############################################################################
-  # CONCERNING: Credits.
-  #############################################################################
 
   concerning :CreditAssociations do
     included do
@@ -207,10 +179,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Contributions.
-  #############################################################################
-
   concerning :ContributionAssociations do
     included do
       has_many :contributions, inverse_of: :work, dependent: :destroy
@@ -227,10 +195,6 @@ class Work < ApplicationRecord
       10.times { contributions.build }
     end
   end
-
-  #############################################################################
-  # CONCERNING: Source relationships.
-  #############################################################################
 
   concerning :SourceAssociations do
     included do
@@ -257,10 +221,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Target relationships.
-  #############################################################################
-
   concerning :TargetAssociations do
     included do
       has_many :target_relationships, class_name: "Work::Relationship",
@@ -286,10 +246,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
-
   concerning :PostAssociations do
     included do
       has_many :reviews, dependent: :nullify
@@ -310,10 +266,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Editing.
-  #############################################################################
-
   concerning :Editing do
     def available_relatives
       Work.where.not(id: id).grouped_by_medium
@@ -330,22 +282,6 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list, -> {}
-  scope :for_show, lambda {
-                     includes(
-                       :aspects, :milestones, :playlists, :reviews, :mixtapes,
-                       :credits, :makers, :contributions, :contributors
-                     )
-                   }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -353,6 +289,18 @@ class Work < ApplicationRecord
 
     def alpha_parts
       [display_makers, title, subtitle]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, lambda {
+        includes(
+          :aspects, :milestones, :playlists, :reviews, :mixtapes,
+          :credits, :makers, :contributions, :contributors
+        )
+      }
     end
   end
 end

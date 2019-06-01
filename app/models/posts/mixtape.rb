@@ -38,20 +38,12 @@
 #
 
 class Mixtape < Post
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
   concerning :ImageAttachment do
     included do
       delegate :hero_image,        to: :playlist
       delegate :additional_images, to: :playlist
     end
   end
-
-  #############################################################################
-  # CONCERNING: STI Subclass.
-  #############################################################################
 
   concerning :Subclassed do
     class_methods do
@@ -68,10 +60,6 @@ class Mixtape < Post
       plural ? "Mixtapes" : "Mixtape"
     end
   end
-
-  #############################################################################
-  # CONCERNING: Playlist.
-  #############################################################################
 
   concerning :PlaylistAssociation do
     included do
@@ -93,10 +81,6 @@ class Mixtape < Post
       [playlist&.title]
     end
   end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
 
   concerning :Alphabetization do
     included do

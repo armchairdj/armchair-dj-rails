@@ -25,10 +25,6 @@ class Work
   class Milestone < ApplicationRecord
     self.table_name = "work_milestones"
 
-    #############################################################################
-    # CONCERNING: Work.
-    #############################################################################
-
     concerning :WorkAssociation do
       included do
         belongs_to :work
@@ -40,10 +36,6 @@ class Work
       end
     end
 
-    #############################################################################
-    # CONCERNING: Posts.
-    #############################################################################
-
     concerning :PostAssociation do
       included do
         has_many :playlists, through: :work
@@ -51,10 +43,6 @@ class Work
         has_many :reviews,   through: :work
       end
     end
-
-    #############################################################################
-    # CONCERNING: Activity.
-    #############################################################################
 
     concerning :ActivityAttribute do
       included do
@@ -79,10 +67,6 @@ class Work
       end
     end
 
-    #############################################################################
-    # CONCERNING: Year.
-    #############################################################################
-
     concerning :YearAttribute do
       included do
         validates :year, presence: true, yearness: true
@@ -91,11 +75,11 @@ class Work
       end
     end
 
-    #############################################################################
-    # CONCERNING: Ginsu.
-    #############################################################################
-
-    scope :for_list, -> { sorted }
-    scope :for_show, -> { sorted.includes(:work) }
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:work) }
+      end
+    end
   end
 end

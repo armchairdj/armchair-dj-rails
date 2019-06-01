@@ -26,10 +26,6 @@ class Work
   class Relationship < ApplicationRecord
     self.table_name = "work_relationships"
 
-    #############################################################################
-    # CONCERNING: Source.
-    #############################################################################
-
     concerning :SourceAssociation do
       included do
         belongs_to :source, class_name: "Work", foreign_key: :source_id
@@ -50,10 +46,6 @@ class Work
       end
     end
 
-    #############################################################################
-    # CONCERNING: Target.
-    #############################################################################
-
     concerning :TargetAssociation do
       included do
         belongs_to :target, class_name: "Work", foreign_key: :target_id
@@ -61,10 +53,6 @@ class Work
         validates :target, presence: true
       end
     end
-
-    #############################################################################
-    # CONCERNING: Connection.
-    #############################################################################
 
     concerning :ConnectionAttribute do
       included do

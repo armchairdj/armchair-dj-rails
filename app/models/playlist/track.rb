@@ -21,10 +21,6 @@ class Playlist
   class Track < ApplicationRecord
     self.table_name = "playlist_tracks"
 
-    #############################################################################
-    # CONCERNING: Playlist.
-    #############################################################################
-
     include Listable
 
     concerning :PlaylistAssociation do
@@ -37,10 +33,6 @@ class Playlist
       end
     end
 
-    #############################################################################
-    # CONCERNING: Work.
-    #############################################################################
-
     concerning :WorkAssociation do
       included do
         belongs_to :work, inverse_of: :playlistings
@@ -49,11 +41,11 @@ class Playlist
       end
     end
 
-    #############################################################################
-    # CONCERNING: Ginsu.
-    #############################################################################
-
-    scope :for_list, -> { sorted }
-    scope :for_show, -> { sorted.includes(:playlist, :work) }
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:playlist, :work) }
+      end
+    end
   end
 end

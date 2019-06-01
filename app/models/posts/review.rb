@@ -38,20 +38,12 @@
 #
 
 class Review < Post
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
   concerning :ImageAttachment do
     included do
       delegate :hero_image,        to: :work
       delegate :additional_images, to: :work
     end
   end
-
-  #############################################################################
-  # CONCERNING: STI Subclass.
-  #############################################################################
 
   concerning :Subclassed do
     class_methods do
@@ -70,10 +62,6 @@ class Review < Post
       plural ? base.pluralize : base
     end
   end
-
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
 
   concerning :WorkAssociation do
     included do
@@ -94,10 +82,6 @@ class Review < Post
       work&.sluggable_parts || []
     end
   end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
 
   concerning :Alphabetization do
     included do

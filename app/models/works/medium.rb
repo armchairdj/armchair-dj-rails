@@ -3,10 +3,6 @@
 class Medium < Work
   self.abstract_class = true
 
-  #############################################################################
-  # CONCERNING: STI Subclass.
-  #############################################################################
-
   concerning :Subclassable do
     class_methods do
       def model_name
@@ -31,10 +27,6 @@ class Medium < Work
       [display_medium.pluralize, display_makers, title, subtitle]
     end
   end
-
-  #############################################################################
-  # CONCERNING: Roles.
-  #############################################################################
 
   concerning :RoleAssociation do
     def available_roles
