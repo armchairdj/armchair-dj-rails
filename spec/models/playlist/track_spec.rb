@@ -69,12 +69,4 @@ RSpec.describe Playlist::Track do
     it { is_expected.to validate_presence_of(:playlist) }
     it { is_expected.to validate_presence_of(:work) }
   end
-
-  describe "hooks" do
-    # Nothing so far.
-  end
-
-  describe "instance" do
-    # Nothing so far.
-  end
 end

@@ -56,10 +56,6 @@ RSpec.describe Credit do
 
   specify { expect(described_class.superclass).to eq(Attribution) }
 
-  describe "scope-related" do
-    # Nothing so far.
-  end
-
   describe "validations" do
     subject { build_minimal_instance }
 
