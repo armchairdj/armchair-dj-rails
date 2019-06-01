@@ -95,29 +95,3 @@
   }
 }
 
-@mixin flex-navbar($separator: "\2194", $font-size: 1rem, $font-size-big: false, $breakpoint: medium, $separator-color: $standard-text-color) {
-  @include flexbox();
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  font-size: 0;
-
-  li,
-  li+li:before {
-    font-size: $font-size;
-  }
-
-  li+li:before {
-    color: $separator-color;
-    content: $separator;
-//    display: inline-block;
-  }
-
-  @include breakpoint($breakpoint) {
-    @if $font-size-big != false {
-      li,
-      li+li:before {
-        font-size: $font-size-big;
-      }
-    }
-  }
-}

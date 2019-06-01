@@ -1,9 +1,8 @@
 <%= content_tag(wrapper, class: "admin-nav") do %>
   <%= content_tag(:div, class: "constrain-wide") do %>
-    <%= link_to(site_logo, posts_path, title: "public site", class: "logo") %>
-
     <%= content_tag(:nav, class: "links") do %>
-      <%= content_tag(:ul, class: "arrowed") do %>
+      <%= content_tag(:ul) do %>
+        <%= content_tag(:li, link_to("Home",      posts_path    )) %>
         <%= content_tag(:li, link_to("Users",     admin_users_path    )) if should_link_to_admin_users? %>
         <%= content_tag(:li, link_to("Articles",  admin_articles_path )) %>
         <%= content_tag(:li, link_to("Reviews",   admin_reviews_path  )) %>
@@ -15,7 +14,6 @@
         <%= content_tag(:li, link_to("Aspects",   admin_aspects_path  )) %>
         <%= content_tag(:li, link_to("Tags",      admin_tags_path     )) %>
         <%= content_tag(:li, link_to("Styles",    style_guides_path   )) %>
-        <%= content_tag(:li, link_to("Log Out",   log_out_path        )) %>
       <% end %>
     <% end %>
   <% end %>
