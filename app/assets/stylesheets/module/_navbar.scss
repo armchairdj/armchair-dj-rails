@@ -3,18 +3,19 @@ nav#navbar {
   background-color: $body-bg-color;
 
   ul {
-    @include chunkable-list($separator: ":", $font-size: 1rem, $breakpoint: small, $font-size-big: 1.2rem, $spread: .5em, $separator-color: $dark-grey);
-    text-align: center;
     margin: 0 0 3rem;
     padding: .5rem 0;
     background-color: $module-bg-color;
     border-radius: $standard-border-radius;
     border: 1px solid $darkest-grey;
+    @include flexbox();
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 
     li {
       text-transform: uppercase;
       line-height: 2;
-      margin: 0;
+      font-size: .9rem;
 
       a {
         @include underline-never();
@@ -27,5 +28,13 @@ nav#navbar {
         }
       }
     }
+
+    @include breakpoint(small) {
+      li {
+        font-size: 1.1rem;
+      }
+    }
   }
 }
+
+
