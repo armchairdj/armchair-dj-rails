@@ -118,7 +118,7 @@ concern :Errorable do
         loggable_verb,
         loggable_url,
         loggable_user,
-        exception.try(:message)
+        exception&.message
       ].compact.join(" :: ")
     end
 
@@ -134,19 +134,19 @@ concern :Errorable do
     end
 
     def loggable_verb
-      request.try(:request_method) || "unknown verb"
+      request&.request_method || "unknown verb"
     end
 
     def loggable_url
-      request.try(:url) || "unknown URL"
+      request&.url || "unknown URL"
     end
 
     def loggable_user
       return "guest user" unless user_signed_in?
 
-      id    = current_user.try(:id)    || "unknown"
-      role  = current_user.try(:role)  || "unknown"
-      email = current_user.try(:email) || "unknown"
+      id    = current_user&.id    || "unknown"
+      role  = current_user&.role  || "unknown"
+      email = current_user&.email || "unknown"
 
       "{ id: #{id}, email: #{email}, role: #{role} }"
     end

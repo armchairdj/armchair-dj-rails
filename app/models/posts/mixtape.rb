@@ -90,7 +90,7 @@ class Mixtape < Post
     end
 
     def sluggable_parts
-      [playlist.try(:title)]
+      [playlist&.title]
     end
   end
 

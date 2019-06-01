@@ -43,7 +43,7 @@ class Creator
     private
 
       def real_name_is_primary
-        errors.add :real_name_id, :not_primary unless real_name.try(:primary?)
+        errors.add :real_name_id, :not_primary unless real_name&.primary?
       end
     end
 
@@ -65,7 +65,7 @@ class Creator
       private # rubocop:disable Lint/UselessAccessModifier
 
       def pseudonym_is_secondary
-        errors.add :pseudonym_id, :not_secondary unless pseudonym.try(:secondary?)
+        errors.add :pseudonym_id, :not_secondary unless pseudonym&.secondary?
       end
     end
   end

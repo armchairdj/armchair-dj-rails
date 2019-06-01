@@ -18,7 +18,7 @@ concern :Authorable do
   #############################################################################
 
   def display_author
-    author.try(:username)
+    author&.username
   end
 
 private

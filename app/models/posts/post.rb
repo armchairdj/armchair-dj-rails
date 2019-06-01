@@ -38,17 +38,9 @@
 #
 
 class Post < ApplicationRecord
-  #############################################################################
-  # CONCERNS.
-  #############################################################################
-
   include Authorable
   include Linkable
   include Sluggable
-
-  #############################################################################
-  # CONCERNING: STI subclass contract.
-  #############################################################################
 
   concerning :Subclassable do
     included do
@@ -66,19 +58,11 @@ class Post < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Tags.
-  #############################################################################
-
   concerning :TagAssociation do
     included do
       has_and_belongs_to_many :tags, -> { order("tags.name") }
     end
   end
-
-  #############################################################################
-  # CONCERNING: State Machine.
-  #############################################################################
 
   concerning :StateMachine do
     included do
@@ -138,10 +122,6 @@ class Post < ApplicationRecord
       self.publish_on = nil
     end
   end
-
-  #############################################################################
-  # CONCERNING: Triggering status changes with virtual attributes.
-  #############################################################################
 
   concerning :Transitioning do
     included do
@@ -221,10 +201,6 @@ class Post < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Publishing.
-  #############################################################################
-
   concerning :Publishing do
     included do
       scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
@@ -238,10 +214,6 @@ class Post < ApplicationRecord
       draft? || scheduled?
     end
   end
-
-  #############################################################################
-  # CONCERNING: Publishing of scheduled posts.
-  #############################################################################
 
   concerning :Scheduling do
     included do
@@ -268,10 +240,6 @@ class Post < ApplicationRecord
       end
     end
   end
-
-  #############################################################################
-  # CONCERNING: Validation.
-  #############################################################################
 
   concerning :ValidatedAttributes do
     included do
@@ -310,8 +278,8 @@ class Post < ApplicationRecord
   concerning :Editing do
     class_methods do
       def for_cms_user(user)
-        return all                       if user.try(:can_edit?)
-        return where(author_id: user.id) if user.try(:can_write?)
+        return all                       if user&.can_edit?
+        return where(author_id: user.id) if user&.can_write?
 
         none
       end

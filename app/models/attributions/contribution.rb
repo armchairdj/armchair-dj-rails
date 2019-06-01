@@ -39,12 +39,14 @@ class Contribution < Attribution
 
       validates :role_id, presence: true
 
-      validates :role_id, inclusion: { allow_blank: true, in:
-        proc { |record| record.work.try(:available_role_ids) || [] } }
+      validates :role_id, inclusion: {
+        allow_blank: true,
+        in:          proc { |record| record.work&.available_role_ids || [] }
+      }
     end
 
     def role_name
-      role.try(:name)
+      role&.name
     end
   end
 

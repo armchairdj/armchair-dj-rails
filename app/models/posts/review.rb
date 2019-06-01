@@ -91,7 +91,7 @@ class Review < Post
     end
 
     def sluggable_parts
-      work.try(:sluggable_parts) || []
+      work&.sluggable_parts || []
     end
   end
 

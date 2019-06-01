@@ -43,7 +43,7 @@ class Creator
     private
 
       def group_is_collective
-        errors.add :group_id, :not_collective unless group.try(:collective?)
+        errors.add :group_id, :not_collective unless group&.collective?
       end
     end
 
@@ -63,7 +63,7 @@ class Creator
       private # rubocop:disable Lint/UselessAccessModifier
 
       def member_is_individual
-        errors.add :member_id, :not_individual unless member.try(:individual?)
+        errors.add :member_id, :not_individual unless member&.individual?
       end
     end
   end
