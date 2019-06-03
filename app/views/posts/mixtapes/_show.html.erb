@@ -5,7 +5,7 @@
 <%= content_for(:post_sidebar) do %>
   <%= content_tag(:aside, class: "post-extra") do %>
     <%= content_tag(:dl, class: "inline") do %>
-      <%= render "shared/playback/tags", tags: @review.tags %>
+      <%= render "shared/playback/tags", tags: @mixtape.tags %>
     <% end %>
   <% end %>
 
