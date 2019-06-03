@@ -1,4 +1,4 @@
-import Sortable from "sortablejs";
+var Sortable = require("sortablejs");
 
 import BaseController from "../controllers/base_controller";
 

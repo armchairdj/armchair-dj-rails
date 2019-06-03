@@ -22,7 +22,11 @@
 
         <%= content_for_unless_empty :pre_main %>
 
-        <%= yield %>
+        <% if content_for?(:main_content) %>
+          <%= content_for(:main_content) %>
+        <% else %>
+          <%= yield %>
+        <% end %>
 
         <%= content_for_unless_empty :article_main %>
       <% end %>

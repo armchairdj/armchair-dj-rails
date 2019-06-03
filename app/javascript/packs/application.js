@@ -4,13 +4,13 @@ import modernizr from "modernizr";
 
 /* Underscore. */
 
-import _ from "underscore";
+const _ = require("underscore");
 
 window._ = _;
 
 /* jQuery. */
 
-import $ from "jquery";
+const $ = require("jquery");
 
 window.$ = window.jQuery = $;
 
@@ -21,7 +21,7 @@ $(document).on("turbolinks:load", function () {
     headers:  { "X-CSRF-Token": $("meta[name='csrf-token']").attr("content") },
     dataType: "json"
   });
-})
+});
 
 /* Selectize. */
 
@@ -31,9 +31,9 @@ window.Selectize = Selectize;
 
 /* Turbolinks */
 
-const Turbolinks = require("turbolinks");
-
-Turbolinks.start();
+// const Turbolinks = require("turbolinks");
+//
+// Turbolinks.start();
 
 /* UJS */
 
