@@ -49,7 +49,7 @@ module Posts
     end
 
     def determine_layout
-      return "post" if action_name == :show
+      return "post" if action_name == "show"
 
       "public"
     end

@@ -1,15 +1,13 @@
-<%= content_for(:post_header) do %>
+<% content_for(:post_header) do %>
   <%= content_tag(:h1, @mixtape.playlist.title) %>
 <% end %>
 
-<%= content_for(:post_sidebar) do %>
+<% content_for(:post_sidebar) do %>
   <%= content_tag(:aside, class: "post-extra") do %>
     <%= content_tag(:dl, class: "inline") do %>
       <%= render "shared/playback/tags", tags: @mixtape.tags %>
     <% end %>
   <% end %>
-
-  <%= render "shared/playback/tags", tags: @mixtape.tags %>
 
   <%= render "shared/playback/links", links: @mixtape.links %>
 <% end %>

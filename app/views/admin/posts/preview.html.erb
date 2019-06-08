@@ -19,6 +19,6 @@
 <% end %>
 
 <%= adj_module do %>
-  <%= content_for :public_header %>
-  <%= content_for :post_preview %>
+  <%= content_for_unless_empty :public_header %>
+  <%= content_for_unless_empty :post_preview %>
 <% end %>

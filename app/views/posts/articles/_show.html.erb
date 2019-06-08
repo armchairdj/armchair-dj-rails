@@ -3,7 +3,9 @@
 <% end %>
 
 <%= content_for(:post_sidebar) do %>
-  <%= render "shared/playback/tags", tags: @article.tags %>
+  <%= content_tag(:dl, class: "inline") do %>
+    <%= render "shared/playback/tags", tags: @article.tags %>
+  <% end %>
 
   <%= render "shared/playback/links", links: @article.links %>
 <% end %>
