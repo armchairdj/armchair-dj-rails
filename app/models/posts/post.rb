@@ -40,13 +40,19 @@
 class Post < ApplicationRecord
   include Authorable
   include Linkable
-  include Sluggable
 
-  concerning :Subclassable do
-    included do
-      validates :type, presence: true
+  concerning :Editing do
+    class_methods do
+      def for_cms_user(user)
+        return all                       if user&.can_edit?
+        return where(author_id: user.id) if user&.can_write?
+
+        none
+      end
     end
+  end
 
+  concerning :GinsuIntegration do
     class_methods do
       def for_list
         includes(:author).references(:author)
@@ -58,9 +64,69 @@ class Post < ApplicationRecord
     end
   end
 
-  concerning :TagAssociation do
+  concerning :Publishing do
     included do
-      has_and_belongs_to_many :tags, -> { order("tags.name") }
+      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
+
+      scope :for_public, -> { published.reverse_cron }
+
+      scope :unpublished, -> { where.not(status: :published) }
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+  end
+
+  concerning :Rendering do
+    def formatted_body
+      return unless body.present?
+
+      renderer.render(body).html_safe
+    end
+
+    private
+
+    def renderer
+      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
+    end
+  end
+
+  concerning :Scheduling do
+    included do
+      scope :scheduled_and_due, lambda {
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
+      }
+    end
+
+    class_methods do
+      def publish_scheduled
+        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
+
+        memo[:all].each do |item|
+          item.unschedule!
+
+          if item.publish!
+            memo[:success] << item
+          else
+            memo[:failure] << item
+          end
+        end
+
+        memo
+      end
+    end
+  end
+
+  concerning :SlugAttribute do
+    included do
+      include Sluggable
+    end
+  end
+
+  concerning :Subclassing do
+    included do
+      validates :type, presence: true
     end
   end
 
@@ -108,7 +174,7 @@ class Post < ApplicationRecord
       end
     end
 
-    private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def set_published_at
       self.published_at = Time.zone.now
@@ -120,6 +186,12 @@ class Post < ApplicationRecord
 
     def clear_publish_on
       self.publish_on = nil
+    end
+  end
+
+  concerning :TagAssociation do
+    included do
+      has_and_belongs_to_many :tags, -> { order("tags.name") }
     end
   end
 
@@ -201,46 +273,6 @@ class Post < ApplicationRecord
     end
   end
 
-  concerning :Publishing do
-    included do
-      scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
-
-      scope :for_public, -> { published.reverse_cron }
-
-      scope :unpublished, -> { where.not(status: :published) }
-    end
-
-    def unpublished?
-      draft? || scheduled?
-    end
-  end
-
-  concerning :Scheduling do
-    included do
-      scope :scheduled_and_due, lambda {
-        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
-      }
-    end
-
-    class_methods do
-      def publish_scheduled
-        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
-
-        memo[:all].each do |item|
-          item.unschedule!
-
-          if item.publish!
-            memo[:success] << item
-          else
-            memo[:failure] << item
-          end
-        end
-
-        memo
-      end
-    end
-  end
-
   concerning :ValidatedAttributes do
     included do
       validates :summary, length: { in: 40..320 }, allow_blank: true
@@ -268,31 +300,6 @@ class Post < ApplicationRecord
 
     def requires_published_at?
       published? || publishing?
-    end
-  end
-
-  concerning :Editing do
-    class_methods do
-      def for_cms_user(user)
-        return all                       if user&.can_edit?
-        return where(author_id: user.id) if user&.can_write?
-
-        none
-      end
-    end
-  end
-
-  concerning :Rendering do
-    def formatted_body
-      return unless body.present?
-
-      renderer.render(body).html_safe
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def renderer
-      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
     end
   end
 end

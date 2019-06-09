@@ -20,7 +20,8 @@
 class Link < ApplicationRecord
   belongs_to :linkable, polymorphic: true
 
-  validates :url,         urlness: true
-  validates :url,         presence: true
+  validates :url, urlness: true
+  validates :url, presence: true
+
   validates :description, presence: true
 end

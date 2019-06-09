@@ -25,25 +25,6 @@ class Work
   class Milestone < ApplicationRecord
     self.table_name = "work_milestones"
 
-    concerning :WorkAssociation do
-      included do
-        belongs_to :work
-
-        has_many :makers,       -> { distinct }, through: :work
-        has_many :contributors, -> { distinct }, through: :work
-
-        validates :work, presence: true
-      end
-    end
-
-    concerning :PostAssociation do
-      included do
-        has_many :playlists, through: :work
-        has_many :mixtapes,  through: :work
-        has_many :reviews,   through: :work
-      end
-    end
-
     concerning :ActivityAttribute do
       included do
         validates :activity, presence: true
@@ -67,18 +48,37 @@ class Work
       end
     end
 
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:work) }
+      end
+    end
+
+    concerning :PostAssociation do
+      included do
+        has_many :playlists, through: :work
+        has_many :mixtapes,  through: :work
+        has_many :reviews,   through: :work
+      end
+    end
+
+    concerning :WorkAssociation do
+      included do
+        belongs_to :work
+
+        has_many :makers,       -> { distinct }, through: :work
+        has_many :contributors, -> { distinct }, through: :work
+
+        validates :work, presence: true
+      end
+    end
+
     concerning :YearAttribute do
       included do
         validates :year, presence: true, yearness: true
 
         scope :sorted, -> { order(:year) }
-      end
-    end
-
-    concerning :GinsuIntegration do
-      included do
-        scope :for_list, -> { sorted }
-        scope :for_show, -> { sorted.includes(:work) }
       end
     end
   end

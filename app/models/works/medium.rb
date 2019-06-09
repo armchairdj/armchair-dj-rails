@@ -3,7 +3,17 @@
 class Medium < Work
   self.abstract_class = true
 
-  concerning :Subclassable do
+  concerning :RoleAssociation do
+    def available_roles
+      Role.for_medium(medium).alpha
+    end
+
+    def available_role_ids
+      available_roles.ids
+    end
+  end
+
+  concerning :Subclassing do
     class_methods do
       def model_name
         Work.model_name
@@ -25,16 +35,6 @@ class Medium < Work
 
     def sluggable_parts
       [display_medium.pluralize, display_makers, title, subtitle]
-    end
-  end
-
-  concerning :RoleAssociation do
-    def available_roles
-      Role.for_medium(medium).alpha
-    end
-
-    def available_role_ids
-      available_roles.ids
     end
   end
 end

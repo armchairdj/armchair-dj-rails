@@ -24,12 +24,7 @@ class Playlist < ApplicationRecord
   include Imageable
   include Authorable
 
-  concerning :TitleAttribute do
-    included do
-      validates :title, presence: true
-    end
-  end
-
+  # This must go before the #PostsAssociation block.
   concerning :TrackAssociations do
     included do
       has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
@@ -48,6 +43,16 @@ class Playlist < ApplicationRecord
     end
   end
 
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [title]
+    end
+  end
+
   concerning :CreatorAssociations do
     included do
       has_many :makers,       -> { distinct }, through: :works
@@ -60,6 +65,13 @@ class Playlist < ApplicationRecord
 
     def creator_ids
       works.map(&:creator_ids).flatten.uniq
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> { includes(:author).references(:author) }
+      scope :for_show, -> { includes(:author, :tracks, :works) }
     end
   end
 
@@ -79,20 +91,9 @@ class Playlist < ApplicationRecord
     end
   end
 
-  concerning :Alphabetization do
+  concerning :TitleAttribute do
     included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [title]
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> { includes(:author).references(:author) }
-      scope :for_show, -> { includes(:author, :tracks, :works) }
+      validates :title, presence: true
     end
   end
 end

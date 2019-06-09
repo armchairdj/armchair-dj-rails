@@ -26,6 +26,27 @@ class Work
   class Relationship < ApplicationRecord
     self.table_name = "work_relationships"
 
+    concerning :ConnectionAttribute do
+      included do
+        validates :connection, presence: true
+
+        enum connection: {
+          member_of:      100,
+
+          version_of:     200,
+          performance_of: 201,
+
+          remake_of:      300,
+          sequel_to:      301,
+          spinoff_of:     302,
+
+          borrows_from:   400
+        }
+
+        improve_enum :connection
+      end
+    end
+
     concerning :SourceAssociation do
       included do
         belongs_to :source, class_name: "Work", foreign_key: :source_id
@@ -51,27 +72,6 @@ class Work
         belongs_to :target, class_name: "Work", foreign_key: :target_id
 
         validates :target, presence: true
-      end
-    end
-
-    concerning :ConnectionAttribute do
-      included do
-        validates :connection, presence: true
-
-        enum connection: {
-          member_of:      100,
-
-          version_of:     200,
-          performance_of: 201,
-
-          remake_of:      300,
-          sequel_to:      301,
-          spinoff_of:     302,
-
-          borrows_from:   400
-        }
-
-        improve_enum :connection
       end
     end
   end

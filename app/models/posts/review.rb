@@ -38,14 +38,15 @@
 #
 
 class Review < Post
-  concerning :ImageAttachment do
+  concerning :Alphabetization do
     included do
-      delegate :hero_image,        to: :work
-      delegate :additional_images, to: :work
+      include Alphabetizable
+
+      delegate :alpha_parts, to: :work, allow_nil: true
     end
   end
 
-  concerning :Subclassed do
+  concerning :GinsuIntegration do
     class_methods do
       def for_list
         super.includes(:work).references(:work)
@@ -55,7 +56,24 @@ class Review < Post
         super.includes(:work, :makers, :contributions, :aspects, :milestones)
       end
     end
+  end
 
+  concerning :ImageAttachment do
+    included do
+      with_options to: :work do
+        delegate :hero_image
+        delegate :additional_images
+      end
+    end
+  end
+
+  concerning :SlugAttribute do
+    def sluggable_parts
+      work&.sluggable_parts || []
+    end
+  end
+
+  concerning :Superclass do
     def display_type(plural: false)
       base = [display_medium, "Review"].compact.join(" ")
 
@@ -76,18 +94,6 @@ class Review < Post
       has_many :milestones,    through: :work
 
       delegate :display_medium, to: :work, allow_nil: true
-    end
-
-    def sluggable_parts
-      work&.sluggable_parts || []
-    end
-  end
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-
-      delegate :alpha_parts, to: :work, allow_nil: true
     end
   end
 end

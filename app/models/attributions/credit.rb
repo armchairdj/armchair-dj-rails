@@ -31,6 +31,21 @@
 class Credit < Attribution
   include Listable
 
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :credits
+
+      validates :creator_id, uniqueness: { scope: [:work_id] }
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list,  -> {}
+      scope :for_show,  -> { includes(:work, :creator) }
+    end
+  end
+
   concerning :RoleAssociation do
     included do
       # Contributions belong_to role; Credits don't, really.
@@ -49,21 +64,6 @@ class Credit < Attribution
       belongs_to :work, inverse_of: :credits
 
       acts_as_listable(:work)
-    end
-  end
-
-  concerning :CreatorAssociation do
-    included do
-      belongs_to :creator, inverse_of: :credits
-
-      validates :creator_id, uniqueness: { scope: [:work_id] }
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list,  -> {}
-      scope :for_show,  -> { includes(:work, :creator) }
     end
   end
 end

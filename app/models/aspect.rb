@@ -18,6 +18,34 @@
 #
 
 class Aspect < ApplicationRecord
+  # This must go before the #PostsAssociation block.
+  concerning :WorksAssociation do
+    included do
+      has_and_belongs_to_many :works, -> { distinct }
+
+      has_many :playlists,    -> { distinct }, through: :works
+      has_many :makers,       -> { distinct }, through: :works
+      has_many :contributors, -> { distinct }, through: :works
+    end
+  end
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [human_facet, name]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
+    end
+  end
+
   concerning :FacetAttribute do
     included do
       scope :for_facet, ->(*facets) { where(facet: facets.flatten.compact) }
@@ -68,16 +96,6 @@ class Aspect < ApplicationRecord
     end
   end
 
-  concerning :WorksAssociation do
-    included do
-      has_and_belongs_to_many :works, -> { distinct }
-
-      has_many :playlists,    -> { distinct }, through: :works
-      has_many :makers,       -> { distinct }, through: :works
-      has_many :contributors, -> { distinct }, through: :works
-    end
-  end
-
   concerning :PostsAssociation do
     included do
       has_many :mixtapes, through: :works
@@ -90,23 +108,6 @@ class Aspect < ApplicationRecord
 
     def post_ids
       reviews.ids + mixtapes.ids
-    end
-  end
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [human_facet, name]
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> {}
-      scope :for_show, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
     end
   end
 end

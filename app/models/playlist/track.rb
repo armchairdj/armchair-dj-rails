@@ -23,6 +23,13 @@ class Playlist
 
     include Listable
 
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:playlist, :work) }
+      end
+    end
+
     concerning :PlaylistAssociation do
       included do
         belongs_to :playlist, inverse_of: :tracks
@@ -38,13 +45,6 @@ class Playlist
         belongs_to :work, inverse_of: :playlistings
 
         validates :work, presence: true
-      end
-    end
-
-    concerning :GinsuIntegration do
-      included do
-        scope :for_list, -> { sorted }
-        scope :for_show, -> { sorted.includes(:playlist, :work) }
       end
     end
   end

@@ -29,6 +29,21 @@
 #
 
 class Contribution < Attribution
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :contributions
+
+      validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list,  -> {}
+      scope :for_show,  -> { includes(:work, :creator, :role) }
+    end
+  end
+
   concerning :RoleAssociation do
     included do
       belongs_to :role
@@ -49,21 +64,6 @@ class Contribution < Attribution
   concerning :WorkAssociation do
     included do
       belongs_to :work, inverse_of: :contributions
-    end
-  end
-
-  concerning :CreatorAssociation do
-    included do
-      belongs_to :creator, inverse_of: :contributions
-
-      validates :creator_id, uniqueness: { scope: [:work_id, :role_id] }
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list,  -> {}
-      scope :for_show,  -> { includes(:work, :creator, :role) }
     end
   end
 end

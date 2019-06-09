@@ -25,24 +25,6 @@ class Creator
   class Identity < ApplicationRecord
     self.table_name = "creator_identities"
 
-    concerning :RealNameAssociation do
-      included do
-        belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
-
-        validates :real_name, presence: true
-
-        validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
-
-        validate { real_name_is_primary }
-      end
-
-      private
-
-      def real_name_is_primary
-        errors.add :real_name_id, :not_primary unless real_name&.primary?
-      end
-    end
-
     concerning :PseudonymAssociation do
       included do
         belongs_to :pseudonym, class_name: "Creator", foreign_key: :pseudonym_id
@@ -54,10 +36,28 @@ class Creator
         validate { pseudonym_is_secondary }
       end
 
-      private # rubocop:disable Lint/UselessAccessModifier
+      private
 
       def pseudonym_is_secondary
         errors.add :pseudonym_id, :not_secondary unless pseudonym&.secondary?
+      end
+    end
+
+    concerning :RealNameAssociation do
+      included do
+        belongs_to :real_name, class_name: "Creator", foreign_key: :real_name_id
+
+        validates :real_name, presence: true
+
+        validates :real_name_id, uniqueness: { scope: [:pseudonym_id] }
+
+        validate { real_name_is_primary }
+      end
+
+      private # rubocop:disable Lint/UselessAccessModifier
+
+      def real_name_is_primary
+        errors.add :real_name_id, :not_primary unless real_name&.primary?
       end
     end
   end
