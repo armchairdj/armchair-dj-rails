@@ -2,7 +2,7 @@
   <%= content_tag(:h1, @article.title) %>
 <% end %>
 
-<%= content_for(:post_sidebar) do %>
+<%= content_for(:post_context) do %>
   <%= content_tag(:dl, class: "inline") do %>
     <%= render "shared/playback/tags", tags: @article.tags %>
   <% end %>

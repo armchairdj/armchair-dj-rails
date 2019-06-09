@@ -1,12 +1,10 @@
-<%= content_for(:public_header) do %>
-  <%= content_tag(:header, class: "post-header") do %>
-    <%= content_for(:post_header) %>
-  <% end %>
-<% end %>
-
 <%= content_for(:main_content) do %>
   <%= content_tag(:div, class: "post-wrapper") do %>
     <%= content_tag(:section, class: "post-content") do %>
+      <%= content_tag(:header, class: "post-header") do %>
+        <%= content_for(:post_header) %>
+
+      <% end %>
       <%= post_body @post %>
 
       <%= content_tag(:footer, class: "post-byline") do %>
@@ -14,8 +12,12 @@
       <% end %>
     <% end %>
 
-    <%= content_tag(:section, class: "post-extras") do %>
-      <%= content_for(:post_sidebar) %>
+    <%= content_tag(:section, class: "post-context") do %>
+      <%= content_for(:post_context) %>
+    <% end %>
+
+    <%= content_tag(:section, class: "post-continue-reading") do %>
+      RELATED POSTS
     <% end %>
   <% end %>
 <% end %>

@@ -2,8 +2,8 @@
   <%= content_tag(:h1, @mixtape.playlist.title) %>
 <% end %>
 
-<% content_for(:post_sidebar) do %>
-  <%= content_tag(:aside, class: "post-extra") do %>
+<% content_for(:post_context) do %>
+  <%= content_tag(:aside, class: "post-context-section") do %>
     <%= content_tag(:dl, class: "inline") do %>
       <%= render "shared/playback/tags", tags: @mixtape.tags %>
     <% end %>

@@ -60,20 +60,24 @@ footer.post-byline {
 @include breakpoint(large) {
   .post-wrapper {
     display: grid;
-    grid-template-areas: "content . extras";
-    grid-template-columns: 3fr 50px 2fr;
+    grid-template-areas: "meta . content . more";
+    grid-template-columns: 4fr 1fr 6fr 1fr 3fr;
     grid-template-rows: auto;
+
+    .post-context {
+      grid-area: meta;
+    }
 
     .post-content {
       grid-area: content;
     }
 
-    .post-extras {
-      grid-area: extras;
+    .post-continue-reading {
+      grid-area: more;
     }
   }
 }
 
-aside.post-extra {
+aside.post-context-section {
   @include bottom-margin();
 }
