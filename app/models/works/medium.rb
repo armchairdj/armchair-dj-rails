@@ -13,6 +13,12 @@ class Medium < Work
     end
   end
 
+  concerning :SlugAttribute do
+    def sluggable_parts
+      [display_medium.pluralize, display_makers, title, subtitle]
+    end
+  end
+
   concerning :Subclassing do
     class_methods do
       def model_name
@@ -31,10 +37,6 @@ class Medium < Work
     included do
       delegate :true_model_name, to: :class
       delegate :display_medium,  to: :class
-    end
-
-    def sluggable_parts
-      [display_medium.pluralize, display_makers, title, subtitle]
     end
   end
 end

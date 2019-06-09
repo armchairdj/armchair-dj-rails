@@ -20,8 +20,6 @@
 #
 
 class Work < ApplicationRecord
-  include Imageable
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -40,7 +38,13 @@ class Work < ApplicationRecord
     end
 
     def display_aspects
-      aspects.group_by(&:human_key).to_a
+      candidates = aspects.group_by(&:key).symbolize_keys
+
+      self.class.available_aspects.each.with_object({}) do |available_key, memo|
+        next unless (items = candidates[available_key])
+
+        memo[items.first.human_key] = items
+      end.to_a
     end
 
     private
@@ -58,6 +62,7 @@ class Work < ApplicationRecord
       has_many :attributions, inverse_of: :work, dependent: :destroy
     end
 
+    # TODO: Make this an association
     def creators
       Creator.where(id: creator_ids)
     end
@@ -142,6 +147,12 @@ class Work < ApplicationRecord
           :credits, :makers, :contributions, :contributors
         )
       }
+    end
+  end
+
+  concerning :ImageAttachment do
+    included do
+      include Imageable
     end
   end
 

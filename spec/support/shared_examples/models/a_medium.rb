@@ -3,8 +3,22 @@
 require "rails_helper"
 
 RSpec.shared_examples "a_medium" do
-  describe "custom validation" do
-    describe "#only_available_aspects" do
+  describe ":AspectsAssociation" do
+    describe "#available_aspects" do
+      subject { described_class.new.available_aspects }
+
+      it { is_expected.to be_a_kind_of(Array) }
+
+      described_class.new.available_aspects.each do |key|
+        describe "available key #{key}" do
+          subject { Aspect.keys.keys }
+
+          it { is_expected.to include(key.to_s) }
+        end
+      end
+    end
+
+    describe "validates #only_available_aspects" do
       subject { build_minimal_instance }
 
       let!(:all_keys) { Aspect.keys.keys.map(&:to_sym) }
@@ -35,21 +49,7 @@ RSpec.shared_examples "a_medium" do
     end
   end
 
-  describe "#available_aspects" do
-    subject { described_class.new.available_aspects }
-
-    it { is_expected.to be_a_kind_of(Array) }
-
-    described_class.new.available_aspects.each do |key|
-      describe "available key #{key}" do
-        subject { Aspect.keys.keys }
-
-        it { is_expected.to include(key.to_s) }
-      end
-    end
-  end
-
-  describe "role methods" do
+  describe ":RoleAssociation" do
     let!(:instance) { build_minimal_instance }
     let!(:other_media) { Work.valid_media.reject { |x| x == instance.medium } }
     let!(:good_role_z) { create(:minimal_role, medium: instance.medium, name: "Z") }
@@ -66,6 +66,18 @@ RSpec.shared_examples "a_medium" do
       subject { instance.available_role_ids }
 
       it { is_expected.to eq([good_role_a.id, good_role_z.id]) }
+    end
+  end
+
+  describe ":SlugAttribute" do
+    describe "#sluggable_parts" do
+      subject(:sluggable_parts) { instance.sluggable_parts }
+
+      let(:instance) do
+        create_minimal_instance(title: "Don't Give Up", subtitle: "Single Edit", maker_names: ["Kate Bush", "Peter Gabriel"])
+      end
+
+      it { is_expected.to eq([instance.display_medium.pluralize, "Kate Bush & Peter Gabriel", "Don't Give Up", "Single Edit"]) }
     end
   end
 end
