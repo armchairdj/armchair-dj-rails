@@ -25,7 +25,7 @@ RSpec.describe Book do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:publisher, :narrative_genre] }
+      let(:expected) { [:narrative_genre, :publisher] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

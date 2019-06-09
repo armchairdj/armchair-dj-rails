@@ -20,5 +20,5 @@
 #
 
 class Song < Medium
-  self.available_aspects = [:song_type, :musical_genre, :musical_mood, :music_label]
+  self.available_aspects = [:song_type, :music_label, :musical_genre, :musical_mood]
 end

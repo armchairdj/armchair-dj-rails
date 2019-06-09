@@ -25,7 +25,7 @@ RSpec.describe VideoGame do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:tech_platform, :game_studio, :game_mechanic] }
+      let(:expected) { [:game_mechanic, :tech_platform, :game_studio] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

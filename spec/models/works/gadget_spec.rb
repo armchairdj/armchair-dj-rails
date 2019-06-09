@@ -25,7 +25,7 @@ RSpec.describe Gadget do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:tech_company, :tech_platform, :device_type] }
+      let(:expected) { [:tech_platform, :device_type, :tech_company] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

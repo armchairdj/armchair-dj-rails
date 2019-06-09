@@ -20,5 +20,5 @@
 #
 
 class Gadget < Medium
-  self.available_aspects = [:tech_company, :tech_platform, :device_type]
+  self.available_aspects = [:tech_platform, :device_type, :tech_company]
 end

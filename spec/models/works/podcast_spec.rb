@@ -25,7 +25,7 @@ RSpec.describe Podcast do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:audio_show_format, :narrative_genre] }
+      let(:expected) { [:audio_show_format, :narrative_genre, :podcast_network] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

@@ -25,7 +25,7 @@ RSpec.describe Song do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:song_type, :musical_genre, :musical_mood, :music_label] }
+      let(:expected) { [:song_type, :music_label, :musical_genre, :musical_mood] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

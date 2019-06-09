@@ -25,7 +25,7 @@ RSpec.describe Movie do
 
   describe "class attributes" do
     describe "available_aspects" do
-      let(:expected) { [:hollywood_studio, :narrative_genre] }
+      let(:expected) { [:narrative_genre, :hollywood_studio] }
       let(:instance) { build_minimal_instance }
 
       specify { expect(instance.available_aspects).to eq(expected) }

@@ -20,5 +20,5 @@
 #
 
 class Podcast < Medium
-  self.available_aspects = [:audio_show_format, :narrative_genre]
+  self.available_aspects = [:audio_show_format, :narrative_genre, :podcast_network]
 end
