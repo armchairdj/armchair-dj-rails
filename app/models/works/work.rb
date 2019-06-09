@@ -39,15 +39,15 @@ class Work < ApplicationRecord
       validate { only_available_aspects }
     end
 
-    def display_facets
-      aspects.group_by(&:human_facet).to_a
+    def display_aspects
+      aspects.group_by(&:human_key).to_a
     end
 
     private
 
     def only_available_aspects
       candidates = aspects.reject(&:marked_for_destruction?)
-      disallowed = candidates.reject { |x| available_facets.include?(x.facet.to_sym) }
+      disallowed = candidates.reject { |x| available_aspects.include?(x.key.to_sym) }
 
       errors.add(:aspects, :invalid) if disallowed.any?
     end
@@ -227,7 +227,7 @@ class Work < ApplicationRecord
 
       validates :medium, presence: true
 
-      class_attribute :available_facets, default: []
+      class_attribute :available_aspects, default: []
     end
 
     class_methods do

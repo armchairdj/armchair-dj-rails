@@ -24,12 +24,12 @@ RSpec.describe Product do
   end
 
   describe "class attributes" do
-    describe "available_facets" do
+    describe "available_aspects" do
       let(:expected) { [:manufacturer, :product_type] }
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.available_facets).to eq(expected) }
-      specify { expect(described_class.available_facets).to eq(expected) }
+      specify { expect(instance.available_aspects).to eq(expected) }
+      specify { expect(described_class.available_aspects).to eq(expected) }
     end
   end
 end

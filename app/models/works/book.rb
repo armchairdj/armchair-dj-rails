@@ -20,5 +20,5 @@
 #
 
 class Book < Medium
-  self.available_facets = [:publisher, :narrative_genre]
+  self.available_aspects = [:publisher, :narrative_genre]
 end

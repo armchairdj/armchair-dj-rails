@@ -11,7 +11,7 @@ RSpec.describe AspectSorter do
     describe "#allowed" do
       subject { instance.allowed.keys }
 
-      it { is_expected.to match_array(["Default", "ID", "Facet", "Name"]) }
+      it { is_expected.to match_array(["Default", "ID", "Key", "Val"]) }
     end
 
     describe "#model_class" do

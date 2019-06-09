@@ -42,10 +42,10 @@ FactoryBot.define do
 
       aspect_ids do
         [
-          create(:aspect, facet: :song_type,     name: "Remix"),
-          create(:aspect, facet: :musical_genre, name: "Techno"),
-          create(:aspect, facet: :musical_mood,  name: "Melancholy"),
-          create(:aspect, facet: :music_label,   name: "Domino")
+          create(:aspect, key: :song_type,     val: "Remix"),
+          create(:aspect, key: :musical_genre, val: "Techno"),
+          create(:aspect, key: :musical_mood,  val: "Melancholy"),
+          create(:aspect, key: :music_label,   val: "Domino")
         ].map(&:id)
       end
 
@@ -67,10 +67,10 @@ FactoryBot.define do
 
       aspect_ids do
         [
-          create(:aspect, facet: :song_type,     name: "Remix"),
-          create(:aspect, facet: :musical_genre, name: "Techno"),
-          create(:aspect, facet: :musical_mood,  name: "Melancholy"),
-          create(:aspect, facet: :music_label,   name: "Domino")
+          create(:aspect, key: :song_type,     val: "Remix"),
+          create(:aspect, key: :musical_genre, val: "Techno"),
+          create(:aspect, key: :musical_mood,  val: "Melancholy"),
+          create(:aspect, key: :music_label,   val: "Domino")
         ].map(&:id)
       end
 

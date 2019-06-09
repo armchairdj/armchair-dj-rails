@@ -1,5 +1,5 @@
 <%
-  @title = ["View Aspect", @aspect.name]
+  @title = ["View Aspect", @aspect.display_val]
 %>
 
 <%= render "admin/shared/header", action: :show, instance: @aspect,
@@ -10,8 +10,8 @@
   record: @aspect,
   rows: [
     { name: "ID",       method: :id, class: "nowrap" },
-    { name: "Facet",    method: :human_facet },
-    { name: "Name",     method: :name },
+    { name: "Key",      method: :human_key },
+    { name: "Val",      method: :val },
     { name: "Created",  method: :created_at, date: true },
     { name: "Updated",  method: :updated_at, date: true },
     { name: "Alpha",    method: :alpha },

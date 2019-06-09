@@ -20,5 +20,5 @@
 #
 
 class Album < Medium
-  self.available_facets = [:album_format, :music_label, :musical_mood, :musical_genre]
+  self.available_aspects = [:music_label, :album_format, :musical_genre, :musical_mood]
 end

@@ -6,15 +6,15 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
-#  facet      :integer          not null
-#  name       :string
+#  key        :integer          not null
+#  val        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
 #  index_aspects_on_alpha  (alpha)
-#  index_aspects_on_facet  (facet)
+#  index_aspects_on_key    (key)
 #
 
 class Aspect < ApplicationRecord
@@ -35,7 +35,7 @@ class Aspect < ApplicationRecord
     end
 
     def alpha_parts
-      [human_facet, name]
+      [human_key, val]
     end
   end
 
@@ -46,11 +46,11 @@ class Aspect < ApplicationRecord
     end
   end
 
-  concerning :FacetAttribute do
+  concerning :KeyAttribute do
     included do
-      scope :for_facet, ->(*facets) { where(facet: facets.flatten.compact) }
+      validates :key, presence: true
 
-      enum facet: {
+      enum key: {
         album_format:      0,
         song_type:         1,
         music_label:       2,
@@ -79,20 +79,20 @@ class Aspect < ApplicationRecord
         game_studio:       602
       }
 
-      improve_enum :facet
+      improve_enum :key
 
-      validates :facet, presence: true
+      scope :for_key, ->(*keys) { where(key: keys.flatten.compact) }
     end
   end
 
-  concerning :NameAttribute do
+  concerning :ValAttribute do
     included do
-      validates :name, presence: true
-      validates :name, uniqueness: { scope: [:facet] }
+      validates :val, presence: true
+      validates :val, uniqueness: { scope: [:key] }
     end
 
-    def display_name(connector: ": ")
-      [human_facet, name].compact.join(connector)
+    def display_val(connector: ": ")
+      [human_key, val].compact.join(connector)
     end
   end
 

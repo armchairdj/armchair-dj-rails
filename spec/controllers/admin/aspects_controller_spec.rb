@@ -32,7 +32,7 @@ RSpec.describe Admin::AspectsController do
 
     describe "POST #create" do
       let(:min_params) { attributes_for(:minimal_aspect) }
-      let(:bad_params) { attributes_for(:minimal_aspect).except(:name) }
+      let(:bad_params) { attributes_for(:minimal_aspect).except(:val) }
 
       context "with min valid params" do
         subject(:send_request) { post :create, params: { aspect: min_params } }
@@ -71,8 +71,8 @@ RSpec.describe Admin::AspectsController do
     end
 
     describe "PUT #update" do
-      let(:update_params) { { name: "New Name" } }
-      let(:bad_update_params) { { name: "" } }
+      let(:update_params) { { val: "New Val" } }
+      let(:bad_update_params) { { val: "" } }
 
       context "with valid params" do
         subject(:send_requst) do

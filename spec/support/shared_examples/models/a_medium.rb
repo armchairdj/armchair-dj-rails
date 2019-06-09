@@ -7,12 +7,12 @@ RSpec.shared_examples "a_medium" do
     describe "#only_available_aspects" do
       subject { build_minimal_instance }
 
-      let!(:all_facets) { Aspect.facets.keys.map(&:to_sym) }
-      let!(:avail_facets) { subject.available_facets }
-      let!(:good_facet) { avail_facets.first }
-      let!(:bad_facet) { (all_facets - avail_facets).first }
-      let!(:good_aspect) { create(:minimal_aspect, facet: good_facet) }
-      let!(:bad_aspect) { create(:minimal_aspect, facet:  bad_facet) }
+      let!(:all_keys) { Aspect.keys.keys.map(&:to_sym) }
+      let!(:avail_keys) { subject.available_aspects }
+      let!(:good_key) { avail_keys.first }
+      let!(:bad_key) { (all_keys - avail_keys).first }
+      let!(:good_aspect) { create(:minimal_aspect, key: good_key) }
+      let!(:bad_aspect) { create(:minimal_aspect, key:  bad_key) }
 
       context "when valid" do
         before do
@@ -35,16 +35,16 @@ RSpec.shared_examples "a_medium" do
     end
   end
 
-  describe "#available_facets" do
-    subject { described_class.new.available_facets }
+  describe "#available_aspects" do
+    subject { described_class.new.available_aspects }
 
     it { is_expected.to be_a_kind_of(Array) }
 
-    described_class.new.available_facets.each do |facet|
-      describe "available facet #{facet}" do
-        subject { Aspect.facets.keys }
+    described_class.new.available_aspects.each do |key|
+      describe "available key #{key}" do
+        subject { Aspect.keys.keys }
 
-        it { is_expected.to include(facet.to_s) }
+        it { is_expected.to include(key.to_s) }
       end
     end
   end

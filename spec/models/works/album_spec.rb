@@ -24,12 +24,12 @@ RSpec.describe Album do
   end
 
   describe "class attributes" do
-    describe "available_facets" do
-      let(:expected) { [:album_format, :music_label, :musical_mood, :musical_genre] }
+    describe "available_aspects" do
+      let(:expected) { [:music_label, :album_format, :musical_genre, :musical_mood] }
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.available_facets).to eq(expected) }
-      specify { expect(described_class.available_facets).to eq(expected) }
+      specify { expect(instance.available_aspects).to eq(expected) }
+      specify { expect(described_class.available_aspects).to eq(expected) }
     end
   end
 end

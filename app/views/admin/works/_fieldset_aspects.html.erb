@@ -9,13 +9,13 @@
 
     <%= content_tag(:div, error, class: "legend-hint") if error %>
 
-    <% @work.available_facets.each do |facet| %>
+    <% @work.available_aspects.each do |key| %>
       <%= f.input :aspect_ids,
-        label:         Aspect.human_facet(facet),
+        label:         Aspect.human_key(key),
         include_blank: :translate,
         as:            :select,
-        collection:    Aspect.for_facet(facet),
-        input_html:    js_selectable_create_aspect_attrs(facet)
+        collection:    Aspect.for_key(key),
+        input_html:    js_selectable_create_aspect_attrs(key)
       %>
     <% end %>
   <% end %>

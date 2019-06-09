@@ -10,7 +10,7 @@
 <%= content_for(:post_context) do %>
   <%= content_tag(:aside, class: "post-context-section") do %>
     <%= content_tag(:dl, class: "inline") do %>
-      <%= render "shared/playback/aspects", facets: @review.work.display_facets %>
+      <%= render "shared/playback/aspects", keys: @review.work.display_aspects %>
 
       <%= render "shared/playback/tags", tags: @review.tags %>
     <% end %>

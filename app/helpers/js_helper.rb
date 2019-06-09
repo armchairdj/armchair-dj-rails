@@ -51,12 +51,12 @@ module JsHelper
     js_attrs("creatable", opts)
   end
 
-  def js_selectable_create_aspect_attrs(facet)
+  def js_selectable_create_aspect_attrs(key)
     opts = {
       "url":          admin_aspects_path,
-      "scope":        "aspect[facet=#{facet}]",
-      "param":        "aspect[name]",
-      "extra-params": "aspect[facet]=#{facet}"
+      "scope":        "aspect[key=#{key}]",
+      "param":        "aspect[val]",
+      "extra-params": "aspect[key]=#{key}"
     }
 
     js_attrs("creatable", opts).merge(multiple: true)

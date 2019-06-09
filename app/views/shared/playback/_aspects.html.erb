@@ -1,8 +1,8 @@
-<% return if facets.empty? %>
+<% return if keys.empty? %>
 
-<% facets.each do |facet_name, aspects| %>
+<% keys.each do |key, aspects| %>
   <%= render "shared/playback/aspect",
-    facet_name: facet_name.pluralize(aspects.count),
+    key: key.pluralize(aspects.count),
     aspects: aspects
   %>
 <% end %>

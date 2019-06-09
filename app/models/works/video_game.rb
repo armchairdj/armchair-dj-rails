@@ -20,5 +20,5 @@
 #
 
 class VideoGame < Medium
-  self.available_facets = [:tech_platform, :game_studio, :game_mechanic]
+  self.available_aspects = [:tech_platform, :game_studio, :game_mechanic]
 end

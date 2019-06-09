@@ -20,5 +20,5 @@
 #
 
 class Publication < Medium
-  self.available_facets = [:publication_type, :publisher]
+  self.available_aspects = [:publication_type, :publisher]
 end
