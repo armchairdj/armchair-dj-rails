@@ -85,17 +85,6 @@ class Aspect < ApplicationRecord
     end
   end
 
-  concerning :ValAttribute do
-    included do
-      validates :val, presence: true
-      validates :val, uniqueness: { scope: [:key] }
-    end
-
-    def display_val(connector: ": ")
-      [human_key, val].compact.join(connector)
-    end
-  end
-
   concerning :PostsAssociation do
     included do
       has_many :mixtapes, through: :works
@@ -108,6 +97,17 @@ class Aspect < ApplicationRecord
 
     def post_ids
       reviews.ids + mixtapes.ids
+    end
+  end
+
+  concerning :ValAttribute do
+    included do
+      validates :val, presence: true
+      validates :val, uniqueness: { scope: [:key] }
+    end
+
+    def display_val(connector: ": ")
+      [human_key, val].compact.join(connector)
     end
   end
 end
