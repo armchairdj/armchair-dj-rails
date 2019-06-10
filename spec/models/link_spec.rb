@@ -20,25 +20,26 @@
 require "rails_helper"
 
 RSpec.describe Link do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  describe "nilify_blanks" do
-    subject { build_minimal_instance }
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-    it { is_expected.to nilify_blanks(before: :validation) }
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
-  describe "associations" do
+  describe ":DescriptionAttribute" do
+    it { is_expected.to validate_presence_of(:description) }
+  end
+
+  describe ":LinkableAssociation" do
     it { is_expected.to belong_to(:linkable).required }
   end
 
-  describe "validations" do
-    subject { build_minimal_instance }
-
+  describe ":UrlAttribute" do
     it { is_expected.to validate_presence_of(:url) }
-
     it { is_expected.to validate_urlness_of(:url) }
-
-    it { is_expected.to validate_presence_of(:description) }
   end
 end

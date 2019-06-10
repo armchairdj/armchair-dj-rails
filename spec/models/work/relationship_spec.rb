@@ -27,7 +27,9 @@ require "rails_helper"
 RSpec.describe Work::Relationship do
   subject { build_minimal_instance }
 
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+  end
 
   describe "target" do
     it { is_expected.to belong_to(:target).class_name("Work") }

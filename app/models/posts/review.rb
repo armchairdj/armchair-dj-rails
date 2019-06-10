@@ -73,7 +73,7 @@ class Review < Post
     end
   end
 
-  concerning :Superclass do
+  concerning :StiInheritance do
     def display_type(plural: false)
       base = [display_medium, "Review"].compact.join(" ")
 
@@ -81,7 +81,7 @@ class Review < Post
     end
   end
 
-  concerning :WorkAssociation do
+  concerning :WorkAssociations do
     included do
       belongs_to :work
 

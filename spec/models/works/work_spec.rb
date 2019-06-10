@@ -3,17 +3,19 @@
 require "rails_helper"
 
 RSpec.describe Work do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  describe "nilify_blanks" do
-    subject(:instance) { build_minimal_instance }
+    describe "nilify_blanks" do
+      subject(:instance) { build_minimal_instance }
 
-    # Must specify individual fields for STI models.
-    it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
-    it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
-    it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
-    it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
-    it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha,          before: :validation) }
+      it { is_expected.to nilify_blanks_for(:display_makers, before: :validation) }
+      it { is_expected.to nilify_blanks_for(:medium,         before: :validation) }
+      it { is_expected.to nilify_blanks_for(:subtitle,       before: :validation) }
+      it { is_expected.to nilify_blanks_for(:title,          before: :validation) }
+    end
   end
 
   describe ":Alphabetization" do

@@ -24,7 +24,9 @@
 require "rails_helper"
 
 RSpec.describe Creator::Membership do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+  end
 
   describe "group" do
     subject { build_minimal_instance }

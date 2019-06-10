@@ -38,10 +38,11 @@
 #
 
 class Post < ApplicationRecord
-  include Authorable
-  include Linkable
+  concerning :AuthorAssociation do
+    included do
+      include Authorable
+    end
 
-  concerning :Editing do
     class_methods do
       def for_cms_user(user)
         return all                       if user&.can_edit?
@@ -49,6 +50,30 @@ class Post < ApplicationRecord
 
         none
       end
+    end
+  end
+
+  concerning :ContentAttributes do
+    included do
+      validates :body, presence: true, if: :requires_body?
+
+      validates :summary, length: { in: 40..320 }, allow_blank: true
+    end
+
+    def formatted_body
+      return unless body.present?
+
+      renderer.render(body).html_safe
+    end
+
+    private
+
+    def requires_body?
+      published? || publishing? || scheduled? || scheduling?
+    end
+
+    def renderer
+      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
     end
   end
 
@@ -64,36 +89,27 @@ class Post < ApplicationRecord
     end
   end
 
+  concerning :LinksAssociation do
+    included do
+      include Linkable
+    end
+  end
+
   concerning :Publishing do
     included do
+      validates :published_at, presence: true, if:     :requires_published_at?
+      validates :published_at, absence:  true, unless: :requires_published_at?
+
+      validates :publish_on, presence: true, if:     :requires_publish_on?
+      validates :publish_on, absence:  true, unless: :requires_publish_on?
+      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
+
       scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
       scope :for_public, -> { published.reverse_cron }
 
       scope :unpublished, -> { where.not(status: :published) }
-    end
 
-    def unpublished?
-      draft? || scheduled?
-    end
-  end
-
-  concerning :Rendering do
-    def formatted_body
-      return unless body.present?
-
-      renderer.render(body).html_safe
-    end
-
-    private
-
-    def renderer
-      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
-    end
-  end
-
-  concerning :Scheduling do
-    included do
       scope :scheduled_and_due, lambda {
         scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
       }
@@ -103,30 +119,32 @@ class Post < ApplicationRecord
       def publish_scheduled
         memo = { success: [], failure: [], all: scheduled_and_due.to_a }
 
-        memo[:all].each do |item|
+        memo[:all].each.with_object(memo) do |(item), acc|
           item.unschedule!
 
-          if item.publish!
-            memo[:success] << item
-          else
-            memo[:failure] << item
-          end
+          item.publish! ? acc[:success] << item : acc[:failure] << item
         end
-
-        memo
       end
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def requires_publish_on?
+      scheduled? || scheduling?
+    end
+
+    def requires_published_at?
+      published? || publishing?
     end
   end
 
   concerning :SlugAttribute do
     included do
       include Sluggable
-    end
-  end
-
-  concerning :Subclassing do
-    included do
-      validates :type, presence: true
     end
   end
 
@@ -186,6 +204,12 @@ class Post < ApplicationRecord
 
     def clear_publish_on
       self.publish_on = nil
+    end
+  end
+
+  concerning :StiInheritance do
+    included do
+      validates :type, presence: true
     end
   end
 
@@ -270,36 +294,6 @@ class Post < ApplicationRecord
       self.unpublishing = false
       self.scheduling   = false
       self.unscheduling = false
-    end
-  end
-
-  concerning :ValidatedAttributes do
-    included do
-      validates :summary, length: { in: 40..320 }, allow_blank: true
-
-      validates :body, presence: true, if: :requires_body?
-
-      validates :published_at, presence: true, if:     :requires_published_at?
-      validates :published_at, absence:  true, unless: :requires_published_at?
-
-      validates :publish_on, presence: true, if:     :requires_publish_on?
-      validates :publish_on, absence:  true, unless: :requires_publish_on?
-
-      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def requires_body?
-      published? || publishing? || scheduled? || scheduling?
-    end
-
-    def requires_publish_on?
-      scheduled? || scheduling?
-    end
-
-    def requires_published_at?
-      published? || publishing?
     end
   end
 end

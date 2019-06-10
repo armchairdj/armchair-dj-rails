@@ -18,19 +18,21 @@
 require "rails_helper"
 
 RSpec.describe Tag do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
 
   it_behaves_like "an_alphabetizable_model"
 
   it_behaves_like "a_ginsu_model" do
     let(:list_loads) { [] }
     let(:show_loads) { [:posts] }
-  end
-
-  describe "nilify_blanks" do
-    subject { build_minimal_instance }
-
-    it { is_expected.to nilify_blanks(before: :validation) }
   end
 
   describe "associations" do

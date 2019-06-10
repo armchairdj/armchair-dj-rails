@@ -22,12 +22,14 @@
 require "rails_helper"
 
 RSpec.describe Creator do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  describe "nilify_blanks" do
-    subject(:instance) { build_minimal_instance }
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-    it { is_expected.to nilify_blanks(before: :validation) }
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe ":Alphabetization" do
@@ -443,7 +445,7 @@ RSpec.describe Creator do
       it "accepts if collective" do
         valid = create(:collective_creator)
 
-        instance.group_memberships_attributes = { "0" => { group_id:   valid.id } }
+        instance.group_memberships_attributes = { "0" => { group_id: valid.id } }
 
         expect(instance.group_memberships).to have(1).items
         expect(instance.groups).to eq(described_class.none) # TODO

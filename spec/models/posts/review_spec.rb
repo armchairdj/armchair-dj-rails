@@ -3,18 +3,32 @@
 require "rails_helper"
 
 RSpec.describe Review do
-  describe "image attachments" do
+  describe ":Alphabetization" do
+    describe "#alpha_parts" do
+      subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
+
+      it { is_expected.to eq(instance.work.alpha_parts) }
+    end
+  end
+
+  describe ":ImageAttachment" do
     pending "delegate hero_image to work"
     pending "delegate additional_images to work"
   end
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [:author, :work] }
-    let(:show_loads) { [:work, :makers, :contributions, :aspects, :milestones] }
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [:author, :work] }
+      let(:show_loads) { [:work, :makers, :contributions, :aspects, :milestones] }
+    end
   end
 
-  describe "STI inheritance" do
+  describe ":StiInheritance" do
     specify { expect(described_class.superclass).to eq(Post) }
+
+    it_behaves_like "a_model_with_a_better_enum_for", :status
 
     describe "type" do
       subject(:instance) { described_class.new.type }
@@ -30,23 +44,7 @@ RSpec.describe Review do
     end
   end
 
-  describe "status" do
-    it_behaves_like "a_model_with_a_better_enum_for", :status
-  end
-
-  describe "work" do
-    it { is_expected.to belong_to(:work).required }
-
-    it { is_expected.to validate_presence_of(:work) }
-
-    it { is_expected.to have_many(:makers).through(:work) }
-    it { is_expected.to have_many(:contributions).through(:work) }
-    it { is_expected.to have_many(:contributors).through(:work) }
-    it { is_expected.to have_many(:aspects).through(:work) }
-    it { is_expected.to have_many(:milestones).through(:work) }
-  end
-
-  describe "sluggable" do
+  describe ":SlugAttribute" do
     it_behaves_like "a_sluggable_model"
 
     describe "#sluggable_parts" do
@@ -94,13 +92,17 @@ RSpec.describe Review do
     end
   end
 
-  describe "alpha" do
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
+  describe ":WorkAssociation" do
+    it { is_expected.to belong_to(:work).required }
 
-      let(:instance) { build_minimal_instance }
+    it { is_expected.to validate_presence_of(:work) }
 
-      it { is_expected.to eq(instance.work.alpha_parts) }
-    end
+    it { is_expected.to have_many(:makers).through(:work) }
+    it { is_expected.to have_many(:contributions).through(:work) }
+    it { is_expected.to have_many(:contributors).through(:work) }
+    it { is_expected.to have_many(:aspects).through(:work) }
+    it { is_expected.to have_many(:milestones).through(:work) }
+
+    pending "#display_medium"
   end
 end

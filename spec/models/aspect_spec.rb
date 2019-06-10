@@ -20,12 +20,14 @@
 require "rails_helper"
 
 RSpec.describe Aspect do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  describe "nilify_blanks" do
-    subject(:instance) { build_minimal_instance }
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-    it { is_expected.to nilify_blanks(before: :validation) }
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
   describe ":WorksAssociation" do
@@ -34,6 +36,15 @@ RSpec.describe Aspect do
     it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
     it { is_expected.to have_many(:playlists).through(:works) }
+  end
+
+  describe ":PostsAssociation" do
+    it { is_expected.to have_many(:mixtapes).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
+
+    pending "#post_ids"
+
+    pending "#posts"
   end
 
   describe ":Alphabetization" do
@@ -84,15 +95,6 @@ RSpec.describe Aspect do
         it { is_expected.to be_empty }
       end
     end
-  end
-
-  describe ":PostsAssociation" do
-    it { is_expected.to have_many(:mixtapes).through(:works) }
-    it { is_expected.to have_many(:reviews).through(:works) }
-
-    pending "#post_ids"
-
-    pending "#posts"
   end
 
   describe ":ValAttribute" do

@@ -45,7 +45,15 @@
 require "rails_helper"
 
 RSpec.describe User do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
 
   it_behaves_like "an_alphabetizable_model"
 
@@ -55,12 +63,6 @@ RSpec.describe User do
   end
 
   it_behaves_like "a_linkable_model"
-
-  describe "nilify_blanks" do
-    subject(:instance) { build_minimal_instance }
-
-    it { is_expected.to nilify_blanks(before: :validation) }
-  end
 
   describe "scope-related" do
     describe "for public site" do

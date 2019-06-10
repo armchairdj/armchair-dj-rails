@@ -13,7 +13,7 @@ concern :Authorable do
     author&.username
   end
 
-private
+  private
 
   def author_can_write
     errors.add(:author, :invalid_author) if author.present? && !author.can_write?
