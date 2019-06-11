@@ -8,7 +8,9 @@ RSpec.describe Article do
     let(:show_loads) { [:author, :links, :tags] }
   end
 
-  it_behaves_like "an_imageable_model"
+  describe ":ImageAttachment" do
+    it_behaves_like "an_imageable_model"
+  end
 
   describe "STI inheritance" do
     specify { expect(described_class.superclass).to eq(Post) }

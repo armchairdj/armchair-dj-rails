@@ -21,11 +21,8 @@
 #
 
 class Playlist < ApplicationRecord
-  include Imageable
-  include Authorable
-
   # This must go before the #PostsAssociation block.
-  concerning :TrackAssociations do
+  concerning :TracksAssociation do
     included do
       has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
         class_name: "Playlist::Track", dependent: :destroy
@@ -53,6 +50,12 @@ class Playlist < ApplicationRecord
     end
   end
 
+  concerning :AuthorAssociation do
+    included do
+      include Authorable
+    end
+  end
+
   concerning :CreatorAssociations do
     included do
       has_many :makers,       -> { distinct }, through: :works
@@ -72,6 +75,12 @@ class Playlist < ApplicationRecord
     included do
       scope :for_list, -> { includes(:author).references(:author) }
       scope :for_show, -> { includes(:author, :tracks, :works) }
+    end
+  end
+
+  concerning :ImageableAttachment do
+    included do
+      include Imageable
     end
   end
 
