@@ -55,17 +55,109 @@ RSpec.describe User do
     end
   end
 
-  it_behaves_like "an_alphabetizable_model"
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
+    describe "#alpha_parts" do
+      subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
+
+      it "uses full name with middle at end so that Brian Dillard and Brian J. Dillard show up consecutively" do
+        is_expected.to eq(["Dillard", "Brian", "J"])
+      end
+    end
   end
 
-  it_behaves_like "a_linkable_model"
+  describe ":BioAttribute" do
+    describe "validation" do
+      context "with member" do
+        it { expect(create(:member)).to validate_absence_of(:bio) }
+      end
 
-  describe "scope-related" do
-    describe "for public site" do
+      context "with writer" do
+        it { expect(create(:writer)).to_not validate_absence_of(:bio) }
+      end
+
+      context "with editor" do
+        it { expect(create(:editor)).to_not validate_absence_of(:bio) }
+      end
+
+      context "with admin" do
+        it { expect(create(:admin)).to_not validate_absence_of(:bio) }
+      end
+
+      context "with root user" do
+        it { expect(create(:root)).to_not validate_absence_of(:bio) }
+      end
+    end
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:links, :posts, :playlists, :works, :makers] }
+    end
+  end
+
+  describe ":LinksAssociation" do
+    it_behaves_like "a_linkable_model"
+  end
+
+  describe ":NameAttributes" do
+    describe "presence and uniqueness validations" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to validate_presence_of(:first_name) }
+      it { is_expected.to validate_presence_of(:last_name) }
+
+      it { is_expected.to validate_presence_of(:username) }
+      it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
+    end
+
+    describe "format validation" do
+      it "allows alphanumerics" do
+        is_expected.to allow_value("ArmchairDJ10039").for(:username)
+      end
+
+      it "disallows special characters" do
+        is_expected.to_not allow_value("Armchair-DJ10039").for(:username)
+        is_expected.to_not allow_value("Armchair_DJ10039").for(:username)
+        is_expected.to_not allow_value("Armchair/DJ10039").for(:username)
+        is_expected.to_not allow_value("Armchair%DJ10039").for(:username)
+        is_expected.to_not allow_value("Armchair.DJ10039").for(:username)
+      end
+    end
+
+    describe "#display_name" do
+      subject(:display_name) { instance.display_name }
+
+      context "without middle name" do
+        let(:instance) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
+
+        it { is_expected.to eq("Derrick May") }
+      end
+
+      context "with middle name" do
+        let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
+
+        it { is_expected.to eq("Brian J Dillard") }
+      end
+    end
+  end
+
+  describe ":PostAssociations" do
+    it { is_expected.to have_many(:posts).dependent(:nullify) }
+    it { is_expected.to have_many(:articles).dependent(:nullify) }
+    it { is_expected.to have_many(:reviews).dependent(:nullify) }
+    it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
+    it { is_expected.to have_many(:playlists).dependent(:nullify) }
+
+    it { is_expected.to have_many(:works).through(:reviews) }
+
+    it { is_expected.to have_many(:makers).through(:works) }
+
+    describe "scopes and booleans" do
       let(:saru) { create(:member, first_name: "Saru", last_name: "Ramanan", username: "saru") }
       let(:monique) { create(:writer, first_name: "Monique", last_name: "Hyman", username: "monique") }
       let(:celia) { create(:editor, first_name: "Celia", last_name: "Esdale", username: "celia") }
@@ -98,6 +190,16 @@ RSpec.describe User do
         specify { expect(brian.published?).to eq(true) }
       end
     end
+  end
+
+  describe ":RoleAttribute" do
+    it { is_expected.to validate_presence_of(:role) }
+
+    it "defaults to member" do
+      expect(described_class.new.role).to eq("member")
+    end
+
+    it_behaves_like "a_model_with_a_better_enum_for", :role
 
     describe ".for_cms_user" do
       subject(:association) { collection.for_cms_user(instance) }
@@ -164,340 +266,223 @@ RSpec.describe User do
         end
       end
     end
-  end
 
-  describe "associations" do
-    it { is_expected.to have_many(:posts).dependent(:nullify) }
-    it { is_expected.to have_many(:articles).dependent(:nullify) }
-    it { is_expected.to have_many(:reviews).dependent(:nullify) }
-    it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
-    it { is_expected.to have_many(:playlists).dependent(:nullify) }
-
-    it { is_expected.to have_many(:works).through(:reviews) }
-
-    it { is_expected.to have_many(:makers).through(:works) }
-  end
-
-  describe "attributes" do
-    describe "enums" do
-      describe "role" do
-        it_behaves_like "a_model_with_a_better_enum_for", :role
-      end
-    end
-  end
-
-  describe "validations" do
-    subject(:instance) { build_minimal_instance }
-
-    it { is_expected.to validate_presence_of(:first_name) }
-    it { is_expected.to validate_presence_of(:last_name) }
-
-    it { is_expected.to validate_presence_of(:role) }
-
-    it { is_expected.to validate_presence_of(:username) }
-    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
-
-    describe "enforce username format" do
-      it { is_expected.to     allow_value("ArmchairDJ10039").for(:username) }
-      it { is_expected.to_not allow_value("Armchair-DJ10039").for(:username) }
-      it { is_expected.to_not allow_value("Armchair_DJ10039").for(:username) }
-      it { is_expected.to_not allow_value("Armchair/DJ10039").for(:username) }
-      it { is_expected.to_not allow_value("Armchair%DJ10039").for(:username) }
-      it { is_expected.to_not allow_value("Armchair.DJ10039").for(:username) }
-    end
-
-    describe "conditional" do
-      context "with member" do
-        subject(:instance) { create(:member) }
-
-        it { is_expected.to validate_absence_of(:bio) }
-      end
-
-      context "with writer" do
-        subject(:instance) { create(:writer) }
-
-        it { is_expected.to_not validate_absence_of(:bio) }
-      end
-
-      context "with editor" do
-        subject(:instance) { create(:editor) }
-
-        it { is_expected.to_not validate_absence_of(:bio) }
-      end
-
-      context "with admin" do
-        subject(:instance) { create(:admin) }
-
-        it { is_expected.to_not validate_absence_of(:bio) }
-      end
-
-      context "with root user" do
-        subject(:instance) { create(:root) }
-
-        it { is_expected.to_not validate_absence_of(:bio) }
-      end
-    end
-  end
-
-  describe "hooks" do
-    describe "after_initialize" do
-      subject(:role) { build_minimal_instance.role }
-
-      it "database sets the default role to member" do
-        is_expected.to eq("member")
-      end
-    end
-  end
-
-  describe "instance" do
-    let(:instance) { build_minimal_instance }
-
-    describe "role" do
+    describe "methods" do
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
       let(:admin) { create(:admin) }
       let(:root) { create(:root) }
 
-      describe "booleans" do
-        describe "#can_write? is true for writers, editors, admins & roots" do
-          specify { expect(member.can_write?).to eq(false) }
-          specify { expect(writer.can_write?).to eq(true) }
-          specify { expect(editor.can_write?).to eq(true) }
-          specify { expect(admin.can_write?).to eq(true) }
-          specify { expect(root.can_write?).to eq(true) }
+      describe "#can_write? is true for writers, editors, admins & roots" do
+        specify { expect(member.can_write?).to eq(false) }
+        specify { expect(writer.can_write?).to eq(true) }
+        specify { expect(editor.can_write?).to eq(true) }
+        specify { expect(admin.can_write?).to eq(true) }
+        specify { expect(root.can_write?).to eq(true) }
+      end
+
+      describe "#can_edit? is true for editors, admins & roots" do
+        specify { expect(member.can_edit?).to eq(false) }
+        specify { expect(writer.can_edit?).to eq(false) }
+        specify { expect(editor.can_edit?).to eq(true) }
+        specify { expect(admin.can_edit?).to eq(true) }
+        specify { expect(root.can_edit?).to eq(true) }
+      end
+
+      describe "#can_publish? is true for admins & roots" do
+        specify { expect(member.can_publish?).to eq(false) }
+        specify { expect(writer.can_publish?).to eq(false) }
+        specify { expect(editor.can_publish?).to eq(false) }
+        specify { expect(admin.can_publish?).to eq(true) }
+        specify { expect(root.can_publish?).to eq(true) }
+      end
+
+      describe "#can_destroy? is true for roots" do
+        specify { expect(member.can_destroy?).to eq(false) }
+        specify { expect(writer.can_destroy?).to eq(false) }
+        specify { expect(editor.can_destroy?).to eq(false) }
+        specify { expect(admin.can_destroy?).to eq(false) }
+        specify { expect(root.can_destroy?).to eq(true) }
+      end
+
+      describe "#assignable_role_options" do
+        let(:options) do
+          [
+            ["Member", "member"],
+            ["Writer", "writer"],
+            ["Editor", "editor"],
+            ["Admin",  "admin"],
+            ["Root",   "root"]
+          ]
         end
 
-        describe "#can_edit? is true for editors, admins & roots" do
-          specify { expect(member.can_edit?).to eq(false) }
-          specify { expect(writer.can_edit?).to eq(false) }
-          specify { expect(editor.can_edit?).to eq(true) }
-          specify { expect(admin.can_edit?).to eq(true) }
-          specify { expect(root.can_edit?).to eq(true) }
+        it "is empty for members" do
+          expect(member.assignable_role_options).to eq([])
         end
 
-        describe "#can_publish? is true for admins & roots" do
-          specify { expect(member.can_publish?).to eq(false) }
-          specify { expect(writer.can_publish?).to eq(false) }
-          specify { expect(editor.can_publish?).to eq(false) }
-          specify { expect(admin.can_publish?).to eq(true) }
-          specify { expect(root.can_publish?).to eq(true) }
+        it "is empty for writers" do
+          expect(writer.assignable_role_options).to eq([])
         end
 
-        describe "#can_destroy? is true for roots" do
-          specify { expect(member.can_destroy?).to eq(false) }
-          specify { expect(writer.can_destroy?).to eq(false) }
-          specify { expect(editor.can_destroy?).to eq(false) }
-          specify { expect(admin.can_destroy?).to eq(false) }
-          specify { expect(root.can_destroy?).to eq(true) }
+        it "is empty for editors" do
+          expect(editor.assignable_role_options).to eq([])
+        end
+
+        it "includes everything but root for admins" do
+          expect(admin.assignable_role_options).to eq(options[0..3])
+        end
+
+        it "includes everything for roots" do
+          expect(root.assignable_role_options).to eq(options)
         end
       end
 
-      describe "methods" do
-        describe "#assignable_role_options" do
-          let(:options) do
-            [
-              ["Member", "member"],
-              ["Writer", "writer"],
-              ["Editor", "editor"],
-              ["Admin",  "admin"],
-              ["Root",   "root"]
-            ]
+      describe "#valid_role_assignment_for?" do
+        describe "for member" do
+          subject(:instance) { create(:member) }
+
+          specify do
+            expect(instance.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
           end
 
-          it "is empty for members" do
-            expect(member.assignable_role_options).to eq([])
+          specify do
+            expect(instance.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
           end
 
-          it "is empty for writers" do
-            expect(writer.assignable_role_options).to eq([])
+          specify do
+            expect(instance.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
           end
 
-          it "is empty for editors" do
-            expect(editor.assignable_role_options).to eq([])
+          specify do
+            expect(instance.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
           end
 
-          it "includes everything but root for admins" do
-            expect(admin.assignable_role_options).to eq(options[0..3])
-          end
-
-          it "includes everything for roots" do
-            expect(root.assignable_role_options).to eq(options)
+          specify do
+            expect(instance.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
           end
         end
 
-        describe "#valid_role_assignment_for?" do
-          describe "for member" do
-            subject(:instance) { create(:member) }
+        describe "for writer" do
+          subject(:instance) { create(:writer) }
 
-            specify do
-              expect(instance.valid_role_assignment_for?(member)).to eq(false)
-              expect(member).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(writer)).to eq(false)
-              expect(writer).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(editor)).to eq(false)
-              expect(editor).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(admin)).to eq(false)
-              expect(admin).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(root)).to eq(false)
-              expect(root).to have_error(:role, :invalid_assignment)
-            end
+          specify do
+            expect(instance.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
           end
 
-          describe "for writer" do
-            subject(:instance) { create(:writer) }
-
-            specify do
-              expect(instance.valid_role_assignment_for?(member)).to eq(false)
-              expect(member).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(writer)).to eq(false)
-              expect(writer).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(editor)).to eq(false)
-              expect(editor).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(admin)).to eq(false)
-              expect(admin).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(root)).to eq(false)
-              expect(root).to have_error(:role, :invalid_assignment)
-            end
+          specify do
+            expect(instance.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
           end
 
-          describe "for editor" do
-            subject(:instance) { create(:editor) }
-
-            specify do
-              expect(instance.valid_role_assignment_for?(member)).to eq(false)
-              expect(member).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(writer)).to eq(false)
-              expect(writer).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(editor)).to eq(false)
-              expect(editor).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(admin)).to eq(false)
-              expect(admin).to have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(root)).to eq(false)
-              expect(root).to have_error(:role, :invalid_assignment)
-            end
+          specify do
+            expect(instance.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
           end
 
-          describe "for admin" do
-            subject(:instance) { create(:admin) }
-
-            specify do
-              expect(instance.valid_role_assignment_for?(member)).to eq(true)
-              expect(member).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(writer)).to eq(true)
-              expect(writer).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(editor)).to eq(true)
-              expect(editor).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(admin)).to eq(true)
-              expect(admin).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(root)).to eq(false)
-              expect(root).to have_error(:role, :invalid_assignment)
-            end
+          specify do
+            expect(instance.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
           end
 
-          describe "for root" do
-            subject(:instance) { create(:root) }
-
-            specify do
-              expect(instance.valid_role_assignment_for?(member)).to eq(true)
-              expect(member).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(writer)).to eq(true)
-              expect(writer).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(editor)).to eq(true)
-              expect(editor).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(admin)).to eq(true)
-              expect(admin).to_not have_error(:role, :invalid_assignment)
-            end
-
-            specify do
-              expect(instance.valid_role_assignment_for?(root)).to eq(true)
-              expect(root).to_not have_error(:role, :invalid_assignment)
-            end
+          specify do
+            expect(instance.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
           end
         end
-      end
-    end
 
-    describe "#display_name" do
-      subject(:display_name) { instance.display_name }
+        describe "for editor" do
+          subject(:instance) { create(:editor) }
 
-      context "without middle name" do
-        let(:instance) { create(:minimal_user, first_name: "Derrick", last_name: "May") }
+          specify do
+            expect(instance.valid_role_assignment_for?(member)).to eq(false)
+            expect(member).to have_error(:role, :invalid_assignment)
+          end
 
-        it { is_expected.to eq("Derrick May") }
-      end
+          specify do
+            expect(instance.valid_role_assignment_for?(writer)).to eq(false)
+            expect(writer).to have_error(:role, :invalid_assignment)
+          end
 
-      context "with middle name" do
-        let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
+          specify do
+            expect(instance.valid_role_assignment_for?(editor)).to eq(false)
+            expect(editor).to have_error(:role, :invalid_assignment)
+          end
 
-        it { is_expected.to eq("Brian J Dillard") }
-      end
-    end
+          specify do
+            expect(instance.valid_role_assignment_for?(admin)).to eq(false)
+            expect(admin).to have_error(:role, :invalid_assignment)
+          end
 
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
+          specify do
+            expect(instance.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
 
-      let(:instance) { create(:minimal_user, first_name: "Brian", middle_name: "J", last_name: "Dillard") }
+        describe "for admin" do
+          subject(:instance) { create(:admin) }
 
-      it "uses full name with middle at end so that Brian Dillard and Brian J. Dillard show up consecutively" do
-        is_expected.to eq(["Dillard", "Brian", "J"])
+          specify do
+            expect(instance.valid_role_assignment_for?(member)).to eq(true)
+            expect(member).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(writer)).to eq(true)
+            expect(writer).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(editor)).to eq(true)
+            expect(editor).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(admin)).to eq(true)
+            expect(admin).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(root)).to eq(false)
+            expect(root).to have_error(:role, :invalid_assignment)
+          end
+        end
+
+        describe "for root" do
+          subject(:instance) { create(:root) }
+
+          specify do
+            expect(instance.valid_role_assignment_for?(member)).to eq(true)
+            expect(member).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(writer)).to eq(true)
+            expect(writer).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(editor)).to eq(true)
+            expect(editor).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(admin)).to eq(true)
+            expect(admin).to_not have_error(:role, :invalid_assignment)
+          end
+
+          specify do
+            expect(instance.valid_role_assignment_for?(root)).to eq(true)
+            expect(root).to_not have_error(:role, :invalid_assignment)
+          end
+        end
       end
     end
   end

@@ -28,30 +28,30 @@ RSpec.describe Tag do
     end
   end
 
-  it_behaves_like "an_alphabetizable_model"
-
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:posts] }
-  end
-
-  describe "associations" do
-    it { is_expected.to have_and_belong_to_many(:posts) }
-  end
-
-  describe "validations" do
-    subject { build_minimal_instance }
-
-    it { is_expected.to validate_presence_of(:name) }
-  end
-
-  describe "instance" do
-    let(:instance) { build_minimal_instance }
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
 
     describe "#alpha_parts" do
       subject { instance.alpha_parts }
 
+      let(:instance) { build_minimal_instance }
+
       it { is_expected.to eq([instance.name]) }
     end
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:posts] }
+    end
+  end
+
+  describe ":NameAttribute" do
+    it { is_expected.to validate_presence_of(:name) }
+  end
+
+  describe ":PostsAssociation" do
+    it { is_expected.to have_and_belong_to_many(:posts) }
   end
 end

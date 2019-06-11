@@ -54,8 +54,6 @@ class User < ApplicationRecord
     :validatable
   )
 
-  include Linkable
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -66,10 +64,22 @@ class User < ApplicationRecord
     end
   end
 
+  concerning :BioAttribute do
+    included do
+      validates :bio, absence: true, unless: :can_write?
+    end
+  end
+
   concerning :GinsuIntegration do
     included do
       scope :for_list, -> {}
       scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
+    end
+  end
+
+  concerning :LinksAssociation do
+    included do
+      include Linkable
     end
   end
 
@@ -127,7 +137,6 @@ class User < ApplicationRecord
       improve_enum :role
 
       validates :role, presence: true
-      validates :bio, absence: true, unless: :can_write?
 
       alias_method :can_access_cms?, :can_write?
       alias_method :can_administer?, :can_publish?

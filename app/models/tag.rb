@@ -39,7 +39,7 @@ class Tag < ApplicationRecord
     end
   end
 
-  concerning :PostAssociations do
+  concerning :PostsAssociation do
     included do
       has_and_belongs_to_many :posts, -> { distinct }
     end
