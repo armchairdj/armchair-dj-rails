@@ -19,7 +19,7 @@ class Medium < Work
     end
   end
 
-  concerning :Subclassing do
+  concerning :StiInheritance do
     class_methods do
       def model_name
         Work.model_name

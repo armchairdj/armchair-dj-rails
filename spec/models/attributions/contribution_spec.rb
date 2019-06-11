@@ -42,27 +42,25 @@ RSpec.describe Contribution do
     end
   end
 
-  it_behaves_like "an_alphabetizable_model"
-
-  it_behaves_like "an_attribution"
-
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:work, :role, :creator] }
-  end
-
-  specify { expect(described_class.superclass).to eq(Attribution) }
-
-  describe "associations" do
-    it { is_expected.to belong_to(:role).required }
-  end
-
-  describe "validations" do
-    subject { build_minimal_instance }
+  describe ":CreatorAssociation" do
+    subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
+  end
 
-    describe "role" do
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :role, :creator] }
+    end
+  end
+
+  describe ":RoleAssociation" do
+    it { is_expected.to belong_to(:role).required }
+
+    pending "#role_name"
+
+    describe "validation" do
       subject { build_minimal_instance(work_id: create(:minimal_song).id) }
 
       let!(:song_role_ids) { create_list(:minimal_role, 3, medium: "Song").map(&:id) }
@@ -71,5 +69,9 @@ RSpec.describe Contribution do
 
       it { is_expected.to validate_inclusion_of(:role_id).in_array(song_role_ids) }
     end
+  end
+
+  describe ":StiInheritance" do
+    it_behaves_like "an_attribution"
   end
 end

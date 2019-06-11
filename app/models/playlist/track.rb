@@ -21,8 +21,6 @@ class Playlist
   class Track < ApplicationRecord
     self.table_name = "playlist_tracks"
 
-    include Listable
-
     concerning :GinsuIntegration do
       included do
         scope :for_list, -> { sorted }
@@ -35,6 +33,8 @@ class Playlist
         belongs_to :playlist, inverse_of: :tracks
 
         validates :playlist, presence: true
+
+        include Listable
 
         acts_as_listable(:playlist)
       end

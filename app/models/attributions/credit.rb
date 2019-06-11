@@ -29,8 +29,6 @@
 #
 
 class Credit < Attribution
-  include Listable
-
   concerning :CreatorAssociation do
     included do
       belongs_to :creator, inverse_of: :credits
@@ -62,6 +60,8 @@ class Credit < Attribution
   concerning :WorkAssociation do
     included do
       belongs_to :work, inverse_of: :credits
+
+      include Listable
 
       acts_as_listable(:work)
     end

@@ -232,7 +232,7 @@ class Work < ApplicationRecord
     end
   end
 
-  concerning :Subclassing do
+  concerning :StiInheritance do
     included do
       self.inheritance_column = :medium
 

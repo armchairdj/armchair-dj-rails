@@ -50,7 +50,7 @@ class Attribution < ApplicationRecord
     end
   end
 
-  concerning :Subclassing do
+  concerning :StiInheritance do
     included do
       validates :type, presence: true
     end

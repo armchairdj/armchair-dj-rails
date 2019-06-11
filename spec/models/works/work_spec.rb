@@ -558,7 +558,7 @@ RSpec.describe Work do
     end
   end
 
-  describe ":Subclassing" do
+  describe ":StiInheritance" do
     it { is_expected.to validate_presence_of(:medium) }
 
     describe ".grouped_by_medium" do

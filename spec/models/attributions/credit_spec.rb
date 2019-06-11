@@ -42,25 +42,33 @@ RSpec.describe Credit do
     end
   end
 
-  it_behaves_like "an_alphabetizable_model"
-
-  it_behaves_like "an_attribution"
-
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:work, :creator] }
-  end
-
-  it_behaves_like "a_listable_model", :work, :credits do
-    let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
-    let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
-  end
-
-  specify { expect(described_class.superclass).to eq(Attribution) }
-
-  describe "validations" do
-    subject { build_minimal_instance }
+  describe ":CreatorAssociation" do
+    subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :creator] }
+    end
+  end
+
+  describe ":RoleAssociation" do
+    it { is_expected.to belong_to(:role).optional }
+
+    pending "#role_name"
+  end
+
+  describe ":StiInheritance" do
+    it_behaves_like "an_attribution"
+  end
+
+  describe ":WorkAssociation" do
+    it_behaves_like "a_listable_model", :work, :credits do
+      let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
+      let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
+    end
   end
 end

@@ -30,17 +30,23 @@ RSpec.describe Playlist::Track do
     end
   end
 
-  it_behaves_like "a_listable_model", :playlist, :tracks do
-    let(:primary) { create(:complete_playlist).tracks.sorted }
-    let(:other) { create(:complete_playlist).tracks.sorted }
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:playlist, :work] }
+    end
   end
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:playlist, :work] }
-  end
+  describe ":PlaylistAssociation" do
+    it { is_expected.to belong_to(:playlist).required }
 
-  describe "scope-related" do
+    it { is_expected.to validate_presence_of(:playlist) }
+
+    it_behaves_like "a_listable_model", :playlist, :tracks do
+      let(:primary) { create(:complete_playlist).tracks.sorted }
+      let(:other) { create(:complete_playlist).tracks.sorted }
+    end
+
     describe ".sorted" do
       subject(:association) { collection.sorted }
 
@@ -62,15 +68,9 @@ RSpec.describe Playlist::Track do
     end
   end
 
-  describe "associations" do
-    it { is_expected.to belong_to(:playlist).required }
+  describe ":WorkAssociation" do
     it { is_expected.to belong_to(:work).required }
-  end
 
-  describe "validations" do
-    subject(:instance) { build_minimal_instance }
-
-    it { is_expected.to validate_presence_of(:playlist) }
     it { is_expected.to validate_presence_of(:work) }
   end
 end

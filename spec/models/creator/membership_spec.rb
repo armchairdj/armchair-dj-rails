@@ -28,7 +28,7 @@ RSpec.describe Creator::Membership do
     it_behaves_like "an_application_record"
   end
 
-  describe "group" do
+  describe ":GroupAssociation" do
     subject { build_minimal_instance }
 
     it { is_expected.to belong_to(:group).class_name("Creator").required }
@@ -57,7 +57,7 @@ RSpec.describe Creator::Membership do
     end
   end
 
-  describe "member" do
+  describe ":MemberAssociation" do
     subject { build_minimal_instance }
 
     it { is_expected.to belong_to(:member).class_name("Creator").required }
