@@ -58,7 +58,7 @@ class Work
         validate { source_and_target_are_different }
       end
 
-    private
+      private
 
       def source_and_target_are_different
         return unless source_id == target_id

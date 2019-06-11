@@ -34,29 +34,33 @@ RSpec.describe Work::Milestone do
     end
   end
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:work] }
+  describe ":ActivityAttribute" do
+    it { is_expected.to validate_presence_of(:activity) }
+
+    it_behaves_like "a_model_with_a_better_enum_for", :activity
   end
 
-  describe "associations" do
-    it { is_expected.to belong_to(:work).required }
-  end
-
-  describe "attributes" do
-    describe "enums" do
-      it_behaves_like "a_model_with_a_better_enum_for", :activity
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work] }
     end
   end
 
-  describe "validations" do
-    subject { build_minimal_instance }
+  describe ":PostAssociations" do
+    it { is_expected.to have_many(:playlists).through(:work) }
+    it { is_expected.to have_many(:mixtapes).through(:work) }
+    it { is_expected.to have_many(:reviews).through(:work) }
+  end
 
+  describe ":WorkAssociation" do
     it { is_expected.to validate_presence_of(:work) }
 
+    it { is_expected.to belong_to(:work).required }
+  end
+
+  describe ":YearAttribute" do
     it { is_expected.to validate_presence_of(:year) }
     it { is_expected.to validate_yearness_of(:year) }
-
-    it { is_expected.to validate_presence_of(:activity) }
   end
 end
