@@ -30,23 +30,6 @@ RSpec.describe Aspect do
     end
   end
 
-  describe ":WorksAssociation" do
-    it { is_expected.to have_and_belong_to_many(:works) }
-
-    it { is_expected.to have_many(:makers).through(:works) }
-    it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:playlists).through(:works) }
-  end
-
-  describe ":PostsAssociation" do
-    it { is_expected.to have_many(:mixtapes).through(:works) }
-    it { is_expected.to have_many(:reviews).through(:works) }
-
-    pending "#post_ids"
-
-    pending "#posts"
-  end
-
   describe ":Alphabetization" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -97,6 +80,15 @@ RSpec.describe Aspect do
     end
   end
 
+  describe ":PostsAssociation" do
+    it { is_expected.to have_many(:mixtapes).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
+
+    pending "#post_ids"
+
+    pending "#posts"
+  end
+
   describe ":ValAttribute" do
     subject { build_minimal_instance }
 
@@ -109,5 +101,13 @@ RSpec.describe Aspect do
       specify { expect(instance.display_val).to eq("Genre: Trip-Hop") }
       specify { expect(instance.display_val(connector: "/")).to eq("Genre/Trip-Hop") }
     end
+  end
+
+  describe ":WorksAssociation" do
+    it { is_expected.to have_and_belong_to_many(:works) }
+
+    it { is_expected.to have_many(:makers).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+    it { is_expected.to have_many(:playlists).through(:works) }
   end
 end

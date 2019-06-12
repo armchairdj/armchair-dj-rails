@@ -67,20 +67,12 @@ class Mixtape < Post
     end
   end
 
-  concerning :PlaylistAssociation do
+  concerning :PlaylistAssociations do
     included do
       belongs_to :playlist
+      has_many :tracks, through: :playlist
 
       validates :playlist, presence: true
-
-      has_many :tracks, through: :playlist
-      has_many :works,  through: :tracks
-
-      has_many :makers,        through: :works
-      has_many :contributions, through: :works
-      has_many :contributors,  through: :works
-      has_many :aspects,       through: :works
-      has_many :milestones,    through: :works
     end
   end
 
@@ -90,9 +82,21 @@ class Mixtape < Post
     end
   end
 
-  concerning :Superclass do
+  concerning :StiInheritance do
     def display_type(plural: false)
       plural ? "Mixtapes" : "Mixtape"
+    end
+  end
+
+  concerning :WorksAssociations do
+    included do
+      has_many :works, through: :tracks
+
+      has_many :makers,        through: :works
+      has_many :contributions, through: :works
+      has_many :contributors,  through: :works
+      has_many :aspects,       through: :works
+      has_many :milestones,    through: :works
     end
   end
 end

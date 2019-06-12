@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe App do
   it_behaves_like "a_medium"
 
-  describe "STI" do
+  describe ":StiInheritance" do
     describe "class" do
       specify { expect(described_class.superclass).to eq(Medium) }
       specify { expect(described_class.model_name.name).to eq("Work") }

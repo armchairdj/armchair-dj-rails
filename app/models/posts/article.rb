@@ -60,7 +60,7 @@ class Article < Post
     end
   end
 
-  concerning :Superclass do
+  concerning :StiInheritance do
     def display_type(plural: false)
       plural ? "Articles" : "Article"
     end

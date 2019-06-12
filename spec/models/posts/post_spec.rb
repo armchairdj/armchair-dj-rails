@@ -145,37 +145,7 @@ RSpec.describe Post do
     it_behaves_like "a_linkable_model"
   end
 
-  describe ":Publishing" do
-    describe "conditional validation" do
-      context "when draft" do
-        subject(:instance) { build_minimal_instance(:draft) }
-
-        it { is_expected.to validate_absence_of(:publish_on) }
-        it { is_expected.to validate_absence_of(:published_at) }
-      end
-
-      context "when scheduled" do
-        subject(:instance) { create_minimal_instance(:scheduled) }
-
-        it { is_expected.to validate_presence_of(:publish_on) }
-        it { is_expected.to validate_absence_of(:published_at) }
-
-        it "validates that publish_on is in the future" do
-          instance.publish_on = Date.today - 1
-          instance.valid?
-
-          is_expected.to have_error(:publish_on, :after)
-        end
-      end
-
-      context "when published" do
-        subject(:instance) { create_minimal_instance(:published) }
-
-        it { is_expected.to validate_absence_of(:publish_on) }
-        it { is_expected.to validate_presence_of(:published_at) }
-      end
-    end
-
+  describe ":PublicSite" do
     describe ".for_public" do
       subject(:association) { collection.for_public }
 
@@ -187,13 +157,13 @@ RSpec.describe Post do
       let!(:collection) { described_class.where(id: ids) }
 
       it "includes only published posts" do
-        is_expected.to eq [published]
+        expect(collection.for_public).to eq([published])
       end
+
+      pending "includes .reverse_cron"
     end
 
     describe ".reverse_cron" do
-      subject(:association) { collection.reverse_cron }
-
       let(:draft) { create_minimal_instance(:draft) }
       let(:scheduled) { create_minimal_instance(:scheduled) }
       let(:published) { create_minimal_instance(:published) }
@@ -201,10 +171,203 @@ RSpec.describe Post do
       let(:ids) { [draft, scheduled, published].map(&:id) }
       let(:collection) { described_class.where(id: ids) }
 
-      it "includes all, ordered descending by published_at, publish_on, updated_at" do
-        is_expected.to eq([draft, scheduled, published])
+      it "orders descending by published_at, publish_on, updated_at" do
+        expect(collection.reverse_cron).to eq([draft, scheduled, published])
       end
     end
+  end
+
+  describe ":StiInheritance" do
+    it { is_expected.to validate_presence_of(:type) }
+  end
+
+  describe ":TagsAssociation" do
+    it { is_expected.to have_and_belong_to_many(:tags) }
+  end
+
+  describe ":StatusAttribute" do
+    # Does not work because direct assignment is blocked
+    xit { is_expected.to validate_presence_of(:status) }
+
+    it_behaves_like "a_model_with_a_better_enum_for", :status
+
+    describe "scopes and booleans" do
+      let(:draft) { create_minimal_instance(:draft) }
+      let(:scheduled) { create_minimal_instance(:scheduled) }
+      let(:published) { create_minimal_instance(:published) }
+
+      let(:ids) { [draft, scheduled, published].map(&:id) }
+      let(:collection) { described_class.where(id: ids) }
+
+      specify ".draft contains only draft posts" do
+        expect(collection.draft).to contain_exactly(draft)
+      end
+
+      specify ".scheduled contains only scheduled posts" do
+        expect(collection.scheduled).to contain_exactly(scheduled)
+      end
+
+      specify ".published contains only published posts" do
+        expect(collection.published).to contain_exactly(published)
+      end
+
+      specify ".unpublished contains only draft and scheduled posts" do
+        expect(collection.unpublished).to contain_exactly(draft, scheduled)
+      end
+
+      specify "#draft? is true only for draft posts" do
+        expect(draft.draft?).to eq(true)
+        expect(scheduled.draft?).to eq(false)
+        expect(published.draft?).to eq(false)
+      end
+
+      specify "#scheduled? is true only for scheduled posts" do
+        expect(draft.scheduled?).to eq(false)
+        expect(scheduled.scheduled?).to eq(true)
+        expect(published.scheduled?).to eq(false)
+      end
+
+      specify "#published? is true only for published posts" do
+        expect(draft.published?).to eq(false)
+        expect(scheduled.published?).to eq(false)
+        expect(published.published?).to eq(true)
+      end
+
+      specify "#unpublished? is true only for draft and scheduled posts" do
+        expect(draft.unpublished?).to eq(true)
+        expect(scheduled.unpublished?).to eq(true)
+        expect(published.unpublished?).to eq(false)
+      end
+    end
+  end
+
+  describe ":StateMachine" do
+    let(:draft) { create_minimal_instance(:draft) }
+    let(:scheduled) { create_minimal_instance(:scheduled) }
+    let(:published) { create_minimal_instance(:published) }
+
+    specify "new instance has draft state" do
+      expect(described_class.new).to have_state(:draft)
+      expect(draft).to have_state(:draft)
+    end
+
+    specify "scheduled instance has scheduled state" do
+      expect(scheduled).to have_state(:scheduled)
+    end
+
+    specify "published instance has published state" do
+      expect(published).to have_state(:published)
+    end
+
+    specify "draft posts with publish_on can be scheduled" do
+      draft.publish_on = 3.weeks.from_now
+
+      expect(draft.schedule!).to eq(true)
+    end
+
+    specify "unscheduling a scheduled post clears publish_on" do
+      expect(scheduled.unschedule!).to eq(true)
+      expect(scheduled.publish_on).to eq(nil)
+    end
+
+    specify "publishing a draft post sets published_at" do
+      expect(draft.publish!).to eq(true)
+      expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+    end
+
+    specify "publishing a scheduled post sets published_at and clears publish_on" do
+      expect(scheduled.publish!).to eq(true)
+      expect(scheduled.publish_on).to eq(nil)
+      expect(scheduled.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
+    end
+
+    specify "unpublishing a published post clears published_at" do
+      expect(published.unpublish!).to eq(true)
+      expect(published.published_at).to eq(nil)
+    end
+
+    specify "may_schedule? is true only for draft posts" do
+      expect(draft.may_schedule?).to eq(true)
+
+      expect(scheduled.may_schedule?).to eq(false)
+      expect(published.may_schedule?).to eq(false)
+    end
+
+    specify "may_unschedule? is true only for scheduled posts" do
+      expect(scheduled.may_unschedule?).to eq(true)
+
+      expect(draft.may_unschedule?).to eq(false)
+      expect(published.may_unschedule?).to eq(false)
+    end
+
+    specify "may_publish? is true only for draft and scheduled posts" do
+      expect(draft.may_publish?).to eq(true)
+      expect(scheduled.may_publish?).to eq(true)
+
+      expect(published.may_publish?).to eq(false)
+    end
+
+    specify "may_unpublish? is true only for published posts" do
+      expect(published.may_unpublish?).to eq(true)
+
+      expect(draft.may_unpublish?).to eq(false)
+      expect(scheduled.may_unpublish?).to eq(false)
+    end
+
+    specify "only scheduled and published posts can transition to draft" do
+      expect(draft).to_not allow_transition_to(:draft)
+
+      expect(scheduled).to allow_transition_to(:draft)
+      expect(published).to allow_transition_to(:draft)
+    end
+
+    specify "only draft posts can transition to scheduled" do
+      expect(draft).to allow_transition_to(:scheduled)
+
+      expect(scheduled).to_not allow_transition_to(:scheduled)
+      expect(published).to_not allow_transition_to(:scheduled)
+    end
+
+    specify "only draft and scheduled posts can transition to published" do
+      expect(draft).to allow_transition_to(:published)
+      expect(scheduled).to allow_transition_to(:published)
+
+      expect(published).to_not allow_transition_to(:published)
+    end
+  end
+
+  describe ":StateMachineValidation" do
+    context "when draft" do
+      subject(:instance) { build_minimal_instance(:draft) }
+
+      it { is_expected.to validate_absence_of(:publish_on) }
+      it { is_expected.to validate_absence_of(:published_at) }
+    end
+
+    context "when scheduled" do
+      subject(:instance) { create_minimal_instance(:scheduled) }
+
+      it { is_expected.to validate_presence_of(:publish_on) }
+      it { is_expected.to validate_absence_of(:published_at) }
+
+      it "validates that publish_on is in the future" do
+        instance.publish_on = Date.today - 1
+        instance.valid?
+
+        is_expected.to have_error(:publish_on, :after)
+      end
+    end
+
+    context "when published" do
+      subject(:instance) { create_minimal_instance(:published) }
+
+      it { is_expected.to validate_absence_of(:publish_on) }
+      it { is_expected.to validate_presence_of(:published_at) }
+    end
+  end
+
+  describe ":StateMachineTransitions" do
+    pending "virtual attributes trigger correct transitions"
 
     describe "scheduling" do
       let!(:future) { create_minimal_instance(:scheduled, publish_on: 4.days.from_now) }
@@ -212,7 +375,7 @@ RSpec.describe Post do
       let!(:past_due) { create_minimal_instance(:scheduled, publish_on: 1.days.from_now) }
 
       describe ".scheduled_and_due" do
-        it "includes only scheduled that have come due, ordered by schedule date" do
+        it "includes only scheduled posts that have come due, ordered by schedule date" do
           Timecop.freeze(Date.today + 3) do
             expect(described_class.scheduled_and_due).to eq([
               past_due,
@@ -262,205 +425,7 @@ RSpec.describe Post do
     end
   end
 
-  describe ":StateMachine" do
-    let(:virgin) { described_class.new }
-    let(:draft) { create_minimal_instance(:draft) }
-    let(:scheduled) { create_minimal_instance(:scheduled) }
-    let(:published) { create_minimal_instance(:published) }
-
-    describe "states" do
-      specify { expect(virgin).to have_state(:draft) }
-      specify { expect(draft).to have_state(:draft) }
-      specify { expect(scheduled).to have_state(:scheduled) }
-      specify { expect(published).to have_state(:published) }
-    end
-
-    describe "events" do
-      describe "schedule" do
-        specify do
-          draft.publish_on = 3.weeks.from_now
-
-          expect(draft.schedule!).to eq(true)
-        end
-      end
-
-      describe "unschedule" do
-        specify do
-          expect(scheduled.unschedule!).to eq(true)
-          expect(scheduled.publish_on).to eq(nil)
-        end
-      end
-
-      describe "publish" do
-        context "when draft" do
-          specify do
-            expect(draft.publish!).to eq(true)
-            expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-          end
-        end
-
-        context "when scheduled" do
-          specify do
-            expect(scheduled.publish!).to eq(true)
-            expect(scheduled.publish_on).to eq(nil)
-            expect(scheduled.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
-          end
-        end
-      end
-
-      describe "unpublish" do
-        specify do
-          expect(published.unpublish!).to eq(true)
-          expect(published.published_at).to eq(nil)
-        end
-      end
-    end
-
-    describe "booleans" do
-      describe "may_schedule?" do
-        specify "on draft" do
-          expect(draft.may_schedule?).to eq(true)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_schedule?).to eq(false)
-        end
-
-        specify "on published" do
-          expect(published.may_schedule?).to eq(false)
-        end
-      end
-
-      describe "may_unschedule?" do
-        specify "on draft" do
-          expect(draft.may_unschedule?).to eq(false)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_unschedule?).to eq(true)
-        end
-
-        specify "on published" do
-          expect(published.may_unschedule?).to eq(false)
-        end
-      end
-
-      describe "may_publish?" do
-        specify "on draft" do
-          expect(draft.may_publish?).to eq(true)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_publish?).to eq(true)
-        end
-
-        specify "on published" do
-          expect(published.may_publish?).to eq(false)
-        end
-      end
-
-      describe "may_unpublish?" do
-        specify "on draft" do
-          expect(draft.may_unpublish?).to eq(false)
-        end
-
-        specify "on scheduled" do
-          expect(scheduled.may_unpublish?).to eq(false)
-        end
-
-        specify "on published" do
-          expect(published.may_unpublish?).to eq(true)
-        end
-      end
-    end
-
-    describe "transitions" do
-      describe "to draft" do
-        specify { expect(draft).to_not allow_transition_to(:draft) }
-        specify { expect(scheduled).to     allow_transition_to(:draft) }
-        specify { expect(published).to     allow_transition_to(:draft) }
-      end
-
-      describe "to scheduled" do
-        specify { expect(draft).to allow_transition_to(:scheduled) }
-        specify { expect(scheduled).to_not allow_transition_to(:scheduled) }
-        specify { expect(published).to_not allow_transition_to(:scheduled) }
-      end
-
-      describe "to published" do
-        specify { expect(draft).to allow_transition_to(:published) }
-        specify { expect(scheduled).to     allow_transition_to(:published) }
-        specify { expect(published).to_not allow_transition_to(:published) }
-      end
-    end
-
-    pending "virtual attributes trigger correct transitions"
-  end
-
-  describe ":StatusAttribute" do
-    it "defaults to draft" do
-      expect(described_class.new.status).to eq("draft")
-    end
-
-    describe "scopes and booleans" do
-      let(:draft) { create_minimal_instance(:draft) }
-      let(:scheduled) { create_minimal_instance(:scheduled) }
-      let(:published) { create_minimal_instance(:published) }
-
-      let(:ids) { [draft, scheduled, published].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
-
-      describe ".draft" do
-        subject(:association) { collection.draft }
-
-        it { is_expected.to contain_exactly(draft) }
-      end
-
-      describe ".scheduled" do
-        subject(:association) { collection.scheduled }
-
-        it { is_expected.to contain_exactly(scheduled) }
-      end
-
-      describe ".published" do
-        subject(:association) { collection.published }
-
-        it { is_expected.to contain_exactly(published) }
-      end
-
-      describe ".unpublished" do
-        subject(:association) { collection.unpublished }
-
-        it { is_expected.to contain_exactly(draft, scheduled) }
-      end
-
-      describe "#draft?" do
-        specify { expect(draft.draft?).to eq(true) }
-        specify { expect(scheduled.draft?).to eq(false) }
-        specify { expect(published.draft?).to eq(false) }
-      end
-
-      describe "#scheduled?" do
-        specify { expect(draft.scheduled?).to eq(false) }
-        specify { expect(scheduled.scheduled?).to eq(true) }
-        specify { expect(published.scheduled?).to eq(false) }
-      end
-
-      describe "#published?" do
-        specify { expect(draft.published?).to eq(false) }
-        specify { expect(scheduled.published?).to eq(false) }
-        specify { expect(published.published?).to eq(true) }
-      end
-
-      describe "#unpublished?" do
-        specify { expect(draft.unpublished?).to eq(true) }
-        specify { expect(scheduled.unpublished?).to eq(true) }
-        specify { expect(published.unpublished?).to eq(false) }
-      end
-    end
-  end
-
-  describe ":TagsAssociation" do
-    it { is_expected.to have_and_belong_to_many(:tags) }
+  describe ":StateMachineTransitionFailures" do
+    pending "#handle_failed_transition"
   end
 end

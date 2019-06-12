@@ -4,6 +4,8 @@ require "rails_helper"
 
 RSpec.describe Review do
   describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
+
     describe "#alpha_parts" do
       subject(:alpha_parts) { instance.alpha_parts }
 
@@ -22,25 +24,6 @@ RSpec.describe Review do
     it_behaves_like "a_ginsu_model" do
       let(:list_loads) { [:author, :work] }
       let(:show_loads) { [:work, :makers, :contributions, :aspects, :milestones] }
-    end
-  end
-
-  describe ":StiInheritance" do
-    specify { expect(described_class.superclass).to eq(Post) }
-
-    it_behaves_like "a_model_with_a_better_enum_for", :status
-
-    describe "type" do
-      subject(:instance) { described_class.new.type }
-
-      it { is_expected.to eq("Review") }
-    end
-
-    describe "#display_type" do
-      let(:instance) { create(:never_for_ever_album_review) }
-
-      specify { expect(instance.display_type).to eq("Album Review") }
-      specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
     end
   end
 
@@ -89,6 +72,23 @@ RSpec.describe Review do
       it "removes all old slugs so they can be reused" do
         expect { call_method }.to change(instance.slugs, :count).from(3).to(0)
       end
+    end
+  end
+
+  describe ":StiInheritance" do
+    specify { expect(described_class.superclass).to eq(Post) }
+
+    describe "type" do
+      subject(:instance) { described_class.new.type }
+
+      it { is_expected.to eq("Review") }
+    end
+
+    describe "#display_type" do
+      let(:instance) { create(:never_for_ever_album_review) }
+
+      specify { expect(instance.display_type).to eq("Album Review") }
+      specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
     end
   end
 

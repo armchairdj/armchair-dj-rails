@@ -95,50 +95,11 @@ class Post < ApplicationRecord
     end
   end
 
-  concerning :Publishing do
+  concerning :PublicSite do
     included do
-      validates :published_at, presence: true, if:     :requires_published_at?
-      validates :published_at, absence:  true, unless: :requires_published_at?
-
-      validates :publish_on, presence: true, if:     :requires_publish_on?
-      validates :publish_on, absence:  true, unless: :requires_publish_on?
-      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
-
       scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
       scope :for_public, -> { published.reverse_cron }
-
-      scope :unpublished, -> { where.not(status: :published) }
-
-      scope :scheduled_and_due, lambda {
-        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
-      }
-    end
-
-    class_methods do
-      def publish_scheduled
-        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
-
-        memo[:all].each.with_object(memo) do |(item), acc|
-          item.unschedule!
-
-          item.publish! ? acc[:success] << item : acc[:failure] << item
-        end
-      end
-    end
-
-    def unpublished?
-      draft? || scheduled?
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def requires_publish_on?
-      scheduled? || scheduling?
-    end
-
-    def requires_published_at?
-      published? || publishing?
     end
   end
 
@@ -148,7 +109,19 @@ class Post < ApplicationRecord
     end
   end
 
-  concerning :StateMachine do
+  concerning :StiInheritance do
+    included do
+      validates :type, presence: true
+    end
+  end
+
+  concerning :TagAssociation do
+    included do
+      has_and_belongs_to_many :tags, -> { order("tags.name") }
+    end
+  end
+
+  concerning :StatusAttribute do
     included do
       enum status: {
         draft:     0,
@@ -160,6 +133,16 @@ class Post < ApplicationRecord
 
       validates :status, presence: true
 
+      scope :unpublished, -> { where.not(status: :published) }
+    end
+
+    def unpublished?
+      draft? || scheduled?
+    end
+  end
+
+  concerning :StateMachine do
+    included do
       include AASM
 
       aasm(
@@ -207,37 +190,57 @@ class Post < ApplicationRecord
     end
   end
 
-  concerning :StiInheritance do
+  concerning :StateMachineValidation do
     included do
-      validates :type, presence: true
+      validates :published_at, presence: true, if:     :requires_published_at?
+      validates :published_at, absence:  true, unless: :requires_published_at?
+
+      validates :publish_on, presence: true, if:     :requires_publish_on?
+      validates :publish_on, absence:  true, unless: :requires_publish_on?
+
+      validates_date :publish_on, after: -> { Date.current }, allow_blank: true
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def requires_publish_on?
+      scheduled? || scheduling?
+    end
+
+    def requires_published_at?
+      published? || publishing?
     end
   end
 
-  concerning :TagAssociation do
+  concerning :StateMachineTransitions do
     included do
-      has_and_belongs_to_many :tags, -> { order("tags.name") }
-    end
-  end
-
-  concerning :Transitioning do
-    included do
-      ### Virtual attributes.
-
       attribute :publishing,   :boolean, default: false
       attribute :unpublishing, :boolean, default: false
       attribute :scheduling,   :boolean, default: false
       attribute :unscheduling, :boolean, default: false
-
-      ### Hooks.
 
       before_validation :unpublish,  if: :unpublishing?
       before_validation :unschedule, if: :unscheduling?
       before_validation :publish,    if: :publishing?
       before_validation :schedule,   if: :scheduling?
 
-      after_validation :handle_failed_transition
-
       after_save :clear_transition_flags
+
+      scope :scheduled_and_due, lambda {
+        scheduled.order(:publish_on).where("posts.publish_on <= ?", Time.zone.now)
+      }
+    end
+
+    class_methods do
+      def publish_scheduled
+        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
+
+        memo[:all].each.with_object(memo) do |(item), acc|
+          item.unschedule!
+
+          item.publish! ? acc[:success] << item : acc[:failure] << item
+        end
+      end
     end
 
     def changing_publication_status?
@@ -246,15 +249,30 @@ class Post < ApplicationRecord
 
     private # rubocop:disable Lint/UselessAccessModifier
 
+    def clear_transition_flags
+      self.publishing   = false
+      self.unpublishing = false
+      self.scheduling   = false
+      self.unscheduling = false
+    end
+  end
+
+  concerning :StateMachineTransitionFailures do
+    included do
+      after_validation :handle_failed_transition
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
     def handle_failed_transition
       return unless errors.any? && changing_publication_status?
 
-      handle_failure
+      reverse_failed_transition
 
       clear_transition_flags
     end
 
-    def handle_failure
+    def reverse_failed_transition
       return handle_failed_publish if publishing?
       return handle_failed_unpublish if unpublishing?
       return handle_failed_schedule if scheduling?
@@ -287,13 +305,6 @@ class Post < ApplicationRecord
       errors.add(:base, :failed_to_unschedule)
 
       self.publish_on = publish_on_was
-    end
-
-    def clear_transition_flags
-      self.publishing   = false
-      self.unpublishing = false
-      self.scheduling   = false
-      self.unscheduling = false
     end
   end
 end
