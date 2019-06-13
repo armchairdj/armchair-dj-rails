@@ -3,24 +3,22 @@
   padding: .5rem;
   background-color: $black;
 
-  .logo {
-    display: block;
-    float: left;
-    width: 2rem;
-
-    img {
-      display: block;
-    }
-  }
-
   nav.links {
-    float: right;
     margin: 0;
     font-size: $admin-nav-size;
 
     ul {
       margin: 0;
+      font-size: 1rem;
       line-height: 2rem;
+      @include flexbox();
+      justify-content: flex-start;
+      align-items: stretch;
+      flex-wrap: wrap;
+
+      li {
+        padding: 0 1rem 0 0;
+      }
     }
   }
 }

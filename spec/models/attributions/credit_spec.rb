@@ -31,38 +31,44 @@
 require "rails_helper"
 
 RSpec.describe Credit do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  it_behaves_like "an_alphabetizable_model"
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-  it_behaves_like "an_attribution"
-
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:work, :creator] }
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
+    end
   end
 
-  it_behaves_like "a_listable_model", :work, :credits do
-    let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
-    let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
-  end
-
-  describe "nilify_blanks" do
-    subject { build_minimal_instance }
-
-    # Must specify individual fields for STI models.
-    it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
-  end
-
-  specify { expect(described_class.superclass).to eq(Attribution) }
-
-  describe "scope-related" do
-    # Nothing so far.
-  end
-
-  describe "validations" do
-    subject { build_minimal_instance }
+  describe ":CreatorAssociation" do
+    subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id) }
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :creator] }
+    end
+  end
+
+  describe ":RoleAssociation" do
+    it { is_expected.to belong_to(:role).optional }
+
+    pending "#role_name"
+  end
+
+  describe ":StiInheritance" do
+    it_behaves_like "an_attribution"
+  end
+
+  describe ":WorkAssociation" do
+    it_behaves_like "a_listable_model", :work, :credits do
+      let(:primary) { create(:minimal_work, maker_count: 5).credits.sorted }
+      let(:other) { create(:minimal_work, maker_count: 5).credits.sorted }
+    end
   end
 end

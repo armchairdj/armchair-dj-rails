@@ -47,13 +47,13 @@ module Admin
 
     def instance_params
       params.fetch(:aspect, {}).permit(
-        :name,
-        :facet
+        :key,
+        :val
       )
     end
 
     def prepare_form
-      @facets = Aspect.human_facets
+      @keys = Aspect.human_keys
     end
   end
 end

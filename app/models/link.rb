@@ -18,9 +18,22 @@
 #
 
 class Link < ApplicationRecord
-  belongs_to :linkable, polymorphic: true
+  concerning :DescriptionAttribute do
+    included do
+      validates :description, presence: true
+    end
+  end
 
-  validates :url,         urlness: true
-  validates :url,         presence: true
-  validates :description, presence: true
+  concerning :LinkableAssociation do
+    included do
+      belongs_to :linkable, polymorphic: true
+    end
+  end
+
+  concerning :UrlAttribute do
+    included do
+      validates :url, urlness: true
+      validates :url, presence: true
+    end
+  end
 end

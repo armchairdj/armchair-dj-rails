@@ -6,101 +6,108 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
-#  facet      :integer          not null
-#  name       :string
+#  key        :integer          not null
+#  val        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
 #  index_aspects_on_alpha  (alpha)
-#  index_aspects_on_facet  (facet)
+#  index_aspects_on_key    (key)
 #
 
 require "rails_helper"
 
 RSpec.describe Aspect do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  it_behaves_like "an_alphabetizable_model"
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
-  describe "nilify_blanks" do
-    subject(:instance) { build_minimal_instance }
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
 
-    it { is_expected.to nilify_blanks(before: :validation) }
+    describe "#alpha_parts" do
+      subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
+
+      it { is_expected.to eq([instance.human_key, instance.val]) }
+    end
   end
 
-  describe "scope-related" do
-    describe "#for_facet" do
-      let!(:mood_a) { create(:minimal_aspect, facet: :musical_mood,  name: "Paranoid") }
-      let!(:mood_b) { create(:minimal_aspect, facet: :musical_mood,  name: "Uplifting") }
-      let!(:genre_a) { create(:minimal_aspect, facet: :musical_genre, name: "Trip-Hop") }
-      let!(:genre_b) { create(:minimal_aspect, facet: :musical_genre, name: "Downtempo") }
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:works, :makers, :contributors, :playlists, :mixtapes, :reviews] }
+    end
+  end
 
-      context "with single facet" do
-        subject(:association) { described_class.for_facet(:musical_mood) }
+  describe ":KeyAttribute" do
+    it { is_expected.to validate_presence_of(:key) }
+
+    it_behaves_like "a_model_with_a_better_enum_for", :key
+
+    describe "#for_key" do
+      let!(:mood_a) { create(:minimal_aspect, key: :musical_mood,  val: "Paranoid") }
+      let!(:mood_b) { create(:minimal_aspect, key: :musical_mood,  val: "Uplifting") }
+      let!(:genre_a) { create(:minimal_aspect, key: :musical_genre, val: "Trip-Hop") }
+      let!(:genre_b) { create(:minimal_aspect, key: :musical_genre, val: "Downtempo") }
+
+      context "with single key" do
+        subject(:association) { described_class.for_key(:musical_mood) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b) }
       end
 
-      context "with multiple facets" do
-        subject(:association) { described_class.for_facet(:musical_mood, :musical_genre) }
+      context "with multiple keys" do
+        subject(:association) { described_class.for_key(:musical_mood, :musical_genre) }
 
         it { is_expected.to contain_exactly(mood_a, mood_b, genre_a, genre_b) }
       end
 
-      context "with no facets" do
-        subject(:association) { described_class.for_facet(nil) }
+      context "with no keys" do
+        subject(:association) { described_class.for_key(nil) }
 
         it { is_expected.to be_empty }
       end
     end
   end
 
-  describe "associations" do
+  describe ":PostsAssociation" do
+    it { is_expected.to have_many(:mixtapes).through(:works) }
+    it { is_expected.to have_many(:reviews).through(:works) }
+
+    pending "#post_ids"
+
+    pending "#posts"
+  end
+
+  describe ":ValAttribute" do
+    subject { build_minimal_instance }
+
+    it { is_expected.to validate_presence_of(:val) }
+    it { is_expected.to validate_uniqueness_of(:val).scoped_to(:key) }
+
+    describe "#display_val" do
+      subject(:instance) { build_minimal_instance(key: :musical_genre, val: "Trip-Hop") }
+
+      specify { expect(instance.display_val).to eq("Genre: Trip-Hop") }
+      specify { expect(instance.display_val(connector: "/")).to eq("Genre/Trip-Hop") }
+    end
+  end
+
+  describe ":WorksAssociation" do
     it { is_expected.to have_and_belong_to_many(:works) }
 
     it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
     it { is_expected.to have_many(:playlists).through(:works) }
-    it { is_expected.to have_many(:mixtapes).through(:works) }
-    it { is_expected.to have_many(:reviews).through(:works) }
-  end
-
-  describe "attributes" do
-    describe "enums" do
-      it_behaves_like "a_model_with_a_better_enum_for", :facet
-    end
-  end
-
-  describe "validations" do
-    subject(:instance) { build_minimal_instance }
-
-    it { is_expected.to validate_presence_of(:facet) }
-
-    it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:facet) }
-  end
-
-  describe "instance" do
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
-
-      let(:instance) { build_minimal_instance }
-
-      it { is_expected.to eq([instance.human_facet, instance.name]) }
-    end
-
-    describe "#display_name" do
-      subject(:instance) { build_minimal_instance(facet: :musical_genre, name: "Trip-Hop") }
-
-      specify { expect(instance.display_name).to eq("Genre: Trip-Hop") }
-      specify { expect(instance.display_name(connector: "/")).to eq("Genre/Trip-Hop") }
-    end
   end
 end

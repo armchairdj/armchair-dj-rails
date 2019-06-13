@@ -18,14 +18,29 @@
 #
 
 class Role < ApplicationRecord
-  concerning :NameAttribute do
+  concerning :Alphabetization do
     included do
-      validates :name, presence: true
-      validates :name, uniqueness: { scope: [:medium] }
+      include Alphabetizable
     end
 
-    def display_name(full: false)
-      full ? [display_medium, name].join(": ") : name
+    def alpha_parts
+      [display_medium, name]
+    end
+  end
+
+  concerning :AttributionAssociations do
+    included do
+      has_many :attributions,  dependent: :destroy
+      has_many :contributions, dependent: :destroy
+
+      has_many :works, through: :contributions
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:contributions, :works) }
     end
   end
 
@@ -44,29 +59,14 @@ class Role < ApplicationRecord
     end
   end
 
-  concerning :AttributionAssociations do
+  concerning :NameAttribute do
     included do
-      has_many :attributions,  dependent: :destroy
-      has_many :contributions, dependent: :destroy
-
-      has_many :works, through: :contributions
-    end
-  end
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
+      validates :name, presence: true
+      validates :name, uniqueness: { scope: [:medium] }
     end
 
-    def alpha_parts
-      [display_medium, name]
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> {}
-      scope :for_show, -> { includes(:contributions, :works) }
+    def display_name(full: false)
+      full ? [display_medium, name].join(": ") : name
     end
   end
 end

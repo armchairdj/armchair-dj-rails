@@ -1,17 +1,11 @@
-<%= content_for(:public_header) do %>
-  <%= content_tag(:header, class: "post-header") do %>
-    <%= content_tag(:h1, @article.title) %>
+<%= content_for(:post_header) do %>
+  <%= content_tag(:h1, @article.title) %>
+<% end %>
+
+<%= content_for(:post_context) do %>
+  <%= content_tag(:dl, class: "inline") do %>
+    <%= render "shared/playback/tags", tags: @article.tags %>
   <% end %>
+
+  <%= render "shared/playback/links", links: @article.links %>
 <% end %>
-
-<%= post_body @article %>
-
-<%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_author_of(@article) %> on <%= post_published_date(@article) %>
-<% end %>
-
-<%= content_tag(:aside, class: "post-tags") do %>
-  <%= render "shared/playback/tags", tags: @article.tags %>
-<% end %>
-
-<%= render "shared/playback/links", links: @article.links %>

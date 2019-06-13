@@ -41,11 +41,11 @@
   <% end %>
 <% end %>
 
-<% if (facets = @work.display_facets).any? %>
+<% if (keys = @work.display_aspects).any? %>
   <%= admin_section(headline: "Aspects") do %>
     <%= content_tag(:dl, class: "horizontal right") do %>
-      <% facets.each do |facet_name, aspects| %>
-        <%= content_tag(:dt, facet_name) %>
+      <% keys.each do |key, aspects| %>
+        <%= content_tag(:dt, key) %>
         <% aspects.each do |aspect| %>
           <%= content_tag(:dd) do %>
             <%= link_to_aspect(aspect) %>

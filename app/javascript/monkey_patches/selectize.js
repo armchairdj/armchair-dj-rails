@@ -1,5 +1,6 @@
-import _         from "underscore";
-import Selectize from "selectize";
+var _ = require("underscore");
+
+var Selectize = require("selectize");
 
 _.extend(Selectize.prototype, {
   getOptionByText: function(text) {

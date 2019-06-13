@@ -82,6 +82,10 @@ module Ginsu
       "#{model_class.table_name}.alpha ASC"
     end
 
+    def author_sort_sql
+      "users.username ASC"
+    end
+
     def default_sort_sql
       "#{model_class.table_name}.updated_at DESC"
     end
@@ -98,8 +102,8 @@ module Ginsu
       "LOWER(#{model_class.table_name}.title) ASC"
     end
 
-    def author_sort_sql
-      "users.username ASC"
+    def val_sort_sql
+      "LOWER(#{model_class.table_name}.val) ASC"
     end
 
     def work_medium_sort_sql

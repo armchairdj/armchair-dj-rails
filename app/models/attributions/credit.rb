@@ -29,9 +29,20 @@
 #
 
 class Credit < Attribution
-  #############################################################################
-  # CONCERNING: Role.
-  #############################################################################
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :credits
+
+      validates :creator_id, uniqueness: { scope: [:work_id] }
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list,  -> {}
+      scope :for_show,  -> { includes(:work, :creator) }
+    end
+  end
 
   concerning :RoleAssociation do
     included do
@@ -46,36 +57,13 @@ class Credit < Attribution
     end
   end
 
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
-
-  include Listable
-
   concerning :WorkAssociation do
     included do
       belongs_to :work, inverse_of: :credits
 
+      include Listable
+
       acts_as_listable(:work)
     end
   end
-
-  #############################################################################
-  # CONCERNING: Creator.
-  #############################################################################
-
-  concerning :CreatorAssociation do
-    included do
-      belongs_to :creator, inverse_of: :credits
-
-      validates :creator_id, uniqueness: { scope: [:work_id] }
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list,  -> {}
-  scope :for_show,  -> { includes(:work, :creator) }
 end

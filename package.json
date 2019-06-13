@@ -2,19 +2,19 @@
   "name": "armchair-dj-rails",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "^3.5",
+    "@rails/webpacker": "^4.0.6",
     "activestorage": "^5.2.2",
-    "form-to-object": "^5.1.0",
-    "jquery": "^3.3.1",
-    "rails-ujs": "^5.1.5",
+    "form-to-object": "^6.0.0",
+    "jquery": "^3.4.1",
+    "rails-ujs": "^5.2.0",
     "selectize": "^0.12.6",
-    "sortablejs": "^1.7.0",
-    "stimulus": "^1.0.1",
-    "turbolinks": "^5.1.1",
+    "sortablejs": "^1.8.0",
+    "stimulus": "^1.1.0",
+    "turbolinks": "5.2.0",
     "underscore": "^1.9.0",
     "webpack-modernizr-loader": "^4.0.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "2.11.2"
+    "webpack-dev-server": "^3.5.1"
   }
 }

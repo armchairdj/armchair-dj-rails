@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Song do
   it_behaves_like "a_medium"
 
-  describe "STI" do
+  describe ":StiInheritance" do
     describe "class" do
       specify { expect(described_class.superclass).to eq(Medium) }
       specify { expect(described_class.model_name.name).to eq("Work") }
@@ -24,12 +24,12 @@ RSpec.describe Song do
   end
 
   describe "class attributes" do
-    describe "available_facets" do
-      let(:expected) { [:song_type, :musical_genre, :musical_mood, :music_label] }
+    describe "available_aspects" do
+      let(:expected) { [:song_type, :music_label, :musical_genre, :musical_mood] }
       let(:instance) { build_minimal_instance }
 
-      specify { expect(instance.available_facets).to eq(expected) }
-      specify { expect(described_class.available_facets).to eq(expected) }
+      specify { expect(instance.available_aspects).to eq(expected) }
+      specify { expect(described_class.available_aspects).to eq(expected) }
     end
   end
 end

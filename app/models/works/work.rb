@@ -20,81 +20,15 @@
 #
 
 class Work < ApplicationRecord
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
-  include Imageable
-
-  #############################################################################
-  # CONCERNING: STI subclass contract.
-  #############################################################################
-
-  concerning :Subclassable do
+  concerning :Alphabetization do
     included do
-      self.inheritance_column = :medium
-
-      validates :medium, presence: true
-
-      class_attribute :available_facets, default: []
+      include Alphabetizable
     end
 
-    class_methods do
-      def grouped_by_medium
-        order(:medium, :alpha).group_by(&:display_medium).to_a
-      end
-
-      def media
-        load_descendants
-
-        classes = descendants.reject { |x| x == Medium }
-
-        classes.map { |x| [x.display_medium, x.true_model_name.name] }.sort_by(&:last)
-      end
-
-      def valid_media
-        media.map(&:last)
-      end
-
-      def load_descendants
-        return unless Rails.env.development? || Rails.env.test?
-
-        Dir["#{Rails.root}/app/models/works/*.rb"].each do |file|
-          next if File.basename(file, ".rb") == File.basename(__FILE__, ".rb")
-
-          require_dependency file
-        end
-      end
+    def alpha_parts
+      [display_makers, title, subtitle]
     end
   end
-
-  #############################################################################
-  # CONCERNING: Title.
-  #############################################################################
-
-  concerning :TitleAttribute do
-    included do
-      validates :title, presence: true
-    end
-
-    def display_title(full: false)
-      return unless persisted?
-
-      parts = [title, subtitle]
-
-      parts.unshift(display_makers) if full
-
-      parts.compact.join(": ")
-    end
-
-    def full_display_title
-      display_title(full: true)
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Aspects.
-  #############################################################################
 
   concerning :AspectsAssociation do
     included do
@@ -103,64 +37,32 @@ class Work < ApplicationRecord
       validate { only_available_aspects }
     end
 
-    def display_facets
-      aspects.group_by(&:human_facet).to_a
+    def display_aspects
+      candidates = aspects.group_by(&:key).symbolize_keys
+
+      self.class.available_aspects.each.with_object({}) do |available_key, memo|
+        next unless (items = candidates[available_key])
+
+        memo[items.first.human_key] = items
+      end.to_a
     end
 
     private
 
     def only_available_aspects
       candidates = aspects.reject(&:marked_for_destruction?)
-      disallowed = candidates.reject { |x| available_facets.include?(x.facet.to_sym) }
+      disallowed = candidates.reject { |x| available_aspects.include?(x.key.to_sym) }
 
       errors.add(:aspects, :invalid) if disallowed.any?
     end
   end
-
-  #############################################################################
-  # CONCERNING: Milestones.
-  #############################################################################
-
-  concerning :MilestonesAssociation do
-    included do
-      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
-
-      accepts_nested_attributes_for(:milestones, allow_destroy: true,
-                                                 reject_if:     proc { |attrs| attrs["year"].blank? })
-
-      validates_nested_uniqueness_of :milestones, uniq_attr: :activity
-
-      validate { presence_of_released_milestone }
-    end
-
-    def display_milestones
-      milestones.sorted
-    end
-
-    def prepare_milestones
-      5.times { milestones.build }
-
-      milestones.first.activity = :released if milestones.first.new_record?
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def presence_of_released_milestone
-      return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
-
-      errors.add(:milestones, :blank)
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Attributions.
-  #############################################################################
 
   concerning :AttributionAssociations do
     included do
       has_many :attributions, inverse_of: :work, dependent: :destroy
     end
 
+    # TODO: Make this an association
     def creators
       Creator.where(id: creator_ids)
     end
@@ -170,9 +72,22 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Credits.
-  #############################################################################
+  concerning :ContributionAssociations do
+    included do
+      has_many :contributions, inverse_of: :work, dependent: :destroy
+
+      has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
+
+      accepts_nested_attributes_for(:contributions, allow_destroy: true,
+                                                    reject_if:     proc { |attrs| attrs["creator_id"].blank? })
+
+      validates_nested_uniqueness_of(:contributions, uniq_attr: :creator_id, scope: [:role_id])
+    end
+
+    def prepare_contributions
+      10.times { contributions.build }
+    end
+  end
 
   concerning :CreditAssociations do
     included do
@@ -207,30 +122,90 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Contributions.
-  #############################################################################
-
-  concerning :ContributionAssociations do
-    included do
-      has_many :contributions, inverse_of: :work, dependent: :destroy
-
-      has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
-
-      accepts_nested_attributes_for(:contributions, allow_destroy: true,
-                                                    reject_if:     proc { |attrs| attrs["creator_id"].blank? })
-
-      validates_nested_uniqueness_of(:contributions, uniq_attr: :creator_id, scope: [:role_id])
+  concerning :Editing do
+    def available_relatives
+      Work.where.not(id: id).grouped_by_medium
     end
 
-    def prepare_contributions
-      10.times { contributions.build }
+    def prepare_for_editing
+      return unless medium.present?
+
+      prepare_credits
+      prepare_contributions
+      prepare_milestones
+      prepare_source_relationships
+      prepare_target_relationships
     end
   end
 
-  #############################################################################
-  # CONCERNING: Source relationships.
-  #############################################################################
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, lambda {
+        includes(
+          :aspects, :milestones, :playlists, :reviews, :mixtapes,
+          :credits, :makers, :contributions, :contributors
+        )
+      }
+    end
+  end
+
+  concerning :ImageAttachment do
+    included do
+      include Imageable
+    end
+  end
+
+  concerning :MilestonesAssociation do
+    included do
+      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
+
+      accepts_nested_attributes_for(:milestones, allow_destroy: true,
+                                                 reject_if:     proc { |attrs| attrs["year"].blank? })
+
+      validates_nested_uniqueness_of :milestones, uniq_attr: :activity
+
+      validate { presence_of_released_milestone }
+    end
+
+    def display_milestones
+      milestones.sorted
+    end
+
+    def prepare_milestones
+      5.times { milestones.build }
+
+      milestones.first.activity = :released if milestones.first.new_record?
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def presence_of_released_milestone
+      return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
+
+      errors.add(:milestones, :blank)
+    end
+  end
+
+  concerning :PostAssociations do
+    included do
+      has_many :reviews, dependent: :nullify
+
+      has_many :playlistings, class_name: "Playlist::Track",
+        inverse_of: :work, foreign_key: :work_id, dependent: :nullify
+
+      has_many :playlists, through: :playlistings
+      has_many :mixtapes,  through: :playlists
+    end
+
+    def posts
+      Post.where(id: post_ids)
+    end
+
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
+  end
 
   concerning :SourceAssociations do
     included do
@@ -257,9 +232,43 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Target relationships.
-  #############################################################################
+  concerning :StiInheritance do
+    included do
+      self.inheritance_column = :medium
+
+      validates :medium, presence: true
+
+      class_attribute :available_aspects, default: []
+    end
+
+    class_methods do
+      def grouped_by_medium
+        order(:medium, :alpha).group_by(&:display_medium).to_a
+      end
+
+      def media
+        load_descendants
+
+        classes = descendants.reject { |x| x == Medium }
+
+        classes.map { |x| [x.display_medium, x.true_model_name.name] }.sort_by(&:last)
+      end
+
+      def valid_media
+        media.map(&:last)
+      end
+
+      def load_descendants
+        return unless Rails.env.development? || Rails.env.test?
+
+        Dir["#{Rails.root}/app/models/works/*.rb"].each do |file|
+          next if File.basename(file, ".rb") == File.basename(__FILE__, ".rb")
+
+          require_dependency file
+        end
+      end
+    end
+  end
 
   concerning :TargetAssociations do
     included do
@@ -286,73 +295,23 @@ class Work < ApplicationRecord
     end
   end
 
-  #############################################################################
-  # CONCERNING: Posts.
-  #############################################################################
-
-  concerning :PostAssociations do
+  concerning :TitleAttribute do
     included do
-      has_many :reviews, dependent: :nullify
-
-      has_many :playlistings, class_name: "Playlist::Track",
-        inverse_of: :work, foreign_key: :work_id, dependent: :nullify
-
-      has_many :playlists, through: :playlistings
-      has_many :mixtapes,  through: :playlists
+      validates :title, presence: true
     end
 
-    def posts
-      Post.where(id: post_ids)
+    def display_title(full: false)
+      return unless persisted?
+
+      parts = [title, subtitle]
+
+      parts.unshift(display_makers) if full
+
+      parts.compact.join(": ")
     end
 
-    def post_ids
-      reviews.ids + mixtapes.ids
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Editing.
-  #############################################################################
-
-  concerning :Editing do
-    def available_relatives
-      Work.where.not(id: id).grouped_by_medium
-    end
-
-    def prepare_for_editing
-      return unless medium.present?
-
-      prepare_credits
-      prepare_contributions
-      prepare_milestones
-      prepare_source_relationships
-      prepare_target_relationships
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
-
-  scope :for_list, -> {}
-  scope :for_show, lambda {
-                     includes(
-                       :aspects, :milestones, :playlists, :reviews, :mixtapes,
-                       :credits, :makers, :contributions, :contributors
-                     )
-                   }
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [display_makers, title, subtitle]
+    def full_display_title
+      display_title(full: true)
     end
   end
 end

@@ -54,7 +54,75 @@ class User < ApplicationRecord
     :validatable
   )
 
-  include Linkable
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [last_name, first_name, middle_name]
+    end
+  end
+
+  concerning :BioAttribute do
+    included do
+      validates :bio, absence: true, unless: :can_write?
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
+    end
+  end
+
+  concerning :LinksAssociation do
+    included do
+      include Linkable
+    end
+  end
+
+  concerning :NameAttributes do
+    included do
+      validates :first_name, presence: true
+      validates :last_name,  presence: true
+
+      validates :username, presence:   true
+      validates :username, uniqueness: { case_sensitive: false }
+      validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
+    end
+
+    def display_name
+      [first_name, middle_name, last_name].compact.join(" ")
+    end
+
+    def to_param
+      username
+    end
+  end
+
+  concerning :PostAssociations do
+    included do
+      scope :published,  -> { joins(:posts).merge(Post.published) }
+      scope :for_public, -> { published }
+
+      with_options(dependent: :nullify, foreign_key: "author_id") do |user|
+        user.has_many :posts
+        user.has_many :articles
+        user.has_many :reviews
+        user.has_many :mixtapes
+        user.has_many :playlists
+      end
+
+      has_many :works, through: :reviews
+      has_many :makers, -> { distinct }, through: :works
+    end
+
+    def published?
+      can_write? && posts.published.count.positive?
+    end
+  end
 
   concerning :RoleAttribute do
     included do
@@ -69,7 +137,6 @@ class User < ApplicationRecord
       improve_enum :role
 
       validates :role, presence: true
-      validates :bio, absence: true, unless: :can_write?
 
       alias_method :can_access_cms?, :can_write?
       alias_method :can_administer?, :can_publish?
@@ -115,64 +182,6 @@ class User < ApplicationRecord
       instance.errors.add(:role, :invalid_assignment)
 
       false
-    end
-  end
-
-  concerning :NameAttributes do
-    included do
-      validates :first_name, presence: true
-      validates :last_name,  presence: true
-
-      validates :username, presence:   true
-      validates :username, uniqueness: { case_sensitive: false }
-      validates :username, format: { with: /\A[a-zA-Z0-9]+\z/ }
-    end
-
-    def display_name
-      [first_name, middle_name, last_name].compact.join(" ")
-    end
-
-    def to_param
-      username
-    end
-  end
-
-  concerning :PostAssociations do
-    included do
-      scope :published,  -> { joins(:posts).merge(Post.published) }
-      scope :for_public, -> { published }
-
-      with_options(dependent: :nullify, foreign_key: "author_id") do |user|
-        user.has_many :posts
-        user.has_many :articles
-        user.has_many :reviews
-        user.has_many :mixtapes
-        user.has_many :playlists
-      end
-
-      has_many :works, through: :reviews
-      has_many :makers, -> { distinct }, through: :works
-    end
-
-    def published?
-      can_write? && posts.published.count.positive?
-    end
-  end
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [last_name, first_name, middle_name]
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> {}
-      scope :for_show, -> { includes(:links, :posts, :playlists, :works, :makers) }
     end
   end
 end

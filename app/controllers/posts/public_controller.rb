@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
-  class BaseController < ApplicationController
+  class PublicController < ApplicationController
     include Paginatable
 
     # GET /<plural_param_key>
@@ -37,7 +37,7 @@ module Posts
     end
 
     def find_instance
-      instance = policy_scope(@model_class).for_show.find_by(slug: params[:slug])
+      instance = policy_scope(@model_class).for_show.find_by!(slug: params[:slug])
 
       instance_variable_set(:"@#{controller_name.singularize}", instance)
 
@@ -46,6 +46,12 @@ module Posts
 
     def set_section
       raise NotImplementedError
+    end
+
+    def determine_layout
+      return "post" if action_name == "show"
+
+      "public"
     end
   end
 end

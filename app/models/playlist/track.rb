@@ -21,11 +21,12 @@ class Playlist
   class Track < ApplicationRecord
     self.table_name = "playlist_tracks"
 
-    #############################################################################
-    # CONCERNING: Playlist.
-    #############################################################################
-
-    include Listable
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:playlist, :work) }
+      end
+    end
 
     concerning :PlaylistAssociation do
       included do
@@ -33,13 +34,11 @@ class Playlist
 
         validates :playlist, presence: true
 
+        include Listable
+
         acts_as_listable(:playlist)
       end
     end
-
-    #############################################################################
-    # CONCERNING: Work.
-    #############################################################################
 
     concerning :WorkAssociation do
       included do
@@ -48,12 +47,5 @@ class Playlist
         validates :work, presence: true
       end
     end
-
-    #############################################################################
-    # CONCERNING: Ginsu.
-    #############################################################################
-
-    scope :for_list, -> { sorted }
-    scope :for_show, -> { sorted.includes(:playlist, :work) }
   end
 end

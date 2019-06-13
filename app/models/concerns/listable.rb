@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 concern :Listable do
-  #############################################################################
-  # Class.
-  #############################################################################
-
   class_methods do
     def acts_as_listable(acts_as_list_scope)
       acts_as_list(scope: acts_as_list_scope, top_of_list: 1)
@@ -20,10 +16,6 @@ concern :Listable do
       BulkReorder.new(self, parent, sorted_ids).execute!
     end
   end
-
-  #############################################################################
-  # BulkReorder.
-  #############################################################################
 
   class BulkReorder
     def initialize(model_class, parent, sorted_ids)

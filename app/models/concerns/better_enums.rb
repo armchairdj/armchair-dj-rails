@@ -11,10 +11,6 @@
 #   - easily retrieve raw enum values?
 
 concern :BetterEnums do
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     class_attribute :_better_enums, instance_accessor: false
 
@@ -30,15 +26,7 @@ concern :BetterEnums do
     private_class_method :raw_enum_member
   end
 
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
   class_methods do
-    ##############
-    ### PUBLIC ###
-    ##############
-
     def improve_enum(attribute)
       lazy_load_better_enums
 
@@ -56,10 +44,6 @@ concern :BetterEnums do
 
       _better_enums
     end
-
-    ###############
-    ### PRIVATE ###
-    ###############
 
     def lazy_load_better_enums
       self._better_enums ||= Set.new

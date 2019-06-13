@@ -6,23 +6,51 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
-#  facet      :integer          not null
-#  name       :string
+#  key        :integer          not null
+#  val        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
 #  index_aspects_on_alpha  (alpha)
-#  index_aspects_on_facet  (facet)
+#  index_aspects_on_key    (key)
 #
 
 class Aspect < ApplicationRecord
-  concerning :FacetAttribute do
+  # This must go before the #PostsAssociation block.
+  concerning :WorksAssociation do
     included do
-      scope :for_facet, ->(*facets) { where(facet: facets.flatten.compact) }
+      has_and_belongs_to_many :works, -> { distinct }
 
-      enum facet: {
+      has_many :playlists,    -> { distinct }, through: :works
+      has_many :makers,       -> { distinct }, through: :works
+      has_many :contributors, -> { distinct }, through: :works
+    end
+  end
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [human_key, val]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
+    end
+  end
+
+  concerning :KeyAttribute do
+    included do
+      validates :key, presence: true
+
+      enum key: {
         album_format:      0,
         song_type:         1,
         music_label:       2,
@@ -51,30 +79,9 @@ class Aspect < ApplicationRecord
         game_studio:       602
       }
 
-      improve_enum :facet
+      improve_enum :key
 
-      validates :facet, presence: true
-    end
-  end
-
-  concerning :NameAttribute do
-    included do
-      validates :name, presence: true
-      validates :name, uniqueness: { scope: [:facet] }
-    end
-
-    def display_name(connector: ": ")
-      [human_facet, name].compact.join(connector)
-    end
-  end
-
-  concerning :WorksAssociation do
-    included do
-      has_and_belongs_to_many :works, -> { distinct }
-
-      has_many :playlists,    -> { distinct }, through: :works
-      has_many :makers,       -> { distinct }, through: :works
-      has_many :contributors, -> { distinct }, through: :works
+      scope :for_key, ->(*keys) { where(key: keys.flatten.compact) }
     end
   end
 
@@ -93,20 +100,14 @@ class Aspect < ApplicationRecord
     end
   end
 
-  concerning :Alphabetization do
+  concerning :ValAttribute do
     included do
-      include Alphabetizable
+      validates :val, presence: true
+      validates :val, uniqueness: { scope: [:key] }
     end
 
-    def alpha_parts
-      [human_facet, name]
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> {}
-      scope :for_show, -> { includes(:works, :makers, :contributors, :playlists, :mixtapes, :reviews) }
+    def display_val(connector: ": ")
+      [human_key, val].compact.join(connector)
     end
   end
 end

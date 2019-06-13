@@ -16,18 +16,6 @@
 #
 
 class Tag < ApplicationRecord
-  concerning :NameAttribute do
-    included do
-      validates :name, presence: true
-    end
-  end
-
-  concerning :PostAssociations do
-    included do
-      has_and_belongs_to_many :posts, -> { distinct }
-    end
-  end
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -42,6 +30,18 @@ class Tag < ApplicationRecord
     included do
       scope :for_list, -> {}
       scope :for_show, -> { includes(:posts) }
+    end
+  end
+
+  concerning :NameAttribute do
+    included do
+      validates :name, presence: true
+    end
+  end
+
+  concerning :PostsAssociation do
+    included do
+      has_and_belongs_to_many :posts, -> { distinct }
     end
   end
 end

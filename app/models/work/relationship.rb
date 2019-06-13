@@ -26,46 +26,6 @@ class Work
   class Relationship < ApplicationRecord
     self.table_name = "work_relationships"
 
-    #############################################################################
-    # CONCERNING: Source.
-    #############################################################################
-
-    concerning :SourceAssociation do
-      included do
-        belongs_to :source, class_name: "Work", foreign_key: :source_id
-
-        validates :source, presence: true
-
-        validates :source_id, uniqueness: { scope: [:target_id, :connection] }
-
-        validate { source_and_target_are_different }
-      end
-
-    private
-
-      def source_and_target_are_different
-        return unless source_id == target_id
-
-        errors.add(:source_id, :same_as_target)
-      end
-    end
-
-    #############################################################################
-    # CONCERNING: Target.
-    #############################################################################
-
-    concerning :TargetAssociation do
-      included do
-        belongs_to :target, class_name: "Work", foreign_key: :target_id
-
-        validates :target, presence: true
-      end
-    end
-
-    #############################################################################
-    # CONCERNING: Connection.
-    #############################################################################
-
     concerning :ConnectionAttribute do
       included do
         validates :connection, presence: true
@@ -84,6 +44,34 @@ class Work
         }
 
         improve_enum :connection
+      end
+    end
+
+    concerning :SourceAssociation do
+      included do
+        belongs_to :source, class_name: "Work", foreign_key: :source_id
+
+        validates :source, presence: true
+
+        validates :source_id, uniqueness: { scope: [:target_id, :connection] }
+
+        validate { source_and_target_are_different }
+      end
+
+      private
+
+      def source_and_target_are_different
+        return unless source_id == target_id
+
+        errors.add(:source_id, :same_as_target)
+      end
+    end
+
+    concerning :TargetAssociation do
+      included do
+        belongs_to :target, class_name: "Work", foreign_key: :target_id
+
+        validates :target, presence: true
       end
     end
   end

@@ -25,37 +25,6 @@ class Work
   class Milestone < ApplicationRecord
     self.table_name = "work_milestones"
 
-    #############################################################################
-    # CONCERNING: Work.
-    #############################################################################
-
-    concerning :WorkAssociation do
-      included do
-        belongs_to :work
-
-        has_many :makers,       -> { distinct }, through: :work
-        has_many :contributors, -> { distinct }, through: :work
-
-        validates :work, presence: true
-      end
-    end
-
-    #############################################################################
-    # CONCERNING: Posts.
-    #############################################################################
-
-    concerning :PostAssociation do
-      included do
-        has_many :playlists, through: :work
-        has_many :mixtapes,  through: :work
-        has_many :reviews,   through: :work
-      end
-    end
-
-    #############################################################################
-    # CONCERNING: Activity.
-    #############################################################################
-
     concerning :ActivityAttribute do
       included do
         validates :activity, presence: true
@@ -79,9 +48,31 @@ class Work
       end
     end
 
-    #############################################################################
-    # CONCERNING: Year.
-    #############################################################################
+    concerning :GinsuIntegration do
+      included do
+        scope :for_list, -> { sorted }
+        scope :for_show, -> { sorted.includes(:work) }
+      end
+    end
+
+    concerning :PostAssociation do
+      included do
+        has_many :playlists, through: :work
+        has_many :mixtapes,  through: :work
+        has_many :reviews,   through: :work
+      end
+    end
+
+    concerning :WorkAssociation do
+      included do
+        belongs_to :work
+
+        has_many :makers,       -> { distinct }, through: :work
+        has_many :contributors, -> { distinct }, through: :work
+
+        validates :work, presence: true
+      end
+    end
 
     concerning :YearAttribute do
       included do
@@ -90,12 +81,5 @@ class Work
         scope :sorted, -> { order(:year) }
       end
     end
-
-    #############################################################################
-    # CONCERNING: Ginsu.
-    #############################################################################
-
-    scope :for_list, -> { sorted }
-    scope :for_show, -> { sorted.includes(:work) }
   end
 end

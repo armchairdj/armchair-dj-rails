@@ -2,7 +2,7 @@
   @title = "Huh?"
 %>
 
-<%= content_for :public_header do %>
+<% content_for :public_header do %>
   <%= content_tag(:header, class: "standard-page-header") do %>
     <%= content_tag(:h1) do %>
       <%= semantic_icon("warning", title: "bad request error", desc: "warning icon") %>

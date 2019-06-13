@@ -29,46 +29,6 @@
 #
 
 class Attribution < ApplicationRecord
-  #############################################################################
-  # CONCERNING: STI subclass contract.
-  #############################################################################
-
-  concerning :Subclassable do
-    included do
-      validates :type, presence: true
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
-
-  concerning :WorkAssociation do
-    included do
-      belongs_to :work, inverse_of: :attributions
-
-      validates :work, presence: true
-
-      delegate :display_medium, to: :work, allow_nil: true
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Creator.
-  #############################################################################
-
-  concerning :CreatorAssociation do
-    included do
-      belongs_to :creator, inverse_of: :attributions
-
-      validates :creator, presence: true
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -79,6 +39,30 @@ class Attribution < ApplicationRecord
       def alpha_parts
         [work_alpha_parts, role_name, creator_alpha_parts]
       end
+    end
+  end
+
+  concerning :CreatorAssociation do
+    included do
+      belongs_to :creator, inverse_of: :attributions
+
+      validates :creator, presence: true
+    end
+  end
+
+  concerning :StiInheritance do
+    included do
+      validates :type, presence: true
+    end
+  end
+
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :attributions
+
+      validates :work, presence: true
+
+      delegate :display_medium, to: :work, allow_nil: true
     end
   end
 end

@@ -1,26 +1,22 @@
-<%= content_for(:public_header) do %>
-  <%= content_tag(:header, class: "post-header") do %>
-    <%= content_tag(:h3, decorated_post_type(@review), class: "post-type-identifier") %>
-    <%= content_tag(:h1) do %>
-      <%= content_tag(:span, @review.work.display_makers, class: "creators") %>
-      <%= content_tag(:span, @review.work.title,          class: "title"   ) %>
-      <%= content_tag(:span, @review.work.subtitle,       class: "subtitle") %>
-    <% end %>
+<%= content_for(:post_header) do %>
+  <%= content_tag(:h3, decorated_post_type(@review), class: "post-type-identifier") %>
+  <%= content_tag(:h1) do %>
+    <%= content_tag(:span, @review.work.display_makers, class: "creators") %>
+    <%= content_tag(:span, @review.work.title,          class: "title"   ) %>
+    <%= content_tag(:span, @review.work.subtitle,       class: "subtitle") %>
   <% end %>
 <% end %>
 
-<%= post_body @review %>
+<%= content_for(:post_context) do %>
+  <%= content_tag(:aside, class: "post-context-section") do %>
+    <%= content_tag(:dl, class: "inline") do %>
+      <%= render "shared/playback/aspects", keys: @review.work.display_aspects %>
 
-<%= content_tag(:footer, class: "post-byline") do %>
-  Posted by <%= link_to_author_of(@review) %> on <%= post_published_date(@review) %>
+      <%= render "shared/playback/tags", tags: @review.tags %>
+    <% end %>
+  <% end %>
+
+  <%= render "shared/playback/contributions", contributions: @review.work.contributions, context: :work %>
+
+  <%= render "shared/playback/links", links: @review.links %>
 <% end %>
-
-<%= render "shared/playback/aspects", facets: @review.work.display_facets %>
-
-<%= render "shared/playback/contributions", contributions: @review.work.contributions, context: :work %>
-
-<%= content_tag(:aside, class: "post-tags") do %>
-  <%= render "shared/playback/tags", tags: @review.tags %>
-<% end %>
-
-<%= render "shared/playback/links", links: @review.links %>

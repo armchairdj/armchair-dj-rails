@@ -6,33 +6,33 @@
 #
 #  id         :bigint(8)        not null, primary key
 #  alpha      :string
-#  facet      :integer          not null
-#  name       :string
+#  key        :integer          not null
+#  val        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
 #  index_aspects_on_alpha  (alpha)
-#  index_aspects_on_facet  (facet)
+#  index_aspects_on_key    (key)
 #
 
 FactoryBot.define do
   factory :aspect do
-    facet { nil }
-    name { nil }
-    initialize_with { Aspect.find_or_initialize_by(facet: facet, name: name) }
+    key { nil }
+    val { nil }
+    initialize_with { Aspect.find_or_initialize_by(key: key, val: val) }
 
     ###########################################################################
     # TRAITS.
     ###########################################################################
 
-    trait :with_facet do
-      facet { :song_type }
+    trait :with_key do
+      key { :song_type }
     end
 
-    trait :with_name do
-      name { generate(:aspect_name) }
+    trait :with_val do
+      val { generate(:aspect_val) }
     end
 
     trait :with_work do
@@ -76,8 +76,8 @@ FactoryBot.define do
     ###########################################################################
 
     factory :minimal_aspect do
-      with_facet
-      with_name
+      with_key
+      with_val
     end
   end
 end

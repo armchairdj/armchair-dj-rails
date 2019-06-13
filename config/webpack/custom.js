@@ -13,5 +13,5 @@ module.exports = {
     alias: {
       modernizr$: path.resolve(__dirname, "./.modernizrrc.js")
     }
-  }
+  },
 };

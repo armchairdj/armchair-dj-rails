@@ -20,65 +20,78 @@
 require "rails_helper"
 
 RSpec.describe Role do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  it_behaves_like "an_alphabetizable_model"
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:contributions, :works] }
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
   end
 
-  describe "nilify_blanks" do
-    subject { build_minimal_instance }
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
 
-    it { is_expected.to nilify_blanks(before: :validation) }
+    describe "#alpha_parts" do
+      subject { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
+
+      it { is_expected.to eq([instance.display_medium, instance.name]) }
+    end
   end
 
-  describe "associations" do
+  describe ":AttributionAssociations" do
+    it { is_expected.to have_many(:attributions).dependent(:destroy) }
     it { is_expected.to have_many(:contributions).dependent(:destroy) }
 
     it { is_expected.to have_many(:works).through(:contributions) }
   end
 
-  describe "validations" do
-    subject { build_minimal_instance }
-
-    it { is_expected.to validate_presence_of(:medium) }
-    it { is_expected.to validate_inclusion_of(:medium).in_array(Work.valid_media) }
-
-    it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:medium) }
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:contributions, :works] }
+    end
   end
 
-  describe "instance" do
-    let(:instance) { build_minimal_instance }
-
-    describe "#alpha_parts" do
-      subject { instance.alpha_parts }
-
-      it { is_expected.to eq([instance.display_medium, instance.name]) }
-    end
-
-    describe "#display_name" do
-      describe "basic" do
-        subject { instance.display_name }
-
-        it { is_expected.to eq(instance.name) }
-      end
-
-      describe "full" do
-        subject { instance.display_name(full: true) }
-
-        it { is_expected.to eq("#{instance.display_medium}: #{instance.name}") }
-      end
-    end
+  describe ":MediumAssociation" do
+    it { is_expected.to validate_presence_of(:medium) }
+    it { is_expected.to validate_inclusion_of(:medium).in_array(Work.valid_media) }
 
     describe "#display_medium" do
       describe "basic" do
         subject { build_minimal_instance(medium: "TvEpisode").display_medium }
 
         it { is_expected.to eq("TV Episode") }
+      end
+    end
+
+    pending ".for_medium"
+  end
+
+  describe ":NameAttribute" do
+    describe "validations" do
+      subject { create_minimal_instance }
+
+      it { is_expected.to validate_presence_of(:name) }
+      it { is_expected.to validate_uniqueness_of(:name).scoped_to(:medium) }
+    end
+
+    describe "#display_name" do
+      let(:instance) { build_minimal_instance }
+
+      context "without arguments" do
+        subject { instance.display_name }
+
+        it { is_expected.to eq(instance.name) }
+      end
+
+      context "with full: true" do
+        subject { instance.display_name(full: true) }
+
+        it { is_expected.to eq("#{instance.display_medium}: #{instance.name}") }
       end
     end
   end

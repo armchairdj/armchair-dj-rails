@@ -38,22 +38,15 @@
 #
 
 class Mixtape < Post
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
-  concerning :ImageAttachment do
+  concerning :Alphabetization do
     included do
-      delegate :hero_image,        to: :playlist
-      delegate :additional_images, to: :playlist
+      include Alphabetizable
+
+      delegate :alpha_parts, to: :playlist, allow_nil: true
     end
   end
 
-  #############################################################################
-  # CONCERNING: STI Subclass.
-  #############################################################################
-
-  concerning :Subclassed do
+  concerning :GinsuIntegration do
     class_methods do
       def for_list
         super.includes(:playlist).references(:playlist)
@@ -63,46 +56,47 @@ class Mixtape < Post
         super.includes(:playlist, :tracks, :works, :makers, :contributions, :aspects, :milestones)
       end
     end
+  end
 
+  concerning :ImageAttachment do
+    included do
+      with_options to: :playlist do
+        delegate :hero_image
+        delegate :additional_images
+      end
+    end
+  end
+
+  concerning :PlaylistAssociations do
+    included do
+      belongs_to :playlist
+      has_many :tracks, through: :playlist
+
+      validates :playlist, presence: true
+    end
+  end
+
+  concerning :SlugAttribute do
+    def sluggable_parts
+      [playlist&.title]
+    end
+  end
+
+  concerning :StiInheritance do
     def display_type(plural: false)
       plural ? "Mixtapes" : "Mixtape"
     end
   end
 
-  #############################################################################
-  # CONCERNING: Playlist.
-  #############################################################################
-
-  concerning :PlaylistAssociation do
+  concerning :WorksAssociations do
     included do
-      belongs_to :playlist
-
-      validates :playlist, presence: true
-
-      has_many :tracks, through: :playlist
-      has_many :works,  through: :tracks
+      has_many :works, through: :tracks
 
       has_many :makers,        through: :works
       has_many :contributions, through: :works
       has_many :contributors,  through: :works
       has_many :aspects,       through: :works
       has_many :milestones,    through: :works
-    end
-
-    def sluggable_parts
-      [playlist.try(:title)]
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-
-      delegate :alpha_parts, to: :playlist, allow_nil: true
     end
   end
 end

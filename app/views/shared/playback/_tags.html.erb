@@ -1,11 +1,5 @@
 <% return if tags.empty? %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Tags") %>
-  <% end %>
+<%= content_tag(:dt, "Tags") %>
 
-  <%= content_tag(:ul, class: "square") do %>
-    <%= render partial: "shared/playback/tag", collection: tags %>
-  <% end %>
-<% end %>
+<%= render partial: "shared/playback/tag", collection: tags %>

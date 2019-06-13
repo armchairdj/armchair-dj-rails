@@ -3,13 +3,13 @@
 
   <%= form_inputs do %>
     <%= adj_module do %>
-      <%= f.input(:facet,
+      <%= f.input(:key,
         as:            :select,
-        collection:    @facets,
+        collection:    @keys,
         include_blank: :translate
       ) %>
 
-      <%= f.input :name %>
+      <%= f.input :val %>
     <% end %>
   <% end %>
 

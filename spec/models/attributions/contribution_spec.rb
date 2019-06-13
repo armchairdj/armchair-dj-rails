@@ -31,36 +31,36 @@
 require "rails_helper"
 
 RSpec.describe Contribution do
-  it_behaves_like "an_application_record"
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
 
-  it_behaves_like "an_alphabetizable_model"
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
 
-  it_behaves_like "an_attribution"
-
-  it_behaves_like "a_ginsu_model" do
-    let(:list_loads) { [] }
-    let(:show_loads) { [:work, :role, :creator] }
+      # Must specify individual fields for STI models.
+      it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
+    end
   end
 
-  describe "nilify_blanks" do
-    subject { build_minimal_instance }
-
-    # Must specify individual fields for STI models.
-    it { is_expected.to nilify_blanks_for(:alpha, before: :validation) }
-  end
-
-  specify { expect(described_class.superclass).to eq(Attribution) }
-
-  describe "associations" do
-    it { is_expected.to belong_to(:role).required }
-  end
-
-  describe "validations" do
-    subject { build_minimal_instance }
+  describe ":CreatorAssociation" do
+    subject { create_minimal_instance }
 
     it { is_expected.to validate_uniqueness_of(:creator_id).scoped_to(:work_id, :role_id) }
+  end
 
-    describe "role" do
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) { [:work, :role, :creator] }
+    end
+  end
+
+  describe ":RoleAssociation" do
+    it { is_expected.to belong_to(:role).required }
+
+    pending "#role_name"
+
+    describe "validation" do
       subject { build_minimal_instance(work_id: create(:minimal_song).id) }
 
       let!(:song_role_ids) { create_list(:minimal_role, 3, medium: "Song").map(&:id) }
@@ -69,5 +69,9 @@ RSpec.describe Contribution do
 
       it { is_expected.to validate_inclusion_of(:role_id).in_array(song_role_ids) }
     end
+  end
+
+  describe ":StiInheritance" do
+    it_behaves_like "an_attribution"
   end
 end

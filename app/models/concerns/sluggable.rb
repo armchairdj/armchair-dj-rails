@@ -6,10 +6,6 @@ concern :Sluggable do
   VERSION_SEPARATOR      =   "-"
   EMPTY_PART_REPLACEMENT = "xxx"
 
-  #############################################################################
-  # CLASS.
-  #############################################################################
-
   class_methods do
     def prepare_parts(parts)
       parts.flatten.compact.map { |x| prepare_part(x) }.compact
@@ -49,10 +45,6 @@ concern :Sluggable do
     end
   end
 
-  #############################################################################
-  # INCLUDED.
-  #############################################################################
-
   included do
     include FriendlyId
 
@@ -81,17 +73,11 @@ concern :Sluggable do
     end
   end
 
-  #############################################################################
-  # INSTANCE.
-  #############################################################################
-
   def sluggable_parts
     []
   end
 
-private
-
-  ### Basic slug generation.
+  private
 
   def slug_candidates
     [:base_slug, :sequenced_slug]

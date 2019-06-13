@@ -29,182 +29,182 @@ brian = User.create_with(
 ##### ASPECTS
 
 album_formats = [
-  FactoryBot.create(:aspect, facet: :album_format, name: "LP"),
-  FactoryBot.create(:aspect, facet: :album_format, name: "EP"),
-  FactoryBot.create(:aspect, facet: :album_format, name: "Single"),
-  FactoryBot.create(:aspect, facet: :album_format, name: "Boxed Set"),
-  FactoryBot.create(:aspect, facet: :album_format, name: "Download")
+  FactoryBot.create(:aspect, key: :album_format, val: "LP"),
+  FactoryBot.create(:aspect, key: :album_format, val: "EP"),
+  FactoryBot.create(:aspect, key: :album_format, val: "Single"),
+  FactoryBot.create(:aspect, key: :album_format, val: "Boxed Set"),
+  FactoryBot.create(:aspect, key: :album_format, val: "Download")
 ]
 
 audio_show_formats = [
-  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Interview"),
-  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Discussion"),
-  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Narrative"),
-  FactoryBot.create(:aspect, facet: :audio_show_format, name: "Documentary")
+  FactoryBot.create(:aspect, key: :audio_show_format, val: "Interview"),
+  FactoryBot.create(:aspect, key: :audio_show_format, val: "Discussion"),
+  FactoryBot.create(:aspect, key: :audio_show_format, val: "Narrative"),
+  FactoryBot.create(:aspect, key: :audio_show_format, val: "Documentary")
 ]
 
 device_types = [
-  FactoryBot.create(:aspect, facet: :device_type, name: "Phone"),
-  FactoryBot.create(:aspect, facet: :device_type, name: "Computer"),
-  FactoryBot.create(:aspect, facet: :device_type, name: "Accessory"),
-  FactoryBot.create(:aspect, facet: :device_type, name: "Router")
+  FactoryBot.create(:aspect, key: :device_type, val: "Phone"),
+  FactoryBot.create(:aspect, key: :device_type, val: "Computer"),
+  FactoryBot.create(:aspect, key: :device_type, val: "Accessory"),
+  FactoryBot.create(:aspect, key: :device_type, val: "Router")
 ]
 
 game_mechanics = [
-  FactoryBot.create(:aspect, facet: :game_mechanic, name: "First-Person Shooter"),
-  FactoryBot.create(:aspect, facet: :game_mechanic, name: "Couch Co-Op"),
-  FactoryBot.create(:aspect, facet: :game_mechanic, name: "MMORPG")
+  FactoryBot.create(:aspect, key: :game_mechanic, val: "First-Person Shooter"),
+  FactoryBot.create(:aspect, key: :game_mechanic, val: "Couch Co-Op"),
+  FactoryBot.create(:aspect, key: :game_mechanic, val: "MMORPG")
 ]
 
 game_studios = [
-  FactoryBot.create(:aspect, facet: :game_studio, name: "Capcom"),
-  FactoryBot.create(:aspect, facet: :game_studio, name: "Blizzard")
+  FactoryBot.create(:aspect, key: :game_studio, val: "Capcom"),
+  FactoryBot.create(:aspect, key: :game_studio, val: "Blizzard")
 ]
 
 hollywood_studios = [
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Netflix"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Amazon"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Hulu"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Disney"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Fox"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Sony"),
-  FactoryBot.create(:aspect, facet: :hollywood_studio, name: "Universal")
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Netflix"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Amazon"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Hulu"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Disney"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Fox"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Sony"),
+  FactoryBot.create(:aspect, key: :hollywood_studio, val: "Universal")
 ]
 
 manufacturers = [
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "Unilever"),
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "Proctor & Gamble"),
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "Amazon Basics"),
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "Tom Bihn"),
-  FactoryBot.create(:aspect, facet: :manufacturer, name: "The North Face")
+  FactoryBot.create(:aspect, key: :manufacturer, val: "Unilever"),
+  FactoryBot.create(:aspect, key: :manufacturer, val: "Proctor & Gamble"),
+  FactoryBot.create(:aspect, key: :manufacturer, val: "Amazon Basics"),
+  FactoryBot.create(:aspect, key: :manufacturer, val: "Tom Bihn"),
+  FactoryBot.create(:aspect, key: :manufacturer, val: "The North Face")
 ]
 
 music_labels = [
-  FactoryBot.create(:aspect, facet: :music_label, name: "Warp"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Soul Jazz"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Plus 8"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Planet E"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Hyperdub"),
-  FactoryBot.create(:aspect, facet: :music_label, name: "Island")
+  FactoryBot.create(:aspect, key: :music_label, val: "Warp"),
+  FactoryBot.create(:aspect, key: :music_label, val: "Soul Jazz"),
+  FactoryBot.create(:aspect, key: :music_label, val: "Plus 8"),
+  FactoryBot.create(:aspect, key: :music_label, val: "Planet E"),
+  FactoryBot.create(:aspect, key: :music_label, val: "Hyperdub"),
+  FactoryBot.create(:aspect, key: :music_label, val: "Island")
 ]
 
 musical_genres = [
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "AOR"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Ambient"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Chamber Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Classic Rock"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Classical"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Dance-Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Disco"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Doom Metal"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Dream Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Drum-n-Bass"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Dub"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Easy Listening"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Electro"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Film & TV"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Hardcore"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Hip-Hop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "House"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "IDM"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Indie-Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Jazz"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Jungle"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Krautrock"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "MOR"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Musical"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Original Score"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Original Soundtrack"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "R&B"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Rap"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Reggae"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Rock"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Rock-'n'-Roll"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Soul"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Spoken Word"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Synth-Pop"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Synthwave"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Techno"),
-  FactoryBot.create(:aspect, facet: :musical_genre, name: "Vocals")
+  FactoryBot.create(:aspect, key: :musical_genre, val: "AOR"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Ambient"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Chamber Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Classic Rock"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Classical"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Dance-Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Disco"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Doom Metal"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Dream Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Drum-n-Bass"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Dub"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Easy Listening"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Electro"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Film & TV"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Hardcore"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Hip-Hop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "House"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "IDM"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Indie-Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Jazz"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Jungle"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Krautrock"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "MOR"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Musical"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Original Score"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Original Soundtrack"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "R&B"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Rap"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Reggae"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Rock"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Rock-'n'-Roll"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Soul"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Spoken Word"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Synth-Pop"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Synthwave"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Techno"),
+  FactoryBot.create(:aspect, key: :musical_genre, val: "Vocals")
 ]
 
 narrative_genres = [
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Action"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Adventure"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Horror"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Sci-Fi"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Fantasy"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Comedy"),
-  FactoryBot.create(:aspect, facet: :narrative_genre, name: "Drama")
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Action"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Adventure"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Horror"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Sci-Fi"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Fantasy"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Comedy"),
+  FactoryBot.create(:aspect, key: :narrative_genre, val: "Drama")
 ]
 
 product_types = [
-  FactoryBot.create(:aspect, facet: :product_type, name: "Clothing"),
-  FactoryBot.create(:aspect, facet: :product_type, name: "Moisturizer"),
-  FactoryBot.create(:aspect, facet: :product_type, name: "Body Wash")
+  FactoryBot.create(:aspect, key: :product_type, val: "Clothing"),
+  FactoryBot.create(:aspect, key: :product_type, val: "Moisturizer"),
+  FactoryBot.create(:aspect, key: :product_type, val: "Body Wash")
 ]
 
 publication_types = [
-  FactoryBot.create(:aspect, facet: :publication_type, name: "Magazine"),
-  FactoryBot.create(:aspect, facet: :publication_type, name: "Newspaper"),
-  FactoryBot.create(:aspect, facet: :publication_type, name: "Website")
+  FactoryBot.create(:aspect, key: :publication_type, val: "Magazine"),
+  FactoryBot.create(:aspect, key: :publication_type, val: "Newspaper"),
+  FactoryBot.create(:aspect, key: :publication_type, val: "Website")
 ]
 
 publishers = [
-  FactoryBot.create(:aspect, facet: :publisher, name: "Conde Nast"),
-  FactoryBot.create(:aspect, facet: :publisher, name: "Vox Media"),
-  FactoryBot.create(:aspect, facet: :publisher, name: "Marvel Comics"),
-  FactoryBot.create(:aspect, facet: :publisher, name: "DC Comics"),
-  FactoryBot.create(:aspect, facet: :publisher, name: "Vertigo")
+  FactoryBot.create(:aspect, key: :publisher, val: "Conde Nast"),
+  FactoryBot.create(:aspect, key: :publisher, val: "Vox Media"),
+  FactoryBot.create(:aspect, key: :publisher, val: "Marvel Comics"),
+  FactoryBot.create(:aspect, key: :publisher, val: "DC Comics"),
+  FactoryBot.create(:aspect, key: :publisher, val: "Vertigo")
 ]
 
 radio_networks = [
-  FactoryBot.create(:aspect, facet: :radio_network, name: "NPR"),
-  FactoryBot.create(:aspect, facet: :radio_network, name: "PRI"),
-  FactoryBot.create(:aspect, facet: :radio_network, name: "Sirius XM")
+  FactoryBot.create(:aspect, key: :radio_network, val: "NPR"),
+  FactoryBot.create(:aspect, key: :radio_network, val: "PRI"),
+  FactoryBot.create(:aspect, key: :radio_network, val: "Sirius XM")
 ]
 
 song_types = [
-  FactoryBot.create(:aspect, facet: :song_type, name: "Studio"),
-  FactoryBot.create(:aspect, facet: :song_type, name: "Remix"),
-  FactoryBot.create(:aspect, facet: :song_type, name: "Live")
+  FactoryBot.create(:aspect, key: :song_type, val: "Studio"),
+  FactoryBot.create(:aspect, key: :song_type, val: "Remix"),
+  FactoryBot.create(:aspect, key: :song_type, val: "Live")
 ]
 
 tech_platforms = [
-  FactoryBot.create(:aspect, facet: :tech_platform, name: "iOS"),
-  FactoryBot.create(:aspect, facet: :tech_platform, name: "macOS"),
-  FactoryBot.create(:aspect, facet: :tech_platform, name: "PS4"),
-  FactoryBot.create(:aspect, facet: :tech_platform, name: "Web")
+  FactoryBot.create(:aspect, key: :tech_platform, val: "iOS"),
+  FactoryBot.create(:aspect, key: :tech_platform, val: "macOS"),
+  FactoryBot.create(:aspect, key: :tech_platform, val: "PS4"),
+  FactoryBot.create(:aspect, key: :tech_platform, val: "Web")
 ]
 
 tv_networks = [
-  FactoryBot.create(:aspect, facet: :tv_network, name: "ABC"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "CBS"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "NBC"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Fox"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "The WB"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "UPN"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "The CW"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "ABC"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "CBS"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "NBC"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Fox"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "The WB"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "UPN"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "The CW"),
 
-  FactoryBot.create(:aspect, facet: :tv_network, name: "AMC"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Lifetime"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "HBO"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Cinemax"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Showtime"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "AMC"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Lifetime"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "HBO"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Cinemax"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Showtime"),
 
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Amazon"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Hulu"),
-  FactoryBot.create(:aspect, facet: :tv_network, name: "Netflix")
+  FactoryBot.create(:aspect, key: :tv_network, val: "Amazon"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Hulu"),
+  FactoryBot.create(:aspect, key: :tv_network, val: "Netflix")
 ]
 
 tech_companies = [
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Rogue Amoeba"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Many Tricks"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Apple"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Google"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Facebook"),
-  FactoryBot.create(:aspect, facet: :tech_company, name: "Amazon")
+  FactoryBot.create(:aspect, key: :tech_company, val: "Rogue Amoeba"),
+  FactoryBot.create(:aspect, key: :tech_company, val: "Many Tricks"),
+  FactoryBot.create(:aspect, key: :tech_company, val: "Apple"),
+  FactoryBot.create(:aspect, key: :tech_company, val: "Google"),
+  FactoryBot.create(:aspect, key: :tech_company, val: "Facebook"),
+  FactoryBot.create(:aspect, key: :tech_company, val: "Amazon")
 ]
 
 ##### ROLES

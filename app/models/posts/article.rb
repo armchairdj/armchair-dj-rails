@@ -38,40 +38,6 @@
 #
 
 class Article < Post
-  #############################################################################
-  # CONCERNING: Image attachment.
-  #############################################################################
-
-  include Imageable
-
-  #############################################################################
-  # CONCERNING: STI Subclass.
-  #############################################################################
-
-  concerning :Subclassed do
-    def display_type(plural: false)
-      plural ? "Articles" : "Article"
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Title.
-  #############################################################################
-
-  concerning :TitleAttribute do
-    included do
-      validates :title, presence: true
-    end
-
-    def sluggable_parts
-      [title]
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Alpha.
-  #############################################################################
-
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -79,6 +45,30 @@ class Article < Post
 
     def alpha_parts
       [title]
+    end
+  end
+
+  concerning :ImageAttachment do
+    included do
+      include Imageable
+    end
+  end
+
+  concerning :SlugAttribute do
+    def sluggable_parts
+      [title]
+    end
+  end
+
+  concerning :StiInheritance do
+    def display_type(plural: false)
+      plural ? "Articles" : "Article"
+    end
+  end
+
+  concerning :TitleAttribute do
+    included do
+      validates :title, presence: true
     end
   end
 end

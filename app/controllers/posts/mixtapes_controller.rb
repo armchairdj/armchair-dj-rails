@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
-  class MixtapesController < Posts::BaseController
+  class MixtapesController < Posts::PublicController
     private
 
     def set_section

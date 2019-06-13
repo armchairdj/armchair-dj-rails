@@ -1,0 +1,25 @@
+<%= content_for(:main_content) do %>
+  <%= content_tag(:div, class: "post-wrapper") do %>
+    <%= content_tag(:section, class: "post-content") do %>
+      <%= content_tag(:header, class: "post-header") do %>
+        <%= content_for(:post_header) %>
+
+      <% end %>
+      <%= post_body @post %>
+
+      <%= content_tag(:footer, class: "post-byline") do %>
+        Posted by <%= link_to_author_of(@post) %> on <%= post_published_date(@post) %>
+      <% end %>
+    <% end %>
+
+    <%= content_tag(:section, class: "post-context") do %>
+      <%= content_for(:post_context) %>
+    <% end %>
+
+    <%= content_tag(:section, class: "post-related") do %>
+      RELATED POSTS
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= render template: "layouts/public" %>

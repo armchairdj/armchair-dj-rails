@@ -29,39 +29,6 @@
 #
 
 class Contribution < Attribution
-  #############################################################################
-  # CONCERNING: Role.
-  #############################################################################
-
-  concerning :RoleAssociation do
-    included do
-      belongs_to :role
-
-      validates :role_id, presence: true
-
-      validates :role_id, inclusion: { allow_blank: true, in:
-        proc { |record| record.work.try(:available_role_ids) || [] } }
-    end
-
-    def role_name
-      role.try(:name)
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Work.
-  #############################################################################
-
-  concerning :WorkAssociation do
-    included do
-      belongs_to :work, inverse_of: :contributions
-    end
-  end
-
-  #############################################################################
-  # CONCERNING: Creator.
-  #############################################################################
-
   concerning :CreatorAssociation do
     included do
       belongs_to :creator, inverse_of: :contributions
@@ -70,10 +37,33 @@ class Contribution < Attribution
     end
   end
 
-  #############################################################################
-  # CONCERNING: Ginsu.
-  #############################################################################
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list,  -> {}
+      scope :for_show,  -> { includes(:work, :creator, :role) }
+    end
+  end
 
-  scope :for_list,  -> {}
-  scope :for_show,  -> { includes(:work, :creator, :role) }
+  concerning :RoleAssociation do
+    included do
+      belongs_to :role
+
+      validates :role_id, presence: true
+
+      validates :role_id, inclusion: {
+        allow_blank: true,
+        in:          proc { |record| record.work&.available_role_ids || [] }
+      }
+    end
+
+    def role_name
+      role&.name
+    end
+  end
+
+  concerning :WorkAssociation do
+    included do
+      belongs_to :work, inverse_of: :contributions
+    end
+  end
 end

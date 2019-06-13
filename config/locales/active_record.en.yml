@@ -30,7 +30,7 @@ en:
           published: "Published"
         tag_ids: "Tags"
       aspect:
-        facets:
+        keys:
           album_format:       "Format"
           song_type:          "Song Type"
           music_label:        "Label"

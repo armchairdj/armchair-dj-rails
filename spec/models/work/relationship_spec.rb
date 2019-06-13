@@ -25,29 +25,31 @@
 require "rails_helper"
 
 RSpec.describe Work::Relationship do
-  subject { build_minimal_instance }
-
-  it_behaves_like "an_application_record"
-
-  describe "target" do
-    it { is_expected.to belong_to(:target).class_name("Work") }
-
-    it { is_expected.to validate_presence_of(:target) }
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
   end
 
-  describe "connection" do
+  describe ":ConnectionAttribute" do
+    it { is_expected.to validate_presence_of(:connection) }
+
     it_behaves_like "a_model_with_a_better_enum_for",
       attribute:  :connection,
       variations: [:source, :target]
-
-    it { is_expected.to validate_presence_of(:connection) }
   end
 
-  describe "source" do
+  describe ":SourceAssociation" do
+    subject { create_minimal_instance }
+
     it { is_expected.to belong_to(:source).class_name("Work") }
 
     it { is_expected.to validate_presence_of(:source) }
 
     it { is_expected.to validate_uniqueness_of(:source_id).scoped_to(:target_id, :connection) }
+  end
+
+  describe ":TargetAssociation" do
+    it { is_expected.to belong_to(:target).class_name("Work") }
+
+    it { is_expected.to validate_presence_of(:target) }
   end
 end

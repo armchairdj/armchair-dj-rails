@@ -20,5 +20,5 @@
 #
 
 class GraphicNovel < Medium
-  self.available_facets = [:publisher, :narrative_genre]
+  self.available_aspects = [:narrative_genre, :publisher]
 end

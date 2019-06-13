@@ -1,13 +1,8 @@
-<% return if facets.empty? %>
+<% return if keys.empty? %>
 
-<%= content_tag(:section) do %>
-  <%= content_tag(:header) do %>
-    <%= content_tag(:h4, "Facets") %>
-  <% end %>
-
-  <%= content_tag(:dl, class: "horizontal right") do %>
-    <% facets.each do |facet_name, aspects| %>
-      <%= render "shared/playback/aspect", facet_name: facet_name, aspects: aspects %>
-    <% end %>
-  <% end %>
+<% keys.each do |key, aspects| %>
+  <%= render "shared/playback/aspect",
+    key: key.pluralize(aspects.count),
+    aspects: aspects
+  %>
 <% end %>
