@@ -3,8 +3,8 @@
     <%= content_tag(:section, class: "post-content") do %>
       <%= content_tag(:header, class: "post-header") do %>
         <%= content_for(:post_header) %>
-
       <% end %>
+
       <%= post_body @post %>
 
       <%= content_tag(:footer, class: "post-byline") do %>
@@ -13,6 +13,10 @@
     <% end %>
 
     <%= content_tag(:section, class: "post-context") do %>
+      <% if @post.hero_image.attached? %>
+        <%= image_tag(@post.hero_image.variant(resize: "1000x1000")) %>
+      <% end %>
+    
       <%= content_for(:post_context) %>
     <% end %>
 
