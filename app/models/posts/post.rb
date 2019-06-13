@@ -100,6 +100,18 @@ class Post < ApplicationRecord
       scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
       scope :for_public, -> { published.reverse_cron }
+
+      scope :related_by_tag, lambda { |post, limit:|
+        return none unless post.tags.exists?
+
+        for_public.limit(limit).joins(:tags).
+          where(tags: { id: [post.tags.ids] }).
+          where.not(id: post.id)
+      }
+    end
+
+    def related_posts
+      self.class.related_by_tag(self, limit: 3)
     end
   end
 

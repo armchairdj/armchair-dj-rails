@@ -21,7 +21,19 @@
     <% end %>
 
     <%= content_tag(:section, class: "post-related") do %>
-      RELATED POSTS
+      <% if @related.empty? %>
+        NO RELATED POSTS
+      <% else %>
+        <%= content_tag(:header) do %>
+          <%= content_tag(:h3, "Continue Reading") %>
+        <% end %>
+
+        <%= content_tag(:ul, class: "bulleted") do %>
+          <% @related.each do |post| %>
+            <%= content_tag(:li, link_to_post(post)) %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

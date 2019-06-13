@@ -23,6 +23,8 @@ module Posts
 
       authorize @instance
 
+      @related = @post.related_posts
+
       @meta_description = @instance.summary
     end
 
