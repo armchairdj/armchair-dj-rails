@@ -54,7 +54,7 @@ FactoryBot.define do
 
       contributions_attributes do
         [contributor_count, contributor_names.length].max.times.each_with_object({}) do |(i), memo|
-          name    = maker_names[i] || generate(:creator_name)
+          name    = contributor_names[i] || generate(:creator_name)
           role    = create(:minimal_role, medium: role_medium)
           creator = create(:minimal_creator, name: name)
 

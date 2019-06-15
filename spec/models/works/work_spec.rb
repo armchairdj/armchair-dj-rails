@@ -31,7 +31,7 @@ RSpec.describe Work do
   end
 
   describe ":AspectsAssociation" do
-    it { is_expected.to have_and_belong_to_many(:aspects) } # TODO: distinct
+    it { is_expected.to have_and_belong_to_many(:aspects) }
 
     pending "validates #only_available_aspects"
 
@@ -40,36 +40,7 @@ RSpec.describe Work do
 
   describe ":AttributionAssociations" do
     it { is_expected.to have_many(:attributions).dependent(:destroy) }
-
-    describe "all-creator methods" do
-      let(:role) { create(:minimal_role, medium: "Song") }
-      let(:creator_1) { create(:minimal_creator, name: "One") }
-      let(:creator_2) { create(:minimal_creator, name: "Two") }
-      let(:creator_3) { create(:minimal_creator, name: "Three") }
-
-      let(:instance) do
-        create(:minimal_song, credits_attributes: {
-          "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id)
-        }, contributions_attributes: {
-          "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id)
-        })
-      end
-
-      describe "#creator_ids" do
-        subject(:creator_ids) { instance.creator_ids }
-
-        it { is_expected.to match_array([creator_1.id, creator_2.id, creator_3.id]) }
-      end
-
-      describe "#creators" do
-        subject(:creators) { instance.creators }
-
-        it { is_expected.to match_array([creator_1, creator_2, creator_3]) }
-        it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
-      end
-    end
+    it { is_expected.to have_many(:creators).through(:attributions) }
   end
 
   describe ":ContributionAssociations" do

@@ -10,6 +10,36 @@ FactoryBot.define do
     # SPECIFIC FACTORIES.
     ###########################################################################
 
+    factory :sleater_kinney_the_center_wont_hold, parent: :minimal_album do
+      title { "The Center Won't Hold" }
+      with_contributions
+
+      milestones_attributes do
+        { "0" => attributes_for(:work_milestone_for_work, year: "2019") }
+      end
+
+      transient do
+        maker_names       { ["Sleater-Kinney"] }
+        contributor_names { ["Corin Tucker", "Carrie Brownstein", "Janet Weiss", "St. Vincent"] }
+        role_medium       { "Album" }
+      end
+    end
+
+    factory :sleater_kinney_the_hot_rock, parent: :minimal_album do
+      title { "The Hot Rock" }
+      with_contributions
+
+      milestones_attributes do
+        { "0" => attributes_for(:work_milestone_for_work, year: "1999") }
+      end
+
+      transient do
+        maker_names       { ["Sleater-Kinney"] }
+        contributor_names { ["Corin Tucker", "Carrie Brownstein", "Janet Weiss", "Roger Moutenot"] }
+        role_medium       { "Album" }
+      end
+    end
+
     factory :global_communications_76_14, parent: :minimal_album do
       title { "76:14" }
       with_contributions

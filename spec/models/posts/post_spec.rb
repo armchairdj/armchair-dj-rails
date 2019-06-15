@@ -161,28 +161,8 @@ RSpec.describe Post do
       expect(scope.for_public).to eq([published])
     end
 
-    describe ".related_by_tag" do
-      let!(:tag) { create(:minimal_tag) }
-
-      it "returns a reverse-cron relation of up to 3 other published posts with the same tag" do
-        expect(described_class).to receive(:for_public).and_call_original
-
-        article, *related = create_minimal_list(4, :published, tag_ids: [tag.id])
-        actual = described_class.related_by_tag(article, limit: 2)
-
-        expect(actual).to be_a_kind_of(ActiveRecord::Relation)
-        expect(actual).to contain_exactly(*related[1..-1])
-      end
-
-      it "returns an empty relation if article has no tags" do
-        article = create_minimal_instance
-        actual = described_class.related_by_tag(article, limit: 3)
-
-        expect(actual).to eq(described_class.none)
-      end
-    end
-
-    it { is_expected.to respond_to(:related_posts) }
+    pending ".additional_posts"
+    pending "#related_posts"
   end
 
   describe ":StiInheritance" do
@@ -191,11 +171,43 @@ RSpec.describe Post do
 
   describe ":TagsAssociation" do
     it { is_expected.to have_and_belong_to_many(:tags) }
+
+    describe ".by_tag" do
+      let(:tags) { create_list(:minimal_tag, 4) }
+
+      let!(:posts) do
+        [
+          create_minimal_instance(tag_ids: [tags[0].id]),
+          create_minimal_instance(tag_ids: [tags[1].id]),
+          create_minimal_instance(tag_ids: [tags[2].id]),
+          create_minimal_instance
+        ]
+      end
+
+      it "finds posts by single tag" do
+        expect(described_class.by_tag(tags[0])).to contain_exactly(posts[0])
+      end
+
+      it "finds posts by multiple tags" do
+        expect(described_class.by_tag(tags[1..2])).to contain_exactly(*posts[1..2])
+      end
+
+      it "returns an empty relation if nothing found" do
+        expect(described_class.by_tag(tags[3])).to be_empty
+      end
+
+      it "returns an empty relation if tags are nil" do
+        expect(described_class.by_tag(nil)).to be_empty
+      end
+    end
   end
 
   describe ":StatusAttribute" do
-    # Does not work because direct assignment is blocked
-    xit { is_expected.to validate_presence_of(:status) }
+    it "cannot be directly assigned" do
+      instance = described_class.new
+
+      expect { instance.status = :draft }.to raise_exception(AASM::NoDirectAssignmentError)
+    end
 
     it_behaves_like "a_model_with_a_better_enum_for", :status
 

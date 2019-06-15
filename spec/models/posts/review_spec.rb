@@ -27,7 +27,36 @@ RSpec.describe Review do
     end
   end
 
-  describe ":PublicSite" do; end
+  describe ":PublicSite" do
+    describe "#related_posts" do
+      let(:work) { create(:carl_craig_and_green_velvet_unity) }
+      let(:carl_craig) { Creator.find_by(name: "Carl Craig") }
+      let(:green_velvet) { Creator.find_by(name: "Green Velvet") }
+
+      let(:related_works) do
+        create_list(:minimal_song, 2, :with_specific_creator, specific_creator: carl_craig) +
+          create_list(:minimal_song, 2, :with_specific_creator, specific_creator: green_velvet)
+      end
+
+      it "returns a reverse-cron relation of up to 3 other published articles with overlapping makers" do
+        expect(described_class).to receive(:for_public).and_call_original
+
+        review = create_minimal_instance(:published, work: work)
+
+        related = related_works.map { |work| create_minimal_instance(:published, work: work) }
+
+        expect(review.related_posts).to contain_exactly(related[1], related[2], related[3])
+      end
+
+      it "returns an empty relation if no other published posts with overlapping maker" do
+        review = create_minimal_instance(:published, work: work)
+
+        create_minimal_instance(:draft, work: related_works.first)
+
+        expect(review.related_posts).to be_empty
+      end
+    end
+  end
 
   describe ":SlugAttribute" do
     it_behaves_like "a_sluggable_model"
@@ -96,15 +125,58 @@ RSpec.describe Review do
 
   describe ":WorkAssociation" do
     it { is_expected.to belong_to(:work).required }
-
     it { is_expected.to validate_presence_of(:work) }
 
-    it { is_expected.to have_many(:makers).through(:work) }
-    it { is_expected.to have_many(:contributions).through(:work) }
-    it { is_expected.to have_many(:contributors).through(:work) }
     it { is_expected.to have_many(:aspects).through(:work) }
     it { is_expected.to have_many(:milestones).through(:work) }
 
-    pending "#display_medium"
+    it "delegates #display_medium to work" do
+      instance = create_minimal_instance
+
+      expect(instance.work).to receive(:display_medium).and_call_original
+
+      instance.display_medium
+    end
+  end
+
+  describe ":WorkAttributionsAssociations" do
+    it { is_expected.to have_many(:attributions).through(:work) }
+    it { is_expected.to have_many(:creators).through(:work) }
+
+    it { is_expected.to have_many(:contributions).through(:work) }
+    it { is_expected.to have_many(:contributors).through(:work) }
+
+    it { is_expected.to have_many(:credits).through(:work) }
+    it { is_expected.to have_many(:makers).through(:work) }
+
+    describe "scopes" do
+      let(:old_album) { create(:sleater_kinney_the_hot_rock) }
+      let(:new_album) { create(:sleater_kinney_the_center_wont_hold) }
+
+      let(:band) { Creator.find_by!(name: "Sleater-Kinney") }
+      let(:carrie) { Creator.find_by!(name: "Carrie Brownstein") }
+      let(:annie) { Creator.find_by!(name: "St. Vincent") }
+
+      let!(:old_review) { create_minimal_instance(work: old_album) }
+      let!(:new_review) { create_minimal_instance(work: new_album) }
+
+      specify ".by_creator finds by maker or contributor" do
+        expect(described_class.by_creator(carrie)).to contain_exactly(old_review, new_review)
+        expect(described_class.by_creator(annie)).to contain_exactly(new_review)
+        expect(described_class.by_creator(band)).to contain_exactly(old_review, new_review)
+      end
+
+      specify ".by_contributor finds only by contributor, not maker" do
+        expect(described_class.by_contributor(carrie)).to contain_exactly(old_review, new_review)
+        expect(described_class.by_contributor(annie)).to contain_exactly(new_review)
+        expect(described_class.by_contributor(band)).to be_empty
+      end
+
+      specify ".by_maker finds only by maker, not contributor" do
+        expect(described_class.by_maker(carrie.id)).to be_empty
+        expect(described_class.by_maker(annie.id)).to be_empty
+        expect(described_class.by_maker(band.id)).to contain_exactly(old_review, new_review)
+      end
+    end
   end
 end

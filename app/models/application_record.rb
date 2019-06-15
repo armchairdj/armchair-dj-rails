@@ -8,6 +8,18 @@ class ApplicationRecord < ActiveRecord::Base
   include AtomicallyValidatable
   include BetterEnums
 
+  # Allows us to define scopes that take:
+  #  - an instance or array of instances
+  #  - an id or array of ids
+  #  - a relation
+  def self.ids_from_list(*items)
+    return items.ids if items.length == 1 && items.is_a?(ActiveRecord::Relation)
+
+    items = items.flatten.compact
+
+    items.first&.respond_to?(:id) ? items.map(&:id) : items
+  end
+
   def self.find_by_sorted_ids(ids)
     return none unless ids.any?
 

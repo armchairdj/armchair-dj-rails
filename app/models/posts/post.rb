@@ -98,17 +98,13 @@ class Post < ApplicationRecord
 
       scope :for_public, -> { published.reverse_cron }
 
-      scope :related_by_tag, lambda { |post, limit:|
-        return none unless post.tags.exists?
-
-        for_public.limit(limit).joins(:tags).
-          where(tags: { id: [post.tags.ids] }).
-          where.not(id: post.id)
+      scope :additional_posts, lambda { |post, limit|
+        for_public.where.not(id: post.id).limit(limit)
       }
     end
 
-    def related_posts
-      self.class.related_by_tag(self, limit: RELATED_POST_COUNT)
+    def related_posts(limit = RELATED_POST_COUNT)
+      self.class.additional_posts(self, limit)
     end
   end
 
@@ -127,6 +123,10 @@ class Post < ApplicationRecord
   concerning :TagAssociation do
     included do
       has_and_belongs_to_many :tags, -> { order("tags.name") }
+
+      scope :by_tag, lambda { |*tags|
+        joins(:tags).where(tags: { id: ids_from_list(tags) })
+      }
     end
   end
 

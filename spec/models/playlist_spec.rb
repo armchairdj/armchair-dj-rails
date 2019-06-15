@@ -35,7 +35,8 @@ RSpec.describe Playlist do
 
   describe ":TracksAssociation" do
     it { is_expected.to have_many(:tracks).dependent(:destroy) }
-    it { is_expected.to have_many(:works).through(:tracks) }
+    it { is_expected.to have_many(:unordered_tracks).dependent(:destroy) }
+    it { is_expected.to have_many(:works).through(:unordered_tracks) }
 
     describe "ordering" do
       subject(:positions) { instance.tracks.map(&:position) }
@@ -114,56 +115,9 @@ RSpec.describe Playlist do
   end
 
   describe ":CreatorAssociations" do
+    it { is_expected.to have_many(:creators).through(:works) }
     it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
-
-    describe "association methods" do
-      let(:role) { create(:minimal_role, medium: "Song") }
-      let(:creator_1) { create(:minimal_creator, name: "One") }
-      let(:creator_2) { create(:minimal_creator, name: "Two") }
-      let(:creator_3) { create(:minimal_creator, name: "Three") }
-      let(:creator_4) { create(:minimal_creator, name: "Four") }
-
-      let(:track_1) do
-        create(:minimal_song, credits_attributes: {
-          "0" => attributes_for(:minimal_credit, creator_id: creator_1.id),
-          "1" => attributes_for(:minimal_credit, creator_id: creator_2.id)
-        }, contributions_attributes: {
-          "0" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_3.id),
-          "1" => attributes_for(:minimal_contribution, role_id: role.id, creator_id: creator_2.id)
-        })
-      end
-
-      let(:track_2) do
-        create(:minimal_song, credits_attributes: {
-          "0" => attributes_for(:minimal_credit, creator_id: creator_4.id)
-        })
-      end
-
-      let(:instance) do
-        create(:minimal_playlist, tracks_attributes: {
-          "0" => attributes_for(:minimal_playlist_track, work_id: track_1.id),
-          "1" => attributes_for(:minimal_playlist_track, work_id: track_2.id)
-        })
-      end
-
-      let(:expected) do
-        [creator_1, creator_2, creator_3, creator_4]
-      end
-
-      describe "#creator_ids" do
-        subject(:creator_ids) { instance.creator_ids }
-
-        it { is_expected.to match_array(expected.map(&:id)) }
-      end
-
-      describe "#creators" do
-        subject(:creators) { instance.creators }
-
-        it { is_expected.to be_a_kind_of(ActiveRecord::Relation) }
-        it { is_expected.to match_array(expected) }
-      end
-    end
   end
 
   describe ":GinsuIntegration" do

@@ -54,6 +54,12 @@ class Article < Post
     end
   end
 
+  concerning :PublicSite do
+    def related_posts
+      super.by_tag(tags)
+    end
+  end
+
   concerning :SlugAttribute do
     def sluggable_parts
       [title]

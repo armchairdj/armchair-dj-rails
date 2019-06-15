@@ -28,12 +28,26 @@ RSpec.describe Article do
 
   describe ":PublicSite" do
     describe "#related_posts" do
-      it "delegates to .related and limits to 3" do
-        article = create_minimal_instance
+      let!(:tag) { create(:minimal_tag) }
 
-        expect(described_class).to receive(:related_by_tag).with(article, limit: 3)
+      it "returns a reverse-cron relation of up to 3 other published articles with the same tag" do
+        expect(described_class).to receive(:for_public).and_call_original
 
-        article.related_posts
+        article, *related = create_minimal_list(5, :published, tag_ids: [tag.id])
+
+        expect(article.related_posts).to contain_exactly(related[1], related[2], related[3])
+      end
+
+      it "returns an empty relation if article has no tags" do
+        expect(create_minimal_instance.related_posts).to be_empty
+      end
+
+      it "returns an empty relation if no other published posts with the same tag" do
+        article, _related = create_minimal_list(2, :draft, tag_ids: [tag.id])
+
+        article.publish!
+
+        expect(article.related_posts).to be_empty
       end
     end
   end

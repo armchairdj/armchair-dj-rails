@@ -60,15 +60,8 @@ class Work < ApplicationRecord
   concerning :AttributionAssociations do
     included do
       has_many :attributions, inverse_of: :work, dependent: :destroy
-    end
 
-    # TODO: Make this an association
-    def creators
-      Creator.where(id: creator_ids)
-    end
-
-    def creator_ids
-      attributions.map(&:creator_id).uniq
+      has_many :creators, -> { distinct }, through: :attributions
     end
   end
 
