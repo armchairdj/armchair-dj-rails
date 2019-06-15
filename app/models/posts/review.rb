@@ -67,6 +67,20 @@ class Review < Post
     end
   end
 
+  concerning :PublicSite do
+    included do
+      scope :related_by_maker, lambda { |review, limit:|
+        for_public.limit(limit).joins(:makers).
+          where(makers: { id: [review.makers.ids] }).
+          where.not(id: review.id)
+      }
+    end
+
+    def related_posts
+      self.class.related_by_maker(self, limit: RELATED_POST_COUNT)
+    end
+  end
+
   concerning :SlugAttribute do
     def sluggable_parts
       work&.sluggable_parts || []

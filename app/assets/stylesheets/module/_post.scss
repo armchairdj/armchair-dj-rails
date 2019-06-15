@@ -61,7 +61,7 @@ footer.post-byline {
   .post-wrapper {
     display: grid;
     grid-template-areas: "meta . content . more";
-    grid-template-columns: 4fr 1.5rem 6fr 1.5rem 3fr;
+    grid-template-columns: 3fr 2rem 6fr 2rem 3fr;
     grid-template-rows: auto;
 
     .post-context {

@@ -165,7 +165,7 @@ RSpec.describe User do
       let(:brian) { create(:root, first_name: "Brian", last_name: "Dillard", username: "brian") }
 
       let(:ids) { [saru, monique, celia, charlie, brian].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
+      let(:scope) { described_class.where(id: ids) }
 
       before do
         create(:minimal_article, :draft,     author: monique)
@@ -174,20 +174,16 @@ RSpec.describe User do
         create(:minimal_article, :published, author: brian)
       end
 
-      describe ".for_public" do
-        subject(:association) { collection.for_public }
-
-        it "includes only published writers" do
-          is_expected.to contain_exactly(charlie, brian)
-        end
+      specify ".for_public includes only published writers" do
+        expect(scope.for_public).to contain_exactly(charlie, brian)
       end
 
-      describe "#published?" do
-        specify { expect(saru.published?).to eq(false) }
-        specify { expect(monique.published?).to eq(false) }
-        specify { expect(celia.published?).to eq(false) }
-        specify { expect(charlie.published?).to eq(true) }
-        specify { expect(brian.published?).to eq(true) }
+      specify "#published? is true only with published posts" do
+        expect(saru.published?).to eq(false)
+        expect(monique.published?).to eq(false)
+        expect(celia.published?).to eq(false)
+        expect(charlie.published?).to eq(true)
+        expect(brian.published?).to eq(true)
       end
     end
   end
@@ -202,9 +198,6 @@ RSpec.describe User do
     it_behaves_like "a_model_with_a_better_enum_for", :role
 
     describe ".for_cms_user" do
-      subject(:association) { collection.for_cms_user(instance) }
-
-      let(:no_user) { nil }
       let(:member) { create(:member) }
       let(:writer) { create(:writer) }
       let(:editor) { create(:editor) }
@@ -213,57 +206,28 @@ RSpec.describe User do
       let(:root_1) { create(:root) }
       let(:root_2) { create(:root) }
 
-      let!(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
-      let!(:collection) { described_class.where(id: ids) }
+      let(:ids) { [member, writer, editor, admin_1, admin_2, root_1, root_2].map(&:id) }
+      let(:scope) { described_class.where(id: ids) }
 
-      context "when passed a nil user" do
-        let(:instance) { no_user }
-
-        it "prevents access to all users" do
-          is_expected.to eq(described_class.none)
-        end
+      specify "prevents access to users for non-admins" do
+        expect(scope.for_cms_user(nil)).to eq(described_class.none)
+        expect(scope.for_cms_user(member)).to eq(described_class.none)
+        expect(scope.for_cms_user(writer)).to eq(described_class.none)
+        expect(scope.for_cms_user(editor)).to eq(described_class.none)
       end
 
-      context "when passed a member" do
-        let(:instance) { member }
+      specify "prevents access to root and self for admins" do
+        expected = [member, writer, editor, admin_2]
+        actual = scope.for_cms_user(admin_1)
 
-        it "prevents access to all users" do
-          is_expected.to eq(described_class.none)
-        end
+        expect(actual).to contain_exactly(*expected)
       end
 
-      context "when passed a writer" do
-        let(:instance) { writer }
+      specify "allows access to all users, including self and other roots, for roots" do
+        expected = [member, writer, editor, admin_1, admin_2, root_1, root_2]
+        actual = scope.for_cms_user(root_1)
 
-        it "prevents access to all users" do
-          is_expected.to eq(described_class.none)
-        end
-      end
-
-      context "when passed an editor" do
-        let(:instance) { editor }
-
-        it "prevents access to all users" do
-          is_expected.to eq(described_class.none)
-        end
-      end
-
-      context "when passed an admin" do
-        let(:instance) { admin_1 }
-        let(:expected) { [member, writer, editor, admin_2] }
-
-        it "allows access to all users except the passed user and root users" do
-          is_expected.to contain_exactly(*expected)
-        end
-      end
-
-      context "when passed a root" do
-        let(:instance) { root_1 }
-        let(:expected) { [member, writer, editor, admin_1, admin_2, root_1, root_2] }
-
-        it "allows access to all users including the passed user" do
-          is_expected.to contain_exactly(*expected)
-        end
+        expect(actual).to contain_exactly(*expected)
       end
     end
 

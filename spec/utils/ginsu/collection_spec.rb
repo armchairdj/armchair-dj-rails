@@ -147,9 +147,7 @@ RSpec.describe Ginsu::Collection do
     let(:instance) { described_class.new(relation) }
     let(:collection) { double }
 
-    before do
-      allow(instance).to receive(:resolved).and_return(collection)
-    end
+    before { allow(instance).to receive(:resolved).and_return(collection) }
 
     context "with 0 records" do
       before { allow(collection).to receive(:total_count).and_return(0) }

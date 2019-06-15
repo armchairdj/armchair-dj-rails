@@ -78,14 +78,9 @@ class Post < ApplicationRecord
   end
 
   concerning :GinsuIntegration do
-    class_methods do
-      def for_list
-        includes(:author).references(:author)
-      end
-
-      def for_show
-        includes(:links, :author, :tags)
-      end
+    included do
+      scope :for_list, -> { includes(:author).references(:author) }
+      scope :for_show, -> { includes(:links, :author, :tags) }
     end
   end
 
@@ -96,6 +91,8 @@ class Post < ApplicationRecord
   end
 
   concerning :PublicSite do
+    RELATED_POST_COUNT = 3
+
     included do
       scope :reverse_cron, -> { order(published_at: :desc, publish_on: :desc, updated_at: :desc) }
 
@@ -111,7 +108,7 @@ class Post < ApplicationRecord
     end
 
     def related_posts
-      self.class.related_by_tag(self, limit: 3)
+      self.class.related_by_tag(self, limit: RELATED_POST_COUNT)
     end
   end
 

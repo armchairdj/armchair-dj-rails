@@ -146,35 +146,43 @@ RSpec.describe Post do
   end
 
   describe ":PublicSite" do
-    describe ".for_public" do
-      subject(:association) { collection.for_public }
+    let(:draft) { create_minimal_instance(:draft) }
+    let(:scheduled) { create_minimal_instance(:scheduled) }
+    let(:published) { create_minimal_instance(:published) }
+    let(:scope) { described_class.where(id: [draft, scheduled, published].map(&:id)) }
 
-      let(:draft) { create_minimal_instance(:draft) }
-      let(:scheduled) { create_minimal_instance(:scheduled) }
-      let(:published) { create_minimal_instance(:published) }
-
-      let!(:ids) { [draft, scheduled, published].map(&:id) }
-      let!(:collection) { described_class.where(id: ids) }
-
-      it "includes only published posts" do
-        expect(collection.for_public).to eq([published])
-      end
-
-      pending "includes .reverse_cron"
+    specify ".reverse_cron orders descending by published_at, publish_on, updated_at" do
+      expect(scope.reverse_cron).to eq([draft, scheduled, published])
     end
 
-    describe ".reverse_cron" do
-      let(:draft) { create_minimal_instance(:draft) }
-      let(:scheduled) { create_minimal_instance(:scheduled) }
-      let(:published) { create_minimal_instance(:published) }
+    specify ".for_public includes only published posts and sorts reverse_cron" do
+      expect(described_class).to receive(:reverse_cron).and_call_original
 
-      let(:ids) { [draft, scheduled, published].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
+      expect(scope.for_public).to eq([published])
+    end
 
-      it "orders descending by published_at, publish_on, updated_at" do
-        expect(collection.reverse_cron).to eq([draft, scheduled, published])
+    describe ".related_by_tag" do
+      let!(:tag) { create(:minimal_tag) }
+
+      it "returns a reverse-cron relation of up to 3 other published posts with the same tag" do
+        expect(described_class).to receive(:for_public).and_call_original
+
+        article, *related = create_minimal_list(4, :published, tag_ids: [tag.id])
+        actual = described_class.related_by_tag(article, limit: 2)
+
+        expect(actual).to be_a_kind_of(ActiveRecord::Relation)
+        expect(actual).to contain_exactly(*related[1..-1])
+      end
+
+      it "returns an empty relation if article has no tags" do
+        article = create_minimal_instance
+        actual = described_class.related_by_tag(article, limit: 3)
+
+        expect(actual).to eq(described_class.none)
       end
     end
+
+    it { is_expected.to respond_to(:related_posts) }
   end
 
   describe ":StiInheritance" do
@@ -197,22 +205,22 @@ RSpec.describe Post do
       let(:published) { create_minimal_instance(:published) }
 
       let(:ids) { [draft, scheduled, published].map(&:id) }
-      let(:collection) { described_class.where(id: ids) }
+      let(:scope) { described_class.where(id: ids) }
 
       specify ".draft contains only draft posts" do
-        expect(collection.draft).to contain_exactly(draft)
+        expect(scope.draft).to contain_exactly(draft)
       end
 
       specify ".scheduled contains only scheduled posts" do
-        expect(collection.scheduled).to contain_exactly(scheduled)
+        expect(scope.scheduled).to contain_exactly(scheduled)
       end
 
       specify ".published contains only published posts" do
-        expect(collection.published).to contain_exactly(published)
+        expect(scope.published).to contain_exactly(published)
       end
 
       specify ".unpublished contains only draft and scheduled posts" do
-        expect(collection.unpublished).to contain_exactly(draft, scheduled)
+        expect(scope.unpublished).to contain_exactly(draft, scheduled)
       end
 
       specify "#draft? is true only for draft posts" do

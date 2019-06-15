@@ -27,6 +27,8 @@ RSpec.describe Review do
     end
   end
 
+  describe ":PublicSite" do; end
+
   describe ":SlugAttribute" do
     it_behaves_like "a_sluggable_model"
 

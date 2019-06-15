@@ -48,20 +48,15 @@ RSpec.describe Playlist::Track do
     end
 
     describe ".sorted" do
-      subject(:association) { collection.sorted }
-
       let(:playlist_1) { create(:complete_playlist, :with_published_post, title: "Z") }
       let(:playlist_2) { create(:complete_playlist,                       title: "A") }
 
-      let(:parent_ids) { [playlist_1, playlist_2].map(&:id) }
-      let(:items) { described_class.where(playlist_id: parent_ids) }
-
-      let(:ids) { items.map(&:id).shuffle }
-      let(:collection) { described_class.where(id: ids) }
+      let(:items) { described_class.where(playlist_id: [playlist_1, playlist_2].map(&:id)) }
+      let(:scope) { described_class.where(id: items.map(&:id).shuffle) }
 
       it "sorts by playlist name and position" do
         expected = playlist_2.tracks.map(&:id) + playlist_1.tracks.map(&:id)
-        actual   = association.map(&:id)
+        actual = scope.sorted.map(&:id)
 
         expect(actual).to eq(expected)
       end
