@@ -85,7 +85,7 @@ module FactoryBuilders
     end
   end
 
-  class PostModernCabaretMixtape1 < Mixtape
+  class PostModernCabaret1 < Mixtape
     private
 
     def create_works(*)

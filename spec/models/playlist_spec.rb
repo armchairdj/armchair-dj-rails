@@ -98,8 +98,6 @@ RSpec.describe Playlist do
     it { is_expected.to have_many(:contributors).through(:works) }
   end
 
-  pending ":CreatorFilters"
-
   describe ":PostAssociations" do
     it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
     it { is_expected.to have_many(:reviews).through(:works) }

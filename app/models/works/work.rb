@@ -22,8 +22,6 @@
 class Work < ApplicationRecord
   concerning :CreatorAssociations do
     included do
-      include CreatorFilters
-
       with_options inverse_of: :work, dependent: :destroy do
         has_many :attributions
         has_many :contributions
