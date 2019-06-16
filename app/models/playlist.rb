@@ -90,7 +90,7 @@ class Playlist < ApplicationRecord
     end
   end
 
-  concerning :ImageableAttachment do
+  concerning :ImageAttachment do
     included do
       include Imageable
     end

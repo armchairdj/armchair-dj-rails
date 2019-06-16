@@ -1,14 +1,16 @@
 <%= content_tag(:article, class: "card #{post.model_name.param_key}") do %>
+  <% if post.hero_image.attached? %>
+    <%= content_tag(:div, class: "card-hero") do %>
+      <%= image_tag(post.hero_image.variant(resize: "800x800")) %>
+    <% end %>
+  <% end %>
+
   <%= content_tag(:header) do %>
     <%= content_tag(:h6, decorated_post_type(post), class: "post-type-identifier") %>
     <%= content_tag(:h3, link_to_post(post, full: true)) %>
   <% end %>
 
-  <%= content_tag(:p) do %>
-    <% if post.hero_image.attached? %>
-      <%= image_tag(post.hero_image.variant(resize: "600x600")) %>
-    <% end %>
-
+  <%= content_tag(:p, class: "card-summary") do %>
     <%= post.summary %>
 
     <%= link_to_post(post, text: semantic_icon("arrow-right", title: "read more", desc: "read more icon"), class: "read-more") %>

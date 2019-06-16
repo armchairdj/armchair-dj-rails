@@ -58,11 +58,7 @@ footer.post-byline {
 }
 
 .post-hero {
-  border: 1px solid $gun-metal;
-
-  img {
-    display: block;
-  }
+  @include post-hero();
 }
 
 @include breakpoint(large) {

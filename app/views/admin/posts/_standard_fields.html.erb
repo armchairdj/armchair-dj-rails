@@ -1,10 +1,10 @@
 <% return unless f.object.persisted? %>
 
-<%= f.input :body, input_html: {
+<%= f.input :body, required: true, input_html: {
   class: "x-large"
 } %>
 
-<%= f.input :summary, required: false, hint: true, input_html: {
+<%= f.input :summary, required: true, hint: true, input_html: {
   class: "small"
 } %>
 

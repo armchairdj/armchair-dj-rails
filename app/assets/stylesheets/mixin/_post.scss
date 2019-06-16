@@ -1,3 +1,12 @@
+@mixin post-hero() {
+  display: block;
+  border: 1px solid $gun-metal;
+
+  img {
+    display: block;
+  }
+}
+
 @mixin post-type-identifier($size: 1rem) {
   @include bold();
   text-transform: uppercase;

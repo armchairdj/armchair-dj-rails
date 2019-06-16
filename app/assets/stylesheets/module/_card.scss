@@ -1,5 +1,6 @@
 .card {
   @include bottom-margin(3rem);
+  @include clearfix();
   background-color: $module-bg-color;
   padding: 1rem;
   border-radius: $standard-border-radius;
@@ -18,7 +19,11 @@
     }
   }
 
-  p {
+  .card-hero {
+    @include post-hero();
+  }
+
+  p.card-summary {
     a.read-more {
       @include svg-link();
       @include inline-block-svg() {
@@ -43,18 +48,27 @@
 @include breakpoint(medium) {
   .card {
     padding: 2rem;
-    img {
-      float: right;
-      margin: .3rem 0 .5rem 1rem;
-      @include square(150px);
+
+    .card-hero {
+      float: left;
+      margin-right: 2rem;
+      width: 200px;
     }
   }
 }
 
 @include breakpoint(large) {
   .card {
-    img {
-      @include square(200px);
+    .card-hero {
+      width: 300px;
+    }
+  }
+}
+
+@include breakpoint(large) {
+  .card {
+    .card-hero {
+      width: 400px;
     }
   }
 }
