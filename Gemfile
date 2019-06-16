@@ -212,7 +212,7 @@ group :development do
   gem "foreman"
 
   # Query optimizer.
-  gem "bullet"
+  gem "bullet", "~> 5.9.0"
 
   # Automatic route and schema comments in model files.
   gem "annotate"

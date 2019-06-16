@@ -31,9 +31,9 @@ window.Selectize = Selectize;
 
 /* Turbolinks */
 
-// const Turbolinks = require("turbolinks");
-//
-// Turbolinks.start();
+const Turbolinks = require("turbolinks");
+
+Turbolinks.start();
 
 /* UJS */
 
