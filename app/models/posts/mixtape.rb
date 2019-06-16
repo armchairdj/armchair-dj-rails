@@ -63,6 +63,7 @@ class Mixtape < Post
       include CreatorFilters
 
       with_options through: :works do
+        has_many :creators
         has_many :makers
         has_many :contributions
         has_many :contributors
@@ -100,7 +101,9 @@ class Mixtape < Post
   end
 
   concerning :PublicSite do
-    def related_posts; end
+    def related_posts
+      super.by_maker(makers)
+    end
   end
 
   concerning :SlugAttribute do

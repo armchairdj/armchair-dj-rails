@@ -51,9 +51,11 @@ class Playlist < ApplicationRecord
     included do
       include CreatorFilters
 
-      has_many :creators,     -> { distinct }, through: :works
-      has_many :makers,       -> { distinct }, through: :works
-      has_many :contributors, -> { distinct }, through: :works
+      with_options through: :works do
+        has_many :creators,     -> { distinct }
+        has_many :makers,       -> { distinct }
+        has_many :contributors, -> { distinct }
+      end
     end
   end
 

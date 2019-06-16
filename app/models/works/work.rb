@@ -31,9 +31,13 @@ class Work < ApplicationRecord
       end
 
       with_options source: :creator, class_name: "Creator" do
-        has_many :creators,     -> { distinct }, through: :attributions
-        has_many :makers,       -> { distinct }, through: :credits
+        has_many :creators, -> { distinct }, through: :attributions
+
         has_many :contributors, -> { distinct }, through: :contributions
+
+        has_many :makers, lambda {
+          joins(:credits).select("creators.*, attributions.position").distinct
+        }, through: :credits
       end
 
       with_options allow_destroy: true, reject_if: proc { |attrs| attrs["creator_id"].blank? } do

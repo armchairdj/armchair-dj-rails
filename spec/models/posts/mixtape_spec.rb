@@ -20,12 +20,56 @@ RSpec.describe Mixtape do
   end
 
   describe ":CreatorAssociations" do
+    it { is_expected.to have_many(:creators).through(:works) }
     it { is_expected.to have_many(:makers).through(:works) }
     it { is_expected.to have_many(:contributions).through(:works) }
     it { is_expected.to have_many(:contributors).through(:works) }
   end
 
-  pending ":CreatorFilters"
+  describe ":CreatorFilters" do
+    let!(:builder1) do
+      FactoryBuilders::Mixtape.new(
+        maker_names:       ["Kate Bush", "TLC", "Richie Hawtin"],
+        contributor_names: ["Stereolab"]
+      )
+    end
+
+    let!(:builder2) do
+      FactoryBuilders::Mixtape.new(
+        maker_names:       ["Kate Bush", "Róisín Murphy", "Stereolab"],
+        contributor_names: ["Richie Hawtin"]
+      )
+    end
+
+    let!(:mixtape1) { builder1.mixtape }
+    let!(:mixtape2) { builder2.mixtape }
+
+    let!(:kate_bush) { builder1.makers["Kate Bush"] }
+    let!(:richie) { builder1.makers["Richie Hawtin"] }
+    let!(:tlc) { builder1.makers["TLC"] }
+    let!(:stereolab) { builder2.makers["Stereolab"] }
+
+    specify ".by_creator finds by maker or contributor" do
+      expect(described_class.by_creator(kate_bush)).to contain_exactly(mixtape1, mixtape2)
+      expect(described_class.by_creator(richie)).to contain_exactly(mixtape1, mixtape2)
+      expect(described_class.by_creator(tlc)).to contain_exactly(mixtape1)
+      expect(described_class.by_creator(stereolab)).to contain_exactly(mixtape1, mixtape2)
+    end
+
+    specify ".by_maker finds only by maker, not contributor" do
+      expect(described_class.by_maker(kate_bush)).to contain_exactly(mixtape1, mixtape2)
+      expect(described_class.by_maker(richie)).to contain_exactly(mixtape1)
+      expect(described_class.by_maker(tlc)).to contain_exactly(mixtape1)
+      expect(described_class.by_maker(stereolab)).to contain_exactly(mixtape2)
+    end
+
+    specify ".by_contributor finds only by contributor, not maker" do
+      expect(described_class.by_contributor(kate_bush)).to be_empty
+      expect(described_class.by_contributor(richie)).to contain_exactly(mixtape2)
+      expect(described_class.by_contributor(tlc)).to be_empty
+      expect(described_class.by_contributor(stereolab)).to contain_exactly(mixtape1)
+    end
+  end
 
   describe ":Alphabetization" do
     it_behaves_like "an_alphabetizable_model"
@@ -52,7 +96,27 @@ RSpec.describe Mixtape do
   end
 
   describe ":PublicSite" do
-    pending "#related_posts"
+    describe "#related_posts" do
+      xit "returns a reverse-cron relation of up to 3 other published mixtapes with overlapping makers" do
+        expect(described_class).to receive(:for_public).and_call_original
+
+        mixtape = create_minimal_instance(:published)
+
+        related = []
+
+        # related = related_works.map { |work| create_minimal_instance(:published, work: work) }
+
+        expect(mixtape.related_posts).to contain_exactly(related[1], related[2], related[3])
+      end
+
+      xit "returns an empty relation if no other published posts with overlapping maker" do
+        mixtape = create_minimal_instance(:published)
+
+        create_minimal_instance(:draft)
+
+        expect(mixtape.related_posts).to be_empty
+      end
+    end
   end
 
   describe ":SlugAttribute" do
