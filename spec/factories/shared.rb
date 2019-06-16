@@ -57,12 +57,14 @@ FactoryBot.define do
 
   trait :scheduled do
     with_body
+    with_summary
     publish_on { 3.weeks.from_now }
     scheduling { true }
   end
 
   trait :published do
     with_body
+    with_summary
     publishing { true }
   end
 

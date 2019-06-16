@@ -55,7 +55,10 @@ class Post < ApplicationRecord
 
   concerning :ContentAttributes do
     included do
-      validates :body, presence: true, if: :requires_body?
+      with_options presence: true, if: :requires_content? do
+        validates :body
+        validates :summary
+      end
 
       validates :summary, length: { in: 40..320 }, allow_blank: true
     end
@@ -63,17 +66,17 @@ class Post < ApplicationRecord
     def formatted_body
       return unless body.present?
 
-      renderer.render(body).html_safe
+      markdown_renderer.render(body).html_safe
     end
 
     private
 
-    def requires_body?
+    def requires_content?
       published? || publishing? || scheduled? || scheduling?
     end
 
-    def renderer
-      @renderer ||= Redcarpet::Markdown.new(PostRenderer)
+    def markdown_renderer
+      @markdown_renderer ||= Redcarpet::Markdown.new(PostRenderer)
     end
   end
 
@@ -240,13 +243,17 @@ class Post < ApplicationRecord
 
     class_methods do
       def publish_scheduled
-        memo = { success: [], failure: [], all: scheduled_and_due.to_a }
+        results = { all: scheduled_and_due.to_a, success: [], failure: [] }
 
-        memo[:all].each.with_object(memo) do |(item), acc|
-          item.unschedule!
+        results[:all].each do |post|
+          post.unschedule!
 
-          item.publish! ? acc[:success] << item : acc[:failure] << item
+          key = post.publish! ? :success : :failure
+
+          results[key] << post
         end
+
+        results
       end
     end
 

@@ -102,18 +102,35 @@ RSpec.describe Post do
         subject(:instance) { build_minimal_instance(:draft) }
 
         it { is_expected.to_not validate_presence_of(:body) }
+        it { is_expected.to_not validate_presence_of(:summary) }
+      end
+
+      context "when scheduling" do
+        subject(:instance) { build_minimal_instance(:scheduled) }
+
+        it { is_expected.to validate_presence_of(:body) }
+        it { is_expected.to validate_presence_of(:summary) }
       end
 
       context "when scheduled" do
         subject(:instance) { create_minimal_instance(:scheduled) }
 
         it { is_expected.to validate_presence_of(:body) }
+        it { is_expected.to validate_presence_of(:summary) }
+      end
+
+      context "when publishing" do
+        subject(:instance) { build_minimal_instance(:published) }
+
+        it { is_expected.to validate_presence_of(:body) }
+        it { is_expected.to validate_presence_of(:summary) }
       end
 
       context "when published" do
         subject(:instance) { create_minimal_instance(:published) }
 
         it { is_expected.to validate_presence_of(:body) }
+        it { is_expected.to validate_presence_of(:summary) }
       end
     end
 
@@ -123,8 +140,8 @@ RSpec.describe Post do
       let(:renderer) { double }
 
       before do
-        allow(instance).to receive(:renderer).and_return(renderer)
         allow(renderer).to receive(:render).and_return("rendered markdown")
+        allow(instance).to receive(:markdown_renderer).and_return(renderer)
       end
 
       context "when on happy path" do
@@ -281,27 +298,30 @@ RSpec.describe Post do
 
     specify "draft posts with publish_on can be scheduled" do
       draft.publish_on = 3.weeks.from_now
+      draft.summary = "summary summary summary summary summary summary"
 
       expect(draft.schedule!).to eq(true)
     end
 
-    specify "unscheduling a scheduled post clears publish_on" do
+    specify "unscheduling scheduled post clears publish_on" do
       expect(scheduled.unschedule!).to eq(true)
       expect(scheduled.publish_on).to eq(nil)
     end
 
-    specify "publishing a draft post sets published_at" do
+    specify "publishing draft sets published_at" do
+      draft.summary = "summary summary summary summary summary summary"
+
       expect(draft.publish!).to eq(true)
       expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
     end
 
-    specify "publishing a scheduled post sets published_at and clears publish_on" do
+    specify "publishing scheduled sets published_at and clears publish_on" do
       expect(scheduled.publish!).to eq(true)
       expect(scheduled.publish_on).to eq(nil)
       expect(scheduled.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)
     end
 
-    specify "unpublishing a published post clears published_at" do
+    specify "unpublishing published post clears published_at" do
       expect(published.unpublish!).to eq(true)
       expect(published.published_at).to eq(nil)
     end

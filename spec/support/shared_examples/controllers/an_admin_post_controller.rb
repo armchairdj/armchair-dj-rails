@@ -4,6 +4,8 @@ RSpec.shared_examples "an_admin_post_controller" do
   let(:model_class) { described_class.controller_name.classify.constantize }
   let(:param_key) { model_class.model_name.param_key.to_sym }
 
+  let(:valid_summary) { "summary summary summary summary summary summary" }
+
   let(:templates) do
     {
       show:    "admin/posts/show",
@@ -191,7 +193,7 @@ RSpec.shared_examples "an_admin_post_controller" do
           let(:transformation) { :publishing }
 
           context "when valid" do
-            let(:params) { { "body" => "body" } }
+            let(:params) { { "body" => "body", "summary" => valid_summary } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
 
@@ -231,7 +233,7 @@ RSpec.shared_examples "an_admin_post_controller" do
           context "when valid" do
             let(:publish_on) { 3.weeks.from_now }
 
-            let(:params) { { "body" => "body", "publish_on" => publish_on } }
+            let(:params) { { "body" => "body", "summary" => valid_summary, "publish_on" => publish_on } }
 
             it { is_expected.to assign(instance, :post).with_attributes(params).and_be_valid }
 
