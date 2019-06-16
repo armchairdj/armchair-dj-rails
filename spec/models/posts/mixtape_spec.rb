@@ -97,22 +97,24 @@ RSpec.describe Mixtape do
 
   describe ":PublicSite" do
     describe "#related_posts" do
-      xit "returns a reverse-cron relation of up to 3 other published mixtapes with overlapping makers" do
-        expect(described_class).to receive(:for_public).and_call_original
-
-        mixtape = create_minimal_instance(:published)
-
-        related = []
-
-        # related = related_works.map { |work| create_minimal_instance(:published, work: work) }
-
-        expect(mixtape.related_posts).to contain_exactly(related[1], related[2], related[3])
+      let!(:builders) do
+        5.times.each.with_object([]) do |(_index), memo|
+          memo << FactoryBuilders::Mixtape.new(maker_names: ["Derrick May", "Carl Craig"])
+        end
       end
 
-      xit "returns an empty relation if no other published posts with overlapping maker" do
+      it "returns a reverse-cron relation of up to 3 other published mixtapes with overlapping makers" do
+        # expect(described_class).to receive(:for_public).and_call_original
+
+        mixtape, _related0, related1, related2, related3 = builders.map(&:mixtape)
+
+        expect(mixtape.related_posts).to contain_exactly(related1, related2, related3)
+      end
+
+      it "returns an empty relation if no other published posts with overlapping maker" do
         mixtape = create_minimal_instance(:published)
 
-        create_minimal_instance(:draft)
+        create_minimal_instance(:draft, playlist: mixtape.playlist)
 
         expect(mixtape.related_posts).to be_empty
       end

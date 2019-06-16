@@ -99,7 +99,7 @@ class Post < ApplicationRecord
       scope :for_public, -> { published.reverse_cron }
 
       scope :additional_posts, lambda { |post, limit|
-        for_public.where.not(id: post.id).limit(limit)
+        for_public.distinct.where.not(id: post.id).limit(limit)
       }
     end
 
