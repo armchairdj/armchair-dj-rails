@@ -14,7 +14,9 @@
 
     <%= content_tag(:section, class: "post-context") do %>
       <% if @post.hero_image.attached? %>
-        <%= image_tag(@post.hero_image.variant(resize: "1000x1000")) %>
+        <%= content_tag(:div, class: "post-hero") do %>
+          <%= image_tag(@post.hero_image.variant(resize: "1000x1000")) %>
+        <% end %>
       <% end %>
     
       <%= content_for(:post_context) %>

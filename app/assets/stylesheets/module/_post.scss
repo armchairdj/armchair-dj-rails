@@ -57,6 +57,14 @@ footer.post-byline {
   }
 }
 
+.post-hero {
+  border: 1px solid $gun-metal;
+
+  img {
+    display: block;
+  }
+}
+
 @include breakpoint(large) {
   .post-wrapper {
     display: grid;
@@ -78,6 +86,6 @@ footer.post-byline {
   }
 }
 
-aside.post-context-section {
+.post-context-section {
   @include bottom-margin();
 }
