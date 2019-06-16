@@ -38,6 +38,31 @@
 #
 
 class Review < Post
+  concerning :WorkAssociations do
+    included do
+      belongs_to :work
+      validates :work, presence: true
+
+      has_many :aspects, through: :work
+      has_many :milestones, through: :work
+
+      delegate :display_medium, to: :work, allow_nil: true
+    end
+  end
+
+  concerning :CreatorAssociations do
+    included do
+      include CreatorFilters
+
+      has_many :creators, through: :work
+
+      has_many :makers, through: :work
+
+      has_many :contributions, through: :work
+      has_many :contributors, through: :work
+    end
+  end
+
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -84,41 +109,6 @@ class Review < Post
       base = [display_medium, "Review"].compact.join(" ")
 
       plural ? base.pluralize : base
-    end
-  end
-
-  concerning :WorkAssociations do
-    included do
-      belongs_to :work
-      validates :work, presence: true
-
-      has_many :aspects, through: :work
-      has_many :milestones, through: :work
-
-      delegate :display_medium, to: :work, allow_nil: true
-    end
-  end
-
-  concerning :WorkAttributionsAssociations do
-    included do
-      scope :by_attribution, lambda { |association, *creators|
-        joins(association).where(creators: { id: ids_from_list(creators) })
-      }
-
-      has_many :attributions, through: :work
-      has_many :creators, through: :work
-
-      scope :by_creator, ->(*creators) { by_attribution(:creators, *creators) }
-
-      has_many :credits, through: :work
-      has_many :makers, through: :work
-
-      scope :by_maker, ->(*makers) { by_attribution(:makers, *makers) }
-
-      has_many :contributions, through: :work
-      has_many :contributors, through: :work
-
-      scope :by_contributor, ->(*contributors) { by_attribution(:contributors, *contributors) }
     end
   end
 end

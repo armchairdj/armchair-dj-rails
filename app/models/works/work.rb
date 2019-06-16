@@ -20,13 +20,55 @@
 #
 
 class Work < ApplicationRecord
-  concerning :Alphabetization do
+  concerning :CreatorAssociations do
     included do
-      include Alphabetizable
+      include CreatorFilters
+
+      with_options inverse_of: :work, dependent: :destroy do
+        has_many :attributions
+        has_many :contributions
+        has_many :credits, -> { order(:position) }
+      end
+
+      with_options source: :creator, class_name: "Creator" do
+        has_many :creators,     -> { distinct }, through: :attributions
+        has_many :makers,       -> { distinct }, through: :credits
+        has_many :contributors, -> { distinct }, through: :contributions
+      end
+
+      with_options allow_destroy: true, reject_if: proc { |attrs| attrs["creator_id"].blank? } do
+        accepts_nested_attributes_for :credits
+        accepts_nested_attributes_for :contributions
+      end
+
+      validates :credits, length: { minimum: 1 }
+
+      with_options uniq_attr: :creator_id do
+        validates_nested_uniqueness_of :credits
+        validates_nested_uniqueness_of :contributions, scope: [:role_id]
+      end
+
+      before_save :memoize_display_makers, prepend: true
     end
 
-    def alpha_parts
-      [display_makers, title, subtitle]
+    def prepare_contributions
+      10.times { contributions.build }
+    end
+
+    def prepare_credits
+      3.times { credits.build }
+    end
+
+    private
+
+    def memoize_display_makers
+      self.display_makers = collect_makers
+    end
+
+    def collect_makers
+      names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
+
+      names.empty? ? nil : names.join(" & ")
     end
   end
 
@@ -47,7 +89,7 @@ class Work < ApplicationRecord
       end.to_a
     end
 
-    private
+    private # rubocop:disable Lint/UselessAccessModifier
 
     def only_available_aspects
       candidates = aspects.reject(&:marked_for_destruction?)
@@ -57,61 +99,107 @@ class Work < ApplicationRecord
     end
   end
 
-  concerning :AttributionAssociations do
+  concerning :MilestonesAssociation do
     included do
-      has_many :attributions, inverse_of: :work, dependent: :destroy
+      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
 
-      has_many :creators, -> { distinct }, through: :attributions
-    end
-  end
+      accepts_nested_attributes_for :milestones,
+        allow_destroy: true, reject_if: proc { |attrs| attrs["year"].blank? }
 
-  concerning :ContributionAssociations do
-    included do
-      has_many :contributions, inverse_of: :work, dependent: :destroy
+      validates_nested_uniqueness_of :milestones, uniq_attr: :activity
 
-      has_many :contributors, through: :contributions, source: :creator, class_name: "Creator"
-
-      accepts_nested_attributes_for(:contributions, allow_destroy: true,
-                                                    reject_if:     proc { |attrs| attrs["creator_id"].blank? })
-
-      validates_nested_uniqueness_of(:contributions, uniq_attr: :creator_id, scope: [:role_id])
+      validate { presence_of_released_milestone }
     end
 
-    def prepare_contributions
-      10.times { contributions.build }
-    end
-  end
-
-  concerning :CreditAssociations do
-    included do
-      has_many :credits, -> { order(:position) }, inverse_of: :work, dependent: :destroy
-
-      has_many :makers, through: :credits, source: :creator, class_name: "Creator"
-
-      accepts_nested_attributes_for(:credits, allow_destroy: true,
-                                              reject_if:     proc { |attrs| attrs["creator_id"].blank? })
-
-      validates :credits, length: { minimum: 1 }
-
-      validates_nested_uniqueness_of :credits, uniq_attr: :creator_id
-
-      before_save :memoize_display_makers, prepend: true
+    def display_milestones
+      milestones.sorted
     end
 
-    def prepare_credits
-      3.times { credits.build }
+    def prepare_milestones
+      5.times { milestones.build }
+
+      milestones.first.activity = :released if milestones.first.new_record?
     end
 
     private # rubocop:disable Lint/UselessAccessModifier
 
-    def memoize_display_makers
-      self.display_makers = collect_makers
+    def presence_of_released_milestone
+      return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
+
+      errors.add(:milestones, :blank)
+    end
+  end
+
+  concerning :RelationshipAssociations do
+    included do
+      with_options class_name: "Work::Relationship", dependent: :destroy do
+        has_many :source_relationships, foreign_key: :target_id, inverse_of: :target
+        has_many :target_relationships, foreign_key: :source_id, inverse_of: :source
+      end
+
+      has_many :source_works, -> { order("works.title") },
+        through: :source_relationships, source: :source
+
+      has_many :target_works, -> { order("works.title") },
+        through: :target_relationships, source: :target
+
+      with_options allow_destroy: true do
+        accepts_nested_attributes_for :source_relationships, reject_if: :reject_source?
+        accepts_nested_attributes_for :target_relationships, reject_if: :reject_target?
+      end
+
+      with_options scope: [:connection] do
+        validates_nested_uniqueness_of :target_relationships, uniq_attr: :target_id
+        validates_nested_uniqueness_of :source_relationships, uniq_attr: :source_id
+      end
     end
 
-    def collect_makers
-      names = credits.reject(&:marked_for_destruction?).map { |x| x.creator.name }
+    def prepare_source_relationships
+      5.times { source_relationships.build }
+    end
 
-      names.empty? ? nil : names.join(" & ")
+    def prepare_target_relationships
+      5.times { target_relationships.build }
+    end
+
+    private # rubocop:disable Lint/UselessAccessModifier
+
+    def reject_source?(attrs)
+      attrs["source_id"].blank?
+    end
+
+    def reject_target?(attrs)
+      attrs["target_id"].blank?
+    end
+  end
+
+  concerning :PostAssociations do
+    included do
+      has_many :reviews, dependent: :nullify
+
+      has_many :playlistings, class_name: "Playlist::Track",
+        inverse_of: :work, foreign_key: :work_id, dependent: :nullify
+
+      has_many :playlists, through: :playlistings
+      has_many :mixtapes,  through: :playlists
+    end
+
+    def posts
+      Post.where(id: post_ids)
+    end
+
+    def post_ids
+      reviews.ids + mixtapes.ids
+    end
+  end
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [display_makers, title, subtitle]
     end
   end
 
@@ -146,82 +234,6 @@ class Work < ApplicationRecord
   concerning :ImageAttachment do
     included do
       include Imageable
-    end
-  end
-
-  concerning :MilestonesAssociation do
-    included do
-      has_many :milestones, class_name: "Work::Milestone", dependent: :destroy
-
-      accepts_nested_attributes_for(:milestones, allow_destroy: true,
-                                                 reject_if:     proc { |attrs| attrs["year"].blank? })
-
-      validates_nested_uniqueness_of :milestones, uniq_attr: :activity
-
-      validate { presence_of_released_milestone }
-    end
-
-    def display_milestones
-      milestones.sorted
-    end
-
-    def prepare_milestones
-      5.times { milestones.build }
-
-      milestones.first.activity = :released if milestones.first.new_record?
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def presence_of_released_milestone
-      return if milestones.reject(&:marked_for_destruction?).any?(&:released?)
-
-      errors.add(:milestones, :blank)
-    end
-  end
-
-  concerning :PostAssociations do
-    included do
-      has_many :reviews, dependent: :nullify
-
-      has_many :playlistings, class_name: "Playlist::Track",
-        inverse_of: :work, foreign_key: :work_id, dependent: :nullify
-
-      has_many :playlists, through: :playlistings
-      has_many :mixtapes,  through: :playlists
-    end
-
-    def posts
-      Post.where(id: post_ids)
-    end
-
-    def post_ids
-      reviews.ids + mixtapes.ids
-    end
-  end
-
-  concerning :SourceAssociations do
-    included do
-      has_many :source_relationships, class_name: "Work::Relationship",
-        foreign_key: :target_id, inverse_of: :target, dependent: :destroy
-
-      has_many :source_works, -> { order("works.title") },
-        through: :source_relationships, source: :source
-
-      accepts_nested_attributes_for(:source_relationships,
-        allow_destroy: true, reject_if: :reject_source_relationship?)
-
-      validates_nested_uniqueness_of(:source_relationships, uniq_attr: :source_id, scope: [:connection])
-    end
-
-    def prepare_source_relationships
-      5.times { source_relationships.build }
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def reject_source_relationship?(attrs)
-      attrs["source_id"].blank?
     end
   end
 
@@ -260,31 +272,6 @@ class Work < ApplicationRecord
           require_dependency file
         end
       end
-    end
-  end
-
-  concerning :TargetAssociations do
-    included do
-      has_many :target_relationships, class_name: "Work::Relationship",
-        foreign_key: :source_id, inverse_of: :source, dependent: :destroy
-
-      has_many :target_works, -> { order("works.title") },
-        through: :target_relationships, source: :target
-
-      accepts_nested_attributes_for(:target_relationships,
-        allow_destroy: true, reject_if: :reject_target_relationship?)
-
-      validates_nested_uniqueness_of(:target_relationships, uniq_attr: :target_id, scope: [:connection])
-    end
-
-    def prepare_target_relationships
-      5.times { target_relationships.build }
-    end
-
-    private # rubocop:disable Lint/UselessAccessModifier
-
-    def reject_target_relationship?(attrs)
-      attrs["target_id"].blank?
     end
   end
 

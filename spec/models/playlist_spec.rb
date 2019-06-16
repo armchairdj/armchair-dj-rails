@@ -23,16 +23,6 @@
 require "rails_helper"
 
 RSpec.describe Playlist do
-  describe "ApplicationRecord" do
-    it_behaves_like "an_application_record"
-
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
-  end
-
   describe ":TracksAssociation" do
     it { is_expected.to have_many(:tracks).dependent(:destroy) }
     it { is_expected.to have_many(:unordered_tracks).dependent(:destroy) }
@@ -98,18 +88,6 @@ RSpec.describe Playlist do
     end
   end
 
-  describe ":Alphabetization" do
-    it_behaves_like "an_alphabetizable_model"
-
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
-
-      let(:instance) { build_minimal_instance }
-
-      it { is_expected.to eq([instance.title]) }
-    end
-  end
-
   describe ":AuthorAssociation" do
     it_behaves_like "an_authorable_model"
   end
@@ -120,16 +98,7 @@ RSpec.describe Playlist do
     it { is_expected.to have_many(:contributors).through(:works) }
   end
 
-  describe ":GinsuIntegration" do
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [:author] }
-      let(:show_loads) { [:author, :tracks, :works] }
-    end
-  end
-
-  describe ":ImageAttachment" do
-    it_behaves_like "an_imageable_model"
-  end
+  pending ":CreatorFilters"
 
   describe ":PostAssociations" do
     it { is_expected.to have_many(:mixtapes).dependent(:nullify) }
@@ -160,6 +129,39 @@ RSpec.describe Playlist do
         it { is_expected.to match_array(expected) }
       end
     end
+  end
+
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
+
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
+
+    describe "#alpha_parts" do
+      subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
+
+      it { is_expected.to eq([instance.title]) }
+    end
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [:author] }
+      let(:show_loads) { [:author, :tracks, :works] }
+    end
+  end
+
+  describe ":ImageAttachment" do
+    it_behaves_like "an_imageable_model"
   end
 
   describe ":TitleAttribute" do

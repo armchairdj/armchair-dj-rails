@@ -23,10 +23,6 @@ FactoryBot.define do
     name { nil }
     initialize_with { Role.find_or_initialize_by(medium: medium, name: name) }
 
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_name do
       name { generate(:role_name) }
     end
@@ -34,10 +30,6 @@ FactoryBot.define do
     trait :with_medium do
       medium { "Song" }
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_role do
       with_name

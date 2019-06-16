@@ -4,10 +4,6 @@ module Ginsu
   class Knife
     extend UrlHelpers
 
-    ###########################################################################
-    # CLASS.
-    ###########################################################################
-
     def self.diced_url(model_class, scope, sort, dir)
       opts = { scope: scope, sort: sort, dir: dir }
 
@@ -16,17 +12,9 @@ module Ginsu
       polymorphic_path [:admin, model_class], **opts
     end
 
-    ###########################################################################
-    # ATTRIBUTES.
-    ###########################################################################
-
     attr_reader :current_scope
     attr_reader :current_sort
     attr_reader :current_dir
-
-    ###########################################################################
-    # INSTANCE.
-    ###########################################################################
 
     def initialize(current_scope: nil, current_sort: nil, current_dir: nil)
       @current_scope = current_scope

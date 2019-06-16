@@ -22,21 +22,13 @@
 require "wannabe_bool"
 
 class Creator < ApplicationRecord
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [name]
-    end
-  end
-
   concerning :AttributionAssociations do
     included do
-      has_many :attributions,  inverse_of: :creator, dependent: :destroy
-      has_many :credits,       inverse_of: :creator, dependent: :destroy
-      has_many :contributions, inverse_of: :creator, dependent: :destroy
+      with_options inverse_of: :creator, dependent: :destroy do
+        has_many :attributions
+        has_many :credits
+        has_many :contributions
+      end
     end
 
     def works
@@ -50,90 +42,25 @@ class Creator < ApplicationRecord
     end
   end
 
-  concerning :BooletaniaIntegration do
+  concerning :AttributedAssociations do
     included do
-      include Booletania
+      with_options class_name: "Work", source: :work do
+        has_many :credited_works, -> { distinct }, through: :credits
+        has_many :contributed_works, -> { distinct }, through: :contributions
+      end
 
-      booletania_columns :primary, :individual
-    end
-  end
+      with_options class_name: "Playlist::Track", source: :playlistings do
+        has_many :credited_playlistings, -> { distinct }, through: :credited_works
+        has_many :contributed_playlistings, -> { distinct }, through: :contributed_works
+      end
 
-  concerning :CreditedAssociations do
-    included do
-      has_many :credited_works, -> { distinct }, through: :credits,
-        class_name: "Work", source: :work
-
-      has_many :credited_playlistings, -> { distinct }, through: :credited_works,
-        class_name: "Playlist::Track", source: :playlistings
-
-      has_many :credited_playlists, -> { distinct }, through: :credited_playlistings,
-        class_name: "Playlist", source: :playlist
-    end
-  end
-
-  concerning :ContributedAssociations do
-    included do
-      has_many :contributed_works, -> { distinct }, through: :contributions,
-        class_name: "Work", source: :work
-
-      has_many :contributed_playlistings, -> { distinct }, through: :contributed_works,
-        class_name: "Playlist::Track", source: :playlistings
-
-      has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings,
-        class_name: "Playlist", source: :playlist
+      with_options class_name: "Playlist", source: :playlist do
+        has_many :credited_playlists, -> { distinct }, through: :credited_playlistings
+        has_many :contributed_playlists, -> { distinct }, through: :contributed_playlistings
+      end
 
       has_many :contributed_roles, -> { includes(contributions: :work) },
         through: :contributions, class_name: "Role", source: :role
-    end
-  end
-
-  concerning :Editing do
-    def prepare_for_editing
-      prepare_group_memberships
-      prepare_member_memberships
-      prepare_pseudonym_identities
-      prepare_real_name_identities
-    end
-
-    def prepare_group_memberships
-      5.times { group_memberships.build }
-    end
-
-    def prepare_member_memberships
-      5.times { member_memberships.build }
-    end
-
-    def prepare_pseudonym_identities
-      5.times { pseudonym_identities.build }
-    end
-
-    def prepare_real_name_identities
-      count_needed = 1 - real_name_identities.length
-
-      count_needed.times { real_name_identities.build }
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> {}
-      scope :for_show, lambda {
-        includes(
-          :pseudonyms,        :real_names,
-          :members,           :groups,
-          :credits,           :contributions,
-          :credited_works,    :contributed_works,
-          :credited_reviews,  :contributed_reviews,
-          :credited_mixtapes, :contributed_mixtapes,
-          :contributed_roles
-        )
-      }
-    end
-  end
-
-  concerning :NameAttribute do
-    included do
-      validates :name, presence: true
     end
   end
 
@@ -216,11 +143,11 @@ class Creator < ApplicationRecord
       has_many :members, -> { order("creators.name") },
         through: :member_memberships, source: :member
 
-      accepts_nested_attributes_for(:group_memberships,
-        allow_destroy: true, reject_if: :reject_group_membership?)
+      accepts_nested_attributes_for :group_memberships,
+        allow_destroy: true, reject_if: :reject_group_membership?
 
-      accepts_nested_attributes_for(:member_memberships,
-        allow_destroy: true, reject_if: :reject_member_membership?)
+      accepts_nested_attributes_for :member_memberships,
+        allow_destroy: true, reject_if: :reject_member_membership?
     end
 
     def colleagues
@@ -312,11 +239,11 @@ class Creator < ApplicationRecord
       has_many :real_names, -> { order("creators.name") },
         through: :real_name_identities, source: :real_name
 
-      accepts_nested_attributes_for(:pseudonym_identities,
-        allow_destroy: true, reject_if: :reject_pseudonym_identity?)
+      accepts_nested_attributes_for :pseudonym_identities,
+        allow_destroy: true, reject_if: :reject_pseudonym_identity?
 
-      accepts_nested_attributes_for(:real_name_identities,
-        allow_destroy: true, reject_if: :reject_real_name_identity?)
+      accepts_nested_attributes_for :real_name_identities,
+        allow_destroy: true, reject_if: :reject_real_name_identity?
     end
 
     def personae
@@ -352,6 +279,74 @@ class Creator < ApplicationRecord
       return true if self.class.find(key).secondary?
 
       false
+    end
+  end
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [name]
+    end
+  end
+
+  concerning :BooletaniaIntegration do
+    included do
+      include Booletania
+
+      booletania_columns :primary, :individual
+    end
+  end
+
+  concerning :Editing do
+    def prepare_for_editing
+      prepare_group_memberships
+      prepare_member_memberships
+      prepare_pseudonym_identities
+      prepare_real_name_identities
+    end
+
+    def prepare_group_memberships
+      5.times { group_memberships.build }
+    end
+
+    def prepare_member_memberships
+      5.times { member_memberships.build }
+    end
+
+    def prepare_pseudonym_identities
+      5.times { pseudonym_identities.build }
+    end
+
+    def prepare_real_name_identities
+      count_needed = 1 - real_name_identities.length
+
+      count_needed.times { real_name_identities.build }
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> {}
+      scope :for_show, lambda {
+        includes(
+          :pseudonyms,        :real_names,
+          :members,           :groups,
+          :credits,           :contributions,
+          :credited_works,    :contributed_works,
+          :credited_reviews,  :contributed_reviews,
+          :credited_mixtapes, :contributed_mixtapes,
+          :contributed_roles
+        )
+      }
+    end
+  end
+
+  concerning :NameAttribute do
+    included do
+      validates :name, presence: true
     end
   end
 end

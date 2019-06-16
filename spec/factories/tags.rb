@@ -17,10 +17,6 @@
 
 FactoryBot.define do
   factory :tag do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_name do
       name { generate(:tag_name) }
     end
@@ -48,10 +44,6 @@ FactoryBot.define do
       with_scheduled_post
       with_published_post
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_tag do
       with_name

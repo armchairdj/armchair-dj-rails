@@ -4,14 +4,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :review do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
-
     factory :minimal_review, class: "Review", parent: :minimal_post_parent do
       with_existing_work
     end
@@ -19,10 +11,6 @@ FactoryBot.define do
     factory :complete_review, class: "Review", parent: :complete_post_parent do
       with_existing_work
     end
-
-    ###########################################################################
-    # SPECIFIC FACTORIES.
-    ###########################################################################
 
     factory :never_for_ever_album_review, parent: :minimal_review do
       body        { "It's in the trees! It's coming!" }

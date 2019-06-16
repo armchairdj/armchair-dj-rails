@@ -6,10 +6,6 @@ FactoryBot.define do
     factory :complete_album, class: "Album", parent: :complete_work_parent
     factory :stuffed_album,  class: "Album", parent: :stuffed_work_parent
 
-    ###########################################################################
-    # SPECIFIC FACTORIES.
-    ###########################################################################
-
     factory :sleater_kinney_the_center_wont_hold, parent: :minimal_album do
       title { "The Center Won't Hold" }
       with_contributions

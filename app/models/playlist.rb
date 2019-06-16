@@ -21,35 +21,23 @@
 #
 
 class Playlist < ApplicationRecord
-  # This must go before the #PostsAssociation block.
   concerning :TracksAssociation do
     included do
-      has_many :unordered_tracks, inverse_of: :playlist,
-        class_name: "Playlist::Track", dependent: :destroy
-
-      has_many :tracks, -> { order(:position) }, inverse_of: :playlist,
-        class_name: "Playlist::Track", dependent: :destroy
+      with_options inverse_of: :playlist, class_name: "Playlist::Track", dependent: :destroy do
+        has_many :unordered_tracks
+        has_many :tracks, -> { order(:position) }
+      end
 
       validates :tracks, length: { minimum: 2 }
 
       has_many :works, through: :unordered_tracks
 
-      accepts_nested_attributes_for(:tracks, allow_destroy: true,
-                                             reject_if:     proc { |attrs| attrs["work_id"].blank? })
+      accepts_nested_attributes_for :tracks,
+        allow_destroy: true, reject_if: proc { |attrs| attrs["work_id"].blank? }
     end
 
     def prepare_tracks
       20.times { tracks.build }
-    end
-  end
-
-  concerning :Alphabetization do
-    included do
-      include Alphabetizable
-    end
-
-    def alpha_parts
-      [title]
     end
   end
 
@@ -61,22 +49,11 @@ class Playlist < ApplicationRecord
 
   concerning :CreatorAssociations do
     included do
+      include CreatorFilters
+
       has_many :creators,     -> { distinct }, through: :works
       has_many :makers,       -> { distinct }, through: :works
       has_many :contributors, -> { distinct }, through: :works
-    end
-  end
-
-  concerning :GinsuIntegration do
-    included do
-      scope :for_list, -> { includes(:author).references(:author) }
-      scope :for_show, -> { includes(:author, :tracks, :works) }
-    end
-  end
-
-  concerning :ImageableAttachment do
-    included do
-      include Imageable
     end
   end
 
@@ -93,6 +70,29 @@ class Playlist < ApplicationRecord
 
     def post_ids
       reviews.ids + mixtapes.ids
+    end
+  end
+
+  concerning :Alphabetization do
+    included do
+      include Alphabetizable
+    end
+
+    def alpha_parts
+      [title]
+    end
+  end
+
+  concerning :GinsuIntegration do
+    included do
+      scope :for_list, -> { includes(:author).references(:author) }
+      scope :for_show, -> { includes(:author, :tracks, :works) }
+    end
+  end
+
+  concerning :ImageableAttachment do
+    included do
+      include Imageable
     end
   end
 

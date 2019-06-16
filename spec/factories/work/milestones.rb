@@ -25,10 +25,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :work_milestone, class: Work::Milestone do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_activity do
       activity { :created }
     end
@@ -36,10 +32,6 @@ FactoryBot.define do
     trait :with_year do
       year { generate(:year) }
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :work_milestone_for_work do
       activity { :released }

@@ -38,6 +38,38 @@
 #
 
 class Mixtape < Post
+  concerning :PlaylistAssociations do
+    included do
+      belongs_to :playlist
+      has_many :tracks, through: :playlist
+
+      validates :playlist, presence: true
+    end
+  end
+
+  concerning :WorksAssociations do
+    included do
+      has_many :works, through: :tracks
+
+      with_options through: :works do
+        has_many :aspects
+        has_many :milestones
+      end
+    end
+  end
+
+  concerning :CreatorAssociations do
+    included do
+      include CreatorFilters
+
+      with_options through: :works do
+        has_many :makers
+        has_many :contributions
+        has_many :contributors
+      end
+    end
+  end
+
   concerning :Alphabetization do
     included do
       include Alphabetizable
@@ -67,13 +99,8 @@ class Mixtape < Post
     end
   end
 
-  concerning :PlaylistAssociations do
-    included do
-      belongs_to :playlist
-      has_many :tracks, through: :playlist
-
-      validates :playlist, presence: true
-    end
+  concerning :PublicSite do
+    def related_posts; end
   end
 
   concerning :SlugAttribute do
@@ -85,18 +112,6 @@ class Mixtape < Post
   concerning :StiInheritance do
     def display_type(plural: false)
       plural ? "Mixtapes" : "Mixtape"
-    end
-  end
-
-  concerning :WorksAssociations do
-    included do
-      has_many :works, through: :tracks
-
-      has_many :makers,        through: :works
-      has_many :contributions, through: :works
-      has_many :contributors,  through: :works
-      has_many :aspects,       through: :works
-      has_many :milestones,    through: :works
     end
   end
 end

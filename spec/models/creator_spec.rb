@@ -22,28 +22,6 @@
 require "rails_helper"
 
 RSpec.describe Creator do
-  describe "ApplicationRecord" do
-    it_behaves_like "an_application_record"
-
-    describe "nilify_blanks" do
-      subject { build_minimal_instance }
-
-      it { is_expected.to nilify_blanks(before: :validation) }
-    end
-  end
-
-  describe ":Alphabetization" do
-    it_behaves_like "an_alphabetizable_model"
-
-    describe "#alpha_parts" do
-      subject(:alpha_parts) { instance.alpha_parts }
-
-      let(:instance) { build_minimal_instance }
-
-      it { is_expected.to eq([instance.name]) }
-    end
-  end
-
   describe ":AttributionAssociations" do
     it { is_expected.to have_many(:attributions).dependent(:destroy) }
     it { is_expected.to have_many(:credits).dependent(:destroy) }
@@ -102,179 +80,17 @@ RSpec.describe Creator do
     end
   end
 
-  describe ":BooletaniaIntegration" do
-    let(:instance) { build_minimal_instance }
-
-    describe ".individual_options" do
-      subject { described_class.individual_options }
-
-      it "contains the correct labels and values" do
-        is_expected.to match_array([
-          [a_string_matching(/^This is an individual/), true],
-          [a_string_matching(/^This is a group/), false]
-        ])
-      end
-    end
-
-    describe ".collective_options" do
-      subject { described_class.primary_options }
-
-      it "contains the correct labels and values" do
-        is_expected.to match_array([
-          [a_string_matching(/^This is a primary/), true],
-          [a_string_matching(/^This is a secondary/), false]
-        ])
-      end
-    end
-
-    describe "#individual_text" do
-      it "looks up the individual option" do
-        instance.individual = true
-
-        expect(instance.individual_text).to match(/^This is an individual/)
-      end
-
-      it "looks up the collective option" do
-        instance.individual = false
-
-        expect(instance.individual_text).to match(/^This is a group/)
-      end
-    end
-
-    describe "#primary_text" do
-      it "looks up the primary option" do
-        instance.primary = true
-
-        expect(instance.primary_text).to match(/^This is a primary/)
-      end
-
-      it "looks up the secondary option" do
-        instance.primary = false
-
-        expect(instance.primary_text).to match(/^This is a secondary/)
-      end
-    end
-  end
-
-  describe ":CreditedAssociations" do
+  describe ":AttributedAssociations" do
     it { is_expected.to have_many(:credited_works).through(:credits) }
-    it { is_expected.to have_many(:credited_playlistings).through(:credited_works) }
-    it { is_expected.to have_many(:credited_playlists).through(:credited_playlistings) }
-  end
-
-  describe ":ContributedAssociations" do
     it { is_expected.to have_many(:contributed_works).through(:contributions) }
+
+    it { is_expected.to have_many(:credited_playlistings).through(:credited_works) }
     it { is_expected.to have_many(:contributed_playlistings).through(:contributed_works) }
+
+    it { is_expected.to have_many(:credited_playlists).through(:credited_playlistings) }
     it { is_expected.to have_many(:contributed_playlists).through(:contributed_playlistings) }
+
     it { is_expected.to have_many(:contributed_roles).through(:contributions) }
-  end
-
-  describe ":Editing" do
-    describe "#prepare_for_editing" do
-      it "builds nested attributes" do
-        instance = build_minimal_instance
-
-        expect(instance).to receive(:prepare_group_memberships)
-        expect(instance).to receive(:prepare_member_memberships)
-        expect(instance).to receive(:prepare_pseudonym_identities)
-        expect(instance).to receive(:prepare_real_name_identities)
-
-        instance.prepare_for_editing
-      end
-    end
-
-    describe "#prepare_group_memberships" do
-      it "builds 5 initially" do
-        instance = create(:individual_creator)
-
-        instance.prepare_group_memberships
-
-        expect(instance.group_memberships).to have(5).items
-      end
-
-      it "builds 5 more" do
-        instance = create(:individual_creator, :with_group)
-
-        instance.prepare_group_memberships
-
-        expect(instance.group_memberships).to have(6).items
-      end
-    end
-
-    describe "#prepare_member_memberships" do
-      it "builds 5 initially" do
-        instance = create(:collective_creator)
-
-        instance.prepare_member_memberships
-
-        expect(instance.member_memberships).to have(5).items
-      end
-
-      it "builds 5 more" do
-        instance = create(:collective_creator, :with_member)
-
-        instance.prepare_member_memberships
-
-        expect(instance.member_memberships).to have(6).items
-      end
-    end
-
-    describe "#prepare_pseudonym_identities" do
-      it "builds 5 initially" do
-        instance = create(:primary_creator)
-
-        instance.prepare_pseudonym_identities
-
-        expect(instance.pseudonym_identities).to have(5).items
-      end
-
-      it "builds 5 more" do
-        instance = create(:primary_creator, :with_pseudonym)
-
-        instance.prepare_pseudonym_identities
-
-        expect(instance.pseudonym_identities).to have(6).items
-      end
-    end
-
-    describe "#prepare_real_name_identities" do
-      it "builds 1 initially" do
-        instance = create(:secondary_creator)
-
-        instance.prepare_real_name_identities
-
-        expect(instance.real_name_identities).to have(1).items
-      end
-
-      it "never builds more than 1" do
-        instance = create(:secondary_creator, :with_real_name)
-
-        instance.prepare_real_name_identities
-
-        expect(instance.real_name_identities).to have(1).items
-      end
-    end
-  end
-
-  describe ":GinsuIntegration" do
-    it_behaves_like "a_ginsu_model" do
-      let(:list_loads) { [] }
-      let(:show_loads) do
-        [
-          :pseudonyms,        :real_names,
-          :members,           :groups,
-          :credits,           :contributions,
-          :credited_works,    :contributed_works,
-          :credited_reviews,  :contributed_reviews,
-          :credited_mixtapes, :contributed_mixtapes,
-          :contributed_roles
-        ]
-      end
-    end
-  end
-
-  describe ":NameAttribute" do
-    it { is_expected.to validate_presence_of(:name) }
   end
 
   describe ":PostAssociations" do
@@ -402,7 +218,7 @@ RSpec.describe Creator do
     it { is_expected.to have_many(:groups).through(:group_memberships).order("creators.name") }
     it { is_expected.to have_many(:members).through(:member_memberships).order("creators.name") }
 
-    describe "nested attributes for member_memberships" do
+    describe "nested member_memberships" do
       subject(:instance) { create(:collective_creator) }
 
       it { is_expected.to accept_nested_attributes_for(:member_memberships).allow_destroy(true) }
@@ -437,7 +253,7 @@ RSpec.describe Creator do
       end
     end
 
-    describe "nested attributes for group_memberships" do
+    describe "nested group_memberships" do
       subject(:instance) { create(:individual_creator) }
 
       it { is_expected.to accept_nested_attributes_for(:group_memberships).allow_destroy(true) }
@@ -685,7 +501,7 @@ RSpec.describe Creator do
     it { is_expected.to have_many(:real_name_identities).dependent(:destroy) }
     it { is_expected.to have_many(:real_names).through(:real_name_identities).order("creators.name") }
 
-    describe "nested attributes for real_name_identities" do
+    describe "nested real_name_identities" do
       subject(:instance) { create(:secondary_creator) }
 
       it { is_expected.to accept_nested_attributes_for(:real_name_identities).allow_destroy(true) }
@@ -720,7 +536,7 @@ RSpec.describe Creator do
       end
     end
 
-    describe "nested attributes for pseudonym_identities" do
+    describe "nested pseudonym_identities" do
       subject(:instance) { create(:primary_creator) }
 
       it { is_expected.to accept_nested_attributes_for(:pseudonym_identities).allow_destroy(true) }
@@ -816,5 +632,189 @@ RSpec.describe Creator do
         expect(fuse.personae).to eq([plastikman, richie])
       end
     end
+  end
+
+  describe "ApplicationRecord" do
+    it_behaves_like "an_application_record"
+
+    describe "nilify_blanks" do
+      subject { build_minimal_instance }
+
+      it { is_expected.to nilify_blanks(before: :validation) }
+    end
+  end
+
+  describe ":Alphabetization" do
+    it_behaves_like "an_alphabetizable_model"
+
+    describe "#alpha_parts" do
+      subject(:alpha_parts) { instance.alpha_parts }
+
+      let(:instance) { build_minimal_instance }
+
+      it { is_expected.to eq([instance.name]) }
+    end
+  end
+
+  describe ":BooletaniaIntegration" do
+    let(:instance) { build_minimal_instance }
+
+    describe ".individual_options" do
+      subject { described_class.individual_options }
+
+      it "contains the correct labels and values" do
+        is_expected.to match_array([
+          [a_string_matching(/^This is an individual/), true],
+          [a_string_matching(/^This is a group/), false]
+        ])
+      end
+    end
+
+    describe ".collective_options" do
+      subject { described_class.primary_options }
+
+      it "contains the correct labels and values" do
+        is_expected.to match_array([
+          [a_string_matching(/^This is a primary/), true],
+          [a_string_matching(/^This is a secondary/), false]
+        ])
+      end
+    end
+
+    describe "#individual_text" do
+      it "looks up the individual option" do
+        instance.individual = true
+
+        expect(instance.individual_text).to match(/^This is an individual/)
+      end
+
+      it "looks up the collective option" do
+        instance.individual = false
+
+        expect(instance.individual_text).to match(/^This is a group/)
+      end
+    end
+
+    describe "#primary_text" do
+      it "looks up the primary option" do
+        instance.primary = true
+
+        expect(instance.primary_text).to match(/^This is a primary/)
+      end
+
+      it "looks up the secondary option" do
+        instance.primary = false
+
+        expect(instance.primary_text).to match(/^This is a secondary/)
+      end
+    end
+  end
+
+  describe ":Editing" do
+    describe "#prepare_for_editing" do
+      it "builds nested attributes" do
+        instance = build_minimal_instance
+
+        expect(instance).to receive(:prepare_group_memberships)
+        expect(instance).to receive(:prepare_member_memberships)
+        expect(instance).to receive(:prepare_pseudonym_identities)
+        expect(instance).to receive(:prepare_real_name_identities)
+
+        instance.prepare_for_editing
+      end
+    end
+
+    describe "#prepare_group_memberships" do
+      it "builds 5 initially" do
+        instance = create(:individual_creator)
+
+        instance.prepare_group_memberships
+
+        expect(instance.group_memberships).to have(5).items
+      end
+
+      it "builds 5 more" do
+        instance = create(:individual_creator, :with_group)
+
+        instance.prepare_group_memberships
+
+        expect(instance.group_memberships).to have(6).items
+      end
+    end
+
+    describe "#prepare_member_memberships" do
+      it "builds 5 initially" do
+        instance = create(:collective_creator)
+
+        instance.prepare_member_memberships
+
+        expect(instance.member_memberships).to have(5).items
+      end
+
+      it "builds 5 more" do
+        instance = create(:collective_creator, :with_member)
+
+        instance.prepare_member_memberships
+
+        expect(instance.member_memberships).to have(6).items
+      end
+    end
+
+    describe "#prepare_pseudonym_identities" do
+      it "builds 5 initially" do
+        instance = create(:primary_creator)
+
+        instance.prepare_pseudonym_identities
+
+        expect(instance.pseudonym_identities).to have(5).items
+      end
+
+      it "builds 5 more" do
+        instance = create(:primary_creator, :with_pseudonym)
+
+        instance.prepare_pseudonym_identities
+
+        expect(instance.pseudonym_identities).to have(6).items
+      end
+    end
+
+    describe "#prepare_real_name_identities" do
+      it "builds 1 initially" do
+        instance = create(:secondary_creator)
+
+        instance.prepare_real_name_identities
+
+        expect(instance.real_name_identities).to have(1).items
+      end
+
+      it "never builds more than 1" do
+        instance = create(:secondary_creator, :with_real_name)
+
+        instance.prepare_real_name_identities
+
+        expect(instance.real_name_identities).to have(1).items
+      end
+    end
+  end
+
+  describe ":GinsuIntegration" do
+    it_behaves_like "a_ginsu_model" do
+      let(:list_loads) { [] }
+      let(:show_loads) do
+        [
+          :pseudonyms,        :real_names,
+          :members,           :groups,
+          :credits,           :contributions,
+          :credited_works,    :contributed_works,
+          :credited_reviews,  :contributed_reviews,
+          :credited_mixtapes, :contributed_mixtapes,
+          :contributed_roles
+        ]
+      end
+    end
+  end
+
+  describe ":NameAttribute" do
+    it { is_expected.to validate_presence_of(:name) }
   end
 end

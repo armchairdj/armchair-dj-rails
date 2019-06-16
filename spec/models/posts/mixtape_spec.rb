@@ -3,6 +3,30 @@
 require "rails_helper"
 
 RSpec.describe Mixtape do
+  describe ":PlaylistAssociations" do
+    it { is_expected.to belong_to(:playlist).required }
+
+    it { is_expected.to have_many(:tracks).through(:playlist) }
+
+    it { is_expected.to validate_presence_of(:playlist) }
+  end
+
+  describe ":WorksAssociations" do
+    it { is_expected.to have_many(:works).through(:tracks) }
+
+    it { is_expected.to have_many(:aspects).through(:works) }
+
+    it { is_expected.to have_many(:milestones).through(:works) }
+  end
+
+  describe ":CreatorAssociations" do
+    it { is_expected.to have_many(:makers).through(:works) }
+    it { is_expected.to have_many(:contributions).through(:works) }
+    it { is_expected.to have_many(:contributors).through(:works) }
+  end
+
+  pending ":CreatorFilters"
+
   describe ":Alphabetization" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -27,12 +51,8 @@ RSpec.describe Mixtape do
     pending "delegate additional_images to playlist"
   end
 
-  describe ":PlaylistAssociations" do
-    it { is_expected.to belong_to(:playlist).required }
-
-    it { is_expected.to have_many(:tracks).through(:playlist) }
-
-    it { is_expected.to validate_presence_of(:playlist) }
+  describe ":PublicSite" do
+    pending "#related_posts"
   end
 
   describe ":SlugAttribute" do
@@ -83,15 +103,5 @@ RSpec.describe Mixtape do
       specify { expect(instance.display_type).to eq("Mixtape") }
       specify { expect(instance.display_type(plural: true)).to eq("Mixtapes") }
     end
-  end
-
-  describe ":WorksAssociations" do
-    it { is_expected.to have_many(:works).through(:tracks) }
-
-    it { is_expected.to have_many(:makers).through(:works) }
-    it { is_expected.to have_many(:contributions).through(:works) }
-    it { is_expected.to have_many(:contributors).through(:works) }
-    it { is_expected.to have_many(:aspects).through(:works) }
-    it { is_expected.to have_many(:milestones).through(:works) }
   end
 end

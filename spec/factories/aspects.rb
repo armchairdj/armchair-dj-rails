@@ -23,10 +23,6 @@ FactoryBot.define do
     val { nil }
     initialize_with { Aspect.find_or_initialize_by(key: key, val: val) }
 
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_key do
       key { :song_type }
     end
@@ -70,10 +66,6 @@ FactoryBot.define do
       with_scheduled_post
       with_published_post
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_aspect do
       with_key

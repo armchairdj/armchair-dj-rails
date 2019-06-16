@@ -6,36 +6,40 @@ RSpec.shared_examples "an_application_record" do
   # Most concerns are tested in the models that actually use them.
   it_behaves_like "an_atomically_validatable_model"
 
-  describe ".ids_from_list" do
-    let(:instances) { create_minimal_list(2) }
-    let(:association) { described_class.where(id: instances.map(&:id)) }
+  describe ":AssociationUtilities" do
+    pending ".by_association"
 
-    it "turns `[nil]` into an empty array" do
-      expect(described_class.ids_from_list([nil])).to eq([])
-    end
+    describe ".ids_from_list" do
+      let(:instances) { create_minimal_list(2) }
+      let(:association) { described_class.where(id: instances.map(&:id)) }
 
-    it "turns `nil` into an empty array" do
-      expect(described_class.ids_from_list(nil)).to eq([])
-    end
+      it "turns `[nil]` into an empty array" do
+        expect(described_class.ids_from_list([nil])).to eq([])
+      end
 
-    it "turns `[instance1]` into an array with a single id" do
-      expect(described_class.ids_from_list([instances[0]])).to eq([instances[0].id])
-    end
+      it "turns `nil` into an empty array" do
+        expect(described_class.ids_from_list(nil)).to eq([])
+      end
 
-    it "turns `instance1` into an array with a single id" do
-      expect(described_class.ids_from_list(instances[0])).to eq([instances[0].id])
-    end
+      it "turns `[instance1]` into an array with a single id" do
+        expect(described_class.ids_from_list([instances[0]])).to eq([instances[0].id])
+      end
 
-    it "turns `[instance1, instance2]` array of ids" do
-      expect(described_class.ids_from_list(instances)).to eq([instances[0].id, instances[1].id])
-    end
+      it "turns `instance1` into an array with a single id" do
+        expect(described_class.ids_from_list(instances[0])).to eq([instances[0].id])
+      end
 
-    it "turns `instance1, instance2` into an array of ids" do
-      expect(described_class.ids_from_list(*instances)).to eq([instances[0].id, instances[1].id])
-    end
+      it "turns `[instance1, instance2]` array of ids" do
+        expect(described_class.ids_from_list(instances)).to eq([instances[0].id, instances[1].id])
+      end
 
-    it "turns `association` into an array of ids" do
-      expect(described_class.ids_from_list(association)).to eq([instances[0].id, instances[1].id])
+      it "turns `instance1, instance2` into an array of ids" do
+        expect(described_class.ids_from_list(*instances)).to eq([instances[0].id, instances[1].id])
+      end
+
+      it "turns `association` into an array of ids" do
+        expect(described_class.ids_from_list(association)).to eq([instances[0].id, instances[1].id])
+      end
     end
   end
 

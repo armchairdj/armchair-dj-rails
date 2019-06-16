@@ -19,10 +19,6 @@
 
 FactoryBot.define do
   factory :playlist_track, class: "Playlist::Track" do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_existing_playlist do
       playlist_id { create(:minimal_playlist).id }
     end
@@ -44,10 +40,6 @@ FactoryBot.define do
         create(:minimal_review, :published, author_id: track.playlist.author.id, work_id: track.work.id)
       end
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_playlist_track do
       with_existing_playlist

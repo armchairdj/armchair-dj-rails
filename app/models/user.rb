@@ -107,12 +107,12 @@ class User < ApplicationRecord
       scope :published,  -> { joins(:posts).merge(Post.published) }
       scope :for_public, -> { published }
 
-      with_options(dependent: :nullify, foreign_key: "author_id") do |user|
-        user.has_many :posts
-        user.has_many :articles
-        user.has_many :reviews
-        user.has_many :mixtapes
-        user.has_many :playlists
+      with_options dependent: :nullify, foreign_key: "author_id" do
+        has_many :posts
+        has_many :articles
+        has_many :reviews
+        has_many :mixtapes
+        has_many :playlists
       end
 
       has_many :works, through: :reviews

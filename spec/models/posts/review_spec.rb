@@ -3,6 +3,61 @@
 require "rails_helper"
 
 RSpec.describe Review do
+  describe ":WorkAssociation" do
+    it { is_expected.to belong_to(:work).required }
+    it { is_expected.to validate_presence_of(:work) }
+
+    it { is_expected.to have_many(:aspects).through(:work) }
+    it { is_expected.to have_many(:milestones).through(:work) }
+
+    it "delegates #display_medium to work" do
+      instance = create_minimal_instance
+
+      expect(instance.work).to receive(:display_medium).and_call_original
+
+      instance.display_medium
+    end
+  end
+
+  describe ":CreatorAssociations" do
+    it { is_expected.to have_many(:creators).through(:work) }
+
+    it { is_expected.to have_many(:makers).through(:work) }
+
+    it { is_expected.to have_many(:contributions).through(:work) }
+    it { is_expected.to have_many(:contributors).through(:work) }
+  end
+
+  describe ":CreatorFilters" do
+    let(:old_album) { create(:sleater_kinney_the_hot_rock) }
+    let(:new_album) { create(:sleater_kinney_the_center_wont_hold) }
+
+    let(:band) { Creator.find_by!(name: "Sleater-Kinney") }
+    let(:carrie) { Creator.find_by!(name: "Carrie Brownstein") }
+    let(:annie) { Creator.find_by!(name: "St. Vincent") }
+
+    let!(:old_review) { create_minimal_instance(work: old_album) }
+    let!(:new_review) { create_minimal_instance(work: new_album) }
+
+    specify ".by_creator finds by maker or contributor" do
+      expect(described_class.by_creator(carrie)).to contain_exactly(old_review, new_review)
+      expect(described_class.by_creator(annie)).to contain_exactly(new_review)
+      expect(described_class.by_creator(band)).to contain_exactly(old_review, new_review)
+    end
+
+    specify ".by_maker finds only by maker, not contributor" do
+      expect(described_class.by_maker(carrie.id)).to be_empty
+      expect(described_class.by_maker(annie.id)).to be_empty
+      expect(described_class.by_maker(band.id)).to contain_exactly(old_review, new_review)
+    end
+
+    specify ".by_contributor finds only by contributor, not maker" do
+      expect(described_class.by_contributor(carrie)).to contain_exactly(old_review, new_review)
+      expect(described_class.by_contributor(annie)).to contain_exactly(new_review)
+      expect(described_class.by_contributor(band)).to be_empty
+    end
+  end
+
   describe ":Alphabetization" do
     it_behaves_like "an_alphabetizable_model"
 
@@ -120,63 +175,6 @@ RSpec.describe Review do
 
       specify { expect(instance.display_type).to eq("Album Review") }
       specify { expect(instance.display_type(plural: true)).to eq("Album Reviews") }
-    end
-  end
-
-  describe ":WorkAssociation" do
-    it { is_expected.to belong_to(:work).required }
-    it { is_expected.to validate_presence_of(:work) }
-
-    it { is_expected.to have_many(:aspects).through(:work) }
-    it { is_expected.to have_many(:milestones).through(:work) }
-
-    it "delegates #display_medium to work" do
-      instance = create_minimal_instance
-
-      expect(instance.work).to receive(:display_medium).and_call_original
-
-      instance.display_medium
-    end
-  end
-
-  describe ":WorkAttributionsAssociations" do
-    it { is_expected.to have_many(:attributions).through(:work) }
-    it { is_expected.to have_many(:creators).through(:work) }
-
-    it { is_expected.to have_many(:contributions).through(:work) }
-    it { is_expected.to have_many(:contributors).through(:work) }
-
-    it { is_expected.to have_many(:credits).through(:work) }
-    it { is_expected.to have_many(:makers).through(:work) }
-
-    describe "scopes" do
-      let(:old_album) { create(:sleater_kinney_the_hot_rock) }
-      let(:new_album) { create(:sleater_kinney_the_center_wont_hold) }
-
-      let(:band) { Creator.find_by!(name: "Sleater-Kinney") }
-      let(:carrie) { Creator.find_by!(name: "Carrie Brownstein") }
-      let(:annie) { Creator.find_by!(name: "St. Vincent") }
-
-      let!(:old_review) { create_minimal_instance(work: old_album) }
-      let!(:new_review) { create_minimal_instance(work: new_album) }
-
-      specify ".by_creator finds by maker or contributor" do
-        expect(described_class.by_creator(carrie)).to contain_exactly(old_review, new_review)
-        expect(described_class.by_creator(annie)).to contain_exactly(new_review)
-        expect(described_class.by_creator(band)).to contain_exactly(old_review, new_review)
-      end
-
-      specify ".by_contributor finds only by contributor, not maker" do
-        expect(described_class.by_contributor(carrie)).to contain_exactly(old_review, new_review)
-        expect(described_class.by_contributor(annie)).to contain_exactly(new_review)
-        expect(described_class.by_contributor(band)).to be_empty
-      end
-
-      specify ".by_maker finds only by maker, not contributor" do
-        expect(described_class.by_maker(carrie.id)).to be_empty
-        expect(described_class.by_maker(annie.id)).to be_empty
-        expect(described_class.by_maker(band.id)).to contain_exactly(old_review, new_review)
-      end
     end
   end
 end

@@ -22,10 +22,6 @@
 
 FactoryBot.define do
   factory :playlist do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_2_tracks do
       tracks_attributes do
         { "0" => attributes_for(:playlist_track, :with_existing_work),
@@ -71,10 +67,6 @@ FactoryBot.define do
       with_scheduled_post
       with_published_post
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_playlist do
       with_title

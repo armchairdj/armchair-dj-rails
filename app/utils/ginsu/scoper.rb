@@ -2,10 +2,6 @@
 
 module Ginsu
   class Scoper < Knife
-    ###########################################################################
-    # INSTANCE.
-    ###########################################################################
-
     def initialize(current_scope: nil, current_sort: nil, current_dir: nil)
       current_scope = allowed.keys.first if current_scope.blank?
       current_sort  = nil                if current_sort.blank?

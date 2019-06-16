@@ -3,6 +3,472 @@
 require "rails_helper"
 
 RSpec.describe Work do
+  describe ":CreatorAssociations" do
+    it { is_expected.to have_many(:attributions).dependent(:destroy) }
+    it { is_expected.to have_many(:credits).dependent(:destroy) }
+    it { is_expected.to have_many(:contributions).dependent(:destroy) }
+
+    it { is_expected.to have_many(:creators).through(:attributions) }
+    it { is_expected.to have_many(:makers).through(:credits) }
+    it { is_expected.to have_many(:contributors).through(:contributions) }
+
+    describe "nested credits" do
+      it { is_expected.to accept_nested_attributes_for(:credits).allow_destroy(true) }
+
+      it "accepts with creator_id and rejects without" do
+        instance = build_minimal_instance(credits_attributes: {
+          "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
+          "1" => attributes_for(:credit, creator_id: nil)
+        })
+
+        expect { instance.save }.to change(Credit, :count).by(1)
+
+        expect(instance.credits).to have(1).items
+      end
+    end
+
+    describe "nested contributions" do
+      it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
+
+      it "accepts with creator_id and rejects without" do
+        role = create(:minimal_role, medium: "Song")
+
+        instance = build(:minimal_song, contributions_attributes: {
+          "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
+          "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
+        })
+
+        expect { instance.save }.to change(Contribution, :count).by(1)
+
+        expect(instance.contributions).to have(1).items
+      end
+    end
+
+    describe "nested uniqueness of credits" do
+      subject(:instance) { build_minimal_instance(credits_attributes: {}) }
+
+      let(:creator1) { create(:minimal_creator) }
+      let(:creator2) { create(:minimal_creator) }
+
+      it "accepts different creators" do
+        instance.credits_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator2.id)
+        }
+
+        is_expected.to be_valid
+      end
+
+      it "rejects duplicate creators" do
+        instance.credits_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator1.id)
+        }
+
+        is_expected.to be_invalid
+        is_expected.to have_error(:credits, :nested_taken)
+      end
+    end
+
+    describe "nested uniqueness of contributions" do
+      subject(:instance) { build(:minimal_song, contributions_attributes: {}) }
+
+      let(:creator1) { create(:minimal_creator) }
+      let(:creator2) { create(:minimal_creator) }
+      let(:role_1) { create(:minimal_role, medium: "Song") }
+      let(:role_2) { create(:minimal_role, medium: "Song") }
+
+      it "accepts same creator in non-duplicate roles" do
+        instance.contributions_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_2.id)
+        }
+
+        is_expected.to be_valid
+      end
+
+      it "accepts different creators in different roles" do
+        instance.contributions_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator2.id, role_id: role_2.id)
+        }
+
+        is_expected.to be_valid
+      end
+
+      it "accepts different creators in same role" do
+        instance.contributions_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator2.id, role_id: role_1.id)
+        }
+
+        is_expected.to be_valid
+      end
+
+      it "rejects same creator with same role" do
+        instance.contributions_attributes = {
+          "0" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_1.id),
+          "1" => attributes_for(:minimal_credit, creator_id: creator1.id, role_id: role_1.id)
+        }
+
+        is_expected.to be_invalid
+        is_expected.to have_error(:contributions, :nested_taken)
+      end
+    end
+
+    describe "#prepare_credits" do
+      it "builds 3 initially" do
+        instance = described_class.new
+        instance.prepare_credits
+
+        expect(instance.credits).to have(3).items
+      end
+
+      it "builds 3 more" do
+        instance = create(:global_communications_76_14)
+        instance.prepare_credits
+
+        expect(instance.credits).to have(4).items
+      end
+    end
+
+    describe "#prepare_contributions" do
+      it "builds 10 initially" do
+        instance = described_class.new
+        instance.prepare_contributions
+
+        expect(instance.contributions).to have(10).items
+      end
+
+      it "builds 10 more" do
+        instance = create(:global_communications_76_14)
+        instance.prepare_contributions
+
+        expect(instance.contributions).to have(12).items
+      end
+    end
+
+    describe "credit length validation" do
+      subject(:instance) { build(:minimal_song) }
+
+      it "accepts 1 or more credits" do
+        is_expected.to be_valid
+      end
+
+      it "rejects 0 credits" do
+        instance.credits = []
+
+        is_expected.to_not be_valid
+
+        is_expected.to have_error(credits: :too_short)
+      end
+    end
+
+    describe "#collect_makers" do
+      subject { instance.send(:collect_makers) }
+
+      context "with no credits" do
+        let(:instance) { build(:work) }
+
+        it { is_expected.to eq(nil) }
+      end
+
+      context "with one credit" do
+        let(:instance) { build(:kate_bush_never_for_ever) }
+
+        it { is_expected.to eq("Kate Bush") }
+      end
+
+      context "with multiple credits" do
+        let(:instance) { build(:carl_craig_and_green_velvet_unity) }
+
+        it { is_expected.to eq("Carl Craig & Green Velvet") }
+      end
+    end
+
+    describe ":before_save hook to #memoize_display_makers" do
+      it "denormalizes maker names as a string on work" do
+        instance = build_minimal_instance
+
+        allow(instance).to receive(:collect_makers).and_return("collected")
+        expect(instance).to receive(:memoize_display_makers).and_call_original
+
+        instance.save
+
+        expect(instance.display_makers).to eq("collected")
+      end
+    end
+  end
+
+  pending ":CreatorFilters"
+
+  describe ":AspectsAssociation" do
+    it { is_expected.to have_and_belong_to_many(:aspects) }
+
+    pending "validates #only_available_aspects"
+
+    pending "#display_aspects"
+  end
+
+  describe ":MilestonesAssociation" do
+    it { is_expected.to have_many(:milestones).dependent(:destroy) }
+
+    it "validates #presence_of_released_milestone" do
+      instance = build_minimal_instance(milestones_attributes: {
+        "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")
+      })
+
+      expect(instance).to be_invalid
+      expect(instance).to have_error(milestones: :blank)
+    end
+
+    describe "nested attributes" do
+      it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
+
+      it "accepts with year and rejects without" do
+        instance = build(:minimal_song, milestones_attributes: {
+          "0" => attributes_for(:work_milestone_for_work, year: "1981"),
+          "1" => attributes_for(:work_milestone_for_work, year: "")
+        })
+
+        expect { instance.save }.to change(Work::Milestone, :count).by(1)
+
+        expect(instance.milestones).to have(1).items
+      end
+    end
+
+    describe "nested uniqueness" do
+      subject(:instance) { build(:minimal_song, milestones_attributes: {}) }
+
+      it "accepts discrete activities" do
+        instance.milestones_attributes = {
+          "0" => attributes_for(:work_milestone, activity: :released,   year: "1977"),
+          "1" => attributes_for(:work_milestone, activity: :remastered, year: "2005")
+        }
+
+        is_expected.to be_valid
+      end
+
+      it "rejects duplicate activities" do
+        instance.milestones_attributes = {
+          "0" => attributes_for(:work_milestone, activity: :released, year: "1977"),
+          "1" => attributes_for(:work_milestone, activity: :released, year: "2005")
+        }
+
+        is_expected.to be_invalid
+        is_expected.to have_error(:milestones, :nested_taken)
+      end
+    end
+
+    describe "#prepare_milestones" do
+      it "builds 5 initially and sets first to 'released' activity" do
+        instance = described_class.new
+
+        instance.prepare_milestones
+
+        expect(instance.milestones).to have(5).items
+
+        activities = instance.milestones.map(&:activity)
+
+        expect(activities).to eq(["released", nil, nil, nil, nil])
+      end
+
+      it "builds 5 more" do
+        instance = create(:global_communications_76_14)
+
+        instance.prepare_milestones
+
+        expect(instance.milestones).to have(6).items
+      end
+    end
+  end
+
+  describe ":RelationshipAssociations" do
+    it { is_expected.to have_many(:source_relationships).dependent(:destroy) }
+    it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
+
+    it { is_expected.to have_many(:source_works).through(:source_relationships) }
+    it { is_expected.to have_many(:target_works).through(:target_relationships) }
+
+    describe "nested sources" do
+      it { is_expected.to accept_nested_attributes_for(:source_relationships).allow_destroy(true) }
+
+      it "accepts with source_id" do
+        instance = create_minimal_instance(source_relationships_attributes: {
+          "0" => { connection: "member_of", source_id: create(:minimal_work).id }
+        })
+
+        expect(instance.source_relationships).to have(1).item
+      end
+
+      it "rejects without source_id" do
+        instance = create_minimal_instance(source_relationships_attributes: {
+          "0" => { connection: "member_of", source_id: nil }
+        })
+
+        expect(instance.source_relationships).to have(0).items
+      end
+    end
+
+    describe "nested targets" do
+      it { is_expected.to accept_nested_attributes_for(:target_relationships).allow_destroy(true) }
+
+      it "accepts with target_id" do
+        instance = create_minimal_instance(target_relationships_attributes: {
+          "0" => { connection: "member_of", target_id: create(:minimal_work).id }
+        })
+
+        expect(instance.target_relationships).to have(1).item
+      end
+
+      it "rejects without target_id" do
+        instance = create_minimal_instance(target_relationships_attributes: {
+          "0" => { connection: "member_of", target_id: nil }
+        })
+
+        expect(instance.target_relationships).to have(0).items
+      end
+    end
+
+    describe "nested uniqeness of sources" do
+      let(:source1) { create_minimal_instance }
+      let(:source2) { create_minimal_instance }
+
+      it "accepts discrete sources with same connection" do
+        instance = build_minimal_instance(source_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, source_id: source1.id),
+          "1" => attributes_for(:minimal_work_relationship, source_id: source2.id)
+        })
+
+        expect(instance).to be_valid
+      end
+
+      it "accepts duplicate sources with different connections" do
+        instance = build_minimal_instance(source_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, source_id: source1.id),
+          "1" => attributes_for(:minimal_work_relationship, source_id: source1.id, connection: "spinoff_of")
+        })
+
+        expect(instance).to be_valid
+      end
+
+      it "rejects duplicate sources with same connection" do
+        instance = build_minimal_instance(source_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, source_id: source1.id),
+          "1" => attributes_for(:minimal_work_relationship, source_id: source1.id)
+        })
+
+        expect(instance).to be_invalid
+        expect(instance).to have_error(:source_relationships, :nested_taken)
+      end
+    end
+
+    describe "nested uniqeness of targets" do
+      let(:target1) { create_minimal_instance }
+      let(:target2) { create_minimal_instance }
+
+      it "accepts discrete targets with same connection" do
+        instance = build_minimal_instance(target_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, target_id: target1.id),
+          "1" => attributes_for(:minimal_work_relationship, target_id: target2.id)
+        })
+
+        expect(instance).to be_valid
+      end
+
+      it "accepts duplicate targets with different connections" do
+        instance = build_minimal_instance(target_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, target_id: target1.id),
+          "1" => attributes_for(:minimal_work_relationship, target_id: target1.id, connection: "spinoff_of")
+        })
+
+        expect(instance).to be_valid
+      end
+
+      it "rejects duplicate targets with same connection" do
+        instance = build_minimal_instance(target_relationships_attributes: {
+          "0" => attributes_for(:minimal_work_relationship, target_id: target1.id),
+          "1" => attributes_for(:minimal_work_relationship, target_id: target1.id)
+        })
+
+        expect(instance).to be_invalid
+        expect(instance).to have_error(:target_relationships, :nested_taken)
+      end
+    end
+
+    describe "#prepare_source_relationships" do
+      it "builds 5" do
+        instance = build_minimal_instance
+
+        instance.prepare_source_relationships
+
+        expect(instance.source_relationships).to have(5).items
+      end
+
+      it "builds 5 more" do
+        instance = create_minimal_instance(source_relationships_attributes: {
+          "0" => { connection: "member_of", source_id: create(:minimal_work).id }
+        })
+
+        instance.prepare_source_relationships
+
+        expect(instance.source_relationships).to have(6).items
+      end
+    end
+
+    describe "#prepare_target_relationships" do
+      it "builds 5" do
+        instance = build_minimal_instance
+
+        instance.prepare_target_relationships
+
+        expect(instance.target_relationships).to have(5).items
+      end
+
+      it "builds 5 more" do
+        instance = create_minimal_instance(target_relationships_attributes: {
+          "0" => { connection: "member_of", target_id: create(:minimal_work).id }
+        })
+
+        instance.prepare_target_relationships
+
+        expect(instance.target_relationships).to have(6).items
+      end
+    end
+  end
+
+  describe ":PostAssociations" do
+    it { is_expected.to have_many(:reviews).dependent(:nullify) }
+
+    it { is_expected.to have_many(:playlistings).dependent(:nullify) }
+    it { is_expected.to have_many(:playlists).through(:playlistings) }
+    it { is_expected.to have_many(:mixtapes).through(:playlists) }
+
+    describe "post methods" do
+      let!(:instance) { create_minimal_instance }
+      let!(:review) { create(:minimal_review, work_id: instance.id) }
+      let!(:playlist) { create(:minimal_playlist) }
+      let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
+
+      before do
+        # TODO: let the factory handle this with transient attributes
+        playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
+      end
+
+      describe "#post_ids" do
+        subject(:post_ids) { instance.post_ids }
+
+        it { is_expected.to contain_exactly(review.id, mixtape.id) }
+      end
+
+      describe "#posts" do
+        subject(:posts) { instance.posts }
+
+        it { is_expected.to contain_exactly(review, mixtape) }
+      end
+    end
+  end
+
   describe "ApplicationRecord" do
     it_behaves_like "an_application_record"
 
@@ -27,252 +493,6 @@ RSpec.describe Work do
       let(:instance) { create_complete_instance }
 
       it { is_expected.to eq([instance.display_makers, instance.title, instance.subtitle]) }
-    end
-  end
-
-  describe ":AspectsAssociation" do
-    it { is_expected.to have_and_belong_to_many(:aspects) }
-
-    pending "validates #only_available_aspects"
-
-    pending "#display_aspects"
-  end
-
-  describe ":AttributionAssociations" do
-    it { is_expected.to have_many(:attributions).dependent(:destroy) }
-    it { is_expected.to have_many(:creators).through(:attributions) }
-  end
-
-  describe ":ContributionAssociations" do
-    it { is_expected.to have_many(:contributions).dependent(:destroy) }
-    it { is_expected.to have_many(:contributors).through(:contributions) }
-
-    describe "nested attributes" do
-      it { is_expected.to accept_nested_attributes_for(:contributions).allow_destroy(true) }
-
-      describe "reject_if" do
-        subject(:instance) do
-          build(:minimal_song, contributions_attributes: {
-            "0" => attributes_for(:contribution, role_id: role.id, creator_id: create(:minimal_creator).id),
-            "1" => attributes_for(:contribution, role_id: role.id, creator_id: nil)
-          })
-        end
-
-        let(:role) { create(:minimal_role, medium: "Song") }
-
-        specify { expect { instance.save }.to change(Contribution, :count).by(1) }
-
-        specify { expect(instance.contributions).to have(1).items }
-      end
-
-      describe "#prepare_contributions" do
-        subject(:contributions) { instance.contributions }
-
-        before { instance.prepare_contributions }
-
-        describe "new instance" do
-          let(:instance) { described_class.new }
-
-          it { is_expected.to have(10).items }
-        end
-
-        describe "saved instance" do
-          let(:instance) { create(:global_communications_76_14) }
-
-          it { is_expected.to have(12).items }
-        end
-      end
-    end
-
-    describe "validates_nested_uniqueness_of" do
-      subject(:instance) { build_minimal_instance }
-
-      describe "credits" do
-        before { instance.credits = [] }
-
-        let(:creator) { create(:minimal_creator) }
-        let(:other_creator) { create(:minimal_creator) }
-
-        let(:good_attributes) do
-          {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id),
-            "1" => attributes_for(:minimal_credit, creator_id: other_creator.id)
-          }
-        end
-
-        let(:bad_attributes) do
-          {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator.id)
-          }
-        end
-
-        it "accepts non-dupes" do
-          instance.credits_attributes = good_attributes
-
-          is_expected.to be_valid
-        end
-
-        it "rejects dupes" do
-          instance.credits_attributes = bad_attributes
-
-          is_expected.to be_invalid
-
-          is_expected.to have_error(:credits, :nested_taken)
-        end
-      end
-    end
-  end
-
-  describe ":CreditAssociations" do
-    it { is_expected.to have_many(:credits).dependent(:destroy) }
-
-    it { is_expected.to have_many(:makers).through(:credits) }
-
-    describe "nested attributes" do
-      it { is_expected.to accept_nested_attributes_for(:credits).allow_destroy(true) }
-
-      describe "reject_if" do
-        it "rejects credits without a creator_id" do
-          instance = build_minimal_instance(credits_attributes: {
-            "0" => attributes_for(:credit, creator_id: create(:minimal_creator).id),
-            "1" => attributes_for(:credit, creator_id: nil)
-          })
-
-          expect { instance.save }.to change(Credit, :count).by(1)
-
-          expect(instance.credits).to have(1).items
-        end
-      end
-
-      describe "#prepare_credits" do
-        subject(:credits) { instance.credits }
-
-        before { instance.prepare_credits }
-
-        describe "new instance" do
-          let(:instance) { described_class.new }
-
-          it { is_expected.to have(3).items }
-        end
-
-        describe "saved instance" do
-          let(:instance) { create(:carl_craig_and_green_velvet_unity) }
-
-          it { is_expected.to have(5).items }
-        end
-      end
-    end
-
-    describe "validates_nested_uniqueness_of" do
-      subject(:instance) { build_minimal_instance }
-
-      describe "contributions" do
-        subject(:instance) { build(:minimal_song) }
-
-        before { instance.contributions = [] }
-
-        let(:creator) { create(:minimal_creator) }
-        let(:role_1) { create(:minimal_role, medium: "Song") }
-        let(:role_2) { create(:minimal_role, medium: "Song") }
-
-        let(:good_attributes) do
-          {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_2.id)
-          }
-        end
-
-        let(:bad_attributes) do
-          {
-            "0" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id),
-            "1" => attributes_for(:minimal_credit, creator_id: creator.id, role_id: role_1.id)
-          }
-        end
-
-        it "accepts non-dupes" do
-          instance.contributions_attributes = good_attributes
-
-          is_expected.to be_valid
-        end
-
-        it "rejects dupes" do
-          instance.contributions_attributes = bad_attributes
-
-          is_expected.to be_invalid
-          is_expected.to have_error(:contributions, :nested_taken)
-        end
-      end
-    end
-
-    describe "validates length is at least 1" do
-      subject(:instance) { build(:minimal_song) }
-
-      specify "valid" do
-        is_expected.to be_valid
-      end
-
-      specify "invalid" do
-        instance.credits = []
-
-        is_expected.to_not be_valid
-
-        is_expected.to have_error(credits: :too_short)
-      end
-    end
-
-    describe "#collect_makers" do
-      subject(:call_method) { instance.send(:collect_makers) }
-
-      context "when unsaved" do
-        context "with no credits" do
-          let(:instance) { build(:work) }
-
-          it { is_expected.to eq(nil) }
-        end
-
-        context "with one credit" do
-          let(:instance) { build(:kate_bush_never_for_ever) }
-
-          it { is_expected.to eq("Kate Bush") }
-        end
-
-        context "with multiple credits" do
-          let(:instance) { create(:carl_craig_and_green_velvet_unity) }
-
-          it { is_expected.to eq("Carl Craig & Green Velvet") }
-        end
-      end
-
-      context "when saved" do
-        context "with one credit" do
-          let(:instance) { create(:kate_bush_never_for_ever) }
-
-          it { is_expected.to eq("Kate Bush") }
-        end
-
-        context "with multiple credits" do
-          let(:instance) { create(:carl_craig_and_green_velvet_unity) }
-
-          it { is_expected.to eq("Carl Craig & Green Velvet") }
-        end
-      end
-    end
-
-    describe "#memoize_display_makers on :before_save" do
-      subject(:display_makers) { instance.display_makers }
-
-      let(:instance) { build_minimal_instance }
-
-      before do
-        allow(instance).to receive(:collect_makers).and_return("collected")
-
-        expect(instance).to receive(:memoize_display_makers).and_call_original
-
-        instance.save
-      end
-
-      it { is_expected.to eq("collected") }
     end
   end
 
@@ -313,220 +533,6 @@ RSpec.describe Work do
 
   describe ":ImageAttachment" do
     it_behaves_like "an_imageable_model"
-  end
-
-  describe ":MilestonesAssociation" do
-    it { is_expected.to have_many(:milestones).dependent(:destroy) }
-
-    describe "nested attributes" do
-      it { is_expected.to accept_nested_attributes_for(:milestones).allow_destroy(true) }
-
-      describe "reject_if" do
-        subject(:instance) do
-          build(:minimal_song, milestones_attributes: {
-            "0" => attributes_for(:work_milestone_for_work, year: "1981"),
-            "1" => attributes_for(:work_milestone_for_work, year: "")
-          })
-        end
-
-        specify { expect { instance.save }.to change(Work::Milestone, :count).by(1) }
-
-        specify { expect(instance.milestones).to have(1).items }
-      end
-
-      describe "#prepare_milestones" do
-        subject(:milestones) { instance.milestones }
-
-        before { instance.prepare_milestones }
-
-        describe "new instance" do
-          let(:instance) { described_class.new }
-
-          it { is_expected.to have(5).items }
-
-          specify { expect(milestones.map(&:activity)).to eq(["released", nil, nil, nil, nil]) }
-        end
-
-        describe "saved instance" do
-          let(:instance) { create(:global_communications_76_14) }
-
-          it { is_expected.to have(6).items }
-        end
-      end
-    end
-
-    describe "validates_nested_uniqueness_of" do
-      subject(:instance) { build(:minimal_song) }
-
-      before { instance.milestones = [] }
-
-      let(:good_attributes) do
-        {
-          "0" => attributes_for(:work_milestone, activity: :released,   year: "1977"),
-          "1" => attributes_for(:work_milestone, activity: :remastered, year: "2005")
-        }
-      end
-
-      let(:bad_attributes) do
-        {
-          "0" => attributes_for(:work_milestone, activity: :released, year: "1977"),
-          "1" => attributes_for(:work_milestone, activity: :released, year: "2005")
-        }
-      end
-
-      it "accepts non-dupes" do
-        instance.milestones_attributes = good_attributes
-
-        is_expected.to be_valid
-      end
-
-      it "rejects dupes" do
-        instance.milestones_attributes = bad_attributes
-
-        is_expected.to be_invalid
-        is_expected.to have_error(:milestones, :nested_taken)
-      end
-    end
-
-    describe "validates #presence_of_released_milestone" do
-      subject(:instance) do
-        build_minimal_instance(milestones_attributes: {
-          "0" => attributes_for(:work_milestone_for_work, activity: :remixed, year: "1972")
-        })
-      end
-
-      before { instance.valid? }
-
-      it { is_expected.to have_error(milestones: :blank) }
-    end
-  end
-
-  describe ":PostAssociations" do
-    it { is_expected.to have_many(:reviews).dependent(:nullify) }
-
-    it { is_expected.to have_many(:playlistings).dependent(:nullify) }
-    it { is_expected.to have_many(:playlists).through(:playlistings) }
-    it { is_expected.to have_many(:mixtapes).through(:playlists) }
-
-    describe "post methods" do
-      let!(:instance) { create_minimal_instance }
-      let!(:review) { create(:minimal_review, work_id: instance.id) }
-      let!(:playlist) { create(:minimal_playlist) }
-      let!(:mixtape) { create(:minimal_mixtape, playlist_id: playlist.id) }
-
-      before do
-        # TODO: let the factory handle this with transient attributes
-        playlist.tracks << create(:minimal_playlist_track, work_id: instance.id)
-      end
-
-      describe "#post_ids" do
-        subject(:post_ids) { instance.post_ids }
-
-        it { is_expected.to contain_exactly(review.id, mixtape.id) }
-      end
-
-      describe "#posts" do
-        subject(:posts) { instance.posts }
-
-        it { is_expected.to contain_exactly(review, mixtape) }
-      end
-    end
-  end
-
-  describe ":SourceAssociations" do
-    it { is_expected.to have_many(:source_relationships).dependent(:destroy) }
-
-    it { is_expected.to have_many(:source_works).through(:source_relationships) }
-
-    describe "nested attributes" do
-      let(:target) { create(:minimal_work) }
-      let(:valid_params) { { "0" => { connection: "member_of", target_id: target.id } } }
-      let(:empty_params) { { "0" => { connection: "member_of", target_id: nil       } } }
-
-      it { is_expected.to accept_nested_attributes_for(:target_relationships).allow_destroy(true) }
-
-      describe "#prepare_target_relationships" do
-        subject(:target_relationships) { instance.target_relationships }
-
-        before { instance.prepare_target_relationships }
-
-        describe "initial state" do
-          let(:instance) { build_minimal_instance }
-
-          it { is_expected.to have(5).items }
-        end
-
-        context "with prior associations" do
-          let(:instance) { create_minimal_instance(target_relationships_attributes: valid_params) }
-
-          it { is_expected.to have(6).items }
-        end
-      end
-
-      describe "#reject_target_relationship?" do
-        subject(:target_relationships) { instance.target_relationships }
-
-        describe "accepts if target_id is present" do
-          let(:instance) { build_minimal_instance(target_relationships_attributes: valid_params) }
-
-          it { is_expected.to have(1).item }
-        end
-
-        describe "rejects if target_id is blank" do
-          let(:instance) { build_minimal_instance(target_relationships_attributes: empty_params) }
-
-          it { is_expected.to have(0).items }
-        end
-      end
-    end
-
-    describe "validates_nested_uniqueness_of" do
-      subject(:instance) { build_minimal_instance }
-
-      let(:target) { create_minimal_instance }
-      let(:other_target) { create_minimal_instance }
-
-      before do
-        instance.target_relationships_attributes = attributes
-      end
-
-      context "without dupes" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
-            "1" => attributes_for(:minimal_work_relationship, target_id: other_target.id)
-          }
-        end
-
-        it { is_expected.to be_valid }
-      end
-
-      context "with dupes" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
-            "1" => attributes_for(:minimal_work_relationship, target_id: target.id)
-          }
-        end
-
-        it "is has the correct error" do
-          is_expected.to be_invalid
-
-          is_expected.to have_error(:target_relationships, :nested_taken)
-        end
-      end
-
-      context "with duplicate targets but different connections" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, target_id: target.id),
-            "1" => attributes_for(:minimal_work_relationship, target_id: target.id, connection: "spinoff_of")
-          }
-        end
-
-        it { is_expected.to be_valid }
-      end
-    end
   end
 
   describe ":StiInheritance" do
@@ -636,102 +642,6 @@ RSpec.describe Work do
 
           described_class.load_descendants
         end
-      end
-    end
-  end
-
-  describe ":TargetAssociations" do
-    it { is_expected.to have_many(:target_relationships).dependent(:destroy) }
-
-    it { is_expected.to have_many(:target_works).through(:target_relationships) }
-
-    describe "nested attributes" do
-      let(:source) { create(:minimal_work) }
-      let(:valid_params) { { "0" => { connection: "member_of", source_id: source.id } } }
-      let(:empty_params) { { "0" => { connection: "member_of", source_id: nil       } } }
-
-      it { is_expected.to accept_nested_attributes_for(:source_relationships).allow_destroy(true) }
-
-      describe "#prepare_source_relationships" do
-        subject(:source_relationships) { instance.source_relationships }
-
-        before { instance.prepare_source_relationships }
-
-        describe "initial state" do
-          let(:instance) { build_minimal_instance }
-
-          it { is_expected.to have(5).items }
-        end
-
-        context "with prior associations" do
-          let(:instance) { create_minimal_instance(source_relationships_attributes: valid_params) }
-
-          it { is_expected.to have(6).items }
-        end
-      end
-
-      describe "#reject_source_relationship?" do
-        subject(:source_relationships) { instance.source_relationships }
-
-        describe "accepts if source_id is present" do
-          let(:instance) { build_minimal_instance(source_relationships_attributes: valid_params) }
-
-          it { is_expected.to have(1).item }
-        end
-
-        describe "rejects if source_id is blank" do
-          let(:instance) { build_minimal_instance(source_relationships_attributes: empty_params) }
-
-          it { is_expected.to have(0).items }
-        end
-      end
-    end
-
-    describe "validates_nested_uniqueness_of" do
-      subject(:instance) { build_minimal_instance }
-
-      let(:source) { create_minimal_instance }
-      let(:other_source) { create_minimal_instance }
-
-      before do
-        instance.source_relationships_attributes = attributes
-      end
-
-      context "without dupes" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
-            "1" => attributes_for(:minimal_work_relationship, source_id: other_source.id)
-          }
-        end
-
-        it { is_expected.to be_valid }
-      end
-
-      context "with dupes" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
-            "1" => attributes_for(:minimal_work_relationship, source_id: source.id)
-          }
-        end
-
-        it "is has the correct error" do
-          is_expected.to be_invalid
-
-          is_expected.to have_error(:source_relationships, :nested_taken)
-        end
-      end
-
-      context "with duplicate sources but different connections" do
-        let(:attributes) do
-          {
-            "0" => attributes_for(:minimal_work_relationship, source_id: source.id),
-            "1" => attributes_for(:minimal_work_relationship, source_id: source.id, connection: "spinoff_of")
-          }
-        end
-
-        it { is_expected.to be_valid }
       end
     end
   end

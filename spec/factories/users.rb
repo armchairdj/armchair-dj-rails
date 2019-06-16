@@ -46,10 +46,6 @@ require "ffaker"
 
 FactoryBot.define do
   factory :user do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_draft_post do
       role { :writer }
 
@@ -91,10 +87,6 @@ FactoryBot.define do
     trait :confirmed do
       confirmed_at { Time.zone.now }
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_user, parent: :member
 

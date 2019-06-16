@@ -14,10 +14,6 @@ FactoryBot.define do
       factory :stuffed_work
     end
 
-    ###########################################################################
-    # SPECIFIC FACTORIES.
-    ###########################################################################
-
     factory :junior_boys_like_a_child, parent: :minimal_song do
       title { "Like a Child" }
       subtitle { "Original Version" }

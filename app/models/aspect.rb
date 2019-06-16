@@ -18,7 +18,6 @@
 #
 
 class Aspect < ApplicationRecord
-  # This must go before the #PostsAssociation block.
   concerning :WorksAssociation do
     included do
       has_and_belongs_to_many :works, -> { distinct }
@@ -26,6 +25,21 @@ class Aspect < ApplicationRecord
       has_many :playlists,    -> { distinct }, through: :works
       has_many :makers,       -> { distinct }, through: :works
       has_many :contributors, -> { distinct }, through: :works
+    end
+  end
+
+  concerning :PostsAssociation do
+    included do
+      has_many :mixtapes, through: :works
+      has_many :reviews,  through: :works
+    end
+
+    def posts
+      Post.where(id: post_ids)
+    end
+
+    def post_ids
+      reviews.ids + mixtapes.ids
     end
   end
 
@@ -82,21 +96,6 @@ class Aspect < ApplicationRecord
       improve_enum :key
 
       scope :for_key, ->(*keys) { where(key: keys.flatten.compact) }
-    end
-  end
-
-  concerning :PostsAssociation do
-    included do
-      has_many :mixtapes, through: :works
-      has_many :reviews,  through: :works
-    end
-
-    def posts
-      Post.where(id: post_ids)
-    end
-
-    def post_ids
-      reviews.ids + mixtapes.ids
     end
   end
 

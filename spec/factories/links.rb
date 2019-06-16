@@ -19,10 +19,6 @@
 
 FactoryBot.define do
   factory :link do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_url do
       url { generate(:link_url) }
     end
@@ -46,10 +42,6 @@ FactoryBot.define do
     trait :with_user do
       association :linkable, factory: :writer
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_link, parent: :article_link
 

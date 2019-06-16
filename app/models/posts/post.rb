@@ -124,9 +124,7 @@ class Post < ApplicationRecord
     included do
       has_and_belongs_to_many :tags, -> { order("tags.name") }
 
-      scope :by_tag, lambda { |*tags|
-        joins(:tags).where(tags: { id: ids_from_list(tags) })
-      }
+      scope :by_tag, ->(*tags) { by_association(tags, :tags) }
     end
   end
 

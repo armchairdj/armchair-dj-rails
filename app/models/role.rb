@@ -30,8 +30,10 @@ class Role < ApplicationRecord
 
   concerning :AttributionAssociations do
     included do
-      has_many :attributions,  dependent: :destroy
-      has_many :contributions, dependent: :destroy
+      with_options dependent: :destroy do
+        has_many :attributions
+        has_many :contributions
+      end
 
       has_many :works, through: :contributions
     end

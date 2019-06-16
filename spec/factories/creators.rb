@@ -26,10 +26,6 @@ FactoryBot.define do
     name { nil }
     initialize_with { Creator.find_or_initialize_by(name: name) }
 
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_draft_post do
       after(:create) do |creator|
         work = create(:minimal_song, credits_attributes: {
@@ -186,10 +182,6 @@ FactoryBot.define do
       end
     end
 
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
-
     factory :minimal_creator do
       name { generate(:creator_name) }
       primary
@@ -211,10 +203,6 @@ FactoryBot.define do
     factory :collective_creator, parent: :minimal_creator do
       collective
     end
-
-    ###########################################################################
-    # SPECIFIC FACTORIES.
-    ###########################################################################
 
     factory :kate_bush do
       primary

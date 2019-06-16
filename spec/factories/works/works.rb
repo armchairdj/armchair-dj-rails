@@ -14,10 +14,6 @@ FactoryBot.define do
   end
 
   factory :work do
-    ###########################################################################
-    # TRAITS.
-    ###########################################################################
-
     trait :with_title do
       title { FFaker::Music.song }
     end
@@ -124,10 +120,6 @@ FactoryBot.define do
         { "0" => attributes_for(:contribution, role_id: create(:minimal_role).id, creator_id: specific_contributor.id) }
       end
     end
-
-    ###########################################################################
-    # FACTORIES.
-    ###########################################################################
 
     factory :minimal_work_parent do
       with_title
