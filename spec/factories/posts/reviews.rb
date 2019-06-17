@@ -4,6 +4,11 @@ require "ffaker"
 
 FactoryBot.define do
   factory :review do
+    trait :with_required_fields_for_publishing do
+      with_body
+      with_summary
+    end
+
     factory :minimal_review, class: "Review", parent: :minimal_post_parent do
       with_existing_work
     end

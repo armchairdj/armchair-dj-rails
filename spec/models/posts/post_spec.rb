@@ -299,6 +299,7 @@ RSpec.describe Post do
     specify "draft posts with publish_on can be scheduled" do
       draft.publish_on = 3.weeks.from_now
       draft.summary = "summary summary summary summary summary summary"
+      draft.body = "body"
 
       expect(draft.schedule!).to eq(true)
     end
@@ -310,6 +311,7 @@ RSpec.describe Post do
 
     specify "publishing draft sets published_at" do
       draft.summary = "summary summary summary summary summary summary"
+      draft.body = "body"
 
       expect(draft.publish!).to eq(true)
       expect(draft.published_at).to be_a_kind_of(ActiveSupport::TimeWithZone)

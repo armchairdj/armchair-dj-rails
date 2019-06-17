@@ -89,46 +89,12 @@ module Admin
         :hero_image,
         additional_images:               [],
         aspect_ids:                      [],
-        links_attributes:                [
-          :id,
-          :_destroy,
-          :url,
-          :description
-        ],
-        credits_attributes:              [
-          :id,
-          :_destroy,
-          :work_id,
-          :creator_id
-        ],
-        contributions_attributes:        [
-          :id,
-          :_destroy,
-          :work_id,
-          :creator_id,
-          :role_id
-        ],
-        milestones_attributes:           [
-          :id,
-          :_destroy,
-          :work_id,
-          :activity,
-          :year
-        ],
-        source_relationships_attributes: [
-          :id,
-          :_destroy,
-          :target_id,
-          :connection,
-          :source_id
-        ],
-        target_relationships_attributes: [
-          :id,
-          :_destroy,
-          :source_id,
-          :connection,
-          :target_id
-        ]
+        links_attributes:                [:id, :_destroy, :url, :description],
+        credits_attributes:              [:id, :_destroy, :work_id, :creator_id],
+        contributions_attributes:        [:id, :_destroy, :work_id, :creator_id, :role_id],
+        milestones_attributes:           [:id, :_destroy, :work_id, :activity, :year],
+        source_relationships_attributes: [:id, :_destroy, :target_id, :connection, :source_id],
+        target_relationships_attributes: [:id, :_destroy, :target_id, :connection, :source_id]
       ])
     end
   end

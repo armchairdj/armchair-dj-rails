@@ -52,19 +52,22 @@ FactoryBot.define do
   end
 
   trait :draft do
+    # nothing
+  end
+
+  trait :with_required_fields_for_publishing do
     with_body
+    with_summary
   end
 
   trait :scheduled do
-    with_body
-    with_summary
+    with_required_fields_for_publishing
     publish_on { 3.weeks.from_now }
     scheduling { true }
   end
 
   trait :published do
-    with_body
-    with_summary
+    with_required_fields_for_publishing
     publishing { true }
   end
 
@@ -94,5 +97,21 @@ FactoryBot.define do
         "1" => attributes_for(:link_for_linkable),
         "2" => attributes_for(:link_for_linkable) }
     end
+  end
+
+  trait :with_nil_image do
+    hero_image { nil }
+  end
+
+  trait :with_hero_image_jpg do
+    hero_image { ActiveSupportHelper.jpg }
+  end
+
+  trait :with_hero_image_png do
+    hero_image { ActiveSupportHelper.png }
+  end
+
+  trait :with_hero_image_pdf do
+    hero_image { ActiveSupportHelper.pdf }
   end
 end

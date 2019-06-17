@@ -52,6 +52,9 @@ gem "aws-sdk-s3", require: false
 # Image resizing.
 gem "image_processing", "~> 1.9"
 
+# Validations
+gem "active_storage_validations"
+
 ###############################################################################
 # ACCESS CONTROLE.
 ###############################################################################

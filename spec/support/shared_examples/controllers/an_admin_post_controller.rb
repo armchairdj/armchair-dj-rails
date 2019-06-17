@@ -103,30 +103,22 @@ RSpec.shared_examples "an_admin_post_controller" do
 
         it { is_expected.to assign(Post.last, :post).with_attributes(params).and_be_valid }
 
-        describe "author" do
-          subject do
-            send_request
-            Post.last.author
-          end
+        it "assigns current_user as author" do
+          send_request
 
-          it { is_expected.to eq(controller.current_user) }
+          expect(Post.last.author).to eq(controller.current_user)
         end
       end
 
       context "with failure" do
         let(:params) { bad_create_params }
 
-        it { is_expected.to successfully_render(templates[:new]) }
+        it "sets errors and re-renders new" do
+          send_request
 
-        describe "instance" do
-          subject do
-            send_request
-            assigns(:post)
-          end
-
-          it { is_expected.to be_a_populated_new_post(param_key) }
-
-          it { is_expected.to be_invalid }
+          is_expected.to successfully_render(templates[:new])
+          expect(assigns(:post)).to be_a_populated_new_post(param_key)
+          expect(assigns(:post)).to be_invalid
         end
       end
     end
