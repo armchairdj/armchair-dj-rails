@@ -5,7 +5,7 @@
     "@rails/webpacker": "^4.0.6",
     "activestorage": "^5.2.2",
     "form-to-object": "^6.0.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "rails-ujs": "^5.2.0",
     "selectize": "^0.12.6",
     "sortablejs": "^1.8.0",
