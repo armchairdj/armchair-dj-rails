@@ -50,7 +50,7 @@ gem "puma", "~> 3.12.1"
 gem "aws-sdk-s3", require: false
 
 # Image resizing.
-gem "image_processing", "~> 1.9"
+gem "image_processing", "~> 1.12"
 
 ###############################################################################
 # ACCESS CONTROLE.
